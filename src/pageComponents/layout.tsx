@@ -10,13 +10,7 @@ import { setIsMobile } from 'redux/reducer/info';
 import isMobile from 'utils/isMobile';
 
 const Layout = dynamic(async () => {
-	const {
-		WebLoginState,
-		useWebLogin,
-		useCallContract,
-		WebLoginEvents,
-		useWebLoginEvent,
-	} = await import('aelf-web-login').then((module) => module);
+
 	return (props: React.PropsWithChildren<{}>) => {
 		const { children } = props;
 
@@ -40,14 +34,7 @@ const Layout = dynamic(async () => {
 
 		return (
 			<>
-				<AntdLayout className={`TS-wrapper`}>
-					<Header />
-					<AntdLayout.Content
-						className={`TS-content min-h-[100vh] flex justify-center`}
-					>
-						<Suspense fallback={<Loading />}>{children}</Suspense>
-					</AntdLayout.Content>
-				</AntdLayout>
+				<Suspense fallback={<Loading />}>{children}</Suspense>
 			</>
 		);
 	};
