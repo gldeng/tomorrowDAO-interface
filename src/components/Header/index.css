@@ -1,0 +1,6 @@
+.header-container {
+  @apply w-full bg-white;
+  .header-banner {
+    @apply max-w-[1440px] m-auto lg:px-10 px-4 py-3 lg:h-20 h-16 lg:py-5 flex items-center justify-between;
+  }
+}

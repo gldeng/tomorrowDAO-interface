@@ -1,7 +1,15 @@
+import LogoComponent from 'components/Logo';
+import './index.css';
+import Login from 'components/Login';
 export default function Header() {
-	return <h1 style={{
-		fontSize: '42px',
-		margin: '12px',
-	}} className="w-full h-16 text-center">Welcome to aelf!</h1>;
-  }
-  
+  return (
+    <header className="header-container">
+      <div className="header-banner">
+        <div className="heder-menu">
+          <LogoComponent />
+        </div>
+        <Login />
+      </div>
+    </header>
+  );
+}
