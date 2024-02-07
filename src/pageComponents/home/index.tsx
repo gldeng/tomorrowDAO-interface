@@ -1,5 +1,5 @@
-import DefaultPage from './defaultPage'
+import DefaultPage from './defaultPage';
 
 export default function Home() {
-  return <DefaultPage />
+  return <DefaultPage />;
 }

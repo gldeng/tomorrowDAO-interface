@@ -6,8 +6,6 @@ import { store } from 'redux/store';
 
 const APP_NAME = 'forest';
 
-
-
 const PortkeyProviderDynamic = dynamic(
   async () => {
     const info = store.getState().elfInfo.elfInfo;
@@ -75,7 +73,9 @@ const WebLoginProviderDynamic = dynamic(
         },
       },
       defaultRpcUrl:
-        (info?.[`rpcUrl${String(info?.curChain).toUpperCase()}`] as unknown as string) || info?.rpcUrlTDVW || '',
+        (info?.[`rpcUrl${String(info?.curChain).toUpperCase()}`] as unknown as string) ||
+        info?.rpcUrlTDVW ||
+        '',
       networkType: info?.networkType || 'TESTNET',
     });
     return webLogin.WebLoginProvider;
@@ -104,7 +104,8 @@ export default ({ children }: { children: React.ReactNode }) => {
           autoLogoutOnNetworkMismatch: true,
           autoLogoutOnAccountMismatch: true,
           autoLogoutOnChainMismatch: true,
-        }}>
+        }}
+      >
         {children}
       </WebLoginProviderDynamic>
     </PortkeyProviderDynamic>
