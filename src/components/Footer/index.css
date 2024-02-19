@@ -1,0 +1,36 @@
+.footer-container {
+  @apply w-full bg-white;
+  .TMRWDAO-divider-horizontal {
+    @apply m-0;
+  }
+  .footer-main {
+    @apply max-w-[1440px] mx-auto pt-[60px] box-border px-10;
+    .footer-top {
+      @apply flex justify-between mb-11;
+      .footer-docs {
+        @apply flex;
+        .footer-docs-item {
+          @apply mr-[90px];
+        }
+        .footer-docs-item:last-child {
+          @apply mr-0;
+        }
+        a {
+          @apply text-[#434343];
+        }
+      }
+    }
+    .footer-media {
+      @apply flex items-center justify-between py-5;
+      .footer-media-items {
+        @apply flex items-center;
+        .footer-media-item {
+          @apply mr-6;
+        }
+      }
+      .footer-time {
+        @apply text-[#B8B8B8] text-sm leading-[22px];
+      }
+    }
+  }
+}
