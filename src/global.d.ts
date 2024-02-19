@@ -37,3 +37,4 @@ declare module 'aelf-sdk';
 declare namespace AElf {
 	function ajax(url: string, settings?: any): void;
 }
+type A = () => void;
