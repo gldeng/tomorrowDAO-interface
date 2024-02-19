@@ -1,0 +1,34 @@
+.dao-list-item {
+  @apply px-6 py-8 bg-white border-[#EDEDED] border-solid border rounded-lg;
+  .dao-list-item-title {
+    @apply flex items-center;
+    .dao-logo {
+      @apply w-10 h-10 mr-3;
+    }
+  }
+  .TMRWDAO-typography {
+    @apply m-0;
+  }
+  .content-text {
+    @apply text-[#434343] text-sm leading-[22px];
+  }
+  .dao-list-item-content {
+    @apply w-full mt-4 mb-6;
+  }
+  .dao-list-item-count {
+    @apply flex items-center;
+    .count-item {
+      @apply mr-8;
+      @apply flex items-center;
+      .count-title {
+        @apply text-[#919191] text-base mr-2;
+      }
+      .count-amount {
+        @apply text-[#1A1A1A] text-base font-medium;
+      }
+    }
+    .count-item:last-child {
+      @apply mr-0;
+    }
+  }
+}

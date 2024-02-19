@@ -1,0 +1,6 @@
+.home-container {
+  @apply w-full;
+  .home-header-container {
+    @apply max-w-[1360px] m-auto;
+  }
+}

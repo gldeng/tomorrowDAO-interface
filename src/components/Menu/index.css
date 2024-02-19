@@ -1,0 +1,17 @@
+.custom-menu {
+  @apply border-none;
+
+  .TMRWDAO-menu-overflow-item,
+  .TMRWDAO-menu-item,
+  .TMRWDAO-menu-submenu {
+    &::after {
+      @apply !border-b-0;
+    }
+    &:hover {
+      @apply !text-[#7F58F5];
+      .TMRWDAO-menu-submenu-title {
+        @apply !text-[#7F58F5];
+      }
+    }
+  }
+}
