@@ -5,6 +5,7 @@ import Header from 'components/Header';
 import Loading from 'components/Loading';
 import dynamic from 'next/dynamic';
 import 'styles/global.css';
+import 'aelf-design/css';
 
 import { store } from 'redux/store';
 import Footer from 'components/Footer';
@@ -15,24 +16,20 @@ const Layout = dynamic(async () => {
     const { children } = props;
 
     return (
-      <html lang="en">
-        <body>
-          <div className="relative box-border min-h-screen bg-global-grey flex flex-col h-full">
-            <Suspense>
-              <Header />
-            </Suspense>
-            <div className="flex flex-1 flex-col overflow-y-auto">
-              <DynamicBreadCrumb />
-              <Suspense>
-                <div className="flex-1">{children}</div>
-              </Suspense>
-              <Suspense>
-                <Footer />
-              </Suspense>
-            </div>
-          </div>
-        </body>
-      </html>
+      <div className="flex w-[100vw] h-[100vh] flex-col relative box-border min-h-screen bg-global-grey">
+        <Suspense>
+          <Header />
+        </Suspense>
+        <div className="flex flex-1 flex-col overflow-y-auto">
+          <DynamicBreadCrumb />
+          <Suspense>
+            <div className="flex-1">{children}</div>
+          </Suspense>
+          <Suspense>
+            <Footer />
+          </Suspense>
+        </div>
+      </div>
     );
   };
 });

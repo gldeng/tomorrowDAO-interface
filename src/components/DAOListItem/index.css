@@ -1,5 +1,5 @@
 .dao-list-item {
-  @apply px-6 py-8 bg-white border-[#EDEDED] border-solid border rounded-lg;
+  @apply py-6 px-4 sm:px-6 sm:py-8 bg-white border-Neutral-Divider cursor-pointer border-solid border rounded-lg hover:border-Neutral-Secondary-Text;
   .dao-list-item-title {
     @apply flex items-center;
     .dao-logo {
@@ -10,21 +10,20 @@
     @apply m-0;
   }
   .content-text {
-    @apply text-[#434343] text-sm leading-[22px];
+    @apply text-Neutral-Primary-Text text-sm leading-[22px];
   }
   .dao-list-item-content {
     @apply w-full mt-4 mb-6;
   }
   .dao-list-item-count {
-    @apply flex items-center;
+    @apply flex gap-5 sm:gap-8 items-center;
     .count-item {
-      @apply mr-8;
       @apply flex items-center;
       .count-title {
-        @apply text-[#919191] text-base mr-2;
+        @apply text-Neutral-Secondary-Text text-xs leading-5 sm:leading-6 sm:text-base mr-2;
       }
       .count-amount {
-        @apply text-[#1A1A1A] text-base font-medium;
+        @apply text-Primary-Text text-xs leading-5 sm:text-base sm:leading-6 font-medium;
       }
     }
     .count-item:last-child {

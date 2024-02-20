@@ -1,16 +1,53 @@
 .custom-menu {
-  @apply border-none;
+  @apply !border-none h-10 !leading-10;
 
   .TMRWDAO-menu-overflow-item,
   .TMRWDAO-menu-item,
   .TMRWDAO-menu-submenu {
+    @apply p-0 pl-12 !mt-0;
     &::after {
       @apply !border-b-0;
     }
     &:hover {
-      @apply !text-[#7F58F5];
-      .TMRWDAO-menu-submenu-title {
-        @apply !text-[#7F58F5];
+      .TMRWDAO-menu-title-content {
+        @apply !text-Brand-hover;
+      }
+      svg {
+        transform: rotate(180deg);
+      }
+      svg * {
+        @apply !fill-Brand-hover;
+      }
+    }
+  }
+  .TMRWDAO-menu-title-content {
+    @apply text-Primary-Text inline-block !text-base;
+  }
+  .menu-label {
+    @apply h-10 flex items-center;
+    .menu-label-text {
+      @apply mr-1;
+    }
+  }
+  
+}
+
+.pc-menu-popup {
+  @apply !pt-0;
+  .TMRWDAO-menu {
+    .TMRWDAO-menu-item {
+      @apply w-full m-0 h-12 leading-[48px] px-6 box-border !important;
+      .TMRWDAO-menu-title-content {
+        @apply text-Primary-Text text-sm leading-[22px] inline-block;
+      }
+    }
+    .TMRWDAO-menu-item:hover {
+      @apply bg-Neutral-Hover-BG;
+    }
+    .TMRWDAO-menu-item:active {
+      @apply bg-Neutral-Hover-BG;
+      .TMRWDAO-menu-title-content {
+        @apply text-Brand-Brand;
       }
     }
   }

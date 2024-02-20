@@ -1,17 +1,22 @@
 import React, { useState } from 'react';
 import type { MenuProps } from 'antd';
 import { Menu } from 'antd';
+import { ReactComponent as MenuArrow } from 'assets/imgs/menu-arrow.svg';
 import './index.css';
 const items: MenuProps['items'] = [
   {
     label: 'Create a DAO',
     key: 'CreateDAO',
-    // icon: <MailOutlined />,
   },
   {
-    label: 'Resources',
+    label: (
+      <div className="menu-label">
+        <span className="menu-label-text">Resources</span>
+        <MenuArrow />
+      </div>
+    ),
     key: 'Resources',
-    // icon: <AppstoreOutlined />,
+    popupClassName: 'pc-menu-popup',
     children: [
       {
         label: 'Documentation',
@@ -28,9 +33,14 @@ const items: MenuProps['items'] = [
     ],
   },
   {
-    label: 'Community',
+    label: (
+      <div className="menu-label">
+        <span className="menu-label-text">Community</span>
+        <MenuArrow />
+      </div>
+    ),
+    popupClassName: 'pc-menu-popup',
     key: 'Community',
-    // icon: <SettingOutlined />,
     children: [
       {
         label: 'Documentation',
