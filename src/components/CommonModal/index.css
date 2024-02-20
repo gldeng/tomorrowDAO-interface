@@ -1,0 +1,8 @@
+.common-modal {
+  .TMRWDAO-modal-close {
+    @apply hidden;
+  }
+  .TMRWDAO-modal-header {
+    @apply px-0 mb-0;
+  }
+}
