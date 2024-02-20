@@ -8,6 +8,14 @@ export const THEME_CONFIG: ThemeConfig = {
     colorPrimaryActive: '#6F45EF',
     colorBorder: '#EDEDED',
     colorPrimaryBorder: '#EDEDED',
+    controlHeight: 48,
+  },
+  components: {
+    Form: {
+      labelColor: '#434343',
+      labelFontSize: 16,
+      itemMarginBottom: 32,
+    },
   },
   components: {
     Steps: {
