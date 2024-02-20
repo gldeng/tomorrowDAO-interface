@@ -17,4 +17,10 @@ export const THEME_CONFIG: ThemeConfig = {
       itemMarginBottom: 32,
     },
   },
+  components: {
+    Steps: {
+      iconSize: 40,
+      controlHeight: 40,
+    },
+  },
 };

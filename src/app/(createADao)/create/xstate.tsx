@@ -1,6 +1,9 @@
 import { StateNode, assign } from 'xstate';
 import { createMachine } from 'xstate';
-import GovernanceModel from './GovernanceModel';
+import BasicDetails from './component/BasicDetails';
+import GovernanceModel from './component/GovernanceModel';
+import ContractsAndFiles from './component/ContractsAndFiles';
+
 export type Event = { type: 'NEXT' } | { type: 'PREVIOUS' };
 
 export type View = {
@@ -22,19 +25,15 @@ export type State = {
 
 export const mapNameToView: Record<string, View> = {
   basicDetails: {
-    Component: <div>basicDetails</div>,
+    Component: <BasicDetails />,
     step: 0,
   },
   governanceModel: {
-    Component: (
-      <div>
-        <GovernanceModel />
-      </div>
-    ),
+    Component: <GovernanceModel />,
     step: 1,
   },
   contractsAndFiles: {
-    Component: <div>contractsAndFiles</div>,
+    Component: <ContractsAndFiles />,
     step: 2,
   },
 };

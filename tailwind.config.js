@@ -4,8 +4,12 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        neutraltitle: '#1A1A1A',
-        'neutralprimary-text': '#434343',
+        neutralTitle: '#1A1A1A',
+        neutralPrimaryText: '#434343',
+        baseBorder: '#EDEDED',
+        colorPrimary: '#764DF1',
+        colorPrimaryHover: '#7F58F5',
+        colorPrimaryActive: '#6F45EF',
       },
     },
   },
