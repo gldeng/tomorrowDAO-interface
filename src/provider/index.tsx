@@ -7,11 +7,14 @@ import { useEffect, useState } from 'react';
 import { store } from 'redux/store';
 import { AELFDProvider } from 'aelf-design';
 import { PREFIXCLS, THEME_CONFIG } from 'utils/AntdThemeConfig';
+import { ConfigProvider } from 'antd';
 
 function Provider({ children }: { children: React.ReactNode }) {
   return (
     <AELFDProvider prefixCls={PREFIXCLS} theme={THEME_CONFIG}>
-      {children}
+      <ConfigProvider prefixCls={PREFIXCLS} theme={THEME_CONFIG}>
+        {children}
+      </ConfigProvider>
     </AELFDProvider>
   );
 }

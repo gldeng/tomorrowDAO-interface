@@ -9,4 +9,10 @@ export const THEME_CONFIG: ThemeConfig = {
     colorBorder: '#EDEDED',
     colorPrimaryBorder: '#EDEDED',
   },
+  components: {
+    Steps: {
+      iconSize: 40,
+      controlHeight: 40,
+    },
+  },
 };

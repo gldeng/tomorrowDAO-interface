@@ -1,6 +1,13 @@
 import { Typography, FontWeightEnum, Button } from 'aelf-design';
 import './index.css';
+import { useRouter } from 'next/navigation';
+
 export default function DAOHeader() {
+  const router = useRouter();
+
+  const toGuidePage = () => {
+    router.push('/guide');
+  };
   return (
     <div className="dao-header">
       <div className="dao-detail">
@@ -13,7 +20,7 @@ export default function DAOHeader() {
         </div>
       </div>
       <div>
-        <Button type="primary" ghost>
+        <Button type="primary" ghost onClick={toGuidePage}>
           Create a DAO
         </Button>
       </div>
