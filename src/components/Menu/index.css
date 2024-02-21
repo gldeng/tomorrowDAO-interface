@@ -1,16 +1,106 @@
 .custom-menu {
-  @apply border-none;
+  @apply !border-none h-10 !leading-10;
 
   .TMRWDAO-menu-overflow-item,
   .TMRWDAO-menu-item,
   .TMRWDAO-menu-submenu {
+    @apply p-0 pl-12 !mt-0;
     &::after {
       @apply !border-b-0;
     }
     &:hover {
-      @apply !text-[#7F58F5];
-      .TMRWDAO-menu-submenu-title {
-        @apply !text-[#7F58F5];
+      .TMRWDAO-menu-title-content {
+        @apply !text-Brand-hover;
+      }
+      svg {
+        transform: rotate(180deg);
+      }
+      svg * {
+        @apply !fill-Brand-hover;
+      }
+    }
+  }
+  .TMRWDAO-menu-title-content {
+    @apply text-Primary-Text inline-block !text-base;
+  }
+  .menu-label {
+    @apply h-10 flex items-center;
+    .menu-label-text {
+      @apply mr-1;
+    }
+  }
+}
+
+.pc-menu-popup {
+  @apply !pt-0;
+  .TMRWDAO-menu {
+    .TMRWDAO-menu-item {
+      @apply w-full m-0 h-12 leading-[48px] px-6 box-border !important;
+      .TMRWDAO-menu-title-content {
+        @apply text-Primary-Text text-sm leading-[22px] inline-block;
+      }
+    }
+    .TMRWDAO-menu-item:hover {
+      @apply bg-Neutral-Hover-BG;
+    }
+    .TMRWDAO-menu-item:active {
+      @apply bg-Neutral-Hover-BG;
+      .TMRWDAO-menu-title-content {
+        @apply text-Brand-Brand;
+      }
+    }
+  }
+}
+
+.mobile-menu-drawer {
+  .TMRWDAO-drawer-header {
+    @apply px-4 py-3;
+  }
+  .menu-header-container {
+    @apply flex items-center justify-between;
+  }
+  .TMRWDAO-drawer-body {
+    @apply p-0;
+    .TMRWDAO-menu {
+      @apply border-none px-4;
+      .TMRWDAO-menu-item {
+        @apply w-full h-16 leading-[64px] m-0 !p-0 border-solid border-b rounded-none;
+      }
+      .TMRWDAO-menu-title-content {
+        @apply text-base text-Primary-Text;
+      }
+      .TMRWDAO-menu-submenu {
+        @apply p-0 border-solid border-b rounded-none;
+        .TMRWDAO-menu-submenu-title {
+          @apply w-full h-16 leading-[64px] m-0 !p-0 rounded-none;
+        }
+      }
+      .TMRWDAO-menu-item-selected {
+        .TMRWDAO-menu-title-content{
+          @apply text-Brand-Brand;
+        }
+      }
+      .TMRWDAO-menu-submenu-selected {
+        .TMRWDAO-menu-submenu-title {
+          @apply bg-transparent;
+          .menu-label-text {
+            @apply text-Brand-Brand;
+          }
+        }
+      }
+      .TMRWDAO-menu-submenu-arrow {
+        inset-inline-end: 0px;
+      }
+      .TMRWDAO-menu-sub {
+        @apply !bg-transparent;
+        .TMRWDAO-menu-item {
+          @apply h-12 leading-[48px] !px-4 border-none;
+        }
+        .TMRWDAO-menu-item-selected {
+          .TMRWDAO-menu-title-content{
+            @apply text-Brand-Brand;
+          }
+        }
       }
     }
   }

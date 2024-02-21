@@ -1,13 +1,16 @@
 import { Typography } from 'antd';
 import './index.css';
 const { Paragraph } = Typography;
+import { Typography as DesignTypography } from 'aelf-design';
+import useResponsive from 'hooks/useResponsive';
 export default function DAOListItem() {
+  const { isSM } = useResponsive();
   return (
     <div className="dao-list-item">
       <div className="dao-list-item-title">
         <div className="dao-logo">{/* <img src={DAODefaultImg} alt="" /> */}</div>
         <div className="dao-title">
-          <Typography.Title level={5}>Network DAO</Typography.Title>
+          <DesignTypography.Title level={isSM ? 6 : 5}>Network DAO</DesignTypography.Title>
         </div>
       </div>
       <div className="dao-list-item-content">

@@ -1,9 +1,9 @@
 import '@portkey/did-ui-react/dist/assets/index.css';
-import '@portkey-v1/did-ui-react/dist/assets/index.css';
 import 'aelf-web-login/dist/assets/index.css';
 import Layout from 'pageComponents/layout';
 import Provider from 'provider/';
 import Script from 'next/script';
+import StyleRegistry from './StyleRegistry';
 
 export const metadata = {
   title: 'TMRW DAO',
@@ -24,8 +24,8 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;"
           name="viewport"
         />
-        <link rel="shortcut icon" href="/aelfinscription/favicon.ico" />
-        <Script src="https://www.googletagmanager.com/gtag/js?id=G-J0D8TQCBTF" />
+        {/* <link rel="shortcut icon" href="/aelfinscription/favicon.ico" /> */}
+        {/* <Script src="https://www.googletagmanager.com/gtag/js?id=G-J0D8TQCBTF" />
         <Script id="google-analytics">
           {`
           window.dataLayer = window.dataLayer || [];
@@ -34,12 +34,14 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
  
           gtag('config', 'G-J0D8TQCBTF');
         `}
-        </Script>
+        </Script> */}
       </head>
       <body>
-        <Provider>
-          <Layout>{children}</Layout>
-        </Provider>
+        <StyleRegistry>
+          <Provider>
+            <Layout>{children}</Layout>
+          </Provider>
+        </StyleRegistry>
       </body>
     </html>
   );

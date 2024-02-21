@@ -1,71 +1,60 @@
+'use client';
 import React, { useState } from 'react';
-import type { MenuProps } from 'antd';
-import { Menu } from 'antd';
+import { Drawer, Menu } from 'antd';
+import MenuButton from 'components/MenuButton';
 import './index.css';
-const items: MenuProps['items'] = [
-  {
-    label: 'Create a DAO',
-    key: 'CreateDAO',
-    // icon: <MailOutlined />,
-  },
-  {
-    label: 'Resources',
-    key: 'Resources',
-    // icon: <AppstoreOutlined />,
-    children: [
-      {
-        label: 'Documentation',
-        key: 'Documentation',
-      },
-      {
-        label: 'GitHub',
-        key: 'GitHub',
-      },
-      {
-        label: 'White Paper',
-        key: 'White Paper',
-      },
-    ],
-  },
-  {
-    label: 'Community',
-    key: 'Community',
-    // icon: <SettingOutlined />,
-    children: [
-      {
-        label: 'Documentation',
-        key: 'Documentation1',
-      },
-      {
-        label: 'GitHub',
-        key: 'GitHub1',
-      },
-      {
-        label: 'White Paper',
-        key: 'White Paper1',
-      },
-    ],
-  },
-];
+import { HeaderLogo } from 'components/Logo';
+import { ReactComponent as CloseIcon } from 'assets/imgs/close.svg';
+import type { MenuProps } from 'antd';
 
-function PCMenu() {
-  const [current, setCurrent] = useState('mail');
+export interface IMobileMenuProps extends Omit<MenuProps, 'mode'> {
+  className?: string;
+}
 
-  const onClick: MenuProps['onClick'] = (e) => {
-    console.log('click ', e);
-    setCurrent(e.key);
-  };
-
+function PCMenu(props: IMobileMenuProps) {
   return (
     <Menu
-      onClick={onClick}
-      selectedKeys={[current]}
       className="custom-menu"
       mode="horizontal"
-      items={items}
       style={{ minWidth: 0, flex: 'auto' }}
+      {...props}
     />
   );
 }
 
-export { PCMenu };
+function MobileMenu(props: IMobileMenuProps) {
+  const [open, setOpen] = useState(false);
+  const showDrawer = () => {
+    setOpen(true);
+  };
+
+  const onClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <div className="mobile-menu-container">
+      <div onClick={showDrawer}>
+        <MenuButton />
+      </div>
+      <Drawer
+        width="100%"
+        title={
+          <div className="menu-header-container">
+            <HeaderLogo />
+            <CloseIcon className="cursor-pointer" width={16} height={16} onClick={onClose} />
+          </div>
+        }
+        className="mobile-menu-drawer"
+        placement="left"
+        closable={false}
+        onClose={onClose}
+        open={open}
+      >
+        <Menu mode="inline" className="mobile-custom-menu" {...props} />
+      </Drawer>
+    </div>
+  );
+}
+
+export { PCMenu, MobileMenu };
