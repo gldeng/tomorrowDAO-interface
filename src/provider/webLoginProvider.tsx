@@ -4,12 +4,17 @@ import dynamic from 'next/dynamic';
 
 import { store } from 'redux/store';
 
-const APP_NAME = 'forest';
+const APP_NAME = 'TMRWDAO';
+
+function addBasePath(url: string) {
+  if (String(url).startsWith('http')) {
+    return url;
+  }
+  return `${url}`;
+}
 
 const PortkeyProviderDynamic = dynamic(
   async () => {
-    const info = store.getState().elfInfo.elfInfo;
-
     const weblogin = await import('aelf-web-login').then((module) => module);
     return weblogin.PortkeyProvider;
   },
@@ -19,41 +24,27 @@ const PortkeyProviderDynamic = dynamic(
 const WebLoginProviderDynamic = dynamic(
   async () => {
     const info = store.getState().elfInfo.elfInfo;
-    const serverV1 = info.portkeyServerV1;
-    const serverV2 = info.portkeyServerV2;
-    const connectUrlV1 = info?.connectUrlV1;
-    const connectUrlV2 = info?.connectUrlV2;
-    const networkTypeV2 = (info.networkTypeV2 || 'TESTNET') as NetworkType;
+    const server = info.portkeyServer;
+    const connectUrl = info?.connectUrl;
+    const networkType = (info.networkType || 'TESTNET') as NetworkType;
 
     const webLogin = await import('aelf-web-login').then((module) => module);
 
     webLogin.setGlobalConfig({
       appName: APP_NAME,
       chainId: info.curChain || '',
-      portkey: {
-        useLocalStorage: true,
-        graphQLUrl: info.graphqlServer || '',
-        connectUrl: connectUrlV1 || '',
-        socialLogin: {},
-        requestDefaults: {
-          timeout: 80000,
-          baseURL: serverV1 || '',
-        },
-      },
+      onlyShowV2: true,
+      portkey: {},
       portkeyV2: {
-        networkType: networkTypeV2,
+        networkType: networkType,
         useLocalStorage: true,
-        graphQLUrl: info.graphqlServerV2,
-        connectUrl: connectUrlV2 || '',
-        loginConfig: {
-          recommendIndexes: [0, 1],
-          loginMethodsOrder: ['Google', 'Telegram', 'Apple', 'Phone', 'Email'],
-        },
+        graphQLUrl: info.graphqlServer,
+        connectUrl: addBasePath(connectUrl || ''),
         requestDefaults: {
-          timeout: networkTypeV2 === 'TESTNET' ? 300000 : 80000,
-          baseURL: serverV2 || '',
+          timeout: networkType === 'TESTNET' ? 300000 : 80000,
+          baseURL: addBasePath(server || ''),
         },
-        serviceUrl: serverV2,
+        serviceUrl: server,
       },
       aelfReact: {
         appName: APP_NAME,
@@ -83,17 +74,21 @@ const WebLoginProviderDynamic = dynamic(
   { ssr: false },
 );
 
-export default ({ children }: { children: React.ReactNode }) => {
+// eslint-disable-next-line import/no-anonymous-default-export
+export default function webLoginProvider({ children }: { children: React.ReactNode }) {
   const info = store.getState().elfInfo.elfInfo;
   return (
-    <PortkeyProviderDynamic networkType={info?.networkType} networkTypeV2={info?.networkTypeV2}>
+    <PortkeyProviderDynamic networkTypeV2={info?.networkType}>
       <WebLoginProviderDynamic
         nightElf={{
           useMultiChain: true,
           connectEagerly: true,
         }}
         portkey={{
-          keyboard: true,
+          design: 'CryptoDesign',
+          keyboard: {
+            v2: true,
+          },
           autoShowUnlock: false,
           checkAccountInfoSync: true,
         }}
@@ -110,4 +105,4 @@ export default ({ children }: { children: React.ReactNode }) => {
       </WebLoginProviderDynamic>
     </PortkeyProviderDynamic>
   );
-};
+}
