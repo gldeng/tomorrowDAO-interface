@@ -10,11 +10,12 @@ import 'aelf-design/css';
 import { store } from 'redux/store';
 import Footer from 'components/Footer';
 import DynamicBreadCrumb from 'components/DynamicBreadCrumb';
+import { useWalletInit } from 'hooks/useWallet';
 
 const Layout = dynamic(async () => {
   return (props: React.PropsWithChildren<{}>) => {
     const { children } = props;
-
+    useWalletInit();
     return (
       <div className="flex w-[100vw] h-[100vh] flex-col relative box-border min-h-screen bg-global-grey">
         <Suspense>
