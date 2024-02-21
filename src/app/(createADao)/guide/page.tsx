@@ -2,6 +2,8 @@
 import { Button, Typography, FontWeightEnum } from 'aelf-design';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import useJumpByPath from 'hooks/useJumpByPath';
+import { ReactComponent as CircleDot } from 'assets/imgs/circle-dot.svg';
 
 const linkArr = [
   { label: 'PTreasury Contract', path: '/' },
@@ -9,15 +11,33 @@ const linkArr = [
   { label: 'Election Contract', path: '/' },
 ];
 
+const offers = [
+  { label: 'Trusted by DAOs that play a central role in aelf network governance' },
+  { label: 'Protects about one billion of dollars in assets' },
+  { label: 'Enable flexible, trustless protocol upgrades' },
+  { label: 'Supports all kinds of governance tokens deployed on aelf chain' },
+  {
+    label:
+      'Customizable number of participants, governance model,voting model, voting period and more',
+  },
+  { label: 'Robust community of builders, users, and tools' },
+];
+const URL_FOR_TSM = 'https://eforest.finance/symbolmarket';
+
 const GuidePage = () => {
   const router = useRouter();
+  const jump = useJumpByPath();
+
   const toCreateDaoPage = () => {
     router.push('/create');
+  };
+  const onJumpHandler = () => {
+    jump(URL_FOR_TSM);
   };
 
   return (
     <div>
-      <div className="py-6 flex flex-col gap-3 border-0 border-b border-solid border-baseBorder">
+      <div className="py-6 flex flex-col gap-3 border-0 border-b border-solid border-Neutral-Divider">
         <Typography.Title level={5} fontWeight={FontWeightEnum.Medium}>
           Governance Framework on TMRW DAO
         </Typography.Title>
@@ -31,32 +51,13 @@ const GuidePage = () => {
           It offers
         </Typography.Title>
         <div className="pt-4">
-          <ul className="list-disc flex flex-col gap-4 pl-4">
-            <li>
-              <Typography.Text>
-                Trusted by DAOs that play a central role in aelf network governance
-              </Typography.Text>
-            </li>
-            <li>
-              <Typography.Text>Protects about one billion of dollars in assets</Typography.Text>
-            </li>
-            <li>
-              <Typography.Text>Enable flexible, trustless protocol upgrades</Typography.Text>
-            </li>
-            <li>
-              <Typography.Text>
-                Supports all kinds of governance tokens deployed on aelf chain
-              </Typography.Text>
-            </li>
-            <li>
-              <Typography.Text>
-                Customizable number of participants, governance model,voting model, voting period
-                and more
-              </Typography.Text>
-            </li>
-            <li>
-              <Typography.Text>Robust community of builders, users, and tools</Typography.Text>
-            </li>
+          <ul className="flex flex-col gap-4">
+            {offers.map((ele, idx) => (
+              <li className="flex items-baseline gap-2" key={idx}>
+                <CircleDot />
+                <Typography.Text className="flex-1">{ele.label}</Typography.Text>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
@@ -66,29 +67,34 @@ const GuidePage = () => {
           It requires
         </Typography.Title>
         <div className="pt-4">
-          <ul className="list-disc flex flex-col gap-4 pl-4">
-            <li>
-              <Typography.Text>Issue a governance token for voting if you need.</Typography.Text>
-              <Link href="/" className="pl-2">
+          <ul className="flex flex-col gap-4">
+            <li className="flex items-baseline gap-2">
+              <CircleDot />
+              <div className="flex-1">
+                <Typography.Text>Issue a governance token for voting if you need.</Typography.Text>
                 <Typography.Text
+                  onClick={onJumpHandler}
                   fontWeight={FontWeightEnum.Medium}
-                  className="text-colorPrimary hover:text-colorPrimaryHover active:text-colorPrimaryActive"
+                  className="pl-0 sm:pl-2 cursor-pointer !text-Brand-Brand hover:text-Brand-hover active:text-Brand-click"
                 >
                   Purchase a seed to issue a token.
                 </Typography.Text>
-              </Link>
+              </div>
             </li>
-            <li>
-              <Typography.Text>Know about the smart contracts and DYOR:</Typography.Text>
+            <li className="flex items-baseline gap-2">
+              <CircleDot />
+              <Typography.Text className="flex-1">
+                Know about the smart contracts and DYOR:
+              </Typography.Text>
             </li>
           </ul>
 
           {linkArr.map((item, index) => (
-            <div className='before:content-["·"] before:text-colorPrimary pt-4 pl-3' key={index}>
+            <div className='before:content-["·"] before:text-Brand-Brand pt-4 pl-3' key={index}>
               <Link href={item.path} className="pl-2">
                 <Typography.Text
                   fontWeight={FontWeightEnum.Medium}
-                  className="text-colorPrimary hover:text-colorPrimaryHover active:text-colorPrimaryActive"
+                  className="!text-Brand-Brand hover:text-Brand-hover active:text-Brand-click"
                 >
                   {item.label}
                 </Typography.Text>
@@ -98,8 +104,8 @@ const GuidePage = () => {
         </div>
       </div>
 
-      <div className="flex py-8 border-0 border-t border-solid border-baseBorder justify-end">
-        <Button type="primary" className="w-40" onClick={toCreateDaoPage}>
+      <div className="flex py-6 lg:py-8 border-0 border-t border-solid border-Neutral-Divider justify-end">
+        <Button type="primary" className="w-full lg:w-40" onClick={toCreateDaoPage}>
           Get Start
         </Button>
       </div>
