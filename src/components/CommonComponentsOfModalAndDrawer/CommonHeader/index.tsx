@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { Flex } from 'antd';
 import { Typography, FontWeightEnum } from 'aelf-design';
 import Image from 'next/image';
-import icon_close from 'assets/imgs/icon_close.svg';
+import closeIcon from 'assets/imgs/close.svg';
 import './index.css';
 
 const { Title } = Typography;
@@ -21,7 +21,7 @@ export default function CommonHeader({ title, onClose }: ICommonHeaderProps) {
       </Title>
       <Image
         className="common-header-close"
-        src={icon_close}
+        src={closeIcon}
         alt="close"
         width={16}
         height={16}

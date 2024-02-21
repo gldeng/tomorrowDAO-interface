@@ -8,14 +8,19 @@ import './index.css';
 const { Title } = Typography;
 
 export enum CommonDaoLogoSizeEnum {
+  Small = 'small',
   Medium = 'medium',
   Large = 'large',
 }
 
 const SIZE_CONFIG = {
-  [CommonDaoLogoSizeEnum.Medium]: {
+  [CommonDaoLogoSizeEnum.Small]: {
     logoSize: 32,
     titleLevel: 7,
+  },
+  [CommonDaoLogoSizeEnum.Medium]: {
+    logoSize: 40,
+    titleLevel: 6,
   },
   [CommonDaoLogoSizeEnum.Large]: {
     logoSize: 48,
@@ -41,7 +46,7 @@ export default function CommonDaoLogo({
   const logoSize = useMemo(() => SIZE_CONFIG[size].logoSize, [size]);
   const titleLevel = useMemo(() => SIZE_CONFIG[size].titleLevel, [size]);
 
-  return isError ? (
+  return isError || !src ? (
     <Flex
       className={clsx('common-dao-logo', 'common-dao-logo-error', className)}
       style={{ width: logoSize, height: logoSize }}
