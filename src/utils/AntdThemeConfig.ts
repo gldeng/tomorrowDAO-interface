@@ -7,8 +7,20 @@ export const THEME_CONFIG: ThemeConfig = {
     colorPrimary: '#764DF1',
     colorPrimaryHover: '#7F58F5',
     colorPrimaryActive: '#6F45EF',
-    colorBorder: '#EDEDED',
+    colorBorder: '#E1E1E1',
     colorPrimaryBorder: '#EDEDED',
+    controlHeight: 48,
+  },
+  components: {
+    Form: {
+      labelColor: '#434343',
+      labelFontSize: 16,
+      itemMarginBottom: 32,
+    },
+    Steps: {
+      iconSize: 40,
+      controlHeight: 40,
+    },
   },
 };
 

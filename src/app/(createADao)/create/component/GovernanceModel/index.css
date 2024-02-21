@@ -1,0 +1,17 @@
+
+.governance-form {
+  .governanceModel-form-item {
+    .governance-ratio-item + .governance-ratio-item {
+      @apply mt-[12px];
+    }
+  }
+  .governance-title-primary {
+    @apply text-[20px] leading-[28px] text-neutralTitle font-medium pb-[8px];
+  }
+  .governance-title-secondary {
+    @apply font-medium leading-[24px]
+  }
+  .governance-type-text {
+    @apply text-neutralPrimaryText text-[16px] leading-[24px] font-normal;
+  }
+}
