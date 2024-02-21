@@ -16,11 +16,14 @@ export const THEME_CONFIG: ThemeConfig = {
       labelFontSize: 16,
       itemMarginBottom: 32,
     },
-  },
-  components: {
     Steps: {
       iconSize: 40,
       controlHeight: 40,
+    },
+    Slider: {
+      handleSize: 8,
+      handleSizeHover: 10,
+      railSize: 8,
     },
   },
 };

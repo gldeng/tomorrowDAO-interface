@@ -25,7 +25,7 @@ export type State = {
 
 export const mapNameToView: Record<string, View> = {
   basicDetails: {
-    Component: <BasicDetails />,
+    Component: <GovernanceModel />,
     step: 0,
   },
   governanceModel: {
