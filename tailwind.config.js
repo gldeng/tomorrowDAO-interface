@@ -6,10 +6,6 @@ module.exports = {
       colors: {
         neutralTitle: '#1A1A1A',
         neutralPrimaryText: '#434343',
-        baseBorder: '#EDEDED',
-        colorPrimary: '#764DF1',
-        colorPrimaryHover: '#7F58F5',
-        colorPrimaryActive: '#6F45EF',
         'Neutral-Secondary-Text': '#919191',
         'Primary-Text': '#1A1A1A',
         'Neutral-Primary-Text': '#434343',

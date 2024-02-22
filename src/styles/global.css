@@ -1,6 +1,6 @@
 /* @tailwind base; */
-/* @tailwind components;
-@tailwind utilities; */
+/* @tailwind components; */
+@tailwind utilities;
 
 html,
 body {
@@ -28,9 +28,7 @@ input[type='number'] {
 }
 
 * {
-	font-family: Poppins, sans-serif;
-	transition: background 0.3s, fill 0.3s, stork 0.3s, color 0.3s,
-		box-shadow 0.3s;
+	font-family: Roboto-regular;
 }
 
 code {
