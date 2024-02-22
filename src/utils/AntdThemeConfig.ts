@@ -20,6 +20,12 @@ export const THEME_CONFIG: ThemeConfig = {
     Steps: {
       iconSize: 40,
       controlHeight: 40,
+      finishIconBorderColor: '#764DF1',
+    },
+    Slider: {
+      handleSize: 8,
+      handleSizeHover: 10,
+      railSize: 8,
     },
   },
 };

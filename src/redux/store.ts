@@ -6,11 +6,15 @@ import storage from 'redux-persist/lib/storage';
 import InfoReducer, { infoSlice } from './reducer/info';
 import DataReducer, { dataSlice } from './reducer/data';
 
+import elfInfoReducer, { elfInfoSlice } from './reducer/elfInfo';
+import UserInfoReducer, { userInfoSlice } from './reducer/userInfo';
+
 const rootReducer = combineReducers({
   [infoSlice.name]: InfoReducer,
   [dataSlice.name]: DataReducer,
+  [userInfoSlice.name]: UserInfoReducer,
+  [elfInfoSlice.name]: elfInfoReducer,
 });
-
 
 const makeStore = () => {
   const persistConfig = {
