@@ -2,6 +2,7 @@
 
 import { Button, Input, Tooltip } from 'aelf-design';
 import { Form, Radio, Select, InputNumber, FormInstance } from 'antd';
+import { ResponsiveSelect } from 'components/ResponsiveSelect';
 import { memo, useEffect } from 'react';
 import InputSlideBind from '../InputSlideBind';
 import {
@@ -47,14 +48,12 @@ const GovernanceSchemeForm: React.FC<GovernanceSchemeFormProps> = (props) => {
   const governanceNameAlias = governanceName as keyof typeof minimalRequiredThresholdMap;
 
   useEffect(() => {
-    form.setFieldsValue({
-      governance_scheme_threshold: {
-        minimal_vote_threshold: undefined,
-        minimal_required_threshold: undefined,
-        minimal_approve_threshold: minimalApproveThresholdMap[governanceName]?.default,
-        maximal_rejection_threshold: maximalRejectionThresholdMap[governanceName]?.default,
-        maximal_abstention_threshold: maximalAbstentionThresholdMap[governanceName]?.default,
-      },
+    form.setFieldValue([keyPrefix, 'governance_scheme_threshold'], {
+      minimal_vote_threshold: undefined,
+      minimal_required_threshold: undefined,
+      minimal_approve_threshold: minimalApproveThresholdMap[governanceName]?.default,
+      maximal_rejection_threshold: maximalRejectionThresholdMap[governanceName]?.default,
+      maximal_abstention_threshold: maximalAbstentionThresholdMap[governanceName]?.default,
     });
   }, [governanceName]);
 
@@ -66,7 +65,18 @@ const GovernanceSchemeForm: React.FC<GovernanceSchemeFormProps> = (props) => {
         rules={[{ required: true, message: 'Please select governance model' }]}
         initialValue={defaultId}
       >
-        <Select placeholder="Please select a country">
+        <ResponsiveSelect
+          popupClassName="governance-model-select"
+          drawerProps={{
+            title: 'Governance Model',
+          }}
+          options={governanceMechanismList.map((item) => {
+            return {
+              label: item.name,
+              value: item.governanceSchemeId,
+            };
+          })}
+        >
           {governanceMechanismList.map((item) => {
             return (
               <Option key={item.governanceSchemeId} value={item.governanceSchemeId}>
@@ -74,7 +84,7 @@ const GovernanceSchemeForm: React.FC<GovernanceSchemeFormProps> = (props) => {
               </Option>
             );
           })}
-        </Select>
+        </ResponsiveSelect>
       </Form.Item>
       {/* address number or  proportion*/}
       {governance_scheme_id === defaultId ? (

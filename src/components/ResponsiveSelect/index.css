@@ -1,0 +1,9 @@
+.drawer-menu-item {
+    @apply h-[64px] flex items-center font-normal leading-[24px] font-[400] cursor-pointer;
+    &.item-selected {
+        @apply text-colorPrimary;
+    }
+}
+.title-close {
+    @apply w-[16px] h-[16px] cursor-pointer absolute right-0;
+}
