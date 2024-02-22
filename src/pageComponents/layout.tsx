@@ -4,8 +4,6 @@ import { Layout as AntdLayout } from 'antd';
 import Header from 'components/Header';
 import Loading from 'components/Loading';
 import dynamic from 'next/dynamic';
-import 'styles/global.css';
-import 'aelf-design/css';
 
 import { store } from 'redux/store';
 import Footer from 'components/Footer';

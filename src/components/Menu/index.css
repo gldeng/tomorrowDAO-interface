@@ -64,13 +64,13 @@
     .TMRWDAO-menu {
       @apply border-none px-4;
       .TMRWDAO-menu-item {
-        @apply w-full h-16 leading-[64px] m-0 !p-0 border-solid border-b rounded-none;
+        @apply !border-0 w-full h-16 leading-[64px] m-0 !p-0 border-solid !border-b rounded-none border-Neutral-Divider;
       }
       .TMRWDAO-menu-title-content {
         @apply text-base text-Primary-Text;
       }
       .TMRWDAO-menu-submenu {
-        @apply p-0 border-solid border-b rounded-none;
+        @apply !border-0 p-0 border-solid !border-b rounded-none border-Neutral-Divider;
         .TMRWDAO-menu-submenu-title {
           @apply w-full h-16 leading-[64px] m-0 !p-0 rounded-none;
         }

@@ -1,3 +1,4 @@
+import { IAelfdCustomToken } from 'aelf-design/dist/es/provider';
 import { ThemeConfig } from 'antd';
 export const PREFIXCLS = 'TMRWDAO';
 
@@ -26,5 +27,14 @@ export const THEME_CONFIG: ThemeConfig = {
       handleSizeHover: 10,
       railSize: 8,
     },
+  },
+};
+
+export const CUSTOM_TOKEN: IAelfdCustomToken = {
+  customAddress: {
+    primaryLinkColor: '#919191',
+    primaryIconColor: '#919191',
+    addressHoverColor: '#7F58F5',
+    addressActiveColor: '#6F45EF',
   },
 };

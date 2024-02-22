@@ -78,16 +78,20 @@ export default function Header() {
   return (
     <header className="header-container">
       <div className="header-banner">
-        <div className="header-menu">
-          <Link href="/">
-            <HeaderLogo />
-          </Link>
-          {!isLG && <PCMenu selectedKeys={[current]} items={items} onClick={onClick} />}
+        <div className="header-logo">
+          <div className="header-menu">
+            <Link href="/">
+              <HeaderLogo />
+            </Link>
+            {!isLG && <PCMenu selectedKeys={[current]} items={items} onClick={onClick} />}
+          </div>
+          <Login />
         </div>
-        <Login />
-        <div className="header-menu-icon ml-2">
-          {isLG && <MobileMenu selectedKeys={[current]} items={items} onClick={onClick} />}
-        </div>
+        {isLG && (
+          <div className="header-menu-icon">
+            <MobileMenu selectedKeys={[current]} items={items} onClick={onClick} />
+          </div>
+        )}
       </div>
     </header>
   );
