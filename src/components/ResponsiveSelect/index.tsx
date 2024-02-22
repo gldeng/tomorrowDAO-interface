@@ -40,7 +40,7 @@ export const ResponsiveSelect = (props: ResponsiveSelectProps) => {
       >
         <div className="flex items-center relative justify-center">
           <h2 className="font-medium text-neutralTitle text-[20px] leading-[28px]">{title}</h2>
-          <CloseIcon onClick={handleDrawerClose} className="title-close" />
+          <CloseIcon onClick={handleDrawerClose} className="responsive-select-title-close" />
         </div>
         {options?.map((option) => (
           <div
@@ -50,7 +50,9 @@ export const ResponsiveSelect = (props: ResponsiveSelectProps) => {
               setOpen(false);
             }}
             key={option.value}
-            className={cls('drawer-menu-item', { 'item-selected': value === option.value })}
+            className={cls('responsive-select-drawer-menu-item', {
+              'item-selected': value === option.value,
+            })}
           >
             {option.label}
           </div>
