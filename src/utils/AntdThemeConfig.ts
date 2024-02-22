@@ -21,5 +21,10 @@ export const THEME_CONFIG: ThemeConfig = {
       controlHeight: 40,
       finishIconBorderColor: '#764DF1',
     },
+    Slider: {
+      handleSize: 8,
+      handleSizeHover: 10,
+      railSize: 8,
+    },
   },
 };
