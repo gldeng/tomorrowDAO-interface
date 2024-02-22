@@ -1,5 +1,4 @@
-import { StateNode, assign } from 'xstate';
-import { createMachine } from 'xstate';
+import { StateNode, assign, createMachine } from 'xstate';
 import BasicDetails from './component/BasicDetails';
 import GovernanceModel from './component/GovernanceModel';
 import ContractsAndFiles from './component/ContractsAndFiles';
