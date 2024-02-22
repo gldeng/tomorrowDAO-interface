@@ -1,0 +1,29 @@
+.dao-detail {
+  @apply w-full;
+
+  .dao-detail-content {
+    @apply max-w-[1360px]  m-auto flex mb-6;
+    .dao-detail-content-left {
+      @apply flex-1 w-2/3;
+      .dao-detail-content-left-tab {
+        @apply bg-white mb-[16px] border border-Neutral-Divider border-solid rounded-lg;
+      }
+      .tab-all-proposals {
+        @apply px-8 pb-4;
+        .tab-all-proposals-header {
+          @apply flex justify-between items-center mb-4;
+        }
+        .tab-all-proposals-select {
+          @apply w-[120px];
+        }
+      }
+    }
+
+    .dao-detail-content-right {
+      @apply w-1/3 ml-6;
+      .dao-detail-content-right-info {
+        @apply border border-Neutral-Divider border-solid rounded-lg bg-white px-8  py-6;
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+.dao-detail-dis {
+  @apply max-w-[1360px] m-auto border border-Neutral-Divider border-solid rounded-lg bg-white px-8 py-6 mb-6;
+  .dao-detail-dis-title {
+    @apply flex justify-between;
+  }
+  .dao-detail-dis-dis {
+    @apply text-neutralPrimaryText mt-2.5;
+  }
+  .dis-item {
+    @apply flex items-center text-neutralPrimaryText;
+    .dis-common-span {
+      @apply text-colorPrimary mr-1 cursor-pointer;
+    }
+  }
+}
