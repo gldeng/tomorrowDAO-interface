@@ -32,8 +32,8 @@ export const THEME_CONFIG: ThemeConfig = {
 
 export const CUSTOM_TOKEN: IAelfdCustomToken = {
   customAddress: {
-    primaryLinkColor: '#919191',
-    primaryIconColor: '#919191',
+    primaryLinkColor: '#434343',
+    primaryIconColor: '#B8B8B8',
     addressHoverColor: '#7F58F5',
     addressActiveColor: '#6F45EF',
   },
