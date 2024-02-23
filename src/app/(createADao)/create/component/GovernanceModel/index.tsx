@@ -1,20 +1,14 @@
 'use client';
 
-import { Button, Radio } from 'aelf-design';
-import { Form, Switch } from 'antd';
-import { memo, useState } from 'react';
-import { GovernanceModelType } from './type';
-import GovernanceSchemeForm from './GovernanceSchemeForm';
-import HighCouncilForm from './HighCouncilForm';
+import { Button, Tooltip } from 'aelf-design';
+import { Form, InputNumber } from 'antd';
+import { memo } from 'react';
+import InputSlideBind from 'components/InputSlideBind';
+import { createPercentageRule, min2maxIntegerRule } from '../utils';
 import './index.css';
 
 const GovernanceModel = () => {
   const [form] = Form.useForm();
-  const governanceModelType = Form.useWatch('governanceModelType', form);
-  const [isCheck, setIsCheck] = useState(false);
-  const onHighCouncilSwitch = (checked: boolean) => {
-    setIsCheck(checked);
-  };
   return (
     <div className="governance-form">
       <Form
@@ -25,46 +19,72 @@ const GovernanceModel = () => {
         scrollToFirstError={true}
       >
         <Form.Item
-          name="governanceModelType"
-          className="governanceModel-form-item"
-          label={<span className="governance-title-primary pb-[8px]">Governance Model</span>}
-          initialValue={GovernanceModelType.Fixed}
+          name={'minimal_required_threshold'}
+          label={
+            <Tooltip title="The minimum number of addresses required to participate in the voting of proposals.">
+              <span className="form-item-label">Minimum voting addresses</span>
+            </Tooltip>
+          }
+          rules={[
+            {
+              required: true,
+              type: 'integer',
+              min: 1,
+              max: 99999999999,
+              message:
+                'Please input a integer number not smaller than 1 and not larger than 100,000,000,000',
+            },
+          ]}
         >
-          <Radio.Group>
-            <Radio value={GovernanceModelType.Fixed} className="governance-ratio-item">
-              <span className="governance-type-text">
-                Fixed governance mechanism: all proposals use the same voting mode
-              </span>
-            </Radio>
-            <Radio value={GovernanceModelType.Flexible} className="governance-ratio-item">
-              <span className="governance-type-text">
-                Flexible governance mechanism: different proposals use different voting models
-              </span>
-            </Radio>
-          </Radio.Group>
+          <InputNumber placeholder="The number should ≥ 1" controls={false} />
         </Form.Item>
-        {governanceModelType === GovernanceModelType.Fixed && (
-          <GovernanceSchemeForm form={form} keyPrefix="governance_scheme_input" />
-        )}
-        {/* highCounci toggle */}
-        <div>
-          <div className="h-[28px] flex items-center mb-[16px]">
-            <Switch onChange={onHighCouncilSwitch} value={isCheck} />
-            <span
-              onClick={() => setIsCheck(!isCheck)}
-              className="governance-title-primary cursor-pointer pl-[16px]"
-            >
-              High Council
-            </span>
-          </div>
-          <p className="font-normal text-neutralPrimaryText text-[16px] leading-[24px] mb-[48px]">
-            High Council is a collection of top-ranked addresses who staked and are voted by
-            govemance tokens in a specific smart contract with primary governance responsibilities
-            for the DAO. Its members may have certain governance or sensitive permissions.
-          </p>
-        </div>
-        {/* highCounci form */}
-        {isCheck && <HighCouncilForm form={form} keyPrefix="high_council_input" />}
+
+        <Form.Item
+          name={'minimal_vote_threshold'}
+          label={
+            <Tooltip title="The minimum number of votes required to finalize a proposal. Only applicable to proposals with 1 token 1 vote proposals.">
+              <span className="form-item-label">Minimum votes</span>
+            </Tooltip>
+          }
+          rules={min2maxIntegerRule}
+        >
+          <InputNumber
+            placeholder="Refer to the governance token circulation to give a reasonable value"
+            controls={false}
+          />
+        </Form.Item>
+
+        {/* approve rejection abstention */}
+        <Form.Item
+          name={'minimal_approve_threshold'}
+          label={<span className="form-item-label">Minimum percentage of approved votes </span>}
+          initialValue={50}
+          rules={[
+            createPercentageRule(
+              1,
+              100,
+              'Please input a integer number larger than 0 and smaller than 100',
+            ),
+          ]}
+        >
+          <InputSlideBind type="approve" placeholder={'Suggest setting it above 50%'} />
+        </Form.Item>
+        <Form.Item
+          name={'maximal_rejection_threshold'}
+          label={<span className="form-item-label">Maximum percentage of rejected votes</span>}
+          initialValue={20}
+          rules={[createPercentageRule(0, 20, 'Please input a integer number smaller than 20')]}
+        >
+          <InputSlideBind type="rejection" placeholder={'Suggest setting it below 20%'} />
+        </Form.Item>
+        <Form.Item
+          name={'maximal_abstention_threshold'}
+          label={<span className="form-item-label">Maximum percentage of abstain votes</span>}
+          initialValue={20}
+          rules={[createPercentageRule(0, 20, 'Please input a integer number smaller than 20')]}
+        >
+          <InputSlideBind type="abstention" placeholder={'Suggest setting it below 20%'} />
+        </Form.Item>
       </Form>
       <Button
         onClick={() => {

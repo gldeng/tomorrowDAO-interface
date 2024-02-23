@@ -2,6 +2,7 @@ import { StateNode, assign, createMachine } from 'xstate';
 import BasicDetails from './component/BasicDetails';
 import GovernanceModel from './component/GovernanceModel';
 import ContractsAndFiles from './component/ContractsAndFiles';
+import HighCouncil from './component/HighCouncil';
 
 export type Event = { type: 'NEXT' } | { type: 'PREVIOUS' };
 
@@ -18,6 +19,7 @@ export type State = {
   states: {
     basicDetails: StateNode;
     governanceModel: StateNode;
+    highCouncil: StateNode;
     contractsAndFiles: StateNode;
   };
 };
@@ -31,9 +33,13 @@ export const mapNameToView: Record<string, View> = {
     Component: <GovernanceModel />,
     step: 1,
   },
+  highCouncil: {
+    Component: <HighCouncil />,
+    step: 2,
+  },
   contractsAndFiles: {
     Component: <ContractsAndFiles />,
-    step: 2,
+    step: 3,
   },
 };
 
@@ -81,6 +87,28 @@ const formMachineConfig = {
           }),
         },
         NEXT: {
+          target: 'highCouncil',
+          actions: assign({
+            currentView: ({ context, event }, params) => {
+              console.log(context, event, params);
+              return mapNameToView['highCouncil'];
+            },
+          }),
+        },
+      },
+    },
+    highCouncil: {
+      on: {
+        PREVIOUS: {
+          target: 'governanceModel',
+          actions: assign({
+            currentView: ({ context, event }, params) => {
+              console.log(context, event, params);
+              return mapNameToView['governanceModel'];
+            },
+          }),
+        },
+        NEXT: {
           target: 'contractsAndFiles',
           actions: assign({
             currentView: ({ context, event }, params) => {
@@ -94,11 +122,11 @@ const formMachineConfig = {
     contractsAndFiles: {
       on: {
         PREVIOUS: {
-          target: 'governanceModel',
+          target: 'highCouncil',
           actions: assign({
             currentView: ({ context, event }, params) => {
               console.log(context, event, params);
-              return mapNameToView['governanceModel'];
+              return mapNameToView['highCouncil'];
             },
           }),
         },

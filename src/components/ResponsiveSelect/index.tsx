@@ -9,7 +9,7 @@ interface ResponsiveSelectProps extends SelectProps {
   drawerProps?: DrawerProps;
 }
 export const ResponsiveSelect = (props: ResponsiveSelectProps) => {
-  const { value, onChange, options, drawerProps } = props;
+  const { value, onChange, options, drawerProps, ...resetProps } = props;
   const { title, ...resetDrawerProps } = drawerProps ?? {};
   const [open, setOpen] = useState(false);
   // width <= 1024;
@@ -25,7 +25,6 @@ export const ResponsiveSelect = (props: ResponsiveSelectProps) => {
       setDrawerVisible(true);
     }
   };
-
   return (
     <>
       <Drawer
@@ -59,10 +58,16 @@ export const ResponsiveSelect = (props: ResponsiveSelectProps) => {
         ))}
       </Drawer>
       <Select
-        {...props}
+        {...resetProps}
+        options={options}
+        value={value}
+        onChange={onChange}
         open={isLG ? false : open}
         onDropdownVisibleChange={(visible) => setOpen(visible)}
-        onClick={handleSelectClick}
+        onClick={(e) => {
+          handleSelectClick();
+          props.onClick?.(e);
+        }}
       >
         {props.children}
       </Select>

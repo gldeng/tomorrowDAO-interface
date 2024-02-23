@@ -16,7 +16,10 @@ const items = [
     title: 'Basic Details',
   },
   {
-    title: 'Governance Model',
+    title: 'Referendum',
+  },
+  {
+    title: 'High Council (optional)',
   },
   {
     title: 'Contracts And Files',
@@ -62,7 +65,7 @@ const CreateDaoPage = () => {
             <span>Back</span>
           </Button>
         )}
-        {currentStep === 2 ? (
+        {currentStep === 3 ? (
           <Button
             type="primary"
             className="flex-1 lg:w-40 lg:flex-none gap-2"
