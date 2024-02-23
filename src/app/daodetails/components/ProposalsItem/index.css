@@ -1,0 +1,14 @@
+.proposal-item {
+  @apply flex justify-between border-solid border-[1px] border-Neutral-Divider rounded-lg px-8 py-6 bg-white mb-4;
+  .proposal-item-time {
+    @apply text-Neutral-Secondary-Text ml-4;
+  }
+  .proposal-item-title {
+    @apply flex items-center mt-2 mb-6 min-h-[62px];
+  }
+  .vote {
+    .vote-dis{
+        @apply text-Neutral-Secondary-Text;
+    }
+  }
+}
