@@ -22,6 +22,7 @@ module.exports = {
         'Brand-hover': '#7F58F5',
         'Brand-click': '#6F45EF',
         'Neutral-Hover-BG': '#FAFAFA',
+        'Neutral-Default-BG': '#F6F6F6',
       },
     },
     screens: {
@@ -34,4 +35,7 @@ module.exports = {
     },
   },
   plugins: [],
+  corePlugins: {
+    preflight: false,
+  },
 };

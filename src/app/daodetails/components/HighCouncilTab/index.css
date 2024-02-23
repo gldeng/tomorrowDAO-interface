@@ -1,0 +1,25 @@
+.high-council {
+  .high-council-header {
+    @apply px-8 pb-6 pt-2;
+  }
+  .customRow {
+    td {
+      @apply border-b-Neutral-Divider;
+    }
+    th:before {
+      background-color: #fff;
+    }
+  }
+  .custom-table-style {
+    th::before {
+      background-color: #fff !important;
+    }
+    /* .TMRWDAO-table-cell{
+      @apply border-t-[]
+    } */
+   
+  }
+  .TMRWDAO-pagination-container{
+    @apply px-8
+  }
+}

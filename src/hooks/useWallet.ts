@@ -40,6 +40,7 @@ export const useWalletInit = () => {
         };
         if (walletType === WalletType.elf) {
           walletInfo.aelfChainAddress = wallet?.address || '';
+          walletInfo.nightElfInfo = wallet.nightElfInfo;
         }
         if (walletType === WalletType.discover) {
           walletInfo.discoverInfo = {
@@ -79,6 +80,7 @@ export const useWalletInit = () => {
   });
 
   useWebLoginEvent(WebLoginEvents.LOGOUT, () => {
+    console.log('logout');
     localStorage.removeItem(storages.accountInfo);
     localStorage.removeItem(storages.walletInfo);
     dispatch(

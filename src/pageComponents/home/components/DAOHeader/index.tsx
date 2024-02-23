@@ -29,7 +29,7 @@ export default function DAOHeader() {
         </div>
         <div>
           <div>
-            <Button type="primary" ghost onClick={toGuidePage}>
+            <Button type="primary" onClick={toGuidePage}>
               Create a DAO
             </Button>
           </div>
