@@ -30,7 +30,7 @@
     "@sentry/nextjs": "^7.86.0",
     "@types/lodash-es": "^4.17.9",
     "@xstate/react": "^4.1.0",
-    "aelf-web-login": "2.0.0-beta.27",
+    "aelf-web-login": "2.0.0-beta.29",
     "antd": "^5.13.1",
     "axios": "^0.24.0",
     "clsx": "^2.1.0",

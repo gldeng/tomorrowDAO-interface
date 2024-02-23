@@ -1,5 +1,3 @@
-import 'styles/antd.css';
-import '@portkey/did-ui-react/dist/assets/index.css';
 import 'aelf-web-login/dist/assets/index.css';
 import 'styles/global.css';
 import 'aelf-design/css';
