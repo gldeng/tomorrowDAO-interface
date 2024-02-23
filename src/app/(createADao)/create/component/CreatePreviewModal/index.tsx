@@ -116,7 +116,7 @@ function AddressItem({
   );
 }
 
-interface ICreatePreviewModalProps {
+export interface ICreatePreviewModalProps {
   open: boolean;
   onClose: () => void;
   onConfirm: () => void;

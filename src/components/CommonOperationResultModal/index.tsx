@@ -21,7 +21,7 @@ const ICON_MAP = {
   [CommonOperationResultModalType.Warning]: warningFilledIcon,
 };
 
-type TCommonOperationResultModalProps = Pick<
+export type TCommonOperationResultModalProps = Pick<
   TCommonModalProps,
   'footerConfig' | 'open' | 'onCancel'
 > & {

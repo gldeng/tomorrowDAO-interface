@@ -6,6 +6,7 @@ import { Button, Typography, FontWeightEnum } from 'aelf-design';
 import { memo } from 'react';
 import { Steps } from 'antd';
 import clsx from 'clsx';
+import SubmitButton from './component/SubmitButton';
 import useResponsive from 'hooks/useResponsive';
 import { ReactComponent as ArrowRight } from 'assets/imgs/arrow-right.svg';
 import { ReactComponent as ArrowLeft } from 'assets/imgs/arrow-left.svg';
@@ -63,16 +64,15 @@ const CreateDaoPage = () => {
           </Button>
         )}
         {currentStep === 2 ? (
-          <Button
-            type="primary"
-            className="flex-1 lg:w-40 lg:flex-none gap-2"
-            onClick={() => {
-              alert('submit');
+          <SubmitButton
+            buttonProps={{
+              type: 'primary',
+              className: 'flex-1 lg:w-40 lg:flex-none gap-2',
             }}
           >
             <span>Submit</span>
             <ArrowRight />
-          </Button>
+          </SubmitButton>
         ) : (
           <Button
             type="primary"
