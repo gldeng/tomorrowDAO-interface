@@ -10,10 +10,7 @@ interface InputSlideBindProps {
   type: 'abstention' | 'rejection' | 'approve';
   placeholder?: string;
 }
-// const marks: SliderSingleProps['marks'] = {
-//   0: '0',
-//   100: '100%',
-// };
+
 const InputSlideBind = (props: InputSlideBindProps) => {
   const { value, onChange, type, placeholder } = props;
 

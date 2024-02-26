@@ -1,14 +1,10 @@
-.governance-form {
-
-  .TMRWDAO-input-number {
-    @apply w-full;
-  }
-
+.deploy-proposal-form {
   .form-item-label {
     @apply font-medium leading-[24px];
   }
 
-  .form-title-primary {
+  .title-primary {
     @apply text-[20px] leading-[28px] text-neutralTitle font-medium;
   }
+
 }
