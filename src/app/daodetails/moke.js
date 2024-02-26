@@ -23,11 +23,13 @@ export const mokeData = {
   pledgeContractAddress: '',
   treasuryContractAddress: '',
   voteContractAddress: '',
+  memberCount: 11,
+  candidateCount: 22,
   // ELF_2Pew…W28l_tDVW
   fileInfoList: [
     {
-      name: '',
-      hash: '',
+      name: 'aaaa',
+      cid: '11',
       url: '',
     },
   ],

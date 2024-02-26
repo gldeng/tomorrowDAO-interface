@@ -1,7 +1,9 @@
-import { Table, IPaginationProps, Typography, FontWeightEnum, HashAddress } from 'aelf-design';
 import { useEffect, useState } from 'react';
+import { Table, IPaginationProps, Typography, FontWeightEnum, HashAddress } from 'aelf-design';
+import { ConfigProvider } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 
+import NoData from '../NoData';
 import './index.css';
 
 interface IDataType {
@@ -95,7 +97,7 @@ export default function HighCounCilTab() {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     const { current: page = 1, pageSize = 10 } = tableParams.pagination;
     const result = data.slice((page - 1) * pageSize, page * pageSize);
-    setDataSource(result);
+    // setDataSource(result);
     setLoading(false);
   };
 
@@ -135,14 +137,16 @@ export default function HighCounCilTab() {
         <Typography.Text fontWeight={FontWeightEnum.Medium}>High Council Members</Typography.Text>
         {/* <span className="">Total of 17 members</span> */}
       </div>
-      <Table
-        className="custom-table-style"
-        columns={columns}
-        loading={loading}
-        pagination={{ ...tableParams.pagination, pageChange, pageSizeChange }}
-        dataSource={dataSource}
-        rowClassName={handleRowClassName}
-      ></Table>
+      <ConfigProvider renderEmpty={() => <NoData></NoData>}>
+        <Table
+          className="custom-table-style"
+          columns={columns}
+          loading={loading}
+          pagination={{ ...tableParams.pagination, pageChange, pageSizeChange }}
+          dataSource={dataSource}
+          rowClassName={handleRowClassName}
+        ></Table>
+      </ConfigProvider>
     </div>
   );
 }

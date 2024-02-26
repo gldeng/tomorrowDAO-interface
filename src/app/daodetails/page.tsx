@@ -1,38 +1,127 @@
 'use client';
 
-import { Descriptions } from 'antd';
-import { useState } from 'react';
-import { Select, Space } from 'antd';
+import { useCallback, useState } from 'react';
 import {
-  HashAddress,
   Tabs,
   Typography,
   FontWeightEnum,
   Button,
-  Search,
   Pagination,
   IPaginationProps,
 } from 'aelf-design';
+import { Form } from 'antd';
 import useResponsive from 'hooks/useResponsive';
-
 import ProposalsItem from './components/ProposalsItem';
 import HighCounCilTab from './components/HighCouncilTab';
 import DaoInfo from './components/DaoInfo';
 import ExecutdProposals from './components/ExecutdProposals';
 import MyRecords from './components/MyRecords';
+import MyInfo from './components/MyInfo';
+import Filter from './components/filter';
 import './page.css';
 
 import { mokeData as data, list } from './moke';
 
 interface ITableParams {
   pagination: IPaginationProps;
+  governanceMechanism: string;
+  proposalType: string;
+  proposalStatus: string;
+  content: string;
+}
+
+interface IHCParams {
+  pagination: IPaginationProps;
+  sorting: string;
+  type: string; // Member/Candidate
+  daoId: string;
+  chainId: string; // AELF tDVV
 }
 
 export default function DeoDetails() {
   const { isSM } = useResponsive();
 
+  // filter form
+  const [form] = Form.useForm();
+
   const [tabKey, setTabKey] = useState('proposals');
   // const [tabKey, setTabKey] = useState('highCouncil');
+
+  // proposal filter params
+  const [tableParams, setTableParams] = useState<ITableParams>({
+    governanceMechanism: '',
+    proposalType: '',
+    proposalStatus: '',
+    content: '',
+    pagination: {
+      current: 1,
+      pageSize: 20,
+      total: 0,
+    },
+  });
+
+  const [hcParams, setHcParams] = useState<IHCParams>({
+    sorting: '',
+    type: '',
+    daoId: '',
+    chainId: '', // AELF tDVV
+    pagination: {
+      current: 1,
+      pageSize: 20,
+      total: 0,
+    },
+  });
+
+  const handleSearch = useCallback(
+    (initParams: any) => {
+      const values = form.getFieldsValue();
+      console.log(values);
+      // params
+      const params = {
+        ...initParams,
+        ...values,
+        skipCount: tableParams.pagination.current,
+        maxResultCount: tableParams.pagination.pageSize,
+      };
+      console.log(params);
+    },
+    [form, tableParams.pagination],
+  );
+
+  const pageChange = useCallback(
+    (page: number) => {
+      const pagination = {
+        ...tableParams.pagination,
+        current: page,
+      };
+      setTableParams((state) => {
+        return {
+          ...state,
+          pagination,
+        };
+      });
+      handleSearch({ ...pagination });
+    },
+    [handleSearch, tableParams],
+  );
+
+  const pageSizeChange = useCallback(
+    (page: number, pageSize: number) => {
+      const pagination = {
+        ...tableParams.pagination,
+        current: page,
+        pageSize,
+      };
+      setTableParams((state) => {
+        return {
+          ...state,
+          pagination,
+        };
+      });
+      handleSearch({ ...pagination });
+    },
+    [handleSearch, tableParams],
+  );
 
   const tabItems = [
     {
@@ -49,40 +138,7 @@ export default function DeoDetails() {
             </Button>
           </div>
           <div className="flex justify-between">
-            <Space wrap>
-              <Select
-                defaultValue="ALL"
-                className="tab-all-proposals-select"
-                options={[
-                  { value: 'ALL', label: 'ALL' },
-                  { value: 'Governance', label: 'Governance' },
-                  { value: 'Advisory', label: 'Advisory' },
-                ]}
-              />
-              <Select
-                defaultValue="ALL"
-                className="tab-all-proposals-select"
-                options={[
-                  { value: 'lucy', label: 'ALL' },
-                  { value: 'Parliament', label: 'Parliament' },
-                  { value: 'Association ', label: 'Association ' },
-                  { value: 'Referendum ', label: 'Referendum ' },
-                  { value: 'Customer ', label: 'Customer ' },
-                ]}
-              />
-              <Select
-                defaultValue="ALL"
-                className="tab-all-proposals-select"
-                options={[
-                  { value: 'ALL', label: 'ALL' },
-                  { value: 'Active', label: 'Active' },
-                  { value: 'Approved', label: 'Approved' },
-                  { value: 'Rejected', label: 'Rejected' },
-                  { value: 'Abstained', label: 'Abstained' },
-                ]}
-              />
-            </Space>
-            <Search className="w-[400px]" placeholder="Proposals Title / Description / ID" />
+            <Filter form={form} onSearch={handleSearch} />
           </div>
         </div>
       ),
@@ -94,63 +150,22 @@ export default function DeoDetails() {
     },
   ];
 
-  const myInfoItems = [
-    {
-      key: '0',
-      label: '',
-      children: <HashAddress preLen={8} endLen={11} address={data.creator}></HashAddress>,
-    },
-    {
-      key: '1',
-      label: 'ELF Balance',
-      children: <div className="w-full text-right">-</div>,
-    },
-    {
-      key: '2',
-      label: 'Staked ELF',
-      children: <div className="w-full text-right">-</div>,
-    },
-    {
-      key: '3',
-      label: 'Voted',
-      children: <div className="w-full text-right">-</div>,
-    },
-  ];
-
-  const [tableParams, setTableParams] = useState<ITableParams>({
-    pagination: {
-      current: 1,
-      pageSize: 10,
-      total: 103,
-    },
-  });
-
-  const pageChange = (page: number) => {
-    setTableParams({
-      pagination: {
-        ...tableParams.pagination,
-        current: page,
-      },
-    });
-  };
-
-  const pageSizeChange = (page: number, pageSize: number) => {
-    setTableParams({
-      pagination: {
-        ...tableParams.pagination,
-        current: page,
-        pageSize: pageSize,
-      },
-    });
-  };
-
   const handleTabChange = (key: string) => {
     setTabKey(key);
   };
 
+  const handleChangeHCparams = useCallback((type: string) => {
+    setHcParams((state) => {
+      return {
+        ...state,
+        type,
+      };
+    });
+  }, []);
+
   return (
     <div className="dao-detail">
-      <DaoInfo data={data} />
+      <DaoInfo data={data} onChangeHCParams={handleChangeHCparams} />
       <div className="dao-detail-content">
         <div className="dao-detail-content-left">
           <div className="dao-detail-content-left-tab">
@@ -169,9 +184,7 @@ export default function DeoDetails() {
           )}
         </div>
         <div className="dao-detail-content-right">
-          <div className="dao-detail-content-right-info">
-            <Descriptions colon={false} title="My Info" items={myInfoItems} column={1} />
-          </div>
+          <MyInfo info={data} isLogin={true} />
           <ExecutdProposals />
           <MyRecords />
         </div>
