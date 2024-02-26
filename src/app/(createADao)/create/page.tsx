@@ -68,11 +68,10 @@ const CreateDaoPage = () => {
         )}
 
         {currentStep === 3 ? (
-          <Button
-            type="primary"
-            className="flex-1 lg:w-40 lg:flex-none gap-2"
-            onClick={() => {
-              alert('submit');
+          <SubmitButton
+            buttonProps={{
+              type: 'primary',
+              className: 'flex-1 lg:w-40 lg:flex-none gap-2',
             }}
           >
             <span>Submit</span>
