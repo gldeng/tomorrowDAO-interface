@@ -1,26 +1,34 @@
 .dao-detail {
   @apply w-full;
-
+ 
   .dao-detail-content {
-    @apply max-w-[1360px]  m-auto flex mb-6;
+    @apply max-w-[1360px] flex mx-4 mb-6 lg:mx-auto;
     .dao-detail-content-left {
       @apply flex-1 w-2/3;
       .dao-detail-content-left-tab {
         @apply bg-white mb-[16px] border border-Neutral-Divider border-solid rounded-lg;
       }
       .tab-all-proposals {
-        @apply px-8 pb-4;
+        @apply px-4 pb-4 lg:px-8;
         .tab-all-proposals-header {
           @apply flex justify-between items-center mb-4;
         }
         .tab-all-proposals-select {
-          @apply w-[120px];
+          @apply w-full;
         }
       }
     }
 
     .dao-detail-content-right {
       @apply w-1/3 ml-6;
+    }
+  }
+  .address{
+    .acss-ijss2m{
+      @apply text-Neutral-Primary-Text;
+    }
+    .acss-ijss2m:hover{
+      @apply text-colorPrimaryHover;
     }
   }
 }

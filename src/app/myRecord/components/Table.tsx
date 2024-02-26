@@ -3,8 +3,7 @@ import { Table, IPaginationProps, Typography, FontWeightEnum, HashAddress } from
 import { ConfigProvider } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 
-import NoData from '../NoData';
-import './index.css';
+import NoData from './NoData';
 
 interface IDataType {
   key: React.Key;
@@ -34,13 +33,27 @@ const handleHeaderCell = () => ({
 
 const columns: ColumnsType<IDataType> = [
   {
-    title: 'No.',
-    dataIndex: 'key',
+    title: 'Time',
+    dataIndex: 'time',
     onHeaderCell: handleHeaderCell,
+    sorter: () => {
+      return 0;
+    },
+    defaultSortOrder: 'descend',
   },
   {
-    title: 'Type',
-    dataIndex: 'age',
+    title: 'Proposal Name / ID',
+    dataIndex: 'ID',
+    onHeaderCell: handleHeaderCell,
+    render: (text) => (
+      <div>
+        <HashAddress preLen={8} endLen={9} address={text}></HashAddress>
+      </div>
+    ),
+  },
+  {
+    title: 'My Option',
+    dataIndex: 'address',
     onHeaderCell: handleHeaderCell,
     filters: [
       { text: 'All', value: '' },
@@ -53,27 +66,14 @@ const columns: ColumnsType<IDataType> = [
     },
   },
   {
-    title: 'Address',
-    dataIndex: 'address',
-    onHeaderCell: handleHeaderCell,
-    render: (text) => <HashAddress preLen={8} endLen={9} address={text}></HashAddress>,
-  },
-  {
-    title: 'Staked Token',
+    title: 'Votes',
     dataIndex: 'stakedAmount',
     onHeaderCell: handleHeaderCell,
-    sorter: () => {
-      return 0;
-    },
   },
   {
-    title: 'Obtained Votes',
+    title: 'Transaction ID',
     dataIndex: 'obtainedVotes',
     onHeaderCell: handleHeaderCell,
-    sorter: () => {
-      return 0;
-    },
-    defaultSortOrder: 'descend',
   },
 ];
 
@@ -81,7 +81,7 @@ interface TableParams {
   pagination: IPaginationProps;
 }
 
-export default function HighCounCilTab() {
+export default function RecordTable() {
   const [dataSource, setDataSource] = useState<IDataType[]>();
   const [loading, setLoading] = useState(false);
 
@@ -130,16 +130,9 @@ export default function HighCounCilTab() {
 
   return (
     <div className="high-council">
-      <div className="high-council-header">
-        <Typography.Title fontWeight={FontWeightEnum.Medium} level={6}>
-          High Council Members
-        </Typography.Title>
-        <Typography.Text fontWeight={FontWeightEnum.Medium}>High Council Members</Typography.Text>
-        {/* <span className="">Total of 17 members</span> */}
-      </div>
       <ConfigProvider renderEmpty={() => <NoData></NoData>}>
         <Table
-          scroll={{ x: 500 }}
+          scroll={{ x: 400 }}
           className="custom-table-style"
           columns={columns}
           loading={loading}

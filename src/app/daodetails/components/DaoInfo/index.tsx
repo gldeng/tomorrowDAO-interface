@@ -1,7 +1,12 @@
-import { Button, HashAddress, Dropdown } from 'aelf-design';
+import { useCallback, useMemo, useState } from 'react';
+import { Collapse, HashAddress, Dropdown, Typography, ICollapseProps } from 'aelf-design';
 import Image from 'next/image';
-import { Divider, Descriptions, DescriptionsProps } from 'antd';
+import { Divider, Descriptions, DescriptionsProps, List } from 'antd';
 import type { MenuProps } from 'antd';
+import useResponsive from 'hooks/useResponsive';
+import CommonDrawer from 'components/CommonDrawer';
+import PreviewFile from 'components/PreviewFile';
+
 import { HC_CANDIDATE, HC_MEMBER } from '../../constants';
 
 import ProposalDetailFile from 'assets/imgs/proposal-detail-file.svg';
@@ -39,6 +44,7 @@ export default function DaoInfo(props: IParams) {
   } = props;
 
   const jump = useJumpByPath();
+  const { isSM } = useResponsive();
 
   const handleGoto = () => {
     const originAddress = 'ELF_2UthYi7AHRdfrqc1YCfeQnjdChDLaas65bW4WxESMGMojFiXj9_AELF#contracts';
@@ -49,7 +55,14 @@ export default function DaoInfo(props: IParams) {
     {
       key: '1',
       label: 'Creator',
-      children: <HashAddress preLen={8} endLen={11} address={data.creator}></HashAddress>,
+      children: (
+        <HashAddress
+          className="address"
+          preLen={8}
+          endLen={11}
+          address={data.creator}
+        ></HashAddress>
+      ),
     },
     {
       key: '2',
@@ -58,6 +71,7 @@ export default function DaoInfo(props: IParams) {
         <HashAddress
           preLen={8}
           endLen={11}
+          className="address"
           address={data.creator}
           addressClickCallback={handleGoto}
         ></HashAddress>
@@ -108,48 +122,26 @@ export default function DaoInfo(props: IParams) {
     },
   ];
 
-  const handleViewPdf = (url: string) => {
-    window.open(url);
-  };
-
-  const fileItems: MenuProps['items'] = fileInfoList.map((item: any) => {
-    return {
-      ...item,
-      key: item.cid,
-      label: (
-        <div
-          className="min-w-36"
-          onClick={() => {
-            handleViewPdf(item.url);
-          }}
-        >
-          {item.name}
-        </div>
-      ),
-    };
-  });
-
   return (
     <div className="dao-detail-dis">
-      <div className="dao-detail-dis-title">
-        <div>
+      <div className="dao-detail-dis-title px-4 lg:px-8">
+        <div className="md:flex md:items-center">
           <Image width={32} height={32} src={DaoLogo} alt="" className="mr-2"></Image>
-          <span>{metadata.name}</span>
+          <Typography.Title level={5}>{metadata.name}</Typography.Title>
         </div>
-        <Dropdown menu={{ items: fileItems }} placement="bottomRight">
-          <div className="bg-Neutral-Default-BG w-28 leading-8 text-center rounded-md">
-            <Image className="mr-1" width={14} height={14} src={ProposalDetailFile} alt=""></Image>
-            Preview File
-          </div>
-        </Dropdown>
+        <PreviewFile list={fileInfoList} />
       </div>
-      <div className="dao-detail-dis-dis">{metadata.description}</div>
-      <Divider />
-      <Descriptions
-        title="Creator"
-        items={items}
-        column={{ xs: 1, sm: 2, md: 2, lg: 2, xl: 2, xxl: 2 }}
-      />
+      <div className="dao-detail-dis-dis px-4 lg:px-8">{metadata.description}</div>
+      <Divider className="mb-2 lg:mb-6" />
+      <Collapse defaultActiveKey={['1']} ghost>
+        <Collapse.Panel header={<Typography.Title>Creator</Typography.Title>} key="1">
+          <Descriptions
+            layout={isSM ? 'vertical' : 'horizontal'}
+            items={items}
+            column={{ xs: 1, sm: 2, md: 2, lg: 2, xl: 2, xxl: 2 }}
+          />
+        </Collapse.Panel>
+      </Collapse>
     </div>
   );
 }

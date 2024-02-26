@@ -41,8 +41,8 @@ export default function MyRecords() {
   };
 
   return (
-    <div className="border border-Neutral-Divider border-solid rounded-lg bg-white my-4">
-      <div className="py-4 px-8 flex justify-between items-center">
+    <div className="border border-Neutral-Divider border-solid rounded-lg bg-white mb-4 lg:my-4">
+      <div className="px-4 lg:px-8 py-6 lg:py-4 flex justify-between items-center">
         <Typography.Title fontWeight={FontWeightEnum.Medium} level={6}>
           My Records
         </Typography.Title>
@@ -57,13 +57,16 @@ export default function MyRecords() {
       <div className="max-h-96 overflow-scroll">
         {data.map((item: any, index: number) => {
           return (
-            <div className="flex justify-between items-end px-8 max-h-80 mb-8" key={index}>
+            <div
+              className="flex justify-between items-center px-4 lg:px-8 max-h-80 mb-8"
+              key={index}
+            >
               <div>
                 <div className="time">
                   <span className="text-Neutral-Secondary-Text mr-2">{item.time}</span>
                   <span className="time-r">{item.vote}</span>
                 </div>
-                <div className="flex items-center">
+                <div className="block lg:flex items-center">
                   <Typography.Text fontWeight={FontWeightEnum.Medium}>Proposal ID:</Typography.Text>
                   <HashAddress
                     preLen={8}

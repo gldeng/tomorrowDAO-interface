@@ -27,6 +27,10 @@ export const THEME_CONFIG: ThemeConfig = {
       handleSizeHover: 10,
       railSize: 8,
     },
+    Tabs: {
+      horizontalItemPadding: '17px 32px',
+      horizontalItemPaddingSM: '17px 16px',
+    },
   },
 };
 
