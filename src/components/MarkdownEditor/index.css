@@ -1,0 +1,18 @@
+.markdown-editor {
+  @apply h-[274px] pb-0;
+  .rc-md-navigation {
+    @apply gap-[3px] py-[5px] bg-Neutral-Hover-BG;
+    .navigation-nav {
+      @apply items-start;
+      &.right {
+        @apply flex-none;
+      }
+    }
+  }
+  .editor-container > .section {
+    @apply border-0;
+    &.sec-md.visible:not(:has(+ .in-visible)) {
+      @apply border;
+    }
+  }
+}
