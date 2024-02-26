@@ -5,6 +5,7 @@ import { Form, Card } from 'antd';
 import Filter from './components/Filter';
 import RecordTable from './components/Table';
 import useResponsive from 'hooks/useResponsive';
+import './page.css';
 
 export default function MyRecord() {
   const [form] = Form.useForm();
@@ -20,7 +21,7 @@ export default function MyRecord() {
     console.log(form.getFieldsValue());
   };
   return (
-    <div className="w-full px-4 lg:px-8">
+    <div className="myRecord w-full px-4 lg:px-8">
       <Card
         className="w-full m"
         title={

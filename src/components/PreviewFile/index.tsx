@@ -51,7 +51,7 @@ export default function PreviewFile(props: PropsType) {
 
   const btnCom = useMemo(() => {
     return (
-      <div className="flex items-center justify-center h-8 bg-Neutral-Default-BG px-2 leading-8 rounded-md">
+      <div className="flex items-center justify-center h-8 bg-Neutral-Default-BG px-2 leading-8 rounded-md cursor-pointer">
         <Image width={14} height={14} src={ProposalDetailFile} alt="" onClick={handleClick}></Image>
         {!isSM && <span className="ml-1">Preview File</span>}
       </div>

@@ -6,6 +6,8 @@ import WarningGrayIcon from 'assets/imgs/warning-gray.svg';
 import CheckedIcon from 'assets/imgs/checked.svg';
 import DetailTag from '../DetailTag';
 import useResponsive from 'hooks/useResponsive';
+import { IProposalsItem } from '../../type';
+import { tagColorMap } from '../../constants';
 
 import './index.css';
 
@@ -16,32 +18,9 @@ export interface IProposalsItemProps {
   votesAmount: string;
 }
 
-const tagColorMap = {
-  Active: {
-    bg: '#FEF7EC',
-    text: '#F8B042',
-  },
-  Approved: {
-    bg: '#EBF3FF',
-    text: '#3888FF',
-  },
-  Expired: {
-    bg: '#EDEDED',
-    text: '#919191',
-  },
-  Executed: {
-    bg: '#E4F8F5',
-    text: '#05C4A2',
-  },
-  Rejected: {
-    bg: '#FEEFF1',
-    text: '#F55D6E',
-  },
-};
-
-export default function ProposalsItem(props: { data: any }) {
+export default function ProposalsItem(props: { data: IProposalsItem }) {
   const { data } = props;
-  const { isSM } = useResponsive();
+  const { isLG } = useResponsive();
 
   return (
     <div className="proposal-item">
@@ -51,8 +30,8 @@ export default function ProposalsItem(props: { data: any }) {
             customStyle={{
               text: data.proposalStatus,
               height: 20,
-              color: '#F8B042',
-              bgColor: '#FEF7EC',
+              color: tagColorMap[data.proposalStatus].textColor,
+              bgColor: tagColorMap[data.proposalStatus].bgColor,
             }}
           />
           <Typography.Text
@@ -60,14 +39,22 @@ export default function ProposalsItem(props: { data: any }) {
             size="small"
             fontWeight={FontWeightEnum.Regular}
           >
-            text test titlefsdfsdfsdfADD
+            {data.proposalDescription}
           </Typography.Text>
         </div>
         <div className="proposal-item-title">
-          <Typography.Title fontWeight={FontWeightEnum.Medium} level={7}>
-            Proposal ID：
-          </Typography.Title>
-          <HashAddress preLen={8} endLen={11} address={data.title}></HashAddress>
+          {data.proposalTitle ? (
+            <Typography.Title fontWeight={FontWeightEnum.Medium} level={7}>
+              {data.proposalTitle}
+            </Typography.Title>
+          ) : (
+            <>
+              <Typography.Title fontWeight={FontWeightEnum.Medium} level={7}>
+                Proposal ID：
+              </Typography.Title>
+              <HashAddress preLen={8} endLen={11} address={data.proposalId}></HashAddress>
+            </>
+          )}
         </div>
         <div>
           <Space>
@@ -85,18 +72,15 @@ export default function ProposalsItem(props: { data: any }) {
           </Space>
         </div>
       </div>
-      {isSM && <Divider></Divider>}
+      {isLG && <Divider></Divider>}
 
       <div className="vote flex flex-col justify-between">
         <div className="vote-top">
-          <Typography.Title
-            // className="proposal-item-time"
-            fontWeight={FontWeightEnum.Regular}
-            level={7}
-          >
+          <Typography.Title fontWeight={FontWeightEnum.Regular} level={7}>
             Total {data.votesAmount} votes
           </Typography.Title>
-          {data.isApprove ? (
+          {/* data.isApprove  */}
+          {data.votesAmount ? (
             <div className="vote-dis">
               <Image width={12} height={12} src={CheckedIcon} alt=""></Image>
               Insufficient votes： 3/100 (min required)

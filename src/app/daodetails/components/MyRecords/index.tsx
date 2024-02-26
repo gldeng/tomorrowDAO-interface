@@ -1,6 +1,7 @@
 import { Typography, FontWeightEnum, Button, HashAddress } from 'aelf-design';
 import Image from 'next/image';
 import arrowRightIcon from 'assets/imgs/arrow-right.svg';
+import { useRouter } from 'next/navigation';
 interface IStatus {
   Approved: string;
   Rejected: string;
@@ -16,6 +17,7 @@ const colorMap: IStatus = {
 };
 
 export default function MyRecords() {
+  const router = useRouter();
   const data: any = Array.from({ length: 5 }, (index) => {
     return {
       title: 'sdfasdfasdfads',
@@ -40,6 +42,10 @@ export default function MyRecords() {
     );
   };
 
+  const handleClickTo = () => {
+    router.push('/myRecord');
+  };
+
   return (
     <div className="border border-Neutral-Divider border-solid rounded-lg bg-white mb-4 lg:my-4">
       <div className="px-4 lg:px-8 py-6 lg:py-4 flex justify-between items-center">
@@ -47,7 +53,7 @@ export default function MyRecords() {
           My Records
         </Typography.Title>
         <div className="records-header-morebtn">
-          <Button type="link" size="medium" className="!p-0 text-[#1A1A1A]">
+          <Button type="link" size="medium" className="!p-0 text-[#1A1A1A]" onClick={handleClickTo}>
             View More
             <Image width={12} height={12} src={arrowRightIcon} alt=""></Image>
           </Button>

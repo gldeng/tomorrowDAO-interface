@@ -1,33 +1,34 @@
 .dao-detail {
-  @apply w-full;
- 
+  @apply w-full block xl:flex flex-col items-center;
+
   .dao-detail-content {
-    @apply max-w-[1360px] flex mx-4 mb-6 lg:mx-auto;
+    @apply flex mx-4 mb-6;
     .dao-detail-content-left {
-      @apply flex-1 w-2/3;
-      .dao-detail-content-left-tab {
-        @apply bg-white mb-[16px] border border-Neutral-Divider border-solid rounded-lg;
-      }
-      .tab-all-proposals {
-        @apply px-4 pb-4 lg:px-8;
-        .tab-all-proposals-header {
-          @apply flex justify-between items-center mb-4;
-        }
-        .tab-all-proposals-select {
-          @apply w-full;
-        }
-      }
+      @apply flex-1;
+      width: calc(100vw - 493px);
+    }
+    .dao-detail-content-left-tab {
+      @apply flex-1 bg-white mb-[16px] border border-Neutral-Divider border-solid rounded-lg;
+    }
+    .tab-all-proposals {
+      @apply px-4 pb-4 lg:px-8;
+    }
+    .tab-all-proposals-header {
+      @apply flex justify-between items-center mb-4;
+    }
+    .tab-all-proposals-select {
+      @apply w-full h-[40px];
     }
 
     .dao-detail-content-right {
-      @apply w-1/3 ml-6;
+      @apply w-[437px] ml-6;
     }
   }
-  .address{
-    .acss-ijss2m{
+  .address {
+    .acss-ijss2m {
       @apply text-Neutral-Primary-Text;
     }
-    .acss-ijss2m:hover{
+    .acss-ijss2m:hover {
       @apply text-colorPrimaryHover;
     }
   }

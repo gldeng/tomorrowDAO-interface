@@ -1,5 +1,5 @@
 export const proposalTypeList = [
-  { value: '', label: 'ALL' },
+  { value: 'All', label: 'ALL' },
   {
     value: 'Governance',
     label: 'Governance',
@@ -7,16 +7,8 @@ export const proposalTypeList = [
   { value: 'Advisory', label: 'Advisory' },
 ];
 
-export const governanceMechanismList = [
-  { value: 'ALL', label: 'ALL' },
-  { value: 'Parliament', label: 'Parliament' },
-  { value: 'Association ', label: 'Association ' },
-  { value: 'Referendum ', label: 'Referendum ' },
-  { value: 'Customer ', label: 'Customer ' },
-];
-
 export const proposalStatusList = [
-  { value: 'ALL', label: 'ALL' },
+  { value: 'All', label: 'ALL' },
   { value: 'Active', label: 'Active' },
   { value: 'Approved', label: 'Approved' },
   { value: 'Rejected', label: 'Rejected' },
@@ -25,3 +17,51 @@ export const proposalStatusList = [
 
 export const HC_MEMBER = 'Member';
 export const HC_CANDIDATE = 'Candidate';
+
+export const tagMap = {
+  proposalType: 'All models',
+  governanceMechanism: 'All governanceMechanism',
+  proposalStatus: 'All status',
+  pagination: '',
+  content: '',
+};
+
+export const tagColorMap = {
+  Active: {
+    bgColor: '#FEF7EC',
+    textColor: '#F8B042',
+    firstText: 'Will expire on',
+  },
+  Pending: {
+    bgColor: '#FEF7EC',
+    textColor: '#F8B042',
+    firstText: 'Can be vetoed before',
+    secondText: 'Being vetoed.',
+  },
+  Approved: {
+    bgColor: '#EBF3FF',
+    textColor: '#3888FF',
+    firstText: 'Availabe to be executed before',
+    secondText: 'Approved on',
+  },
+  Rejected: {
+    bgColor: '#FEEFF1',
+    textColor: '#F55D6E',
+    firstText: 'Rejected on',
+  },
+  Abstained: {
+    bgColor: '#FEEFF1',
+    textColor: '#F55D6E',
+    firstText: 'Rejected on',
+  },
+  Expired: {
+    bgColor: '#EDEDED',
+    textColor: '#919191',
+    firstText: 'Availabe to be executed before',
+    secondText: 'Approved on',
+  },
+  Executed: {
+    bgColor: '#E4F8F5',
+    textColor: '#05C4A2',
+  },
+};
