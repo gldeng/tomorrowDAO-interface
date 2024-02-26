@@ -1,0 +1,6 @@
+.common-footer {
+  @apply mt-6;
+  .common-footer-button {
+    @apply w-[206px];
+  }
+}
