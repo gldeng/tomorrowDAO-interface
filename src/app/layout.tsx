@@ -1,5 +1,6 @@
-import '@portkey/did-ui-react/dist/assets/index.css';
 import 'aelf-web-login/dist/assets/index.css';
+import 'styles/global.css';
+import 'aelf-design/css';
 import Layout from 'pageComponents/layout';
 import Provider from 'provider/';
 import Script from 'next/script';

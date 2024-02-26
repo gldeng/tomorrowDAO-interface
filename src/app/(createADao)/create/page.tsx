@@ -6,6 +6,7 @@ import { Button, Typography, FontWeightEnum } from 'aelf-design';
 import { memo } from 'react';
 import { Steps } from 'antd';
 import clsx from 'clsx';
+import SubmitButton from './component/SubmitButton';
 import useResponsive from 'hooks/useResponsive';
 import { ReactComponent as ArrowRight } from 'assets/imgs/arrow-right.svg';
 import { ReactComponent as ArrowLeft } from 'assets/imgs/arrow-left.svg';
@@ -65,6 +66,7 @@ const CreateDaoPage = () => {
             <span>Back</span>
           </Button>
         )}
+
         {currentStep === 3 ? (
           <Button
             type="primary"
@@ -75,7 +77,7 @@ const CreateDaoPage = () => {
           >
             <span>Submit</span>
             <ArrowRight />
-          </Button>
+          </SubmitButton>
         ) : (
           <Button
             type="primary"

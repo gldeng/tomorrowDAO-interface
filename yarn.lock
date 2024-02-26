@@ -4534,10 +4534,10 @@ aelf-sdk@3.4.1, aelf-sdk@^3.3.0:
     scryptsy "^2.1.0"
     xmlhttprequest "^1.8.0"
 
-aelf-web-login@2.0.0-beta.27:
-  version "2.0.0-beta.27"
-  resolved "https://registry.npmjs.org/aelf-web-login/-/aelf-web-login-2.0.0-beta.27.tgz#4d3d4a3a6d545c28ebdfdcd449757874879faed2"
-  integrity sha512-bqbyMcANJpmPKaPApdYtJTx5p3ta/TdhsOEeleEBAoISk2QPNF9es5g29tvBynN1A0vtbj9CXEs7Ka3MmkM/7A==
+aelf-web-login@2.0.0-beta.29:
+  version "2.0.0-beta.29"
+  resolved "https://registry.npmjs.org/aelf-web-login/-/aelf-web-login-2.0.0-beta.29.tgz#43536b8ee49de20fafdfd7b0409e07dcc7d2c38b"
+  integrity sha512-jTb63Rcxi6h8Rpp+bEIcLrGU19N3mCO5Mtmzm/1azoIKTqsWu5BEUwCcoDZlG7V6tY+qir5OE5nraiG+ZHue5g==
   dependencies:
     "@aelf-react/core" "^0.1.19"
     "@portkey/detect-provider" "2.0.0-alpha.5"
@@ -5569,7 +5569,7 @@ clsx@^1.2.1:
 
 clsx@^2.1.0:
   version "2.1.0"
-  resolved "https://registry.npmmirror.com/clsx/-/clsx-2.1.0.tgz#e851283bcb5c80ee7608db18487433f7b23f77cb"
+  resolved "https://registry.yarnpkg.com/clsx/-/clsx-2.1.0.tgz#e851283bcb5c80ee7608db18487433f7b23f77cb"
   integrity sha512-m3iNNWpd9rl3jvvcBnu70ylMdrXt8Vlq4HYadnU5fwcOtvkSQWPmj7amUcDT2qYI7risszBjI5AUIUox9D16pg==
 
 color-convert@^1.9.0:

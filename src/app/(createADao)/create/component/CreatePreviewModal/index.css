@@ -1,0 +1,18 @@
+.social-media-item {
+  @apply flex-none px-2 py-1 rounded-md bg-[#F6F6F6];
+}
+
+.address {
+  @apply items-center;
+  & > span {
+    @apply font-normal hover:text-[#434343] active:text-[#434343];
+  }
+}
+
+.divider {
+  @apply border-solid border-t border-[#EDEDED];
+}
+
+.dot {
+  @apply flex-none mt-2 size-[6px] rounded-full bg-[#434343];
+}
