@@ -1,0 +1,8 @@
+.address-container {
+  .address {
+    @apply bg-Neutral-Default-BG rounded-md p-3; 
+  }
+  .address-info {
+    @apply mt-1 text-Neutral-Secondary-Text text-xs leading-5;
+  }
+}

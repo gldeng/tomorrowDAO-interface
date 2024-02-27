@@ -1,6 +1,6 @@
 'use client';
 
-import { Input, Tooltip } from 'aelf-design';
+import { Input, ToolTip } from 'aelf-design';
 import { Form, InputNumber } from 'antd';
 import { memo } from 'react';
 import './index.css';
@@ -30,9 +30,9 @@ const HighCouncil = () => {
         <Form.Item
           initialValue={'xxxxxxxxxxxxxxxx'}
           label={
-            <Tooltip title="After initially staking a certain amount of tokens in the Election contract, you will be able to receive votes from other addresses. Stakers with a higher number of votes will become members of the High Council.">
+            <ToolTip title="After initially staking a certain amount of tokens in the Election contract, you will be able to receive votes from other addresses. Stakers with a higher number of votes will become members of the High Council.">
               <span className="form-item-label">Election contract</span>
-            </Tooltip>
+            </ToolTip>
           }
           extra="If no address completes a stake in this contract, the DAO creator will automatically become a HC member; adjustments can be made after the DAO is created."
         >
@@ -74,9 +74,9 @@ const HighCouncil = () => {
         <Form.Item
           name={['high_council_config', 'election_period']}
           label={
-            <Tooltip title="The number of days for the rotation of High Council members, counted from the day after the DAO is created. If zero is entered, it means there is no rotation for High Council members.">
+            <ToolTip title="The number of days for the rotation of High Council members, counted from the day after the DAO is created. If zero is entered, it means there is no rotation for High Council members.">
               <span className="form-item-label">High Council member term length</span>
-            </Tooltip>
+            </ToolTip>
           }
           rules={[
             {
@@ -113,9 +113,9 @@ const HighCouncil = () => {
         <Form.Item
           name={'minimal_vote_threshold'}
           label={
-            <Tooltip title="The minimum number of votes required to finalize a proposal. Only applicable to proposals with 1 token 1 vote proposals.">
+            <ToolTip title="The minimum number of votes required to finalize a proposal. Only applicable to proposals with 1 token 1 vote proposals.">
               <span className="form-item-label">Minimum votes</span>
-            </Tooltip>
+            </ToolTip>
           }
           rules={min2maxIntegerRule}
         >

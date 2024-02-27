@@ -1,0 +1,14 @@
+.basic-detail {
+  .TMRWDAO-form-item-label >label {
+    @apply font-medium leading-6;
+  }
+  .Media-info {
+    @apply text-xs leading-5 text-Neutral-Secondary-Text mt-1;
+  }
+  .symbol-radio {
+    @apply flex items-center mb-2;
+  }
+  .token-title {
+    @apply text-base font-medium text-Neutral-Primary-Text ml-4 mr-1;
+  }
+}
