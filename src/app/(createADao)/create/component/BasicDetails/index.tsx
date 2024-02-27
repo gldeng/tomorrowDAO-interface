@@ -5,21 +5,23 @@ import ChainAddress from 'components/Address';
 import { ReactComponent as QuestionIcon } from 'assets/imgs/question-icon.svg';
 import { useState } from 'react';
 import { cx } from 'antd-style';
-import { mediaValidatorMap } from '../utils';
+import { mediaValidatorMap, useRegisterForm } from '../utils';
 import IPFSUpload from 'components/IPFSUpload';
+import { StepEnum } from '../../type';
 
 export default function BasicDetails() {
   const [form] = Form.useForm();
   const [showSymbol, setShowSymbol] = useState<boolean>(true);
+  useRegisterForm(form, StepEnum.step0);
   return (
     <div className="basic-detail">
       <div className="mb-6">
         <Typography.Title level={6}>Basic Information</Typography.Title>
       </div>
       <div>
-        <Form layout="vertical" autoComplete="off">
+        <Form layout="vertical" autoComplete="off" form={form}>
           <Form.Item
-            name="Name"
+            name={['metadata', 'name']}
             rules={[
               {
                 required: true,
@@ -36,7 +38,7 @@ export default function BasicDetails() {
             <Input placeholder="Make it something epic!" />
           </Form.Item>
           <Form.Item
-            name="Logo"
+            name={['metadata', 'logo_url']}
             rules={[
               {
                 required: true,
@@ -65,7 +67,7 @@ export default function BasicDetails() {
                 message: 'The description cannot be more than 240 characters.',
               },
             ]}
-            name="Description"
+            name={['metadata', 'description']}
             label="Description"
           >
             <Input.TextArea
@@ -76,14 +78,14 @@ export default function BasicDetails() {
               placeholder={`What is the mission and vision of this DAO? You will be able to change it later.`}
             />
           </Form.Item>
-          <Form.Item className="mb-6" name="Social" label="">
+          <Form.Item className="mb-6" label="">
             <div className="mt-8">
               <Typography.Title level={6}>Social Media</Typography.Title>
             </div>
             <div className="Media-info">At least one social media is required.</div>
           </Form.Item>
           <Form.Item
-            name="Twitter"
+            name={['metadata', 'social_media', 'Twitter']}
             rules={[
               ...mediaValidatorMap.Twitter.validator,
               {
@@ -97,7 +99,7 @@ export default function BasicDetails() {
             <Input placeholder={`Input the DAO's twitter account starts with @`} />
           </Form.Item>
           <Form.Item
-            name="Facebook"
+            name="metadata.social_media.Facebook"
             rules={[
               ...mediaValidatorMap.Other.validator,
               {
@@ -111,7 +113,7 @@ export default function BasicDetails() {
             <Input placeholder={`Input the DAO's Facebook page address`} />
           </Form.Item>
           <Form.Item
-            name="Discord"
+            name="metadata.social_media.Discord"
             rules={[
               ...mediaValidatorMap.Other.validator,
               {
@@ -125,7 +127,7 @@ export default function BasicDetails() {
             <Input placeholder={`Input the link to join the DAO's Discord group`} />
           </Form.Item>
           <Form.Item
-            name="Telegram"
+            name={['metadata', 'social_media', 'Telegram']}
             rules={[
               ...mediaValidatorMap.Other.validator,
               {
@@ -139,7 +141,7 @@ export default function BasicDetails() {
             <Input placeholder={`Input the link to join the DAO's Telegram group`} />
           </Form.Item>
           <Form.Item
-            name="Reddit"
+            name={['metadata', 'social_media', 'Reddit']}
             rules={[
               ...mediaValidatorMap.Other.validator,
               {
@@ -175,7 +177,7 @@ export default function BasicDetails() {
             </ToolTip>
           </div>
           {showSymbol && (
-            <Form.Item name="Symbol" label="">
+            <Form.Item name="governance_token" label="">
               <Input placeholder="Input the token symbol" />
             </Form.Item>
           )}

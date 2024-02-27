@@ -5,12 +5,14 @@ import { Form, InputNumber } from 'antd';
 import { memo } from 'react';
 import './index.css';
 import InputSlideBind from 'components/InputSlideBind';
-import { createPercentageRule, min2maxIntegerRule } from '../utils';
+import { integerRule, min2maxIntegerRule, validatorCreate, useRegisterForm } from '../utils';
+import { StepEnum } from '../../type';
 
 const HighCouncil = () => {
   const [form] = Form.useForm();
+  useRegisterForm(form, StepEnum.step2);
   return (
-    <div className="governance-form">
+    <div className="high-council-form">
       <Form
         form={form}
         layout="vertical"
@@ -28,7 +30,6 @@ const HighCouncil = () => {
         </div>
 
         <Form.Item
-          initialValue={'xxxxxxxxxxxxxxxx'}
           label={
             <ToolTip title="After initially staking a certain amount of tokens in the Election contract, you will be able to receive votes from other addresses. Stakers with a higher number of votes will become members of the High Council.">
               <span className="form-item-label">Election contract</span>
@@ -36,13 +37,14 @@ const HighCouncil = () => {
           }
           extra="If no address completes a stake in this contract, the DAO creator will automatically become a HC member; adjustments can be made after the DAO is created."
         >
-          <Input disabled />
+          <Input disabled defaultValue={'xxxxxxxxxxx111112121212121abc'} />
         </Form.Item>
 
         <Form.Item
           name={['high_council_config', 'max_high_council_member_count']}
           label={<span className="form-item-label">High Council Members</span>}
           extra="Alternate member of the High Council. The number can be changed through proposals."
+          validateFirst={true}
           rules={[
             {
               required: true,
@@ -59,14 +61,11 @@ const HighCouncil = () => {
           name={['high_council_config', 'max_high_council_candidate_count']}
           label={<span className="form-item-label">High Council Condidate Members</span>}
           extra="The number can be changed through proposals."
+          validateFirst={true}
           rules={[
-            {
-              required: true,
-              type: 'integer',
-              min: 1,
-              max: 10000,
-              message: 'Supports up to 10000 High Council candidates.',
-            },
+            integerRule,
+            validatorCreate((v) => v < 1, 'Please input a number larger than 1'),
+            validatorCreate((v) => v > 10000, 'Supports up to 10000 High Council members'),
           ]}
         >
           <InputNumber placeholder="At most 10000 members" controls={false} />
@@ -78,20 +77,19 @@ const HighCouncil = () => {
               <span className="form-item-label">High Council member term length</span>
             </ToolTip>
           }
+          validateFirst={true}
           rules={[
-            {
-              required: true,
-              type: 'integer',
-              min: 0,
-              max: Number.MAX_SAFE_INTEGER,
-              message: 'Please input a integer number >= 0',
-            },
+            integerRule,
+            validatorCreate(
+              (v) => v > Number.MAX_SAFE_INTEGER,
+              `Please input a number not larger than ${Number.MAX_SAFE_INTEGER}`,
+            ),
           ]}
         >
           <InputNumber
             placeholder="Days that High Council members can serve in each round"
             controls={false}
-            addonAfter="Days"
+            suffix="Days"
           />
         </Form.Item>
         {/* governance_scheme_threshold */}
@@ -99,12 +97,11 @@ const HighCouncil = () => {
           name={['governance_scheme_threshold', 'minimal_required_threshold']}
           label={<span className="form-item-label">Minimum voting proportion</span>}
           initialValue={75}
+          validateFirst={true}
           rules={[
-            createPercentageRule(
-              75,
-              100,
-              'Please input a integer number larger than 75 and smaller than 100',
-            ),
+            integerRule,
+            validatorCreate((v) => v < 75, 'Please input a number larger than 75'),
+            validatorCreate((v) => v > 100, 'Please input a number smaller than 100'),
           ]}
         >
           <InputSlideBind type="approve" placeholder={'Suggest setting it above 50%'} />
@@ -117,6 +114,7 @@ const HighCouncil = () => {
               <span className="form-item-label">Minimum votes</span>
             </ToolTip>
           }
+          validateFirst={true}
           rules={min2maxIntegerRule}
         >
           <InputNumber
@@ -130,12 +128,11 @@ const HighCouncil = () => {
           name={['governance_scheme_threshold', 'minimal_approve_threshold']}
           label={<span className="form-item-label">Minimum percentage of approved votes </span>}
           initialValue={67}
+          validateFirst={true}
           rules={[
-            createPercentageRule(
-              67,
-              100,
-              'Please input a integer number larger than 67 and smaller than 100',
-            ),
+            integerRule,
+            validatorCreate((v) => v < 67, 'Please input a number larger than 67'),
+            validatorCreate((v) => v > 100, 'Please input a number smaller than 100'),
           ]}
         >
           <InputSlideBind type="approve" placeholder={'Suggest setting it above 50%'} />
@@ -144,12 +141,11 @@ const HighCouncil = () => {
           name={['governance_scheme_threshold', 'maximal_rejection_threshold']}
           label={<span className="form-item-label">Maximum percentage of rejected votes</span>}
           initialValue={20}
+          validateFirst={true}
           rules={[
-            createPercentageRule(
-              0,
-              20,
-              'Please input a integer number larger than 0 and smaller than 20',
-            ),
+            integerRule,
+            validatorCreate((v) => v === 0, 'Please input a number larger than 0'),
+            validatorCreate((v) => v > 20, 'Please input a number smaller than 20'),
           ]}
         >
           <InputSlideBind type="rejection" placeholder={'Suggest setting it below 20%'} />
@@ -158,12 +154,11 @@ const HighCouncil = () => {
           name={['minimal_approve_threshold', 'maximal_abstention_threshold']}
           label={<span className="form-item-label">Maximum percentage of abstain votes</span>}
           initialValue={20}
+          validateFirst={true}
           rules={[
-            createPercentageRule(
-              0,
-              20,
-              'Please input a integer number larger than 0 and smaller than 20',
-            ),
+            integerRule,
+            validatorCreate((v) => v === 0, 'Please input a number larger than 0'),
+            validatorCreate((v) => v > 20, 'Please input a number smaller than 20'),
           ]}
         >
           <InputSlideBind type="abstention" placeholder={'Suggest setting it below 20%'} />

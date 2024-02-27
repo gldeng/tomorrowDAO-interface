@@ -15,7 +15,7 @@ const InputSlideBind = (props: InputSlideBindProps) => {
   const { value, onChange, type, placeholder } = props;
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    let num = Number(e.target.value);
+    let num = Number(e.target.value.trim());
     if (Number.isNaN(num)) {
       num = 0;
     }
@@ -29,7 +29,13 @@ const InputSlideBind = (props: InputSlideBindProps) => {
   return (
     <div className="input-slide-bind">
       <div className="input">
-        <Input value={value} onChange={handleInputChange} placeholder={placeholder} />
+        <Input
+          value={value}
+          onChange={handleInputChange}
+          placeholder={placeholder}
+          suffix="%"
+          allowClear={false}
+        />
       </div>
       <div className={cls('slide', type)}>
         <div
