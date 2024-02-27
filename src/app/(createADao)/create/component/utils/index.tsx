@@ -4,7 +4,7 @@ type TValidatorCreate = (
   failCallBack: (v: any) => boolean,
   msg: string,
 ) => { validator: (rule: any, value: any) => Promise<any> };
-const validatorCreate: TValidatorCreate = (failCallBack, msg: string) => {
+export const validatorCreate: TValidatorCreate = (failCallBack, msg: string) => {
   return {
     validator(rule, value) {
       if (failCallBack(value)) {
@@ -15,13 +15,6 @@ const validatorCreate: TValidatorCreate = (failCallBack, msg: string) => {
   };
 };
 
-export const percentageRule: Rule = {
-  required: true,
-  type: 'integer',
-  min: 1,
-  max: 100,
-  message: 'Please input a integer number larger than 0 and smaller than 100',
-};
 type TPercentageRuleCreate = (min: number, max: number, msg: string) => Rule;
 
 export const createPercentageRule: TPercentageRuleCreate = (min, max, msg) => {
@@ -33,13 +26,13 @@ export const createPercentageRule: TPercentageRuleCreate = (min, max, msg) => {
     message: msg,
   };
 };
-
+export const integerRule: Rule = {
+  required: true,
+  type: 'integer',
+  message: 'Please input a integer number',
+};
 export const min2maxIntegerRule: Rule[] = [
-  {
-    required: true,
-    type: 'integer',
-    message: 'Please input a integer number',
-  },
+  integerRule,
   {
     validator(rule, value) {
       if (value < 1) {
@@ -80,3 +73,4 @@ export const mediaValidatorMap = {
     ],
   },
 };
+export * from './use-register-form';

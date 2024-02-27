@@ -2,13 +2,14 @@
 
 import { Button, ToolTip } from 'aelf-design';
 import { Form, InputNumber } from 'antd';
-import { memo } from 'react';
+import { memo, useContext, useEffect } from 'react';
 import InputSlideBind from 'components/InputSlideBind';
-import { createPercentageRule, min2maxIntegerRule } from '../utils';
+import { integerRule, min2maxIntegerRule, useRegisterForm, validatorCreate } from '../utils';
 import './index.css';
-
+import { StepEnum, StepsContext } from '../../type';
 const GovernanceModel = () => {
   const [form] = Form.useForm();
+  useRegisterForm(form, StepEnum.step1);
   return (
     <div className="governance-form">
       <Form
@@ -25,15 +26,14 @@ const GovernanceModel = () => {
               <span className="form-item-label">Minimum voting addresses</span>
             </ToolTip>
           }
+          validateFirst={true}
           rules={[
-            {
-              required: true,
-              type: 'integer',
-              min: 1,
-              max: 99999999999,
-              message:
-                'Please input a integer number not smaller than 1 and not larger than 100,000,000,000',
-            },
+            integerRule,
+            validatorCreate((v) => v < 1, 'Please input a number not smaller than 1'),
+            validatorCreate(
+              (v) => v >= 100000000000,
+              'Please input a number  not larger than 100,000,000,000',
+            ),
           ]}
         >
           <InputNumber placeholder="The number should ≥ 1" controls={false} />
@@ -46,6 +46,7 @@ const GovernanceModel = () => {
               <span className="form-item-label">Minimum votes</span>
             </ToolTip>
           }
+          validateFirst={true}
           rules={min2maxIntegerRule}
         >
           <InputNumber
@@ -59,12 +60,11 @@ const GovernanceModel = () => {
           name={'minimal_approve_threshold'}
           label={<span className="form-item-label">Minimum percentage of approved votes </span>}
           initialValue={50}
+          validateFirst={true}
           rules={[
-            createPercentageRule(
-              1,
-              100,
-              'Please input a integer number larger than 0 and smaller than 100',
-            ),
+            integerRule,
+            validatorCreate((v) => v === 0, 'Please input a number larger than 0'),
+            validatorCreate((v) => v > 100, 'Please input a number smaller than 100'),
           ]}
         >
           <InputSlideBind type="approve" placeholder={'Suggest setting it above 50%'} />
@@ -73,7 +73,12 @@ const GovernanceModel = () => {
           name={'maximal_rejection_threshold'}
           label={<span className="form-item-label">Maximum percentage of rejected votes</span>}
           initialValue={20}
-          rules={[createPercentageRule(0, 20, 'Please input a integer number smaller than 20')]}
+          validateFirst={true}
+          rules={[
+            integerRule,
+            validatorCreate((v) => v === 0, 'Please input a number larger than 0'),
+            validatorCreate((v) => v > 20, 'Please input a number smaller than 20'),
+          ]}
         >
           <InputSlideBind type="rejection" placeholder={'Suggest setting it below 20%'} />
         </Form.Item>
@@ -81,20 +86,16 @@ const GovernanceModel = () => {
           name={'maximal_abstention_threshold'}
           label={<span className="form-item-label">Maximum percentage of abstain votes</span>}
           initialValue={20}
-          rules={[createPercentageRule(0, 20, 'Please input a integer number smaller than 20')]}
+          validateFirst={true}
+          rules={[
+            integerRule,
+            validatorCreate((v) => v === 0, 'Please input a number larger than 0'),
+            validatorCreate((v) => v > 20, 'Please input a number smaller than 20'),
+          ]}
         >
           <InputSlideBind type="abstention" placeholder={'Suggest setting it below 20%'} />
         </Form.Item>
       </Form>
-      <Button
-        onClick={() => {
-          form.validateFields().then((res) => {
-            console.log('res', res);
-          });
-        }}
-      >
-        validate and then get form value
-      </Button>
     </div>
   );
 };

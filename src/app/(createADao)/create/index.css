@@ -3,18 +3,22 @@
   .TMRWDAO-steps-item-wait .TMRWDAO-steps-item-icon {
     @apply !border-Neutral-Border !bg-transparent;
   }
+
   &.dao-steps-wrap-mobile {
     .TMRWDAO-steps-item-title {
       @apply text-xs leading-4;
     }
-    &.TMRWDAO-steps-label-vertical .TMRWDAO-steps-item-tail{
-        @apply ms-[50px]
+
+    &.TMRWDAO-steps-label-vertical .TMRWDAO-steps-item-tail {
+      @apply ms-[50px]
     }
-    &.TMRWDAO-steps-label-vertical .TMRWDAO-steps-item-icon{
-        @apply ms-[30px]
+
+    &.TMRWDAO-steps-label-vertical .TMRWDAO-steps-item-icon {
+      @apply ms-[30px]
     }
-    &.TMRWDAO-steps-label-vertical .TMRWDAO-steps-item-content{
-        @apply w-[92px]
+
+    &.TMRWDAO-steps-label-vertical .TMRWDAO-steps-item-content {
+      @apply w-[92px]
     }
   }
 }
