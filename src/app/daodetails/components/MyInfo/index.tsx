@@ -1,26 +1,43 @@
-import { Descriptions, Divider, Form, List } from 'antd';
+import { Descriptions, Divider, Form, List, DescriptionsProps } from 'antd';
+
 import { HashAddress, Typography, FontWeightEnum, Button, Modal, Input } from 'aelf-design';
 import { useState } from 'react';
 import Image from 'next/image';
 
 import ElfIcon from 'assets/imgs/elf-icon.svg';
 import SuccessGreenIcon from 'assets/imgs/success-green.svg';
+import CommonModal from 'components/CommonModal';
+
+import Info from '../Info';
 
 type InfoTypes = {
-  info?: {
+  info: {
     creator: string;
+    data: Array<{
+      label: string;
+      value: string;
+    }>;
   };
+  height?: number;
   isLogin: boolean;
+  children?: any;
 };
 
 export default function MyInfo(props: InfoTypes) {
-  const { info, isLogin = true } = props;
+  const { info, isLogin = true, height } = props;
   const [form] = Form.useForm();
   const myInfoItems = [
     {
       key: '0',
       label: '',
-      children: info && <HashAddress preLen={8} endLen={11} address={info.creator}></HashAddress>,
+      children: info && (
+        <HashAddress
+          preLen={8}
+          endLen={11}
+          address={info.creator}
+          className="address"
+        ></HashAddress>
+      ),
     },
     {
       key: '1',
@@ -66,13 +83,38 @@ export default function MyInfo(props: InfoTypes) {
   };
 
   return (
-    <div className="border border-Neutral-Divider border-solid rounded-lg bg-white px-8  py-6">
+    <div
+      className="border-0 lg:border border-Neutral-Divider border-solid rounded-lg bg-white px-4 pt-2 pb-6 lg:px-8  lg:py-6"
+      style={{
+        height: height || 'auto',
+      }}
+    >
       <Typography.Title fontWeight={FontWeightEnum.Medium} level={6} className="pb-6">
-        My Records
+        My Info
       </Typography.Title>
       {isLogin ? (
         <div>
-          <Descriptions colon={false} title="" items={myInfoItems} column={1} />
+          {info && (
+            <HashAddress
+              preLen={8}
+              endLen={11}
+              address={info.creator}
+              className="address"
+            ></HashAddress>
+          )}
+
+          <List
+            dataSource={info.data}
+            className="py-2"
+            renderItem={(item) => (
+              <div className="border-0 flex justify-between items-center m-2">
+                <Typography.Text className="text-Neutral-Secondary-Text">
+                  {item.label}
+                </Typography.Text>
+                <Typography.Title> {item.value}</Typography.Title>
+              </div>
+            )}
+          />
           {/* cliam */}
           <Divider className="mt-0 mb-4" />
           <div className="flex justify-between items-start">
@@ -144,12 +186,12 @@ export default function MyInfo(props: InfoTypes) {
               OK
             </Button>
           </Modal>
-          <Modal
+
+          <CommonModal
             open={isUnstakeAmModalOpen}
             onCancel={() => {
               setIsUnstakeAmIsModalOpen(false);
             }}
-            footer={null}
           >
             <Image className="mx-auto block" width={56} height={56} src={SuccessGreenIcon} alt="" />
             <div className="text-center text-Primary-Text font-medium">
@@ -189,23 +231,15 @@ export default function MyInfo(props: InfoTypes) {
             >
               View Transaction Details
             </Button>
-          </Modal>
-          <Modal
+          </CommonModal>
+
+          <CommonModal
             open={isUnstakeAmModalOpen}
             onCancel={() => {
               setIsUnstakeAmIsModalOpen(false);
             }}
-            footer={null}
           >
-            <Image className="mx-auto block" width={56} height={56} src={SuccessGreenIcon} alt="" />
-            <div className="text-center text-Primary-Text font-medium">Transaction Failed!</div>
-
-            <p className="text-center text-Neutral-Secondary-Text font-medium">
-              Insufficient transaction fee.
-            </p>
-            <p className="text-center text-Neutral-Secondary-Text font-medium">
-              Please transfer some ELF to the account.
-            </p>
+            <Info></Info>
             <Button
               className="mx-auto mt-6 w-[206px]"
               type="primary"
@@ -215,7 +249,7 @@ export default function MyInfo(props: InfoTypes) {
             >
               Back
             </Button>
-          </Modal>
+          </CommonModal>
         </div>
       ) : (
         <div>
@@ -227,6 +261,7 @@ export default function MyInfo(props: InfoTypes) {
           </div>
         </div>
       )}
+      <div>{props.children}</div>
     </div>
   );
 }

@@ -1,5 +1,5 @@
 .proposal-item {
-  @apply flex justify-between border-solid border-[1px] border-Neutral-Divider rounded-lg px-8 py-6 bg-white mb-4;
+  @apply block lg:flex justify-between border-solid border-[1px] border-Neutral-Divider rounded-lg px-8 py-6 bg-white mb-4;
   .proposal-item-time {
     @apply text-Neutral-Secondary-Text ml-4;
   }

@@ -1,10 +1,11 @@
-import { Space } from 'antd';
+import { Divider, Space } from 'antd';
 import { Typography, FontWeightEnum, HashAddress, Progress } from 'aelf-design';
 import Image from 'next/image';
 
 import WarningGrayIcon from 'assets/imgs/warning-gray.svg';
 import CheckedIcon from 'assets/imgs/checked.svg';
 import DetailTag from '../DetailTag';
+import useResponsive from 'hooks/useResponsive';
 
 import './index.css';
 
@@ -40,6 +41,8 @@ const tagColorMap = {
 
 export default function ProposalsItem(props: { data: any }) {
   const { data } = props;
+  const { isSM } = useResponsive();
+
   return (
     <div className="proposal-item">
       <div>
@@ -82,6 +85,8 @@ export default function ProposalsItem(props: { data: any }) {
           </Space>
         </div>
       </div>
+      {isSM && <Divider></Divider>}
+
       <div className="vote flex flex-col justify-between">
         <div className="vote-top">
           <Typography.Title

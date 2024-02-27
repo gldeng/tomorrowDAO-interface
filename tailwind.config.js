@@ -19,6 +19,7 @@ module.exports = {
         'Neutral-Divider': '#EDEDED',
         'Neutral-Border': '#E1E1E1',
         'Brand-Brand': '#764DF1',
+        'Brand-Brand-BG': '#F2EEFF',
         'Brand-hover': '#7F58F5',
         'Brand-click': '#6F45EF',
         'Neutral-Hover-BG': '#FAFAFA',

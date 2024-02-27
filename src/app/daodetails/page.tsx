@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Tabs,
   Typography,
@@ -18,6 +18,7 @@ import ExecutdProposals from './components/ExecutdProposals';
 import MyRecords from './components/MyRecords';
 import MyInfo from './components/MyInfo';
 import Filter from './components/filter';
+
 import './page.css';
 
 import { mokeData as data, list } from './moke';
@@ -88,6 +89,32 @@ export default function DeoDetails() {
     [form, tableParams.pagination],
   );
 
+  const initItems = [
+    {
+      key: 'proposals',
+      label: 'All Proposals',
+      children: (
+        <div className="tab-all-proposals">
+          <div className="tab-all-proposals-header">
+            <Typography.Title fontWeight={FontWeightEnum.Medium} level={6}>
+              Proposals
+            </Typography.Title>
+            <Button size="medium" type="primary">
+              Deploy
+            </Button>
+          </div>
+          <Filter form={form} onSearch={handleSearch} />
+        </div>
+      ),
+    },
+    {
+      key: 'highCouncil',
+      label: 'High Council',
+      children: <HighCounCilTab />,
+    },
+  ];
+  const [tabItems, setTabItems] = useState(initItems);
+
   const pageChange = useCallback(
     (page: number) => {
       const pagination = {
@@ -123,33 +150,6 @@ export default function DeoDetails() {
     [handleSearch, tableParams],
   );
 
-  const tabItems = [
-    {
-      key: 'proposals',
-      label: 'All Proposals',
-      children: (
-        <div className="tab-all-proposals">
-          <div className="tab-all-proposals-header">
-            <Typography.Title fontWeight={FontWeightEnum.Medium} level={6}>
-              Proposals
-            </Typography.Title>
-            <Button size="medium" type="primary">
-              Deploy
-            </Button>
-          </div>
-          <div className="flex justify-between">
-            <Filter form={form} onSearch={handleSearch} />
-          </div>
-        </div>
-      ),
-    },
-    {
-      key: 'highCouncil',
-      label: 'High Council',
-      children: <HighCounCilTab />,
-    },
-  ];
-
   const handleTabChange = (key: string) => {
     setTabKey(key);
   };
@@ -163,13 +163,54 @@ export default function DeoDetails() {
     });
   }, []);
 
+  const rightContent = useMemo(() => {
+    return (
+      <>
+        <MyInfo
+          info={{
+            creator: data.creator,
+            data: Array.from({ length: 3 }, (index: number) => {
+              return {
+                label: 'fasf',
+                value: '11' + index,
+              };
+            }),
+          }}
+          isLogin={true}
+        >
+          <Button>dfasf</Button>
+        </MyInfo>
+      </>
+    );
+  }, []);
+
+  useEffect(() => {
+    if (isSM) {
+      setTabItems([
+        ...initItems,
+        {
+          key: 'myInfo',
+          label: 'My Info',
+          children: rightContent,
+        },
+      ]);
+    } else {
+      setTabItems(initItems);
+    }
+  }, [isSM]);
+
   return (
     <div className="dao-detail">
       <DaoInfo data={data} onChangeHCParams={handleChangeHCparams} />
       <div className="dao-detail-content">
         <div className="dao-detail-content-left">
           <div className="dao-detail-content-left-tab">
-            <Tabs defaultActiveKey={tabKey} items={tabItems} onChange={handleTabChange} />
+            <Tabs
+              size={isSM ? 'small' : 'middle'}
+              defaultActiveKey={tabKey}
+              items={tabItems}
+              onChange={handleTabChange}
+            />
           </div>
           {tabKey === 'proposals' && (
             <div>
@@ -182,12 +223,21 @@ export default function DeoDetails() {
               />
             </div>
           )}
+          {isSM && tabKey === 'myInfo' && (
+            <>
+              <ExecutdProposals />
+              <MyRecords />
+            </>
+          )}
         </div>
-        <div className="dao-detail-content-right">
-          <MyInfo info={data} isLogin={true} />
-          <ExecutdProposals />
-          <MyRecords />
-        </div>
+
+        {!isSM && (
+          <div className="dao-detail-content-right">
+            {rightContent}
+            <ExecutdProposals />
+            <MyRecords />
+          </div>
+        )}
       </div>
     </div>
   );
