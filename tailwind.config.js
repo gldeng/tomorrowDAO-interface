@@ -28,6 +28,7 @@ module.exports = {
         'Disable-Text': '#B8B8B8',
         'Active-Text': '#F8B042',
         'Reject-Reject': '#F55D6E',
+        'Light-Mode-Brand-Brand': '#127FFF',
       },
     },
     screens: {

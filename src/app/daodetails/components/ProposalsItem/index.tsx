@@ -4,10 +4,10 @@ import Image from 'next/image';
 
 import WarningGrayIcon from 'assets/imgs/warning-gray.svg';
 import CheckedIcon from 'assets/imgs/checked.svg';
-import DetailTag from '../DetailTag';
 import useResponsive from 'hooks/useResponsive';
 import { IProposalsItem } from '../../type';
 import { tagColorMap } from '../../constants';
+import DetailTag from 'components/DetailTag';
 
 import './index.css';
 
