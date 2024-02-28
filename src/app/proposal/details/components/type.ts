@@ -11,7 +11,7 @@ export interface IVotingResult {
   transactionId: string;
   voter: string;
   amount: number;
-  voteOption: TVotingOption;
+  voteOption: keyof typeof TVotingOption;
   voteTime: string;
 }
 

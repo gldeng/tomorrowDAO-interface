@@ -63,7 +63,7 @@ const VoteInfo = () => {
           </div>
         </div>
       </BoxWrapper>
-      <MyInfo isLogin={true} />
+      {/* <MyInfo isLogin={true} /> */}
     </div>
   );
 };
