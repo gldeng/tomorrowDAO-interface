@@ -5,4 +5,7 @@
   ol {
     @apply list-decimal;
   }
+  .contains-task-list {
+    @apply list-none;
+  }
 }

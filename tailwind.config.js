@@ -24,6 +24,8 @@ module.exports = {
         'Brand-click': '#6F45EF',
         'Neutral-Hover-BG': '#FAFAFA',
         'Neutral-Default-BG': '#F6F6F6',
+        'Disable-Text': '#B8B8B8',
+        'Active-Text': '#F8B042',
       },
     },
     screens: {

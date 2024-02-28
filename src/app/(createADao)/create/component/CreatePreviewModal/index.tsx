@@ -125,6 +125,7 @@ export interface ICreatePreviewModalProps {
 export default function CreatePreviewModal({ open, onClose, onConfirm }: ICreatePreviewModalProps) {
   return (
     <CommonModalSwitchDrawer
+      commonClassName="create-preview-modal"
       title="Confirm"
       modalWidth={800}
       footerConfig={{
