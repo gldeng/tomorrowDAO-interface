@@ -18,6 +18,7 @@ module.exports = {
         'Neutral-Primary-Text': '#434343',
         'Neutral-Divider': '#EDEDED',
         'Neutral-Border': '#E1E1E1',
+        'Neutral-Disable-Text': '#B8B8B8',
         'Brand-Brand': '#764DF1',
         'Brand-Brand-BG': '#F2EEFF',
         'Brand-hover': '#7F58F5',

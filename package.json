@@ -17,6 +17,7 @@
     "@aws-sdk/credential-provider-cognito-identity": "^3.410.0",
     "@aws-sdk/lib-storage": "^3.412.0",
     "@ebay/nice-modal-react": "^1.2.10",
+    "@monaco-editor/react": "^4.6.0",
     "@portkey-v1/did-ui-react": "1.5.4-alpha.22",
     "@portkey/contracts": "2.0.0-alpha.28",
     "@portkey/detect-provider": "^2.0.0-alpha.5",

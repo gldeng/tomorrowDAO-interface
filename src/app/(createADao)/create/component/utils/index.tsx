@@ -31,6 +31,11 @@ export const integerRule: Rule = {
   type: 'integer',
   message: 'Please input a integer number',
 };
+export const percentRule: Rule[] = [
+  integerRule,
+  validatorCreate((v) => v === 0, 'Please input a number larger than 0'),
+  validatorCreate((v) => v > 100, 'Please input a number smaller than 100'),
+];
 export const min2maxIntegerRule: Rule[] = [
   integerRule,
   {

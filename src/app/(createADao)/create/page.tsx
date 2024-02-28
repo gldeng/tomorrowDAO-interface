@@ -51,6 +51,7 @@ const CreateDaoPage = () => {
       [StepEnum.step2]: {},
       [StepEnum.step3]: {},
     },
+    onRegister: () => {},
   };
   const stepsFormMapRef = useRef<IStepsContext>(stepsFormMap);
 
@@ -90,7 +91,7 @@ const CreateDaoPage = () => {
       <StepsContext.Provider
         value={{
           ...stepsFormMapRef.current,
-          onLoad: (ins) => {
+          onRegister: (ins) => {
             stepsFormMapRef.current.stepForm[currentStepString].formInstance = ins;
           },
         }}

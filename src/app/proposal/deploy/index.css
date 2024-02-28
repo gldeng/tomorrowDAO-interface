@@ -8,3 +8,27 @@
   }
 
 }
+
+.proposal-type-select {
+  @apply p-0;
+
+  .TMRWDAO-select-item {
+    @apply px-[24px] py-[16px];
+  }
+
+  .rc-virtual-list-holder {
+    @apply !max-h-none;
+  }
+}
+
+.proposal-type-draw {
+  .responsive-select-drawer-menu-item {
+    @apply h-auto py-[16px];
+  }
+
+  .item-selected {
+    .label-text {
+      @apply text-colorPrimary;
+    }
+  }
+}
