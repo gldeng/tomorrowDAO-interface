@@ -47,6 +47,7 @@ export default function BasicDetails() {
           >
             <IPFSUpload
               maxFileCount={1}
+              needCheckImgSize
               accept=".png,.jpg"
               uploadText="Click to upload"
               uploadIconColor="#1A1A1A"

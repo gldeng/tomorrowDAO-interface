@@ -1,14 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { Upload, IUploadProps } from 'aelf-design';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Upload as AntdUpload } from 'antd';
+import { Upload, IUploadProps, UploadButton } from 'aelf-design';
 import { GetProp, UploadFile, message } from 'antd';
+import clsx from 'clsx';
 import pinFileToIPFS from 'components/PinFileToIPFS';
 export type FileType = Parameters<GetProp<IUploadProps, 'beforeUpload'>>[0];
 import { checkImgSize } from 'utils/checkImgSize';
+import './index.css';
+
+const COMMON_UPLOAD_INPUT_ID = 'common-upload-input-id';
 
 export interface IFUploadProps extends IUploadProps {
   maxFileCount?: number;
   fileLimit?: string;
+  fileNameLengthLimit?: number;
   fileList?: UploadFile[];
+  isAntd?: boolean;
+  needCheckImgSize?: boolean;
 }
 
 const handleLimit = (limit: string) => {
@@ -26,10 +34,17 @@ const handleLimit = (limit: string) => {
   return 10 * unit_M;
 };
 const FUpload: React.FC<IFUploadProps> = ({
+  isAntd = false,
+  needCheckImgSize = false,
   fileList,
   maxFileCount,
   fileLimit = '1M',
+  fileNameLengthLimit,
   onChange,
+  tips,
+  uploadText,
+  uploadIconColor,
+  disabled,
   ...props
 }) => {
   const [showUploadBtn, setShowUploadBtn] = useState<boolean>(false);
@@ -43,6 +58,17 @@ const FUpload: React.FC<IFUploadProps> = ({
   useEffect(() => {
     setFileList(fileList || []);
   }, [fileList]);
+
+  useEffect(() => {
+    const input = document.getElementById(COMMON_UPLOAD_INPUT_ID);
+    if (input) {
+      if (disabled) {
+        input.setAttribute('disabled', 'disabled');
+      } else {
+        input.removeAttribute('disabled');
+      }
+    }
+  }, [disabled]);
 
   const onFileChange: IFUploadProps['onChange'] = (info) => {
     const { file, fileList } = info;
@@ -62,18 +88,33 @@ const FUpload: React.FC<IFUploadProps> = ({
   };
 
   const onBeforeUpload = async (file: FileType) => {
+    let result = true;
+
     const isLteLimit = file.size <= handleLimit(fileLimit);
-
     if (!isLteLimit) {
-      message.error(`Image must smaller than ${fileLimit}B!`);
+      message.error(`Only files smaller than ${fileLimit}B are supported.`);
+    }
+    result = isLteLimit;
+
+    if (needCheckImgSize) {
+      const checkSize = await checkImgSize(file);
+      if (!checkSize) {
+        message.error('Only images of 512*512 are supported.');
+      }
+      result = result && checkSize;
     }
 
-    const checkSize = await checkImgSize(file);
-    if (!checkSize) {
-      message.error('Only images of 512*512 are supported.');
+    if (fileNameLengthLimit) {
+      const isLengthLteLimit = file.name.length <= fileNameLengthLimit;
+      if (!isLengthLteLimit) {
+        message.error(
+          `The filename is too long, please shorten it to ${fileNameLengthLimit} characters.`,
+        );
+      }
+      result = result && isLengthLteLimit;
     }
 
-    return isLteLimit && checkSize;
+    return result;
   };
 
   const onCustomRequest: IUploadProps['customRequest'] = async ({ file, onSuccess, onError }) => {
@@ -90,15 +131,30 @@ const FUpload: React.FC<IFUploadProps> = ({
     }
   };
 
-  return (
-    <Upload
-      {...props}
-      fileList={inFileList}
-      showUploadButton={showUploadBtn}
-      customRequest={onCustomRequest}
-      onChange={onFileChange}
-      beforeUpload={onBeforeUpload}
-    />
+  const uploadButtonProps = useMemo(() => {
+    return {
+      uploadText,
+      tips,
+      uploadIconColor,
+    };
+  }, [uploadText, tips, uploadIconColor]);
+
+  const commonProps = {
+    ...props,
+    id: COMMON_UPLOAD_INPUT_ID,
+    className: clsx(props.className, 'common-upload', disabled && 'common-upload-disabled'),
+    fileList: inFileList,
+    onChange: onFileChange,
+    beforeUpload: onBeforeUpload,
+    customRequest: onCustomRequest,
+  };
+
+  return isAntd ? (
+    <AntdUpload {...commonProps}>
+      <UploadButton {...uploadButtonProps} />
+    </AntdUpload>
+  ) : (
+    <Upload {...commonProps} {...uploadButtonProps} showUploadButton={showUploadBtn} />
   );
 };
 
