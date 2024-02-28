@@ -8,10 +8,22 @@ import { cx } from 'antd-style';
 import { mediaValidatorMap, useRegisterForm } from '../utils';
 import IPFSUpload from 'components/IPFSUpload';
 import { StepEnum } from '../../type';
+import { useSelector } from 'react-redux';
+
+const mediaList = [
+  ['metadata', 'social_media', 'Twitter'],
+  ['metadata', 'social_media', 'Facebook'],
+  ['metadata', 'social_media', 'Telegram'],
+  ['metadata', 'social_media', 'Discord'],
+  ['metadata', 'social_media', 'Reddit'],
+];
 
 export default function BasicDetails() {
   const [form] = Form.useForm();
   const [showSymbol, setShowSymbol] = useState<boolean>(true);
+  const [mediaError, setMediaError] = useState<boolean>(false);
+  const { walletInfo } = useSelector((store: any) => store.userInfo);
+  const info = useSelector((store: any) => store.elfInfo.elfInfo);
   useRegisterForm(form, StepEnum.step0);
   return (
     <div className="basic-detail">
@@ -19,7 +31,13 @@ export default function BasicDetails() {
         <Typography.Title level={6}>Basic Information</Typography.Title>
       </div>
       <div>
-        <Form layout="vertical" autoComplete="off" form={form}>
+        <Form
+          layout="vertical"
+          name="baseInfo"
+          scrollToFirstError={true}
+          autoComplete="off"
+          form={form}
+        >
           <Form.Item
             name={['metadata', 'name']}
             rules={[
@@ -39,6 +57,7 @@ export default function BasicDetails() {
           </Form.Item>
           <Form.Item
             name={['metadata', 'logo_url']}
+            valuePropName="fileList"
             rules={[
               {
                 required: true,
@@ -74,16 +93,38 @@ export default function BasicDetails() {
             <Input.TextArea
               className="Description-textArea"
               showCount
-              maxLength={10}
+              maxLength={240}
               style={{ height: 116 }}
               placeholder={`What is the mission and vision of this DAO? You will be able to change it later.`}
             />
           </Form.Item>
-          <Form.Item className="mb-6" label="">
+          <Form.Item
+            className="mb-6"
+            name={['metadata', 'social_media', 'title']}
+            dependencies={mediaList}
+            rules={[
+              ({ getFieldValue }) => ({
+                validator() {
+                  const metadata = mediaList.map((item) => getFieldValue(item));
+                  const values = Object.values(metadata);
+                  const checked = values.some((item) => item);
+                  if (checked) {
+                    setMediaError(false);
+                    return Promise.resolve();
+                  }
+                  setMediaError(true);
+                  return Promise.reject(new Error(''));
+                },
+              }),
+            ]}
+            label=""
+          >
             <div className="mt-8">
               <Typography.Title level={6}>Social Media</Typography.Title>
             </div>
-            <div className="Media-info">At least one social media is required.</div>
+            <div className={cx('Media-info', mediaError && '!text-Reject-Reject')}>
+              At least one social media is required.
+            </div>
           </Form.Item>
           <Form.Item
             name={['metadata', 'social_media', 'Twitter']}
@@ -100,7 +141,7 @@ export default function BasicDetails() {
             <Input placeholder={`Input the DAO's twitter account starts with @`} />
           </Form.Item>
           <Form.Item
-            name="metadata.social_media.Facebook"
+            name={['metadata', 'social_media', 'Facebook']}
             rules={[
               ...mediaValidatorMap.Other.validator,
               {
@@ -114,7 +155,7 @@ export default function BasicDetails() {
             <Input placeholder={`Input the DAO's Facebook page address`} />
           </Form.Item>
           <Form.Item
-            name="metadata.social_media.Discord"
+            name={['metadata', 'social_media', 'Discord']}
             rules={[
               ...mediaValidatorMap.Other.validator,
               {
@@ -161,7 +202,8 @@ export default function BasicDetails() {
           <div className="mb-8">
             <ChainAddress
               size="large"
-              address="pykr77ft9UUKJZLVq15wCH8PinBSjVRQ12sD1Ayq92mKFsJ1i"
+              address={walletInfo.address}
+              chain={info.curChain}
               info="The admin can only upgrade settings on the TMRW DAO platform - not the smart contracts."
             />
           </div>
@@ -178,7 +220,16 @@ export default function BasicDetails() {
             </ToolTip>
           </div>
           {showSymbol && (
-            <Form.Item name="governance_token" label="">
+            <Form.Item
+              rules={[
+                {
+                  required: true,
+                  message: 'governance_token is required',
+                },
+              ]}
+              name="governance_token"
+              label=""
+            >
               <Input placeholder="Input the token symbol" />
             </Form.Item>
           )}

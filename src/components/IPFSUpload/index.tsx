@@ -9,14 +9,16 @@ import { checkImgSize } from 'utils/checkImgSize';
 import './index.css';
 
 const COMMON_UPLOAD_INPUT_ID = 'common-upload-input-id';
+import { emitLoading } from 'utils/myEvent';
 
-export interface IFUploadProps extends IUploadProps {
+export interface IFUploadProps extends Omit<IUploadProps, 'onChange'> {
   maxFileCount?: number;
   fileLimit?: string;
   fileNameLengthLimit?: number;
   fileList?: UploadFile[];
   isAntd?: boolean;
   needCheckImgSize?: boolean;
+  onChange?: (fileList: UploadFile[]) => void;
 }
 
 const handleLimit = (limit: string) => {
@@ -49,7 +51,6 @@ const FUpload: React.FC<IFUploadProps> = ({
 }) => {
   const [showUploadBtn, setShowUploadBtn] = useState<boolean>(false);
   const [inFileList, setFileList] = useState<UploadFile[]>([]);
-
   useEffect(() => {
     if (!maxFileCount) return setShowUploadBtn(true);
     setShowUploadBtn(inFileList.length < maxFileCount);
@@ -70,7 +71,7 @@ const FUpload: React.FC<IFUploadProps> = ({
     }
   }, [disabled]);
 
-  const onFileChange: IFUploadProps['onChange'] = (info) => {
+  const onFileChange: IUploadProps['onChange'] = (info) => {
     const { file, fileList } = info;
 
     if (!file?.status) return;
@@ -83,7 +84,7 @@ const FUpload: React.FC<IFUploadProps> = ({
     });
 
     console.log('onFileChange', newFileList);
-    onChange?.({ ...info, fileList: newFileList });
+    onChange?.(newFileList);
     setFileList(newFileList);
   };
 
@@ -119,7 +120,7 @@ const FUpload: React.FC<IFUploadProps> = ({
 
   const onCustomRequest: IUploadProps['customRequest'] = async ({ file, onSuccess, onError }) => {
     try {
-      console.log('onCustom loading');
+      emitLoading(true, 'Uploading...');
       const uploadData = await pinFileToIPFS(file as File);
       const fileUrl = uploadData?.url ?? '';
       console.log('ipfs-success', fileUrl);
@@ -127,7 +128,7 @@ const FUpload: React.FC<IFUploadProps> = ({
     } catch (error) {
       onError?.(error as Error);
     } finally {
-      console.log('onCustom loading done');
+      emitLoading(false);
     }
   };
 

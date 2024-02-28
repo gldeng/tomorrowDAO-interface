@@ -29,6 +29,21 @@
       @apply mr-1;
     }
   }
+
+  .TMRWDAO-menu-submenu-selected {
+    .TMRWDAO-menu-submenu-title {
+      @apply bg-transparent;
+      .menu-label-text {
+        @apply !text-Brand-Brand;
+      }
+    }
+  }
+
+  .TMRWDAO-menu-item-selected {
+    .TMRWDAO-menu-title-content {
+      @apply !text-Brand-Brand;
+    }
+  }
 }
 
 .pc-menu-popup {
@@ -38,6 +53,11 @@
       @apply w-full m-0 h-12 leading-[48px] px-6 box-border !important;
       .TMRWDAO-menu-title-content {
         @apply text-Primary-Text text-sm leading-[22px] inline-block;
+      }
+    }
+    .TMRWDAO-menu-item-selected {
+      .TMRWDAO-menu-title-content {
+        @apply !text-Brand-Brand;
       }
     }
     .TMRWDAO-menu-item:hover {
@@ -75,19 +95,16 @@
           @apply w-full h-16 leading-[64px] m-0 !p-0 rounded-none;
         }
       }
-      .TMRWDAO-menu-item-selected {
-        .TMRWDAO-menu-title-content{
-          @apply text-Brand-Brand;
-        }
-      }
+
       .TMRWDAO-menu-submenu-selected {
         .TMRWDAO-menu-submenu-title {
           @apply bg-transparent;
           .menu-label-text {
-            @apply text-Brand-Brand;
+            @apply !text-Brand-Brand;
           }
         }
       }
+
       .TMRWDAO-menu-submenu-arrow {
         inset-inline-end: 0px;
       }
@@ -97,7 +114,7 @@
           @apply h-12 leading-[48px] !px-4 border-none;
         }
         .TMRWDAO-menu-item-selected {
-          .TMRWDAO-menu-title-content{
+          .TMRWDAO-menu-title-content {
             @apply text-Brand-Brand;
           }
         }
