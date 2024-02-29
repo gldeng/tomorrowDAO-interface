@@ -41,7 +41,7 @@ export const ResponsiveSelect = (props: ResponsiveSelectProps) => {
           <h2 className="font-medium text-neutralTitle text-[20px] leading-[28px]">{title}</h2>
           <CloseIcon onClick={handleDrawerClose} className="responsive-select-title-close" />
         </div>
-        {options?.map((option) => (
+        {options?.map((option, i) => (
           <div
             onClick={() => {
               onChange?.(option.value, option);
@@ -53,7 +53,14 @@ export const ResponsiveSelect = (props: ResponsiveSelectProps) => {
               'item-selected': value === option.value,
             })}
           >
-            {option.label}
+            {props.optionRender
+              ? props.optionRender(
+                  { data: option, key: option.value ?? i },
+                  {
+                    index: i,
+                  },
+                )
+              : option.label}
           </div>
         ))}
       </Drawer>

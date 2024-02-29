@@ -4,53 +4,41 @@ import { Button, Radio } from 'aelf-design';
 import { Form, Switch, Select } from 'antd';
 import { memo, useState } from 'react';
 import { ResponsiveSelect } from 'components/ResponsiveSelect';
-import { proposalTypeList } from '../util';
 import ProposalType from './ProposalType';
 import ProposalInfo from './ProposalInfo';
 import clsx from 'clsx';
 
-const defaultId = proposalTypeList[0].value;
 const { Option } = Select;
 const GovernanceModel = () => {
   const [form] = Form.useForm();
   const [isNext, setNext] = useState(false);
-  const governanceModelType = Form.useWatch('governanceModelType', form);
-  const [isCheck, setIsCheck] = useState(false);
-  const onHighCouncilSwitch = (checked: boolean) => {
-    setIsCheck(checked);
-  };
+  const title = Form.useWatch(['proposal_basic_info', 'proposal_title'], form);
+  const description = Form.useWatch(['proposal_basic_info', 'proposal_description'], form);
+  // const [isCheck, setIsCheck] = useState(false);
   return (
-    <div className="deploy-proposal-form">
+    <div className="deploy-proposal-form mt-[24px] mb-[24px]">
       <Form
         form={form}
         layout="vertical"
         autoComplete="off"
         requiredMark={false}
         scrollToFirstError={true}
+        onValuesChange={(changedValues) => {
+          console.log('changedValues', changedValues);
+          if (changedValues?.transaction?.to_address) {
+            form.setFieldValue(['transaction', 'contract_method_name'], '');
+            form.setFieldValue(['transaction', 'params'], '');
+          }
+        }}
       >
-        <ProposalInfo
-        //   className={clsx({ hidden: !isNext })}
-        />
         <ProposalType
-          //   className={clsx({ hidden: isNext })}
+          className={clsx({ hidden: isNext })}
           next={() => {
             setNext(true);
           }}
         />
-        {/* {isNext ? (
-        ) : (
-          
-        )} */}
+        <ProposalInfo className={clsx({ hidden: !isNext })} />
       </Form>
-      <Button
-        type="primary"
-        className="w-[156px] mt-[100px]"
-        onClick={() => {
-          console.log('form.getFieldsValue()', form.getFieldsValue());
-        }}
-      >
-        Deploy
-      </Button>
     </div>
   );
 };

@@ -4,7 +4,7 @@ import { Radio } from 'aelf-design';
 import { Button, Form, Switch, Select } from 'antd';
 import { memo, useState } from 'react';
 import { ResponsiveSelect } from 'components/ResponsiveSelect';
-import { proposalTypeList } from '../util';
+import { proposalTypeList } from '../type';
 
 const defaultType = proposalTypeList[0].value;
 console.log('defaultType', defaultType, proposalTypeList);
@@ -27,32 +27,38 @@ const ProposalType = (props: ProposalTypeProps) => {
         name={'proposal_type'}
         label={null}
         rules={[{ required: true, message: 'Please select proposal type' }]}
-        initialValue={defaultType}
+        initialValue={proposalTypeList[0].value}
       >
         <ResponsiveSelect
-          popupClassName="proposal-model-select"
+          popupClassName="proposal-type-select"
           drawerProps={{
             title: 'Proposal Type',
+            className: 'proposal-type-draw',
           }}
           options={proposalTypeList}
           optionLabelProp="label"
           optionRender={(option) => (
-            <div className="h-[48px]">
-              <h2 className="text-[14px] leading-[22px] font-normal">{option.data.label}</h2>
-              <p className="text-[14px] mt-[4px] leading-[22px] font-normal text-[#B8B8B8]">
-                {option.data.desc}
-              </p>
-            </div>
+            <ProposalTypeItem label={option.data.label} desc={option.data.desc} />
           )}
         ></ResponsiveSelect>
       </Form.Item>
-      <div className="flex justify-end mt-[100px]">
+      <div className="flex justify-end mt-[494px]">
         <Button type="primary" className="w-[156px]" onClick={next}>
-          Next
+          Continue
         </Button>
       </div>
     </div>
   );
 };
-
+function ProposalTypeItem(props: { label: string; desc: string }) {
+  const { label, desc } = props;
+  return (
+    <div>
+      <h2 className="text-[16px] leading-[24px] font-normal label-text">{label}</h2>
+      <p className="text-[14px] mt-[4px] leading-[22px] font-normal text-Neutral-Disable-Text text-wrap">
+        {desc}
+      </p>
+    </div>
+  );
+}
 export default memo(ProposalType);

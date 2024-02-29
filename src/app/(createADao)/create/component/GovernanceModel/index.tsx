@@ -1,12 +1,18 @@
 'use client';
 
-import { Button, ToolTip } from 'aelf-design';
+import { ToolTip } from 'aelf-design';
 import { Form, InputNumber } from 'antd';
-import { memo, useContext, useEffect } from 'react';
+import { memo } from 'react';
 import InputSlideBind from 'components/InputSlideBind';
-import { integerRule, min2maxIntegerRule, useRegisterForm, validatorCreate } from '../utils';
+import {
+  integerRule,
+  min2maxIntegerRule,
+  percentRule,
+  useRegisterForm,
+  validatorCreate,
+} from '../utils';
 import './index.css';
-import { StepEnum, StepsContext } from '../../type';
+import { StepEnum } from '../../type';
 const GovernanceModel = () => {
   const [form] = Form.useForm();
   useRegisterForm(form, StepEnum.step1);
@@ -61,11 +67,7 @@ const GovernanceModel = () => {
           label={<span className="form-item-label">Minimum percentage of approved votes </span>}
           initialValue={50}
           validateFirst={true}
-          rules={[
-            integerRule,
-            validatorCreate((v) => v === 0, 'Please input a number larger than 0'),
-            validatorCreate((v) => v > 100, 'Please input a number smaller than 100'),
-          ]}
+          rules={percentRule}
         >
           <InputSlideBind type="approve" placeholder={'Suggest setting it above 50%'} />
         </Form.Item>
@@ -74,11 +76,7 @@ const GovernanceModel = () => {
           label={<span className="form-item-label">Maximum percentage of rejected votes</span>}
           initialValue={20}
           validateFirst={true}
-          rules={[
-            integerRule,
-            validatorCreate((v) => v === 0, 'Please input a number larger than 0'),
-            validatorCreate((v) => v > 20, 'Please input a number smaller than 20'),
-          ]}
+          rules={percentRule}
         >
           <InputSlideBind type="rejection" placeholder={'Suggest setting it below 20%'} />
         </Form.Item>
@@ -87,11 +85,7 @@ const GovernanceModel = () => {
           label={<span className="form-item-label">Maximum percentage of abstain votes</span>}
           initialValue={20}
           validateFirst={true}
-          rules={[
-            integerRule,
-            validatorCreate((v) => v === 0, 'Please input a number larger than 0'),
-            validatorCreate((v) => v > 20, 'Please input a number smaller than 20'),
-          ]}
+          rules={percentRule}
         >
           <InputSlideBind type="abstention" placeholder={'Suggest setting it below 20%'} />
         </Form.Item>

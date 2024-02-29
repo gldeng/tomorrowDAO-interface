@@ -3,9 +3,9 @@ import { useContext, useEffect } from 'react';
 import { StepEnum, StepsContext } from '../../type';
 
 export const useRegisterForm = (form: FormInstance, stepEnum: StepEnum) => {
-  const { stepForm, onLoad } = useContext(StepsContext);
+  const { stepForm, onRegister } = useContext(StepsContext);
   useEffect(() => {
-    onLoad?.(form);
+    onRegister?.(form);
     if (stepForm[stepEnum].submitedRes) {
       form.setFieldsValue(stepForm[stepEnum].submitedRes);
     }
