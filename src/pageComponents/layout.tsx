@@ -9,6 +9,7 @@ import { store } from 'redux/store';
 import Footer from 'components/Footer';
 import DynamicBreadCrumb from 'components/DynamicBreadCrumb';
 import { useWalletInit } from 'hooks/useWallet';
+import PageLoading from 'components/Loading';
 
 const Layout = dynamic(async () => {
   return (props: React.PropsWithChildren<{}>) => {
@@ -28,6 +29,7 @@ const Layout = dynamic(async () => {
             <Footer />
           </Suspense>
         </div>
+        <PageLoading />
       </div>
     );
   };

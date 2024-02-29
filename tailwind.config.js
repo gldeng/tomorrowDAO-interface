@@ -26,6 +26,7 @@ module.exports = {
         'Neutral-Default-BG': '#F6F6F6',
         'Disable-Text': '#B8B8B8',
         'Active-Text': '#F8B042',
+        'Reject-Reject': '#F55D6E',
       },
     },
     screens: {

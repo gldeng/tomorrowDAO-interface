@@ -1,6 +1,6 @@
-import { FormInstance } from "antd";
-import { create } from "domain";
-import { createContext } from "react";
+import { FormInstance, UploadFile } from 'antd';
+import { create } from 'domain';
+import { createContext } from 'react';
 
 export enum GovernanceModelType {
   Fixed = 'Fixed',
@@ -27,9 +27,10 @@ export interface IHighCouncilInput {
 }
 export interface IMetadata {
   name: string;
-  logo_url: string;
+  logo_url: UploadFile[];
   description: string; // 240
-  social_media: Record<string, string>; // Twitter, Facebook, Discord, Telegram, Reddit
+  // title does not need to be submitted
+  social_media: Record<string, string>; // Twitter, Facebook, Discord, Telegram, Reddit, title
 }
 export interface IFile {
   cid: string; // id

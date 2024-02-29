@@ -8,7 +8,9 @@ import useResponsive from 'hooks/useResponsive';
 import { MobileMenu } from 'components/Menu';
 import { ReactComponent as MenuArrow } from 'assets/imgs/menu-arrow.svg';
 import { MenuProps } from 'antd';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 export default function Header() {
   const { isLG } = useResponsive();
@@ -68,12 +70,26 @@ export default function Header() {
       },
     ];
   }, [isLG]);
+  const router = useRouter();
+
+  const pathname = usePathname();
 
   const [current, setCurrent] = useState('CreateDAO');
 
   const onClick: MenuProps['onClick'] = (e) => {
+    switch (e.key) {
+      case 'CreateDAO':
+        router.push('/guide');
+        break;
+    }
     setCurrent(e.key);
   };
+
+  useEffect(() => {
+    if (pathname === '/guide' || pathname === '/create') {
+      setCurrent('CreateDAO');
+    }
+  }, [pathname]);
 
   return (
     <header className="header-container">

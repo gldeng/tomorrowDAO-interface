@@ -10,6 +10,7 @@ export const THEME_CONFIG: ThemeConfig = {
     colorBorder: '#E1E1E1',
     colorPrimaryBorder: '#EDEDED',
     controlHeight: 48,
+    colorError: '#F55D6E',
   },
   components: {
     Form: {

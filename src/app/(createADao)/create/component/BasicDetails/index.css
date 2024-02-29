@@ -11,4 +11,14 @@
   .token-title {
     @apply text-base font-medium text-Neutral-Primary-Text ml-4 mr-1;
   }
+
+  .Description-textArea {
+    .TMRWDAO-input {
+      @apply !pb-8;
+    }
+    .TMRWDAO-input-data-count {
+      @apply bottom-3;
+      inset-inline-end: 12px;
+    }
+  }
 }
