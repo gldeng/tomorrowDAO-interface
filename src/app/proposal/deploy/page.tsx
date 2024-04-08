@@ -1,6 +1,4 @@
-import { memo, useState } from 'react';
-import { Steps } from 'antd';
-import clsx from 'clsx';
+import { memo } from 'react';
 import DeployForm from './DeployForm';
 import './index.css';
 const ProposalDeploy = () => {

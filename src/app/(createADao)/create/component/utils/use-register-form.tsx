@@ -5,9 +5,10 @@ import { StepEnum, StepsContext } from '../../type';
 export const useRegisterForm = (form: FormInstance, stepEnum: StepEnum) => {
   const { stepForm, onRegister } = useContext(StepsContext);
   useEffect(() => {
+    console.log('-----------');
     onRegister?.(form);
     if (stepForm[stepEnum].submitedRes) {
       form.setFieldsValue(stepForm[stepEnum].submitedRes);
     }
-  }, [form]);
+  }, [form, onRegister, stepEnum, stepForm]);
 };

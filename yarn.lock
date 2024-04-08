@@ -7051,7 +7051,7 @@ listr2@^5.0.7:
     through "^2.3.8"
     wrap-ansi "^7.0.0"
 
-loader-utils@^2.0.0, loader-utils@^2.0.2:
+loader-utils@^2.0.0:
   version "2.0.4"
   resolved "https://registry.npmmirror.com/loader-utils/-/loader-utils-2.0.4.tgz#8b5cb38b5c34a9a018ee1fc0e6a066d1dfcc528c"
   integrity sha512-xXqpXoINfFhgua9xiqD8fPFHgkoq1mmmpE92WlDbm9rNRd/EbRb+Gqf908T2DMfuHjjJlksiK2RbHVOdD/MqSw==
@@ -8000,13 +8000,6 @@ moment@^2.24.0, moment@^2.29.2, moment@^2.29.4:
   version "2.30.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.30.1.tgz#f8c91c07b7a786e30c59926df530b4eac96974ae"
   integrity sha512-uEmtNhbDOrWPFS+hdjFCBfy9f2YoyzRpwcl+DqpC6taX21FzsTLQVbMV/W7PzNSX6x/bhC1zA3c2UQ5NzH6how==
-
-monaco-editor-webpack-plugin@^7.1.0:
-  version "7.1.0"
-  resolved "https://registry.npmjs.org/monaco-editor-webpack-plugin/-/monaco-editor-webpack-plugin-7.1.0.tgz#16f265c2b5dbb5fe08681b6b3b7d00d3c5b2ee97"
-  integrity sha512-ZjnGINHN963JQkFqjjcBtn1XBtUATDZBMgNQhDQwd78w2ukRhFXAPNgWuacaQiDZsUr4h1rWv5Mv6eriKuOSzA==
-  dependencies:
-    loader-utils "^2.0.2"
 
 ms@2.0.0:
   version "2.0.0"
@@ -9589,13 +9582,6 @@ react-markdown@^9.0.1:
     unist-util-visit "^5.0.0"
     vfile "^6.0.0"
 
-react-monaco-editor@^0.55.0:
-  version "0.55.0"
-  resolved "https://registry.npmjs.org/react-monaco-editor/-/react-monaco-editor-0.55.0.tgz#8933e8acc28e177b8b2aaf23593716b8cebf27a8"
-  integrity sha512-GdEP0Q3Rn1dczfKEEyY08Nes5plWwIYU4sWRBQO0+jsQWQsKMHKCC6+hPRwR7G/4aA3V/iU9jSmWPzVJYMVFSQ==
-  dependencies:
-    prop-types "^15.8.1"
-
 react-qrcode-logo@2.9.0:
   version "2.9.0"
   resolved "https://registry.yarnpkg.com/react-qrcode-logo/-/react-qrcode-logo-2.9.0.tgz#34270d563b4a15396b5e7e7656ea2d079673adad"
@@ -10416,6 +10402,11 @@ staged-components@^1.1.3:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/staged-components/-/staged-components-1.1.3.tgz#bb5a396df2d9b48fbc31841a59f53437ed8b8ac6"
   integrity sha512-9EIswzDqjwlEu+ymkV09TTlJfzSbKgEnNteUnZSTxkpMgr5Wx2CzzA9WcMFWBNCldqVPsHVnRGGrApduq2Se5A==
+
+state-local@^1.0.6:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/state-local/-/state-local-1.0.7.tgz#da50211d07f05748d53009bee46307a37db386d5"
+  integrity sha512-HTEHMNieakEnoe33shBYcZ7NX83ACUjCu8c40iOGEZsngj9zRnkqS9j1pqQPXwobB0ZcVTk27REb7COQ0UR59w==
 
 streamsearch@^1.1.0:
   version "1.1.0"

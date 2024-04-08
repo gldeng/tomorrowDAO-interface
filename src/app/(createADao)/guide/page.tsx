@@ -53,8 +53,10 @@ const GuidePage = () => {
         <div className="pt-4">
           <ul className="flex flex-col gap-4">
             {offers.map((ele, idx) => (
-              <li className="flex items-baseline gap-2" key={idx}>
-                <CircleDot />
+              <li className="flex gap-2" key={idx}>
+                <div className="flex items-center h-[22px]">
+                  <CircleDot />
+                </div>
                 <Typography.Text className="flex-1">{ele.label}</Typography.Text>
               </li>
             ))}
@@ -68,8 +70,10 @@ const GuidePage = () => {
         </Typography.Title>
         <div className="pt-4">
           <ul className="flex flex-col gap-4">
-            <li className="flex items-baseline gap-2">
-              <CircleDot />
+            <li className="flex gap-2">
+              <div className="flex items-center h-[22px]">
+                <CircleDot />
+              </div>
               <div className="flex-1">
                 <Typography.Text>Issue a governance token for voting if you need.</Typography.Text>
                 <Typography.Text
@@ -81,8 +85,10 @@ const GuidePage = () => {
                 </Typography.Text>
               </div>
             </li>
-            <li className="flex items-baseline gap-2">
-              <CircleDot />
+            <li className="flex gap-2">
+              <div className="flex items-center h-[22px]">
+                <CircleDot />
+              </div>
               <Typography.Text className="flex-1">
                 Know about the smart contracts and DYOR:
               </Typography.Text>
