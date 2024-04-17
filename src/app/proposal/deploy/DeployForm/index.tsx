@@ -1,14 +1,11 @@
 'use client';
 
-import { Button, Radio } from 'aelf-design';
-import { Form, Switch, Select } from 'antd';
+import { Form } from 'antd';
 import { memo, useState } from 'react';
-import { ResponsiveSelect } from 'components/ResponsiveSelect';
 import ProposalType from './ProposalType';
 import ProposalInfo from './ProposalInfo';
 import clsx from 'clsx';
 
-const { Option } = Select;
 const GovernanceModel = () => {
   const [form] = Form.useForm();
   const [isNext, setNext] = useState(false);

@@ -3,8 +3,8 @@
 import { useMachine } from '@xstate/react';
 import { formMachine } from './xstate';
 import { Button, Typography, FontWeightEnum } from 'aelf-design';
-import React, { memo, useRef } from 'react';
-import { Steps, message } from 'antd';
+import React, { memo, useCallback, useRef } from 'react';
+import { Steps, message, FormInstance } from 'antd';
 import clsx from 'clsx';
 import SubmitButton from './component/SubmitButton';
 import useResponsive from 'hooks/useResponsive';
@@ -43,17 +43,9 @@ const CreateDaoPage = () => {
   const currentStepString = currentStep.toString() as StepEnum;
   const [messageApi, contextHolder] = message.useMessage();
   const isNotFirstStep = currentStep > 0;
-  const { isMD, isLG } = useResponsive();
-  const stepsFormMap: IStepsContext = {
-    stepForm: {
-      [StepEnum.step0]: {},
-      [StepEnum.step1]: {},
-      [StepEnum.step2]: {},
-      [StepEnum.step3]: {},
-    },
-    onRegister: () => {},
-  };
-  const stepsFormMapRef = useRef<IStepsContext>(stepsFormMap);
+  const { isMD } = useResponsive();
+
+  const stepsFormMapRef = useRef<IStepsContext>(defaultStepsFormMap);
 
   const handleNextStep = () => {
     const form = stepsFormMapRef.current.stepForm[currentStepString].formInstance;
@@ -73,6 +65,13 @@ const CreateDaoPage = () => {
     }
   };
 
+  const onRegisterHandler = useCallback(
+    (ins: FormInstance) => {
+      stepsFormMapRef.current.stepForm[currentStepString].formInstance = ins;
+    },
+    [currentStepString],
+  );
+
   return (
     <div>
       <Typography.Title className="py-6" level={5} fontWeight={FontWeightEnum.Medium}>
@@ -91,9 +90,7 @@ const CreateDaoPage = () => {
       <StepsContext.Provider
         value={{
           ...stepsFormMapRef.current,
-          onRegister: (ins) => {
-            stepsFormMapRef.current.stepForm[currentStepString].formInstance = ins;
-          },
+          onRegister: onRegisterHandler,
         }}
       >
         <div className="dao-steps-content-wrap">{snapshot.context.currentView.Component}</div>

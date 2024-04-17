@@ -20,7 +20,7 @@ export const proposalTypeList = [
   },
   {
     label: 'Veto Proposal',
-    desc: "Veto proposals are only supported for the referendum. For any proposal issued by the High Council, any address can quickly initiate a veto-type proposal to terminate the execution of the proposal issued by the High Council.",
+    desc: 'Veto proposals are only supported for the referendum. For any proposal issued by the High Council, any address can quickly initiate a veto-type proposal to terminate the execution of the proposal issued by the High Council.',
     detailDesc: `Veto proposals are only supported for the referendum. For any proposal issued by the High Council, any address can quickly initiate a veto-type proposal to terminate the execution of the proposal issued by the High Council.`,
     value: ProposalType.VETO,
   },
@@ -59,7 +59,7 @@ export const mockVoteSchemeList: VoteSchemeListRes = {
   ],
 };
 
-export const fetchVoteSchemeList = async (p: { "chainId": string }) => {
+export const fetchVoteSchemeList = async (p: { chainId: string }) => {
   await new Promise((resolve) => {
     setTimeout(resolve, 1000);
   });
@@ -88,7 +88,7 @@ const mockGovernanceMechanismList: GovernanceMechanismList = {
   ],
 };
 
-export const fetchGovernanceMechanismList = async (p: { "chainId": string }) => {
+export const fetchGovernanceMechanismList = async (p: { chainId: string }) => {
   await new Promise((resolve) => {
     setTimeout(resolve, 1000);
   });
@@ -136,7 +136,7 @@ export interface DaoInfo {
     pendingTimePeriod: number;
     executeTimePeriod: number;
     vetoExecuteTimePeriod: number;
-  },
+  };
 }
 const mockDaoInfo: DaoInfo = {
   chainId: '1',
@@ -183,11 +183,11 @@ const mockDaoInfo: DaoInfo = {
     },
   ],
 };
-export const fetchDaoInfo = async (p: { daoId: string, chainId: string }) => {
+export const fetchDaoInfo = async (p: { daoId: string; chainId: string }) => {
   await new Promise((resolve) => {
     setTimeout(resolve, 1000);
   });
-  return mockDaoInfo; // 假设 mockDaoInfo 是你已经定义好的模拟数据
+  return mockDaoInfo;
 };
 interface ContractInfoItem {
   ContractAddress: string;
@@ -212,7 +212,7 @@ const mockContractInfoList: ContractInfo = {
     },
   ],
 };
-export const fetchContractInfo = async (p: { "chainId": string }) => {
+export const fetchContractInfo = async (p: { chainId: string }) => {
   await new Promise((resolve) => {
     setTimeout(resolve, 1000);
   });

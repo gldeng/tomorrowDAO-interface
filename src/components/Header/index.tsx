@@ -24,7 +24,7 @@ export default function Header() {
         label: (
           <div className="menu-label">
             <span className="menu-label-text">Resources</span>
-            {!isLG && <MenuArrow />}
+            {!isLG && <MenuArrow className="transition-all duration-200" />}
           </div>
         ),
         key: 'Resources',
@@ -48,7 +48,7 @@ export default function Header() {
         label: (
           <div className="menu-label">
             <span className="menu-label-text">Community</span>
-            {!isLG && <MenuArrow />}
+            {!isLG && <MenuArrow className="transition-all duration-200" />}
           </div>
         ),
         popupClassName: 'pc-menu-popup',

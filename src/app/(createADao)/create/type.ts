@@ -93,9 +93,7 @@ export const defaultStepsFormMap = {
     [StepEnum.step2]: {},
     [StepEnum.step3]: {},
   },
-  onRegister: () => {
-    // 
-  },
+  onRegister: () => undefined,
 };
 export interface IStepsContext {
   stepForm: StepsFormMap;

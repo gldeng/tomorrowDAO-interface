@@ -34,9 +34,9 @@ export const THEME_CONFIG: ThemeConfig = {
     },
     Table: {
       // borderColor: '#fff',
-      headerBg: '#fff',
       headerSplitColor: '#fff',
       headerSortActiveBg: '#fff',
+      headerBg: '#FFFFFF',
     },
   },
 };
