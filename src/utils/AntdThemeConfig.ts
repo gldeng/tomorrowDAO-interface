@@ -32,6 +32,12 @@ export const THEME_CONFIG: ThemeConfig = {
       horizontalItemPadding: '17px 32px',
       horizontalItemPaddingSM: '17px 16px',
     },
+    Table: {
+      // borderColor: '#fff',
+      headerBg: '#fff',
+      headerSplitColor: '#fff',
+      headerSortActiveBg: '#fff',
+    },
   },
 };
 

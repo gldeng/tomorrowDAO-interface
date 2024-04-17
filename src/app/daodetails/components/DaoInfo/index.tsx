@@ -1,50 +1,31 @@
-import { useCallback, useMemo, useState } from 'react';
-import { Collapse, HashAddress, Dropdown, Typography, ICollapseProps } from 'aelf-design';
+import { Collapse, HashAddress, Typography } from 'aelf-design';
 import Image from 'next/image';
-import { Divider, Descriptions, DescriptionsProps, List } from 'antd';
-import type { MenuProps } from 'antd';
+import { Divider, Descriptions, DescriptionsProps } from 'antd';
 import useResponsive from 'hooks/useResponsive';
-import CommonDrawer from 'components/CommonDrawer';
 import PreviewFile from 'components/PreviewFile';
+import { IDaoDetail } from '../../type';
 
 import { HC_CANDIDATE, HC_MEMBER } from '../../constants';
 
-import ProposalDetailFile from 'assets/imgs/proposal-detail-file.svg';
 import DaoLogo from 'assets/imgs/dao-logo.svg';
 
 import './index.css';
 import useJumpByPath from 'hooks/useJumpByPath';
 
 interface IParams {
-  data: {
-    metadata: {
-      name: string;
-      description: string;
-    };
-    creator: string;
-    governanceToken: string;
-    network: string;
-    governanceModel: string;
-    memberCount: number;
-    candidateCount: number;
-    fileInfoList: Array<{
-      cid: string;
-      name: string;
-      url: string;
-    }>;
-  };
+  data: IDaoDetail;
   onChangeHCParams: any;
 }
 
 export default function DaoInfo(props: IParams) {
   const {
     data,
-    data: { metadata, fileInfoList = [] },
+    data: { metadata, fileInfoList },
     onChangeHCParams,
   } = props;
 
   const jump = useJumpByPath();
-  const { isSM } = useResponsive();
+  const { isLG } = useResponsive();
 
   const handleGoto = () => {
     const originAddress = 'ELF_2UthYi7AHRdfrqc1YCfeQnjdChDLaas65bW4WxESMGMojFiXj9_AELF#contracts';
@@ -136,7 +117,7 @@ export default function DaoInfo(props: IParams) {
       <Collapse defaultActiveKey={['1']} ghost>
         <Collapse.Panel header={<Typography.Title>Creator</Typography.Title>} key="1">
           <Descriptions
-            layout={isSM ? 'vertical' : 'horizontal'}
+            layout={isLG ? 'vertical' : 'horizontal'}
             items={items}
             column={{ xs: 1, sm: 2, md: 2, lg: 2, xl: 2, xxl: 2 }}
           />

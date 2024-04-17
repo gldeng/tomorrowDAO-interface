@@ -1,5 +1,5 @@
 .dao-detail-dis {
-  @apply max-w-[1360px] border border-Neutral-Divider border-solid rounded-lg bg-white py-6 mb-6 pb-0 mx-4 lg:mx-auto;
+  @apply  border border-Neutral-Divider border-solid rounded-lg bg-white py-6 mb-6 pb-0 mx-4 ;
   .dao-detail-dis-title {
     @apply flex justify-between;
   }

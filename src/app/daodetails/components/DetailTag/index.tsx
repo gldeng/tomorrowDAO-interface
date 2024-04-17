@@ -16,7 +16,7 @@ export default function DetailTag(props: {
     backgroundColor: customStyle.bgColor,
   };
   return (
-    <div className="inline-block px-2 rounded leading-5" style={{ ...style }}>
+    <div className="inline-block px-2 rounded leading-5 font-medium" style={{ ...style }}>
       {customStyle.text}
     </div>
   );
