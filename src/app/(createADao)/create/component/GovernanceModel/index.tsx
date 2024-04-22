@@ -1,6 +1,6 @@
 'use client';
 
-import { ToolTip } from 'aelf-design';
+import { Tooltip } from 'aelf-design';
 import { Form, InputNumber } from 'antd';
 import { memo } from 'react';
 import InputSlideBind from 'components/InputSlideBind';
@@ -28,9 +28,9 @@ const GovernanceModel = () => {
         <Form.Item
           name={'minimal_required_threshold'}
           label={
-            <ToolTip title="The minimum number of addresses required to participate in the voting of proposals.">
+            <Tooltip title="The minimum number of addresses required to participate in the voting of proposals.">
               <span className="form-item-label">Minimum voting addresses</span>
-            </ToolTip>
+            </Tooltip>
           }
           validateFirst={true}
           rules={[
@@ -48,9 +48,9 @@ const GovernanceModel = () => {
         <Form.Item
           name={'minimal_vote_threshold'}
           label={
-            <ToolTip title="The minimum number of votes required to finalize a proposal. Only applicable to proposals with 1 token 1 vote proposals.">
+            <Tooltip title="The minimum number of votes required to finalize a proposal. Only applicable to proposals with 1 token 1 vote proposals.">
               <span className="form-item-label">Minimum votes</span>
-            </ToolTip>
+            </Tooltip>
           }
           validateFirst={true}
           rules={min2maxIntegerRule}

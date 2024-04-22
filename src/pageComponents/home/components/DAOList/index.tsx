@@ -1,4 +1,5 @@
 import DAOListItem from 'components/DAOListItem';
+import Link from 'next/link';
 import DownIcon from 'assets/imgs/down.svg';
 import { LoadingOutlined } from '@ant-design/icons';
 import { Spin } from 'antd';
@@ -25,7 +26,11 @@ export default function DAOList() {
     <div className="dao-list">
       <div className="dao-list-container">
         {numbersArray.map((number) => {
-          return <DAOListItem key={number} />;
+          return (
+            <Link key={number} href={`/daodetails/${number}`}>
+              <DAOListItem />
+            </Link>
+          );
         })}
       </div>
       <div className="dao-more">

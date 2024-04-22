@@ -1,4 +1,4 @@
-import { Input, Typography, ToolTip } from 'aelf-design';
+import { Input, Typography, Tooltip } from 'aelf-design';
 import './index.css';
 import { Form, Switch } from 'antd';
 import ChainAddress from 'components/Address';
@@ -215,9 +215,9 @@ export default function BasicDetails() {
               }}
             />
             <span className="token-title">Governance token</span>
-            <ToolTip placement="top" title="What is the governance token?">
+            <Tooltip placement="top" title="What is the governance token?">
               <QuestionIcon className="cursor-pointer" width={16} height={16} />
-            </ToolTip>
+            </Tooltip>
           </div>
           {showSymbol && (
             <Form.Item

@@ -1,6 +1,6 @@
 'use client';
 
-import { Radio, Input, ToolTip, Button } from 'aelf-design';
+import { Radio, Input, Tooltip, Button } from 'aelf-design';
 import { Form, Select } from 'antd';
 import { memo, useEffect, useMemo, useState } from 'react';
 import { ResponsiveSelect } from 'components/ResponsiveSelect';
@@ -206,9 +206,9 @@ const ProposalInfo = (props: ProposalInfoProps) => {
       </Form.Item>
       <Form.Item
         label={
-          <ToolTip title="Estimated proposal active period. The active period starts from the proposal being published on the blockchain and lasts until {num} days later">
+          <Tooltip title="Estimated proposal active period. The active period starts from the proposal being published on the blockchain and lasts until {num} days later">
             <span className="form-item-label">Active Period</span>
-          </ToolTip>
+          </Tooltip>
         }
       >
         <div className="flex h-[48px] px-[16px] py-[8px] items-center rounded-[6px] border-[1px] border-solid border-Neutral-Border bg-Neutral-Hover-BG">
@@ -223,9 +223,9 @@ const ProposalInfo = (props: ProposalInfoProps) => {
       </Form.Item>
       <Form.Item
         label={
-          <ToolTip title="Estimated proposal executable period. The executable period starts from the proposal being approved on the blockchain and lasts until {num} days later">
+          <Tooltip title="Estimated proposal executable period. The executable period starts from the proposal being approved on the blockchain and lasts until {num} days later">
             <span className="form-item-label">Executable Period</span>
-          </ToolTip>
+          </Tooltip>
         }
       >
         <div className="flex h-[48px] px-[16px] py-[8px] items-center rounded-[6px] border-[1px] border-solid border-Neutral-Border bg-Neutral-Hover-BG">
