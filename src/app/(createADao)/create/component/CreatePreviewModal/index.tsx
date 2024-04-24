@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, useContext, useState } from 'react';
 import { Flex, Checkbox, CheckboxProps } from 'antd';
 import { FontWeightEnum, Typography, HashAddress } from 'aelf-design';
 import Image from 'next/image';
@@ -6,47 +6,11 @@ import CommonModalSwitchDrawer from 'components/CommonModalSwitchDrawer';
 import CommonDaoLogo, { CommonDaoLogoSizeEnum } from 'components/CommonDaoLogo';
 import { colorfulSocialMediaIconMap } from 'assets/imgs/socialMediaIcon';
 import './index.css';
+import { StepsContext, StepEnum } from '../../type';
 
 const { Text, Title } = Typography;
 
-const socialMediaList = [
-  {
-    name: 'telegram',
-    url: 'https://t.me/aelfblockchain',
-  },
-  {
-    name: 'medium',
-    url: 'https://medium.com/aelfblockchain',
-  },
-  {
-    name: 'facebook',
-    url: 'https://www.facebook.com/aelfofficial',
-  },
-  {
-    name: 'reddit',
-    url: 'https://www.reddit.com/r/aelfofficial/',
-  },
-  {
-    name: 'discord',
-    url: 'https://discord.gg/3gV2rPf',
-  },
-  {
-    name: 'station',
-    url: 'https://www.google.com',
-  },
-  {
-    name: 'x',
-    url: 'https://www.google.com',
-  },
-] as const;
-
-function SocialMediaItem({
-  name,
-  url,
-}: {
-  name: keyof typeof colorfulSocialMediaIconMap;
-  url: string;
-}) {
+function SocialMediaItem({ name, url }: { name: string; url: string }) {
   return (
     <Flex className="social-media-item" gap={8} align="center">
       <Image src={colorfulSocialMediaIconMap[name]} alt="media" width={16} height={16} />
@@ -123,13 +87,26 @@ export interface ICreatePreviewModalProps {
 }
 
 export default function CreatePreviewModal({ open, onClose, onConfirm }: ICreatePreviewModalProps) {
+  const { stepForm } = useContext(StepsContext);
+  const [state, setState] = useState([false, false, false, false]);
+  const disabled = state.findIndex((item) => item === false) > -1;
+
+  const metaData = stepForm[StepEnum.step0].submitedRes;
+
+  const socialMediaList = Object.keys(metaData?.metadata?.socialMedia ?? {}).map((key) => {
+    return {
+      name: key,
+      url: metaData?.metadata.socialMedia[key],
+    };
+  });
+
   return (
     <CommonModalSwitchDrawer
       commonClassName="create-preview-modal"
       title="Confirm"
       modalWidth={800}
       footerConfig={{
-        buttonList: [{ children: 'Confirm', onClick: onConfirm }],
+        buttonList: [{ children: 'Confirm', onClick: onConfirm, disabled: disabled }],
       }}
       open={open}
       onClose={onClose}
@@ -142,15 +119,10 @@ export default function CreatePreviewModal({ open, onClose, onConfirm }: ICreate
               Network DAO
             </Title>
           </Flex>
-          <Text>
-            AELF is a fully decentralized community governed protocol by the ELF token-holders. ELF
-            token-holders collectively discuss, propose, and vote on upgrades to the protocol. ELF
-            token-holders (aelf network only) can either vote themselves on new proposals or
-            delegate to an address of choice. To learn more, check out the Governance documentation.
-          </Text>
+          <Text>{metaData?.metadata.description}</Text>
           <Flex gap={12} wrap="wrap">
             {socialMediaList.map(({ name, url }, index) => (
-              <SocialMediaItem key={index} name={name} url={url} />
+              <SocialMediaItem key={index} name={name as string} url={url ?? ''} />
             ))}
           </Flex>
         </Flex>
@@ -162,12 +134,14 @@ export default function CreatePreviewModal({ open, onClose, onConfirm }: ICreate
           />
           <Flex gap={8} align="center">
             <Title fontWeight={FontWeightEnum.Medium}>Governance token:</Title>
-            <Text>ELF</Text>
+            <Text>{metaData?.governanceToken}</Text>
           </Flex>
         </Flex>
         <div className="divider" />
         <CheckboxItem
           label="Fixed governance mechanism"
+          checked={state[0]}
+          onChange={(e) => setState([e.target.checked, state[1], state[2], state[3]])}
           descriptionList={[
             {
               content: 'Parliament',
@@ -183,6 +157,8 @@ export default function CreatePreviewModal({ open, onClose, onConfirm }: ICreate
         />
         <CheckboxItem
           label="High Council"
+          checked={state[1]}
+          onChange={(e) => setState([state[0], e.target.checked, state[2], state[3]])}
           descriptionList={[
             {
               content:
@@ -199,6 +175,8 @@ export default function CreatePreviewModal({ open, onClose, onConfirm }: ICreate
           ]}
         />
         <CheckboxItem
+          checked={state[2]}
+          onChange={(e) => setState([state[0], state[1], e.target.checked, state[3]])}
           label={`Documents (${3})`}
           descriptionList={[
             {
@@ -214,6 +192,8 @@ export default function CreatePreviewModal({ open, onClose, onConfirm }: ICreate
         />
         <CheckboxItem
           label="Governance Contracts (2)"
+          checked={state[3]}
+          onChange={(e) => setState([state[0], state[1], state[2], e.target.checked])}
           descriptionList={[
             {
               content: 'Governance:',

@@ -1,14 +1,16 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import { Button, IButtonProps } from 'aelf-design';
 import CreatePreviewModal, { ICreatePreviewModalProps } from '../CreatePreviewModal';
 import CommonOperationResultModal, {
   CommonOperationResultModalType,
   TCommonOperationResultModalProps,
 } from 'components/CommonOperationResultModal';
+import { StepEnum, StepsContext } from '../../type';
 
 interface ISubmitButtonProps {
   buttonProps?: Omit<IButtonProps, 'onClick'>;
   children?: React.ReactNode;
+  onConfirm?: () => void;
 }
 
 type TPreviewModalConfig = Pick<ICreatePreviewModalProps, 'open'>;
@@ -29,9 +31,11 @@ const INIT_RESULT_MODAL_CONFIG: TResultModalConfig = {
   secondaryContent: '',
 };
 
-export default function SubmitButton({ buttonProps, children }: ISubmitButtonProps) {
+export default function SubmitButton({ buttonProps, children, onConfirm }: ISubmitButtonProps) {
   const [previewModalConfig, setPreviewModalConfig] = useState(INIT_PREVIEW_MODAL_CONFIG);
   const [resultModalConfig, setResultModalConfig] = useState(INIT_RESULT_MODAL_CONFIG);
+
+  const { stepForm } = useContext(StepsContext);
 
   const getResultModalConfig = useCallback(
     ({ type, failReason }: { type: CommonOperationResultModalType; failReason?: string }) => {
@@ -88,6 +92,7 @@ export default function SubmitButton({ buttonProps, children }: ISubmitButtonPro
       open: true,
       ...getResultModalConfig({ type: CommonOperationResultModalType.Error }),
     });
+    onConfirm?.();
   }, [getResultModalConfig]);
 
   return (
@@ -95,8 +100,10 @@ export default function SubmitButton({ buttonProps, children }: ISubmitButtonPro
       <Button
         {...buttonProps}
         onClick={() => {
-          setPreviewModalConfig({
-            open: true,
+          stepForm[StepEnum.step3].formInstance?.validateFields().then(() => {
+            setPreviewModalConfig({
+              open: true,
+            });
           });
         }}
       >

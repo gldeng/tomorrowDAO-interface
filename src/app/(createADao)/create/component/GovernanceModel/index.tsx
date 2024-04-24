@@ -1,6 +1,6 @@
 'use client';
 
-import { ToolTip } from 'aelf-design';
+import { Tooltip } from 'aelf-design';
 import { Form, InputNumber } from 'antd';
 import { memo } from 'react';
 import InputSlideBind from 'components/InputSlideBind';
@@ -26,11 +26,11 @@ const GovernanceModel = () => {
         scrollToFirstError={true}
       >
         <Form.Item
-          name={'minimal_required_threshold'}
+          name={'minimalRequiredThreshold'}
           label={
-            <ToolTip title="The minimum number of addresses required to participate in the voting of proposals.">
+            <Tooltip title="The minimum number of addresses required to participate in the voting of proposals.">
               <span className="form-item-label">Minimum voting addresses</span>
-            </ToolTip>
+            </Tooltip>
           }
           validateFirst={true}
           rules={[
@@ -46,11 +46,11 @@ const GovernanceModel = () => {
         </Form.Item>
 
         <Form.Item
-          name={'minimal_vote_threshold'}
+          name={'minimalVoteThreshold'}
           label={
-            <ToolTip title="The minimum number of votes required to finalize a proposal. Only applicable to proposals with 1 token 1 vote proposals.">
+            <Tooltip title="The minimum number of votes required to finalize a proposal. Only applicable to proposals with 1 token 1 vote proposals.">
               <span className="form-item-label">Minimum votes</span>
-            </ToolTip>
+            </Tooltip>
           }
           validateFirst={true}
           rules={min2maxIntegerRule}
@@ -63,7 +63,7 @@ const GovernanceModel = () => {
 
         {/* approve rejection abstention */}
         <Form.Item
-          name={'minimal_approve_threshold'}
+          name={'minimalApproveThreshold'}
           label={<span className="form-item-label">Minimum percentage of approved votes </span>}
           initialValue={50}
           validateFirst={true}
@@ -72,7 +72,7 @@ const GovernanceModel = () => {
           <InputSlideBind type="approve" placeholder={'Suggest setting it above 50%'} />
         </Form.Item>
         <Form.Item
-          name={'maximal_rejection_threshold'}
+          name={'maximalRejectionThreshold'}
           label={<span className="form-item-label">Maximum percentage of rejected votes</span>}
           initialValue={20}
           validateFirst={true}
@@ -81,7 +81,7 @@ const GovernanceModel = () => {
           <InputSlideBind type="rejection" placeholder={'Suggest setting it below 20%'} />
         </Form.Item>
         <Form.Item
-          name={'maximal_abstention_threshold'}
+          name={'maximalAbstentionThreshold'}
           label={<span className="form-item-label">Maximum percentage of abstain votes</span>}
           initialValue={20}
           validateFirst={true}

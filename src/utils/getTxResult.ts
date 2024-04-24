@@ -1,15 +1,7 @@
 import AElf from 'aelf-sdk';
-import { sleep } from './common';
-
-export interface ITxResultProps {
-	TransactionId: string;
-	chainId: Chain;
-	rePendingEnd?: number;
-	rpcUrl: string;
-	reNotexistedCount?: number;
-	reGetCount?: number;
-  }
-
+import { store } from 'redux/store';
+import { SupportedELFChainId } from 'types';
+import { getTxResult as getAelfTxResult } from '@portkey/contracts';
 
 export function getAElf(rpcUrl?: string) {
 	const rpc = rpcUrl || '';
@@ -21,86 +13,54 @@ export function getAElf(rpcUrl?: string) {
 	return httpProviders[rpc];
 }
 
-export async function getTxResultRetry({
-	TransactionId,
-	chainId,
-	rpcUrl,
-	reGetCount = 3,
-	rePendingEnd,
-	reNotexistedCount = 3,
-  }: ITxResultProps): Promise<any> {
-	try {
-	  const txResult = await getAElf(rpcUrl).chain.getTxResult(TransactionId);
-	  if (txResult.error && txResult.errorMessage) {
-		throw Error(txResult.errorMessage.message || txResult.errorMessage.Message);
-	  }
-  
-	  if (!txResult) {
-		if (reGetCount > 1) {
-		  await sleep(500);
-		  reGetCount--;
-		  return getTxResultRetry({
-			TransactionId,
-			chainId,
-			rePendingEnd,
-			rpcUrl,
-			reNotexistedCount,
-			reGetCount,
-		  });
-		}
+const getRpcUrls = () => {
+	const info = store.getState().elfInfo.elfInfo;
 
-		throw Error('Please check your internet connection and try again.');
-	  }
-  
-	  if (txResult.Status.toLowerCase() === 'pending') {
-		const current = new Date().getTime();
-		if (rePendingEnd && rePendingEnd <= current) {
-		  throw Error('Please check your internet connection and try again.');
-		}
-		await sleep(500);
-		const pendingEnd = rePendingEnd || current;
-		return getTxResultRetry({
-		  TransactionId,
-		  chainId,
-		  rePendingEnd: pendingEnd,
-		  rpcUrl,
-		  reNotexistedCount,
-		  reGetCount,
-		});
-	  }
-  
-	  if (txResult.Status.toLowerCase() === 'notexisted' && reNotexistedCount > 1) {
-		await sleep(500);
-		reNotexistedCount--;
-		return getTxResultRetry({
-		  TransactionId,
-		  chainId,
-		  rePendingEnd,
-		  rpcUrl,
-		  reNotexistedCount,
-		  reGetCount,
-		});
-	  }
-  
-	  if (txResult.Status.toLowerCase() === 'mined') {
-		return { TransactionId, txResult };
-	  }
-	  throw Error('Please check your internet connection and try again.');
-	} catch (error) {
-	  console.log('=====getTxResult error', error);
-	  if (reGetCount > 1) {
-		await sleep(500);
-		reGetCount--;
-		return getTxResultRetry({
-		  TransactionId,
-		  chainId,
-		  rePendingEnd,
-		  rpcUrl,
-		  reNotexistedCount,
-		  reGetCount,
-		});
-	  }
-	  throw Error('Please check your internet connection and try again.');
+	return {
+		[SupportedELFChainId.MAIN_NET]: info?.rpcUrlAELF,
+		[SupportedELFChainId.TDVV_NET]: info?.rpcUrlTDVV,
+		[SupportedELFChainId.TDVW_NET]: info?.rpcUrlTDVW,
+	};
+};
+
+// export async function getTxResult(TransactionId: string, chainId: Chain, reGetCount = 0): Promise<any> {
+//   const rpcUrl = getRpcUrls()[chainId];
+//   const txResult = await getAElf(rpcUrl).chain.getTxResult(TransactionId);
+//   if (txResult.error && txResult.errorMessage) {
+//     throw Error(txResult.errorMessage.message || txResult.errorMessage.Message);
+//   }
+
+//   if (!txResult) {
+//     throw Error('Can not get transaction result.');
+//   }
+
+//   if (txResult.Status.toLowerCase() === 'pending') {
+//     // || txResult.Status.toLowerCase() === 'notexisted'
+//     if (reGetCount > 10) {
+//       throw Error(`timeout; TransactionId:${TransactionId}`);
+//     }
+//     await sleep(1000);
+//     reGetCount++;
+//     return getTxResult(TransactionId, chainId, reGetCount);
+//   }
+
+//   if (txResult.Status.toLowerCase() === 'mined') {
+//     return { TransactionId, txResult };
+//   }
+
+//   throw Error({ ...txResult, Error: txResult.Error, TransactionId } || 'Transaction error');
+// }
+
+export async function getTxResult(
+	TransactionId: string,
+	chainId: Chain,
+	reGetCount = -280,
+): Promise<any> {
+	const rpcUrl = getRpcUrls()[chainId];
+	const instance = getAElf(rpcUrl);
+	const txResult = await getAelfTxResult(instance, TransactionId, reGetCount);
+	if (txResult.Status.toLowerCase() === 'mined') {
+		return txResult;
 	}
-  }
-  
+	throw Error({ ...txResult.Error, TransactionId } || 'Transaction error');
+}

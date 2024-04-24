@@ -47,12 +47,12 @@ export enum VoteSchemeId {
 export const mockVoteSchemeList: VoteSchemeListRes = {
   VoteSchemeList: [
     {
-      VoteSchemeId: '1',
+      VoteSchemeId: '632e4047edc35bdf06de385f46fd553ef454ddf7d1bfd060cc341e6dba237510',
       VoteMechanism: 1,
       VoteMechanismName: '1a1v',
     },
     {
-      VoteSchemeId: '2',
+      VoteSchemeId: '632e4047edc35bdf06de385f46fd553ef454ddf7d1bfd060cc341e6dba237510',
       VoteMechanism: 2,
       VoteMechanismName: '1t1v',
     },
@@ -78,11 +78,11 @@ const mockGovernanceMechanismList: GovernanceMechanismList = {
   chainId: '1',
   governanceMechanismList: [
     {
-      governanceSchemeId: 'governanceSchemeId1',
+      governanceSchemeId: 'D29ezPPDCKL3UJxUUyabtz6tdWzztSqczSRbpRfyYvpn9Bmq9',
       name: 'Referendum',
     },
     {
-      governanceSchemeId: 'governanceSchemeId2',
+      governanceSchemeId: 'D29ezPPDCKL3UJxUUyabtz6tdWzztSqczSRbpRfyYvpn9Bmq9',
       name: 'High Council',
     },
   ],
@@ -201,15 +201,10 @@ export interface ContractInfo {
 const mockContractInfoList: ContractInfo = {
   contractInfoList: [
     {
-      ContractAddress: 'address1',
+      ContractAddress: 'pykr77ft9UUKJZLVq15wCH8PinBSjVRQ12sD1Ayq92mKFsJ1i',
       ContractName: 'name1',
-      FunctionList: ['a1', 'b1', 'c1'],
-    },
-    {
-      ContractAddress: 'address2',
-      ContractName: 'name2',
-      FunctionList: ['a2', 'b2', 'c2'],
-    },
+      FunctionList: ['ChangeCodeCheckController'],
+    }
   ],
 };
 export const fetchContractInfo = async (p: { chainId: string }) => {

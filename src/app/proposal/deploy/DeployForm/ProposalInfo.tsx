@@ -1,8 +1,9 @@
 'use client';
 
-import { Radio, Input, ToolTip, Button } from 'aelf-design';
+import { Radio, Input, Tooltip, Button } from 'aelf-design';
 import { Form, Select } from 'antd';
 import { memo, useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { ResponsiveSelect } from 'components/ResponsiveSelect';
 import MarkdownEditor from 'components/MarkdownEditor';
 import Editor from '@monaco-editor/react';
@@ -19,6 +20,7 @@ import {
   proposalTypeList,
 } from '../type';
 import { formatDate } from '../util';
+import { proposalCreateContractRequest } from 'contract/proposalCreateContract';
 
 const { Option } = Select;
 interface ProposalInfoProps {
@@ -27,6 +29,7 @@ interface ProposalInfoProps {
 }
 const ProposalInfo = (props: ProposalInfoProps) => {
   const [governanceMechanismList, setGovernanceMechanismList] = useState<GovernanceMechanismList>();
+  const searchParams = useSearchParams();
   const [daoInfo, setDaoInfo] = useState<DaoInfo>();
   const [contractInfo, setContractInfo] = useState<ContractInfo>();
   const [voteScheme, setVoteScheme] = useState<VoteSchemeListRes>();
@@ -55,8 +58,8 @@ const ProposalInfo = (props: ProposalInfoProps) => {
     });
   }, [contractInfo]);
   const form = Form.useFormInstance();
-  const contractAddress = Form.useWatch(['transaction', 'to_address'], form);
-  const proposalType = Form.useWatch('proposal_type', form);
+  const contractAddress = Form.useWatch(['transaction', 'toAddress'], form);
+  const proposalType = Form.useWatch('proposalType', form);
   const contractMethodOptions = useMemo(() => {
     const contract = contractInfo?.contractInfoList.find(
       (item) => item.ContractAddress === contractAddress,
@@ -96,7 +99,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
         {proposalDetailDesc}
       </p>
       <Form.Item
-        name={['proposal_basic_info', 'proposal_title']}
+        name={['proposalBasicInfo', 'proposalTitle']}
         label={<span className="form-item-label">Title</span>}
         rules={[
           {
@@ -110,7 +113,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
         <Input type="text" placeholder="Please input the title (300 words at most)" />
       </Form.Item>
       <Form.Item
-        name={['proposal_basic_info', 'proposal_description']}
+        name={['proposalBasicInfo', 'proposalDescription']}
         label={<span className="form-item-label">Description</span>}
         rules={[
           {
@@ -127,7 +130,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
       {/* Discussion on forum */}
       <h2 className="title-primary mt-[64px]">Governance Information</h2>
       <Form.Item
-        name={['proposal_basic_info', 'forum_url']}
+        name={['proposalBasicInfo', 'forumUrl']}
         label={
           <span className="form-item-label">
             Discussion on Forum <span>(Optional)</span>
@@ -145,7 +148,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
 
       {/* Voters and executors: */}
       <Form.Item
-        name={['proposal_basic_info', 'scheme_address']}
+        name={['proposalBasicInfo', 'schemeAddress']}
         label={<span className="form-item-label">Voters and executors</span>}
       >
         <ResponsiveSelect
@@ -158,14 +161,14 @@ const ProposalInfo = (props: ProposalInfoProps) => {
       </Form.Item>
       {/* 1a1v/1t1v */}
       <Form.Item
-        name={['proposal_basic_info', 'vote_scheme_id']}
+        name={['proposalBasicInfo', 'voteSchemeId']}
         label={<span className="form-item-label">Vote Model</span>}
         initialValue={voteScheme?.VoteSchemeList?.[0]?.VoteSchemeId}
       >
         <Radio.Group>
           {voteScheme?.VoteSchemeList.map((item) => {
             return (
-              <Radio value={item.VoteSchemeId} key={item.VoteSchemeId}>
+              <Radio value={item.VoteSchemeId} key={item.VoteMechanismName}>
                 {item.VoteMechanismName}
               </Radio>
             );
@@ -174,7 +177,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
       </Form.Item>
       {/* contract address: */}
       <Form.Item
-        name={['transaction', 'to_address']}
+        name={['transaction', 'toAddress']}
         label={<span className="form-item-label">Contract Address</span>}
       >
         <ResponsiveSelect
@@ -186,9 +189,9 @@ const ProposalInfo = (props: ProposalInfoProps) => {
         ></ResponsiveSelect>
       </Form.Item>
       <Form.Item
-        name={['transaction', 'contract_method_name']}
+        name={['transaction', 'contractMethodName']}
         label={<span className="form-item-label">Method Name</span>}
-        dependencies={['transaction', 'to_address']}
+        dependencies={['transaction', 'toAddress']}
       >
         <ResponsiveSelect
           drawerProps={{
@@ -206,9 +209,9 @@ const ProposalInfo = (props: ProposalInfoProps) => {
       </Form.Item>
       <Form.Item
         label={
-          <ToolTip title="Estimated proposal active period. The active period starts from the proposal being published on the blockchain and lasts until {num} days later">
+          <Tooltip title="Estimated proposal active period. The active period starts from the proposal being published on the blockchain and lasts until {num} days later">
             <span className="form-item-label">Active Period</span>
-          </ToolTip>
+          </Tooltip>
         }
       >
         <div className="flex h-[48px] px-[16px] py-[8px] items-center rounded-[6px] border-[1px] border-solid border-Neutral-Border bg-Neutral-Hover-BG">
@@ -223,9 +226,9 @@ const ProposalInfo = (props: ProposalInfoProps) => {
       </Form.Item>
       <Form.Item
         label={
-          <ToolTip title="Estimated proposal executable period. The executable period starts from the proposal being approved on the blockchain and lasts until {num} days later">
+          <Tooltip title="Estimated proposal executable period. The executable period starts from the proposal being approved on the blockchain and lasts until {num} days later">
             <span className="form-item-label">Executable Period</span>
-          </ToolTip>
+          </Tooltip>
         }
       >
         <div className="flex h-[48px] px-[16px] py-[8px] items-center rounded-[6px] border-[1px] border-solid border-Neutral-Border bg-Neutral-Hover-BG">
@@ -244,10 +247,43 @@ const ProposalInfo = (props: ProposalInfoProps) => {
           className="w-[156px]"
           // disabled={!title || !description}
           onClick={() => {
-            console.log(
-              'form.getFieldsValue()',
-              form.validateFields().then((res) => console.log(res)),
-            );
+            const daoId = searchParams.get('daoId');
+            if (!daoId) {
+              throw new Error('daoId is required');
+            }
+            form.validateFields().then(async (res) => {
+              const params = {
+                ...res,
+                proposalBasicInfo: {
+                  ...res.proposalBasicInfo,
+                  daoId,
+                },
+              };
+              console.log('res------- input', res);
+              // const params = {
+              //   proposalBasicInfo: {
+              //     daoId: '58ce59423ec3b437603e05e6990cb56dfa04a3338a5f8f25350568ac29dd6c29',
+              //     proposalTitle: 'Proposal Title',
+              //     proposalDescription:
+              //       'https://ipfs.io/ipfs/QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG',
+              //     forumUrl: 'https://forum.example.com',
+              //     // vote and executor
+              //     schemeAddress: 'D29ezPPDCKL3UJxUUyabtz6tdWzztSqczSRbpRfyYvpn9Bmq9',
+              //     // vote model
+              //     voteSchemeId:
+              //       '632e4047edc35bdf06de385f46fd553ef454ddf7d1bfd060cc341e6dba237510',
+              //   },
+              //   proposalType: 1,
+              //   transaction: {
+              //     contractMethodName: 'ChangeCodeCheckController',
+              //     toAddress: 'pykr77ft9UUKJZLVq15wCH8PinBSjVRQ12sD1Ayq92mKFsJ1i',
+              //     params: '123',
+              //   },
+              // };
+              console.log('res', params);
+              const createRes = proposalCreateContractRequest('CreateProposal', params);
+              console.log('res', createRes);
+            });
           }}
         >
           Submit
