@@ -1,7 +1,7 @@
 import { IDaoDetail, IProposalsItem } from './type';
 export const mokeData: IDaoDetail = {
   chainId: '',
-  daoId: '',
+  daoId: '58ce59423ec3b437603e05e6990cb56dfa04a3338a5f8f25350568ac29dd6c29',
   metadata: {
     name: 'Network DAO',
     logoUrl: '',

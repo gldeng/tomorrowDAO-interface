@@ -41,7 +41,7 @@ const HighCouncil = () => {
         </Form.Item>
 
         <Form.Item
-          name={['high_council_config', 'max_high_council_member_count']}
+          name={['highCouncilConfig', 'maxHighCouncilMemberCount']}
           label={<span className="form-item-label">High Council Members</span>}
           extra="Alternate member of the High Council. The number can be changed through proposals."
           validateFirst={true}
@@ -58,7 +58,7 @@ const HighCouncil = () => {
           <InputNumber placeholder="At least 7 members required" controls={false} />
         </Form.Item>
         <Form.Item
-          name={['high_council_config', 'max_high_council_candidate_count']}
+          name={['highCouncilConfig', 'maxHighCouncilCandidateCount']}
           label={<span className="form-item-label">High Council Condidate Members</span>}
           extra="The number can be changed through proposals."
           validateFirst={true}
@@ -71,7 +71,7 @@ const HighCouncil = () => {
           <InputNumber placeholder="At most 10000 members" controls={false} />
         </Form.Item>
         <Form.Item
-          name={['high_council_config', 'election_period']}
+          name={['highCouncilConfig', 'electionPeriod']}
           label={
             <Tooltip title="The number of days for the rotation of High Council members, counted from the day after the DAO is created. If zero is entered, it means there is no rotation for High Council members.">
               <span className="form-item-label">High Council member term length</span>
@@ -92,9 +92,9 @@ const HighCouncil = () => {
             suffix="Days"
           />
         </Form.Item>
-        {/* governance_scheme_threshold */}
+        {/* governanceSchemeThreshold */}
         <Form.Item
-          name={['governance_scheme_threshold', 'minimal_required_threshold']}
+          name={['governanceSchemeThreshold', 'minimalRequiredThreshold']}
           label={<span className="form-item-label">Minimum voting proportion</span>}
           initialValue={75}
           validateFirst={true}
@@ -108,7 +108,7 @@ const HighCouncil = () => {
         </Form.Item>
 
         <Form.Item
-          name={'minimal_vote_threshold'}
+          name={['governanceSchemeThreshold', 'minimalVoteThreshold']}
           label={
             <Tooltip title="The minimum number of votes required to finalize a proposal. Only applicable to proposals with 1 token 1 vote proposals.">
               <span className="form-item-label">Minimum votes</span>
@@ -125,7 +125,7 @@ const HighCouncil = () => {
         {/* approve rejection abstention */}
 
         <Form.Item
-          name={['governance_scheme_threshold', 'minimal_approve_threshold']}
+          name={['governanceSchemeThreshold', 'minimalApproveThreshold']}
           label={<span className="form-item-label">Minimum percentage of approved votes </span>}
           initialValue={67}
           validateFirst={true}
@@ -138,7 +138,7 @@ const HighCouncil = () => {
           <InputSlideBind type="approve" placeholder={'Suggest setting it above 50%'} />
         </Form.Item>
         <Form.Item
-          name={['governance_scheme_threshold', 'maximal_rejection_threshold']}
+          name={['governanceSchemeThreshold', 'maximalRejectionThreshold']}
           label={<span className="form-item-label">Maximum percentage of rejected votes</span>}
           initialValue={20}
           validateFirst={true}
@@ -151,7 +151,7 @@ const HighCouncil = () => {
           <InputSlideBind type="rejection" placeholder={'Suggest setting it below 20%'} />
         </Form.Item>
         <Form.Item
-          name={['minimal_approve_threshold', 'maximal_abstention_threshold']}
+          name={['governanceSchemeThreshold', 'maximalAbstentionThreshold']}
           label={<span className="form-item-label">Maximum percentage of abstain votes</span>}
           initialValue={20}
           validateFirst={true}

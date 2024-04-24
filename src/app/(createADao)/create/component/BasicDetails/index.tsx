@@ -11,11 +11,11 @@ import { StepEnum } from '../../type';
 import { useSelector } from 'react-redux';
 
 const mediaList = [
-  ['metadata', 'social_media', 'Twitter'],
-  ['metadata', 'social_media', 'Facebook'],
-  ['metadata', 'social_media', 'Telegram'],
-  ['metadata', 'social_media', 'Discord'],
-  ['metadata', 'social_media', 'Reddit'],
+  ['metadata', 'socialMedia', 'Twitter'],
+  ['metadata', 'socialMedia', 'Facebook'],
+  ['metadata', 'socialMedia', 'Telegram'],
+  ['metadata', 'socialMedia', 'Discord'],
+  ['metadata', 'socialMedia', 'Reddit'],
 ];
 
 export default function BasicDetails() {
@@ -56,7 +56,7 @@ export default function BasicDetails() {
             <Input placeholder="Make it something epic!" />
           </Form.Item>
           <Form.Item
-            name={['metadata', 'logo_url']}
+            name={['metadata', 'logoUrl']}
             valuePropName="fileList"
             rules={[
               {
@@ -100,7 +100,7 @@ export default function BasicDetails() {
           </Form.Item>
           <Form.Item
             className="mb-6"
-            name={['metadata', 'social_media', 'title']}
+            name={['metadata', 'socialMedia', 'title']}
             dependencies={mediaList}
             rules={[
               ({ getFieldValue }) => ({
@@ -127,7 +127,7 @@ export default function BasicDetails() {
             </div>
           </Form.Item>
           <Form.Item
-            name={['metadata', 'social_media', 'Twitter']}
+            name={['metadata', 'socialMedia', 'Twitter']}
             rules={[
               ...mediaValidatorMap.Twitter.validator,
               {
@@ -141,7 +141,7 @@ export default function BasicDetails() {
             <Input placeholder={`Input the DAO's twitter account starts with @`} />
           </Form.Item>
           <Form.Item
-            name={['metadata', 'social_media', 'Facebook']}
+            name={['metadata', 'socialMedia', 'Facebook']}
             rules={[
               ...mediaValidatorMap.Other.validator,
               {
@@ -155,7 +155,7 @@ export default function BasicDetails() {
             <Input placeholder={`Input the DAO's Facebook page address`} />
           </Form.Item>
           <Form.Item
-            name={['metadata', 'social_media', 'Discord']}
+            name={['metadata', 'socialMedia', 'Discord']}
             rules={[
               ...mediaValidatorMap.Other.validator,
               {
@@ -169,7 +169,7 @@ export default function BasicDetails() {
             <Input placeholder={`Input the link to join the DAO's Discord group`} />
           </Form.Item>
           <Form.Item
-            name={['metadata', 'social_media', 'Telegram']}
+            name={['metadata', 'socialMedia', 'Telegram']}
             rules={[
               ...mediaValidatorMap.Other.validator,
               {
@@ -183,7 +183,7 @@ export default function BasicDetails() {
             <Input placeholder={`Input the link to join the DAO's Telegram group`} />
           </Form.Item>
           <Form.Item
-            name={['metadata', 'social_media', 'Reddit']}
+            name={['metadata', 'socialMedia', 'Reddit']}
             rules={[
               ...mediaValidatorMap.Other.validator,
               {
@@ -227,7 +227,7 @@ export default function BasicDetails() {
                   message: 'governance_token is required',
                 },
               ]}
-              name="governance_token"
+              name="governanceToken"
               label=""
             >
               <Input placeholder="Input the token symbol" />

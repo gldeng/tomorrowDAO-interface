@@ -26,6 +26,7 @@ import {
 import './page.css';
 
 import { mokeData as data, list } from './moke';
+import Link from 'next/link';
 
 export default function DeoDetails() {
   const { isLG, isSM } = useResponsive();
@@ -84,9 +85,12 @@ export default function DeoDetails() {
               <Typography.Title fontWeight={FontWeightEnum.Medium} level={6}>
                 Proposals
               </Typography.Title>
-              <Button size="medium" type="primary">
-                Deploy
-              </Button>
+
+              <Link href={`/proposal/deploy?daoId=${daoDetail.daoId}`}>
+                <Button size="medium" type="primary">
+                  Deploy
+                </Button>
+              </Link>
             </div>
             <Filter form={form} tableParams={tableParams} onChangeTableParams={setTableParams} />
           </div>

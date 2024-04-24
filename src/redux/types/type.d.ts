@@ -21,6 +21,7 @@ declare type IConfigItems = {
   rpcUrlAELF?: string;
   rpcUrlTDVV?: string;
   rpcUrlTDVW?: string;
+  daoAddress?: string;
   mainChainAddress?: string;
   sideChainAddress?: string;
   mainCaAddress?: string;
