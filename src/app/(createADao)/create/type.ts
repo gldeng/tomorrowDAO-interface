@@ -8,29 +8,29 @@ export enum GovernanceModelType {
 }
 
 export interface IGovernanceSchemeThreshold {
-  minimal_required_threshold: number;
-  minimal_vote_threshold: number;
-  minimal_approve_threshold: number; // percentage
-  maximal_rejection_threshold: number; // percentage
-  maximal_abstention_threshold: number; // percentage
+  minimalRequiredThreshold: number;
+  minimalVoteThreshold: number;
+  minimalApproveThreshold: number; // percentage
+  maximalRejectionThreshold: number; // percentage
+  maximalAbstentionThreshold: number; // percentage
 }
 
 export interface IHighCouncilConfig {
-  max_high_council_member_count: number;
-  max_high_council_candidate_count: number;
-  election_period: number;
+  maxHighCouncilMemberCount: number;
+  maxHighCouncilCandidateCount: number;
+  electionPeriod: number;
 }
 
 export interface IHighCouncilInput {
-  high_council_config: IHighCouncilConfig;
-  governance_scheme_threshold: IGovernanceSchemeThreshold;
+  highCouncilConfig: IHighCouncilConfig;
+  governanceSchemeThreshold: IGovernanceSchemeThreshold;
 }
 export interface IMetadata {
   name: string;
-  logo_url: UploadFile[];
+  logoUrl: UploadFile[];
   description: string; // 240
   // title does not need to be submitted
-  social_media: Record<string, string>; // Twitter, Facebook, Discord, Telegram, Reddit, title
+  socialMedia: Record<string, string>; // Twitter, Facebook, Discord, Telegram, Reddit, title
 }
 export interface IFile {
   cid: string; // id
@@ -40,12 +40,12 @@ export interface IFile {
 // DAO create params
 export interface ICreateDAOInput {
   // step 0
-  metadata: IMetadata;
-  governance_token: string;
+  metadata: Omit<IMetadata, 'logo_url'> & { logo_url: string };
+  governanceToken: string;
   // step 1
-  governance_scheme_threshold: IGovernanceSchemeThreshold;
+  governanceSchemeThreshold: IGovernanceSchemeThreshold;
   // step 2 optional
-  high_council_input: IHighCouncilInput;
+  highCouncilInput: IHighCouncilInput;
   // step 3
   files: IFile[];
 }
@@ -57,16 +57,16 @@ export enum StepEnum {
 }
 export interface BasicInfoSubmitedRes {
   metadata: IMetadata;
-  governance_token: string;
+  governanceToken: string;
 }
 export interface GovernanceSchemeSubmitedRes {
-  governance_scheme_threshold: IGovernanceSchemeThreshold;
+  governanceSchemeThreshold: IGovernanceSchemeThreshold;
 }
 export interface HighCouncilSubmitedRes {
-  high_council_input: IHighCouncilInput;
+  highCouncilInput: IHighCouncilInput;
 }
 export interface FilesSubmitedRes {
-  files: IFile[];
+  files: UploadFile[];
 }
 interface StepsFormMap {
   [StepEnum.step0]: {

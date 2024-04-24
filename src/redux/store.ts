@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
 import { useSelector as useReduxSelector, TypedUseSelectorHook } from 'react-redux';
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
-import { persistReducer, persistStore } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+// import { persistReducer, persistStore } from 'redux-persist';
+// import storage from 'redux-persist/lib/storage';
 import InfoReducer, { infoSlice } from './reducer/info';
 import DataReducer, { dataSlice } from './reducer/data';
 
@@ -17,15 +17,15 @@ const rootReducer = combineReducers({
 });
 
 const makeStore = () => {
-  const persistConfig = {
-    key: 'nextjs',
-    storage,
-  };
+  // const persistConfig = {
+  //   key: 'nextjs',
+  //   storage,
+  // };
 
-  const persistedReducer = persistReducer(persistConfig, rootReducer);
+  // const persistedReducer = persistReducer(persistConfig, rootReducer);
 
   const store = configureStore({
-    reducer: persistedReducer,
+    reducer: rootReducer,
     middleware: (getDefaultMiddleware: any) =>
       getDefaultMiddleware({
         serializableCheck: false,
@@ -35,7 +35,7 @@ const makeStore = () => {
 
   return {
     ...store,
-    __persistor: persistStore(store),
+    // __persistor: persistStore(store),
   };
 };
 

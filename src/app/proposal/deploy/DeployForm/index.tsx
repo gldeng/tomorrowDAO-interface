@@ -21,9 +21,8 @@ const GovernanceModel = () => {
         requiredMark={false}
         scrollToFirstError={true}
         onValuesChange={(changedValues) => {
-          console.log('changedValues', changedValues);
           if (changedValues?.transaction?.to_address) {
-            form.setFieldValue(['transaction', 'contract_method_name'], '');
+            form.setFieldValue(['transaction', 'contractMethodName'], '');
             form.setFieldValue(['transaction', 'params'], '');
           }
         }}

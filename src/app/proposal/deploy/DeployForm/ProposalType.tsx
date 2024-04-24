@@ -24,7 +24,7 @@ const ProposalType = (props: ProposalTypeProps) => {
         impact.
       </p>
       <Form.Item
-        name={'proposal_type'}
+        name={'proposalType'}
         label={null}
         rules={[{ required: true, message: 'Please select proposal type' }]}
         initialValue={proposalTypeList[0].value}
@@ -37,8 +37,8 @@ const ProposalType = (props: ProposalTypeProps) => {
           }}
           options={proposalTypeList}
           optionLabelProp="label"
-          optionRender={(option) => (
-            <ProposalTypeItem label={option.data.label} desc={option.data.desc} />
+          optionRender={(option, info) => (
+            <ProposalTypeItem label={option.data.label} desc={option.data.desc} key={info.index} />
           )}
         ></ResponsiveSelect>
       </Form.Item>
