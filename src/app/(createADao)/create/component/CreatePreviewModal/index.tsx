@@ -13,7 +13,7 @@ const { Text, Title } = Typography;
 function SocialMediaItem({ name, url }: { name: string; url: string }) {
   return (
     <Flex className="social-media-item" gap={8} align="center">
-      <Image src={colorfulSocialMediaIconMap[name]} alt="media" width={16} height={16} />
+      <Image src={(colorfulSocialMediaIconMap as any)[name]} alt="media" width={16} height={16} />
       <Text>{url}</Text>
     </Flex>
   );

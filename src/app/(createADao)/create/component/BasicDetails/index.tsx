@@ -94,6 +94,7 @@ export default function BasicDetails() {
               className="Description-textArea"
               showCount
               maxLength={240}
+              // eslint-disable-next-line no-inline-styles/no-inline-styles
               style={{ height: 116 }}
               placeholder={`What is the mission and vision of this DAO? You will be able to change it later.`}
             />

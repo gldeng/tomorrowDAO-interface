@@ -7,7 +7,7 @@ export default class PortkeyProvider {
 
   static async getDetectProvider() {
     if (!PortkeyProvider.instance) {
-        PortkeyProvider.instance = await detectProvider();
+      PortkeyProvider.instance = await detectProvider();
     }
     return PortkeyProvider.instance;
   }

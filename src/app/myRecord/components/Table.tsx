@@ -128,7 +128,7 @@ export default function RecordTable() {
       <Table
         scroll={{ x: 800 }}
         className="custom-table-style"
-        columns={columns}
+        columns={columns as any}
         loading={loading}
         pagination={{ ...tableParams.pagination, pageChange, pageSizeChange }}
         dataSource={dataSource}
