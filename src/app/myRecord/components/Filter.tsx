@@ -15,7 +15,7 @@ export default function Filter(props: PropsType) {
   return (
     <Form layout="inline" form={form} name="control-hooks">
       <Form.Item name="content">
-        <Search size="small" placeholder="Proposals Name / ID" onChange={onSearch} />
+        <Search inputSize="small" placeholder="Proposals Name / ID" onChange={onSearch} />
       </Form.Item>
     </Form>
   );

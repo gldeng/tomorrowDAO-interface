@@ -216,7 +216,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
       >
         <div className="flex h-[48px] px-[16px] py-[8px] items-center rounded-[6px] border-[1px] border-solid border-Neutral-Border bg-Neutral-Hover-BG">
           <span className="text-neutralTitle text-[14px] font-400 leading-[22px] pr-[16px]">
-            {formatDate(daoInfo)}
+            {/* {formatDate(daoInfo)} */}
           </span>
           <ArrowIcon className="color-[#B8B8B8]" />
           <span className="text-neutralTitle text-[14px] font-400 leading-[22px] pl-[16px]">

@@ -138,7 +138,7 @@ const VoteResultTable = () => {
         </div>
       </div>
       <Table
-        columns={columns}
+        columns={columns as any}
         loading={loading}
         pagination={{ ...tableParams.pagination, total, pageChange, pageSizeChange }}
         dataSource={dataSource}

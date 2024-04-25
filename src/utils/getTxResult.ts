@@ -4,23 +4,23 @@ import { SupportedELFChainId } from 'types';
 import { getTxResult as getAelfTxResult } from '@portkey/contracts';
 
 export function getAElf(rpcUrl?: string) {
-	const rpc = rpcUrl || '';
-	const httpProviders: any = {};
+  const rpc = rpcUrl || '';
+  const httpProviders: any = {};
 
-	if (!httpProviders[rpc]) {
-		httpProviders[rpc] = new AElf(new AElf.providers.HttpProvider(rpc));
-	}
-	return httpProviders[rpc];
+  if (!httpProviders[rpc]) {
+    httpProviders[rpc] = new AElf(new AElf.providers.HttpProvider(rpc));
+  }
+  return httpProviders[rpc];
 }
 
 const getRpcUrls = () => {
-	const info = store.getState().elfInfo.elfInfo;
+  const info = store.getState().elfInfo.elfInfo;
 
-	return {
-		[SupportedELFChainId.MAIN_NET]: info?.rpcUrlAELF,
-		[SupportedELFChainId.TDVV_NET]: info?.rpcUrlTDVV,
-		[SupportedELFChainId.TDVW_NET]: info?.rpcUrlTDVW,
-	};
+  return {
+    [SupportedELFChainId.MAIN_NET]: info?.rpcUrlAELF,
+    [SupportedELFChainId.TDVV_NET]: info?.rpcUrlTDVV,
+    [SupportedELFChainId.TDVW_NET]: info?.rpcUrlTDVW,
+  };
 };
 
 // export async function getTxResult(TransactionId: string, chainId: Chain, reGetCount = 0): Promise<any> {
@@ -52,15 +52,15 @@ const getRpcUrls = () => {
 // }
 
 export async function getTxResult(
-	TransactionId: string,
-	chainId: Chain,
-	reGetCount = -280,
+  TransactionId: string,
+  chainId: Chain,
+  reGetCount = -280,
 ): Promise<any> {
-	const rpcUrl = getRpcUrls()[chainId];
-	const instance = getAElf(rpcUrl);
-	const txResult = await getAelfTxResult(instance, TransactionId, reGetCount);
-	if (txResult.Status.toLowerCase() === 'mined') {
-		return txResult;
-	}
-	throw Error({ ...txResult.Error, TransactionId } || 'Transaction error');
+  const rpcUrl = getRpcUrls()[chainId];
+  const instance = getAElf(rpcUrl);
+  const txResult = await getAelfTxResult(instance, TransactionId, reGetCount);
+  if (txResult.Status.toLowerCase() === 'mined') {
+    return txResult;
+  }
+  throw Error({ ...txResult.Error, TransactionId } || 'Transaction error');
 }

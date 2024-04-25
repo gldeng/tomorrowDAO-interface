@@ -16,6 +16,7 @@ function PCMenu(props: IMobileMenuProps) {
     <Menu
       className="custom-menu"
       mode="horizontal"
+      // eslint-disable-next-line no-inline-styles/no-inline-styles
       style={{ minWidth: 0, flex: 'auto' }}
       {...props}
     />

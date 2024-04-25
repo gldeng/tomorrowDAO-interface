@@ -1,5 +1,5 @@
 import React, { ChangeEvent } from 'react';
-import { Slider, SliderSingleProps } from 'antd';
+import { Slider } from 'antd';
 import { Input } from 'aelf-design';
 import cls from 'clsx';
 import './index.css';

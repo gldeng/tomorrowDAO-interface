@@ -18,12 +18,15 @@ export const formatErrorMsg = (result: IContractError) => {
       },
     };
   } else if (typeof result.error !== 'number' && typeof result.error !== 'string') {
-    if (result.error?.message) {
+    if ((result.error as any)?.message) {
       return {
         ...result,
         error: '401',
         errorMessage: {
-          message: JSON.stringify(result.error.message).replace('AElf.Sdk.CSharp.AssertionException: ', ''),
+          message: JSON.stringify((result.error as any).message).replace(
+            'AElf.Sdk.CSharp.AssertionException: ',
+            '',
+          ),
         },
       };
     }

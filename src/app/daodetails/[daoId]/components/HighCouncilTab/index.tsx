@@ -9,7 +9,7 @@ import NoData from '../NoData';
 import './index.css';
 
 interface IDataType {
-  key: React.Key;
+  key: number;
   name: string;
   type: string;
   address: string;
@@ -183,7 +183,7 @@ export default function HighCounCilTab(props: {
         <Table
           // sortDirections={['asc', 'desc']}
           scroll={{ x: 800 }}
-          columns={columns}
+          columns={columns as any}
           loading={loading}
           pagination={{ ...tableParams.pagination, pageChange, pageSizeChange }}
           dataSource={dataSource}

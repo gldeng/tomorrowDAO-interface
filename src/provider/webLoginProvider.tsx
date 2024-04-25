@@ -20,7 +20,6 @@ const PortkeyProviderDynamic = dynamic(
   },
   { ssr: false },
 ) as any;
-
 const WebLoginProviderDynamic = dynamic(
   async () => {
     const info = store.getState().elfInfo.elfInfo;

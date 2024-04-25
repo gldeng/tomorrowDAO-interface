@@ -1,5 +1,5 @@
 {
-  "name": "TS",
+  "name": "tmrw-dao",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -33,7 +33,7 @@
     "graphql": "^16.8.1",
     "lodash-es": "^4.17.21",
     "lottie-react": "^2.4.0",
-    "next": "13.4.4",
+    "next": "14.0.1",
     "next-babel-conditional-ssg-ssr": "^1.0.0",
     "next-compose-plugins": "^2.2.1",
     "next-redux-wrapper": "^8.1.0",
@@ -90,7 +90,7 @@
     "stylelint-config-prettier": "^9.0.3",
     "stylelint-config-standard": "^26.0.0",
     "tailwindcss": "^3.3.2",
-    "typescript": "4.7.4",
+    "typescript": "5.4.2",
     "url-loader": "^4.1.1"
   },
   "resolutions": {

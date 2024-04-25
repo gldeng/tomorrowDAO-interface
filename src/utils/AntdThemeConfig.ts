@@ -1,5 +1,5 @@
 import { ThemeConfig } from 'antd';
-import { IAelfdCustomToken } from 'aelf-design/dist/es/provider';
+import { IAelfdCustomToken } from 'aelf-design/dist/esm/provider';
 export const PREFIXCLS = 'TMRWDAO';
 
 export const THEME_CONFIG: ThemeConfig = {

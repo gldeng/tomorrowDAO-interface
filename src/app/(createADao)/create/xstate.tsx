@@ -135,4 +135,4 @@ const formMachineConfig = {
   },
 };
 
-export const formMachine = createMachine(formMachineConfig);
+export const formMachine = createMachine(formMachineConfig as any);

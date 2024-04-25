@@ -204,7 +204,7 @@ const mockContractInfoList: ContractInfo = {
       ContractAddress: 'pykr77ft9UUKJZLVq15wCH8PinBSjVRQ12sD1Ayq92mKFsJ1i',
       ContractName: 'name1',
       FunctionList: ['ChangeCodeCheckController'],
-    }
+    },
   ],
 };
 export const fetchContractInfo = async (p: { chainId: string }) => {
