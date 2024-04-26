@@ -288,7 +288,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
           className="w-[156px]"
           // disabled={!title || !description}
           onClick={() => {
-            onSubmit(voteSchemeId);
+            onSubmit(voteSchemeId ?? '');
           }}
         >
           Submit
