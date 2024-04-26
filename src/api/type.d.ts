@@ -202,7 +202,6 @@ interface IProposalsItem {
   minimalApproveThreshold: number;
   maximalRejectionThreshold: number;
   maximalAbstentionThreshold: number;
-  tagList: string[];
 }
 interface ProposalListResData {
   totalCount: number;
@@ -279,34 +278,39 @@ interface ProposalDetailRes {
 }
 // -------------------------------------governance-model-list-----------------------------
 interface SchemeThreshold {
-  MinimalRequiredThreshold: number;
-  MinimalVoteThreshold: number;
-  MinimalApproveThreshold: number;
-  MaximalRejectionThreshold: number;
-  MaximalAbstentionThreshold: number;
+  minimalRequiredThreshold: number;
+  minimalVoteThreshold: number;
+  minimalApproveThreshold: number;
+  maximalRejectionThreshold: number;
+  maximalAbstentionThreshold: number;
 }
 
 interface GovernanceScheme {
-  Id: string;
-  DAOId: string;
-  SchemeId: string;
-  SchemeAddress: string;
-  ChainId: string;
-  GovernanceMechanism: string;
-  GovernanceToken: string;
-  SchemeThreshold: SchemeThreshold;
+  id: string;
+  daoId: string;
+  schemeId: string;
+  schemeAddress: string;
+  chainId: string;
+  governanceMechanism: string;
+  governanceToken: string;
+  schemeThreshold?: SchemeThreshold;
 }
 
 type GovernanceSchemeList = GovernanceScheme[];
-interface GovernanceModelListRes {
+interface GovernanceModelListData {
   data: GovernanceSchemeList;
+}
+interface GovernanceModelListRes {
+  code: string;
+  data: GovernanceModelListData;
+  message: string;
 }
 // -------------------------------------contracts-info-----------------------------
 
 interface ContractInfo {
-  ContractAddress: string;
-  ContractName: string;
-  FunctionList: string[];
+  contractAddress: string;
+  contractName: string;
+  functionList: string[];
 }
 
 interface ContractInfoListData {

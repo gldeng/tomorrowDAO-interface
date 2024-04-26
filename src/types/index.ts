@@ -119,5 +119,6 @@ export const proposalTypeList = [
     desc: 'Veto proposals are only supported for the referendum. For any proposal issued by the High Council, any address can quickly initiate a veto-type proposal to terminate the execution of the proposal issued by the High Council.',
     detailDesc: `Veto proposals are only supported for the referendum. For any proposal issued by the High Council, any address can quickly initiate a veto-type proposal to terminate the execution of the proposal issued by the High Council.`,
     value: ProposalType.VETO,
+    disable: true,
   },
 ];

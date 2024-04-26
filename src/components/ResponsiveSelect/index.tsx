@@ -51,6 +51,7 @@ export const ResponsiveSelect = (props: ResponsiveSelectProps) => {
             key={option.value}
             className={cls('responsive-select-drawer-menu-item', {
               'item-selected': value === option.value,
+              'item-disable': option.disabled,
             })}
           >
             {props.optionRender

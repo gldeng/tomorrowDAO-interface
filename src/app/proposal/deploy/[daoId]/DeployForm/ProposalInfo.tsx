@@ -20,22 +20,34 @@ import { formatDate } from '../util';
 import { proposalCreateContractRequest } from 'contract/proposalCreateContract';
 import { useSelector } from 'redux/store';
 
+const contractMethodNamePath = ['transaction', 'contractMethodName'];
+const VoteSchemeList = [
+  {
+    VoteMechanismName: '1a1v',
+    VoteSchemeId: '1a1v',
+  },
+  {
+    VoteMechanismName: '1t1v',
+    VoteSchemeId: '1t1v',
+  },
+];
 const { Option } = Select;
 interface ProposalInfoProps {
   next?: () => void;
   className?: string;
   daoId: string;
+  onSubmit: (voteSchemeId: string) => void;
 }
 const ProposalInfo = (props: ProposalInfoProps) => {
   const [governanceMechanismList, setGovernanceMechanismList] = useState<GovernanceSchemeList>();
   const searchParams = useSearchParams();
   const [daoInfo, setDaoInfo] = useState<DaoInfoData>();
   const [contractInfo, setContractInfo] = useState<ContractInfoListData>();
-  const [voteScheme, setVoteScheme] = useState<IVoteSchemeListData>();
+  // const [voteScheme, setVoteScheme] = useState<IVoteSchemeListData>();
 
   // const info = store.getState().elfInfo.elfInfo;
   const elfInfo = useSelector((state) => state.elfInfo.elfInfo);
-  const { className, daoId } = props;
+  const { className, daoId, onSubmit } = props;
 
   const governanceMechanismOptions = useMemo(() => {
     return governanceMechanismList?.map((item) => {
@@ -50,28 +62,36 @@ const ProposalInfo = (props: ProposalInfoProps) => {
       //   value: item.governanceSchemeId,
       // };
       return {
-        label: item.GovernanceMechanism,
-        value: item.SchemeAddress,
+        label: item.governanceMechanism,
+        value: item.schemeAddress,
       };
     });
   }, [governanceMechanismList]);
   const contractInfoOptions = useMemo(() => {
     return contractInfo?.contractInfoList.map((item) => {
       return {
-        label: item.ContractName,
-        value: item.ContractAddress,
+        label: item.contractName,
+        value: item.contractAddress,
       };
     });
   }, [contractInfo]);
   const form = Form.useFormInstance();
   const contractAddress = Form.useWatch(['transaction', 'toAddress'], form);
   const proposalType = Form.useWatch('proposalType', form);
+  const schemeAddress = Form.useWatch(['proposalBasicInfo', 'schemeAddress'], form);
+  const voteSchemeId = useMemo(() => {
+    const governanceMechanism = governanceMechanismList?.find(
+      (item) => item.schemeAddress === schemeAddress,
+    );
+    return governanceMechanism?.schemeId;
+  }, [schemeAddress, governanceMechanismList]);
+  console.log('voteSchemeId', voteSchemeId);
   const contractMethodOptions = useMemo(() => {
     const contract = contractInfo?.contractInfoList.find(
-      (item) => item.ContractAddress === contractAddress,
+      (item) => item.contractAddress === contractAddress,
     );
     return (
-      contract?.FunctionList?.map((item) => {
+      contract?.functionList?.map((item) => {
         return {
           label: item,
           value: item,
@@ -81,23 +101,34 @@ const ProposalInfo = (props: ProposalInfoProps) => {
   }, [contractInfo, contractAddress]);
   useEffect(() => {
     const run = async () => {
-      const [governanceMechanismListRes, daoInfo, contractInfo, voteSchemeListRes] =
-        await Promise.all([
-          fetchGovernanceMechanismList({ chainId: elfInfo.curChain, daoId: daoId }),
-          fetchDaoInfo({ chainId: elfInfo.curChain, daoId: daoId }),
-          fetchContractInfo({ chainId: elfInfo.curChain }),
-          fetchVoteSchemeList({ chainId: elfInfo.curChain, types: [1, 2] }),
-        ]);
-      setGovernanceMechanismList(governanceMechanismListRes.data);
+      const [
+        governanceMechanismListRes,
+        daoInfo,
+        contractInfo,
+        // voteSchemeListRes
+      ] = await Promise.all([
+        fetchGovernanceMechanismList({ chainId: elfInfo.curChain, daoId: daoId }),
+        fetchDaoInfo({ chainId: elfInfo.curChain, daoId: daoId }),
+        fetchContractInfo({ chainId: elfInfo.curChain }),
+        // fetchVoteSchemeList({ chainId: elfInfo.curChain, types: [1, 2] }),
+      ]);
+      setGovernanceMechanismList(governanceMechanismListRes.data.data);
       setDaoInfo(daoInfo.data);
       setContractInfo(contractInfo.data);
-      setVoteScheme(voteSchemeListRes.data);
+      // setVoteScheme(voteSchemeListRes.data);
     };
     run();
   }, []);
   const proposalDetailDesc = useMemo(() => {
     return proposalTypeList.find((item) => item.value === proposalType)?.detailDesc ?? '';
   }, [proposalType]);
+  // reset Method Name if Contract Address change
+  useEffect(() => {
+    const methodName = form.getFieldValue(contractMethodNamePath);
+    if (!contractInfo?.contractInfoList.includes(methodName)) {
+      form.setFieldValue(contractMethodNamePath, undefined);
+    }
+  }, [contractAddress, form, contractInfo]);
   return (
     <div className={className}>
       <h2 className="text-[20px] leading-[28px] font-weight">Proposal Details</h2>
@@ -167,12 +198,12 @@ const ProposalInfo = (props: ProposalInfoProps) => {
       </Form.Item>
       {/* 1a1v/1t1v */}
       <Form.Item
-        name={['proposalBasicInfo', 'voteSchemeId']}
+        name={['proposalBasicInfo', 'deleteVoteSchemeId']}
         label={<span className="form-item-label">Vote Model</span>}
-        initialValue={voteScheme?.VoteSchemeList?.[0]?.VoteSchemeId}
+        initialValue={VoteSchemeList[0].VoteSchemeId}
       >
         <Radio.Group>
-          {voteScheme?.VoteSchemeList.map((item) => {
+          {VoteSchemeList.map((item) => {
             return (
               <Radio value={item.VoteSchemeId} key={item.VoteMechanismName}>
                 {item.VoteMechanismName}
@@ -195,7 +226,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
         ></ResponsiveSelect>
       </Form.Item>
       <Form.Item
-        name={['transaction', 'contractMethodName']}
+        name={contractMethodNamePath}
         label={<span className="form-item-label">Method Name</span>}
         dependencies={['transaction', 'toAddress']}
       >
@@ -222,11 +253,13 @@ const ProposalInfo = (props: ProposalInfoProps) => {
       >
         <div className="flex h-[48px] px-[16px] py-[8px] items-center rounded-[6px] border-[1px] border-solid border-Neutral-Border bg-Neutral-Hover-BG">
           <span className="text-neutralTitle text-[14px] font-400 leading-[22px] pr-[16px]">
+            readonly value
             {/* {formatDate(daoInfo)} */}
           </span>
           <ArrowIcon className="color-[#B8B8B8]" />
           <span className="text-neutralTitle text-[14px] font-400 leading-[22px] pl-[16px]">
-            12 Dec, 2024
+            {/* 12 Dec, 2024 */}
+            readonly value
           </span>
         </div>
       </Form.Item>
@@ -239,11 +272,13 @@ const ProposalInfo = (props: ProposalInfoProps) => {
       >
         <div className="flex h-[48px] px-[16px] py-[8px] items-center rounded-[6px] border-[1px] border-solid border-Neutral-Border bg-Neutral-Hover-BG">
           <span className="text-neutralTitle text-[14px] font-400 leading-[22px] pr-[16px]">
-            05 Dec, 2024
+            {/* 05 Dec, 2024 */}
+            readonly value
           </span>
           <ArrowIcon className="color-[#B8B8B8]" />
           <span className="text-neutralTitle text-[14px] font-400 leading-[22px] pl-[16px]">
-            12 Dec, 2024
+            {/* 12 Dec, 2024 */}
+            readonly value
           </span>
         </div>
       </Form.Item>
@@ -253,43 +288,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
           className="w-[156px]"
           // disabled={!title || !description}
           onClick={() => {
-            const daoId = searchParams.get('daoId');
-            if (!daoId) {
-              throw new Error('daoId is required');
-            }
-            form.validateFields().then(async (res) => {
-              const params = {
-                ...res,
-                proposalBasicInfo: {
-                  ...res.proposalBasicInfo,
-                  daoId,
-                },
-              };
-              console.log('res------- input', res);
-              // const params = {
-              //   proposalBasicInfo: {
-              //     daoId: '58ce59423ec3b437603e05e6990cb56dfa04a3338a5f8f25350568ac29dd6c29',
-              //     proposalTitle: 'Proposal Title',
-              //     proposalDescription:
-              //       'https://ipfs.io/ipfs/QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG',
-              //     forumUrl: 'https://forum.example.com',
-              //     // vote and executor
-              //     schemeAddress: 'D29ezPPDCKL3UJxUUyabtz6tdWzztSqczSRbpRfyYvpn9Bmq9',
-              //     // vote model
-              //     voteSchemeId:
-              //       '632e4047edc35bdf06de385f46fd553ef454ddf7d1bfd060cc341e6dba237510',
-              //   },
-              //   proposalType: 1,
-              //   transaction: {
-              //     contractMethodName: 'ChangeCodeCheckController',
-              //     toAddress: 'pykr77ft9UUKJZLVq15wCH8PinBSjVRQ12sD1Ayq92mKFsJ1i',
-              //     params: '123',
-              //   },
-              // };
-              console.log('res', params);
-              const createRes = proposalCreateContractRequest('CreateProposal', params);
-              console.log('res', createRes);
-            });
+            onSubmit(voteSchemeId);
           }}
         >
           Submit

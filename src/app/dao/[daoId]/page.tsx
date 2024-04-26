@@ -62,7 +62,7 @@ export default function DeoDetails(props: IProps) {
       daoId: daoId,
       chainId: info.curChain,
       skipCount:
-        (tableParams.pagination.current ?? 1 - 1) * (tableParams.pagination.pageSize ?? 20),
+        ((tableParams.pagination.current ?? 1) - 1) * (tableParams.pagination.pageSize ?? 20),
       maxResultCount: tableParams.pagination.pageSize,
     };
     if (proposalType !== ProposalType.ALL) {
@@ -106,7 +106,7 @@ export default function DeoDetails(props: IProps) {
               <Typography.Title fontWeight={FontWeightEnum.Medium} level={6}>
                 Proposals
               </Typography.Title>
-              <Link href={`/proposal/deploy/${daoData?.data?.id}`}>
+              <Link href={`/proposal/deploy/${daoId}`}>
                 <Button size="medium" type="primary">
                   Deploy
                 </Button>
