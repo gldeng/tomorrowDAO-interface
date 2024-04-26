@@ -23,9 +23,9 @@ const HighCouncil = () => {
   });
   const electionContractAddress = useMemo(() => {
     const electionContract = data?.data.contractInfoList.find(
-      (item) => item.ContractName === ElectionContractName,
+      (item) => item?.contractName === ElectionContractName,
     );
-    return electionContract?.ContractAddress;
+    return electionContract?.contractAddress;
   }, [data]);
   return (
     <div className="high-council-form">

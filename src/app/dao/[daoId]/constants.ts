@@ -72,5 +72,5 @@ export const tagColorMap = {
     textColor: '#F8B042',
     firstText: 'Can be vetoed before',
     secondText: 'Being vetoed.',
-  }
+  },
 };
