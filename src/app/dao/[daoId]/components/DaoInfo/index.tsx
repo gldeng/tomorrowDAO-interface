@@ -3,7 +3,6 @@ import Image from 'next/image';
 import { Divider, Descriptions, DescriptionsProps } from 'antd';
 import useResponsive from 'hooks/useResponsive';
 import PreviewFile from 'components/PreviewFile';
-import { IDaoDetail } from '../../type';
 
 import { HC_CANDIDATE, HC_MEMBER } from '../../constants';
 
@@ -13,7 +12,7 @@ import './index.css';
 import useJumpByPath from 'hooks/useJumpByPath';
 
 interface IParams {
-  data: IDaoDetail;
+  data: DaoInfoData;
   onChangeHCParams: any;
 }
 

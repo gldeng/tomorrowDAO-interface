@@ -1,7 +1,7 @@
 module.exports = [
   {
-    source: '/api/:path*',
-    destination: 'http://192.168.67.187:8068/api/:path*',
+    source: '/api/app/:path*',
+    destination: 'https://test-api.tmrwdao.com/api/app/:path*',
   },
   {
     source: '/cms/:path*',

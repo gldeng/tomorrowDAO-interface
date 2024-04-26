@@ -9,6 +9,7 @@ import { mediaValidatorMap, useRegisterForm } from '../utils';
 import IPFSUpload from 'components/IPFSUpload';
 import { StepEnum } from '../../type';
 import { useSelector } from 'react-redux';
+import { fetchTokenInfo } from 'api/request';
 
 const mediaList = [
   ['metadata', 'socialMedia', 'Twitter'],
@@ -227,7 +228,29 @@ export default function BasicDetails() {
                   required: true,
                   message: 'governance_token is required',
                 },
+                // {
+                //   validator: (_, value) => {
+                //     const reqParams = {
+                //       symbol: value,
+                //       chainId: info.curChain,
+                //     };
+                //     return new Promise<void>((resolve, reject) => {
+                //       fetchTokenInfo(reqParams)
+                //         .then((res) => {
+                //           if (res.data.name) {
+                //             resolve();
+                //           } else {
+                //             reject(new Error('The token has not yet been issued'));
+                //           }
+                //         })
+                //         .catch(() => {
+                //           reject(new Error('api error，Re-enter the token'));
+                //         });
+                //     });
+                //   },
+                // },
               ]}
+              validateTrigger="onBlur"
               name="governanceToken"
               label=""
             >

@@ -8,44 +8,50 @@ import { ResponsiveSelect } from 'components/ResponsiveSelect';
 import MarkdownEditor from 'components/MarkdownEditor';
 import Editor from '@monaco-editor/react';
 import { ReactComponent as ArrowIcon } from 'assets/imgs/arrow-icon.svg';
+import { proposalTypeList } from 'types';
 import {
   fetchGovernanceMechanismList,
-  GovernanceMechanismList,
-  fetchDaoInfo,
-  DaoInfo,
-  ContractInfo,
   fetchContractInfo,
-  VoteSchemeListRes,
+  fetchDaoInfo,
   fetchVoteSchemeList,
-  proposalTypeList,
-} from '../type';
+} from 'api/request';
+// import { VoteSchemeListRes, fetchVoteSchemeList } from '../type';
 import { formatDate } from '../util';
 import { proposalCreateContractRequest } from 'contract/proposalCreateContract';
+import { useSelector } from 'redux/store';
 
 const { Option } = Select;
 interface ProposalInfoProps {
   next?: () => void;
   className?: string;
+  daoId: string;
 }
 const ProposalInfo = (props: ProposalInfoProps) => {
-  const [governanceMechanismList, setGovernanceMechanismList] = useState<GovernanceMechanismList>();
+  const [governanceMechanismList, setGovernanceMechanismList] = useState<GovernanceSchemeList>();
   const searchParams = useSearchParams();
-  const [daoInfo, setDaoInfo] = useState<DaoInfo>();
-  const [contractInfo, setContractInfo] = useState<ContractInfo>();
-  const [voteScheme, setVoteScheme] = useState<VoteSchemeListRes>();
-  const { next, className } = props;
+  const [daoInfo, setDaoInfo] = useState<DaoInfoData>();
+  const [contractInfo, setContractInfo] = useState<ContractInfoListData>();
+  const [voteScheme, setVoteScheme] = useState<IVoteSchemeListData>();
+
+  // const info = store.getState().elfInfo.elfInfo;
+  const elfInfo = useSelector((state) => state.elfInfo.elfInfo);
+  const { className, daoId } = props;
 
   const governanceMechanismOptions = useMemo(() => {
-    return governanceMechanismList?.governanceMechanismList.map((item) => {
-      const isHighCouncil = item.name === 'High Council';
-      let num = daoInfo?.memberCount ?? 0;
-      if (!daoInfo?.governanceToken) {
-        num = 0;
-      }
+    return governanceMechanismList?.map((item) => {
+      // const isHighCouncil = item.name === 'High Council';
+      // let num = daoInfo?.memberCount ?? 0;
+      // if (!daoInfo?.governanceToken) {
+      //   num = 0;
+      // }
+      // return {
+      //   label: isHighCouncil ? `High Council (${num} members)` : item.name,
+      //   disabled: num === 0,
+      //   value: item.governanceSchemeId,
+      // };
       return {
-        label: isHighCouncil ? `High Council (${num} members)` : item.name,
-        disabled: num === 0,
-        value: item.governanceSchemeId,
+        label: item.GovernanceMechanism,
+        value: item.SchemeAddress,
       };
     });
   }, [governanceMechanismList]);
@@ -77,15 +83,15 @@ const ProposalInfo = (props: ProposalInfoProps) => {
     const run = async () => {
       const [governanceMechanismListRes, daoInfo, contractInfo, voteSchemeListRes] =
         await Promise.all([
-          fetchGovernanceMechanismList({ chainId: 'aelf' }),
-          fetchDaoInfo({ chainId: 'x', daoId: 'x' }),
-          fetchContractInfo({ chainId: 'aelf' }),
-          fetchVoteSchemeList({ chainId: 'aelf' }),
+          fetchGovernanceMechanismList({ chainId: elfInfo.curChain, daoId: daoId }),
+          fetchDaoInfo({ chainId: elfInfo.curChain, daoId: daoId }),
+          fetchContractInfo({ chainId: elfInfo.curChain }),
+          fetchVoteSchemeList({ chainId: elfInfo.curChain, types: [1, 2] }),
         ]);
-      setGovernanceMechanismList(governanceMechanismListRes);
-      setDaoInfo(daoInfo);
-      setContractInfo(contractInfo);
-      setVoteScheme(voteSchemeListRes);
+      setGovernanceMechanismList(governanceMechanismListRes.data);
+      setDaoInfo(daoInfo.data);
+      setContractInfo(contractInfo.data);
+      setVoteScheme(voteSchemeListRes.data);
     };
     run();
   }, []);

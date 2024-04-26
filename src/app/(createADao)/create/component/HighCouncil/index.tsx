@@ -2,15 +2,31 @@
 
 import { Input, Tooltip } from 'aelf-design';
 import { Form, InputNumber } from 'antd';
-import { memo } from 'react';
-import './index.css';
+import { memo, useMemo } from 'react';
+import { useRequest } from 'ahooks';
 import InputSlideBind from 'components/InputSlideBind';
 import { integerRule, min2maxIntegerRule, validatorCreate, useRegisterForm } from '../utils';
 import { StepEnum } from '../../type';
+import { useSelector } from 'redux/store';
+import { fetchContractInfo } from 'api/request';
+import { ElectionContractName } from 'config/index';
+import './index.css';
 
 const HighCouncil = () => {
   const [form] = Form.useForm();
+  const elfInfo = useSelector((store) => store.elfInfo.elfInfo);
   useRegisterForm(form, StepEnum.step2);
+  const { data } = useRequest(() => {
+    return fetchContractInfo({
+      chainId: elfInfo.curChain,
+    });
+  });
+  const electionContractAddress = useMemo(() => {
+    const electionContract = data?.data.contractInfoList.find(
+      (item) => item.ContractName === ElectionContractName,
+    );
+    return electionContract?.ContractAddress;
+  }, [data]);
   return (
     <div className="high-council-form">
       <Form
@@ -37,7 +53,7 @@ const HighCouncil = () => {
           }
           extra="If no address completes a stake in this contract, the DAO creator will automatically become a HC member; adjustments can be made after the DAO is created."
         >
-          <Input disabled defaultValue={'xxxxxxxxxxx111112121212121abc'} />
+          <Input disabled defaultValue={electionContractAddress} />
         </Form.Item>
 
         <Form.Item

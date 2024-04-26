@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Tabs, Typography, FontWeightEnum, Button, Pagination } from 'aelf-design';
-import { Form } from 'antd';
+import { Form, message } from 'antd';
 import useResponsive from 'hooks/useResponsive';
 import ProposalsItem from './components/ProposalsItem';
 import HighCounCilTab from './components/HighCouncilTab';
@@ -10,38 +10,43 @@ import DaoInfo from './components/DaoInfo';
 import ExecutdProposals from './components/ExecutdProposals';
 import MyRecords from './components/MyRecords';
 import MyInfo from './components/MyInfo';
-import Filter from './components/filter';
-import { useSearchParams } from 'next/navigation';
-// import { useSearchParams } from 'next/router';
-import {
-  HCType,
-  IProposalTableParams,
-  TabKey,
-  ProposalType,
-  ProposalStatus,
-  IDaoDetail,
-  IProposalsItem,
-} from './type';
-
+import Filter from './components/Filter';
+import { useRequest } from 'ahooks';
+import { HCType, IProposalTableParams, TabKey, ProposalStatus } from './type';
+import { ProposalType } from 'types';
+import Link from 'next/link';
+import { fetchDaoInfo, fetchProposalList } from 'api/request';
+import { store } from 'redux/store';
 import './page.css';
 
-import { mokeData as data, list } from './moke';
-import Link from 'next/link';
-
-export default function DeoDetails() {
+interface IProps {
+  params: { daoId: string };
+}
+export default function DeoDetails(props: IProps) {
+  const daoId = props.params.daoId;
+  const info = store.getState().elfInfo.elfInfo;
   const { isLG, isSM } = useResponsive();
-  const params = useSearchParams();
-  const id = params.get('id');
 
   const [form] = Form.useForm();
   const [tabKey, setTabKey] = useState(TabKey.PROPOSALS);
   const [hcType, setHcType] = useState(HCType.MEMBER);
 
-  const [daoDetail, setDaoDetail] = useState<IDaoDetail>(data);
-  const [proposalList, setProposalList] = useState<IProposalsItem[]>(list);
+  const {
+    data: daoData,
+    error: daoError,
+    loading: daoLoading,
+  } = useRequest(async () => {
+    if (!daoId) {
+      message.error('daoId is required');
+      return null;
+    }
+    return fetchDaoInfo({ daoId, chainId: info.curChain });
+  });
+  // const [daoDetail, setDaoDetail] = useState<IDaoDetail>(data);
+  // const [proposalList, setProposalList] = useState<IProposalsItem[]>(list);
 
   const [tableParams, setTableParams] = useState<IProposalTableParams>({
-    proposalType: ProposalType.ALL,
+    // proposalType: ProposalType.ALL,
     proposalStatus: ProposalStatus.ALL,
     content: '',
     pagination: {
@@ -50,21 +55,37 @@ export default function DeoDetails() {
       total: 0,
     },
   });
-
-  const fetchData = useCallback(() => {
+  const fetchProposalListWithParams = async () => {
     const { proposalType, proposalStatus } = tableParams;
-    // params
-    const params = {
-      proposalType,
-      proposalStatus,
-      daoId: data.daoId,
-      chainId: data.chainId,
-      skipCount: tableParams.pagination.current,
+    console.log('tableParams.pagination.current', tableParams.pagination.current);
+    const params: ProposalListReq = {
+      daoId: daoId,
+      chainId: info.curChain,
+      skipCount:
+        (tableParams.pagination.current ?? 1 - 1) * (tableParams.pagination.pageSize ?? 20),
       maxResultCount: tableParams.pagination.pageSize,
     };
-    console.log('search', params);
-    setProposalList(list);
-  }, [tableParams]);
+    if (proposalType !== ProposalType.ALL) {
+      params.proposalType = proposalType;
+    }
+    if (proposalStatus !== ProposalStatus.ALL) {
+      params.proposalStatus = proposalStatus;
+    }
+    console.log('tableParams', tableParams);
+    if (tableParams.content) {
+      params.content = tableParams.content;
+    }
+    const listRes = await fetchProposalList(params);
+    return listRes;
+  };
+  const {
+    data: proposalData,
+    error: proposalError,
+    loading: proposalLoading,
+    run,
+  } = useRequest(fetchProposalListWithParams, {
+    manual: true,
+  });
 
   const rightContent = useMemo(() => {
     return (
@@ -85,8 +106,7 @@ export default function DeoDetails() {
               <Typography.Title fontWeight={FontWeightEnum.Medium} level={6}>
                 Proposals
               </Typography.Title>
-
-              <Link href={`/proposal/deploy?daoId=${daoDetail.daoId}`}>
+              <Link href={`/proposal/deploy/${daoData?.data?.id}`}>
                 <Button size="medium" type="primary">
                   Deploy
                 </Button>
@@ -114,9 +134,10 @@ export default function DeoDetails() {
         },
       ];
     }
-  }, [form, tableParams, hcType, isLG, rightContent]);
+  }, [form, tableParams, hcType, isLG, rightContent, daoData]);
 
   const pageChange = useCallback((page: number) => {
+    console.log('page', page);
     setTableParams((state) => {
       return {
         ...state,
@@ -129,6 +150,7 @@ export default function DeoDetails() {
   }, []);
 
   const pageSizeChange = useCallback((page: number, pageSize: number) => {
+    console.log('pageSize', page, pageSize);
     setTableParams((state) => {
       return {
         ...state,
@@ -142,6 +164,7 @@ export default function DeoDetails() {
   }, []);
 
   const handleTabChange = (key: string) => {
+    console.log('key', key);
     setTabKey(key as TabKey);
   };
 
@@ -162,31 +185,20 @@ export default function DeoDetails() {
     );
   }, [isLG, tabItems, tabKey]);
 
-  const getDaoDetail = async () => {
-    await new Promise((resolve) => {
-      resolve('aaa');
-    });
-    setDaoDetail(data);
-  };
-
   useEffect(() => {
-    getDaoDetail();
-  }, [id]);
-
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    run();
+  }, [tableParams]);
 
   return (
     <div className="dao-detail">
       <div className="max-w-[1360px] mx-auto ">
-        <DaoInfo data={daoDetail} onChangeHCParams={handleChangeHCparams} />
+        {daoData?.data && <DaoInfo data={daoData.data} onChangeHCParams={handleChangeHCparams} />}
         <div className="dao-detail-content">
           <div className={` ${isSM ? 'w-full' : 'dao-detail-content-left'}`}>
             <div className="dao-detail-content-left-tab">{tabCom}</div>
             {tabKey === TabKey.PROPOSALS && (
               <div>
-                {proposalList.map((item) => (
+                {proposalData?.data.items.map((item) => (
                   <ProposalsItem key={item.proposalId} data={item} />
                 ))}
                 <Pagination

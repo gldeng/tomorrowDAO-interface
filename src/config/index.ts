@@ -10,3 +10,5 @@ export enum NetworkType {
 }
 
 export const SECONDS_60 = 60000;
+
+export const ElectionContractName = 'Election';
