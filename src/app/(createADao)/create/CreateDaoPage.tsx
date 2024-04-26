@@ -6,13 +6,18 @@ import { Button, Typography, FontWeightEnum } from 'aelf-design';
 import React, { memo, useCallback, useRef } from 'react';
 import { Steps, message, FormInstance } from 'antd';
 import clsx from 'clsx';
-import SubmitButton from './component/SubmitButton';
+import SubmitButton, { ISubmitRef } from './component/SubmitButton';
 import { daoCreateContractRequest } from 'contract/daoCreateContract';
 import useResponsive from 'hooks/useResponsive';
 import { ReactComponent as ArrowRight } from 'assets/imgs/arrow-right.svg';
 import { ReactComponent as ArrowLeft } from 'assets/imgs/arrow-left.svg';
+import CommonOperationResultModal, {
+  CommonOperationResultModalType,
+  TCommonOperationResultModalProps,
+} from 'components/CommonOperationResultModal';
 import './index.css';
 import {
+  ICreateDAOInput,
   IFile,
   IGovernanceSchemeThreshold,
   IHighCouncilInput,
@@ -22,6 +27,8 @@ import {
   StepsContext,
   defaultStepsFormMap,
 } from './type';
+import { emitLoading } from 'utils/myEvent';
+import Link from 'next/link';
 
 const items = [
   {
@@ -42,7 +49,10 @@ const CreateDaoPage = () => {
   const [snapshot, send] = useMachine(formMachine);
   const currentStep = snapshot.context.currentView.step;
   const currentStepString = currentStep.toString() as StepEnum;
+  const isHighCouncilStep = currentStepString === StepEnum.step2;
   const [messageApi, contextHolder] = message.useMessage();
+  const isSkipHighCouncil = useRef<boolean>(false);
+  const submitRef = useRef<ISubmitRef>(null);
   const isNotFirstStep = currentStep > 0;
   const { isMD } = useResponsive();
 
@@ -55,6 +65,9 @@ const CreateDaoPage = () => {
       form?.validateFields().then((res) => {
         console.log(form, currentStepString, res);
         stepsFormMapRef.current.stepForm[currentStepString].submitedRes = res;
+        if (isHighCouncilStep) {
+          isSkipHighCouncil.current = false;
+        }
         send({ type: 'NEXT' });
       });
     } else {
@@ -64,6 +77,10 @@ const CreateDaoPage = () => {
       });
       // send({ type: 'NEXT' });
     }
+  };
+  const handleSkip = () => {
+    isSkipHighCouncil.current = true;
+    send({ type: 'NEXT' });
   };
 
   const onRegisterHandler = useCallback(
@@ -101,18 +118,57 @@ const CreateDaoPage = () => {
           const params = {
             ...metadata,
             governanceSchemeThreshold: {
-              ...stepForm[StepEnum.step1].submitedRes,
-            },
-            highCouncilInput: {
-              ...stepForm[StepEnum.step2].submitedRes,
+              ...(stepForm[StepEnum.step1].submitedRes ?? {}),
             },
             files,
           };
+          if (!isSkipHighCouncil.current) {
+            params.highCouncilInput = {
+              ...(stepForm[StepEnum.step2].submitedRes ?? {}),
+            };
+          }
+          console.log('params', params);
+          emitLoading(true, 'Uploading...');
           const createRes = await daoCreateContractRequest('CreateDAO', params);
           // todo loading
           console.log('res', createRes);
+          emitLoading(false);
+          submitRef.current?.setResultModalConfig({
+            open: true,
+            type: CommonOperationResultModalType.Success,
+            primaryContent: 'Network DAO is created successfully',
+            secondaryContent: (
+              <>
+                If you wish to modify the DAO&apos;s display information, you can join the{' '}
+                <span className="text-colorPrimary cursor-pointer">Telegram group</span>.
+              </>
+            ),
+            footerConfig: {
+              buttonList: [
+                {
+                  children: <Link href={`/`}>View My DAO</Link>,
+                },
+              ],
+            },
+          });
         } catch (error) {
-          //
+          emitLoading(false);
+          submitRef.current?.setResultModalConfig({
+            open: true,
+            type: CommonOperationResultModalType.Error,
+            primaryContent: 'Failed to Create the DAO',
+            secondaryContent: 'Failed to Create the DAO',
+            footerConfig: {
+              buttonList: [
+                {
+                  children: 'Back',
+                  onClick: () => {
+                    submitRef.current?.initResultModalConfig();
+                  },
+                },
+              ],
+            },
+          });
         }
       });
     }
@@ -129,7 +185,7 @@ const CreateDaoPage = () => {
           className={clsx('dao-steps-wrap', isMD && 'dao-steps-wrap-mobile')}
           current={currentStep}
           items={items}
-          labelPlacement={isMD ? 'vertical' : 'horizontal'}
+          labelPlacement={'vertical'}
         />
       </div>
       {contextHolder}
@@ -166,19 +222,32 @@ const CreateDaoPage = () => {
                 className: 'flex-1 lg:w-40 lg:flex-none gap-2',
               }}
               onConfirm={handleCreateDao}
+              ref={submitRef}
             >
               <span>Submit</span>
               <ArrowRight />
             </SubmitButton>
           ) : (
-            <Button
-              type="primary"
-              className="flex-1 lg:w-40 lg:flex-none gap-2"
-              onClick={handleNextStep}
-            >
-              <span>Next</span>
-              <ArrowRight />
-            </Button>
+            <>
+              {isHighCouncilStep && (
+                <Button
+                  type="primary"
+                  className="flex-1 lg:w-40 lg:flex-none gap-2"
+                  onClick={handleSkip}
+                >
+                  <span>Skip</span>
+                  <ArrowRight />
+                </Button>
+              )}
+              <Button
+                type="primary"
+                className="flex-1 lg:w-40 lg:flex-none gap-2"
+                onClick={handleNextStep}
+              >
+                <span>Next</span>
+                <ArrowRight />
+              </Button>
+            </>
           )}
         </div>
       </StepsContext.Provider>

@@ -6,7 +6,11 @@ import ProposalDetailFile from 'assets/imgs/proposal-detail-file.svg';
 import Image from 'next/image';
 import { memo } from 'react';
 
-const HeaderInfo = () => {
+interface IHeaderInfoProps {
+  proposalDetailData: ProposalDetailData;
+}
+const HeaderInfo = (props: IHeaderInfoProps) => {
+  const { proposalDetailData } = props;
   return (
     <BoxWrapper>
       <div className="flex justify-between items-center">
@@ -20,7 +24,7 @@ const HeaderInfo = () => {
             }}
           />
           <Typography.Text size="small" className="text-Neutral-Secondary-Text">
-            Will expire on Nov 13, 2023.
+            Will expire on {proposalDetailData.expiredTime}
           </Typography.Text>
         </div>
         <div className="flex gap-6">
@@ -69,11 +73,11 @@ const HeaderInfo = () => {
         </div>
         <div className="flex items-center gap-4">
           <Typography.Text className="text-Neutral-Secondary-Text">Proposal ID:</Typography.Text>
-          <HashAddress preLen={8} endLen={9} address={'2PedfasdfadsfasW28l'}></HashAddress>
+          <HashAddress preLen={8} endLen={9} address={proposalDetailData.proposalId}></HashAddress>
         </div>
         <div className="flex items-center gap-4">
           <Typography.Text className="text-Neutral-Secondary-Text">Poster on:</Typography.Text>
-          <Typography.Text>Nov 13, 2023</Typography.Text>
+          <Typography.Text>{proposalDetailData.deployTime}</Typography.Text>
         </div>
       </div>
     </BoxWrapper>

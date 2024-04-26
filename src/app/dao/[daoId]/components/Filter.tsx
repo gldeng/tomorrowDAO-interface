@@ -8,9 +8,10 @@ import { ResponsiveSelect } from 'components/ResponsiveSelect';
 import CommonDrawer from 'components/CommonDrawer';
 import type { FormInstance } from 'antd';
 import SwitchBtn from 'assets/imgs/switch-btn.svg';
-import { proposalTypeList, proposalStatusList, tagMap } from '../constants';
+import { proposalTypeList, proposalStatusList, tagMap, ALL } from '../constants';
 import { IProposalTableParams, TTableParamsKey } from '../type';
 import CloseTag from 'assets/imgs/close-tag.svg';
+import { ProposalType } from 'types';
 type PropsType = {
   form: FormInstance;
   // onFechData: (params: IProposalTableParams) => void;
@@ -122,7 +123,7 @@ export default function Filter(props: PropsType) {
           ) : (
             <>
               <Col span={5}>
-                <Form.Item name="proposalType" className="w-full">
+                <Form.Item name="proposalType" className="w-full" initialValue={ProposalType.ALL}>
                   <Select
                     className="tab-all-proposals-select"
                     options={proposalTypeList}

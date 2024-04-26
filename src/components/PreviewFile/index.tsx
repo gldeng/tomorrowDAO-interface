@@ -1,43 +1,31 @@
 import { useCallback, useMemo, useState } from 'react';
-import useJumpByPath from 'hooks/useJumpByPath';
 import useResponsive from 'hooks/useResponsive';
 import { Dropdown } from 'aelf-design';
 import { List, type MenuProps } from 'antd';
 import Image from 'next/image';
+import Link from 'next/link';
 import ProposalDetailFile from 'assets/imgs/proposal-detail-file.svg';
 import CommonDrawer from 'components/CommonDrawer';
 
-type itemType = {
-  name: string;
-  url: string;
-};
-
 type PropsType = {
-  list: itemType[];
+  list: FileInfoItem[];
 };
 export default function PreviewFile(props: PropsType) {
   const { list = [] } = props;
+  console.log('list', list);
   const { isSM } = useResponsive();
-  const jump = useJumpByPath();
 
   const [showDrawerModal, setShowDrawerModal] = useState(false);
-
-  const handleViewPdf = (url: string) => {
-    jump(url);
-  };
 
   const fileItems: MenuProps['items'] = list.map((item, index) => {
     return {
       ...item,
       key: `${index}`,
       label: (
-        <div
-          className="min-w-36"
-          onClick={() => {
-            handleViewPdf(item.url);
-          }}
-        >
-          {item.name}
+        <div className="min-w-36">
+          <Link href={item.file.url} target="_blank">
+            {item.file.name}
+          </Link>
         </div>
       ),
     };
@@ -76,12 +64,10 @@ export default function PreviewFile(props: PropsType) {
           size="small"
           dataSource={list}
           renderItem={(item) => (
-            <List.Item
-              onClick={() => {
-                handleViewPdf(item.url);
-              }}
-            >
-              {item.name}
+            <List.Item>
+              <Link href={item.file.url} target="_blank">
+                {item.file.name}
+              </Link>
             </List.Item>
           )}
         />

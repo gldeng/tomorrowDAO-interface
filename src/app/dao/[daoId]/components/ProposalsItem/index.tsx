@@ -5,7 +5,6 @@ import Image from 'next/image';
 import WarningGrayIcon from 'assets/imgs/warning-gray.svg';
 import CheckedIcon from 'assets/imgs/checked.svg';
 import useResponsive from 'hooks/useResponsive';
-import { IProposalsItem } from '../../type';
 import { tagColorMap } from '../../constants';
 import DetailTag from 'components/DetailTag';
 
@@ -17,10 +16,12 @@ export interface IProposalsItemProps {
   tagList: Array<string>;
   votesAmount: string;
 }
-
+type TagColorKey = keyof typeof tagColorMap;
 export default function ProposalsItem(props: { data: IProposalsItem }) {
   const { data } = props;
   const { isLG } = useResponsive();
+
+  const proposalStatus = data.proposalStatus as TagColorKey;
 
   return (
     <div className="proposal-item">
@@ -30,8 +31,8 @@ export default function ProposalsItem(props: { data: IProposalsItem }) {
             customStyle={{
               text: data.proposalStatus,
               height: 20,
-              color: tagColorMap[data.proposalStatus].textColor,
-              bgColor: tagColorMap[data.proposalStatus].bgColor,
+              color: tagColorMap[proposalStatus].textColor,
+              bgColor: tagColorMap[proposalStatus].bgColor,
             }}
           />
           <Typography.Text

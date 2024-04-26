@@ -1,10 +1,13 @@
+import { ProposalType } from 'types';
+export const ALL = 'ALL';
+
 export const proposalTypeList = [
-  { value: 'All', label: 'ALL' },
+  { value: ProposalType.ALL, label: 'ALL' },
   {
-    value: 'Governance',
+    value: ProposalType.GOVERNANCE,
     label: 'Governance',
   },
-  { value: 'Advisory', label: 'Advisory' },
+  { value: ProposalType.ADVISORY, label: 'Advisory' },
 ];
 
 export const proposalStatusList = [
