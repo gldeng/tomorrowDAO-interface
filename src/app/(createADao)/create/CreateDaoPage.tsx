@@ -115,7 +115,7 @@ const CreateDaoPage = () => {
                 url: file.response.url,
               };
             }) ?? [];
-          const params = {
+          const params: any = {
             ...metadata,
             governanceSchemeThreshold: {
               ...(stepForm[StepEnum.step1].submitedRes ?? {}),
