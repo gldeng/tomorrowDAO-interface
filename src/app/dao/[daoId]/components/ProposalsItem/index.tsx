@@ -9,6 +9,7 @@ import { tagColorMap } from '../../constants';
 import DetailTag from 'components/DetailTag';
 
 import './index.css';
+import { useMemo } from 'react';
 
 export interface IProposalsItemProps {
   proposalStatus: string;
@@ -23,6 +24,10 @@ export default function ProposalsItem(props: { data: IProposalsItem }) {
 
   const proposalStatus = data.proposalStatus as TagColorKey;
 
+  const tagList = useMemo(() => {
+    return [data.governanceMechanism];
+  }, [data]);
+
   return (
     <div className="proposal-item">
       <div>
@@ -31,8 +36,8 @@ export default function ProposalsItem(props: { data: IProposalsItem }) {
             customStyle={{
               text: data.proposalStatus,
               height: 20,
-              color: tagColorMap[proposalStatus].textColor,
-              bgColor: tagColorMap[proposalStatus].bgColor,
+              color: tagColorMap[proposalStatus]?.textColor,
+              bgColor: tagColorMap[proposalStatus]?.bgColor,
             }}
           />
           <Typography.Text
@@ -51,7 +56,7 @@ export default function ProposalsItem(props: { data: IProposalsItem }) {
           ) : (
             <>
               <Typography.Title fontWeight={FontWeightEnum.Medium} level={7}>
-                Proposal ID：
+                Proposal ID：{data.proposalId}
               </Typography.Title>
               <HashAddress preLen={8} endLen={11} address={data.proposalId}></HashAddress>
             </>
@@ -59,7 +64,7 @@ export default function ProposalsItem(props: { data: IProposalsItem }) {
         </div>
         <div>
           <Space>
-            {data.tagList.map((item: any) => (
+            {tagList.map((item: any) => (
               <DetailTag
                 key={item}
                 customStyle={{
@@ -89,39 +94,41 @@ export default function ProposalsItem(props: { data: IProposalsItem }) {
           ) : (
             <div className="vote-dis">
               <Image width={12} height={12} src={WarningGrayIcon} alt=""></Image>
-              Minimum voting requirement met： 3/100
+              Minimum voting requirement met： {data.minimalVoteThreshold}/
+              {data.minimalRequiredThreshold}
             </div>
           )}
         </div>
         <div>
-          <CustomProgress />
+          <CustomProgress data={data} />
         </div>
       </div>
     </div>
   );
 }
 
-function CustomProgress() {
+function CustomProgress(props: { data: IProposalsItem }) {
+  const { data } = props;
   return (
     <>
       <div className="flex">
         <div className="flex-1 text-approve">
           <div className="font-medium leading-10">Approved</div>
-          <div className="leading-4">80%</div>
+          <div className="leading-4">{data.minimalApproveThreshold}%</div>
         </div>
         <div className="flex-1 text-abstention">
           <div className="font-medium leading-10">Asbtained</div>
-          <div className="leading-4">8%</div>
+          <div className="leading-4">{data.maximalAbstentionThreshold}%</div>
         </div>
         <div className="justify-self-end text-rejection">
           <div className="font-medium leading-10">Rejected</div>
-          <div className="leading-4">12%</div>
+          <div className="leading-4">{data.maximalRejectionThreshold}%</div>
         </div>
       </div>
       <Progress
         trailColor="#F55D6E"
         strokeColor="#687083"
-        percent={88}
+        percent={data.minimalVoteThreshold / data.minimalRequiredThreshold}
         success={{ percent: 80, strokeColor: '#3888FF' }}
       />
     </>

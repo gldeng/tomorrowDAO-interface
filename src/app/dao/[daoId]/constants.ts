@@ -67,4 +67,10 @@ export const tagColorMap = {
     bgColor: '#E4F8F5',
     textColor: '#05C4A2',
   },
+  BelowThreshold: {
+    bgColor: '#FEF7EC',
+    textColor: '#F8B042',
+    firstText: 'Can be vetoed before',
+    secondText: 'Being vetoed.',
+  }
 };
