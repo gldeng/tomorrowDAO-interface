@@ -26,6 +26,7 @@
     "@types/lodash-es": "^4.17.9",
     "@xstate/react": "^4.1.0",
     "aelf-web-login": "2.0.1-beta.8",
+    "ahooks": "^3.7.11",
     "antd": "^5.13.1",
     "axios": "^0.24.0",
     "clsx": "^2.1.0",

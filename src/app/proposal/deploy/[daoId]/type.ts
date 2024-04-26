@@ -9,7 +9,7 @@ export const proposalTypeList = [
     label: 'Governance',
     desc: 'Enact changes to smart contracts of the DAO. Once approved, an on-chain execution is required.',
     detailDesc: `Governance proposals ami to modify aelf chain's governance parameters. All contracts are
-    system contracts which play criticla roles fo aelf ecosystem`,
+      system contracts which play criticla roles fo aelf ecosystem`,
     value: ProposalType.GOVERNANCE,
   },
   {

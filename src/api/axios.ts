@@ -41,7 +41,7 @@ class Request {
 
         switch (code) {
           case '20000':
-            return data;
+            return res;
           case '20001':
             return {};
           case '50000':
@@ -113,9 +113,9 @@ class Request {
   }
 }
 
-const tokenRequest = new Request({
-  baseURL: '/connect',
+const apiServer = new Request({
+  baseURL: '/api/app',
 });
 
 export default new Request({});
-export { tokenRequest };
+export { apiServer };

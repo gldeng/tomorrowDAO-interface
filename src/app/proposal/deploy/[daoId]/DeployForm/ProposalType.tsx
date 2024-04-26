@@ -4,7 +4,7 @@ import { Radio } from 'aelf-design';
 import { Button, Form, Switch, Select } from 'antd';
 import { memo, useState } from 'react';
 import { ResponsiveSelect } from 'components/ResponsiveSelect';
-import { proposalTypeList } from '../type';
+import { proposalTypeList } from 'types';
 
 const defaultType = proposalTypeList[0].value;
 console.log('defaultType', defaultType, proposalTypeList);

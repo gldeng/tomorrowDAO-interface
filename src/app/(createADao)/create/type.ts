@@ -45,7 +45,7 @@ export interface ICreateDAOInput {
   // step 1
   governanceSchemeThreshold: IGovernanceSchemeThreshold;
   // step 2 optional
-  highCouncilInput: IHighCouncilInput;
+  highCouncilInput?: IHighCouncilInput;
   // step 3
   files: IFile[];
 }
@@ -59,9 +59,6 @@ export interface BasicInfoSubmitedRes {
   metadata: IMetadata;
   governanceToken: string;
 }
-export interface GovernanceSchemeSubmitedRes {
-  governanceSchemeThreshold: IGovernanceSchemeThreshold;
-}
 export interface HighCouncilSubmitedRes {
   highCouncilInput: IHighCouncilInput;
 }
@@ -74,7 +71,7 @@ interface StepsFormMap {
     formInstance?: FormInstance;
   };
   [StepEnum.step1]: {
-    submitedRes?: GovernanceSchemeSubmitedRes;
+    submitedRes?: IGovernanceSchemeThreshold;
     formInstance?: FormInstance;
   };
   [StepEnum.step2]: {

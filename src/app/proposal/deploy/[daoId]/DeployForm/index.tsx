@@ -6,11 +6,15 @@ import ProposalType from './ProposalType';
 import ProposalInfo from './ProposalInfo';
 import clsx from 'clsx';
 
-const GovernanceModel = () => {
+interface IGovernanceModelProps {
+  daoId: string;
+}
+const GovernanceModel = (props: IGovernanceModelProps) => {
   const [form] = Form.useForm();
   const [isNext, setNext] = useState(false);
   const title = Form.useWatch(['proposal_basic_info', 'proposal_title'], form);
   const description = Form.useWatch(['proposal_basic_info', 'proposal_description'], form);
+  const { daoId } = props;
   // const [isCheck, setIsCheck] = useState(false);
   return (
     <div className="deploy-proposal-form mt-[24px] mb-[24px]">
@@ -33,7 +37,7 @@ const GovernanceModel = () => {
             setNext(true);
           }}
         />
-        <ProposalInfo className={clsx({ hidden: !isNext })} />
+        <ProposalInfo className={clsx({ hidden: !isNext })} daoId={daoId} />
       </Form>
     </div>
   );

@@ -13,11 +13,11 @@ declare type UserInfoType = {
 
 declare type IConfigItems = {
   networkType: 'TESTNET' | 'MAIN';
+  curChain: Chain;
   connectServer?: string;
   connectUrl?: string;
   graphqlServer?: string;
   portkeyServer?: string;
-  curChain?: Chain;
   rpcUrlAELF?: string;
   rpcUrlTDVV?: string;
   rpcUrlTDVW?: string;

@@ -1,9 +1,12 @@
 import { Typography, FontWeightEnum, Progress } from 'aelf-design';
-import MyInfo from 'app/daodetails/[daoId]/components/MyInfo';
+// import MyInfo from 'app/daodetails/components/MyInfo';
 import BoxWrapper from './BoxWrapper';
 import { memo } from 'react';
 
-const VoteInfo = () => {
+interface IHeaderInfoProps {
+  proposalDetailData: ProposalDetailData;
+}
+const VoteInfo = (props: IHeaderInfoProps) => {
   return (
     <div className="flex justify-between">
       <BoxWrapper className="w-[800px] flex-shrink-0">
