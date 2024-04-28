@@ -1,5 +1,5 @@
 const JWT = `Bearer ${process.env.NEXT_PUBLIC_PINATA_JWT}`;
-
+console.log('process.env.NEXT_PUBLIC_PINATA_JWT', process.env.NEXT_PUBLIC_PINATA_JWT);
 async function pinFileToIPFS(file: File) {
   try {
     const formData = new FormData();

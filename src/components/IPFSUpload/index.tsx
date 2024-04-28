@@ -121,6 +121,7 @@ const FUpload: React.FC<IFUploadProps> = ({
   const onCustomRequest: IUploadProps['customRequest'] = async ({ file, onSuccess, onError }) => {
     try {
       emitLoading(true, 'Uploading...');
+      console.log('process.env.NEXT_PUBLIC_PINATA_JWT', process.env.NEXT_PUBLIC_PINATA_JWT);
       const uploadData = await pinFileToIPFS(file as File);
       const fileUrl = uploadData?.url ?? '';
       console.log('ipfs-success', fileUrl);
