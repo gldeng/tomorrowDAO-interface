@@ -100,6 +100,7 @@ export default function CreatePreviewModal({ open, onClose, onConfirm }: ICreate
     };
   });
 
+  const logoUrl = metaData?.metadata?.logoUrl?.[0]?.response?.url;
   return (
     <CommonModalSwitchDrawer
       commonClassName="create-preview-modal"
@@ -114,16 +115,23 @@ export default function CreatePreviewModal({ open, onClose, onConfirm }: ICreate
       <Flex vertical gap={24}>
         <Flex vertical gap={12}>
           <Flex gap={8} align="center">
-            <CommonDaoLogo src="" daoName="Network DAO" size={CommonDaoLogoSizeEnum.Small} />
+            {logoUrl && (
+              <CommonDaoLogo
+                src={logoUrl}
+                daoName="Network DAO"
+                size={CommonDaoLogoSizeEnum.Small}
+              />
+            )}
             <Title level={5} fontWeight={FontWeightEnum.Medium}>
-              Network DAO
+              {metaData?.metadata?.name}
             </Title>
           </Flex>
           <Text>{metaData?.metadata.description}</Text>
           <Flex gap={12} wrap="wrap">
-            {socialMediaList.map(({ name, url }, index) => (
-              <SocialMediaItem key={index} name={name as string} url={url ?? ''} />
-            ))}
+            {socialMediaList.map(
+              ({ name, url }, index) =>
+                name && <SocialMediaItem key={index} name={name as string} url={url ?? ''} />,
+            )}
           </Flex>
         </Flex>
         <Flex vertical gap={16}>
