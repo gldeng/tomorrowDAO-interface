@@ -55,16 +55,31 @@ export default function Header() {
         key: 'Community',
         children: [
           {
-            label: 'Documentation',
-            key: 'Documentation1',
+            label: (
+              <Link href="https://twitter.com/tmrwdao" target="_blank">
+                Twitter
+              </Link>
+            ),
+            key: 'Twitter',
           },
           {
-            label: 'GitHub',
-            key: 'GitHub1',
+            label: (
+              <Link
+                href="https://discord.com/channels/1182601337553293313/1182605569773813820"
+                target="_blank"
+              >
+                Discord
+              </Link>
+            ),
+            key: 'Discord',
           },
           {
-            label: 'White Paper',
-            key: 'White Paper1',
+            label: (
+              <Link href="https://t.me/tmrwdao" target="_blank">
+                Telegram
+              </Link>
+            ),
+            key: 'Telegram',
           },
         ],
       },

@@ -55,7 +55,7 @@ export const fetchTokenInfo = async (params: {
   symbol: string;
   chainId: string;
 }): Promise<ITokenInfoRes> => {
-  return apiServer.post('/token', {
+  return apiServer.get('/token', {
     params,
   });
 };

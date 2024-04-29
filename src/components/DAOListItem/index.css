@@ -2,7 +2,7 @@
   @apply h-[212px] py-6 px-4 sm:px-6 sm:py-8 bg-white border-Neutral-Divider cursor-pointer border-solid border rounded-lg hover:border-Neutral-Secondary-Text;
 
   .dao-list-item-title {
-    @apply flex items-center;
+    @apply flex items-center h-[40px];
 
     .dao-logo {
       @apply w-10 h-10 mr-3 rounded-full;
@@ -11,6 +11,10 @@
         @apply w-[100%] h-[100%];
       }
     }
+  }
+
+  .dao-list-item-content {
+    @apply min-h-[44px];
   }
 
   .TMRWDAO-typography {

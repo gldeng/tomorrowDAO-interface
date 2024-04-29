@@ -39,7 +39,7 @@ const HeaderInfo = (props: IHeaderInfoProps) => {
             </Typography.Text>
           </div>
           <div className="w-8 h-8 cursor-pointer bg-Neutral-Default-BG rounded-md flex justify-center items-center">
-            <Image src={colorfulSocialMediaIconMap.x} alt="x" width={11} height={10} />
+            <Image src={colorfulSocialMediaIconMap.Twitter} alt="x" width={11} height={10} />
           </div>
         </div>
       </div>

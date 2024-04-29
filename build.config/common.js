@@ -5,11 +5,14 @@ module.exports = {
     return rewritesConfig;
   },
   images: {
-    loader: 'akamai',
-    path: '',
-    domains: ['raw.githubusercontent.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'silver-abstract-unicorn-590.mypinata.cloud',
+        pathname: '/**/*',
+      },
+    ],
   },
-
   productionBrowserSourceMaps: true,
   webpack: (config, { webpack }) => {
     config.module.rules.push({

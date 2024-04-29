@@ -42,7 +42,6 @@ export const mapNameToView: Record<string, View> = {
     step: 3,
   },
 };
-
 const initialStateName = 'basicDetails';
 
 const formMachineConfig = {
