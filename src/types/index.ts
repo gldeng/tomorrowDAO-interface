@@ -100,6 +100,21 @@ export enum ProposalType {
   VETO = 3,
   ALL = 'ALL',
 }
+export enum ProposalTypeString {
+  Governance = 'Governance',
+  Advisory = 'Advisory',
+  Veto = 'Veto',
+}
+
+export enum ProposalStatusString {
+  Approved = 'Approved',
+  Rejected = 'Rejected',
+  Pending = 'Pending',
+  Abstained = 'Abstained',
+  Expired = 'Expired',
+  Executed = 'Executed',
+  BelowThreshold = 'BelowThreshold',
+}
 export const proposalTypeList = [
   {
     label: 'Governance',

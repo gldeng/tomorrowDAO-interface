@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Tabs, Typography, FontWeightEnum, Button, Pagination } from 'aelf-design';
-import { Form, message } from 'antd';
+import { Form, message, Empty } from 'antd';
+import { SkeletonList } from 'components/Skeleton';
 import useResponsive from 'hooks/useResponsive';
 import ProposalsItem from './components/ProposalsItem';
 import HighCounCilTab from './components/HighCouncilTab';
@@ -18,6 +19,7 @@ import Link from 'next/link';
 import { fetchDaoInfo, fetchProposalList } from 'api/request';
 import { store } from 'redux/store';
 import './page.css';
+import { ALL } from './constants';
 
 interface IProps {
   params: { daoId: string };
@@ -46,8 +48,6 @@ export default function DeoDetails(props: IProps) {
   // const [proposalList, setProposalList] = useState<IProposalsItem[]>(list);
 
   const [tableParams, setTableParams] = useState<IProposalTableParams>({
-    // proposalType: ProposalType.ALL,
-    proposalStatus: ProposalStatus.ALL,
     content: '',
     pagination: {
       current: 1,
@@ -57,7 +57,6 @@ export default function DeoDetails(props: IProps) {
   });
   const fetchProposalListWithParams = async () => {
     const { proposalType, proposalStatus } = tableParams;
-    console.log('tableParams.pagination.current', tableParams.pagination.current);
     const params: ProposalListReq = {
       daoId: daoId,
       chainId: info.curChain,
@@ -65,13 +64,12 @@ export default function DeoDetails(props: IProps) {
         ((tableParams.pagination.current ?? 1) - 1) * (tableParams.pagination.pageSize ?? 20),
       maxResultCount: tableParams.pagination.pageSize,
     };
-    if (proposalType !== ProposalType.ALL) {
+    if (proposalType !== ALL && proposalType) {
       params.proposalType = proposalType;
     }
-    if (proposalStatus !== ProposalStatus.ALL) {
+    if (proposalStatus !== ALL && proposalStatus) {
       params.proposalStatus = proposalStatus;
     }
-    console.log('tableParams', tableParams);
     if (tableParams.content) {
       params.content = tableParams.content;
     }
@@ -134,7 +132,7 @@ export default function DeoDetails(props: IProps) {
         },
       ];
     }
-  }, [form, tableParams, hcType, isLG, rightContent, daoData]);
+  }, [form, tableParams, hcType, isLG, rightContent, daoId]);
 
   const pageChange = useCallback((page: number) => {
     console.log('page', page);
@@ -191,16 +189,32 @@ export default function DeoDetails(props: IProps) {
 
   return (
     <div className="dao-detail">
-      <div className="max-w-[1360px] mx-auto ">
-        {daoData?.data && <DaoInfo data={daoData.data} onChangeHCParams={handleChangeHCparams} />}
+      <div className="max-w-[1360px] mx-auto">
+        <DaoInfo
+          data={daoData?.data}
+          isLoading={daoLoading}
+          isError={daoError}
+          onChangeHCParams={handleChangeHCparams}
+        />
+
         <div className="dao-detail-content">
           <div className={` ${isSM ? 'w-full' : 'dao-detail-content-left'}`}>
             <div className="dao-detail-content-left-tab">{tabCom}</div>
             {tabKey === TabKey.PROPOSALS && (
               <div>
-                {proposalData?.data.items.map((item) => (
-                  <ProposalsItem key={item.proposalId} data={item} />
-                ))}
+                {proposalLoading ? (
+                  <SkeletonList />
+                ) : proposalError ? (
+                  <div>proposal error, refresh pleaase</div>
+                ) : proposalData?.data?.items?.length ? (
+                  proposalData?.data?.items?.map((item) => (
+                    <Link key={item.proposalId} href={`/proposal/${item.proposalId}`}>
+                      <ProposalsItem data={item} />
+                    </Link>
+                  ))
+                ) : (
+                  <Empty />
+                )}
                 <Pagination
                   {...tableParams.pagination}
                   pageChange={pageChange}
@@ -208,6 +222,7 @@ export default function DeoDetails(props: IProps) {
                 />
               </div>
             )}
+            {/* < 1024 */}
             {isLG && tabKey === TabKey.MYINFO && (
               <>
                 <ExecutdProposals />

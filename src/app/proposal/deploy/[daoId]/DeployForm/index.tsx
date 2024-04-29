@@ -2,6 +2,7 @@
 
 import { Form } from 'antd';
 import { memo, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import ProposalType from './ProposalType';
 import ProposalInfo from './ProposalInfo';
 import clsx from 'clsx';
@@ -29,6 +30,7 @@ const INIT_RESULT_MODAL_CONFIG: TResultModalConfig = {
 const GovernanceModel = (props: IGovernanceModelProps) => {
   const [form] = Form.useForm();
   const [isNext, setNext] = useState(false);
+  const router = useRouter();
   const [resultModalConfig, setResultModalConfig] = useState(INIT_RESULT_MODAL_CONFIG);
   const title = Form.useWatch(['proposal_basic_info', 'proposal_title'], form);
   const description = Form.useWatch(['proposal_basic_info', 'proposal_description'], form);
@@ -87,15 +89,10 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
           footerConfig: {
             buttonList: [
               {
-                children: (
-                  <span
-                    onClick={() => {
-                      setResultModalConfig(INIT_RESULT_MODAL_CONFIG);
-                    }}
-                  >
-                    OK
-                  </span>
-                ),
+                children: 'OK',
+                onClick: () => {
+                  router.push(`/dao/${daoId}`);
+                },
               },
             ],
             childrenNode: (

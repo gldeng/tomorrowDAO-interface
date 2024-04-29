@@ -11,7 +11,6 @@ import SwitchBtn from 'assets/imgs/switch-btn.svg';
 import { proposalTypeList, proposalStatusList, tagMap, ALL } from '../constants';
 import { IProposalTableParams, TTableParamsKey } from '../type';
 import CloseTag from 'assets/imgs/close-tag.svg';
-import { ProposalType } from 'types';
 type PropsType = {
   form: FormInstance;
   // onFechData: (params: IProposalTableParams) => void;
@@ -35,7 +34,7 @@ export default function Filter(props: PropsType) {
     return list.map((key) => {
       return {
         key: key,
-        value: tableParams[key] === 'All' ? tagMap[key] : tableParams[key],
+        value: tableParams[key] === ALL ? tagMap[key] : tableParams[key],
       };
     });
   }, [tableParams]);
@@ -83,8 +82,8 @@ export default function Filter(props: PropsType) {
 
   const handleCloseAll = () => {
     const values = {
-      proposalType: '',
-      proposalStatus: '',
+      proposalType: ALL,
+      proposalStatus: ALL,
     };
     form.setFieldsValue(values);
     onChangeTableParams((state: IProposalTableParams) => {
@@ -123,7 +122,7 @@ export default function Filter(props: PropsType) {
           ) : (
             <>
               <Col span={5}>
-                <Form.Item name="proposalType" className="w-full" initialValue={ProposalType.ALL}>
+                <Form.Item name="proposalType" className="w-full" initialValue={ALL}>
                   <Select
                     className="tab-all-proposals-select"
                     options={proposalTypeList}
@@ -133,7 +132,7 @@ export default function Filter(props: PropsType) {
                 </Form.Item>
               </Col>
               <Col span={5}>
-                <Form.Item name="proposalStatus" className="w-full">
+                <Form.Item name="proposalStatus" className="w-full" initialValue={ALL}>
                   <Select
                     className="tab-all-proposals-select"
                     options={proposalStatusList}

@@ -52,11 +52,9 @@ export const enum ProposalStatus {
 export interface IProposalTableParams {
   pagination: IPaginationProps;
   // governanceMechanism?: string;
-  proposalType?: ProposalType;
-  proposalStatus?: ProposalStatus;
+  proposalType?: string;
+  proposalStatus?: string;
   content?: string;
 }
 
 export type TTableParamsKey = keyof IProposalTableParams;
-
-type TproposalStatus = 'Active' | 'Approved' | 'Expired' | 'Executed' | 'Rejected';

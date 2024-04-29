@@ -1,11 +1,11 @@
 import { Divider, Space } from 'antd';
 import { Typography, FontWeightEnum, HashAddress, Progress } from 'aelf-design';
 import Image from 'next/image';
-
+import { ProposalStatusString } from 'types';
 import WarningGrayIcon from 'assets/imgs/warning-gray.svg';
 import CheckedIcon from 'assets/imgs/checked.svg';
 import useResponsive from 'hooks/useResponsive';
-import { tagColorMap } from '../../constants';
+import { getTimeDesc, tagColorMap } from '../../constants';
 import DetailTag from 'components/DetailTag';
 
 import './index.css';
@@ -18,6 +18,7 @@ export interface IProposalsItemProps {
   votesAmount: string;
 }
 type TagColorKey = keyof typeof tagColorMap;
+
 export default function ProposalsItem(props: { data: IProposalsItem }) {
   const { data } = props;
   const { isLG } = useResponsive();
@@ -28,13 +29,15 @@ export default function ProposalsItem(props: { data: IProposalsItem }) {
     return [data.governanceMechanism];
   }, [data]);
 
+  const proposalComplete = proposalStatus === ProposalStatusString.Approved;
+
   return (
     <div className="proposal-item">
       <div>
         <div>
           <DetailTag
             customStyle={{
-              text: data.proposalStatus,
+              text: proposalStatus,
               height: 20,
               color: tagColorMap[proposalStatus]?.textColor,
               bgColor: tagColorMap[proposalStatus]?.bgColor,
@@ -45,7 +48,7 @@ export default function ProposalsItem(props: { data: IProposalsItem }) {
             size="small"
             fontWeight={FontWeightEnum.Regular}
           >
-            {data.proposalDescription}
+            {/* {getTimeDesc(proposalStatus, data)} */}
           </Typography.Text>
         </div>
         <div className="proposal-item-title">
@@ -85,17 +88,18 @@ export default function ProposalsItem(props: { data: IProposalsItem }) {
           <Typography.Title fontWeight={FontWeightEnum.Regular} level={7}>
             Total {data.votesAmount} votes
           </Typography.Title>
-          {/* data.isApprove  */}
-          {data.votesAmount ? (
+          {proposalComplete ? (
             <div className="vote-dis">
               <Image width={12} height={12} src={CheckedIcon} alt=""></Image>
-              Insufficient votes： 3/100 (min required)
+              Insufficient votes： {data.votesAmount}/{data.minimalVoteThreshold} (min required)
             </div>
           ) : (
             <div className="vote-dis">
               <Image width={12} height={12} src={WarningGrayIcon} alt=""></Image>
-              Minimum voting requirement met： {data.minimalVoteThreshold}/
-              {data.minimalRequiredThreshold}
+              Minimum voting requirement met：{' '}
+              {data.votesAmount < data.minimalVoteThreshold
+                ? `${data.votesAmount}/${data.minimalVoteThreshold}`
+                : `${data.voterCount}/${data.minimalRequiredThreshold}`}
             </div>
           )}
         </div>
@@ -114,22 +118,22 @@ function CustomProgress(props: { data: IProposalsItem }) {
       <div className="flex">
         <div className="flex-1 text-approve">
           <div className="font-medium leading-10">Approved</div>
-          <div className="leading-4">{data.minimalApproveThreshold}%</div>
+          <div className="leading-4">{data.minimalApproveThreshold / 100}%</div>
         </div>
         <div className="flex-1 text-abstention">
           <div className="font-medium leading-10">Asbtained</div>
-          <div className="leading-4">{data.maximalAbstentionThreshold}%</div>
+          <div className="leading-4">{data.maximalAbstentionThreshold / 100}%</div>
         </div>
         <div className="justify-self-end text-rejection">
           <div className="font-medium leading-10">Rejected</div>
-          <div className="leading-4">{data.maximalRejectionThreshold}%</div>
+          <div className="leading-4">{data.maximalRejectionThreshold / 100}%</div>
         </div>
       </div>
       <Progress
         trailColor="#F55D6E"
         strokeColor="#687083"
-        percent={data.minimalVoteThreshold / data.minimalRequiredThreshold}
-        success={{ percent: 80, strokeColor: '#3888FF' }}
+        percent={(data.minimalApproveThreshold + data.maximalAbstentionThreshold) / 100}
+        success={{ percent: data.minimalApproveThreshold / 100, strokeColor: '#3888FF' }}
       />
     </>
   );

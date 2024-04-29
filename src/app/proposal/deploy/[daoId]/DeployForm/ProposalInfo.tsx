@@ -85,7 +85,6 @@ const ProposalInfo = (props: ProposalInfoProps) => {
     );
     return governanceMechanism?.schemeId;
   }, [schemeAddress, governanceMechanismList]);
-  console.log('voteSchemeId', voteSchemeId);
   const contractMethodOptions = useMemo(() => {
     const contract = contractInfo?.contractInfoList.find(
       (item) => item.contractAddress === contractAddress,
@@ -187,6 +186,12 @@ const ProposalInfo = (props: ProposalInfoProps) => {
       <Form.Item
         name={['proposalBasicInfo', 'schemeAddress']}
         label={<span className="form-item-label">Voters and executors</span>}
+        rules={[
+          {
+            required: true,
+            message: 'Voters and executors is required',
+          },
+        ]}
       >
         <ResponsiveSelect
           drawerProps={{
@@ -201,6 +206,12 @@ const ProposalInfo = (props: ProposalInfoProps) => {
         name={['proposalBasicInfo', 'deleteVoteSchemeId']}
         label={<span className="form-item-label">Vote Model</span>}
         initialValue={VoteSchemeList[0].VoteSchemeId}
+        rules={[
+          {
+            required: true,
+            message: 'Vote Model is required',
+          },
+        ]}
       >
         <Radio.Group>
           {VoteSchemeList.map((item) => {
@@ -215,6 +226,12 @@ const ProposalInfo = (props: ProposalInfoProps) => {
       {/* contract address: */}
       <Form.Item
         name={['transaction', 'toAddress']}
+        rules={[
+          {
+            required: true,
+            message: 'Contract Address is required',
+          },
+        ]}
         label={<span className="form-item-label">Contract Address</span>}
       >
         <ResponsiveSelect
@@ -229,6 +246,12 @@ const ProposalInfo = (props: ProposalInfoProps) => {
         name={contractMethodNamePath}
         label={<span className="form-item-label">Method Name</span>}
         dependencies={['transaction', 'toAddress']}
+        rules={[
+          {
+            required: true,
+            message: 'Method Name is required',
+          },
+        ]}
       >
         <ResponsiveSelect
           drawerProps={{
@@ -241,6 +264,12 @@ const ProposalInfo = (props: ProposalInfoProps) => {
       <Form.Item
         name={['transaction', 'params']}
         label={<span className="form-item-label">Method Params</span>}
+        rules={[
+          {
+            required: true,
+            message: 'Method Params is required',
+          },
+        ]}
       >
         <Editor defaultLanguage="json" height={176} />
       </Form.Item>

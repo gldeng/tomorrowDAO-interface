@@ -42,11 +42,7 @@ export default function Footer() {
         <div className="footer-media">
           <div className="footer-media-items">
             <div className="footer-media-item">
-              <a
-                target="_blank"
-                rel="noreferrer"
-                href="https://discord.com/channels/1182601337553293313/1182605569773813820"
-              >
+              <a target="_blank" rel="noreferrer" href="https://discord.com/invite/Y73pZaWy">
                 <img src={DiscordIcon} alt="discord" />
               </a>
             </div>

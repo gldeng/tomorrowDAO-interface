@@ -8,11 +8,10 @@ import ProposalDetailFile from 'assets/imgs/proposal-detail-file.svg';
 import CommonDrawer from 'components/CommonDrawer';
 
 type PropsType = {
-  list: FileInfoItem[];
+  list: FileInfo[];
 };
 export default function PreviewFile(props: PropsType) {
   const { list = [] } = props;
-  console.log('list', list);
   const { isSM } = useResponsive();
 
   const [showDrawerModal, setShowDrawerModal] = useState(false);

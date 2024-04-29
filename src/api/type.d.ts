@@ -113,38 +113,57 @@ interface ProposalTimePeriodSet {
 }
 
 interface FileInfo {
-  name: string;
-  cid: string;
-  url: string;
-}
-interface FileInfoItem {
-  uploadTime: string;
+  file: {
+    name: string;
+    cid: string;
+    url: string;
+  };
   uploader: string;
-  file: FileInfo;
+  uploadTime: string;
 }
 
 interface DaoInfoData {
-  chainId: string;
   id: string;
+  chainId: string;
+  blockHeight: number;
+  creator: string;
   metadata: {
     name: string;
     logoUrl: string;
     description: string;
-    socialMedia: SocialMedia;
+    socialMedia: {
+      Twitter: string;
+    };
   };
-  creator: string;
   governanceToken: string;
-  network: string;
-  governanceModel: string;
-  memberCount: number;
-  candidateCount: number;
+  isHighCouncilEnabled: boolean;
+  highCouncilAddress: null | string;
+  memberCount?: number;
+  candidateCount?: number;
+  highCouncilConfig: null | {
+    electionPeriod: number;
+    maxHighCouncilCandidateCount: number;
+    maxHighCouncilMemberCount: number;
+    stakingAmount: number;
+  };
+  highCouncilTermNumber: number;
+  fileInfoList: FileInfo[];
+  isTreasuryContractNeeded: boolean;
+  subsistStatus: boolean;
   treasuryContractAddress: string;
+  treasuryAccountAddress: null | string;
+  isTreasuryPause: boolean;
+  treasuryPauseExecutor: null | string;
   voteContractAddress: string;
   electionContractAddress: string;
   governanceContractAddress: string;
   timelockContractAddress: string;
-  proposalTimePeriodSet: ProposalTimePeriodSet;
-  fileInfoList: FileInfoItem[];
+  activeTimePeriod: number;
+  vetoActiveTimePeriod: number;
+  pendingTimePeriod: number;
+  executeTimePeriod: number;
+  vetoExecuteTimePeriod: number;
+  createTime: string;
 }
 
 interface DaoInfoReq {
@@ -165,7 +184,7 @@ interface ProposalListReq {
   chainId: string;
   daoId: string;
   // governanceMechanism: string;
-  proposalType?: number;
+  proposalType?: string;
   proposalStatus?: string;
   content?: string;
 }
@@ -192,7 +211,7 @@ interface IProposalsItem {
   endTime: string;
   expiredTime: string;
   transaction: Transaction;
-  votesAmount: string;
+  votesAmount: number;
   approvedCount: string;
   rejectionCount: string;
   abstentionCount: string;
@@ -221,56 +240,60 @@ interface ProposalDetailReq {
   chainId: string;
 }
 
+interface ProposalLife {
+  proposalStatus: string;
+  proposalStage: string;
+}
+
 interface Transaction {
-  contractName: string;
-  contractMethodName: string;
   toAddress: string;
-  params: {
-    param1: string;
-    param2: string;
-  };
-}
-
-interface VoteTopListItem {
-  voter: string;
-  amount: number;
-  voteOption: string;
-}
-
-interface OrganizationInfo {
-  organizationName: string;
-  organizationAddress: string;
+  contractMethodName: string;
+  params: Record<string, unknown>;
 }
 
 interface ProposalDetailData {
+  proposalLifeList: ProposalLife[];
+  voteTopList: any[];
   chainId: string;
-  daoId: string;
+  blockHeight: number;
+  id: string;
+  daoId: null | string;
   proposalId: string;
-  releaseAddress: string;
-  deployTime: string;
   proposalTitle: string;
-  governanceMechanism: number;
-  proposalStatus: string;
   proposalDescription: string;
+  forumUrl: string;
   proposalType: string;
-  startTime: string;
-  endTime: string;
-  expiredTime: string;
+  activeStartTime: string;
+  activeEndTime: string;
+  executeStartTime: string;
+  executeEndTime: string;
+  proposalStatus: string;
+  proposalStage: string;
+  proposer: string;
+  schemeAddress: string;
   transaction: Transaction;
-  votesAmount: string;
-  approvedCount: string;
-  rejectionCount: string;
-  abstentionCount: string;
-  voterCount: number;
+  voteSchemeId: null | string;
+  vetoProposalId: null | string;
+  deployTime: string;
+  executeTime: string;
+  governanceMechanism: string;
   minimalRequiredThreshold: number;
   minimalVoteThreshold: number;
   minimalApproveThreshold: number;
   maximalRejectionThreshold: number;
   maximalAbstentionThreshold: number;
-  organizationInfo: OrganizationInfo;
-  voteTopList: VoteTopListItem[];
-  tagList: string[];
+  activeTimePeriod: number;
+  vetoActiveTimePeriod: number;
+  pendingTimePeriod: number;
+  executeTimePeriod: number;
+  vetoExecuteTimePeriod: number;
+  voterCount: number;
+  votesAmount: number;
+  approvedCount: number;
+  rejectionCount: number;
+  abstentionCount: number;
 }
+
 interface ProposalDetailRes {
   code: string;
   data: ProposalDetailData;
