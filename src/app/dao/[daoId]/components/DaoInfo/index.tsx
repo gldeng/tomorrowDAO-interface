@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { Divider, Descriptions, DescriptionsProps } from 'antd';
 import useResponsive from 'hooks/useResponsive';
 import PreviewFile from 'components/PreviewFile';
+import { Skeleton, SkeletonList } from 'components/Skeleton';
 
 import { HC_CANDIDATE, HC_MEMBER } from '../../constants';
 
@@ -12,15 +13,19 @@ import './index.css';
 import useJumpByPath from 'hooks/useJumpByPath';
 
 interface IParams {
-  data: DaoInfoData;
+  data?: DaoInfoData;
   onChangeHCParams: any;
+  isLoading: boolean;
+  isError?: Error;
 }
 
 export default function DaoInfo(props: IParams) {
   const {
     data,
-    data: { metadata, fileInfoList },
+    data: { metadata, fileInfoList = [] } = {},
     onChangeHCParams,
+    isLoading,
+    isError,
   } = props;
 
   const jump = useJumpByPath();
@@ -40,7 +45,7 @@ export default function DaoInfo(props: IParams) {
           className="address"
           preLen={8}
           endLen={11}
-          address={data.creator}
+          address={data?.creator ?? '-'}
         ></HashAddress>
       ),
     },
@@ -52,7 +57,7 @@ export default function DaoInfo(props: IParams) {
           preLen={8}
           endLen={11}
           className="address"
-          address={data.creator}
+          address={'todo'}
           addressClickCallback={handleGoto}
         ></HashAddress>
       ),
@@ -60,12 +65,12 @@ export default function DaoInfo(props: IParams) {
     {
       key: '3',
       label: 'Governance Token',
-      children: data.governanceToken,
+      children: data?.governanceToken ?? '-',
     },
     {
       key: '4',
       label: 'Governance Model',
-      children: data.governanceModel,
+      children: `Referendum ${data?.isHighCouncilEnabled ? ' + High Council' : ''}`,
     },
     {
       key: '5',
@@ -78,9 +83,9 @@ export default function DaoInfo(props: IParams) {
               onChangeHCParams(HC_MEMBER);
             }}
           >
-            {data.memberCount} Members
+            {data?.memberCount ?? '-'} Members
           </span>
-          <span>17 Days</span>
+          <span>{data?.highCouncilConfig?.electionPeriod} Days</span>
         </div>
       ),
     },
@@ -95,7 +100,7 @@ export default function DaoInfo(props: IParams) {
               onChangeHCParams(HC_CANDIDATE);
             }}
           >
-            {data.candidateCount} Candidates
+            {data?.candidateCount ?? '-'} Candidates
           </span>
         </div>
       ),
@@ -104,24 +109,38 @@ export default function DaoInfo(props: IParams) {
 
   return (
     <div className="dao-detail-dis">
-      <div className="dao-detail-dis-title px-4 lg:px-8">
-        <div className="md:flex md:items-center">
-          <Image width={32} height={32} src={DaoLogo} alt="" className="mr-2"></Image>
-          <Typography.Title level={5}>{metadata.name}</Typography.Title>
-        </div>
-        <PreviewFile list={fileInfoList} />
-      </div>
-      <div className="dao-detail-dis-dis px-4 lg:px-8">{metadata.description}</div>
-      <Divider className="mb-2 lg:mb-6" />
-      <Collapse defaultActiveKey={['1']} ghost>
-        <Collapse.Panel header={<Typography.Title>Creator</Typography.Title>} key="1">
-          <Descriptions
-            layout={isLG ? 'vertical' : 'horizontal'}
-            items={items}
-            column={{ xs: 1, sm: 2, md: 2, lg: 2, xl: 2, xxl: 2 }}
-          />
-        </Collapse.Panel>
-      </Collapse>
+      {isLoading ? (
+        <Skeleton />
+      ) : isError ? (
+        <div>error, please refresh page</div>
+      ) : (
+        <>
+          <div className="dao-detail-dis-title px-4 lg:px-8">
+            <div className="md:flex md:items-center">
+              <Image
+                width={32}
+                height={32}
+                src={metadata?.logoUrl ?? DaoLogo}
+                alt=""
+                className="mr-2"
+              ></Image>
+              <Typography.Title level={5}>{metadata?.name}</Typography.Title>
+            </div>
+            <PreviewFile list={fileInfoList} />
+          </div>
+          <div className="dao-detail-dis-dis px-4 lg:px-8">{metadata?.description}</div>
+          <Divider className="mb-2 lg:mb-6" />
+          <Collapse defaultActiveKey={['1']} ghost>
+            <Collapse.Panel header={<Typography.Title>Creator</Typography.Title>} key="1">
+              <Descriptions
+                layout={isLG ? 'vertical' : 'horizontal'}
+                items={items}
+                column={{ xs: 1, sm: 2, md: 2, lg: 2, xl: 2, xxl: 2 }}
+              />
+            </Collapse.Panel>
+          </Collapse>
+        </>
+      )}
     </div>
   );
 }

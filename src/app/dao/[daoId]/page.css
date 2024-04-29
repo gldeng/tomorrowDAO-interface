@@ -1,21 +1,30 @@
 .dao-detail {
   @apply w-full block xl:flex flex-col items-center;
 
+  .TMRWDAO-select-single {
+    @apply h-[32px];
+  }
+
   .dao-detail-content {
     @apply flex mx-4 mb-6;
+
     .dao-detail-content-left {
       @apply flex-1;
       width: calc(100vw - 493px);
     }
+
     .dao-detail-content-left-tab {
       @apply flex-1 bg-white mb-[16px] border border-Neutral-Divider border-solid rounded-lg;
     }
+
     .tab-all-proposals {
       @apply px-4 pb-4 lg:px-8;
     }
+
     .tab-all-proposals-header {
       @apply flex justify-between items-center mb-4;
     }
+
     .tab-all-proposals-select {
       @apply w-full h-[40px];
     }
@@ -24,12 +33,15 @@
       @apply w-[437px] ml-6;
     }
   }
+
   .address {
     .acss-ijss2m {
       @apply text-Neutral-Primary-Text;
     }
+
     .acss-ijss2m:hover {
       @apply text-colorPrimaryHover;
     }
   }
+
 }

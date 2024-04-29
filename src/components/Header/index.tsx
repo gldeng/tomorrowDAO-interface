@@ -64,10 +64,7 @@ export default function Header() {
           },
           {
             label: (
-              <Link
-                href="https://discord.com/channels/1182601337553293313/1182605569773813820"
-                target="_blank"
-              >
+              <Link href="https://discord.com/invite/Y73pZaWy" target="_blank">
                 Discord
               </Link>
             ),

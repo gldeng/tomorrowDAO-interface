@@ -5,6 +5,7 @@ module.exports = {
     return rewritesConfig;
   },
   images: {
+    domains: ['www.baidu.com', '**.baidu.com'],
     remotePatterns: [
       {
         protocol: 'https',

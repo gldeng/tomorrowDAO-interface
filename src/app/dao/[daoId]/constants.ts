@@ -1,21 +1,23 @@
-import { ProposalType } from 'types';
-export const ALL = 'ALL';
-
+import { ProposalStatusString, ProposalTypeString } from 'types';
+export const ALL = 'All';
 export const proposalTypeList = [
-  { value: ProposalType.ALL, label: 'ALL' },
-  {
-    value: ProposalType.GOVERNANCE,
-    label: 'Governance',
-  },
-  { value: ProposalType.ADVISORY, label: 'Advisory' },
+  { value: ALL, label: ALL },
+  ...(Object.keys(ProposalTypeString) as Array<keyof typeof ProposalTypeString>).map((key) => {
+    return {
+      value: ProposalTypeString[key],
+      label: key,
+    };
+  }),
 ];
 
 export const proposalStatusList = [
-  { value: 'All', label: 'ALL' },
-  { value: 'Active', label: 'Active' },
-  { value: 'Approved', label: 'Approved' },
-  { value: 'Rejected', label: 'Rejected' },
-  { value: 'Abstained', label: 'Abstained' },
+  { value: ALL, label: ALL },
+  ...(Object.keys(ProposalStatusString) as Array<keyof typeof ProposalStatusString>).map((key) => {
+    return {
+      value: ProposalStatusString[key],
+      label: key,
+    };
+  }),
 ];
 
 export const HC_MEMBER = 'Member';
@@ -30,47 +32,60 @@ export const tagMap = {
 };
 
 export const tagColorMap = {
-  Active: {
-    bgColor: '#FEF7EC',
-    textColor: '#F8B042',
-    firstText: 'Will expire on',
-  },
-  Pending: {
+  [ProposalStatusString.Pending]: {
     bgColor: '#FEF7EC',
     textColor: '#F8B042',
     firstText: 'Can be vetoed before',
     secondText: 'Being vetoed.',
   },
-  Approved: {
+  [ProposalStatusString.Approved]: {
     bgColor: '#EBF3FF',
     textColor: '#3888FF',
     firstText: 'Availabe to be executed before',
     secondText: 'Approved on',
   },
-  Rejected: {
+  [ProposalStatusString.Rejected]: {
     bgColor: '#FEEFF1',
     textColor: '#F55D6E',
     firstText: 'Rejected on',
   },
-  Abstained: {
+  [ProposalStatusString.Abstained]: {
     bgColor: '#FEEFF1',
     textColor: '#F55D6E',
     firstText: 'Rejected on',
   },
-  Expired: {
+  [ProposalStatusString.Expired]: {
     bgColor: '#EDEDED',
     textColor: '#919191',
     firstText: 'Availabe to be executed before',
     secondText: 'Approved on',
   },
-  Executed: {
+  [ProposalStatusString.Executed]: {
     bgColor: '#E4F8F5',
     textColor: '#05C4A2',
   },
-  BelowThreshold: {
+  [ProposalStatusString.BelowThreshold]: {
     bgColor: '#FEF7EC',
     textColor: '#F8B042',
     firstText: 'Can be vetoed before',
-    secondText: 'Being vetoed.',
+    secondText: '',
   },
+};
+export const getTimeDesc = (status: string, data: IProposalsItem) => {
+  switch (status) {
+    case ProposalStatusString.Pending:
+      return `Can be vetoed before xxxx`;
+    case ProposalStatusString.Approved:
+      return `Availabe to be executed before ${data.expiredTime}`;
+    case ProposalStatusString.Rejected:
+      return `Rejected on ${data.endTime}`;
+    case ProposalStatusString.Abstained:
+      return `Abstained on ${data.endTime}`;
+    case ProposalStatusString.Expired:
+      return `Expired on ${data.expiredTime}`;
+    case ProposalStatusString.Executed:
+      return `Executed on ${data.startTime}`;
+    default:
+      return '';
+  }
 };
