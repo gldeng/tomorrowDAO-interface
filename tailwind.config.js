@@ -30,6 +30,10 @@ module.exports = {
         'Reject-Reject': '#F55D6E',
         'Light-Mode-Brand-Brand': '#127FFF',
       },
+      flex: {
+        quarter: '1 1 25%',
+        half: '1 1 50%',
+      },
     },
     screens: {
       xs: '480px',

@@ -2,11 +2,11 @@
 
 import { Input, Tooltip } from 'aelf-design';
 import { Form, InputNumber } from 'antd';
-import { memo, useMemo } from 'react';
+import { memo, useContext, useMemo } from 'react';
 import { useRequest } from 'ahooks';
 import InputSlideBind from 'components/InputSlideBind';
 import { integerRule, min2maxIntegerRule, validatorCreate, useRegisterForm } from '../utils';
-import { StepEnum } from '../../type';
+import { StepEnum, StepsContext } from '../../type';
 import { useSelector } from 'redux/store';
 import { fetchContractInfo } from 'api/request';
 import { ElectionContractName } from 'config/index';
@@ -15,6 +15,9 @@ import './index.css';
 const HighCouncil = () => {
   const [form] = Form.useForm();
   const elfInfo = useSelector((store) => store.elfInfo.elfInfo);
+  const daoCreateToken = useSelector((store) => store.daoCreate.token);
+  const { stepForm } = useContext(StepsContext);
+  console.log('daoCreateToken', daoCreateToken);
   useRegisterForm(form, StepEnum.step2);
   const { data } = useRequest(() => {
     return fetchContractInfo({
@@ -27,6 +30,8 @@ const HighCouncil = () => {
     );
     return electionContract?.contractAddress;
   }, [data]);
+  const metaData = stepForm[StepEnum.step0].submitedRes;
+  const disabled = !metaData?.governanceToken;
   return (
     <div className="high-council-form">
       <Form
@@ -51,7 +56,6 @@ const HighCouncil = () => {
               <span className="form-item-label">Election contract</span>
             </Tooltip>
           }
-          extra="If no address completes a stake in this contract, the DAO creator will automatically become a HC member; adjustments can be made after the DAO is created."
         >
           <Input disabled defaultValue={electionContractAddress} />
         </Form.Item>
@@ -59,7 +63,6 @@ const HighCouncil = () => {
         <Form.Item
           name={['highCouncilConfig', 'maxHighCouncilMemberCount']}
           label={<span className="form-item-label">High Council Members</span>}
-          extra="Alternate member of the High Council. The number can be changed through proposals."
           validateFirst={true}
           rules={[
             {
@@ -71,12 +74,15 @@ const HighCouncil = () => {
             },
           ]}
         >
-          <InputNumber placeholder="At least 7 members required" controls={false} />
+          <InputNumber
+            disabled={disabled}
+            placeholder="At least 7 members required"
+            controls={false}
+          />
         </Form.Item>
         <Form.Item
           name={['highCouncilConfig', 'maxHighCouncilCandidateCount']}
           label={<span className="form-item-label">High Council Condidate Members</span>}
-          extra="The number can be changed through proposals."
           validateFirst={true}
           rules={[
             integerRule,
@@ -84,7 +90,26 @@ const HighCouncil = () => {
             validatorCreate((v) => v > 10000, 'Supports up to 10000 High Council members'),
           ]}
         >
-          <InputNumber placeholder="At most 10000 members" controls={false} />
+          <InputNumber disabled={disabled} placeholder="At most 10000 members" controls={false} />
+        </Form.Item>
+        <Form.Item
+          name={['highCouncilConfig', 'lockTokenForElection']}
+          label={<span className="form-item-label">Stake threshold</span>}
+          validateFirst={true}
+          rules={[
+            integerRule,
+            validatorCreate((v) => v < 1, 'Please input a number larger than 1'),
+            validatorCreate(
+              (v) => v > Number(daoCreateToken?.totalSupply ?? 10000),
+              'The amount staked to become a HC member cannot exceed the maximum supply of the token.',
+            ),
+          ]}
+        >
+          <InputNumber
+            disabled={disabled}
+            placeholder="Refer to the governance token circulation to give a reasonable value."
+            controls={false}
+          />
         </Form.Item>
         <Form.Item
           name={['highCouncilConfig', 'electionPeriod']}
@@ -103,6 +128,7 @@ const HighCouncil = () => {
           ]}
         >
           <InputNumber
+            disabled={disabled}
             placeholder="Days that High Council members can serve in each round"
             controls={false}
             suffix="Days"
@@ -120,7 +146,11 @@ const HighCouncil = () => {
             validatorCreate((v) => v > 100, 'Please input a number smaller than 100'),
           ]}
         >
-          <InputSlideBind type="approve" placeholder={'Suggest setting it above 50%'} />
+          <InputSlideBind
+            disabled={disabled}
+            type="approve"
+            placeholder={'Suggest setting it above 50%'}
+          />
         </Form.Item>
 
         <Form.Item
@@ -134,6 +164,7 @@ const HighCouncil = () => {
           rules={min2maxIntegerRule}
         >
           <InputNumber
+            disabled={disabled}
             placeholder="Refer to the governance token circulation to give a reasonable value"
             controls={false}
           />
@@ -151,7 +182,11 @@ const HighCouncil = () => {
             validatorCreate((v) => v > 100, 'Please input a number smaller than 100'),
           ]}
         >
-          <InputSlideBind type="approve" placeholder={'Suggest setting it above 50%'} />
+          <InputSlideBind
+            disabled={disabled}
+            type="approve"
+            placeholder={'Suggest setting it above 50%'}
+          />
         </Form.Item>
         <Form.Item
           name={['governanceSchemeThreshold', 'maximalRejectionThreshold']}
@@ -164,7 +199,11 @@ const HighCouncil = () => {
             validatorCreate((v) => v > 20, 'Please input a number smaller than 20'),
           ]}
         >
-          <InputSlideBind type="rejection" placeholder={'Suggest setting it below 20%'} />
+          <InputSlideBind
+            disabled={disabled}
+            type="rejection"
+            placeholder={'Suggest setting it below 20%'}
+          />
         </Form.Item>
         <Form.Item
           name={['governanceSchemeThreshold', 'maximalAbstentionThreshold']}
@@ -177,7 +216,11 @@ const HighCouncil = () => {
             validatorCreate((v) => v > 20, 'Please input a number smaller than 20'),
           ]}
         >
-          <InputSlideBind type="abstention" placeholder={'Suggest setting it below 20%'} />
+          <InputSlideBind
+            disabled={disabled}
+            type="abstention"
+            placeholder={'Suggest setting it below 20%'}
+          />
         </Form.Item>
       </Form>
     </div>

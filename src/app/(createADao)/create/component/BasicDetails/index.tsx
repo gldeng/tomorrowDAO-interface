@@ -9,7 +9,9 @@ import { mediaValidatorMap, useRegisterForm } from '../utils';
 import IPFSUpload from 'components/IPFSUpload';
 import { StepEnum } from '../../type';
 import { useSelector } from 'react-redux';
+import { dispatch } from 'redux/store';
 import { fetchTokenInfo } from 'api/request';
+import { setToken } from 'redux/reducer/daoCreate';
 
 const mediaList = [
   ['metadata', 'socialMedia', 'Twitter'],
@@ -24,7 +26,7 @@ export default function BasicDetails() {
   const [showSymbol, setShowSymbol] = useState<boolean>(true);
   const [mediaError, setMediaError] = useState<boolean>(false);
   const { walletInfo } = useSelector((store: any) => store.userInfo);
-  const info = useSelector((store: any) => store.elfInfo.elfInfo);
+  const elfInfo = useSelector((store: any) => store.elfInfo.elfInfo);
   useRegisterForm(form, StepEnum.step0);
   return (
     <div className="basic-detail">
@@ -205,7 +207,7 @@ export default function BasicDetails() {
             <ChainAddress
               size="large"
               address={walletInfo.address}
-              chain={info.curChain}
+              chain={elfInfo.curChain}
               info="The admin can only upgrade settings on the TMRW DAO platform - not the smart contracts."
             />
           </div>
@@ -223,32 +225,34 @@ export default function BasicDetails() {
           </div>
           {showSymbol && (
             <Form.Item
+              validateFirst
               rules={[
                 {
                   required: true,
                   message: 'governance_token is required',
                 },
-                // {
-                //   validator: (_, value) => {
-                //     const reqParams = {
-                //       symbol: value,
-                //       chainId: info.curChain,
-                //     };
-                //     return new Promise<void>((resolve, reject) => {
-                //       fetchTokenInfo(reqParams)
-                //         .then((res) => {
-                //           if (res.data.name) {
-                //             resolve();
-                //           } else {
-                //             reject(new Error('The token has not yet been issued'));
-                //           }
-                //         })
-                //         .catch(() => {
-                //           reject(new Error('api error，Re-enter the token'));
-                //         });
-                //     });
-                //   },
-                // },
+                {
+                  validator: (_, value) => {
+                    const reqParams = {
+                      symbol: value ?? '',
+                      chainId: elfInfo.curChain,
+                    };
+                    return new Promise<void>((resolve, reject) => {
+                      fetchTokenInfo(reqParams)
+                        .then((res) => {
+                          dispatch(setToken(res.data));
+                          if (res.data.name && !res.data.isNFT) {
+                            resolve();
+                          } else {
+                            reject(new Error('The token has not yet been issued'));
+                          }
+                        })
+                        .catch(() => {
+                          reject(new Error('api error，Re-enter the token'));
+                        });
+                    });
+                  },
+                },
               ]}
               validateTrigger="onBlur"
               name="governanceToken"

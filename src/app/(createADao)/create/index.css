@@ -21,4 +21,10 @@
       @apply w-[92px]
     }
   }
+
+
+}
+
+.create-dao-rigth-btn+.create-dao-rigth-btn {
+  margin-left: 16px;
 }

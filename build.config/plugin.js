@@ -1,3 +1,1 @@
-module.exports = [
-	(nextConfig) => nextConfig,
-];
+module.exports = [(nextConfig) => nextConfig];

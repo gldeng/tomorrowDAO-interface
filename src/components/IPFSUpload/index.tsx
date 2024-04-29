@@ -76,16 +76,15 @@ const FUpload: React.FC<IFUploadProps> = ({
 
     if (!file?.status) return;
 
-    const newFileList = fileList.map((file) => {
-      if (file.response) {
-        file.url = file.response.url;
-      }
-      return file;
-    });
-
-    console.log('onFileChange', newFileList);
+    const newFileList = fileList
+      .map((file) => {
+        if (file.response) {
+          file.url = file.response.url;
+        }
+        return file;
+      })
+      .filter((file) => file.status !== 'error');
     onChange?.(newFileList);
-    setFileList(newFileList);
   };
 
   const onBeforeUpload = async (file: FileType) => {
@@ -121,12 +120,15 @@ const FUpload: React.FC<IFUploadProps> = ({
   const onCustomRequest: IUploadProps['customRequest'] = async ({ file, onSuccess, onError }) => {
     try {
       emitLoading(true, 'Uploading...');
-      console.log('process.env.NEXT_PUBLIC_PINATA_JWT', process.env.NEXT_PUBLIC_PINATA_JWT);
       const uploadData = await pinFileToIPFS(file as File);
+      if (!uploadData.cid) {
+        onError?.(new Error('upload no hash'));
+        return;
+      }
       const fileUrl = uploadData?.url ?? '';
-      console.log('ipfs-success', fileUrl);
       onSuccess?.({ url: fileUrl });
     } catch (error) {
+      message.error(`customRequest: upload error`);
       onError?.(error as Error);
     } finally {
       emitLoading(false);

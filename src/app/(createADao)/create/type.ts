@@ -19,6 +19,7 @@ export interface IHighCouncilConfig {
   maxHighCouncilMemberCount: number;
   maxHighCouncilCandidateCount: number;
   electionPeriod: number;
+  lockTokenForElection: number;
 }
 
 export interface IHighCouncilInput {
@@ -59,9 +60,6 @@ export interface BasicInfoSubmitedRes {
   metadata: IMetadata;
   governanceToken: string;
 }
-export interface HighCouncilSubmitedRes {
-  highCouncilInput: IHighCouncilInput;
-}
 export interface FilesSubmitedRes {
   files: UploadFile[];
 }
@@ -75,7 +73,7 @@ interface StepsFormMap {
     formInstance?: FormInstance;
   };
   [StepEnum.step2]: {
-    submitedRes?: HighCouncilSubmitedRes;
+    submitedRes?: IHighCouncilInput;
     formInstance?: FormInstance;
   };
   [StepEnum.step3]: {

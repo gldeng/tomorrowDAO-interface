@@ -1,9 +1,9 @@
-import { useMemo, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { Typography, FontWeightEnum } from 'aelf-design';
 import { Form, InputNumber } from 'antd';
 import IPFSUpload, { IFUploadProps } from 'components/IPFSUpload';
 import './index.css';
-import { StepEnum } from '../../type';
+import { FilesSubmitedRes, StepEnum, StepsContext } from '../../type';
 import { useRegisterForm } from '../utils';
 
 const { Title } = Typography;
@@ -14,6 +14,7 @@ const MAX_FILE_NAME_LENGTH = 128;
 export default function ContractsAndFiles() {
   const [form] = Form.useForm();
   useRegisterForm(form, StepEnum.step3);
+  const { stepForm } = useContext(StepsContext);
 
   const fileList = Form.useWatch('files', form) ?? [];
 
@@ -43,6 +44,9 @@ export default function ContractsAndFiles() {
         autoComplete="off"
         requiredMark={false}
         scrollToFirstError={true}
+        onValuesChange={(_a, values) => {
+          stepForm[StepEnum.step3].submitedRes = values;
+        }}
       >
         <Form.Item
           name={'files'}

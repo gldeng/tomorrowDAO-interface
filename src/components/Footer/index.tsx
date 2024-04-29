@@ -42,17 +42,21 @@ export default function Footer() {
         <div className="footer-media">
           <div className="footer-media-items">
             <div className="footer-media-item">
-              <a href="https://twitter.com/TMRWDAO">
+              <a
+                target="_blank"
+                rel="noreferrer"
+                href="https://discord.com/channels/1182601337553293313/1182605569773813820"
+              >
                 <img src={DiscordIcon} alt="discord" />
               </a>
             </div>
             <div className="footer-media-item">
-              <a href="https://twitter.com/TMRWDAO">
+              <a target="_blank" rel="noreferrer" href="https://t.me/tmrwdao">
                 <img src={TGIcon} alt="telegram" />
               </a>
             </div>
             <div className="footer-media-item">
-              <a href="https://twitter.com/TMRWDAO">
+              <a target="_blank" rel="noreferrer" href="https://twitter.com/tmrwdao">
                 <img src={TwitterIcon} alt="twitter" />
               </a>
             </div>

@@ -347,18 +347,14 @@ interface IVoteSchemeListRes {
 // -------------------------------------token-info-----------------------------
 
 interface TokenInfoData {
-  id?: number;
-  contractAddress?: string;
-  symbol?: string;
   chainId?: string;
-  issueChainId?: string;
-  txId?: string;
-  name?: string;
-  totalSupply?: number;
-  supply?: number;
   decimals?: number;
-  holders: number;
-  transfers: string;
+  imageUrl?: string;
+  isNFT?: boolean;
+  name?: string;
+  supply?: string;
+  symbol?: string;
+  totalSupply?: string;
 }
 
 interface ITokenInfoRes {

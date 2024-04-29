@@ -9,10 +9,11 @@ interface InputSlideBindProps {
   onChange?: (value: number | null) => void;
   type: 'abstention' | 'rejection' | 'approve';
   placeholder?: string;
+  disabled?: boolean;
 }
 
 const InputSlideBind = (props: InputSlideBindProps) => {
-  const { value, onChange, type, placeholder } = props;
+  const { value, onChange, type, placeholder, disabled } = props;
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     let num = Number(e.target.value.trim());
@@ -35,6 +36,7 @@ const InputSlideBind = (props: InputSlideBindProps) => {
           placeholder={placeholder}
           suffix="%"
           allowClear={false}
+          disabled={disabled}
         />
       </div>
       <div className={cls('slide', type)}>
@@ -45,7 +47,12 @@ const InputSlideBind = (props: InputSlideBindProps) => {
             { disable: !value },
           )}
         ></div>
-        <Slider className="slide-wrap" value={value} onChange={handleProgressChange} />
+        <Slider
+          className="slide-wrap"
+          value={value}
+          onChange={handleProgressChange}
+          disabled={disabled}
+        />
         <div className={cls('point', { active: value && value === 100 })}></div>
       </div>
     </div>

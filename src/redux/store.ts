@@ -8,12 +8,14 @@ import DataReducer, { dataSlice } from './reducer/data';
 
 import elfInfoReducer, { elfInfoSlice } from './reducer/elfInfo';
 import UserInfoReducer, { userInfoSlice } from './reducer/userInfo';
+import daoCreateReducer, { daoCreateSlice } from './reducer/daoCreate';
 
 const rootReducer = combineReducers({
   [infoSlice.name]: InfoReducer,
   [dataSlice.name]: DataReducer,
   [userInfoSlice.name]: UserInfoReducer,
   [elfInfoSlice.name]: elfInfoReducer,
+  [daoCreateSlice.name]: daoCreateReducer,
 });
 
 const makeStore = () => {
