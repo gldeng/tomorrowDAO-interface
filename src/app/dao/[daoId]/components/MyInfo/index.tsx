@@ -14,10 +14,11 @@ type InfoTypes = {
   height?: number;
   isLogin: boolean;
   children?: ReactNode;
+  clssName?: string;
 };
 
 export default function MyInfo(props: InfoTypes) {
-  const { isLogin = true, height } = props;
+  const { isLogin = true, height, clssName } = props;
   const [elfBlance, setElfBlance] = useState(0);
   const [info, setInfo] = useState({
     creator: '',
@@ -94,7 +95,7 @@ export default function MyInfo(props: InfoTypes) {
 
   return (
     <div
-      className="border-0 lg:border border-Neutral-Divider border-solid rounded-lg bg-white px-4 pt-2 pb-6 lg:px-8  lg:py-6"
+      className={`${clssName} border-0 lg:border border-Neutral-Divider border-solid rounded-lg bg-white px-4 pt-2 pb-6 lg:px-8  lg:py-6`}
       style={{
         height: height || 'auto',
       }}

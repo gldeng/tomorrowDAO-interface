@@ -66,7 +66,7 @@ const HeaderInfo = (props: IHeaderInfoProps) => {
           );
         })}
       </div>
-      <div className="border-0 border-t border-solid border-Neutral-Divider flex pt-6 gap-16">
+      <div className="border-0 border-t border-solid border-Neutral-Divider flex pt-6 gap-y-4 gap-x-0 lg:gap-x-16 lg:gap-y-0 lg:flex-row flex-col">
         <div className="flex items-center gap-4">
           <Typography.Text className="text-Neutral-Secondary-Text">Poster:</Typography.Text>
           <HashAddress preLen={8} endLen={9} address={proposalDetailData.proposer}></HashAddress>

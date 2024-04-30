@@ -11,8 +11,10 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@aelf-design/icons": "^1.0.0-alpha.13",
     "@monaco-editor/react": "^4.6.0",
     "@portkey-v1/did-ui-react": "1.5.4-alpha.22",
+    "@portkey-v1/contracts": "1.5.4-alpha.22",
     "@portkey/contracts": "2.0.0-alpha.28",
     "@portkey/detect-provider": "^2.0.0-alpha.5",
     "@portkey/did-ui-react": "2.0.0-alpha.28",
@@ -25,6 +27,7 @@
     "@sentry/nextjs": "^7.86.0",
     "@types/lodash-es": "^4.17.9",
     "@xstate/react": "^4.1.0",
+    "aelf-sdk": "^3.4.8",
     "aelf-web-login": "2.0.1-beta.8",
     "ahooks": "^3.7.11",
     "antd": "^5.13.1",
@@ -50,7 +53,8 @@
     "rehype-katex": "^7.0.0",
     "remark-gfm": "^4.0.0",
     "remark-math": "^6.0.0",
-    "xstate": "^5.7.1"
+    "xstate": "^5.7.1",
+    "query-string": "^7.1.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.0.2",

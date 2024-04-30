@@ -189,7 +189,7 @@ export default function DeoDetails(props: IProps) {
 
   return (
     <div className="dao-detail">
-      <div className="max-w-[1360px] mx-auto">
+      <div>
         <DaoInfo
           data={daoData?.data}
           isLoading={daoLoading}

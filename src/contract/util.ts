@@ -6,7 +6,7 @@ export const formatErrorMsg = (result: IContractError) => {
       ...result,
       error: result.code,
       errorMessage: {
-        message: JSON.stringify(result.message),
+        message: result?.message?.toString(),
       },
     };
   } else if (result.Error) {
@@ -14,7 +14,7 @@ export const formatErrorMsg = (result: IContractError) => {
       ...result,
       error: '401',
       errorMessage: {
-        message: JSON.stringify(result.Error).replace('AElf.Sdk.CSharp.AssertionException: ', ''),
+        message: result?.Error?.toString()?.replace('AElf.Sdk.CSharp.AssertionException: ', ''),
       },
     };
   } else if (typeof result.error !== 'number' && typeof result.error !== 'string') {
@@ -23,10 +23,9 @@ export const formatErrorMsg = (result: IContractError) => {
         ...result,
         error: '401',
         errorMessage: {
-          message: JSON.stringify((result.error as any).message).replace(
-            'AElf.Sdk.CSharp.AssertionException: ',
-            '',
-          ),
+          message: (result.error as any)?.message
+            ?.toString()
+            ?.replace('AElf.Sdk.CSharp.AssertionException: ', ''),
         },
       };
     }

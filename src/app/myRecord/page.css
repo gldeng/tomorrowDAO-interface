@@ -2,4 +2,8 @@
   .TMRWDAO-pagination-container {
     @apply px-8;
   }
+
+  .TMRWDAO-select-single {
+    @apply h-[32px];
+  }
 }

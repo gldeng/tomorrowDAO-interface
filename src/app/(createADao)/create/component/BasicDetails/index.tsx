@@ -137,7 +137,7 @@ export default function BasicDetails() {
               {
                 type: 'string',
                 max: 15,
-                message: 'The URL should be shorter than 15 characters.',
+                message: 'The X (Twitter) user name should be shorter than 15 characters.',
               },
             ]}
             label="X (Twitter)"
@@ -241,11 +241,17 @@ export default function BasicDetails() {
                       fetchTokenInfo(reqParams)
                         .then((res) => {
                           dispatch(setToken(res.data));
-                          if (res.data.name && !res.data.isNFT) {
-                            resolve();
-                          } else {
+                          if (!res.data.name) {
                             reject(new Error('The token has not yet been issued'));
                           }
+                          if (res.data.isNFT) {
+                            reject(
+                              new Error(
+                                `${value} is an NFT. Using NFTs as governance tokens is not supported.`,
+                              ),
+                            );
+                          }
+                          resolve();
                         })
                         .catch(() => {
                           reject(new Error('api error，Re-enter the token'));
@@ -258,7 +264,13 @@ export default function BasicDetails() {
               name="governanceToken"
               label=""
             >
-              <Input placeholder="Input the token symbol" />
+              <Input
+                placeholder="Input the token symbol"
+                onBlur={() => {
+                  const token = form.getFieldValue('governanceToken');
+                  form.setFieldValue('governanceToken', token?.toUpperCase());
+                }}
+              />
             </Form.Item>
           )}
         </Form>

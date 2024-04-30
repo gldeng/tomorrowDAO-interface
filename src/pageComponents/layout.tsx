@@ -21,9 +21,13 @@ const Layout = dynamic(async () => {
           <Header />
         </Suspense>
         <div className="flex flex-1 flex-col overflow-y-auto">
-          <DynamicBreadCrumb />
           <Suspense>
-            <div className="flex-1 flex justify-center">{children}</div>
+            <div className="flex-1 flex justify-center">
+              <div className="flex-1 max-w-[1440px] mx-auto py-6 mb-6 px-4 lg:px-10">
+                <DynamicBreadCrumb />
+                {children}
+              </div>
+            </div>
           </Suspense>
           <Suspense>
             <Footer />
