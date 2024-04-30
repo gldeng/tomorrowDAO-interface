@@ -9,8 +9,8 @@ interface IHeaderInfoProps {
 const VoteInfo = (props: IHeaderInfoProps) => {
   const { proposalDetailData } = props;
   return (
-    <div className="flex justify-between">
-      <BoxWrapper className="w-[800px] flex-shrink-0">
+    <div className="flex justify-between flex-col lg:flex-row">
+      <BoxWrapper className="flex-1 lg:mr-[24px] order-last lg:order-first">
         <Typography.Title level={6} fontWeight={FontWeightEnum.Medium}>
           Current Votes
         </Typography.Title>
@@ -82,7 +82,7 @@ const VoteInfo = (props: IHeaderInfoProps) => {
           </div>
         </div>
       </BoxWrapper>
-      <MyInfo isLogin={true} />
+      <MyInfo isLogin={true} clssName="flex-1 grow-0 lg:basis-[32%]" />
     </div>
   );
 };

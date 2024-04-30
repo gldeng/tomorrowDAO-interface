@@ -42,7 +42,9 @@ export const mapNameToView: Record<string, View> = {
     step: 3,
   },
 };
+// todo
 const initialStateName = 'basicDetails';
+// const initialStateName = 'governanceModel';
 
 const formMachineConfig = {
   types: {} as {

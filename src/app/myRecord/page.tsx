@@ -21,7 +21,7 @@ export default function MyRecord() {
     console.log(form.getFieldsValue());
   };
   return (
-    <div className="myRecord w-full px-4 lg:px-8">
+    <div className="myRecord w-full">
       <Card
         className="w-full m"
         title={

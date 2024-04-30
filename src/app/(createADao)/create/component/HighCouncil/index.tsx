@@ -70,7 +70,7 @@ const HighCouncil = () => {
               type: 'integer',
               min: 1,
               max: 10000,
-              message: 'Supports up to 10000 High Council members',
+              message: 'Please input a number between 1 and 10000, inclusive',
             },
           ]}
         >
@@ -85,9 +85,13 @@ const HighCouncil = () => {
           label={<span className="form-item-label">High Council Condidate Members</span>}
           validateFirst={true}
           rules={[
-            integerRule,
-            validatorCreate((v) => v < 1, 'Please input a number larger than 1'),
-            validatorCreate((v) => v > 10000, 'Supports up to 10000 High Council members'),
+            {
+              required: true,
+              type: 'integer',
+              min: 1,
+              max: 10000,
+              message: 'Please input a number between 1 and 10000, inclusive',
+            },
           ]}
         >
           <InputNumber disabled={disabled} placeholder="At most 10000 members" controls={false} />
@@ -120,11 +124,13 @@ const HighCouncil = () => {
           }
           validateFirst={true}
           rules={[
-            integerRule,
-            validatorCreate(
-              (v) => v > Number.MAX_SAFE_INTEGER,
-              `Please input a number not larger than ${Number.MAX_SAFE_INTEGER}`,
-            ),
+            {
+              required: true,
+              type: 'integer',
+              min: 0,
+              max: Number.MAX_SAFE_INTEGER,
+              message: `Please input a number between 0 ~ ${Number.MAX_SAFE_INTEGER}`,
+            },
           ]}
         >
           <InputNumber

@@ -5,6 +5,7 @@ import { memo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import ProposalType from './ProposalType';
 import ProposalInfo from './ProposalInfo';
+import { IContractError, IFormValidateError } from 'types';
 import clsx from 'clsx';
 import CommonOperationResultModal, {
   CommonOperationResultModalType,
@@ -13,6 +14,8 @@ import CommonOperationResultModal, {
 import { proposalCreateContractRequest } from 'contract/proposalCreateContract';
 import { emitLoading } from 'utils/myEvent';
 import Link from 'next/link';
+import ProtoInstance from 'utils/decode-log';
+import { propalAddress } from 'config';
 
 interface IGovernanceModelProps {
   daoId: string;
@@ -56,59 +59,67 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
       },
     });
   };
-  const hadnleSubmit = (voteSchemeId: string) => {
+  const hadnleSubmit = async (voteSchemeId: string) => {
     try {
       if (!daoId) {
         openErrorModal();
       }
-      form.validateFields().then(async (res) => {
-        const params = {
-          ...res,
-          proposalBasicInfo: {
-            ...res.proposalBasicInfo,
-            daoId,
-            voteSchemeId: voteSchemeId,
-          },
-        };
-        delete params.proposalBasicInfo.deleteVoteSchemeId;
-        emitLoading(true, 'Submitting the proposal...');
-        console.log('res------- input', params);
-        console.log('res', params);
-        const createRes = await proposalCreateContractRequest('CreateProposal', params);
-        console.log('res', createRes);
-        emitLoading(false);
-        setResultModalConfig({
-          open: true,
-          type: CommonOperationResultModalType.Success,
-          primaryContent: 'Proposal Submitted!',
-          secondaryContent: (
-            <>
-              {res.proposalBasicInfo.proposalTitle}:{res.proposalBasicInfo.proposalDescription}
-            </>
-          ),
-          footerConfig: {
-            buttonList: [
-              {
-                children: 'OK',
-                onClick: () => {
-                  router.push(`/dao/${daoId}`);
-                },
-              },
-            ],
-            childrenNode: (
-              <Link
-                href={`/`}
-                className="color-[colorPrimary] font-500 leading-[22px] text-[14px] "
-              >
-                View Proposal Details
-              </Link>
-            ),
-          },
-        });
-      });
-    } catch (error) {
+      const res = await form.validateFields();
+      const params = {
+        ...res,
+        proposalBasicInfo: {
+          ...res.proposalBasicInfo,
+          daoId,
+          voteSchemeId: voteSchemeId,
+        },
+      };
+      delete params.proposalBasicInfo.deleteVoteSchemeId;
+      emitLoading(true, 'Submitting the proposal...');
+      console.log('res------- input', params);
+      console.log('res', params);
+      const createRes = await proposalCreateContractRequest('CreateProposal', params);
+      console.log('res', createRes);
+
       emitLoading(false);
-      openErrorModal();
+      setResultModalConfig({
+        open: true,
+        type: CommonOperationResultModalType.Success,
+        primaryContent: 'Proposal Submitted!',
+        secondaryContent: (
+          <>
+            {res.proposalBasicInfo.proposalTitle}:{res.proposalBasicInfo.proposalDescription}
+          </>
+        ),
+        footerConfig: {
+          buttonList: [
+            {
+              children: 'OK',
+              onClick: () => {
+                router.push(`/dao/${daoId}`);
+              },
+            },
+          ],
+          childrenNode: (
+            // <Link
+            //   href={`/proposal/${createRes.proposalId}`}
+            //   className="color-[colorPrimary] font-500 leading-[22px] text-[14px] "
+            // >
+            //   View Proposal Details
+            // </Link>
+            <span></span>
+          ),
+        },
+      });
+    } catch (err) {
+      const error = err as IFormValidateError | IContractError;
+      // form Error
+      if ('errorFields' in error) {
+        return;
+      }
+      console.log('error', error);
+      const message = error?.errorMessage?.message || error?.message;
+      emitLoading(false);
+      openErrorModal(undefined, message);
     }
   };
   return (

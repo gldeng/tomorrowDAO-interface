@@ -1,3 +1,5 @@
+export * from './testnet';
+
 export enum WalletType {
   unknown = 'unknown',
   discover = 'discover',

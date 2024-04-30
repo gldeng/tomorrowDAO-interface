@@ -1,12 +1,12 @@
 .dao-detail {
-  @apply w-full block xl:flex flex-col items-center;
+  @apply w-full block flex-col items-center;
 
   .TMRWDAO-select-single {
     @apply h-[32px];
   }
 
   .dao-detail-content {
-    @apply flex mx-4 mb-6;
+    @apply flex my-6;
 
     .dao-detail-content-left {
       @apply flex-1;
@@ -31,16 +31,6 @@
 
     .dao-detail-content-right {
       @apply w-[437px] ml-6;
-    }
-  }
-
-  .address {
-    .acss-ijss2m {
-      @apply text-Neutral-Primary-Text;
-    }
-
-    .acss-ijss2m:hover {
-      @apply text-colorPrimaryHover;
     }
   }
 

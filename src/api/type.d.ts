@@ -1,70 +1,3 @@
-/*
-/api/proposal/detail
-入参
-```
-{
-  "proposalId": "ABC"，
-  "chainId": "", // aelf/tdvv
-}
-```
-出参
-```json
-{
-    "code":"20000",
-    "data":{
-        "chainId":""
-        "daoId": "", 
-        "proposalId": "", // 提案id
-        "releaseAddress": "", // 发布地址
-        "deployTime": "", // 发布时间
-        "proposalTitle": "", // 标题
-        "governanceMechanism": 1,
-        "proposalStatus": "", // 状态
-        "proposalDescription": "", // 提案描述
-        "proposalType":"", //Governance / Advisory
-        "startTime": "", // 提案开始时间
-        "endTime": "", // 投票结束的时间，即提案创建后，活跃期，可投票的时间段
-        "expiredTime": "", // 提案的过期时间，即活跃期投票结束后，在过期时间前需保证提案已被执行
-        "transaction": {
-            "contractName":"",
-            "contractMethodName":"",
-            "toAddress":""
-            "params": {
-                 "param1": "value1",
-                 "param2": "value2"
-             }
-        },
-        "votesAmount": "", // 全部已投票数
-        "approvedCount": "", // 同意票ouz数
-        "rejectionCount": "", // 拒绝票数
-        "abstentionCount": "", // 弃权票数
-        "voterCount": 10, //投票地址数量
-        "minimalRequiredThreshold": 20, //最小需要参与投票的地址数
-        "minimalVoteThreshold": 10, //最小的投票数量阈值；
-        "minimalApproveThreshold": 10, //最小的approve数量阈值；(百分比)
-        "maximalRejectionThreshold": 10, //拒绝数量的上限阈值；(百分比)
-        "maximalAbstentionThreshold": 10 //弃权数量的上限阈值；(百分比)
-        "organizationInfo": {
-            "organizationName":"",
-            "organizationAddress":""
-        },
-        "voteTopList": [
-            {
-             "voter": "xxx1", //投票的地址
-             "amount": 10, //数量
-             "voteOption": "" // Approved / Rejected / Abstained
-           },    
-        ],// Top list, order by vote count desc, 默认 top 10,
-        "tagList": [
-            "DAO Upgrade",
-            "Customized Vote Model"
-        ]
-    },
-    "message": ""
-}
-```
-生成 TS 定义，入参以 Req 结尾，出参以 Res 结尾, data 结构单独定义，去除注释
-*/
 // -------------------------------------dao-list-----------------------------
 interface IListDaoReq {
   skipCount: number; //  0
@@ -132,7 +65,11 @@ interface DaoInfoData {
     logoUrl: string;
     description: string;
     socialMedia: {
-      Twitter: string;
+      twitter?: string;
+      facebook?: string;
+      discrod?: string;
+      telegram?: string;
+      reddit?: string;
     };
   };
   governanceToken: string;

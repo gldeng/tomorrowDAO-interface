@@ -156,7 +156,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
             required: true,
             min: 0,
             max: 300000,
-            message: 'The proposal title supports a maximum of 300,000 characters',
+            message: 'The proposal description supports a maximum of 300,000 characters',
           },
         ]}
       >
@@ -189,7 +189,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
         rules={[
           {
             required: true,
-            message: 'Voters and executors is required',
+            message: 'voters and executors is required',
           },
         ]}
       >
@@ -209,7 +209,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
         rules={[
           {
             required: true,
-            message: 'Vote Model is required',
+            message: 'vote model is required',
           },
         ]}
       >
@@ -229,7 +229,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
         rules={[
           {
             required: true,
-            message: 'Contract Address is required',
+            message: 'contract address is required',
           },
         ]}
         label={<span className="form-item-label">Contract Address</span>}
@@ -249,7 +249,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
         rules={[
           {
             required: true,
-            message: 'Method Name is required',
+            message: 'method name is required',
           },
         ]}
       >
@@ -267,7 +267,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
         rules={[
           {
             required: true,
-            message: 'Method Params is required',
+            message: 'method params is required',
           },
         ]}
       >

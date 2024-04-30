@@ -32,7 +32,6 @@ export const useWalletInit = () => {
         // backToHomeByRoute();
       }
       if (state === WebLoginState.logined) {
-        message.info('login success');
         const walletInfo: WalletInfoType = {
           address: wallet?.address || '',
           publicKey: wallet?.publicKey,

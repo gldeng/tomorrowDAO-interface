@@ -9,7 +9,7 @@ import { useRegisterForm } from '../utils';
 const { Title } = Typography;
 
 const FILE_LIMIT = '20M';
-const MAX_FILE_COUNT = 3;
+const MAX_FILE_COUNT = 20;
 const MAX_FILE_NAME_LENGTH = 128;
 export default function ContractsAndFiles() {
   const [form] = Form.useForm();

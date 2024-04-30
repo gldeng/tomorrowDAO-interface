@@ -4,6 +4,7 @@ import { Divider, Descriptions, DescriptionsProps } from 'antd';
 import useResponsive from 'hooks/useResponsive';
 import PreviewFile from 'components/PreviewFile';
 import { Skeleton, SkeletonList } from 'components/Skeleton';
+import { colorfulSocialMediaIconMap } from 'assets/imgs/socialMediaIcon';
 
 import { HC_CANDIDATE, HC_MEMBER } from '../../constants';
 
@@ -11,7 +12,21 @@ import DaoLogo from 'assets/imgs/dao-logo.svg';
 
 import './index.css';
 import useJumpByPath from 'hooks/useJumpByPath';
+import Link from 'next/link';
 
+const colorfulSocialMediaIconMapKeys = Object.keys(colorfulSocialMediaIconMap).reduce(
+  (acc, key) => ({
+    ...acc,
+    [key.toLowerCase()]: (colorfulSocialMediaIconMap as Record<string, string>)[key],
+  }),
+  {},
+);
+const getSocialUrl = (key: string, val: string) => {
+  if (key === 'twitter') {
+    return `https://twitter.com/${val.includes('@') ? val.split('@')[1] : val}`;
+  }
+  return val;
+};
 interface IParams {
   data?: DaoInfoData;
   onChangeHCParams: any;
@@ -35,6 +50,14 @@ export default function DaoInfo(props: IParams) {
     const originAddress = 'ELF_2UthYi7AHRdfrqc1YCfeQnjdChDLaas65bW4WxESMGMojFiXj9_AELF#contracts';
     jump(`https://explorer.aelf.io/address/${originAddress}`);
   };
+  const socialMedia = metadata?.socialMedia ?? {};
+
+  const socialMediaList = Object.keys(socialMedia).map((key) => {
+    return {
+      name: key,
+      url: socialMedia[key as keyof typeof socialMedia],
+    };
+  });
 
   const items: DescriptionsProps['items'] = [
     {
@@ -128,7 +151,24 @@ export default function DaoInfo(props: IParams) {
             </div>
             <PreviewFile list={fileInfoList} />
           </div>
-          <div className="dao-detail-dis-dis px-4 lg:px-8">{metadata?.description}</div>
+          <div className="dao-detail-dis-dis px-4 lg:px-8">
+            {metadata?.description}
+            <div className="flex gap-2 mt-[16px]">
+              {socialMediaList.map(
+                ({ name, url }, index) =>
+                  url && (
+                    <Link href={getSocialUrl(name, url)} target="_blank" key={index}>
+                      <Image
+                        src={(colorfulSocialMediaIconMapKeys as any)[name]}
+                        alt="media"
+                        width={16}
+                        height={16}
+                      />
+                    </Link>
+                  ),
+              )}
+            </div>
+          </div>
           <Divider className="mb-2 lg:mb-6" />
           <Collapse defaultActiveKey={['1']} ghost>
             <Collapse.Panel header={<Typography.Title>Creator</Typography.Title>} key="1">
