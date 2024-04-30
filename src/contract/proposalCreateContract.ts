@@ -48,7 +48,7 @@ export const proposalCreateContractRequest = async <T>(
       logsName: 'ProposalCreated',
       TransactionResult: transaction,
     });
-    console.log('proposalCreatedRes', proposalCreatedRes)
+    console.log('proposalCreatedRes', proposalCreatedRes);
     return proposalCreatedRes;
   } catch (error) {
     console.error('=====tokenAdapterContractRequest error:', methodName, JSON.stringify(error));
