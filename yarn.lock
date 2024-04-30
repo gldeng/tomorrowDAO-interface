@@ -45,6 +45,15 @@
     antd-style "^3.5.2"
     classnames "^2.3.2"
 
+"@aelf-design/icons@^1.0.0-alpha.13":
+  version "1.0.0-alpha.13"
+  resolved "https://registry.npmjs.org/@aelf-design/icons/-/icons-1.0.0-alpha.13.tgz#96b25c3ffe774bcda799f0b6f7fc6d85def2816d"
+  integrity sha512-aw/6EzYYG2lGhe9ikMNXJIbo/EPF6Mdj351ALJKKd4VfNEKc/efwpREAwI3wsHod19lp1++Mnbf6IydhmDXGpQ==
+  dependencies:
+    "@ant-design/cssinjs" "^1.18.2"
+    antd-style "^3.5.2"
+    classnames "^2.3.2"
+
 "@aelf-react/core@^0.1.19":
   version "0.1.19"
   resolved "https://registry.yarnpkg.com/@aelf-react/core/-/core-0.1.19.tgz#b2052c6c29acfc4abddaed316ab9cc5956420d4d"
@@ -2959,7 +2968,7 @@
   resolved "https://registry.npmjs.org/@portkey-v1/accounts/-/accounts-1.5.4-alpha.22.tgz#a182454a441e72227896aed07849f9818ee28a1a"
   integrity sha512-H5pDgYO4seOR/NMN819GF8049qJcXDfJ6kUxTHLrcAKbIa0Ir9wu/k0wTPR/bEmm6AmOE0LAl6WIP01mfvjXoA==
 
-"@portkey-v1/contracts@^1.5.4-alpha.22":
+"@portkey-v1/contracts@1.5.4-alpha.22", "@portkey-v1/contracts@^1.5.4-alpha.22":
   version "1.5.4-alpha.22"
   resolved "https://registry.npmjs.org/@portkey-v1/contracts/-/contracts-1.5.4-alpha.22.tgz#5be8860eb186fccf425f21950007f92254e59540"
   integrity sha512-CaQ2mfqsv7xTviZmwaup4EAnvNMPPMNhcBnDo5hOQa2dNreAYy5N/BbL0ovctSxibuEXAjPH/BTP0MD0XZcWSA==
@@ -4693,6 +4702,29 @@ aelf-sdk@3.4.1, aelf-sdk@^3.3.0:
     scryptsy "^2.1.0"
     xmlhttprequest "^1.8.0"
 
+aelf-sdk@^3.4.8:
+  version "3.4.8"
+  resolved "https://registry.npmjs.org/aelf-sdk/-/aelf-sdk-3.4.8.tgz#4651246f23bedc4947e6ac5997be1d72ec9345ec"
+  integrity sha512-1AnfBcwfDg4q3ex+x1dM1BWlOEKxPDB0ht3J0HwOa1FmI05p0ScHSK7QMlTr1bv83PQZdKgCc9Qs1bip+xxcgQ==
+  dependencies:
+    "@aelfqueen/protobufjs" "^6.8.9"
+    "@aws-crypto/sha256-js" "^5.0.0"
+    "@babel/runtime" "^7.4.5"
+    assert "^2.0.0"
+    bignumber.js "^9.0.0"
+    bip39 "^3.0.2"
+    bn.js "^5.2.1"
+    browserify-cipher "^1.0.1"
+    bs58 "^4.0.1"
+    buffer "^5.2.1"
+    crypto-js "^4.2.0"
+    elliptic "^6.4.1"
+    hdkey "^1.1.1"
+    query-string "5.1.1"
+    randombytes "^2.1.0"
+    scryptsy "^2.1.0"
+    xmlhttprequest "^1.8.0"
+
 aelf-web-login@2.0.1-beta.8:
   version "2.0.1-beta.8"
   resolved "https://registry.npmjs.org/aelf-web-login/-/aelf-web-login-2.0.1-beta.8.tgz#6d65b965b7905972cb37e28669c86b9529df4b09"
@@ -6075,6 +6107,11 @@ crypto-js@^3.1.9-1:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/crypto-js/-/crypto-js-3.3.0.tgz#846dd1cce2f68aacfa156c8578f926a609b7976b"
   integrity sha512-DIT51nX0dCfKltpRiXV+/TVZq+Qq2NgF4644+K7Ttnla7zEzqc+kjJyiB96BHNyUTBxyjzRcZYpUdZa+QAqi6Q==
+
+crypto-js@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.npmjs.org/crypto-js/-/crypto-js-4.2.0.tgz#4d931639ecdfd12ff80e8186dba6af2c2e856631"
+  integrity sha512-KALDyEYgpY+Rlob/iriUtjV6d5Eq+Y191A5g4UqLAi8CyGP9N1+FdVbkc1SxKc2r4YAYqG8JzO2KGL+AizD70Q==
 
 css-functions-list@^3.1.0:
   version "3.2.1"

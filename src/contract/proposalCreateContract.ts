@@ -1,27 +1,17 @@
-import {
-  IContractOptions,
-  ContractMethodType,
-  ISendResult,
-  IContractError,
-  SupportedELFChainId,
-} from 'types';
-import { store } from 'redux/store';
+import { IContractOptions, ContractMethodType, ISendResult, IContractError } from 'types';
 import { formatErrorMsg } from './util';
 import { getTxResult } from 'utils/getTxResult';
 import { sleep } from 'utils/common';
 import { GetContractServiceMethod } from './baseContract';
+import { propalAddress, curChain } from 'config';
+import ProtoInstance from 'utils/decode-log';
 
-export const proposalCreateContractRequest = async <T, R>(
+export const proposalCreateContractRequest = async <T>(
   methodName: string,
   params: T,
   options?: IContractOptions,
-): Promise<R | ISendResult> => {
-  const info = store.getState().elfInfo.elfInfo;
-  console.log('info', store.getState().elfInfo, '123', store.getState());
-  const contractAddress =
-    info?.propalAddress ?? '2sJ8MDufVDR3V8fDhBPUKMdP84CUf1oJroi9p8Er1yRvMp3fq7';
-
-  const curChain: Chain = info.curChain ?? SupportedELFChainId.TDVW_NET;
+): Promise<IProposalCreated> => {
+  const contractAddress = propalAddress;
 
   console.log(
     '=====multiTokenContractRequest methodName, type, contractAddress, curChain, params: ',
@@ -35,7 +25,7 @@ export const proposalCreateContractRequest = async <T, R>(
   const CallContractMethod = GetContractServiceMethod(curChain, options?.type);
 
   try {
-    const res: R = await CallContractMethod({
+    const res = await CallContractMethod({
       contractAddress,
       methodName,
       args: params,
@@ -47,20 +37,23 @@ export const proposalCreateContractRequest = async <T, R>(
       throw formatErrorMsg(result);
     }
 
-    if (options?.type === ContractMethodType.VIEW) {
-      return res;
-    }
-
     const { transactionId, TransactionId } = result.result || result;
     const resTransactionId = TransactionId || transactionId;
     await sleep(1000);
     const transaction = await getTxResult(resTransactionId!, curChain as Chain);
 
     console.log('=====tokenAdapterContractRequest transaction: ', methodName, transaction);
-    return { TransactionId: transaction.TransactionId, TransactionResult: transaction.txResult };
+    const proposalCreatedRes = await ProtoInstance.getLogEventResult<IProposalCreated>({
+      contractAddress: propalAddress,
+      logsName: 'ProposalCreated',
+      TransactionResult: transaction,
+    });
+    console.log('proposalCreatedRes', proposalCreatedRes)
+    return proposalCreatedRes;
   } catch (error) {
     console.error('=====tokenAdapterContractRequest error:', methodName, JSON.stringify(error));
     const resError = error as IContractError;
-    throw formatErrorMsg(resError);
+    const a = formatErrorMsg(resError);
+    throw a;
   }
 };

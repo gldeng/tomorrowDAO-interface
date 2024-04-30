@@ -9,12 +9,18 @@ const ProposalTab = (props: IProposalTabProps) => {
   const tabItems = [
     {
       key: '1',
-      label: 'Description',
-      children: <div className="text-base	px-8 py-4">{proposalDetailData?.proposalDescription}</div>,
+      label: <span className="flex flex-col lg:flex-row">Description</span>,
+      children: (
+        <div className="text-base px-8 py-4">{proposalDetailData?.proposalDescription}</div>
+      ),
     },
     {
       key: '2',
-      label: 'Contract Information',
+      label: (
+        <span className="flex flex-col lg:flex-row">
+          <span>Contract</span>&nbsp; <span>Information</span>
+        </span>
+      ),
       children: (
         <div className="text-base	px-8 py-4">
           <div className="flex flex-col gap-2 pb-8">
@@ -49,7 +55,12 @@ const ProposalTab = (props: IProposalTabProps) => {
     },
     {
       key: '3',
-      label: 'Organization Information',
+      label: (
+        <span className="flex flex-col lg:flex-row">
+          <span>Organization</span>&nbsp;
+          <span>Information</span>
+        </span>
+      ),
       children: (
         <div className="text-base	px-8 py-4">
           <div className="flex flex-col gap-2 pb-8">

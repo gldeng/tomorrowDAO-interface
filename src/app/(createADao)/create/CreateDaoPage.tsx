@@ -34,6 +34,8 @@ import {
 import { emitLoading } from 'utils/myEvent';
 import Link from 'next/link';
 import { current } from '@reduxjs/toolkit';
+import { IFormValidateError, IContractError } from 'types';
+import { cloneDeepWith } from 'lodash-es';
 
 const initItems: StepsProps['items'] = [
   {
@@ -65,7 +67,7 @@ const CreateDaoPage = () => {
   const { isMD } = useResponsive();
   const [items, setItems] = useState(initItems);
 
-  const stepsFormMapRef = useRef<IStepsContext>(defaultStepsFormMap);
+  const stepsFormMapRef = useRef<IStepsContext>(cloneDeepWith(defaultStepsFormMap));
 
   const handleNextStep = () => {
     const form = stepsFormMapRef.current.stepForm[currentStepString].formInstance;
@@ -109,86 +111,100 @@ const CreateDaoPage = () => {
     const stepForm = stepsFormMapRef.current.stepForm;
     const form = stepForm[StepEnum.step3].formInstance;
     if (form) {
-      form?.validateFields().then(async (res) => {
-        stepForm[StepEnum.step3].submitedRes = res;
-        const originMetadata = stepForm[StepEnum.step0].submitedRes;
-        const metadata = {
-          metadata: {
-            ...originMetadata?.metadata,
-            logoUrl: originMetadata?.metadata?.logoUrl?.[0]?.response?.url,
-          },
-          governanceToken: originMetadata?.governanceToken,
-        };
-        try {
-          const files: IFile[] =
-            stepForm[StepEnum.step3].submitedRes?.files?.map((file) => {
-              const url = new URL(file.response.url);
-              // const url = file.response.url;
-              const id = url.pathname.split('/').pop() ?? '';
-              return {
-                cid: id,
-                name: file.name,
-                url: file.response.url,
-              };
-            }) ?? [];
-          const params: any = {
-            ...metadata,
-            governanceSchemeThreshold: {
-              ...(stepForm[StepEnum.step1].submitedRes ?? {}),
-            },
-            files,
-          };
-          if (!isSkipHighCouncil.current) {
-            params.highCouncilInput = {
-              ...(stepForm[StepEnum.step2].submitedRes ?? {}),
-            };
-          }
-          console.log('params', params);
-          emitLoading(true, 'Uploading...');
-          const createRes = await daoCreateContractRequest('CreateDAO', params);
-          // todo loading
-          emitLoading(false);
-          submitButtonRef.current?.setResultModalConfig({
-            open: true,
-            type: CommonOperationResultModalType.Success,
-            primaryContent: 'Network DAO is created successfully',
-            secondaryContent: (
-              <>
-                If you wish to modify the DAO&apos;s display information, you can join the{' '}
-                <Link className="text-colorPrimary cursor-pointer" href={'https://t.me/tmrwdao'}>
-                  Telegram group
-                </Link>
-                .
-              </>
-            ),
-            footerConfig: {
-              buttonList: [
-                {
-                  children: <Link href={`/`}>View My DAO</Link>,
-                },
-              ],
-            },
-          });
-        } catch (error) {
-          emitLoading(false);
-          submitButtonRef.current?.setResultModalConfig({
-            open: true,
-            type: CommonOperationResultModalType.Error,
-            primaryContent: 'Failed to Create the DAO',
-            secondaryContent: 'Failed to Create the DAO',
-            footerConfig: {
-              buttonList: [
-                {
-                  children: 'Back',
-                  onClick: () => {
-                    submitButtonRef.current?.initResultModalConfig();
-                  },
-                },
-              ],
-            },
-          });
+      const res = await form?.validateFields();
+      stepForm[StepEnum.step3].submitedRes = res;
+      const originMetadata = stepForm[StepEnum.step0].submitedRes;
+      const originSocialMedia = (originMetadata?.metadata?.socialMedia ?? {}) as object;
+      const socialMedia = Object.keys(originSocialMedia).reduce((acc, key) => {
+        const k = key as keyof typeof originSocialMedia;
+        if (originSocialMedia[k]) {
+          acc[key] = originSocialMedia[k];
         }
-      });
+        return acc;
+      }, {} as Record<string, string>);
+      const metadata = {
+        metadata: {
+          ...originMetadata?.metadata,
+          logoUrl: originMetadata?.metadata?.logoUrl?.[0]?.response?.url,
+          socialMedia,
+        },
+        governanceToken: originMetadata?.governanceToken,
+      };
+      try {
+        const files: IFile[] =
+          stepForm[StepEnum.step3].submitedRes?.files?.map((file) => {
+            const url = new URL(file.response.url);
+            // const url = file.response.url;
+            const id = url.pathname.split('/').pop() ?? '';
+            return {
+              cid: id,
+              name: file.name,
+              url: file.response.url,
+            };
+          }) ?? [];
+        const params: any = {
+          ...metadata,
+          governanceSchemeThreshold: {
+            ...(stepForm[StepEnum.step1].submitedRes ?? {}),
+          },
+          files,
+        };
+        if (!isSkipHighCouncil.current) {
+          params.highCouncilInput = {
+            ...(stepForm[StepEnum.step2].submitedRes ?? {}),
+          };
+        }
+        console.log('params', params);
+        emitLoading(true, 'Uploading...');
+        const createRes = await daoCreateContractRequest('CreateDAO', params);
+        emitLoading(false);
+        submitButtonRef.current?.setResultModalConfig({
+          open: true,
+          type: CommonOperationResultModalType.Success,
+          primaryContent: 'Network DAO is created successfully',
+          secondaryContent: (
+            <>
+              If you wish to modify the DAO&apos;s display information, you can join the{' '}
+              <Link className="text-colorPrimary cursor-pointer" href={'https://t.me/tmrwdao'}>
+                Telegram group
+              </Link>
+              .
+            </>
+          ),
+          footerConfig: {
+            buttonList: [
+              {
+                children: <Link href={`/`}>View My DAO</Link>,
+              },
+            ],
+          },
+        });
+      } catch (err) {
+        const error = err as IFormValidateError | IContractError;
+        // form Error
+        if ('errorFields' in error) {
+          return;
+        }
+        console.log('error', error);
+        const message = error?.errorMessage?.message || error?.message;
+        emitLoading(false);
+        submitButtonRef.current?.setResultModalConfig({
+          open: true,
+          type: CommonOperationResultModalType.Error,
+          primaryContent: 'Failed to Create the DAO',
+          secondaryContent: message,
+          footerConfig: {
+            buttonList: [
+              {
+                children: 'Back',
+                onClick: () => {
+                  submitButtonRef.current?.initResultModalConfig();
+                },
+              },
+            ],
+          },
+        });
+      }
     }
   };
 
@@ -203,7 +219,7 @@ const CreateDaoPage = () => {
   console.log('currentStepString', currentStepString);
 
   return isLogin ? (
-    <div>
+    <div className="px-4 lg:px-8">
       <Typography.Title className="py-6" level={5} fontWeight={FontWeightEnum.Medium}>
         Create your DAO to TMRW DAO
       </Typography.Title>
@@ -287,7 +303,11 @@ const CreateDaoPage = () => {
       </StepsContext.Provider>
     </div>
   ) : (
-    <Result status="warning" title="Please log in first before creating a DAO" />
+    <Result
+      className="px-4 lg:px-8"
+      status="warning"
+      title="Please log in first before creating a DAO"
+    />
   );
 };
 

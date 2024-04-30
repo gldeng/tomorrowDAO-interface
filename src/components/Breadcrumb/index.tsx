@@ -6,9 +6,7 @@ export interface INavItemProps {
   href?: string;
 }
 const NavForPC = ({ items }: { items: INavItemProps[] }) => {
-  return (
-    <Breadcrumb separator=">" items={items} className="py-6 max-w-[898px] w-[898px] mx-auto " />
-  );
+  return <Breadcrumb separator=">" items={items} />;
 };
 
 export default memo(NavForPC);

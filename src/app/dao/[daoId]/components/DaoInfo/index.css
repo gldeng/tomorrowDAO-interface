@@ -1,21 +1,27 @@
 .dao-detail-dis {
-  @apply  border border-Neutral-Divider border-solid rounded-lg bg-white py-6 mb-6 pb-0 mx-4 ;
+  @apply border border-Neutral-Divider border-solid rounded-lg bg-white pt-6;
+
   .dao-detail-dis-title {
     @apply flex justify-between;
   }
+
   .dao-detail-dis-dis {
     @apply text-neutralPrimaryText mt-2.5;
   }
+
   .dis-item {
     @apply flex items-center text-neutralPrimaryText;
+
     .dis-common-span {
       @apply text-colorPrimary mr-1 cursor-pointer;
     }
   }
-  .TMRWDAO-collapse-header{
+
+  .TMRWDAO-collapse-header {
     @apply px-4 lg:px-8 !important;
   }
-  .TMRWDAO-collapse-content-box{
+
+  .TMRWDAO-collapse-content-box {
     @apply px-4 lg:px-8 !important;
   }
 }

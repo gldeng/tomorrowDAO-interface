@@ -137,3 +137,23 @@ export const proposalTypeList = [
     disable: true,
   },
 ];
+
+export interface IFormValidateError {
+  values?: {};
+  errorFields: [];
+  outOfDate?: Boolean;
+}
+
+export interface ITransactionResult {
+  TransactionId: string;
+  Status: string;
+  Logs: ITransactionLog[];
+  [props: string]: any;
+}
+
+export interface ITransactionLog {
+  Address: string;
+  Name: string;
+  Indexed: string[];
+  NonIndexed: string;
+}

@@ -4,11 +4,13 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import useJumpByPath from 'hooks/useJumpByPath';
 import { ReactComponent as CircleDot } from 'assets/imgs/circle-dot.svg';
+import { symbolmarketUrl } from 'config';
 
 const linkArr = [
-  { label: 'PTreasury Contract', path: '/' },
-  { label: 'Voting Contract', path: '/' },
-  { label: 'Election Contract', path: '/' },
+  { label: 'DAO Governance contract', path: '/' },
+  { label: 'Treasury contract', path: '/' },
+  { label: 'Voting contract', path: '/' },
+  { label: 'Election contract', path: '/' },
 ];
 
 const offers = [
@@ -22,7 +24,6 @@ const offers = [
   },
   { label: 'Robust community of builders, users, and tools' },
 ];
-const URL_FOR_TSM = 'https://eforest.finance/symbolmarket';
 
 const GuidePage = () => {
   const router = useRouter();
@@ -32,11 +33,11 @@ const GuidePage = () => {
     router.push('/create');
   };
   const onJumpHandler = () => {
-    jump(URL_FOR_TSM);
+    jump(symbolmarketUrl);
   };
 
   return (
-    <div>
+    <div className="px-4 lg:px-8">
       <div className="py-6 flex flex-col gap-3 border-0 border-b border-solid border-Neutral-Divider">
         <Typography.Title level={5} fontWeight={FontWeightEnum.Medium}>
           Governance Framework on TMRW DAO
