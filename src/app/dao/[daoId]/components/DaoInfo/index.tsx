@@ -14,13 +14,17 @@ import './index.css';
 import useJumpByPath from 'hooks/useJumpByPath';
 import Link from 'next/link';
 
+const firstLetterToLowerCase = (str: string) => {
+  return str.charAt(0).toLowerCase() + str.slice(1);
+};
 const colorfulSocialMediaIconMapKeys = Object.keys(colorfulSocialMediaIconMap).reduce(
   (acc, key) => ({
     ...acc,
-    [key.toLowerCase()]: (colorfulSocialMediaIconMap as Record<string, string>)[key],
+    [firstLetterToLowerCase(key)]: (colorfulSocialMediaIconMap as Record<string, string>)[key],
   }),
   {},
 );
+
 const getSocialUrl = (key: string, val: string) => {
   if (key === 'twitter') {
     return `https://twitter.com/${val.includes('@') ? val.split('@')[1] : val}`;
@@ -54,7 +58,7 @@ export default function DaoInfo(props: IParams) {
 
   const socialMediaList = Object.keys(socialMedia).map((key) => {
     return {
-      name: key,
+      name: firstLetterToLowerCase(key),
       url: socialMedia[key as keyof typeof socialMedia],
     };
   });
