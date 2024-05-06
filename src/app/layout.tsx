@@ -26,16 +26,16 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
           name="viewport"
         />
         {/* <link rel="shortcut icon" href="/aelfinscription/favicon.ico" /> */}
-        {/* <Script src="https://www.googletagmanager.com/gtag/js?id=G-J0D8TQCBTF" />
+        <Script async src="https://www.googletagmanager.com/gtag/js?id=G-Z5LV4SE2RX"></Script>
         <Script id="google-analytics">
           {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
- 
-          gtag('config', 'G-J0D8TQCBTF');
-        `}
-        </Script> */}
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+          
+            gtag('config', 'G-Z5LV4SE2RX');
+          `}
+        </Script>
       </head>
       <body>
         <StyleRegistry>
