@@ -4,10 +4,6 @@
     @apply w-full;
   }
 
-  .form-item-label {
-    @apply font-medium leading-[24px];
-  }
-
   .form-title-primary {
     @apply text-[20px] leading-[28px] text-neutralTitle font-medium;
   }

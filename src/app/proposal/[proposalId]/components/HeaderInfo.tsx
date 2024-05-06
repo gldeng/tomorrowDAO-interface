@@ -31,16 +31,16 @@ const HeaderInfo = (props: IHeaderInfoProps) => {
           </Typography.Text> */}
         </div>
         <div className="flex gap-6">
-          <div className="flex items-center gap-2 py-1.5 px-4 rounded-md bg-Neutral-Default-BG">
+          {/* <div className="flex items-center gap-2 py-1.5 px-4 rounded-md bg-Neutral-Default-BG">
             <Image className="mr-1" width={14} height={14} src={ProposalDetailFile} alt=""></Image>
             <Typography.Text
               size="small"
               className="text-Primary-Text"
               fontWeight={FontWeightEnum.Medium}
             >
-              Preview File
+              Documentation
             </Typography.Text>
-          </div>
+          </div> */}
           <div className="w-8 h-8 cursor-pointer bg-Neutral-Default-BG rounded-md flex justify-center items-center">
             <Image src={colorfulSocialMediaIconMap.Twitter} alt="x" width={11} height={10} />
           </div>

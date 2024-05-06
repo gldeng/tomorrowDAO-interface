@@ -68,7 +68,7 @@ export default function RecordTable() {
       ),
     },
     {
-      title: 'My Option',
+      title: 'My Operation',
       dataIndex: 'MyOption',
       filters: [
         { text: 'All', value: '' },

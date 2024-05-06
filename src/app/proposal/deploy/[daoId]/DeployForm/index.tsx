@@ -59,7 +59,7 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
       },
     });
   };
-  const hadnleSubmit = async (voteSchemeId: string) => {
+  const handleSubmit = async (voteSchemeId: string) => {
     try {
       if (!daoId) {
         openErrorModal();
@@ -74,7 +74,7 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
         },
       };
       delete params.proposalBasicInfo.deleteVoteSchemeId;
-      emitLoading(true, 'Submitting the proposal...');
+      emitLoading(true, 'The transaction is being processed...');
       console.log('res------- input', params);
       console.log('res', params);
       const createRes = await proposalCreateContractRequest('CreateProposal', params);
@@ -124,29 +124,6 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
   };
   return (
     <div className="deploy-proposal-form mt-[24px] mb-[24px]">
-      {/* <button
-        onClick={async () => {
-          let params = {
-            proposalType: 2,
-            proposalBasicInfo: {
-              proposalTitle: '2121',
-              proposalDescription: '21212',
-              forumUrl: 'http://baidu.com',
-              schemeAddress: '8XepdGhyo27gUQNVzqq7GVvdEvMDXcxqPuQpXvBkooxzDb34S',
-              daoId: 'ce67effe8525732b8d07687302dd22cb0795582899e067387ce3a8fffb1fb71d',
-              voteSchemeId: '06c84e65f48d95959cb580bfe13c45a3f5eec2ecb7851dc44e2f0b4362adafbc',
-            },
-            transaction: {
-              toAddress: '2sJ8MDufVDR3V8fDhBPUKMdP84CUf1oJroi9p8Er1yRvMp3fq7',
-              contractMethodName: 'CreateTreasury',
-              params: 21,
-            },
-          };
-          const createRes = proposalCreateContractRequest('CreateProposal', params);
-        }}
-      >
-        debug
-      </button> */}
       <Form
         form={form}
         layout="vertical"
@@ -166,7 +143,7 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
             setNext(true);
           }}
         />
-        <ProposalInfo className={clsx({ hidden: !isNext })} daoId={daoId} onSubmit={hadnleSubmit} />
+        <ProposalInfo className={clsx({ hidden: !isNext })} daoId={daoId} onSubmit={handleSubmit} />
       </Form>
       <CommonOperationResultModal
         {...resultModalConfig}

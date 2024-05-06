@@ -3,6 +3,7 @@
 import { Input, Tooltip } from 'aelf-design';
 import { Form, InputNumber } from 'antd';
 import { memo, useContext, useMemo } from 'react';
+import { InfoCircleOutlined } from '@aelf-design/icons';
 import { useRequest } from 'ahooks';
 import InputSlideBind from 'components/InputSlideBind';
 import { integerRule, min2maxIntegerRule, validatorCreate, useRegisterForm } from '../utils';
@@ -42,27 +43,41 @@ const HighCouncil = () => {
         scrollToFirstError={true}
       >
         <div>
-          <h2 className="form-title-primary cursor-pointer">High Council</h2>
+          <h2 className="form-title-primary cursor-pointer">
+            High Council, a supplementary governance mechanism
+          </h2>
           <p className="font-normal text-neutralPrimaryText text-[16px] leading-[24px] mb-[48px]">
-            High Council is a collection of top-ranked addresses who staked and are voted by
-            govemance tokens in a specific smart contract with primary governance responsibilities
-            for the DAO. Its members may have certain governance or sensitive permissions.
+            As an optional governance choice that supplements referendum, High Council consists of
+            top-ranked addresses who stake governance tokens in the Election contract and receive
+            votes. High Council members have the authority and responsibility in DAO governance.
           </p>
         </div>
 
         <Form.Item
           label={
-            <Tooltip title="After initially staking a certain amount of tokens in the Election contract, you will be able to receive votes from other addresses. Stakers with a higher number of votes will become members of the High Council.">
-              <span className="form-item-label">Election contract</span>
+            <Tooltip title="The Election contract facilitates the election of High Council members. Users interested in becoming High Council members must stake a specified number of governance tokens in the contract to become eligible for election and receive votes from other addresses, with those accumulating more votes being elected as High Council members. If no user stake tokens in this contract, the DAO creator will automatically become a High Council member.">
+              <span className="form-item-label">
+                Election Contract
+                <InfoCircleOutlined className="cursor-pointer label-icon" />
+              </span>
             </Tooltip>
           }
         >
-          <Input disabled defaultValue={electionContractAddress} />
+          <Input disabled defaultValue={electionContractAddress + 'mock address'} />
         </Form.Item>
 
         <Form.Item
           name={['highCouncilConfig', 'maxHighCouncilMemberCount']}
-          label={<span className="form-item-label">High Council Members</span>}
+          label={
+            <Tooltip
+              title={`Users interested in becoming High Council members must stake a specified number of governance tokens to become eligible for election and receive votes from other addresses, with those accumulating more votes being elected as High Council members. The number of High Council members can be changed through proposals.`}
+            >
+              <span className="form-item-label">
+                Number of High Council Members
+                <InfoCircleOutlined className="cursor-pointer label-icon" />
+              </span>
+            </Tooltip>
+          }
           validateFirst={true}
           rules={[
             {
@@ -74,15 +89,20 @@ const HighCouncil = () => {
             },
           ]}
         >
-          <InputNumber
-            disabled={disabled}
-            placeholder="At least 7 members required"
-            controls={false}
-          />
+          <InputNumber disabled={disabled} placeholder="Enter 1 or more" controls={false} />
         </Form.Item>
         <Form.Item
           name={['highCouncilConfig', 'maxHighCouncilCandidateCount']}
-          label={<span className="form-item-label">High Council Condidate Members</span>}
+          label={
+            <Tooltip
+              title={`Users who stake the required number of governance tokens but fail to accumulate enough votes to rank among the top addresses will become High Council candidates, maximum 10,000. The number of High Council candidates can be changed through proposals.`}
+            >
+              <span className="form-item-label">
+                Number of High Council Candidates
+                <InfoCircleOutlined className="cursor-pointer label-icon" />
+              </span>
+            </Tooltip>
+          }
           validateFirst={true}
           rules={[
             {
@@ -94,32 +114,44 @@ const HighCouncil = () => {
             },
           ]}
         >
-          <InputNumber disabled={disabled} placeholder="At most 10000 members" controls={false} />
+          <InputNumber disabled={disabled} placeholder="Enter 10,000 or less" controls={false} />
         </Form.Item>
         <Form.Item
           name={['highCouncilConfig', 'lockTokenForElection']}
-          label={<span className="form-item-label">Stake threshold</span>}
+          label={
+            <Tooltip
+              title={`The number of governance tokens that a user need to stake to become eligible for High Council election.`}
+            >
+              <span className="form-item-label">
+                Staking Requirement
+                <InfoCircleOutlined className="cursor-pointer label-icon" />
+              </span>
+            </Tooltip>
+          }
           validateFirst={true}
           rules={[
             integerRule,
             validatorCreate((v) => v < 1, 'Please input a number larger than 1'),
             validatorCreate(
               (v) => v > Number(daoCreateToken?.totalSupply ?? 10000),
-              'The amount staked to become a HC member cannot exceed the maximum supply of the token.',
+              'The number should not exceed the total supply of the token.',
             ),
           ]}
         >
           <InputNumber
             disabled={disabled}
-            placeholder="Refer to the governance token circulation to give a reasonable value."
+            placeholder="Enter a reasonable value based on the circulation of the governance token."
             controls={false}
           />
         </Form.Item>
         <Form.Item
           name={['highCouncilConfig', 'electionPeriod']}
           label={
-            <Tooltip title="The number of days for the rotation of High Council members, counted from the day after the DAO is created. If zero is entered, it means there is no rotation for High Council members.">
-              <span className="form-item-label">High Council member term length</span>
+            <Tooltip title="This is the duration, in days, for the rotation of High Council members. The countdown begins from the day when the DAO is created. Entering zero means that there is no rotation for High Council members.">
+              <span className="form-item-label">
+                Rotation Term for High Council Members
+                <InfoCircleOutlined className="cursor-pointer label-icon" />
+              </span>
             </Tooltip>
           }
           validateFirst={true}
@@ -135,7 +167,7 @@ const HighCouncil = () => {
         >
           <InputNumber
             disabled={disabled}
-            placeholder="Days that High Council members can serve in each round"
+            placeholder="Enter the frequency at which High Council members rotate"
             controls={false}
             suffix="Days"
           />
@@ -143,7 +175,16 @@ const HighCouncil = () => {
         {/* governanceSchemeThreshold */}
         <Form.Item
           name={['governanceSchemeThreshold', 'minimalRequiredThreshold']}
-          label={<span className="form-item-label">Minimum voting proportion</span>}
+          label={
+            <Tooltip
+              title={`The minimum percentage of High Council member addresses required to participate in voting on proposals.`}
+            >
+              <span className="form-item-label">
+                Minimum Participation Rate
+                <InfoCircleOutlined className="cursor-pointer label-icon" />
+              </span>
+            </Tooltip>
+          }
           initialValue={75}
           validateFirst={true}
           rules={[
@@ -155,15 +196,18 @@ const HighCouncil = () => {
           <InputSlideBind
             disabled={disabled}
             type="approve"
-            placeholder={'Suggest setting it above 50%'}
+            placeholder={'The suggested percentage is no less than 75%.'}
           />
         </Form.Item>
 
         <Form.Item
           name={['governanceSchemeThreshold', 'minimalVoteThreshold']}
           label={
-            <Tooltip title="The minimum number of votes required to finalize a proposal. Only applicable to proposals with 1 token 1 vote proposals.">
-              <span className="form-item-label">Minimum votes</span>
+            <Tooltip
+              title={`The minimum number of votes required to finalise proposals, only applicable to the voting mechanism where "1 token = 1 vote".
+            Note: There are two types of voting mechanisms: "1 token = 1 vote" and "1 address = 1 vote". You can choose the voting mechanism when you create the proposal.`}
+            >
+              <span className="form-item-label">Minimum Vote Requirement</span>
             </Tooltip>
           }
           validateFirst={true}
@@ -171,7 +215,7 @@ const HighCouncil = () => {
         >
           <InputNumber
             disabled={disabled}
-            placeholder="Refer to the governance token circulation to give a reasonable value"
+            placeholder="Enter a reasonable value"
             controls={false}
           />
         </Form.Item>
@@ -179,7 +223,16 @@ const HighCouncil = () => {
 
         <Form.Item
           name={['governanceSchemeThreshold', 'minimalApproveThreshold']}
-          label={<span className="form-item-label">Minimum percentage of approved votes </span>}
+          label={
+            <Tooltip
+              title={`The lowest percentage of approve votes required for a proposal to be approved. This is applicable to both voting mechanisms, where "1 token = 1 vote" or "1 address = 1 vote".`}
+            >
+              <span className="form-item-label">
+                Minimum Approval Rate
+                <InfoCircleOutlined className="cursor-pointer label-icon" />
+              </span>
+            </Tooltip>
+          }
           initialValue={67}
           validateFirst={true}
           rules={[
@@ -191,12 +244,22 @@ const HighCouncil = () => {
           <InputSlideBind
             disabled={disabled}
             type="approve"
-            placeholder={'Suggest setting it above 50%'}
+            placeholder={'The suggested percentage is no less than 67%.'}
           />
         </Form.Item>
         <Form.Item
           name={['governanceSchemeThreshold', 'maximalRejectionThreshold']}
-          label={<span className="form-item-label">Maximum percentage of rejected votes</span>}
+          label={
+            <Tooltip
+              title={`The percentage of reject votes at which a proposal would be rejected. This is applicable to both voting mechanisms, where "1 token = 1 vote" or "1 address = 1 vote".
+            Note: If the rejection threshold and other thresholds are met simultaneously, the proposal will be rejected. `}
+            >
+              <span className="form-item-label">
+                Maximum Rejection Rate
+                <InfoCircleOutlined className="cursor-pointer label-icon" />
+              </span>
+            </Tooltip>
+          }
           initialValue={20}
           validateFirst={true}
           rules={[
@@ -208,12 +271,22 @@ const HighCouncil = () => {
           <InputSlideBind
             disabled={disabled}
             type="rejection"
-            placeholder={'Suggest setting it below 20%'}
+            placeholder={'The suggested percentage is no greater than 20%.'}
           />
         </Form.Item>
         <Form.Item
           name={['governanceSchemeThreshold', 'maximalAbstentionThreshold']}
-          label={<span className="form-item-label">Maximum percentage of abstain votes</span>}
+          label={
+            <Tooltip
+              title={`The percentage of abstain votes at which a proposal would be classified as abstained. This is applicable to both voting mechanisms, where "1 token = 1 vote" or "1 address = 1 vote".
+            Note: If the abstain threshold and approval threshold are met simultaneously, the proposal will be classified as abstained. `}
+            >
+              <span className="form-item-label">
+                Maximum Abstain Rate
+                <InfoCircleOutlined className="cursor-pointer label-icon" />
+              </span>
+            </Tooltip>
+          }
           initialValue={20}
           validateFirst={true}
           rules={[
@@ -225,7 +298,7 @@ const HighCouncil = () => {
           <InputSlideBind
             disabled={disabled}
             type="abstention"
-            placeholder={'Suggest setting it below 20%'}
+            placeholder={'The suggested percentage is no greater than 20%.'}
           />
         </Form.Item>
       </Form>

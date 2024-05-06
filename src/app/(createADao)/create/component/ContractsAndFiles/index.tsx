@@ -33,10 +33,10 @@ export default function ContractsAndFiles() {
   return (
     <div className="contracts-and-files">
       <Title className="primary-text" level={6} fontWeight={FontWeightEnum.Medium}>
-        Documentations
+        Documentation
       </Title>
       <Title className="secondary-text">
-        It is recommended to upload at least a white paper and roadmap.
+        It is recommended to upload at least a white paper and a roadmap.
       </Title>
       <Form
         form={form}
@@ -57,8 +57,7 @@ export default function ContractsAndFiles() {
               type: 'array',
               min: 1,
               max: 20,
-              message:
-                'add at least one documentation，If you reach the upload limit of 20 files. Please remove an existing file to upload a new one, or add the telegram group if you need assistance with managing your files.',
+              message: `You have reached the maximum limit of 20 files. Please consider removing some files before uploading a new one. If you need further assistance, you can join TMRWDAO's Telegram group.`,
             },
           ]}
           valuePropName="fileList"
@@ -72,7 +71,7 @@ export default function ContractsAndFiles() {
             maxCount={MAX_FILE_COUNT}
             fileNameLengthLimit={MAX_FILE_NAME_LENGTH}
             uploadIconColor="#1A1A1A"
-            uploadText="Click to upload"
+            uploadText="Click to Upload"
             tips={uploadTips}
             disabled={isUploadDisabled}
           />

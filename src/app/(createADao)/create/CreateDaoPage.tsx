@@ -39,7 +39,7 @@ import { cloneDeepWith } from 'lodash-es';
 
 const initItems: StepsProps['items'] = [
   {
-    title: 'Basic Details',
+    title: 'Basic Information',
   },
   {
     title: 'Referendum',
@@ -48,7 +48,7 @@ const initItems: StepsProps['items'] = [
     title: 'High Council (optional)',
   },
   {
-    title: 'Contracts And Files',
+    title: 'Documentation',
   },
 ];
 
@@ -106,7 +106,6 @@ const CreateDaoPage = () => {
     },
     [currentStepString],
   );
-  emitLoading(false);
   const handleCreateDao = async () => {
     const stepForm = stepsFormMapRef.current.stepForm;
     const form = stepForm[StepEnum.step3].formInstance;
@@ -155,20 +154,21 @@ const CreateDaoPage = () => {
           };
         }
         console.log('params', params);
-        emitLoading(true, 'Uploading...');
+        emitLoading(true, 'The transaction is being processed...');
         const createRes = await daoCreateContractRequest('CreateDAO', params);
         emitLoading(false);
         submitButtonRef.current?.setResultModalConfig({
           open: true,
           type: CommonOperationResultModalType.Success,
-          primaryContent: 'Network DAO is created successfully',
+          primaryContent: `${originMetadata?.metadata.name} Created Successfully`,
           secondaryContent: (
             <>
-              If you wish to modify the DAO&apos;s display information, you can join the{' '}
+              Feel free to join TMRWDAO&lsquo;s
               <Link className="text-colorPrimary cursor-pointer" href={'https://t.me/tmrwdao'}>
                 Telegram group
-              </Link>
-              .
+              </Link>{' '}
+              to connect with the team and get assistance with tasks such as modifying the
+              DAO&lsquo;s information. .
             </>
           ),
           footerConfig: {
@@ -191,7 +191,7 @@ const CreateDaoPage = () => {
         submitButtonRef.current?.setResultModalConfig({
           open: true,
           type: CommonOperationResultModalType.Error,
-          primaryContent: 'Failed to Create the DAO',
+          primaryContent: 'DAO Creation Failed',
           secondaryContent: message,
           footerConfig: {
             buttonList: [
@@ -221,7 +221,7 @@ const CreateDaoPage = () => {
   return isLogin ? (
     <div className="px-4 lg:px-8">
       <Typography.Title className="py-6" level={5} fontWeight={FontWeightEnum.Medium}>
-        Create your DAO to TMRW DAO
+        Create a DAO
       </Typography.Title>
       <div className="font-medium pt-6 lg:pt-8 pb-10 lg:pb-12 border-0 border-t border-solid border-Neutral-Divider px-0 lg:px-[34px]">
         <Steps

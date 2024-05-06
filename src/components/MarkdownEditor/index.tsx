@@ -31,7 +31,7 @@ export default function MarkdownEditor({ value, onChange }: IMarkdownEditorProps
   return (
     <MdEditor
       className="markdown-editor"
-      placeholder="Please input the content"
+      placeholder="Describe the proposal"
       view={{
         menu: true,
         md: true,

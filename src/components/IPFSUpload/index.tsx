@@ -92,14 +92,14 @@ const FUpload: React.FC<IFUploadProps> = ({
 
     const isLteLimit = file.size <= handleLimit(fileLimit);
     if (!isLteLimit) {
-      message.error(`Only files smaller than ${fileLimit}B are supported.`);
+      message.error(`File too large. Please upload an File no larger than ${fileLimit}`);
     }
     result = isLteLimit;
 
     if (needCheckImgSize) {
       const checkSize = await checkImgSize(file);
       if (!checkSize) {
-        message.error('Only images of 512*512 are supported.');
+        message.error('Please upload an imgae of 512*512.');
       }
       result = result && checkSize;
     }
@@ -128,7 +128,7 @@ const FUpload: React.FC<IFUploadProps> = ({
       const fileUrl = uploadData?.url ?? '';
       onSuccess?.({ url: fileUrl });
     } catch (error) {
-      message.error(`customRequest: upload error`);
+      message.error(`Please check your internet connection and try again.`);
       onError?.(error as Error);
     } finally {
       emitLoading(false);

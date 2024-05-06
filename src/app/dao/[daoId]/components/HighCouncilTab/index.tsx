@@ -64,7 +64,7 @@ export default function HighCounCilTab(props: {
       dataIndex: 'key',
     },
     {
-      title: 'Type',
+      title: 'Role',
       dataIndex: 'type',
       filters: [
         { text: 'All', value: '' },
@@ -82,12 +82,12 @@ export default function HighCounCilTab(props: {
       width: '200',
     },
     {
-      title: 'Staked Token',
+      title: 'Token Staked',
       dataIndex: 'stakeAmount',
       sorter: true,
     },
     {
-      title: 'Obtained Votes',
+      title: 'Votes Received',
       dataIndex: 'votesAmount',
       sorter: true,
       defaultSortOrder: 'descend',
@@ -177,7 +177,7 @@ export default function HighCounCilTab(props: {
         <Typography.Title fontWeight={FontWeightEnum.Medium} level={6}>
           High Council Members
         </Typography.Title>
-        <Typography.Text fontWeight={FontWeightEnum.Medium}>Total of 17 members</Typography.Text>
+        <Typography.Text fontWeight={FontWeightEnum.Medium}>-num- Members in Total</Typography.Text>
       </div>
       <ConfigProvider renderEmpty={() => <NoData></NoData>}>
         <Table

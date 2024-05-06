@@ -14,15 +14,26 @@ const linkArr = [
 ];
 
 const offers = [
-  { label: 'Trusted by DAOs that play a central role in aelf network governance' },
-  { label: 'Protects about one billion of dollars in assets' },
-  { label: 'Enable flexible, trustless protocol upgrades' },
-  { label: 'Supports all kinds of governance tokens deployed on aelf chain' },
   {
-    label:
-      'Customizable number of participants, governance model,voting model, voting period and more',
+    label: 'Trustworthy',
+    text: ' Trusted by the aelf network for creating its DAO, guaranteeing reliability and integrity.',
   },
-  { label: 'Robust community of builders, users, and tools' },
+  {
+    label: 'Secure',
+    text: 'Provides robust security measures to protect user assets and DAO treasuries.',
+  },
+  {
+    label: 'Trustless',
+    text: 'Operates entirely through collective decision-making using smart contracts, eliminating the need for intermediaries.',
+  },
+  {
+    label: 'Customisable',
+    text: 'Enables the customisation of governance mechanisms, voting rules, and other parameters to suit specific needs.',
+  },
+  {
+    label: 'Boundless',
+    text: 'Accomodates a wide range of scenarios and offers a low entry barrier for creating and participating in DAOs.',
+  },
 ];
 
 const GuidePage = () => {
@@ -40,16 +51,17 @@ const GuidePage = () => {
     <div className="px-4 lg:px-8">
       <div className="py-6 flex flex-col gap-3 border-0 border-b border-solid border-Neutral-Divider">
         <Typography.Title level={5} fontWeight={FontWeightEnum.Medium}>
-          Governance Framework on TMRW DAO
+          Governance Framework on TMRWDAO
         </Typography.Title>
         <Typography.Text>
-          The first secure and comprehensive platform for creating DAOs based on the aelf network.
+          Launch your own DAO with a customisable governance framework tailored to your
+          organisation&lsquo;s needs.
         </Typography.Text>
       </div>
 
       <div className="py-6">
         <Typography.Title level={6} fontWeight={FontWeightEnum.Medium}>
-          It offers
+          Features
         </Typography.Title>
         <div className="pt-4">
           <ul className="flex flex-col gap-4">
@@ -58,7 +70,9 @@ const GuidePage = () => {
                 <div className="flex items-center h-[22px]">
                   <CircleDot />
                 </div>
-                <Typography.Text className="flex-1">{ele.label}</Typography.Text>
+                <Typography.Text className="flex-1">
+                  <strong>{ele.label}</strong>: {ele.text}
+                </Typography.Text>
               </li>
             ))}
           </ul>
@@ -67,7 +81,7 @@ const GuidePage = () => {
 
       <div className="py-6">
         <Typography.Title level={6} fontWeight={FontWeightEnum.Medium}>
-          It requires
+          All You Need to Do
         </Typography.Title>
         <div className="pt-4">
           <ul className="flex flex-col gap-4">
@@ -76,13 +90,18 @@ const GuidePage = () => {
                 <CircleDot />
               </div>
               <div className="flex-1">
-                <Typography.Text>Issue a governance token for voting if you need.</Typography.Text>
-                <Typography.Text
-                  onClick={onJumpHandler}
-                  fontWeight={FontWeightEnum.Medium}
-                  className="pl-0 sm:pl-2 cursor-pointer !text-Brand-Brand hover:text-Brand-hover active:text-Brand-click"
-                >
-                  Purchase a seed to issue a token.
+                <Typography.Text>
+                  If needed, you can issue a governance token. You can create and issue your token
+                  via{' '}
+                  <Typography.Text
+                    onClick={onJumpHandler}
+                    fontWeight={FontWeightEnum.Medium}
+                    className="pl-0 sm:pl-2 cursor-pointer !text-Brand-Brand hover:text-Brand-hover active:text-Brand-click"
+                  >
+                    Symbol Market
+                  </Typography.Text>
+                  . The platform allows you to acquire SEEDs, which enable you to create tokens with
+                  symbol of your preference.
                 </Typography.Text>
               </div>
             </li>
@@ -91,7 +110,9 @@ const GuidePage = () => {
                 <CircleDot />
               </div>
               <Typography.Text className="flex-1">
-                Know about the smart contracts and DYOR:
+                Learn about the smart contracts that could be used for creating your DAO. These
+                contracts are deployed by TMRWDAO and can empower you to activate specific
+                functionalities in your own DAO.
               </Typography.Text>
             </li>
           </ul>
@@ -113,7 +134,7 @@ const GuidePage = () => {
 
       <div className="flex py-6 lg:py-8 border-0 border-t border-solid border-Neutral-Divider justify-end">
         <Button type="primary" className="w-full lg:w-40" onClick={toCreateDaoPage}>
-          Get Start
+          Get Started
         </Button>
       </div>
     </div>

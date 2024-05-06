@@ -106,7 +106,7 @@ export default function DeoDetails(props: IProps) {
               </Typography.Title>
               <Link href={`/proposal/deploy/${daoId}`}>
                 <Button size="medium" type="primary">
-                  Deploy
+                  Create a Proposal
                 </Button>
               </Link>
             </div>
