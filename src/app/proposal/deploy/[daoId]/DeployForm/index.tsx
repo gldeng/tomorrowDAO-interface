@@ -16,6 +16,8 @@ import { emitLoading } from 'utils/myEvent';
 import Link from 'next/link';
 import ProtoInstance from 'utils/decode-log';
 import { propalAddress } from 'config';
+import { parseJSON, uint8ToBase64 } from 'utils/parseJSON';
+import { getContract } from '../util';
 
 interface IGovernanceModelProps {
   daoId: string;
@@ -65,19 +67,37 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
         openErrorModal();
       }
       const res = await form.validateFields();
-      const params = {
+      const params = res.transaction.params;
+      // todo decode params
+      // const parsedParams = parseJSON(params);
+      // const contractInfo = await getContract(res.transaction.toAddress);
+      // console.log('contractInfo', contractInfo);
+      // const method = contractInfo[res.transaction.contractMethodName];
+      // let decoded;
+      // if (Array.isArray(parsedParams)) {
+      //   decoded = method.packInput([...parsedParams]);
+      // } else if (typeof parsedParams === 'object' && parsedParams !== null) {
+      //   decoded = method.packInput(JSON.parse(JSON.stringify(parsedParams)));
+      // } else {
+      //   decoded = method.packInput(parsedParams);
+      // }
+      // const finalParams = uint8ToBase64(decoded || []) || [];
+      const finalParams = params;
+      const contractParams = {
         ...res,
+        transaction: {
+          ...res.transaction,
+          params: finalParams,
+        },
         proposalBasicInfo: {
           ...res.proposalBasicInfo,
           daoId,
           voteSchemeId: voteSchemeId,
         },
       };
-      delete params.proposalBasicInfo.deleteVoteSchemeId;
+      delete contractParams.proposalBasicInfo.deleteVoteSchemeId;
       emitLoading(true, 'The transaction is being processed...');
-      console.log('res------- input', params);
-      console.log('res', params);
-      const createRes = await proposalCreateContractRequest('CreateProposal', params);
+      const createRes = await proposalCreateContractRequest('CreateProposal', contractParams);
       console.log('res', createRes);
 
       emitLoading(false);

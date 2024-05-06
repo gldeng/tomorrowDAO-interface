@@ -43,6 +43,7 @@ export default function BasicDetails() {
         >
           <Form.Item
             name={['metadata', 'name']}
+            validateFirst
             rules={[
               {
                 required: true,
@@ -79,6 +80,7 @@ export default function BasicDetails() {
             />
           </Form.Item>
           <Form.Item
+            validateFirst
             rules={[
               {
                 required: true,
@@ -132,6 +134,7 @@ export default function BasicDetails() {
           </Form.Item>
           <Form.Item
             name={['metadata', 'socialMedia', 'Twitter']}
+            validateFirst
             rules={[
               ...mediaValidatorMap.Twitter.validator,
               {
@@ -146,6 +149,7 @@ export default function BasicDetails() {
           </Form.Item>
           <Form.Item
             name={['metadata', 'socialMedia', 'Facebook']}
+            validateFirst
             rules={[
               ...mediaValidatorMap.Other.validator,
               {
@@ -160,6 +164,7 @@ export default function BasicDetails() {
           </Form.Item>
           <Form.Item
             name={['metadata', 'socialMedia', 'Discord']}
+            validateFirst
             rules={[
               ...mediaValidatorMap.Other.validator,
               {
@@ -174,6 +179,7 @@ export default function BasicDetails() {
           </Form.Item>
           <Form.Item
             name={['metadata', 'socialMedia', 'Telegram']}
+            validateFirst
             rules={[
               ...mediaValidatorMap.Other.validator,
               {
@@ -188,6 +194,7 @@ export default function BasicDetails() {
           </Form.Item>
           <Form.Item
             name={['metadata', 'socialMedia', 'Reddit']}
+            validateFirst
             rules={[
               ...mediaValidatorMap.Other.validator,
               {

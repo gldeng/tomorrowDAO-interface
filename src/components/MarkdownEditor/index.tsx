@@ -11,11 +11,12 @@ MdEditor.unuse(Plugins.FontUnderline);
 interface IMarkdownEditorProps {
   value?: string;
   onChange?: (value: string) => void;
+  maxLen?: number;
 }
 
-export default function MarkdownEditor({ value, onChange }: IMarkdownEditorProps) {
+export default function MarkdownEditor({ value, onChange, maxLen }: IMarkdownEditorProps) {
   const handleEditorChange: MdEditor['props']['onChange'] = ({ text }) => {
-    onChange?.(text);
+    onChange?.(text.slice(0, maxLen));
   };
 
   const handleImageUpload: Required<MdEditor['props']>['onImageUpload'] = async (file: File) => {
