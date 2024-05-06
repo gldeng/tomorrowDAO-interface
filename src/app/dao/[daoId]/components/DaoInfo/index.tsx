@@ -96,7 +96,7 @@ export default function DaoInfo(props: IParams) {
     },
     {
       key: '4',
-      label: 'Governance Model',
+      label: 'Governance Mechanism',
       children: `Referendum ${data?.isHighCouncilEnabled ? ' + High Council' : ''}`,
     },
     {
@@ -112,7 +112,7 @@ export default function DaoInfo(props: IParams) {
           >
             {data?.memberCount ?? '-'} Members
           </span>
-          <span>{data?.highCouncilConfig?.electionPeriod} Days</span>
+          <span>Rotates Every {data?.highCouncilConfig?.electionPeriod} Days.</span>
         </div>
       ),
     },

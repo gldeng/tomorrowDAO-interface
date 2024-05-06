@@ -48,7 +48,7 @@ export default function DAOList() {
             <Spin indicator={<LoadingOutlined spin rev={undefined} />} />
           ) : (
             <>
-              <span className="more-text">View More</span>
+              <span className="more-text">Load More</span>
               <img className="down-icon" src={DownIcon} alt="down" />
             </>
           )}

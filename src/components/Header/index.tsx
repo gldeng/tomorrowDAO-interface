@@ -52,7 +52,7 @@ export default function Header() {
           </div>
         ),
         popupClassName: 'pc-menu-popup',
-        key: 'Community',
+        key: 'Social Media',
         children: [
           {
             label: (

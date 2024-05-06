@@ -1,6 +1,7 @@
 'use client';
 
 import { Radio, Input, Tooltip, Button } from 'aelf-design';
+import { InfoCircleOutlined } from '@aelf-design/icons';
 import { Form, Select } from 'antd';
 import { memo, useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
@@ -23,11 +24,11 @@ import { useSelector } from 'redux/store';
 const contractMethodNamePath = ['transaction', 'contractMethodName'];
 const VoteSchemeList = [
   {
-    VoteMechanismName: '1a1v',
+    VoteMechanismName: '1 address = 1 vote',
     VoteSchemeId: '1a1v',
   },
   {
-    VoteMechanismName: '1t1v',
+    VoteMechanismName: '1 token = 1 vote',
     VoteSchemeId: '1t1v',
   },
 ];
@@ -119,7 +120,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
     run();
   }, []);
   const proposalDetailDesc = useMemo(() => {
-    return proposalTypeList.find((item) => item.value === proposalType)?.detailDesc ?? '';
+    return proposalTypeList.find((item) => item.value === proposalType)?.desc ?? '';
   }, [proposalType]);
   // reset Method Name if Contract Address change
   useEffect(() => {
@@ -137,16 +138,20 @@ const ProposalInfo = (props: ProposalInfoProps) => {
       <Form.Item
         name={['proposalBasicInfo', 'proposalTitle']}
         label={<span className="form-item-label">Title</span>}
+        validateFirst
         rules={[
           {
             required: true,
+            message: 'The proposal title is required',
+          },
+          {
             min: 0,
             max: 300,
             message: 'The proposal title supports a maximum of 300 characters',
           },
         ]}
       >
-        <Input type="text" placeholder="Please input the title (300 words at most)" />
+        <Input type="text" placeholder="Enter the title of the proposal (300 characters max)" />
       </Form.Item>
       <Form.Item
         name={['proposalBasicInfo', 'proposalDescription']}
@@ -154,6 +159,9 @@ const ProposalInfo = (props: ProposalInfoProps) => {
         rules={[
           {
             required: true,
+            message: 'The proposal description is required',
+          },
+          {
             min: 0,
             max: 300000,
             message: 'The proposal description supports a maximum of 300,000 characters',
@@ -204,7 +212,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
       {/* 1a1v/1t1v */}
       <Form.Item
         name={['proposalBasicInfo', 'deleteVoteSchemeId']}
-        label={<span className="form-item-label">Vote Model</span>}
+        label={<span className="form-item-label">Voting mechanism</span>}
         initialValue={VoteSchemeList[0].VoteSchemeId}
         rules={[
           {
@@ -240,6 +248,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
           }}
           options={contractInfoOptions}
           optionLabelProp="label"
+          placeholder="Select a contract"
         ></ResponsiveSelect>
       </Form.Item>
       <Form.Item
@@ -259,6 +268,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
           }}
           options={contractMethodOptions}
           optionLabelProp="label"
+          placeholder="Select a method name"
         ></ResponsiveSelect>
       </Form.Item>
       <Form.Item
@@ -275,8 +285,11 @@ const ProposalInfo = (props: ProposalInfoProps) => {
       </Form.Item>
       <Form.Item
         label={
-          <Tooltip title="Estimated proposal active period. The active period starts from the proposal being published on the blockchain and lasts until {num} days later">
-            <span className="form-item-label">Active Period</span>
+          <Tooltip title="If the proposal is initiated around or at UTC 00:00 and is created after 00:00, the creation date will be the second day. As a result, the voting period will be extended by one day.">
+            <span className="form-item-label">
+              Voting Period
+              <InfoCircleOutlined className="cursor-pointer label-icon" />
+            </span>
           </Tooltip>
         }
       >
@@ -294,8 +307,11 @@ const ProposalInfo = (props: ProposalInfoProps) => {
       </Form.Item>
       <Form.Item
         label={
-          <Tooltip title="Estimated proposal executable period. The executable period starts from the proposal being approved on the blockchain and lasts until {num} days later">
-            <span className="form-item-label">Executable Period</span>
+          <Tooltip title="If the proposal is initiated around or at UTC 00:00 and is created after 00:00, the creation date will be the second day. As a result, the execution period will be extended by one day.">
+            <span className="form-item-label">
+              Execution Period
+              <InfoCircleOutlined className="cursor-pointer label-icon" />
+            </span>
           </Tooltip>
         }
       >

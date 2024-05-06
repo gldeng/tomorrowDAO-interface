@@ -40,7 +40,7 @@ export default function PreviewFile(props: PropsType) {
     return (
       <div className="flex items-center justify-center h-8 bg-Neutral-Default-BG px-2 leading-8 rounded-md cursor-pointer">
         <Image width={14} height={14} src={ProposalDetailFile} alt="" onClick={handleClick}></Image>
-        {!isSM && <span className="ml-1">Preview File</span>}
+        {!isSM && <span className="ml-1">Documentation</span>}
       </div>
     );
   }, [handleClick, isSM]);
@@ -58,7 +58,7 @@ export default function PreviewFile(props: PropsType) {
           {btnCom}
         </Dropdown>
       )}
-      <CommonDrawer title="Preview File" open={showDrawerModal} onClose={handleClose}>
+      <CommonDrawer title="Documentation" open={showDrawerModal} onClose={handleClose}>
         <List
           size="small"
           dataSource={list}

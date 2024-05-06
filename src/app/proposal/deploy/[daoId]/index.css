@@ -1,7 +1,4 @@
 .deploy-proposal-form {
-  .form-item-label {
-    @apply font-medium leading-[24px];
-  }
 
   .title-primary {
     @apply text-[20px] leading-[28px] text-neutralTitle font-medium;
@@ -30,5 +27,13 @@
     .label-text {
       @apply text-colorPrimary;
     }
+  }
+}
+
+.form-item-label {
+  @apply font-medium leading-[24px] flex items-center;
+
+  .label-icon {
+    @apply text-[#B8B8B8] ml-[8px];
   }
 }

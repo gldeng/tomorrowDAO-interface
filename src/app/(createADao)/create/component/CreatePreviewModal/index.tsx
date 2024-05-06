@@ -158,15 +158,15 @@ export default function CreatePreviewModal({ open, onClose, onConfirm }: ICreate
         </Flex>
         <div className="divider" />
         <CheckboxItem
-          label="Governance Referendum"
+          label="Referendum"
           checked={state[0]}
           onChange={(e) => setState([e.target.checked, state[1], state[2]])}
           descriptionList={[
             {
-              content: `${governance?.minimalRequiredThreshold} address and ${governance?.minimalVoteThreshold} votes to finalize a proposal`,
+              content: `Each proposal requires a minimum participation of ${governance?.minimalRequiredThreshold} address and ${governance?.minimalVoteThreshold} votes to be finalised`,
             },
             {
-              content: `Each proposal must receive more than ${governance?.minimalApproveThreshold}% of approve votes, less then ${governance?.maximalRejectionThreshold}% reject votes and less than ${governance?.maximalAbstentionThreshold}% abstain votes to be passed.`,
+              content: `Each proposal must receive at least ${governance?.minimalApproveThreshold}% of approve votes, less than ${governance?.maximalRejectionThreshold}% of reject votes, and less than ${governance?.maximalAbstentionThreshold}% of abstain votes to be approved.`,
             },
           ]}
         />
@@ -177,21 +177,26 @@ export default function CreatePreviewModal({ open, onClose, onConfirm }: ICreate
             onChange={(e) => setState([state[0], e.target.checked, state[2]])}
             descriptionList={[
               {
-                content: `${highCouncil?.highCouncilConfig.maxHighCouncilMemberCount} members at most, ${highCouncil?.highCouncilConfig.maxHighCouncilMemberCount} candidates at most, with a term rotation every ${highCouncil?.highCouncilConfig.electionPeriod} days. Stake at least ${highCouncil?.highCouncilConfig.lockTokenForElection} ${metaData?.governanceToken} to be a candidate.`,
+                content: `
+                ${highCouncil?.highCouncilConfig.maxHighCouncilMemberCount} members and ${highCouncil?.highCouncilConfig.maxHighCouncilCandidateCount} candidates at most, rotated every ${highCouncil?.highCouncilConfig.electionPeriod} days. Require a staking of at least ${highCouncil?.highCouncilConfig.lockTokenForElection} ${metaData?.governanceToken} tokens.
+                `,
               },
               {
                 content: (
                   <AddressItem
-                    label="Election Contract"
+                    label="Election contract"
                     address="ELF_2XDRhxzMbaYRCTe3NxRpARKBpjfQpyWdBkKscQpc3Tph3m6dqHG_AELF"
                   />
                 ),
               },
               {
-                content: `${highCouncil?.governanceSchemeThreshold.minimalRequiredThreshold}% members and ${highCouncil?.governanceSchemeThreshold.minimalVoteThreshold} votes to finalize a proposal`,
+                content: `
+                Each proposal requires a minimum participation of ${highCouncil?.governanceSchemeThreshold.minimalRequiredThreshold}% addresses and  ${highCouncil?.governanceSchemeThreshold.minimalVoteThreshold} votes to be finalised.`,
               },
               {
-                content: `Each proposal must receive more than ${highCouncil?.governanceSchemeThreshold.minimalApproveThreshold}% of approve votes, less then ${highCouncil?.governanceSchemeThreshold.maximalRejectionThreshold}% reject votes and less than ${highCouncil?.governanceSchemeThreshold.maximalAbstentionThreshold}% abstain votes to be passed.`,
+                content: `
+                Each proposal must receive at least ${highCouncil?.governanceSchemeThreshold.minimalApproveThreshold}% of approve votes, less than ${highCouncil?.governanceSchemeThreshold.maximalRejectionThreshold}% of reject votes, and less than ${highCouncil?.governanceSchemeThreshold.maximalAbstentionThreshold}% of abstain votes to be approved.
+                `,
               },
             ]}
           />
@@ -199,8 +204,8 @@ export default function CreatePreviewModal({ open, onClose, onConfirm }: ICreate
         <CheckboxItem
           checked={state[2]}
           onChange={(e) => setState([state[0], state[1], e.target.checked])}
-          label={`Documents (${3})`}
-          descriptionList={files?.files.map((item) => {
+          label={`Documentation ${files?.files?.length ? `(${files?.files?.length})` : ''}`}
+          descriptionList={files?.files?.map((item) => {
             return {
               content: item.name,
             };
