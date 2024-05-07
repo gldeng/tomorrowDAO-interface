@@ -15,3 +15,5 @@ export const mainChainAddress = 'JRmBduh4nXWi1aXgdUsj5gJrzeZb2LxmrAbf7W99faZSvoA
 export const sideChainAddress = 'zv7YnQ2dLM45ssfifN1dpwqBwdxH13pqGm9GDH6peRdH8F3hD';
 
 export const symbolmarketUrl = 'https://www.eforest.finance/symbolmarket';
+
+export const explorerAddress = 'https://explorer.aelf.io/address/';

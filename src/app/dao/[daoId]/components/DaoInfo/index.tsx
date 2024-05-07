@@ -3,17 +3,17 @@ import Image from 'next/image';
 import { Divider, Descriptions, DescriptionsProps } from 'antd';
 import useResponsive from 'hooks/useResponsive';
 import PreviewFile from 'components/PreviewFile';
-import { Skeleton, SkeletonList } from 'components/Skeleton';
+import { Skeleton } from 'components/Skeleton';
 import { colorfulSocialMediaIconMap } from 'assets/imgs/socialMediaIcon';
 
 import { HC_CANDIDATE, HC_MEMBER } from '../../constants';
 
 import DaoLogo from 'assets/imgs/dao-logo.svg';
 
-import './index.css';
-import useJumpByPath from 'hooks/useJumpByPath';
 import Link from 'next/link';
+import { explorerAddress } from 'config';
 
+import './index.css';
 const firstLetterToLowerCase = (str: string) => {
   return str.charAt(0).toLowerCase() + str.slice(1);
 };
@@ -37,7 +37,16 @@ interface IParams {
   isLoading: boolean;
   isError?: Error;
 }
-
+const contractMapList = [
+  {
+    label: 'Treasury contract',
+    key: 'treasuryContractAddress',
+  },
+  {
+    label: 'Vote Contract',
+    key: 'voteContractAddress',
+  },
+];
 export default function DaoInfo(props: IParams) {
   const {
     data,
@@ -47,13 +56,7 @@ export default function DaoInfo(props: IParams) {
     isError,
   } = props;
 
-  const jump = useJumpByPath();
   const { isLG } = useResponsive();
-
-  const handleGoto = () => {
-    const originAddress = 'ELF_2UthYi7AHRdfrqc1YCfeQnjdChDLaas65bW4WxESMGMojFiXj9_AELF#contracts';
-    jump(`https://explorer.aelf.io/address/${originAddress}`);
-  };
   const socialMedia = metadata?.socialMedia ?? {};
 
   const socialMediaList = Object.keys(socialMedia).map((key) => {
@@ -62,6 +65,28 @@ export default function DaoInfo(props: IParams) {
       url: socialMedia[key as keyof typeof socialMedia],
     };
   });
+
+  const contractItems = contractMapList
+    .map((obj) => {
+      const dataKey = obj.key;
+      const address = data?.[dataKey as keyof DaoInfoData];
+      if (!address) return null;
+      return {
+        key: dataKey,
+        label: obj.label,
+        children: (
+          <Link href={`${explorerAddress}${address}`} target="_blank">
+            <HashAddress
+              preLen={8}
+              endLen={11}
+              className="address"
+              address={address as string}
+            ></HashAddress>
+          </Link>
+        ),
+      };
+    })
+    .filter(Boolean) as DescriptionsProps['items'];
 
   const items: DescriptionsProps['items'] = [
     {
@@ -76,19 +101,7 @@ export default function DaoInfo(props: IParams) {
         ></HashAddress>
       ),
     },
-    {
-      key: '2',
-      label: 'Staking Contract',
-      children: (
-        <HashAddress
-          preLen={8}
-          endLen={11}
-          className="address"
-          address={'todo'}
-          addressClickCallback={handleGoto}
-        ></HashAddress>
-      ),
-    },
+    ...(contractItems ?? []),
     {
       key: '3',
       label: 'Governance Token',
