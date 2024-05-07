@@ -80,6 +80,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
   const contractAddress = Form.useWatch(['transaction', 'toAddress'], form);
   const proposalType = Form.useWatch('proposalType', form);
   const schemeAddress = Form.useWatch(['proposalBasicInfo', 'schemeAddress'], form);
+  const params = Form.useWatch(['transaction', 'params'], form);
   const voteSchemeId = useMemo(() => {
     const governanceMechanism = governanceMechanismList?.find(
       (item) => item.schemeAddress === schemeAddress,
@@ -156,6 +157,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
       <Form.Item
         name={['proposalBasicInfo', 'proposalDescription']}
         label={<span className="form-item-label">Description</span>}
+        validateFirst
         rules={[
           {
             required: true,
@@ -168,7 +170,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
           },
         ]}
       >
-        <MarkdownEditor />
+        <MarkdownEditor maxLen={300000} />
       </Form.Item>
 
       {/* Discussion on forum */}

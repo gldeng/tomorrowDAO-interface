@@ -4,7 +4,7 @@ import { useMachine } from '@xstate/react';
 import { formMachine } from './xstate';
 import { Button, Typography, FontWeightEnum } from 'aelf-design';
 import React, { memo, useCallback, useRef, useState } from 'react';
-import { Steps, message, FormInstance, Result, StepsProps } from 'antd';
+import { Steps, message, FormInstance, Result, StepsProps, StepProps } from 'antd';
 import Image from 'next/image';
 import { useWebLoginEvent, WebLoginEvents, useWebLogin, WebLoginState } from 'aelf-web-login';
 import { useRouter } from 'next/navigation';
@@ -67,6 +67,12 @@ const CreateDaoPage = () => {
   const { isMD } = useResponsive();
   const [items, setItems] = useState(initItems);
 
+  const updateStep = (step: StepProps) => {
+    const itemsCopy = [...items];
+    itemsCopy[2] = step;
+    setItems(itemsCopy);
+  };
+
   const stepsFormMapRef = useRef<IStepsContext>(cloneDeepWith(defaultStepsFormMap));
 
   const handleNextStep = () => {
@@ -76,7 +82,9 @@ const CreateDaoPage = () => {
         stepsFormMapRef.current.stepForm[currentStepString].submitedRes = res;
         if (isHighCouncilStep) {
           isSkipHighCouncil.current = false;
-          setItems(initItems);
+          updateStep({
+            title: 'High Council',
+          });
         }
         send({ type: 'NEXT' });
       });
@@ -90,12 +98,10 @@ const CreateDaoPage = () => {
   };
   const handleSkip = () => {
     isSkipHighCouncil.current = true;
-    const itemsCopy = [...items];
-    itemsCopy[2] = {
+    updateStep({
       icon: <Skip />,
       title: 'High Council (Skipped)',
-    };
-    setItems(itemsCopy);
+    });
     stepsFormMapRef.current.stepForm[StepEnum.step2].submitedRes = undefined;
     send({ type: 'NEXT' });
   };
@@ -164,9 +170,13 @@ const CreateDaoPage = () => {
           secondaryContent: (
             <>
               Feel free to join TMRWDAO&lsquo;s
-              <Link className="text-colorPrimary cursor-pointer" href={'https://t.me/tmrwdao'}>
+              <Link
+                className="text-colorPrimary cursor-pointer"
+                href={'https://t.me/tmrwdao'}
+                target="_blank"
+              >
                 Telegram group
-              </Link>{' '}
+              </Link>
               to connect with the team and get assistance with tasks such as modifying the
               DAO&lsquo;s information. .
             </>

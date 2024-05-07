@@ -198,19 +198,5 @@ interface ContractInfoItem {
 export interface ContractInfo {
   contractInfoList: ContractInfoItem[];
 }
-const mockContractInfoList: ContractInfo = {
-  contractInfoList: [
-    {
-      ContractAddress: 'pykr77ft9UUKJZLVq15wCH8PinBSjVRQ12sD1Ayq92mKFsJ1i',
-      ContractName: 'name1',
-      FunctionList: ['ChangeCodeCheckController'],
-    },
-  ],
-};
-export const fetchContractInfo = async (p: { chainId: string }) => {
-  await new Promise((resolve) => {
-    setTimeout(resolve, 1000);
-  });
-  return mockContractInfoList;
-};
+
 export type TContractInfoList = IContractInfo[];

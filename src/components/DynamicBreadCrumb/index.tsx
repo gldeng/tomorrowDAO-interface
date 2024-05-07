@@ -36,7 +36,7 @@ const DynamicBreadCrumb = () => {
     <div className="pb-6 ">
       {isLG ? (
         <span
-          className="breadcrumb-back-button"
+          className="breadcrumb-back-button flex items-center"
           onClick={() => {
             router.back();
           }}
