@@ -1,4 +1,4 @@
-import { ProposalStatusString, ProposalTypeString } from 'types';
+import { AllProposalStatusString, ProposalStatusString, ProposalTypeString } from 'types';
 export const ALL = 'All';
 export const proposalTypeList = [
   { value: ALL, label: ALL },
@@ -32,39 +32,33 @@ export const tagMap = {
 };
 
 export const tagColorMap = {
-  [ProposalStatusString.Pending]: {
-    bgColor: '#FEF7EC',
-    textColor: '#F8B042',
-    firstText: 'Can be vetoed before',
-    secondText: 'Being vetoed.',
-  },
-  [ProposalStatusString.Approved]: {
+  [AllProposalStatusString.Approved]: {
     bgColor: '#EBF3FF',
     textColor: '#3888FF',
     firstText: 'Availabe to be executed before',
     secondText: 'Approved on',
   },
-  [ProposalStatusString.Rejected]: {
+  [AllProposalStatusString.Rejected]: {
     bgColor: '#FEEFF1',
     textColor: '#F55D6E',
     firstText: 'Rejected on',
   },
-  [ProposalStatusString.Abstained]: {
+  [AllProposalStatusString.Abstained]: {
     bgColor: '#FEEFF1',
     textColor: '#F55D6E',
     firstText: 'Rejected on',
   },
-  [ProposalStatusString.Expired]: {
+  [AllProposalStatusString.Expired]: {
     bgColor: '#EDEDED',
     textColor: '#919191',
     firstText: 'Availabe to be executed before',
     secondText: 'Approved on',
   },
-  [ProposalStatusString.Executed]: {
+  [AllProposalStatusString.Executed]: {
     bgColor: '#E4F8F5',
     textColor: '#05C4A2',
   },
-  [ProposalStatusString.BelowThreshold]: {
+  [AllProposalStatusString.BelowThreshold]: {
     bgColor: '#FEF7EC',
     textColor: '#F8B042',
     firstText: 'Can be vetoed before',
@@ -73,8 +67,8 @@ export const tagColorMap = {
 };
 export const getTimeDesc = (status: string, data: IProposalsItem) => {
   switch (status) {
-    case ProposalStatusString.Pending:
-      return `Can be vetoed before xxxx`;
+    // case ProposalStatusString.Pending:
+    //   return `Can be vetoed before xxxx`;
     case ProposalStatusString.Approved:
       return `Availabe to be executed before ${data.expiredTime}`;
     case ProposalStatusString.Rejected:

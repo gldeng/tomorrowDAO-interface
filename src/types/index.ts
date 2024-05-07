@@ -102,18 +102,29 @@ export enum ProposalType {
 }
 export enum ProposalTypeString {
   Governance = 'Governance',
-  Advisory = 'Advisory',
+  Improvement = 'Advisory',
   Veto = 'Veto',
 }
-
+// for filter ProposalStatusString
 export enum ProposalStatusString {
   Approved = 'Approved',
   Rejected = 'Rejected',
-  Pending = 'Pending',
   Abstained = 'Abstained',
   Expired = 'Expired',
   Executed = 'Executed',
-  BelowThreshold = 'BelowThreshold',
+  'Subject to Veto' = 'PendingVote',
+  'Being Vetoed' = 'Vetoed',
+}
+// all ProposalStatusString
+export enum AllProposalStatusString {
+  Approved = 'Approved',
+  Rejected = 'Rejected',
+  Abstained = 'Abstained',
+  Expired = 'Expired',
+  Executed = 'Executed',
+  'Subject to Veto' = 'PendingVote',
+  'Being Vetoed' = 'Vetoed',
+  'BelowThreshold' = 'BelowThreshold',
 }
 export const proposalTypeList = [
   {

@@ -4,27 +4,6 @@ export enum ProposalType {
   ADVISORY = 2,
   VETO = 3,
 }
-export const proposalTypeList = [
-  {
-    label: 'Governance',
-    desc: 'Enact changes to smart contracts of the DAO. Once approved, an on-chain execution is required.',
-    detailDesc: `Governance proposals ami to modify aelf chain's governance parameters. All contracts are
-      system contracts which play criticla roles fo aelf ecosystem`,
-    value: ProposalType.GOVERNANCE,
-  },
-  {
-    label: 'Advisory',
-    desc: "Offer guidance and suggestions for the DAO's future direction, do not directly result in on-chain actions.",
-    detailDesc: `Advisory proposals typically contain non-mandatory suggestions for the network, aimed at guiding or advising community members to take specific actions, but without enforcement. This type of proposal does not directly alter the blockchain's code or rules but instead offers insights and recommendations on how to improve the network, governance structure, strategy, or any other relevant.`,
-    value: ProposalType.ADVISORY,
-  },
-  {
-    label: 'Veto Proposal',
-    desc: 'Veto proposals are only supported for the referendum. For any proposal issued by the High Council, any address can quickly initiate a veto-type proposal to terminate the execution of the proposal issued by the High Council.',
-    detailDesc: `Veto proposals are only supported for the referendum. For any proposal issued by the High Council, any address can quickly initiate a veto-type proposal to terminate the execution of the proposal issued by the High Council.`,
-    value: ProposalType.VETO,
-  },
-];
 export interface IContractInfo {
   ContractAddress: string;
   ContractName: string;
