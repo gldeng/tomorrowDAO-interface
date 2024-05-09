@@ -86,12 +86,8 @@ export default function DeoDetails(props: IProps) {
   });
 
   const rightContent = useMemo(() => {
-    return (
-      <>
-        <MyInfo isLogin={true}></MyInfo>
-      </>
-    );
-  }, []);
+    return <MyInfo daoId={daoId} />;
+  }, [daoId]);
 
   const tabItems = useMemo(() => {
     const items = [
