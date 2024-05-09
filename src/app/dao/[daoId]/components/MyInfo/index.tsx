@@ -1,42 +1,104 @@
-import { Descriptions, Divider, Form, List, DescriptionsProps } from 'antd';
-
-import { HashAddress, Typography, FontWeightEnum, Button, Modal, Input } from 'aelf-design';
-import { ReactNode, useState } from 'react';
+import { Descriptions, Divider, Form, List, InputNumber } from 'antd';
+import { HashAddress, Typography, FontWeightEnum, Button } from 'aelf-design';
+import { ReactNode, useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
-
 import ElfIcon from 'assets/imgs/elf-icon.svg';
 import SuccessGreenIcon from 'assets/imgs/success-green.svg';
 import CommonModal from 'components/CommonModal';
-
+import { useWalletService } from 'hooks/useWallet';
 import Info from '../Info';
+import { fetchProposalMyInfo, ProposalMyInfo } from 'api/request';
+import { store } from 'redux/store';
+import { useSelector } from 'react-redux';
+import { callContract, GetBalanceByContract } from 'contract/callContract';
+import { curChain, voteAddress } from 'config';
+import { emitLoading } from 'utils/myEvent';
+import { getExploreLink } from 'utils/common';
+import BigNumber from 'bignumber.js';
 
 type InfoTypes = {
   height?: number;
-  isLogin: boolean;
   children?: ReactNode;
   clssName?: string;
+  daoId: string;
+  proposalId?: string;
+};
+
+type FieldType = {
+  unstakeAmount: number;
 };
 
 export default function MyInfo(props: InfoTypes) {
-  const { isLogin = true, height, clssName } = props;
-  const [elfBlance, setElfBlance] = useState(0);
-  const [info, setInfo] = useState({
-    creator: '',
+  const { height, clssName, daoId, proposalId } = props;
+  const { login, isLogin } = useWalletService();
+  const elfInfo = store.getState().elfInfo.elfInfo;
+  const { walletInfo } = useSelector((store: any) => store.userInfo);
+  const [elfBalance, setElfBalance] = useState(0);
+  const [txHash, setTxHash] = useState('');
+  const [info, setInfo] = useState<ProposalMyInfo>({
     symbol: 'ELF',
     availableUnStakeAmount: 1000,
     stakeAmount: '',
     votesAmount: '',
     canVote: true,
+    proposalIdList: [],
   });
+
   const [form] = Form.useForm();
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showFailedModal, setShowFailedModal] = useState(false);
-  const listData = Array.from({ length: 3 }, (index: number) => {
-    return {
-      name: 'fasf',
-      value: 11 + index,
+  const fetchMyInfo = useCallback(async () => {
+    if (!isLogin || !elfInfo.curChain || !daoId || !walletInfo.address) {
+      return;
+    }
+    const reqMyInfoParams: ProposalMyInfoReq = {
+      chainId: elfInfo.curChain,
+      daoId: daoId,
+      address: walletInfo.address,
     };
-  });
+    if (proposalId) {
+      reqMyInfoParams.proposalId = proposalId;
+    }
+
+    const res = await fetchProposalMyInfo(reqMyInfoParams);
+    const data: ProposalMyInfo = res?.data || {};
+    if (!data?.symbol) {
+      data.symbol = 'ELF';
+    }
+    console.log(data);
+    setInfo(data);
+  }, [daoId, proposalId, elfInfo.curChain, walletInfo.address, isLogin]);
+
+  useEffect(() => {
+    fetchMyInfo();
+  }, [fetchMyInfo]);
+
+  const getBalance = useCallback(async () => {
+    console.log('getBalance');
+    if (!isLogin || !walletInfo.address || !curChain) {
+      return;
+    }
+    const { balance } = await GetBalanceByContract(
+      {
+        symbol: info?.symbol || 'ELF',
+        owner: walletInfo.address,
+      },
+      { chain: curChain },
+    );
+    // aelf decimal 8
+    setElfBalance(new BigNumber(balance).div(10 ** 8).toNumber());
+  }, [isLogin, walletInfo.address, info?.symbol]);
+
+  useEffect(() => {
+    getBalance();
+  }, [getBalance]);
+
+  // const listData = Array.from({ length: 3 }, (index: number) => {
+  //   return {
+  //     name: 'fasf',
+  //     value: 11 + index,
+  //   };
+  // });
 
   const myInfoItems = [
     {
@@ -46,7 +108,7 @@ export default function MyInfo(props: InfoTypes) {
         <HashAddress
           preLen={8}
           endLen={11}
-          address={info.creator}
+          address={walletInfo.address}
           className="address"
         ></HashAddress>
       ),
@@ -54,17 +116,21 @@ export default function MyInfo(props: InfoTypes) {
     {
       key: '1',
       label: 'ELF Balance',
-      children: <div className="w-full text-right">{elfBlance} ELF</div>,
+      children: <div className="w-full text-right">{elfBalance} ELF</div>,
     },
     {
       key: '2',
-      label: 'Staked ELF',
-      children: <div className="w-full text-right">{info.stakeAmount} ELF</div>,
+      label: 'Staked ' + info?.symbol,
+      children: (
+        <div className="w-full text-right">
+          {info?.stakeAmount} {info?.symbol}
+        </div>
+      ),
     },
     {
       key: '3',
       label: 'Voted',
-      children: <div className="w-full text-right">{info.votesAmount} Votes</div>,
+      children: <div className="w-full text-right">{info?.votesAmount} Votes</div>,
     },
   ];
 
@@ -83,13 +149,29 @@ export default function MyInfo(props: InfoTypes) {
     setIsModalOpen(false);
   };
 
-  const handleClaim = () => {
-    const resData = false;
-    // success
-    if (resData) {
-      setShowSuccessModal(true);
-    } else {
+  const handleClaim = async (values: FieldType) => {
+    // call contract
+    const contractParams = {
+      daoId,
+      withdrawAmount: values.unstakeAmount,
+      votingItemIdList: info?.proposalIdList,
+    };
+    try {
+      emitLoading(true, 'The unstake is being processed...');
+      const result = await callContract('Withdraw', contractParams, voteAddress);
+      emitLoading(false);
+      console.log(result);
+      setTxHash('123123123');
+      const resData = false;
+      // success
+      if (resData) {
+        setShowSuccessModal(true);
+      } else {
+        setShowFailedModal(true);
+      }
+    } catch (error) {
       setShowFailedModal(true);
+      emitLoading(false);
     }
   };
 
@@ -111,49 +193,72 @@ export default function MyInfo(props: InfoTypes) {
           <div className="flex justify-between items-start">
             <div>
               <div className="text-Neutral-Secondary-Text text-sm mb-1">Available to unstake</div>
-              <div className="text-Primary-Text font-medium">{info.availableUnStakeAmount} ELF</div>
+              <div className="text-Primary-Text font-medium">
+                {info?.availableUnStakeAmount} {info?.symbol}
+              </div>
             </div>
-            <Button type="primary" onClick={showModal}>
+            <Button type="primary" size="medium" onClick={showModal}>
               Claim
             </Button>
           </div>
+          {info?.canVote && (
+            <div className="flex justify-between items-center mt-4">
+              <Button type="primary" size="medium" millisecondOfDebounce={1000}>
+                Approve
+              </Button>
+              <Button type="primary" size="medium" danger millisecondOfDebounce={1000}>
+                Reject
+              </Button>
+              <Button
+                type="primary"
+                size="medium"
+                millisecondOfDebounce={1000}
+                className="bg-abstention"
+              >
+                Abstain
+              </Button>
+            </div>
+          )}
           {/* Claim Modal  */}
           <CommonModal
             open={isModalOpen}
             title={<div className="text-center">Claim ELF on MainChain AELF</div>}
             onCancel={handleCancel}
           >
-            <p className="text-center color-text-Primary-Text font-medium">
+            {/* <p className="text-center color-text-Primary-Text font-medium">
               An upgrade of smart contract ELF_DBCC...C3BW_AELF on MainChain AELF on MainChain AELF
-            </p>
+            </p> */}
             <div className="text-center color-text-Primary-Text font-medium">
-              <span className="text-[32px] mr-1">999</span>
+              <span className="text-[32px] mr-1">{info?.availableUnStakeAmount}</span>
               <span>ELF</span>
             </div>
             <div className="text-center text-Neutral-Secondary-Text">Available to unstake</div>
-            <Form form={form} layout="vertical" variant="filled">
-              <Form.Item
+            <Form form={form} layout="vertical" variant="filled" onFinish={handleClaim}>
+              <Form.Item<FieldType>
                 label="Unstake Amount"
-                name="requiredMarkValue"
+                name="unstakeAmount"
                 tooltip="Currently, only one-time withdrawal of all unlocked ELF is supported."
+                rules={[{ required: true, message: 'Please input Unstake Amount!' }]}
               >
-                <Input
-                  placeholder="input placeholder"
-                  disabled
-                  suffix={
+                <InputNumber
+                  className="w-full"
+                  placeholder="pleas input Unstake Amount"
+                  min={0}
+                  max={info?.availableUnStakeAmount}
+                  prefix={
                     <div className="flex items-center">
-                      <Divider type="vertical" />
                       <Image width={24} height={24} src={ElfIcon} alt="" />
                       <span className="text-Neutral-Secondary-Text ml-1">ELF</span>
+                      <Divider type="vertical" />
                     </div>
                   }
                 />
               </Form.Item>
-              <div>
-                <Button className="mx-auto" type="primary" onClick={handleClaim}>
+              <Form.Item>
+                <Button className="mx-auto" type="primary" htmlType="submit">
                   Claim
                 </Button>
-              </div>
+              </Form.Item>
             </Form>
           </CommonModal>
           {/* Unstake Amount  */}
@@ -179,6 +284,7 @@ export default function MyInfo(props: InfoTypes) {
 
           {/* success */}
           <CommonModal
+            title="Transaction submitted successfully!"
             open={showSuccessModal}
             onCancel={() => {
               setShowSuccessModal(false);
@@ -186,13 +292,13 @@ export default function MyInfo(props: InfoTypes) {
           >
             <Image className="mx-auto block" width={56} height={56} src={SuccessGreenIcon} alt="" />
             <div className="text-center text-Primary-Text font-medium">
-              <span className="text-[32px] mr-1">999</span>
+              <span className="text-[32px] mr-1">{form.getFieldValue('unstakeAmount')}</span>
               <span>ELF</span>
             </div>
             <p className="text-center text-Neutral-Secondary-Text font-medium">
               Congratulations, transaction submitted successfully!
             </p>
-            <List
+            {/* <List
               size="small"
               dataSource={listData}
               className="bg-Neutral-Hover-BG py-2"
@@ -202,7 +308,7 @@ export default function MyInfo(props: InfoTypes) {
                   <Typography.Text> {item.value}</Typography.Text>
                 </List.Item>
               )}
-            />
+            /> */}
             <Button
               className="mx-auto mt-6 w-[206px]"
               type="primary"
@@ -217,7 +323,7 @@ export default function MyInfo(props: InfoTypes) {
               className="mx-auto text-colorPrimary"
               size="small"
               onClick={() => {
-                setShowSuccessModal(false);
+                window.open(getExploreLink(txHash, 'transaction'));
               }}
             >
               View Transaction Details
@@ -245,8 +351,8 @@ export default function MyInfo(props: InfoTypes) {
         </div>
       ) : (
         <div>
-          <Button className="w-full mb-4" type="primary">
-            Login
+          <Button className="w-full mb-4" type="primary" onClick={login}>
+            Log In
           </Button>
           <div className="text-center text-Neutral-Secondary-Text">
             Connect wallet to view your votes.

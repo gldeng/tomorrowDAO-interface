@@ -11,9 +11,9 @@ import { HC_CANDIDATE, HC_MEMBER } from '../../constants';
 import DaoLogo from 'assets/imgs/dao-logo.svg';
 
 import Link from 'next/link';
-import { explorerAddress } from 'config';
-
+import { getExploreLink } from 'utils/common';
 import './index.css';
+
 const firstLetterToLowerCase = (str: string) => {
   return str.charAt(0).toLowerCase() + str.slice(1);
 };
@@ -75,7 +75,7 @@ export default function DaoInfo(props: IParams) {
         key: dataKey,
         label: obj.label,
         children: (
-          <Link href={`${explorerAddress}${address}`} target="_blank">
+          <Link href={getExploreLink(address as string, 'address')} target="_blank">
             <HashAddress
               preLen={8}
               endLen={11}
