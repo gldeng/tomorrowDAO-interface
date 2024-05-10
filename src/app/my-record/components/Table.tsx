@@ -2,55 +2,42 @@ import { useCallback, useEffect, useState } from 'react';
 import { Table, IPaginationProps, Typography, FontWeightEnum, HashAddress } from 'aelf-design';
 import { ConfigProvider } from 'antd';
 import { ColumnsType } from 'antd/es/table';
+import { useSelector } from 'react-redux';
+import { fetchVoteHistory } from 'api/request';
 
 import NoData from './NoData';
+import { curChain } from 'config';
+import { useRequest } from 'ahooks';
 
-interface IDataType {
-  key: React.Key;
-  address: string;
-  timeStamp: string;
-  proposalId: string;
-  proposalName: string;
-  MyOption: string;
-  votesNum: number;
-  TransactionId: string;
-}
-
-const data: IDataType[] = [];
-for (let i = 0; i < 103; i++) {
-  data.push({
-    key: i,
-    address: `London, Park Lane no. ${i}`,
-    timeStamp: '1111',
-    proposalId: '',
-    proposalName: '',
-    MyOption: '',
-    votesNum: i,
-    TransactionId: '',
-  });
-}
-
-interface TableParams {
-  address: string;
-  chainId: string;
-  pagination: IPaginationProps;
-}
-
+const defaultPageSize = 20;
 export default function RecordTable() {
-  const [dataSource, setDataSource] = useState<IDataType[]>();
-  const [loading, setLoading] = useState(false);
+  const { walletInfo } = useSelector((store: any) => store.userInfo);
 
-  const [tableParams, setTableParams] = useState<TableParams>({
-    address: '',
-    chainId: '',
-    pagination: {
-      current: 1,
-      pageSize: 10,
-      total: 103,
-    },
+  const [tableParams, setTableParams] = useState<{ page: number; pageSize: number }>({
+    page: 1,
+    pageSize: defaultPageSize,
   });
+  const {
+    data: voteHistoryData,
+    error: voteHistoryError,
+    loading: voteHistoryLoading,
+    run,
+  } = useRequest(
+    () => {
+      return fetchVoteHistory({
+        address: walletInfo.address,
+        chainId: curChain,
+        skipCount: (tableParams.page - 1) * tableParams.pageSize,
+        maxResultCount: tableParams.pageSize,
+        proposalId: 'xx',
+      });
+    },
+    {
+      manual: true,
+    },
+  );
 
-  const columns: ColumnsType<IDataType> = [
+  const columns: ColumnsType<IVoteHistoryItem> = [
     {
       title: 'Time',
       dataIndex: 'timeStamp',
@@ -59,17 +46,22 @@ export default function RecordTable() {
     },
     {
       title: 'Proposal Name / ID',
-      dataIndex: 'proposalName',
+      dataIndex: 'ProposalTitle',
       render: (text) => (
         <div>
-          <HashAddress preLen={8} endLen={9} address={text}></HashAddress>
-          <Typography.Text>Executed by me</Typography.Text>
+          {text}
+          {/* <HashAddress preLen={8} endLen={9} address={text}></HashAddress> */}
+          {/* <Typography.Text>Executed by me</Typography.Text> */}
         </div>
       ),
     },
     {
+      title: 'proposalId',
+      dataIndex: 'proposalId',
+    },
+    {
       title: 'My Operation',
-      dataIndex: 'MyOption',
+      dataIndex: 'myOption',
       filters: [
         { text: 'All', value: '' },
         { text: 'Member', value: 'Member' },
@@ -81,47 +73,35 @@ export default function RecordTable() {
       dataIndex: 'votesNum',
     },
     {
-      title: 'Transaction ID',
-      dataIndex: 'TransactionId',
+      title: 'transactionId',
+      dataIndex: 'transactionId',
+    },
+    {
+      title: 'executer',
+      dataIndex: 'executer',
     },
   ];
-  const fetchData = useCallback(async () => {
-    setLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    const { current: page = 1, pageSize = 10 } = tableParams.pagination;
-    const result = data.slice((page - 1) * pageSize, page * pageSize);
-    // setDataSource(result);
-    setLoading(false);
-  }, [tableParams.pagination]);
 
-  const pageChange = (page: number) => {
+  const pageChange = (page: number, pageSize?: number) => {
     setTableParams({
-      ...tableParams,
-      pagination: {
-        ...tableParams.pagination,
-        current: page,
-      },
+      page,
+      pageSize: pageSize ?? defaultPageSize,
     });
   };
 
   const pageSizeChange = (page: number, pageSize: number) => {
     setTableParams({
-      ...tableParams,
-      pagination: {
-        ...tableParams.pagination,
-        current: page,
-        pageSize: pageSize,
-      },
+      page,
+      pageSize,
     });
   };
 
   const handleRowClassName = (): string => {
     return 'customRow';
   };
-
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    run();
+  }, [tableParams]);
 
   return (
     <ConfigProvider renderEmpty={() => <NoData></NoData>}>
@@ -130,7 +110,12 @@ export default function RecordTable() {
         className="custom-table-style"
         columns={columns as any}
         loading={loading}
-        pagination={{ ...tableParams.pagination, pageChange, pageSizeChange }}
+        pagination={{
+          ...tableParams,
+          total: voteHistoryData?.data?.total ?? 0,
+          pageChange,
+          pageSizeChange,
+        }}
         dataSource={dataSource}
         rowClassName={handleRowClassName}
       ></Table>

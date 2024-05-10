@@ -394,3 +394,32 @@ interface TokenPriceRes {
   USD?: number;
   symbol: string;
 }
+
+// -------------------------------------vote-history-----------------------------
+interface IVoteHistoryReq {
+  proposalId: string;
+  chainId: string;
+  skipCount: number;
+  maxResultCount: number;
+  address: string;
+  voteOption?: string;
+}
+interface IVoteHistoryItem {
+  timeStamp: number;
+  proposalId: string;
+  ProposalTitle: string;
+  myOption: string;
+  votesNum: number;
+  transactionId: string;
+  executer: string;
+}
+
+interface IVoteHistoryResData {
+  total: number;
+  items: IVoteHistoryItem[];
+}
+interface IVoteHistoryRes {
+  code: string;
+  data: IVoteHistoryResData;
+  message: string;
+}

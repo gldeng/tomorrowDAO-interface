@@ -69,25 +69,25 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
       const res = await form.validateFields();
       const params = res.transaction.params;
       // todo decode params
-      // const parsedParams = parseJSON(params);
-      // const contractInfo = await getContract(res.transaction.toAddress);
-      // console.log('contractInfo', contractInfo);
-      // const method = contractInfo[res.transaction.contractMethodName];
-      // let decoded;
-      // if (Array.isArray(parsedParams)) {
-      //   console.log(1);
-      //   decoded = method.packInput([...parsedParams]);
-      // } else if (typeof parsedParams === 'object' && parsedParams !== null) {
-      //   console.log(2);
-      //   decoded = method.packInput(JSON.parse(JSON.stringify(parsedParams)));
-      // } else {
-      //   console.log(3);
-      //   decoded = method.packInput(parsedParams);
-      // }
-      // console.log('decoded', decoded);
+      const parsedParams = parseJSON(params);
+      const contractInfo = await getContract(res.transaction.toAddress);
+      console.log('contractInfo', contractInfo);
+      const method = contractInfo[res.transaction.contractMethodName];
+      let decoded;
+      if (Array.isArray(parsedParams)) {
+        console.log(1);
+        decoded = method.packInput([...parsedParams]);
+      } else if (typeof parsedParams === 'object' && parsedParams !== null) {
+        console.log(2);
+        decoded = method.packInput(JSON.parse(JSON.stringify(parsedParams)));
+      } else {
+        console.log(3);
+        decoded = method.packInput(parsedParams);
+      }
+      console.log('decoded', decoded);
       // window.btoa(params);
-      // const finalParams = uint8ToBase64(decoded || []) || [];
-      const finalParams = window.btoa(params);
+      const finalParams = uint8ToBase64(decoded || []) || [];
+      // const finalParams = window.btoa(params);
       // const finalParams = params;
       const contractParams = {
         ...res,
