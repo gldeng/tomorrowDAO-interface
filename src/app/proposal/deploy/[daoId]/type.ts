@@ -9,10 +9,22 @@ export interface IContractInfo {
   ContractName: string;
   FunctionList: string[];
 }
-interface VoteSchemeItem {
+
+export enum EVoteMechanismNameType {
+  UniqueVote = 'UniqueVote',
+  TokenBallot = 'TokenBallot',
+}
+
+export enum EVoteOption {
+  APPROVED = 0,
+  REJECTED = 1,
+  ABSTAINED = 2,
+}
+
+export interface VoteSchemeItem {
   VoteSchemeId: string;
   VoteMechanism: number;
-  VoteMechanismName: string; // Unspecified UniqueVote TokenBallot
+  VoteMechanismName: EVoteMechanismNameType; // Unspecified UniqueVote TokenBallot
 }
 
 export interface VoteSchemeListRes {
@@ -28,12 +40,12 @@ export const mockVoteSchemeList: VoteSchemeListRes = {
     {
       VoteSchemeId: '632e4047edc35bdf06de385f46fd553ef454ddf7d1bfd060cc341e6dba237510',
       VoteMechanism: 1,
-      VoteMechanismName: '1a1v',
+      VoteMechanismName: EVoteMechanismNameType.UniqueVote,
     },
     {
       VoteSchemeId: '632e4047edc35bdf06de385f46fd553ef454ddf7d1bfd060cc341e6dba237510',
       VoteMechanism: 2,
-      VoteMechanismName: '1t1v',
+      VoteMechanismName: EVoteMechanismNameType.TokenBallot,
     },
   ],
 };
