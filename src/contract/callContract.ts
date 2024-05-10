@@ -68,3 +68,13 @@ export const GetBalanceByContract = async (
   })) as { balance: number };
   return res;
 };
+
+export const ApproveByContract = async (
+  params: any,
+  options?: IContractOptions,
+): Promise<IContractError> => {
+  const res = (await multiTokenContractRequest('Approve', params, {
+    ...options,
+  })) as IContractError;
+  return res;
+};

@@ -7,7 +7,7 @@ import SuccessGreenIcon from 'assets/imgs/success-green.svg';
 import CommonModal from 'components/CommonModal';
 import { useWalletService } from 'hooks/useWallet';
 import Info from '../Info';
-import { fetchProposalMyInfo, ProposalMyInfo } from 'api/request';
+import { fetchProposalMyInfo } from 'api/request';
 import { store } from 'redux/store';
 import { useSelector } from 'react-redux';
 import { callContract, GetBalanceByContract } from 'contract/callContract';
@@ -15,21 +15,23 @@ import { curChain, voteAddress } from 'config';
 import { emitLoading } from 'utils/myEvent';
 import { getExploreLink } from 'utils/common';
 import BigNumber from 'bignumber.js';
+import Vote from './vote';
 
-type InfoTypes = {
+type TInfoTypes = {
   height?: number;
   children?: ReactNode;
   clssName?: string;
   daoId: string;
   proposalId?: string;
+  voteMechanismName?: string;
 };
 
-type FieldType = {
+type TFieldType = {
   unstakeAmount: number;
 };
 
-export default function MyInfo(props: InfoTypes) {
-  const { height, clssName, daoId, proposalId } = props;
+export default function MyInfo(props: TInfoTypes) {
+  const { height, clssName, daoId, proposalId = '', voteMechanismName = '' } = props;
   const { login, isLogin } = useWalletService();
   const elfInfo = store.getState().elfInfo.elfInfo;
   const { walletInfo } = useSelector((store: any) => store.userInfo);
@@ -93,13 +95,6 @@ export default function MyInfo(props: InfoTypes) {
     getBalance();
   }, [getBalance]);
 
-  // const listData = Array.from({ length: 3 }, (index: number) => {
-  //   return {
-  //     name: 'fasf',
-  //     value: 11 + index,
-  //   };
-  // });
-
   const myInfoItems = [
     {
       key: '0',
@@ -141,39 +136,31 @@ export default function MyInfo(props: InfoTypes) {
     setIsModalOpen(true);
   };
 
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-
   const handleCancel = () => {
     setIsModalOpen(false);
   };
 
-  const handleClaim = async (values: FieldType) => {
-    // call contract
-    const contractParams = {
-      daoId,
-      withdrawAmount: values.unstakeAmount,
-      votingItemIdList: info?.proposalIdList,
-    };
-    try {
-      emitLoading(true, 'The unstake is being processed...');
-      const result = await callContract('Withdraw', contractParams, voteAddress);
-      emitLoading(false);
-      console.log(result);
-      setTxHash('123123123');
-      const resData = false;
-      // success
-      if (resData) {
+  const handleClaim = useCallback(
+    async (values: TFieldType) => {
+      // call contract
+      const contractParams = {
+        daoId,
+        withdrawAmount: values.unstakeAmount,
+        votingItemIdList: info?.proposalIdList,
+      };
+      try {
+        emitLoading(true, 'The unstake is being processed...');
+        const result = await callContract('Withdraw', contractParams, voteAddress);
+        emitLoading(false);
+        setTxHash(result?.TransactionId);
         setShowSuccessModal(true);
-      } else {
+      } catch (error) {
         setShowFailedModal(true);
+        emitLoading(false);
       }
-    } catch (error) {
-      setShowFailedModal(true);
-      emitLoading(false);
-    }
-  };
+    },
+    [daoId, info?.proposalIdList],
+  );
 
   return (
     <div
@@ -202,22 +189,13 @@ export default function MyInfo(props: InfoTypes) {
             </Button>
           </div>
           {info?.canVote && (
-            <div className="flex justify-between items-center mt-4">
-              <Button type="primary" size="medium" millisecondOfDebounce={1000}>
-                Approve
-              </Button>
-              <Button type="primary" size="medium" danger millisecondOfDebounce={1000}>
-                Reject
-              </Button>
-              <Button
-                type="primary"
-                size="medium"
-                millisecondOfDebounce={1000}
-                className="bg-abstention"
-              >
-                Abstain
-              </Button>
-            </div>
+            <Vote
+              proposalId={proposalId}
+              voteMechanismName={voteMechanismName}
+              elfBalance={elfBalance}
+              symbol={info?.symbol}
+              fetchMyInfo={fetchMyInfo}
+            />
           )}
           {/* Claim Modal  */}
           <CommonModal
@@ -225,16 +203,13 @@ export default function MyInfo(props: InfoTypes) {
             title={<div className="text-center">Claim ELF on MainChain AELF</div>}
             onCancel={handleCancel}
           >
-            {/* <p className="text-center color-text-Primary-Text font-medium">
-              An upgrade of smart contract ELF_DBCC...C3BW_AELF on MainChain AELF on MainChain AELF
-            </p> */}
             <div className="text-center color-text-Primary-Text font-medium">
               <span className="text-[32px] mr-1">{info?.availableUnStakeAmount}</span>
               <span>ELF</span>
             </div>
             <div className="text-center text-Neutral-Secondary-Text">Available to unstake</div>
             <Form form={form} layout="vertical" variant="filled" onFinish={handleClaim}>
-              <Form.Item<FieldType>
+              <Form.Item<TFieldType>
                 label="Unstake Amount"
                 name="unstakeAmount"
                 tooltip="Currently, only one-time withdrawal of all unlocked ELF is supported."
@@ -243,6 +218,7 @@ export default function MyInfo(props: InfoTypes) {
                 <InputNumber
                   className="w-full"
                   placeholder="pleas input Unstake Amount"
+                  autoFocus
                   min={0}
                   max={info?.availableUnStakeAmount}
                   prefix={
@@ -298,17 +274,6 @@ export default function MyInfo(props: InfoTypes) {
             <p className="text-center text-Neutral-Secondary-Text font-medium">
               Congratulations, transaction submitted successfully!
             </p>
-            {/* <List
-              size="small"
-              dataSource={listData}
-              className="bg-Neutral-Hover-BG py-2"
-              renderItem={(item) => (
-                <List.Item className="border-0">
-                  <Typography.Text> {item.name}</Typography.Text>
-                  <Typography.Text> {item.value}</Typography.Text>
-                </List.Item>
-              )}
-            /> */}
             <Button
               className="mx-auto mt-6 w-[206px]"
               type="primary"

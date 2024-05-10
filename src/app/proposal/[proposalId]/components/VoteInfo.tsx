@@ -83,9 +83,10 @@ const VoteInfo = (props: IHeaderInfoProps) => {
         </div>
       </BoxWrapper>
       <MyInfo
+        clssName="flex-1 grow-0 lg:basis-[32%]"
         daoId={proposalDetailData.daoId || ''}
         proposalId={proposalDetailData.proposalId}
-        clssName="flex-1 grow-0 lg:basis-[32%]"
+        voteMechanismName={proposalDetailData.voteMechanismName}
       />
     </div>
   );

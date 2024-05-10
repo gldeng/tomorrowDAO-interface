@@ -232,6 +232,7 @@ interface ProposalDetailData {
   schemeAddress: string;
   transaction: Transaction;
   voteSchemeId: null | string;
+  voteMechanismName: string;
   vetoProposalId: null | string;
   deployTime: string;
   executeTime: string;
