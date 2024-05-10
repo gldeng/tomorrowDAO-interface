@@ -14,9 +14,9 @@ import {
 import { WebLoginInstance } from "@utils/webLogin";
 import { LOG_OUT_ACTIONS, LOG_IN_ACTIONS } from 'app/network-dao/_src/redux/actions/proposalCommon';
 import store from "./_src/redux/store";
-import dynamic from 'next/dynamic';
+import dynamicReq from 'next/dynamic';
 
-const Layout = dynamic(
+const Layout = dynamicReq(
   async () => {
     return (props: React.PropsWithChildren<{}>) => {
       const dispatch = useDispatch();

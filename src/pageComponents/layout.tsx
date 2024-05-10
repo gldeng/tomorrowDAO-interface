@@ -4,7 +4,7 @@ import { Layout as AntdLayout } from 'antd';
 import StoreProvider from '../provider/store';
 import Header from 'components/Header';
 import Loading from 'components/Loading';
-import dynamic from 'next/dynamic';
+import dynamicReq from 'next/dynamic';
 
 import { store } from 'redux/store';
 import Footer from 'components/Footer';
@@ -12,7 +12,7 @@ import DynamicBreadCrumb from 'components/DynamicBreadCrumb';
 import { useWalletInit } from 'hooks/useWallet';
 import PageLoading from 'components/Loading';
 
-const Layout = dynamic(
+const Layout = dynamicReq(
   async () => {
     return (props: React.PropsWithChildren<{}>) => {
       const { children } = props;

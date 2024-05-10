@@ -1,3 +1,4 @@
+import React from 'react';
 import { useCallback, useEffect, useState } from 'react';
 import { Table, IPaginationProps, Typography, FontWeightEnum, HashAddress } from 'aelf-design';
 import { ConfigProvider } from 'antd';
@@ -109,14 +110,14 @@ export default function RecordTable() {
         scroll={{ x: 800 }}
         className="custom-table-style"
         columns={columns as any}
-        loading={loading}
+        loading={voteHistoryLoading}
         pagination={{
           ...tableParams,
           total: voteHistoryData?.data?.total ?? 0,
           pageChange,
           pageSizeChange,
         }}
-        dataSource={dataSource}
+        dataSource={voteHistoryData?.data?.items ?? []}
         rowClassName={handleRowClassName}
       ></Table>
     </ConfigProvider>

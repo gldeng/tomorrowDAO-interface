@@ -1,4 +1,10 @@
 'use client';
 
-import dynamic from 'next/dynamic';
-export default dynamic(() => import('./_page'), { ssr: false });
+import dynamicReq from 'next/dynamic';
+import React from 'react';
+const PageIndex = dynamicReq(() => import('./_page'), { ssr: false });
+
+export default function Page(props) {
+  return <PageIndex />;
+}
+export const ssg = false;

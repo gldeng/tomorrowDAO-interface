@@ -1,13 +1,8 @@
-import { memo } from 'react';
-import DeployForm from './DeployForm';
-import './index.css';
-const ProposalDeploy = (props: { params: { daoId: string } }) => {
-  const { daoId } = props.params;
-  return (
-    <div className="deploy-form">
-      <DeployForm daoId={daoId} />
-    </div>
-  );
-};
-
-export default memo(ProposalDeploy);
+'use client';
+import React from 'react';
+import dynamicReq from 'next/dynamic';
+const PageIndex = dynamicReq(() => import('./_page'), { ssr: false });
+export default function Page(props) {
+  return <PageIndex />;
+}
+export const ssg = false;
