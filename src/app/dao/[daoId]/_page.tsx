@@ -20,12 +20,10 @@ import { fetchDaoInfo, fetchProposalList } from 'api/request';
 import { curChain } from 'config';
 import './page.css';
 import { ALL } from './constants';
+import { useParams } from 'next/navigation';
 
-interface IProps {
-  daoId: string;
-}
-export default function DeoDetails(props: IProps) {
-  const daoId = props.daoId;
+export default function DeoDetails() {
+  const { daoId } = useParams<{ daoId: string }>();
   const { isLG, isSM } = useResponsive();
 
   const [form] = Form.useForm();

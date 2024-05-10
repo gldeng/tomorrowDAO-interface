@@ -1,7 +1,4 @@
 'use client';
 
-import DaoDetail from './_page';
-
-export default function DaoDetailPage(props: { params: { daoId: string } }) {
-  return <DaoDetail daoId={props.params.daoId} />;
-}
+import dynamic from 'next/dynamic';
+export default dynamic(() => import('./_page'), { ssr: false });

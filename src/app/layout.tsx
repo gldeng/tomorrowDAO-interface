@@ -9,7 +9,7 @@ import NetworkDaoLayout from 'pageComponents/network-dao/layout';
 
 import Provider from 'provider/';
 import Script from 'next/script';
-import StyleRegistry from './StyleRegistry';
+// import StyleRegistry from './StyleRegistry';
 import { NetworkDaoHomePathName } from 'config';
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
@@ -35,15 +35,15 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
         </Script>
       </head>
       <body>
-        <StyleRegistry>
-          <Provider>
-            {isNetWorkDao ? (
-              <NetworkDaoLayout>{children}</NetworkDaoLayout>
-            ) : (
-              <Layout>{children}</Layout>
-            )}
-          </Provider>
-        </StyleRegistry>
+        {/* <StyleRegistry> */}
+        <Provider>
+          {isNetWorkDao ? (
+            <NetworkDaoLayout>{children}</NetworkDaoLayout>
+          ) : (
+            <Layout>{children}</Layout>
+          )}
+        </Provider>
+        {/* </StyleRegistry> */}
       </body>
     </html>
   );
