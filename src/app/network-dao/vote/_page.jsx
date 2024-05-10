@@ -1394,6 +1394,10 @@ const mapDispatchToProps = {
   setContractWithName,
 };
 
-export default (
+const VoteContainerConnect = (
   connect(mapStateToProps, mapDispatchToProps)(VoteContainer)
 );
+
+export default function VoteContainerPage() {
+  return <VoteContainerConnect />
+}

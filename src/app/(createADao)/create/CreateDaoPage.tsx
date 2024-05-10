@@ -36,6 +36,8 @@ import Link from 'next/link';
 import { current } from '@reduxjs/toolkit';
 import { IFormValidateError, IContractError } from 'types';
 import { cloneDeepWith } from 'lodash-es';
+import NetworkDaoHome from 'app/network-dao/page';
+import { NetworkName } from 'config';
 
 const initItems: StepsProps['items'] = [
   {
@@ -115,6 +117,7 @@ const CreateDaoPage = () => {
   const handleCreateDao = async () => {
     const stepForm = stepsFormMapRef.current.stepForm;
     const form = stepForm[StepEnum.step3].formInstance;
+    const isNetworkDaoLocal = localStorage.getItem('is_network_dao');
     if (form) {
       const res = await form?.validateFields();
       stepForm[StepEnum.step3].submitedRes = res;
@@ -153,6 +156,9 @@ const CreateDaoPage = () => {
             ...(stepForm[StepEnum.step1].submitedRes ?? {}),
           },
           files,
+          is_network_dao: isNetworkDaoLocal
+            ? isNetworkDaoLocal === 'true'
+            : metadata.metadata.name === NetworkName,
         };
         if (!isSkipHighCouncil.current) {
           params.highCouncilInput = {

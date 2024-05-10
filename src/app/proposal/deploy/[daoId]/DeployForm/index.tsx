@@ -5,7 +5,7 @@ import { memo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import ProposalType from './ProposalType';
 import ProposalInfo from './ProposalInfo';
-import { IContractError, IFormValidateError } from 'types';
+import { IContractError, IFormValidateError, ProposalType as ProposalTypeEnum } from 'types';
 import clsx from 'clsx';
 import CommonOperationResultModal, {
   CommonOperationResultModalType,
@@ -91,17 +91,21 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
       // const finalParams = params;
       const contractParams = {
         ...res,
-        transaction: {
-          ...res.transaction,
-          params: finalParams,
-        },
         proposalBasicInfo: {
           ...res.proposalBasicInfo,
           daoId,
         },
       };
+      if (res.proposalType === ProposalTypeEnum.GOVERNANCE) {
+        contractParams.transaction = {
+          ...res.transaction,
+          params: finalParams,
+        };
+      }
       emitLoading(true, 'The transaction is being processed...');
-      const createRes = await proposalCreateContractRequest('CreateProposal', contractParams);
+      const methodName =
+        res.proposalType === ProposalTypeEnum.VETO ? 'CreateVetoProposal' : 'CreateProposal';
+      const createRes = await proposalCreateContractRequest(methodName, contractParams);
       console.log('res', createRes);
 
       emitLoading(false);

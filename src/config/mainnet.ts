@@ -1,3 +1,4 @@
+export const electionContractAddress = '2akycoQt8nYSQbarup4tTJYxQ4SzdKbwBfBCcCF9yqWYtMXt9j';
 export const treasuryAccountAddress = 'KNdM6U6PyPsgyena8rPHTbCoMrkrALhxAy1b8Qx2cgi4169xr';
 export const networkType = 'TESTNET';
 export const rpcUrlAELF = 'https://aelf-test-node.aelf.io';

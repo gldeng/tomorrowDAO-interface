@@ -10,7 +10,7 @@ import { integerRule, min2maxIntegerRule, validatorCreate, useRegisterForm } fro
 import { StepEnum, StepsContext } from '../../type';
 import { useSelector } from 'redux/store';
 import { fetchContractInfo } from 'api/request';
-import { ElectionContractName } from 'config/index';
+import { electionContractAddress } from 'config/index';
 import './index.css';
 
 const HighCouncil = () => {
@@ -25,12 +25,6 @@ const HighCouncil = () => {
       chainId: elfInfo.curChain,
     });
   });
-  const electionContractAddress = useMemo(() => {
-    const electionContract = data?.data.contractInfoList.find(
-      (item) => item?.contractName === ElectionContractName,
-    );
-    return electionContract?.contractAddress;
-  }, [data]);
   const metaData = stepForm[StepEnum.step0].submitedRes;
   const disabled = !metaData?.governanceToken;
   return (
@@ -63,7 +57,7 @@ const HighCouncil = () => {
             </Tooltip>
           }
         >
-          <Input disabled defaultValue={electionContractAddress + 'mock address'} />
+          <Input disabled defaultValue={electionContractAddress} />
         </Form.Item>
 
         <Form.Item
@@ -117,7 +111,7 @@ const HighCouncil = () => {
           <InputNumber disabled={disabled} placeholder="Enter 10,000 or less" controls={false} />
         </Form.Item>
         <Form.Item
-          name={['highCouncilConfig', 'lockTokenForElection']}
+          name={['highCouncilConfig', 'stakingAmount']}
           label={
             <Tooltip
               title={`The number of governance tokens that a user need to stake to become eligible for High Council election.`}

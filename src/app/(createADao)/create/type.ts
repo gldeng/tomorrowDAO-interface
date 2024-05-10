@@ -19,7 +19,7 @@ export interface IHighCouncilConfig {
   maxHighCouncilMemberCount: number;
   maxHighCouncilCandidateCount: number;
   electionPeriod: number;
-  lockTokenForElection: number;
+  stakingAmount: number;
 }
 
 export interface IHighCouncilInput {

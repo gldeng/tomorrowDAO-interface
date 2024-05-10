@@ -3,6 +3,7 @@ const path = require('path');
 const rewritesConfig = require('./rewrites/index');
 const ROOT = path.resolve(__dirname, '../src/app/network-dao/');
 module.exports = {
+  ssg: false,
   reactStrictMode: true,
   async rewrites() {
     return rewritesConfig;
@@ -17,10 +18,8 @@ module.exports = {
       },
     ],
   },
-  eslint: {
-    // Warning: This allows production builds to successfully complete even if
-    // your project has ESLint errors.
-    ignoreDuringBuilds: true,
+  typescript: {
+    ignoreBuildErrors: true,
   },
   productionBrowserSourceMaps: true,
   webpack: (config, { webpack }) => {
