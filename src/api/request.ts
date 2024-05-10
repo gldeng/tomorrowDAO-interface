@@ -19,6 +19,14 @@ export const fetchProposalList = async (params: ProposalListReq): Promise<Propos
   });
 };
 
+export const fetchProposalMyInfo = async (
+  params: ProposalMyInfoReq,
+): Promise<ProposalMyInfoRes> => {
+  return apiServer.get('/proposal/my-info', {
+    params,
+  });
+};
+
 export const fetchProposalDetail = async (
   params: ProposalDetailReq,
 ): Promise<ProposalDetailRes> => {

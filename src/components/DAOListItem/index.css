@@ -14,7 +14,7 @@
   }
 
   .dao-list-item-content {
-    @apply min-h-[44px];
+    @apply min-h-[44px] w-full mt-4 mb-6;
   }
 
   .TMRWDAO-typography {
@@ -23,10 +23,6 @@
 
   .content-text {
     @apply text-Neutral-Primary-Text text-sm leading-[22px];
-  }
-
-  .dao-list-item-content {
-    @apply w-full mt-4 mb-6;
   }
 
   .dao-list-item-count {

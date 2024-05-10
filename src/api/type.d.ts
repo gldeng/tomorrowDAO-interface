@@ -126,6 +126,13 @@ interface ProposalListReq {
   content?: string;
 }
 
+interface ProposalMyInfoReq {
+  chainId: string;
+  daoId: string;
+  proposalId?: string;
+  address: string;
+}
+
 interface Transaction {
   contractMethodName: string;
   toAddress: string;
@@ -167,6 +174,21 @@ interface ProposalListResData {
 interface ProposalListRes {
   code: string;
   data: ProposalListResData;
+  message: string;
+}
+
+interface ProposalMyInfo {
+  symbol: string;
+  availableUnStakeAmount: number;
+  stakeAmount: string;
+  votesAmount: string;
+  canVote: boolean;
+  proposalIdList: Array;
+}
+
+interface ProposalMyInfoRes {
+  code: string;
+  data: ProposalMyInfo;
   message: string;
 }
 
