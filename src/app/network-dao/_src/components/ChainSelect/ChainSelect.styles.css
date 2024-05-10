@@ -1,0 +1,32 @@
+.chain-select {
+  width: 154px;
+  margin-left: 10px;
+}
+.chain-select .ant-select-selection-item {
+  color: #266cd3 !important;
+}
+.chain-select .ant-select-selector {
+  box-shadow: none !important;
+}
+.chain-select .ant-select-arrow {
+  color: #266cd3;
+}
+.chain-select .ant-select-selector {
+  border-color: #266cd3 !important;
+}
+.chain-select .ant-select-selector__rendered {
+  line-height: 32px;
+  margin: 0 16px;
+}
+.ant-select-open .ant-select-selector {
+  box-shadow: none;
+}
+.ant-select-open .ant-select-selector:focus {
+  box-shadow: none;
+}
+.chain-select-option {
+  height: 44px;
+  padding: 9px 16px;
+  line-height: 22px;
+  font-size: 14px;
+}

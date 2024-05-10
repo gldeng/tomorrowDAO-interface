@@ -75,14 +75,20 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
       // const method = contractInfo[res.transaction.contractMethodName];
       // let decoded;
       // if (Array.isArray(parsedParams)) {
+      //   console.log(1);
       //   decoded = method.packInput([...parsedParams]);
       // } else if (typeof parsedParams === 'object' && parsedParams !== null) {
+      //   console.log(2);
       //   decoded = method.packInput(JSON.parse(JSON.stringify(parsedParams)));
       // } else {
+      //   console.log(3);
       //   decoded = method.packInput(parsedParams);
       // }
+      // console.log('decoded', decoded);
+      // window.btoa(params);
       // const finalParams = uint8ToBase64(decoded || []) || [];
-      const finalParams = params;
+      const finalParams = window.btoa(params);
+      // const finalParams = params;
       const contractParams = {
         ...res,
         transaction: {
@@ -92,10 +98,8 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
         proposalBasicInfo: {
           ...res.proposalBasicInfo,
           daoId,
-          voteSchemeId: voteSchemeId,
         },
       };
-      delete contractParams.proposalBasicInfo.deleteVoteSchemeId;
       emitLoading(true, 'The transaction is being processed...');
       const createRes = await proposalCreateContractRequest('CreateProposal', contractParams);
       console.log('res', createRes);

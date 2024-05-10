@@ -1,0 +1,142 @@
+/*
+ * @Author: Alfred Yang
+ * @Github: https://github.com/cat-walk
+ * @Date: 2019-09-17 15:54:31
+ * @LastEditors: Alfred Yang
+ * @LastEditTime: 2019-12-09 19:07:24
+ * @Description: file content
+ */
+.team-detail {
+  padding: 50px;
+}
+.team-detail .card-container {
+  padding: 20px 0;
+  margin-bottom: 0;
+}
+.team-detail .card-container .card-header {
+  color: #000;
+  font-weight: bold;
+}
+.team-detail .card-container .card-content {
+  background: #f7f8f9;
+  min-height: 120px;
+  padding: 28px 30px;
+}
+.team-detail .statistical-data-container {
+  background: #fff;
+  padding: 20px 0;
+}
+.team-detail .team-detail-header {
+  margin-bottom: 0;
+}
+.team-detail .team-detail-header .team-detail-team-avatar-info .ant-avatar-square {
+  border-radius: 20px;
+}
+.team-detail .team-detail-header .team-detail-team-avatar-info .team-detail-team-info {
+  display: inline-block;
+  vertical-align: top;
+}
+.team-detail .team-detail-header .team-detail-team-avatar-info .team-detail-team-info .team-detail-node-name {
+  color: #266cd3;
+  max-width: 500px;
+  font-size: 20px;
+}
+.team-detail .team-detail-header .team-detail-team-avatar-info .team-detail-team-info .team-detail-node-name .ant-tag {
+  margin-left: 5px;
+}
+.team-detail .team-detail-header .team-detail-team-avatar-info .team-detail-team-info-location {
+  margin-right: 100px;
+}
+.team-detail .team-detail-header .team-detail-team-avatar-info .team-detail-team-info-address {
+  margin-bottom: 10px;
+}
+.team-detail .team-detail-header .team-detail-team-avatar-info .team-detail-team-info-address .ant-typography {
+  display: inline;
+  max-width: 500px;
+}
+.team-detail .team-detail-header .card-container-right {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.team-detail .team-detail-header .card-container-right .ant-btn {
+  display: block;
+  margin-bottom: 12px;
+  border: none;
+  width: 78px;
+  height: 26px;
+  border-radius: 26px;
+  font-size: 14px;
+}
+.team-detail .team-detail-header .card-container-right .ant-btn.vote-btn {
+  background-color: #266cd3;
+}
+.team-detail .team-detail-header .card-container-right .ant-btn.redeem-btn {
+  background-color: #05ac90;
+}
+.team-detail .team-detail-intro {
+  padding-top: 0;
+  margin-top: 20px;
+}
+.team-detail .team-detail-intro-text {
+  text-indent: 2em;
+}
+.team-detail .vote-team-detail-social-network-item-title {
+  display: inline-block;
+  min-width: 72px;
+}
+.team-detail .vote-team-detail-empty {
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.card-header {
+  padding: 10px 10px 10px 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  font-size: 18px;
+}
+@media (max-width: 768px) {
+  .team-detail {
+    padding: 20px;
+  }
+  .team-detail .team-detail-header .card-container-left {
+    padding: 0;
+  }
+  .team-detail .team-detail-header .card-container-left .team-detail-team-avatar-info {
+    position: relative;
+    display: block;
+  }
+  .team-detail .team-detail-header .card-container-left .team-detail-team-avatar-info .edit-btn {
+    display: none;
+  }
+  .team-detail .team-detail-header .card-container-left .team-detail-team-avatar-info .team-avatar-container {
+    padding-top: 12px;
+  }
+  .team-detail .team-detail-header .card-container-left .team-detail-team-avatar-info .team-detail-team-info {
+    width: 80%;
+    margin-left: 10px;
+  }
+  .team-detail .team-detail-header .card-container-left .team-detail-team-avatar-info .team-detail-team-info .team-detail-node-name {
+    max-width: 250px;
+    font-size: 16px;
+  }
+  .team-detail .team-detail-header .card-container-left .team-detail-team-avatar-info .team-detail-team-info-address {
+    position: relative;
+    display: block;
+    margin-bottom: 0;
+  }
+  .team-detail .team-detail-header .card-container-left .team-detail-team-avatar-info .team-detail-team-info-address .ant-typography {
+    display: inline-block;
+    max-width: 250px;
+  }
+  .team-detail .team-detail-header .card-container-left .team-detail-team-avatar-info .team-detail-team-info-address .ant-typography .ant-typography-copy {
+    position: absolute;
+    top: 0;
+    right: 5%;
+  }
+  .team-detail .team-detail-header .card-container-right {
+    display: none;
+  }
+}

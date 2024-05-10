@@ -32,6 +32,7 @@ const WebLoginProviderDynamic = dynamic(
     webLogin.setGlobalConfig({
       appName: APP_NAME,
       chainId: info.curChain || '',
+      // chainId: 'AELF' || '',
       onlyShowV2: true,
       portkey: {},
       portkeyV2: {
@@ -66,6 +67,7 @@ const WebLoginProviderDynamic = dynamic(
         (info?.[`rpcUrl${String(info?.curChain).toUpperCase()}`] as unknown as string) ||
         info?.rpcUrlTDVW ||
         '',
+      // defaultRpcUrl: 'https://explorer-test.aelf.io/chain',
       networkType: info?.networkType || 'TESTNET',
     });
     return webLogin.WebLoginProvider;

@@ -1,23 +1,20 @@
+'use client';
+
+import { usePathname } from 'next/navigation';
 import 'aelf-web-login/dist/assets/index.css';
 import 'styles/global.css';
 import 'aelf-design/css';
 import Layout from 'pageComponents/layout';
+import NetworkDaoLayout from 'pageComponents/network-dao/layout';
+
 import Provider from 'provider/';
 import Script from 'next/script';
 import StyleRegistry from './StyleRegistry';
-
-export const metadata = {
-  title: 'TMRW DAO',
-  description: 'TMRW DAO',
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
-    userScalable: 'no',
-  },
-};
+import { NetworkDaoHomePathName } from 'config';
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
+  const pathname = usePathname();
+  const isNetWorkDao = pathname.startsWith(NetworkDaoHomePathName);
   return (
     <html lang="en">
       <head>
@@ -40,7 +37,11 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
       <body>
         <StyleRegistry>
           <Provider>
-            <Layout>{children}</Layout>
+            {isNetWorkDao ? (
+              <NetworkDaoLayout>{children}</NetworkDaoLayout>
+            ) : (
+              <Layout>{children}</Layout>
+            )}
           </Provider>
         </StyleRegistry>
       </body>

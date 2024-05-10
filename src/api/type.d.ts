@@ -286,17 +286,16 @@ interface ContractInfoListRes {
 
 interface IVoteSchemeListReq {
   chainId: string;
-  types: (0 | 1 | 2)[];
 }
 
 interface IVoteScheme {
-  VoteSchemeId: string;
-  VoteMechanism: number;
-  VoteMechanismName: string;
+  voteSchemeId: string;
+  voteMechanismName: string;
+  voteMechanism: number;
 }
 
 interface IVoteSchemeListData {
-  VoteSchemeList: VoteScheme[];
+  voteSchemeList: IVoteScheme[];
 }
 
 interface IVoteSchemeListRes {
@@ -321,4 +320,55 @@ interface ITokenInfoRes {
   msg: string;
   code: number;
   data: TokenInfoData;
+}
+
+// -------------------------------------explore-----------------------------
+interface AddressTokenListDataItem {
+  symbol: string;
+  balance: string;
+}
+
+interface AddressTokenListRes {
+  msg: string;
+  code: number;
+  data: AddressTokenListDataItem[];
+}
+// -------------------------------------explore-----------------------------
+interface AddressTransferListTxFee {
+  ELF: number;
+}
+
+interface AddressTransferListDataListItem {
+  id: number;
+  txId: string;
+  from: string;
+  to: string;
+  amount: string;
+  symbol: string;
+  action: string;
+  isCrossChain: string;
+  relatedChainId: string;
+  memo: null;
+  txFee: AddressTransferListTxFee;
+  time: string;
+  method: string;
+  blockHeight: number;
+  addressFrom: string;
+  addressTo: string;
+}
+
+interface AddressTransferListData {
+  list: AddressTransferListDataListItem[];
+  total: number;
+}
+
+interface AddressTransferListRes {
+  msg: string;
+  code: number;
+  data: AddressTransferListData;
+}
+// -------------------------------------TokenPriceRes-----------------------------
+interface TokenPriceRes {
+  USD?: number;
+  symbol: string;
 }

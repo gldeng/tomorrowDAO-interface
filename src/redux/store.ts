@@ -10,12 +10,27 @@ import elfInfoReducer, { elfInfoSlice } from './reducer/elfInfo';
 import UserInfoReducer, { userInfoSlice } from './reducer/userInfo';
 import daoCreateReducer, { daoCreateSlice } from './reducer/daoCreate';
 
+import {
+  common,
+  getOrganization,
+  getProposalList,
+  getProposalSelectList,
+  setModifyOrg,
+  handleContract,
+} from '../app/network-dao/_src/redux/reducers';
+
 const rootReducer = combineReducers({
   [infoSlice.name]: InfoReducer,
   [dataSlice.name]: DataReducer,
   [userInfoSlice.name]: UserInfoReducer,
   [elfInfoSlice.name]: elfInfoReducer,
   [daoCreateSlice.name]: daoCreateReducer,
+  common,
+  organizations: getOrganization,
+  proposals: getProposalList,
+  proposalSelect: getProposalSelectList,
+  proposalModify: setModifyOrg,
+  voteContracts: handleContract,
 });
 
 const makeStore = () => {
@@ -30,6 +45,8 @@ const makeStore = () => {
     reducer: rootReducer,
     middleware: (getDefaultMiddleware: any) =>
       getDefaultMiddleware({
+        thunk: true,
+        immutableCheck: false,
         serializableCheck: false,
       }),
     devTools: process.env.NODE_ENV !== 'production',

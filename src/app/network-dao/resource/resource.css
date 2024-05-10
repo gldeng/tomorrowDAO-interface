@@ -1,0 +1,58 @@
+.App .resource-body.basic-container {
+  padding-left: 0;
+  padding-right: 0;
+  background-color: transparent;
+}
+.resource-money-market {
+  padding-top: 38px;
+}
+@media screen and (max-width: 992px) {
+  .resource-wallet {
+    margin: 20px;
+  }
+}
+@media (max-width: 768px) {
+  .resource-money-market {
+    padding-top: 0;
+  }
+}
+.resource-icon {
+  color: #266cd3;
+  font-size: 26px;
+  margin-right: 12px;
+}
+.resource-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #000;
+}
+.resource-block {
+  background-color: #ffffff;
+}
+.resource-header {
+  border-bottom: 1px solid #e5e5e5;
+  padding: 20px 57px 18px 57px;
+}
+.resource-sub-container {
+  padding: 0 57px;
+}
+.resource-blank {
+  height: 25px;
+  width: 25px;
+}
+.resource-pc-note {
+  text-align: center;
+  color: #266cd3;
+  padding-top: 16px;
+  font-size: 14px;
+}
+.text-ellipse {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+@media screen and (max-width: 768px) {
+  .resource-sub-container {
+    padding: 0;
+  }
+}

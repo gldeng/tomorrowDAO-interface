@@ -1,3 +1,4 @@
+export const treasuryAccountAddress = 'KNdM6U6PyPsgyena8rPHTbCoMrkrALhxAy1b8Qx2cgi4169xr';
 export const networkType = 'TESTNET';
 export const rpcUrlAELF = 'https://aelf-test-node.aelf.io';
 export const rpcUrlTDVV = 'https://tdvw-test-node.aelf.io';

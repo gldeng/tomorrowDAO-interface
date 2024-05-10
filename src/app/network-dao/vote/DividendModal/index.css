@@ -1,0 +1,88 @@
+/*
+ * @Author: Alfred Yang
+ * @Github: https://github.com/cat-walk
+ * @Date: 2019-09-25 16:08:05
+ * @LastEditors: Alfred Yang
+ * @LastEditTime: 2019-12-07 21:23:53
+ * @Description: file content
+ */
+.profit-item-value {
+  font-size: 12px;
+  display: inline-block;
+}
+.dividend-modal.ant-modal {
+  width: 672px !important;
+  border-radius: 8px;
+}
+.dividend-modal.ant-modal .ant-modal-close-icon {
+  position: absolute;
+  top: 17px;
+  right: 16px;
+}
+.dividend-modal.ant-modal .ant-modal-content .ant-modal-header {
+  border-bottom: 1px solid #e6e6e6;
+}
+.dividend-modal.ant-modal .ant-modal-content .ant-modal-header .ant-modal-title {
+  padding: 17px 16px;
+  border: 0;
+}
+.dividend-modal.ant-modal .ant-modal-content .ant-modal-body {
+  padding: 24px 16px;
+  display: grid;
+  grid-gap: 16px;
+  font-size: 12px;
+}
+.dividend-modal.ant-modal .ant-modal-content .ant-modal-body .claim-profit-item {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 140px 1fr 128px;
+  grid-gap: 8px;
+}
+.dividend-modal.ant-modal .ant-modal-content .ant-modal-body .claim-profit-item .text-center {
+  text-align: left;
+}
+.dividend-modal.ant-modal .ant-modal-content .ant-modal-body .claim-profit-item .ant-btn {
+  width: 128px;
+  height: 24px;
+  border-radius: 4px;
+  font-size: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.dividend-modal.ant-modal .ant-modal-close-icon {
+  color: #101010;
+}
+@media (max-width: 1024px) {
+  .dividend-modal.ant-modal {
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: 100%;
+    height: 100vh;
+    border-radius: 0;
+  }
+  .dividend-modal.ant-modal .ant-modal-content {
+    height: 100vh;
+  }
+  .dividend-modal.ant-modal .ant-modal-content .ant-modal-header {
+    text-align: left;
+    padding: 0;
+  }
+}
+@media (max-width: 640px) {
+  .dividend-modal.ant-modal .text-left {
+    grid-area: left;
+  }
+  .dividend-modal.ant-modal .text-center {
+    grid-area: center;
+  }
+  .dividend-modal.ant-modal .text-right {
+    grid-area: right;
+    display: grid;
+    justify-content: end;
+  }
+  .dividend-modal.ant-modal .ant-modal-content .ant-modal-body .claim-profit-item {
+    grid-template-areas: "left ." "center right";
+    grid-template-columns: 1fr 1fr;
+  }
+}

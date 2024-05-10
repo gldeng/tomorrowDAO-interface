@@ -1,0 +1,11 @@
+.header-blank {
+  height: 108px;
+}
+@media screen and (max-width: 768px) {
+  .header-blank {
+    height: 128px;
+  }
+  .header-blank.only-menu {
+    height: 56px;
+  }
+}

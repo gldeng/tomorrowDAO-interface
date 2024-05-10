@@ -28,15 +28,15 @@ class Request {
     this.instance.interceptors.response.use(
       <T>(response: AxiosResponse<ResponseType<T>>) => {
         const res = response.data;
-        const { code, data, message: errorMessage } = response.data;
-        if (response.config.url?.includes('api.etherscan.io')) {
-          return res;
-        }
-        if (config.baseURL?.includes('cms')) {
-          return data;
-        }
-        if (config.baseURL?.includes('connect')) {
-          return res;
+        const { code, data, message: errorMessage } = res;
+        if (config.baseURL?.includes('/explorer-api')) {
+          switch (response.status) {
+            case 200:
+              return res;
+            default:
+              message.error(errorMessage);
+              return res;
+          }
         }
 
         switch (code) {
@@ -117,5 +117,9 @@ const apiServer = new Request({
   baseURL: '/api/app',
 });
 
+const explorerServer = new Request({
+  baseURL: '/explorer-api/',
+});
+
 export default new Request({});
-export { apiServer };
+export { apiServer, explorerServer };
