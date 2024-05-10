@@ -29,7 +29,7 @@ export default function ProposalsItem(props: { data: IProposalsItem }) {
     return [data.governanceMechanism];
   }, [data]);
 
-  const proposalComplete = proposalStatus === ProposalStatusString.Approved;
+  const proposalComplete = (proposalStatus as any) === ProposalStatusString.Approved;
 
   return (
     <div className="proposal-item">

@@ -7,7 +7,7 @@ import SuccessGreenIcon from 'assets/imgs/success-green.svg';
 import CommonModal from 'components/CommonModal';
 import { useWalletService } from 'hooks/useWallet';
 import Info from '../Info';
-import { fetchProposalMyInfo, ProposalMyInfo } from 'api/request';
+import { fetchProposalMyInfo } from 'api/request';
 import { store } from 'redux/store';
 import { useSelector } from 'react-redux';
 import { callContract, GetBalanceByContract } from 'contract/callContract';

@@ -9,7 +9,7 @@ import { ResponsiveSelect } from 'components/ResponsiveSelect';
 import MarkdownEditor from 'components/MarkdownEditor';
 import Editor from '@monaco-editor/react';
 import { ReactComponent as ArrowIcon } from 'assets/imgs/arrow-icon.svg';
-import { proposalTypeList } from 'types';
+import { ProposalType, proposalTypeList } from 'types';
 import {
   fetchGovernanceMechanismList,
   fetchContractInfo,
@@ -214,58 +214,63 @@ const ProposalInfo = (props: ProposalInfoProps) => {
           })}
         </Radio.Group>
       </Form.Item>
-      {/* contract address: */}
-      <Form.Item
-        name={['transaction', 'toAddress']}
-        rules={[
-          {
-            required: true,
-            message: 'contract address is required',
-          },
-        ]}
-        label={<span className="form-item-label">Contract Address</span>}
-      >
-        <ResponsiveSelect
-          drawerProps={{
-            title: 'Contract Address',
-          }}
-          options={contractInfoOptions}
-          optionLabelProp="label"
-          placeholder="Select a contract"
-        ></ResponsiveSelect>
-      </Form.Item>
-      <Form.Item
-        name={contractMethodNamePath}
-        label={<span className="form-item-label">Method Name</span>}
-        dependencies={['transaction', 'toAddress']}
-        rules={[
-          {
-            required: true,
-            message: 'method name is required',
-          },
-        ]}
-      >
-        <ResponsiveSelect
-          drawerProps={{
-            title: 'Method Name',
-          }}
-          options={contractMethodOptions}
-          optionLabelProp="label"
-          placeholder="Select a method name"
-        ></ResponsiveSelect>
-      </Form.Item>
-      <Form.Item
-        name={['transaction', 'params']}
-        label={<span className="form-item-label">Method Params</span>}
-        rules={[
-          {
-            required: true,
-            message: 'method params is required',
-          },
-        ]}
-      >
-        <Editor defaultLanguage="json" height={176} />
-      </Form.Item>
+      {/* transaction: */}
+      {proposalType === ProposalType.GOVERNANCE && (
+        <>
+          <Form.Item
+            name={['transaction', 'toAddress']}
+            rules={[
+              {
+                required: true,
+                message: 'contract address is required',
+              },
+            ]}
+            label={<span className="form-item-label">Contract Address</span>}
+          >
+            <ResponsiveSelect
+              drawerProps={{
+                title: 'Contract Address',
+              }}
+              options={contractInfoOptions}
+              optionLabelProp="label"
+              placeholder="Select a contract"
+            ></ResponsiveSelect>
+          </Form.Item>
+          <Form.Item
+            name={contractMethodNamePath}
+            label={<span className="form-item-label">Method Name</span>}
+            dependencies={['transaction', 'toAddress']}
+            rules={[
+              {
+                required: true,
+                message: 'method name is required',
+              },
+            ]}
+          >
+            <ResponsiveSelect
+              drawerProps={{
+                title: 'Method Name',
+              }}
+              options={contractMethodOptions}
+              optionLabelProp="label"
+              placeholder="Select a method name"
+            ></ResponsiveSelect>
+          </Form.Item>
+          <Form.Item
+            name={['transaction', 'params']}
+            label={<span className="form-item-label">Method Params</span>}
+            rules={[
+              {
+                required: true,
+                message: 'method params is required',
+              },
+            ]}
+          >
+            <Editor defaultLanguage="json" height={176} />
+          </Form.Item>
+        </>
+      )}
+
       <Form.Item
         label={
           <Tooltip title="If the proposal is initiated around or at UTC 00:00 and is created after 00:00, the creation date will be the second day. As a result, the voting period will be extended by one day.">
