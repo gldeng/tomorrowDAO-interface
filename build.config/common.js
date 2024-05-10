@@ -19,9 +19,12 @@ module.exports = {
     ],
   },
   typescript: {
+    // !! WARN !!
+    // Dangerously allow production builds to successfully complete even if
+    // your project has type errors.
+    // !! WARN !!
     ignoreBuildErrors: true,
   },
-  productionBrowserSourceMaps: true,
   webpack: (config, { webpack }) => {
     config.module.rules.push({
       test: /\.svg$/,

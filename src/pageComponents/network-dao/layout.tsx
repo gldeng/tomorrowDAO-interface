@@ -5,7 +5,7 @@ import StoreProvider from './store';
 import NetworkDaoHeader from 'components/NetworkDaoHeader';
 
 import Loading from 'components/Loading';
-import dynamic from 'next/dynamic';
+import dynamicReq from 'next/dynamic';
 import {
   useWebLoginEvent,
   useWebLogin,
@@ -22,7 +22,7 @@ import PageLoading from 'components/Loading';
 import { usePathname } from 'next/navigation';
 import { NetworkDaoHomePathName } from 'config';
 
-const Layout = dynamic(
+const Layout = dynamicReq(
   async () => {
     return (props: React.PropsWithChildren<{}>) => {
       const { children } = props;

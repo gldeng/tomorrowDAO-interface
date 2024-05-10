@@ -19,7 +19,7 @@ import constants, { LOADING_STATUS, LOG_STATUS } from "@redux/common/constants";
 import { setCurrentOrg } from "@actions/proposalDetail";
 import Total from "@components/Total";
 import Organization from "./Organization";
-import dynamic from 'next/dynamic';
+import dynamicReq from 'next/dynamic';
 import { getOrganizations } from "@redux/actions/organizationList";
 import "./index.css";
 import { removePrefixOrSuffix, sendHeight } from "@common/utils";

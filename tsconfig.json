@@ -20,22 +20,11 @@
       {
         "name": "next"
       }
-    ],
-    "paths": {
-      "@common/*": ["app/network-dao/_src/common/*"],
-      "@utils/*": ["app/network-dao/_src/utils/*"],
-      "@components/*": ["app/network-dao/_src/components/*"],
-      "@hooks/*": ["app/network-dao/_src/hooks/*"],
-      "@pages/*": ["app/network-dao/_src/pages/*"],
-      "@api/*": ["app/network-dao/_src/api/*"],
-      "@context/*": ["app/network-dao/_src/context/*"],
-      "@lib/*": ["app/network-dao/_src/lib/*"],
-      "@types/*": ["app/network-dao/_src/types/*"]
-    }
+    ]
   },
   "include": ["src", "next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": [
-    "node_modules",
+    "node_modules"
     // "src/app/network-dao/_proposal_root/**/*",
     // "src/app/network-dao/_src/**/*",
     // "src/app/network-dao/proposal-list/**/*",
