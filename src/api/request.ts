@@ -59,6 +59,12 @@ export const fetchVoteSchemeList = async (
   });
 };
 
+export const fetchVoteHistory = async (params: IVoteHistoryReq): Promise<IVoteHistoryRes> => {
+  return apiServer.get('/proposal/vote-history', {
+    params,
+  });
+};
+
 export const fetchTokenInfo = async (params: {
   symbol: string;
   chainId: string;
