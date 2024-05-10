@@ -1,5 +1,5 @@
 import qs from 'qs';
-import { apiServer } from './axios';
+import { apiServer, explorerServer } from './axios';
 
 export const fetchDaoList = async (params: IListDaoReq): Promise<ListDaoRes> => {
   return apiServer.get('/dao/dao-list', {
@@ -54,7 +54,7 @@ export const fetchContractInfo = async (params: {
 export const fetchVoteSchemeList = async (
   params: IVoteSchemeListReq,
 ): Promise<IVoteSchemeListRes> => {
-  return apiServer.get('/vote-scheme-list', {
+  return apiServer.get('/vote/vote-scheme-list', {
     params,
   });
 };
@@ -64,6 +64,37 @@ export const fetchTokenInfo = async (params: {
   chainId: string;
 }): Promise<ITokenInfoRes> => {
   return apiServer.get('/token', {
+    params,
+  });
+};
+
+// explore
+export const fetchAddressTokenList = async (params: {
+  address: string;
+}): Promise<AddressTokenListRes> => {
+  return explorerServer.get('/viewer/balances', {
+    params,
+  });
+};
+
+export const fetchAddressTransferList = async (params: {
+  pageSize: number;
+  pageNum: number;
+  address: string;
+}): Promise<AddressTransferListRes> => {
+  return explorerServer.get('/viewer/transferList', {
+    params,
+  });
+};
+export const fetchTokenPrice = async (params: {
+  fsym: string;
+  syms?: string;
+}): Promise<TokenPriceRes> => {
+  if (!params.syms) {
+    params.syms = 'USD';
+  }
+
+  return explorerServer.get('/token/price', {
     params,
   });
 };

@@ -20,31 +20,22 @@ import {
 import { formatDate } from '../util';
 import { proposalCreateContractRequest } from 'contract/proposalCreateContract';
 import { useSelector } from 'redux/store';
+import { curChain } from 'config';
 
 const contractMethodNamePath = ['transaction', 'contractMethodName'];
-const VoteSchemeList = [
-  {
-    VoteMechanismName: '1 address = 1 vote',
-    VoteSchemeId: '1a1v',
-  },
-  {
-    VoteMechanismName: '1 token = 1 vote',
-    VoteSchemeId: '1t1v',
-  },
-];
 const { Option } = Select;
 interface ProposalInfoProps {
   next?: () => void;
   className?: string;
   daoId: string;
-  onSubmit: (voteSchemeId: string) => void;
+  onSubmit: () => void;
 }
 const ProposalInfo = (props: ProposalInfoProps) => {
   const [governanceMechanismList, setGovernanceMechanismList] = useState<GovernanceSchemeList>();
   const searchParams = useSearchParams();
   const [daoInfo, setDaoInfo] = useState<DaoInfoData>();
   const [contractInfo, setContractInfo] = useState<ContractInfoListData>();
-  // const [voteScheme, setVoteScheme] = useState<IVoteSchemeListData>();
+  const [voteScheme, setVoteScheme] = useState<IVoteSchemeListData>();
 
   // const info = store.getState().elfInfo.elfInfo;
   const elfInfo = useSelector((state) => state.elfInfo.elfInfo);
@@ -81,12 +72,6 @@ const ProposalInfo = (props: ProposalInfoProps) => {
   const proposalType = Form.useWatch('proposalType', form);
   const schemeAddress = Form.useWatch(['proposalBasicInfo', 'schemeAddress'], form);
   const params = Form.useWatch(['transaction', 'params'], form);
-  const voteSchemeId = useMemo(() => {
-    const governanceMechanism = governanceMechanismList?.find(
-      (item) => item.schemeAddress === schemeAddress,
-    );
-    return governanceMechanism?.schemeId;
-  }, [schemeAddress, governanceMechanismList]);
   const contractMethodOptions = useMemo(() => {
     const contract = contractInfo?.contractInfoList.find(
       (item) => item.contractAddress === contractAddress,
@@ -102,21 +87,17 @@ const ProposalInfo = (props: ProposalInfoProps) => {
   }, [contractInfo, contractAddress]);
   useEffect(() => {
     const run = async () => {
-      const [
-        governanceMechanismListRes,
-        daoInfo,
-        contractInfo,
-        // voteSchemeListRes
-      ] = await Promise.all([
-        fetchGovernanceMechanismList({ chainId: elfInfo.curChain, daoId: daoId }),
-        fetchDaoInfo({ chainId: elfInfo.curChain, daoId: daoId }),
-        fetchContractInfo({ chainId: elfInfo.curChain }),
-        // fetchVoteSchemeList({ chainId: elfInfo.curChain, types: [1, 2] }),
-      ]);
+      const [governanceMechanismListRes, daoInfo, contractInfo, voteSchemeListRes] =
+        await Promise.all([
+          fetchGovernanceMechanismList({ chainId: elfInfo.curChain, daoId: daoId }),
+          fetchDaoInfo({ chainId: elfInfo.curChain, daoId: daoId }),
+          fetchContractInfo({ chainId: elfInfo.curChain }),
+          fetchVoteSchemeList({ chainId: curChain }),
+        ]);
       setGovernanceMechanismList(governanceMechanismListRes.data.data);
       setDaoInfo(daoInfo.data);
       setContractInfo(contractInfo.data);
-      // setVoteScheme(voteSchemeListRes.data);
+      setVoteScheme(voteSchemeListRes.data);
     };
     run();
   }, []);
@@ -213,9 +194,9 @@ const ProposalInfo = (props: ProposalInfoProps) => {
       </Form.Item>
       {/* 1a1v/1t1v */}
       <Form.Item
-        name={['proposalBasicInfo', 'deleteVoteSchemeId']}
+        name={['proposalBasicInfo', 'voteSchemeId']}
         label={<span className="form-item-label">Voting mechanism</span>}
-        initialValue={VoteSchemeList[0].VoteSchemeId}
+        initialValue={voteScheme?.voteSchemeList?.[0]?.voteSchemeId}
         rules={[
           {
             required: true,
@@ -224,10 +205,10 @@ const ProposalInfo = (props: ProposalInfoProps) => {
         ]}
       >
         <Radio.Group>
-          {VoteSchemeList.map((item) => {
+          {voteScheme?.voteSchemeList.map((item) => {
             return (
-              <Radio value={item.VoteSchemeId} key={item.VoteMechanismName}>
-                {item.VoteMechanismName}
+              <Radio value={item.voteSchemeId} key={item.voteSchemeId}>
+                {item.voteMechanismName}
               </Radio>
             );
           })}
@@ -335,7 +316,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
           className="w-[156px]"
           // disabled={!title || !description}
           onClick={() => {
-            onSubmit(voteSchemeId ?? '');
+            onSubmit();
           }}
         >
           Submit

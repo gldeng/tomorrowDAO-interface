@@ -51,7 +51,7 @@ export default function MyRecords() {
           My Votes
         </Typography.Title>
         <div className="records-header-morebtn">
-          <Link href="/myRecord">
+          <Link href="/my-record">
             <Button type="link" size="medium" className="!p-0 text-[#1A1A1A]">
               Load More
               <Image width={12} height={12} src={arrowRightIcon} alt=""></Image>

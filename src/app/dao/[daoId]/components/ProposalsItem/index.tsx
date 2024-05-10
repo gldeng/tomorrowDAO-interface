@@ -96,7 +96,7 @@ export default function ProposalsItem(props: { data: IProposalsItem }) {
           ) : (
             <div className="vote-dis">
               <Image width={12} height={12} src={WarningGrayIcon} alt=""></Image>
-              Minimum voting requirement met：{' '}
+              Minimum voting requirement met：
               {data.votesAmount < data.minimalVoteThreshold
                 ? `${data.votesAmount}/${data.minimalVoteThreshold}`
                 : `${data.voterCount}/${data.minimalRequiredThreshold}`}
@@ -118,22 +118,22 @@ function CustomProgress(props: { data: IProposalsItem }) {
       <div className="flex">
         <div className="flex-1 text-approve">
           <div className="font-medium leading-10">Approved</div>
-          <div className="leading-4">{data.minimalApproveThreshold / 100}%</div>
+          <div className="leading-4">{data.minimalApproveThreshold}%</div>
         </div>
         <div className="flex-1 text-abstention">
           <div className="font-medium leading-10">Asbtained</div>
-          <div className="leading-4">{data.maximalAbstentionThreshold / 100}%</div>
+          <div className="leading-4">{data.maximalAbstentionThreshold}%</div>
         </div>
         <div className="justify-self-end text-rejection">
           <div className="font-medium leading-10">Rejected</div>
-          <div className="leading-4">{data.maximalRejectionThreshold / 100}%</div>
+          <div className="leading-4">{data.maximalRejectionThreshold}%</div>
         </div>
       </div>
       <Progress
         trailColor="#F55D6E"
         strokeColor="#687083"
-        percent={(data.minimalApproveThreshold + data.maximalAbstentionThreshold) / 100}
-        success={{ percent: data.minimalApproveThreshold / 100, strokeColor: '#3888FF' }}
+        percent={data.minimalApproveThreshold + data.maximalAbstentionThreshold}
+        success={{ percent: data.minimalApproveThreshold, strokeColor: '#3888FF' }}
       />
     </>
   );

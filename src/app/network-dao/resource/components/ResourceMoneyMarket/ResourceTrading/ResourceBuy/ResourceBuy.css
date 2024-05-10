@@ -1,0 +1,75 @@
+.trading-box {
+  background: #ffffff;
+  display: flex;
+  justify-content: center;
+}
+.trading-box .ant-input-group-addon {
+  border-left: none;
+  background: transparent;
+  color: #B4B4B4;
+}
+.trading-box .ant-input {
+  border: 1px solid #d9d9d9;
+  border-right: none;
+  background: transparent;
+  color: #B4B4B4;
+}
+.trading-box .ant-input-number {
+  border: 1px solid #d9d9d9;
+  background: transparent;
+  color: #B4B4B4;
+}
+.trading-buy {
+  border-right: 1px solid rgba(255, 255, 255, 0.19);
+}
+.trading-buy .trading-title {
+  color: #05ac90;
+  font-size: 16px;
+  font-weight: 900;
+}
+.trading-buy .ant-slider-track {
+  background: #05ac90;
+}
+.trading-buy .ant-slider-dot-active {
+  border-color: #05ac90;
+  background: #05ac90;
+}
+.trading-buy .ant-slider-handle {
+  border-color: #05ac90;
+  background: #05ac90;
+  border: solid 2px #05ac90;
+  transform: none !important;
+}
+.trading-buy .ant-slider-handle:focus {
+  box-shadow: none;
+}
+.trading-buy .ant-slider-track:focus {
+  background: #05ac90;
+}
+.trading-buy .ant-slider:hover .ant-slider-track {
+  background: #05ac90;
+}
+.trading-buy .ant-slider:hover .ant-slider-handle {
+  border: none;
+}
+.trading-buy .ELF-value .ant-spin-nested-loading {
+  position: relative;
+  display: inline-block;
+  min-height: 30px;
+}
+.trading-buy .ant-spin-container {
+  padding: 3px;
+}
+.trading-buy .ant-form-item {
+  margin-bottom: 0;
+}
+.trading-buy .ant-form-item .ant-form-explain {
+  position: absolute;
+  top: -50%;
+}
+.ant-confirm-title {
+  color: #000;
+}
+.approve-info {
+  color: #000;
+}

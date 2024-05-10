@@ -1,0 +1,148 @@
+.resource-trading {
+  position: relative;
+  margin-bottom: 20px;
+}
+.resource-trading .resource-action-block {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+}
+.resource-trading .resource-action-block .resource-action-title {
+  color: #4c4c4c;
+  font-weight: bold;
+  display: inline-block;
+  width: 120px;
+  line-height: 16px;
+  height: 16px;
+}
+.resource-trading .resource-action-block .resource-action-input {
+  min-width: 140px;
+  flex: 1 1;
+  display: inline-block;
+  width: auto;
+}
+.resource-trading .resource-action-block .resource-action-input .ant-input-number {
+  width: 100%;
+  color: #333333;
+}
+.resource-trading .trading-title-sell {
+  color: #d34a64;
+  font-size: 16px;
+  font-weight: 900;
+}
+.resource-trading .trading-title-buy {
+  color: #05ac90;
+  font-size: 16px;
+  font-weight: 900;
+}
+.resource-buy-divider {
+  margin: 15px 0;
+}
+.resource-trading-head {
+  height: 44px;
+  background: #ffffff;
+  text-indent: 28px;
+  line-height: 44px;
+  color: #000;
+  font-size: 16px;
+}
+.trading {
+  width: 100%;
+  min-width: 270px;
+}
+.ELF-value {
+  font-size: 12px;
+  color: #266cd3;
+  text-align: right;
+  margin: 5px 0;
+}
+.trading-input {
+  margin: 2px 0;
+}
+.ant-slider-handle {
+  width: 12px;
+  height: 12px;
+  margin-left: -4px;
+  margin-top: -4px;
+}
+.ant-slider-with-marks {
+  margin-bottom: 16px;
+}
+.ElF-value {
+  color: #266cd3;
+  text-align: right;
+  font-size: 16px;
+}
+.trading-button {
+  width: 100%;
+  height: 28px;
+  text-align: center;
+  border-radius: 6px;
+  color: #fff;
+  margin: 14px auto;
+  cursor: pointer;
+}
+.trading-button.sell-btn {
+  background: #d34a64;
+  border: none;
+  color: #fff;
+}
+.trading-button.sell-btn:hover {
+  background: #d34a64;
+}
+.trading-button.buy-btn {
+  background: #05ac90;
+  border: none;
+  color: #fff;
+}
+.trading-button.buy-btn:hover {
+  background: #05ac90;
+}
+.modal-display-box {
+  text-align: center;
+  overflow: hidden;
+}
+.modal-display-box .ant-modal-content {
+  text-align: center;
+}
+.modal-display-box .ant-modal-content .ant-modal-header {
+  color: #000;
+  text-align: center;
+  border-bottom: 1px solid #e8e8e8;
+  padding: 0 24px;
+}
+.modal-display-box .ant-modal-content .ant-modal-header .ant-modal-title {
+  color: #000;
+  font-size: 28px;
+  line-height: 50px;
+}
+.modal-display-box .ant-modal-footer {
+  border: none;
+}
+.mobile-mask {
+  position: absolute;
+  z-index: 100;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.mobile-mask .mobile-mask-text {
+  color: #000;
+  z-index: 102;
+}
+.mobile-trading-input {
+  width: 100%;
+  height: 28px;
+  line-height: 28px;
+  border: 1px solid #d9d9d9;
+  padding: 0 8px 0 8px;
+  border-radius: 3px;
+  -webkit-appearance: none;
+}
+.mobile-trading-input::placeholder {
+  color: #bfbfbf;
+}

@@ -1,0 +1,61 @@
+.resource-wallet a {
+  color: #266cd3;
+}
+.resource-wallet .resource-wallet-header {
+  display: flex;
+  align-items: center;
+}
+.resource-wallet .resource-wallet-address {
+  margin: 16px 0;
+  padding: 0 0 8px 0;
+  border-bottom: 1px solid #e5e5e5;
+  word-break: break-word;
+}
+.resource-wallet .ant-divider.ant-divider-horizontal {
+  margin: 8px 0;
+}
+.resource-wallet-address {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.resource-wallet-address-name {
+  font-weight: bold;
+  flex-grow: 1;
+  line-height: 32px;
+}
+.resource-wallet-address-update {
+  display: flex;
+  align-items: center;
+}
+.resource-wallet-address-update:last-child {
+  padding-right: 0;
+}
+.resource-wallet-address-update:hover,
+.resource-wallet-address-update:active,
+.resource-wallet-address-update:focus {
+  color: #327dec;
+}
+.resource-wallet-operation-container {
+  flex-grow: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+.resource-wallet-operation-container .ant-btn > .anticon {
+  line-height: 0;
+}
+.resource-wallet-info .ant-row .ant-col {
+  margin-bottom: 25px;
+}
+.resource-wallet-info .ant-row .last-col {
+  margin-bottom: 0;
+}
+.resource-wallet-info-name {
+  color: #4c4c4c;
+  width: 180px;
+  display: inline-block;
+}
+.resource-wallet-info .balance {
+  font-weight: bold;
+  color: #000;
+}
