@@ -179,9 +179,10 @@ interface ProposalListRes {
 
 interface ProposalMyInfo {
   symbol: string;
+  decimal: string;
   availableUnStakeAmount: number;
-  stakeAmount: string;
-  votesAmount: string;
+  stakeAmount: number;
+  votesAmount: number;
   canVote: boolean;
   proposalIdList: Array;
 }

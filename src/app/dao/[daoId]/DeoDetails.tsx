@@ -13,8 +13,7 @@ import MyRecords from './components/MyRecords';
 import MyInfo from './components/MyInfo';
 import Filter from './components/Filter';
 import { useRequest } from 'ahooks';
-import { HCType, IProposalTableParams, TabKey, ProposalStatus } from './type';
-import { ProposalType } from 'types';
+import { HCType, IProposalTableParams, TabKey } from './type';
 import Link from 'next/link';
 import { fetchDaoInfo, fetchProposalList } from 'api/request';
 import { curChain } from 'config';
@@ -85,12 +84,8 @@ export default function DeoDetails(props: IProps) {
   });
 
   const rightContent = useMemo(() => {
-    return (
-      <>
-        <MyInfo daoId={daoId} />
-      </>
-    );
-  }, []);
+    return <MyInfo daoId={daoId} />;
+  }, [daoId]);
 
   const tabItems = useMemo(() => {
     const items = [

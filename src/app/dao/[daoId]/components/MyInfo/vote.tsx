@@ -1,6 +1,6 @@
-import { Divider, Form, InputNumber } from 'antd';
+import { Divider, Form, InputNumber, message } from 'antd';
 import { Button, HashAddress } from 'aelf-design';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import CommonModal from 'components/CommonModal';
 import Image from 'next/image';
 import ElfIcon from 'assets/imgs/elf-icon.svg';
@@ -21,6 +21,8 @@ type TVoteTypes = {
   elfBalance: number;
   symbol: string;
   fetchMyInfo: () => void;
+  votesAmount: number;
+  decimal: string;
 };
 
 type TFieldType = {
@@ -28,41 +30,46 @@ type TFieldType = {
 };
 
 function Vote(props: TVoteTypes) {
-  const { proposalId, voteMechanismName, elfBalance, symbol, fetchMyInfo } = props;
+  const { proposalId, voteMechanismName, elfBalance, symbol, fetchMyInfo, votesAmount, decimal } =
+    props;
   const [form] = Form.useForm();
   const [currentVoteType, setCurrentVoteType] = useState<EVoteOption>(EVoteOption.APPROVED);
   const [currentTitle, setCurrentTitle] = useState('');
   const [currentMessage, setCurrentMessage] = useState('');
-  const [showApproveTokenBallotModal, setShowApproveTokenBallotModal] = useState(false);
+  const [showTokenBallotModal, setShowTokenBallotModal] = useState(false);
   const [showVoteModal, setShowVoteModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showFailedModal, setShowFailedModal] = useState(false);
   const { walletInfo } = useSelector((store: any) => store.userInfo);
   const [txHash, setTxHash] = useState('');
 
-  const handlerApprove = () => {
-    console.log('voteMechanismName', voteMechanismName);
-    if (voteMechanismName === EVoteMechanismNameType.TokenBallot) {
-      setShowApproveTokenBallotModal(true);
-    } else if (voteMechanismName === EVoteMechanismNameType.UniqueVote) {
-      setCurrentTitle('Approve Proposal');
-      setCurrentMessage(voteApproveMessage);
-      setShowVoteModal(true);
+  const handlerModal = (voteType: number) => {
+    // if have voted, can't vote again
+    if (votesAmount > 0) {
+      message.info('You have already voted!');
+      return;
     }
-    setCurrentVoteType(EVoteOption.APPROVED);
-  };
-
-  const handlerReject = () => {
-    setCurrentTitle('Reject Proposal');
-    setCurrentMessage(voteRejectMessage);
-    setCurrentVoteType(EVoteOption.REJECTED);
-    setShowVoteModal(true);
-  };
-
-  const handlerAbstain = () => {
-    setCurrentTitle('Abstain Proposal');
-    setCurrentMessage(voteAbstainMessage);
-    setCurrentVoteType(EVoteOption.ABSTAINED);
+    setCurrentVoteType(voteType);
+    if (voteMechanismName === EVoteMechanismNameType.TokenBallot) {
+      setShowTokenBallotModal(true);
+      return;
+    }
+    switch (voteType) {
+      case EVoteOption.APPROVED:
+        setCurrentTitle('Approve Proposal');
+        setCurrentMessage(voteApproveMessage);
+        break;
+      case EVoteOption.REJECTED:
+        setCurrentTitle('Reject Proposal');
+        setCurrentMessage(voteRejectMessage);
+        break;
+      case EVoteOption.ABSTAINED:
+        setCurrentTitle('Abstain Proposal');
+        setCurrentMessage(voteAbstainMessage);
+        break;
+      default:
+        break;
+    }
     setShowVoteModal(true);
   };
 
@@ -70,29 +77,28 @@ function Vote(props: TVoteTypes) {
     const contractParams = {
       votingItemId: proposalId,
       voteOption: currentVoteType,
+      // if 1t1v vote, need to approve token
       // elf decimals 8
-      voteAmount: Number(
-        timesDecimals(
-          voteMechanismName === EVoteMechanismNameType.TokenBallot
-            ? form.getFieldValue('stakeAmount')
-            : 1,
-          8,
-        ),
-      ),
+      voteAmount:
+        voteMechanismName === EVoteMechanismNameType.TokenBallot
+          ? timesDecimals(form.getFieldValue('stakeAmount'), decimal || '8')
+          : 1,
     };
     try {
       emitLoading(true, 'The vote is being processed...');
-      const approveRes = await ApproveByContract(
-        {
-          spender: voteAddress,
-          symbol: symbol || 'ELF',
-          amount: contractParams.voteAmount,
-        },
-        {
-          chain: curChain,
-        },
-      );
-      console.log('token approve finish', approveRes);
+      if (voteMechanismName === EVoteMechanismNameType.TokenBallot) {
+        const approveRes = await ApproveByContract(
+          {
+            spender: voteAddress,
+            symbol: symbol || 'ELF',
+            amount: contractParams.voteAmount,
+          },
+          {
+            chain: curChain,
+          },
+        );
+        console.log('token approve finish', approveRes);
+      }
 
       const result = await callContract('Vote', contractParams, voteAddress);
       emitLoading(false);
@@ -104,10 +110,10 @@ function Vote(props: TVoteTypes) {
       emitLoading(false);
     }
     // handle vote done close Modal
-    setShowApproveTokenBallotModal(false);
+    setShowTokenBallotModal(false);
     setShowVoteModal(false);
     form.setFieldValue('stakeAmount', 0);
-  }, [currentVoteType, form, proposalId, voteMechanismName, symbol, fetchMyInfo]);
+  }, [currentVoteType, form, proposalId, voteMechanismName, symbol, fetchMyInfo, decimal]);
 
   return (
     <div className="flex justify-between items-center mt-4">
@@ -115,16 +121,16 @@ function Vote(props: TVoteTypes) {
         type="primary"
         size="medium"
         millisecondOfDebounce={1000}
-        onClick={() => handlerApprove()}
+        onClick={() => handlerModal(EVoteOption.APPROVED)}
       >
         Approve
       </Button>
       <Button
         type="primary"
         size="medium"
-        danger
+        className="bg-rejection"
         millisecondOfDebounce={1000}
-        onClick={() => handlerReject()}
+        onClick={() => handlerModal(EVoteOption.REJECTED)}
       >
         Reject
       </Button>
@@ -133,18 +139,19 @@ function Vote(props: TVoteTypes) {
         size="medium"
         millisecondOfDebounce={1000}
         className="bg-abstention"
-        onClick={() => handlerAbstain()}
+        onClick={() => handlerModal(EVoteOption.ABSTAINED)}
       >
         Abstain
       </Button>
 
-      {/* vote approve TokenBallot 1t1v Modal  */}
+      {/* vote TokenBallot 1t1v Modal  */}
       <CommonModal
-        open={showApproveTokenBallotModal}
-        title={<div className="text-center">Approve Proposal</div>}
+        open={showTokenBallotModal}
+        destroyOnClose
+        title={<div className="text-center">TokenBallot Proposal</div>}
         onCancel={() => {
           form.setFieldValue('stakeAmount', 0);
-          setShowApproveTokenBallotModal(false);
+          setShowTokenBallotModal(false);
         }}
       >
         <p className="text-center color-text-Primary-Text font-medium">
@@ -191,7 +198,7 @@ function Vote(props: TVoteTypes) {
           </Form.Item>
         </Form>
       </CommonModal>
-      {/* vote 1 approve UniqueVote 1a1v Modal  2 Reject  3 Abstain  */}
+      {/* UniqueVote vote 1a1v 1 approve  2 Reject  3 Abstain  */}
       <CommonModal
         open={showVoteModal}
         title={<div className="text-center">{currentTitle}</div>}
