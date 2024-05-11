@@ -68,10 +68,6 @@ export default function Header() {
             ),
             key: 'Governance Resources Trade',
           },
-          {
-            label: <Link href={formatUrl('/network-dao/resource')}>1 </Link>,
-            key: 'Governance Resources Trade',
-          },
         ],
       },
     ];

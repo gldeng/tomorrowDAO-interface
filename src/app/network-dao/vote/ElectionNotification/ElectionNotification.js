@@ -311,6 +311,9 @@ class ElectionNotification extends PureComponent {
           args: {
             value: currentWallet?.publicKey,
           },
+          options: {
+            chainId: "AELF"
+          }
         })
         .then((res) => {
           if (!res) {
@@ -384,6 +387,9 @@ class ElectionNotification extends PureComponent {
           contractAddress: electionContractFromExt.address,
           methodName: "AnnounceElection",
           args: admin,
+          options: {
+            chainId: "AELF"
+          }
         })
         .then((res) => {
           if (res.error) {

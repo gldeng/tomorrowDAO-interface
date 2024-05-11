@@ -67,28 +67,6 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
         openErrorModal();
       }
       const res = await form.validateFields();
-      const params = res.transaction.params;
-      // todo decode params
-      const parsedParams = parseJSON(params);
-      const contractInfo = await getContract(res.transaction.toAddress);
-      console.log('contractInfo', contractInfo);
-      const method = contractInfo[res.transaction.contractMethodName];
-      let decoded;
-      if (Array.isArray(parsedParams)) {
-        console.log(1);
-        decoded = method.packInput([...parsedParams]);
-      } else if (typeof parsedParams === 'object' && parsedParams !== null) {
-        console.log(2);
-        decoded = method.packInput(JSON.parse(JSON.stringify(parsedParams)));
-      } else {
-        console.log(3);
-        decoded = method.packInput(parsedParams);
-      }
-      console.log('decoded', decoded);
-      // window.btoa(params);
-      const finalParams = uint8ToBase64(decoded || []) || [];
-      // const finalParams = window.btoa(params);
-      // const finalParams = params;
       const contractParams = {
         ...res,
         proposalBasicInfo: {
@@ -97,6 +75,19 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
         },
       };
       if (res.proposalType === ProposalTypeEnum.GOVERNANCE) {
+        const params = res.transaction.params;
+        const parsedParams = parseJSON(params);
+        const contractInfo = await getContract(res.transaction.toAddress);
+        const method = contractInfo[res.transaction.contractMethodName];
+        let decoded;
+        if (Array.isArray(parsedParams)) {
+          decoded = method.packInput([...parsedParams]);
+        } else if (typeof parsedParams === 'object' && parsedParams !== null) {
+          decoded = method.packInput(JSON.parse(JSON.stringify(parsedParams)));
+        } else {
+          decoded = method.packInput(parsedParams);
+        }
+        const finalParams = uint8ToBase64(decoded || []) || [];
         contractParams.transaction = {
           ...res.transaction,
           params: finalParams,
@@ -106,7 +97,7 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
       const methodName =
         res.proposalType === ProposalTypeEnum.VETO ? 'CreateVetoProposal' : 'CreateProposal';
       const createRes = await proposalCreateContractRequest(methodName, contractParams);
-      console.log('res', createRes);
+      console.log('proposalCreateContractRequest', createRes);
 
       emitLoading(false);
       setResultModalConfig({

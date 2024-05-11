@@ -6,7 +6,7 @@ import { Button, Typography, FontWeightEnum } from 'aelf-design';
 import React, { memo, useCallback, useRef, useState } from 'react';
 import { Steps, message, FormInstance, Result, StepsProps, StepProps } from 'antd';
 import Image from 'next/image';
-import { useWebLoginEvent, WebLoginEvents, useWebLogin, WebLoginState } from 'aelf-web-login';
+import { useWebLoginEvent, WebLoginEvents, useWebLogin, WebLoginState } from 'aelf-web-login-dao';
 import { useRouter } from 'next/navigation';
 import clsx from 'clsx';
 import SubmitButton, { ISubmitRef } from './component/SubmitButton';

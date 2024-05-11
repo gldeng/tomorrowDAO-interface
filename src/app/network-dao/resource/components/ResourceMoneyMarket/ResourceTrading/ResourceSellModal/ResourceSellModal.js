@@ -57,7 +57,10 @@ export default class ResourceSellModal extends PureComponent {
       const result = await WebLoginInstance.get().callContract({
         contractAddress: contracts.tokenConverter,
         methodName: "Sell",
-        args: payload
+        args: payload,
+        options: {
+          chainId: "AELF"
+        }
       })
       if (result.error) {
         this.setState({

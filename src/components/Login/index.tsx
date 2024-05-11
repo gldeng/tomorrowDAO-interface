@@ -4,7 +4,7 @@ import { useWalletService } from 'hooks/useWallet';
 import { ReactComponent as AvatarIcon } from 'assets/imgs/avatar-icon.svg';
 import './index.css';
 import { useSelector } from 'react-redux';
-import { WalletType, useWebLogin } from 'aelf-web-login';
+import { WalletType, useWebLogin } from 'aelf-web-login-dao';
 import { useMemo } from 'react';
 import { Popover } from 'antd';
 

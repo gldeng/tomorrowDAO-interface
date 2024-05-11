@@ -1,5 +1,5 @@
 import React from 'react';
-import { WebLoginState, useWebLogin } from "aelf-web-login"
+import { WebLoginState, useWebLogin } from "aelf-web-login-dao"
 import {
   Button,
 } from "antd";
