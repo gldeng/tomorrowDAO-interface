@@ -1,4 +1,4 @@
-import { getConfig, setGlobalConfig } from "aelf-web-login";
+import { getConfig, setGlobalConfig } from "aelf-web-login-dao";
 import {
   APPNAME,
   CHAIN_ID,
@@ -34,9 +34,9 @@ setGlobalConfig({
       Portkey: isWebview()
         ? undefined
         : {
-            websiteName: APPNAME,
-            websiteIcon: `${CHAINS_LINK[CHAIN_ID]}/favicon.main.ico`,
-          },
+          websiteName: APPNAME,
+          websiteIcon: `${CHAINS_LINK[CHAIN_ID]}/favicon.main.ico`,
+        },
     },
     requestDefaults: {
       timeout: NETWORK_TYPE === "TESTNET" ? 300000 : 80000,

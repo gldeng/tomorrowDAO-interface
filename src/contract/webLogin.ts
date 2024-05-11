@@ -1,5 +1,5 @@
-import { CallContractParams } from 'aelf-web-login';
-import { WebLoginInterface } from 'aelf-web-login/dist/types/context';
+import { CallContractParams } from 'aelf-web-login-dao';
+import { WebLoginInterface } from 'aelf-web-login-dao/dist/types/context';
 import { SupportedELFChainId } from 'types';
 
 export interface IWebLoginArgs {

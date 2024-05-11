@@ -53,7 +53,10 @@ export default class ResourceBuyModal extends PureComponent {
       const result = await WebLoginInstance.get().callContract({
         contractAddress: contracts.tokenConverter,
         methodName: "Buy",
-        args: payload
+        args: payload,
+        options: {
+          chainId: "AELF"
+        }
       });
 
       console.log("Buy", result);

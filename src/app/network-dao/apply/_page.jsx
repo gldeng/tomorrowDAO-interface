@@ -13,7 +13,7 @@ import {
   uint8ToBase64,
 } from "@redux/common/utils";
 import debounce from "lodash.debounce";
-import { getConfig, useWebLogin, did } from "aelf-web-login";
+import { getConfig, useWebLogin, did } from "aelf-web-login-dao";
 import NormalProposal from "./NormalProposal/index.jsx";
 import ContractProposal, { contractMethodType } from "./ContractProposal/index.jsx";
 import {
@@ -645,6 +645,9 @@ const CreateProposal = () => {
           organizationAddress,
           proposalDescriptionUrl,
         },
+        options: {
+          chainId: "AELF"
+        }
       };
 
       console.log("callContract", params);

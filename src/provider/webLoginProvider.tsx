@@ -15,7 +15,7 @@ function addBasePath(url: string) {
 
 const PortkeyProviderDynamic = dynamicReq(
   async () => {
-    const weblogin = await import('aelf-web-login').then((module) => module);
+    const weblogin = await import('aelf-web-login-dao').then((module) => module);
     return weblogin.PortkeyProvider;
   },
   { ssr: false },
@@ -27,7 +27,7 @@ const WebLoginProviderDynamic = dynamicReq(
     const connectUrl = info?.connectUrl;
     const networkType = (info.networkType || 'TESTNET') as NetworkType;
 
-    const webLogin = await import('aelf-web-login').then((module) => module);
+    const webLogin = await import('aelf-web-login-dao').then((module) => module);
 
     webLogin.setGlobalConfig({
       appName: APP_NAME,

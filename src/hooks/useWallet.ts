@@ -8,7 +8,7 @@ import {
   useGetAccount,
   usePortkeyLock,
   PortkeyInfo,
-} from 'aelf-web-login';
+} from 'aelf-web-login-dao';
 import { message } from 'antd';
 import { useCallback } from 'react';
 import { getOriginalAddress } from 'utils/addressFormatting';

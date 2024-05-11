@@ -232,6 +232,9 @@ export const sendTransactionWith = async (
       contractAddress,
       methodName: method,
       args: param,
+      options: {
+        chainId: "AELF"
+      }
     });
     showTransactionResult(result);
     if (result.transactionId) {
