@@ -3,6 +3,12 @@ import Image from 'next/image';
 import arrowRightIcon from 'assets/imgs/arrow-right.svg';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { fetchVoteHistory } from 'api/request';
+import { useSelector } from 'react-redux';
+import { useRequest } from 'ahooks';
+import { curChain } from 'config';
+import { EVoteOption } from 'types/vote';
+import dayjs from 'dayjs';
 
 interface IStatus {
   Approved: string;
@@ -17,18 +23,24 @@ const colorMap: IStatus = {
   Asbtained: '#687083',
   Executed: '#05C4A2',
 };
-
-export default function MyRecords() {
-  const router = useRouter();
-  const data: any = Array.from({ length: 5 }, (index) => {
-    return {
-      title: 'sdfasdfasdfads',
-      pid: 'ELF_2PedfasdfadsfasW28l_tDVW',
-      time: 'Nov 13, 2023',
-      vote: '18 votes',
-      status: 'Approved',
-      id: index,
-    };
+interface IProps {
+  daoId: string;
+}
+export default function MyRecords(props: IProps) {
+  const { daoId } = props;
+  const { walletInfo } = useSelector((store: any) => store.userInfo);
+  const {
+    data: voteHistoryData,
+    error: voteHistoryError,
+    loading: voteHistoryLoading,
+  } = useRequest(() => {
+    return fetchVoteHistory({
+      address: walletInfo.address,
+      chainId: curChain,
+      skipCount: 0,
+      maxResultCount: 10,
+      daoId,
+    });
   });
 
   const statusCom = (text: keyof IStatus, size = 500) => {
@@ -51,7 +63,7 @@ export default function MyRecords() {
           My Votes
         </Typography.Title>
         <div className="records-header-morebtn">
-          <Link href="/my-record">
+          <Link href={`/my-record?daoId=${daoId}`}>
             <Button type="link" size="medium" className="!p-0 text-[#1A1A1A]">
               Load More
               <Image width={12} height={12} src={arrowRightIcon} alt=""></Image>
@@ -61,27 +73,45 @@ export default function MyRecords() {
       </div>
 
       <div className="max-h-96 overflow-scroll">
-        {data.map((item: any, index: number) => {
+        {voteHistoryData?.data?.items?.map((item) => {
           return (
             <div
               className="flex justify-between items-center px-4 lg:px-8 max-h-80 mb-8"
-              key={index}
+              key={item.transactionId}
             >
               <div>
                 <div className="time">
-                  <span className="text-Neutral-Secondary-Text mr-2">{item.time}</span>
-                  <span className="time-r">{item.vote}</span>
+                  <span className="text-Neutral-Secondary-Text mr-2">
+                    {dayjs(item.timeStamp).format('YYYY-MM-DD HH:mm:ss')}
+                    <span className="pl-[4px]">{EVoteOption[item.myOption]}</span>
+                  </span>
+                </div>
+                <div>
+                  <span className="block lg:flex items-center">
+                    <Typography.Text fontWeight={FontWeightEnum.Medium}>
+                      transactionId:
+                    </Typography.Text>
+
+                    <HashAddress
+                      className="pl-[4px]"
+                      ignorePrefixSuffix={true}
+                      preLen={8}
+                      endLen={11}
+                      address={item.transactionId}
+                    ></HashAddress>
+                  </span>
                 </div>
                 <div className="block lg:flex items-center">
                   <Typography.Text fontWeight={FontWeightEnum.Medium}>Proposal ID:</Typography.Text>
                   <HashAddress
+                    className="pl-[4px]"
+                    ignorePrefixSuffix={true}
                     preLen={8}
                     endLen={11}
-                    address={'ELF_2PedfasdfadsfasW28l_tDVW'}
+                    address={item.proposalId}
                   ></HashAddress>
                 </div>
               </div>
-              {statusCom(item.status)}
             </div>
           );
         })}

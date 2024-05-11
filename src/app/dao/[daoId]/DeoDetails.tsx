@@ -220,7 +220,7 @@ export default function DeoDetails(props: IProps) {
             {isLG && tabKey === TabKey.MYINFO && (
               <>
                 <ExecutdProposals />
-                <MyRecords />
+                <MyRecords daoId={daoId} />
               </>
             )}
           </div>
@@ -229,7 +229,7 @@ export default function DeoDetails(props: IProps) {
             <div className="dao-detail-content-right">
               {rightContent}
               <ExecutdProposals />
-              <MyRecords />
+              <MyRecords daoId={daoId} />
             </div>
           )}
         </div>

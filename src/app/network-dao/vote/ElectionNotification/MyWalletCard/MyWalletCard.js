@@ -13,7 +13,7 @@ import moment from "moment";
 import { SyncOutlined, LogoutOutlined } from "@ant-design/icons";
 import { thousandsCommaWithDecimal } from "@utils/formater";
 import { ELF_DECIMAL, SYMBOL } from "@src/constants";
-import { WebLoginState } from "aelf-web-login-dao";
+import { WebLoginState } from "aelf-web-login";
 import { connect } from "react-redux";
 import CopyButton from "@components/CopyButton/CopyButton";
 import { isPhoneCheck } from "@utils/deviceCheck";

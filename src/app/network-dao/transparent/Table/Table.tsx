@@ -28,7 +28,6 @@ const checkIsOut = (address: string, record: AddressTransferListDataListItem) =>
 const defaultPageSize = 20;
 export default function RecordTable() {
   const [timeFormat, setTimeFormat] = useState("Age");
-  const [loading, setLoading] = useState(false);
   const { isLG } = useResponsive()
 
   const [tableParams, setTableParams] = useState<{page: number, pageSize: number}>({
@@ -168,7 +167,7 @@ export default function RecordTable() {
         scroll={{ x: 800 }}
         className="custom-table-style"
         columns={columns as any}
-        loading={loading}
+        loading={transferListLoading}
         pagination={{ ...tableParams, total: transferListData?.data?.total ?? 0, pageChange, pageSizeChange }}
         dataSource={transferListData?.data?.list ?? []}
         rowClassName={handleRowClassName}

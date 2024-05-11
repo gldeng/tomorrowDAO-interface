@@ -1,4 +1,4 @@
-import { getConfig, setGlobalConfig } from "aelf-web-login-dao";
+import { getConfig, setGlobalConfig } from "aelf-web-login";
 import {
   APPNAME,
   CHAIN_ID,

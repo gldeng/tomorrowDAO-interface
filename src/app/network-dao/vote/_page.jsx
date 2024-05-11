@@ -14,7 +14,7 @@ import { SYMBOL, ELF_DECIMAL, NEED_PLUGIN_AUTHORIZE_TIP } from "@src/constants";
 import getStateJudgment from "@utils/getStateJudgment";
 import publicKeyToAddress from "@utils/publicKeyToAddress";
 import { getAllTeamDesc } from "@api/vote";
-import { WebLoginState } from "aelf-web-login-dao";
+import { WebLoginState } from "aelf-web-login";
 import "./index.css";
 import MyVote from "./MyVote/MyVote";
 import ElectionNotification from "./ElectionNotification/ElectionNotification";

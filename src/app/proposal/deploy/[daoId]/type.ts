@@ -15,12 +15,6 @@ export enum EVoteMechanismNameType {
   TokenBallot = 'TOKEN_BALLOT',
 }
 
-export enum EVoteOption {
-  APPROVED = 0,
-  REJECTED = 1,
-  ABSTAINED = 2,
-}
-
 export interface VoteSchemeItem {
   VoteSchemeId: string;
   VoteMechanism: number;

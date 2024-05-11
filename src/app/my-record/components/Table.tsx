@@ -5,13 +5,16 @@ import { ConfigProvider } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { useSelector } from 'react-redux';
 import { fetchVoteHistory } from 'api/request';
-
+import { EVoteOption } from 'types/vote';
 import NoData from './NoData';
 import { curChain } from 'config';
 import { useRequest } from 'ahooks';
+import { useSearchParams } from 'next/navigation';
+import dayjs from 'dayjs';
 
 const defaultPageSize = 20;
 export default function RecordTable() {
+  const searchParams = useSearchParams();
   const { walletInfo } = useSelector((store: any) => store.userInfo);
 
   const [tableParams, setTableParams] = useState<{ page: number; pageSize: number }>({
@@ -30,7 +33,7 @@ export default function RecordTable() {
         chainId: curChain,
         skipCount: (tableParams.page - 1) * tableParams.pageSize,
         maxResultCount: tableParams.pageSize,
-        proposalId: 'xx',
+        daoId: searchParams.get('daoId') ?? '',
       });
     },
     {
@@ -44,21 +47,29 @@ export default function RecordTable() {
       dataIndex: 'timeStamp',
       sorter: true,
       defaultSortOrder: 'descend',
+      render(time) {
+        return <span>{dayjs(time).format('YYYY-MM-DD HH:mm:ss')}</span>;
+      },
     },
     {
-      title: 'Proposal Name / ID',
-      dataIndex: 'ProposalTitle',
-      render: (text) => (
-        <div>
-          {text}
-          {/* <HashAddress preLen={8} endLen={9} address={text}></HashAddress> */}
-          {/* <Typography.Text>Executed by me</Typography.Text> */}
-        </div>
-      ),
+      title: 'Proposal Name',
+      dataIndex: 'proposalTitle',
+      render: (text) => <div>{text}</div>,
     },
     {
       title: 'proposalId',
       dataIndex: 'proposalId',
+      render(text) {
+        return (
+          <HashAddress
+            className="pl-[4px]"
+            ignorePrefixSuffix={true}
+            preLen={8}
+            endLen={11}
+            address={text}
+          ></HashAddress>
+        );
+      },
     },
     {
       title: 'My Operation',
@@ -68,14 +79,28 @@ export default function RecordTable() {
         { text: 'Member', value: 'Member' },
         { text: 'Candidate', value: 'Candidate' },
       ],
+      render(option) {
+        return <span>{EVoteOption[option]}</span>;
+      },
     },
     {
       title: 'Votes',
-      dataIndex: 'votesNum',
+      dataIndex: 'voteNum',
     },
     {
       title: 'transactionId',
       dataIndex: 'transactionId',
+      render(text) {
+        return (
+          <HashAddress
+            className="pl-[4px]"
+            ignorePrefixSuffix={true}
+            preLen={8}
+            endLen={11}
+            address={text}
+          ></HashAddress>
+        );
+      },
     },
     {
       title: 'executer',

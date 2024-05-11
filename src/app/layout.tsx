@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import 'aelf-web-login-dao/dist/assets/index.css';
+import 'aelf-web-login/dist/assets/index.css';
 import 'styles/global.css';
 import 'aelf-design/css';
 import Layout from 'pageComponents/layout';

@@ -1,7 +1,7 @@
 import { Accounts, ChainId } from '@portkey/provider-types';
 import { IBlockchainWallet } from '@portkey/types';
 import { ManagerInfoType } from '@portkey/did-ui-react';
-import { DiscoverInfo, PortkeyInfo } from 'aelf-web-login-dao';
+import { DiscoverInfo, PortkeyInfo } from 'aelf-web-login';
 import type { AElfContextType } from '@aelf-react/core/dist/types';
 
 export type TokenInfo = {

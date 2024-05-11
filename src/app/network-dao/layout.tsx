@@ -10,7 +10,7 @@ import {
   useLoginState,
   WebLoginEvents,
   ERR_CODE,
-} from 'aelf-web-login-dao';
+} from 'aelf-web-login';
 import { WebLoginInstance } from "@utils/webLogin";
 import { LOG_OUT_ACTIONS, LOG_IN_ACTIONS } from 'app/network-dao/_src/redux/actions/proposalCommon';
 import store from "./_src/redux/store";
