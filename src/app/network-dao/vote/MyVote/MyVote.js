@@ -13,7 +13,7 @@ import {
 } from "../constants";
 import { Button, Spin } from "antd";
 import { connect } from "react-redux";
-import { WebLoginState } from "aelf-web-login-dao";
+import { WebLoginState } from "aelf-web-login";
 import MyVoteRecord from "./MyVoteRecords";
 import addressFormat from "@utils/addressFormat";
 import "./MyVote.style.css";

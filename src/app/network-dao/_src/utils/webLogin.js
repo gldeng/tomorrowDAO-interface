@@ -1,4 +1,4 @@
-import { WebLoginState } from "aelf-web-login-dao";
+import { WebLoginState } from "aelf-web-login";
 
 let instance;
 

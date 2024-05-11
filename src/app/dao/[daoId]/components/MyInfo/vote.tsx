@@ -4,7 +4,7 @@ import { useState, useCallback } from 'react';
 import CommonModal from 'components/CommonModal';
 import Image from 'next/image';
 import ElfIcon from 'assets/imgs/elf-icon.svg';
-import { EVoteMechanismNameType, EVoteOption } from 'app/proposal/deploy/[daoId]/type';
+import { EVoteMechanismNameType } from 'app/proposal/deploy/[daoId]/type';
 import { useSelector } from 'react-redux';
 import { voteApproveMessage, voteRejectMessage, voteAbstainMessage } from 'utils/constant';
 import SuccessGreenIcon from 'assets/imgs/success-green.svg';
@@ -14,6 +14,8 @@ import { callContract, ApproveByContract } from 'contract/callContract';
 import { emitLoading } from 'utils/myEvent';
 import { curChain, voteAddress } from 'config';
 import { timesDecimals } from 'utils/calculate';
+import { EVoteOption } from 'types/vote';
+import { IContractError } from 'types';
 
 type TVoteTypes = {
   proposalId: string;
@@ -39,7 +41,10 @@ function Vote(props: TVoteTypes) {
   const [showTokenBallotModal, setShowTokenBallotModal] = useState(false);
   const [showVoteModal, setShowVoteModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [showFailedModal, setShowFailedModal] = useState(false);
+  const [modalInfo, setShowFailedModal] = useState({
+    isOpen: false,
+    message: '',
+  });
   const { walletInfo } = useSelector((store: any) => store.userInfo);
   const [txHash, setTxHash] = useState('');
 
@@ -81,8 +86,8 @@ function Vote(props: TVoteTypes) {
       // elf decimals 8
       voteAmount:
         voteMechanismName === EVoteMechanismNameType.TokenBallot
-          ? timesDecimals(form.getFieldValue('stakeAmount'), decimal || '8')
-          : 1,
+          ? timesDecimals(form.getFieldValue('stakeAmount'), decimal || '8').toNumber()
+          : timesDecimals(1, decimal || '8').toNumber(),
     };
     try {
       emitLoading(true, 'The vote is being processed...');
@@ -105,8 +110,14 @@ function Vote(props: TVoteTypes) {
       setTxHash(result?.TransactionId);
       setShowSuccessModal(true);
       fetchMyInfo();
-    } catch (error) {
-      setShowFailedModal(true);
+    } catch (err) {
+      const error = err as IContractError;
+      console.log('error', error);
+      const message = error?.errorMessage?.message || error?.message;
+      setShowFailedModal({
+        isOpen: true,
+        message,
+      });
       emitLoading(false);
     }
     // handle vote done close Modal
@@ -258,19 +269,24 @@ function Vote(props: TVoteTypes) {
 
       {/* failed */}
       <CommonModal
-        open={showFailedModal}
+        open={modalInfo.isOpen}
         onCancel={() => {
-          setShowFailedModal(false);
+          setShowFailedModal({
+            ...modalInfo,
+            isOpen: false,
+          });
         }}
       >
         <Info
           title="Transaction Failed!"
-          firstText="Insufficient transaction fee."
-          secondText="Please transfer some ELF to the account."
+          firstText={modalInfo.message}
           btnText="I Know"
           type="failed"
           onOk={() => {
-            setShowFailedModal(false);
+            setShowFailedModal({
+              ...modalInfo,
+              isOpen: false,
+            });
           }}
         ></Info>
       </CommonModal>

@@ -13,7 +13,7 @@ import {
   useLoginState,
   WebLoginEvents,
   ERR_CODE,
-} from 'aelf-web-login-dao';
+} from 'aelf-web-login';
 import { store } from 'redux/store';
 import Footer from 'components/Footer';
 import DynamicBreadCrumb from 'components/DynamicBreadCrumb';

@@ -3,7 +3,7 @@ import { useCallback, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { getOriginProposedContractInputHash } from "@redux/common/util.proposed";
 import { getContractAddress, getTxResult } from "@redux/common/utils";
-import { useWebLogin } from "aelf-web-login-dao";
+import { useWebLogin } from "aelf-web-login";
 import { callGetMethod } from "@utils/utils";
 import CopylistItem from "../_proposal_root/components/CopylistItem";
 import { getDeserializeLog } from "./utils.js";

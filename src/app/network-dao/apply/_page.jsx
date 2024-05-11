@@ -13,7 +13,7 @@ import {
   uint8ToBase64,
 } from "@redux/common/utils";
 import debounce from "lodash.debounce";
-import { getConfig, useWebLogin, did } from "aelf-web-login-dao";
+import { getConfig, useWebLogin, did } from "aelf-web-login";
 import NormalProposal from "./NormalProposal/index.jsx";
 import ContractProposal, { contractMethodType } from "./ContractProposal/index.jsx";
 import {

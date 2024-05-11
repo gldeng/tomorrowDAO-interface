@@ -1,4 +1,4 @@
-import { CallContractParams, useCallContract } from 'aelf-web-login-dao';
+import { CallContractParams, useCallContract } from 'aelf-web-login';
 import { SupportedELFChainId, ContractMethodType } from 'types';
 import { store } from 'redux/store';
 

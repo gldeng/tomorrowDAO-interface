@@ -408,7 +408,7 @@ interface TokenPriceRes {
 
 // -------------------------------------vote-history-----------------------------
 interface IVoteHistoryReq {
-  proposalId: string;
+  daoId?: string;
   chainId: string;
   skipCount: number;
   maxResultCount: number;
@@ -419,7 +419,7 @@ interface IVoteHistoryItem {
   timeStamp: number;
   proposalId: string;
   ProposalTitle: string;
-  myOption: string;
+  myOption: number;
   votesNum: number;
   transactionId: string;
   executer: string;

@@ -10,7 +10,7 @@ import { Row, Col, Spin, Button, message } from "antd";
 import { SYMBOL, ELF_DECIMAL } from "@src/constants";
 import { thousandsCommaWithDecimal } from "@utils/formater";
 import { resourceTokens } from "@config/config";
-import { WebLoginState, useWebLogin } from "aelf-web-login-dao";
+import { WebLoginState, useWebLogin } from "aelf-web-login";
 import {
   WalletOutlined,
   SyncOutlined,

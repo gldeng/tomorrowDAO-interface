@@ -16,6 +16,7 @@ import { emitLoading } from 'utils/myEvent';
 import { getExploreLink } from 'utils/common';
 import Vote from './vote';
 import { timesDecimals, divDecimals } from 'utils/calculate';
+import { IContractError, IFormValidateError } from 'types';
 
 type TInfoTypes = {
   height?: number;
@@ -49,7 +50,10 @@ export default function MyInfo(props: TInfoTypes) {
 
   const [form] = Form.useForm();
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [showFailedModal, setShowFailedModal] = useState(false);
+  const [modalInfo, setShowFailedModal] = useState({
+    isOpen: false,
+    message: '',
+  });
   const fetchMyInfo = useCallback(async () => {
     if (!isLogin || !elfInfo.curChain || !daoId || !walletInfo.address) {
       return;
@@ -149,8 +153,13 @@ export default function MyInfo(props: TInfoTypes) {
       emitLoading(false);
       setTxHash(result?.TransactionId);
       setShowSuccessModal(true);
-    } catch (error) {
-      setShowFailedModal(true);
+    } catch (err) {
+      const error = err as IContractError;
+      const message = error?.errorMessage?.message || error?.message;
+      setShowFailedModal({
+        isOpen: true,
+        message,
+      });
       emitLoading(false);
     }
   }, [daoId, info?.proposalIdList, info?.decimal, info?.availableUnStakeAmount]);
@@ -304,19 +313,24 @@ export default function MyInfo(props: TInfoTypes) {
 
           {/* failed */}
           <CommonModal
-            open={showFailedModal}
+            open={modalInfo.isOpen}
             onCancel={() => {
-              setShowFailedModal(false);
+              setShowFailedModal({
+                ...modalInfo,
+                isOpen: false,
+              });
             }}
           >
             <Info
               title="Transaction Failed!"
-              firstText="Insufficient transaction fee."
-              secondText="Please transfer some ELF to the account."
+              firstText={modalInfo.message}
               btnText="Back"
               type="failed"
               onOk={() => {
-                setShowFailedModal(false);
+                setShowFailedModal({
+                  ...modalInfo,
+                  isOpen: false,
+                });
               }}
             ></Info>
           </CommonModal>

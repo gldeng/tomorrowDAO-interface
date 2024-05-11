@@ -5,7 +5,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import Decimal from "decimal.js";
 import { Form, InputNumber, message, Modal, Button } from "antd";
-import { useWebLogin } from "aelf-web-login-dao";
+import { useWebLogin } from "aelf-web-login";
 import {
   getContractAddress,
   getTxResult,
