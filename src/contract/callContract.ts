@@ -5,6 +5,8 @@ import { sleep } from 'utils/common';
 import { GetContractServiceMethod } from './baseContract';
 import { curChain } from 'config';
 import { multiTokenContractRequest } from './multiTokenContract';
+import { daoCreateContractRequest } from './daoCreateContract';
+import { proposalCreateContractRequest } from './proposalCreateContract';
 
 export const callContract = async <T>(
   methodName: string,
@@ -76,5 +78,16 @@ export const ApproveByContract = async (
   const res = (await multiTokenContractRequest('Approve', params, {
     ...options,
   })) as IContractError;
+  return res;
+};
+
+export const GetDaoProposalTimePeriodContract = async (
+  params?: string,
+  options?: IContractOptions,
+): Promise<ITimePeriod> => {
+  const res = (await proposalCreateContractRequest('GetDaoProposalTimePeriod', params, {
+    ...options,
+    type: ContractMethodType.VIEW,
+  })) as unknown as ITimePeriod;
   return res;
 };

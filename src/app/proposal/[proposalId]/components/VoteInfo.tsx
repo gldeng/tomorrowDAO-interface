@@ -1,13 +1,20 @@
 import { Typography, FontWeightEnum, Progress } from 'aelf-design';
 import MyInfo from 'app/dao/[daoId]/components/MyInfo';
 import BoxWrapper from './BoxWrapper';
+import { divDecimals } from 'utils/calculate';
 import { memo } from 'react';
+import BigNumber from 'bignumber.js';
 
 interface IHeaderInfoProps {
   proposalDetailData: ProposalDetailData;
 }
 const VoteInfo = (props: IHeaderInfoProps) => {
   const { proposalDetailData } = props;
+  const { decimals } = proposalDetailData;
+  const total =
+    proposalDetailData.abstentionCount +
+    proposalDetailData.rejectionCount +
+    proposalDetailData.approvedCount;
   return (
     <div className="flex justify-between flex-col lg:flex-row">
       <BoxWrapper className="flex-1 lg:mr-[24px] order-last lg:order-first">
@@ -25,12 +32,13 @@ const VoteInfo = (props: IHeaderInfoProps) => {
                 Approved
               </Typography.Text>
               <Typography.Text className="text-Neutral-Secondary-Text">
-                {proposalDetailData.approvedCount} Votes
-                {proposalDetailData.minimalApproveThreshold / 100}%
+                {divDecimals(proposalDetailData.approvedCount, decimals).valueOf()}
+                <span className="px-[4px]">Votes</span>
+                {proposalDetailData.minimalApproveThreshold}%
               </Typography.Text>
             </div>
             <Progress
-              percent={proposalDetailData.approvedCount / proposalDetailData.votesAmount}
+              percent={(proposalDetailData.approvedCount / total) * 100}
               strokeColor="#3888FF"
             />
           </div>
@@ -41,12 +49,13 @@ const VoteInfo = (props: IHeaderInfoProps) => {
                 Rejected
               </Typography.Text>
               <Typography.Text className="text-Neutral-Secondary-Text">
-                {proposalDetailData.rejectionCount} Votes
-                {proposalDetailData.maximalRejectionThreshold / 100}%
+                {divDecimals(proposalDetailData.rejectionCount, decimals).valueOf()}
+                <span className="px-[4px]">Votes</span>
+                {proposalDetailData.maximalRejectionThreshold}%
               </Typography.Text>
             </div>
             <Progress
-              percent={proposalDetailData.rejectionCount / proposalDetailData.votesAmount}
+              percent={(proposalDetailData.rejectionCount / total) * 100}
               strokeColor="#F55D6E"
             />
           </div>
@@ -57,12 +66,13 @@ const VoteInfo = (props: IHeaderInfoProps) => {
                 Abstained
               </Typography.Text>
               <Typography.Text className="text-Neutral-Secondary-Text">
-                {proposalDetailData.abstentionCount}
-                Votes {proposalDetailData.maximalAbstentionThreshold / 100}%
+                {divDecimals(proposalDetailData.abstentionCount, decimals).valueOf()}
+                <span className="px-[4px]">Votes</span>{' '}
+                {proposalDetailData.maximalAbstentionThreshold}%
               </Typography.Text>
             </div>
             <Progress
-              percent={proposalDetailData.abstentionCount / proposalDetailData.votesAmount}
+              percent={(proposalDetailData.abstentionCount / total) * 100}
               strokeColor="#687083"
             />
           </div>
@@ -71,12 +81,17 @@ const VoteInfo = (props: IHeaderInfoProps) => {
         <div className="border-0 border-t border-solid border-Neutral-Divider flex flex-col py-8">
           <div>
             <Typography.Text fontWeight={FontWeightEnum.Medium} className="text-Primary-Text">
-              Total {proposalDetailData.votesAmount} votes
+              Total
+              <span className="px-[4px]">
+                {divDecimals(proposalDetailData.votesAmount, decimals).valueOf()}
+              </span>
+              votes
             </Typography.Text>
           </div>
           <div>
             <Typography.Text size="small" className="text-Neutral-Secondary-Text">
-              Minimum voting requirement met({proposalDetailData.votesAmount}/
+              Minimum voting requirement met(
+              {divDecimals(proposalDetailData.votesAmount, decimals).valueOf()}/
               {proposalDetailData.minimalVoteThreshold})
             </Typography.Text>
           </div>

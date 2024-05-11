@@ -12,6 +12,8 @@ import clsx from 'clsx';
 import SubmitButton, { ISubmitRef } from './component/SubmitButton';
 import { daoCreateContractRequest } from 'contract/daoCreateContract';
 import useResponsive from 'hooks/useResponsive';
+import { useSelector } from 'redux/store';
+import { timesDecimals } from 'utils/calculate';
 import { ReactComponent as ArrowRight } from 'assets/imgs/arrow-right.svg';
 import { ReactComponent as ArrowLeft } from 'assets/imgs/arrow-left.svg';
 import { ReactComponent as Skip } from 'assets/imgs/skip.svg';
@@ -35,9 +37,10 @@ import { emitLoading } from 'utils/myEvent';
 import Link from 'next/link';
 import { current } from '@reduxjs/toolkit';
 import { IFormValidateError, IContractError } from 'types';
-import { cloneDeepWith } from 'lodash-es';
+import { cloneDeep, cloneDeepWith } from 'lodash-es';
 import NetworkDaoHome from 'app/network-dao/page';
 import { NetworkName } from 'config';
+import BigNumber from 'bignumber.js';
 
 const initItems: StepsProps['items'] = [
   {
@@ -61,6 +64,7 @@ const CreateDaoPage = () => {
 
   const isHighCouncilStep = currentStepString === StepEnum.step2;
   const [messageApi, contextHolder] = message.useMessage();
+  const daoCreateToken = useSelector((store) => store.daoCreate.token);
   const isSkipHighCouncil = useRef<boolean>(false);
   const submitButtonRef = useRef<ISubmitRef>(null);
   const router = useRouter();
@@ -156,16 +160,25 @@ const CreateDaoPage = () => {
             ...(stepForm[StepEnum.step1].submitedRes ?? {}),
           },
           files,
-          is_network_dao: isNetworkDaoLocal
+          isNetworkDao: isNetworkDaoLocal
             ? isNetworkDaoLocal === 'true'
             : metadata.metadata.name === NetworkName,
         };
         if (!isSkipHighCouncil.current) {
+          let highCouncilInput = stepForm[StepEnum.step2].submitedRes;
+          if (highCouncilInput && daoCreateToken?.decimals) {
+            const stakingAmount = highCouncilInput.highCouncilConfig.stakingAmount;
+            const stakingAmountDecimals = Number(
+              timesDecimals(stakingAmount, daoCreateToken.decimals),
+            );
+            highCouncilInput = cloneDeep(highCouncilInput);
+            highCouncilInput.highCouncilConfig.stakingAmount = stakingAmountDecimals;
+          }
+
           params.highCouncilInput = {
-            ...(stepForm[StepEnum.step2].submitedRes ?? {}),
+            ...(highCouncilInput ?? {}),
           };
         }
-        console.log('params', params);
         emitLoading(true, 'The transaction is being processed...');
         const createRes = await daoCreateContractRequest('CreateDAO', params);
         emitLoading(false);

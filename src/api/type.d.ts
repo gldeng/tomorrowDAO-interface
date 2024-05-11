@@ -16,6 +16,7 @@ interface IDaoItem {
   symbol: string;
   symbolHoldersNum: number; //
   votersNum: number; //
+  isNetworkDAO?: boolean;
 }
 
 interface DaoData {
@@ -209,10 +210,18 @@ interface Transaction {
   contractMethodName: string;
   params: Record<string, unknown>;
 }
-
+interface IProposalDetailDataVoteTopListItem {
+  amount: number;
+  option: string;
+  transactionId: string;
+  voteTime: string;
+  voter: string;
+  votingItemId: string;
+}
 interface ProposalDetailData {
+  decimals: string;
   proposalLifeList: ProposalLife[];
-  voteTopList: any[];
+  voteTopList: IProposalDetailDataVoteTopListItem[];
   chainId: string;
   blockHeight: number;
   id: string;

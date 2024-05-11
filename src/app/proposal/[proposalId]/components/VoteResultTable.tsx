@@ -1,13 +1,13 @@
 import { memo, useCallback, useEffect, useState } from 'react';
 import BoxWrapper from './BoxWrapper';
 import { FontWeightEnum, HashAddress, Search, Table, Typography } from 'aelf-design';
-import { ITableProps, IVotingResult, TVotingOption } from './type';
+import { ITableProps, TVotingOption } from './type';
 import { ColumnsType } from 'antd/es/table';
 import { tableData } from '../tabItem';
 import thousandsNumber from 'utils/thousandsNumber';
 import clsx from 'clsx';
 
-const columns: ColumnsType<IVotingResult> = [
+const columns: ColumnsType<IProposalDetailDataVoteTopListItem> = [
   {
     width: 320,
     title: <Typography.Text className="text-Neutral-Secondary-Text">Voters</Typography.Text>,
@@ -29,7 +29,7 @@ const columns: ColumnsType<IVotingResult> = [
   {
     width: 200,
     title: <Typography.Text className="text-Neutral-Secondary-Text">Result</Typography.Text>,
-    dataIndex: 'voteOption',
+    dataIndex: 'option',
     render: (text) => {
       return (
         <Typography.Text
@@ -68,54 +68,30 @@ const columns: ColumnsType<IVotingResult> = [
     },
   },
 ];
-
-const VoteResultTable = () => {
-  const [tableParams, setTableParams] = useState<ITableProps>({
-    pagination: {
-      current: 1,
-      pageSize: 10,
-      total: 0,
-    },
+interface IVoteResultTableProps {
+  voteTopList: IProposalDetailDataVoteTopListItem[];
+}
+const defaultPageSize = 20;
+const VoteResultTable = (props: IVoteResultTableProps) => {
+  const { voteTopList } = props;
+  const [tableParams, setTableParams] = useState<{ page: number; pageSize: number }>({
+    page: 1,
+    pageSize: defaultPageSize,
   });
-  const [loading, setLoading] = useState(false);
-  const [dataSource, setDataSource] = useState<IVotingResult[]>([]);
-  const [total, setTotal] = useState(0);
 
-  console.log('total', total);
-
-  const fetchData = useCallback(async () => {
-    setLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    const { current: page = 1, pageSize = 10 } = tableParams.pagination;
-    const result = tableData.slice((page - 1) * pageSize, page * pageSize);
-    setDataSource(result);
-    setTotal(tableData.length);
-    setLoading(false);
-  }, [tableParams.pagination]);
-
-  const pageChange = (page: number) => {
+  const pageChange = (page: number, pageSize?: number) => {
     setTableParams({
-      pagination: {
-        ...tableParams.pagination,
-        current: page,
-      },
+      page,
+      pageSize: pageSize ?? defaultPageSize,
     });
   };
 
   const pageSizeChange = (page: number, pageSize: number) => {
     setTableParams({
-      pagination: {
-        ...tableParams.pagination,
-        current: page,
-        pageSize: pageSize,
-      },
+      page,
+      pageSize,
     });
   };
-
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
-
   return (
     <BoxWrapper>
       <div className="flex justify-between pb-6">
@@ -139,9 +115,13 @@ const VoteResultTable = () => {
       </div>
       <Table
         columns={columns as any}
-        loading={loading}
-        pagination={{ ...tableParams.pagination, total, pageChange, pageSizeChange }}
-        dataSource={dataSource}
+        pagination={{
+          ...tableParams,
+          total: voteTopList?.length ?? 0,
+          pageChange,
+          pageSizeChange,
+        }}
+        dataSource={voteTopList ?? []}
       ></Table>
     </BoxWrapper>
   );

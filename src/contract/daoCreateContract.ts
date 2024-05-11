@@ -13,7 +13,7 @@ import { GetContractServiceMethod } from './baseContract';
 
 export const daoCreateContractRequest = async <T, R>(
   methodName: string,
-  params: T,
+  params?: T,
   options?: IContractOptions,
 ): Promise<R | ISendResult> => {
   const info = store.getState().elfInfo.elfInfo;

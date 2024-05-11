@@ -12,6 +12,7 @@ import { useSelector } from 'redux/store';
 import { fetchContractInfo } from 'api/request';
 import { electionContractAddress } from 'config/index';
 import './index.css';
+import BigNumber from 'bignumber.js';
 
 const HighCouncil = () => {
   const [form] = Form.useForm();
