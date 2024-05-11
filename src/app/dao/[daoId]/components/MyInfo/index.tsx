@@ -1,4 +1,4 @@
-import { Descriptions, Divider, Form, List, InputNumber } from 'antd';
+import { Descriptions, Divider, Form, InputNumber, message } from 'antd';
 import { HashAddress, Typography, FontWeightEnum, Button } from 'aelf-design';
 import { ReactNode, useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
@@ -14,8 +14,8 @@ import { callContract, GetBalanceByContract } from 'contract/callContract';
 import { curChain, voteAddress } from 'config';
 import { emitLoading } from 'utils/myEvent';
 import { getExploreLink } from 'utils/common';
-import BigNumber from 'bignumber.js';
 import Vote from './vote';
+import { timesDecimals, divDecimals } from 'utils/calculate';
 
 type TInfoTypes = {
   height?: number;
@@ -39,10 +39,11 @@ export default function MyInfo(props: TInfoTypes) {
   const [txHash, setTxHash] = useState('');
   const [info, setInfo] = useState<ProposalMyInfo>({
     symbol: 'ELF',
-    availableUnStakeAmount: 1000,
-    stakeAmount: '',
-    votesAmount: '',
-    canVote: true,
+    decimal: '8',
+    availableUnStakeAmount: 0,
+    stakeAmount: 0,
+    votesAmount: 0,
+    canVote: false,
     proposalIdList: [],
   });
 
@@ -64,10 +65,14 @@ export default function MyInfo(props: TInfoTypes) {
 
     const res = await fetchProposalMyInfo(reqMyInfoParams);
     const data: ProposalMyInfo = res?.data || {};
+    // handle res data
     if (!data?.symbol) {
       data.symbol = 'ELF';
     }
-    console.log(data);
+    const decimal = data?.decimal;
+    data.availableUnStakeAmount = divDecimals(data?.availableUnStakeAmount, decimal).toNumber();
+    data.stakeAmount = divDecimals(data?.stakeAmount, decimal).toNumber();
+    data.votesAmount = divDecimals(data?.votesAmount, decimal).toNumber();
     setInfo(data);
   }, [daoId, proposalId, elfInfo.curChain, walletInfo.address, isLogin]);
 
@@ -76,7 +81,6 @@ export default function MyInfo(props: TInfoTypes) {
   }, [fetchMyInfo]);
 
   const getBalance = useCallback(async () => {
-    console.log('getBalance');
     if (!isLogin || !walletInfo.address || !curChain) {
       return;
     }
@@ -88,8 +92,8 @@ export default function MyInfo(props: TInfoTypes) {
       { chain: curChain },
     );
     // aelf decimal 8
-    setElfBalance(new BigNumber(balance).div(10 ** 8).toNumber());
-  }, [isLogin, walletInfo.address, info?.symbol]);
+    setElfBalance(divDecimals(balance, info?.decimal || '8').toNumber());
+  }, [isLogin, walletInfo.address, info?.symbol, info?.decimal]);
 
   useEffect(() => {
     getBalance();
@@ -132,35 +136,24 @@ export default function MyInfo(props: TInfoTypes) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUnstakeAmModalOpen, setIsUnstakeAmIsModalOpen] = useState(false);
 
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleClaim = useCallback(
-    async (values: TFieldType) => {
-      // call contract
-      const contractParams = {
-        daoId,
-        withdrawAmount: values.unstakeAmount,
-        votingItemIdList: info?.proposalIdList,
-      };
-      try {
-        emitLoading(true, 'The unstake is being processed...');
-        const result = await callContract('Withdraw', contractParams, voteAddress);
-        emitLoading(false);
-        setTxHash(result?.TransactionId);
-        setShowSuccessModal(true);
-      } catch (error) {
-        setShowFailedModal(true);
-        emitLoading(false);
-      }
-    },
-    [daoId, info?.proposalIdList],
-  );
+  const handleClaim = useCallback(async () => {
+    // call contract
+    const contractParams = {
+      daoId,
+      withdrawAmount: timesDecimals(info?.availableUnStakeAmount, info?.decimal).toNumber(),
+      votingItemIdList: info?.proposalIdList,
+    };
+    try {
+      emitLoading(true, 'The unstake is being processed...');
+      const result = await callContract('Withdraw', contractParams, voteAddress);
+      emitLoading(false);
+      setTxHash(result?.TransactionId);
+      setShowSuccessModal(true);
+    } catch (error) {
+      setShowFailedModal(true);
+      emitLoading(false);
+    }
+  }, [daoId, info?.proposalIdList, info?.decimal, info?.availableUnStakeAmount]);
 
   return (
     <div
@@ -184,7 +177,17 @@ export default function MyInfo(props: TInfoTypes) {
                 {info?.availableUnStakeAmount} {info?.symbol}
               </div>
             </div>
-            <Button type="primary" size="medium" onClick={showModal}>
+            <Button
+              type="primary"
+              size="medium"
+              onClick={() => {
+                if (info?.availableUnStakeAmount === 0) {
+                  message.info('Available to unstake is 0!');
+                } else {
+                  setIsModalOpen(true);
+                }
+              }}
+            >
               Claim
             </Button>
           </div>
@@ -195,13 +198,19 @@ export default function MyInfo(props: TInfoTypes) {
               elfBalance={elfBalance}
               symbol={info?.symbol}
               fetchMyInfo={fetchMyInfo}
+              votesAmount={info?.votesAmount}
+              decimal={info?.decimal}
             />
           )}
           {/* Claim Modal  */}
           <CommonModal
             open={isModalOpen}
             title={<div className="text-center">Claim ELF on MainChain AELF</div>}
-            onCancel={handleCancel}
+            destroyOnClose
+            onCancel={() => {
+              form.setFieldValue('unStakeAmount', 0);
+              setIsModalOpen(false);
+            }}
           >
             <div className="text-center color-text-Primary-Text font-medium">
               <span className="text-[32px] mr-1">{info?.availableUnStakeAmount}</span>
@@ -213,14 +222,12 @@ export default function MyInfo(props: TInfoTypes) {
                 label="Unstake Amount"
                 name="unstakeAmount"
                 tooltip="Currently, only one-time withdrawal of all unlocked ELF is supported."
-                rules={[{ required: true, message: 'Please input Unstake Amount!' }]}
               >
                 <InputNumber
                   className="w-full"
                   placeholder="pleas input Unstake Amount"
-                  autoFocus
-                  min={0}
-                  max={info?.availableUnStakeAmount}
+                  defaultValue={info?.availableUnStakeAmount}
+                  disabled
                   prefix={
                     <div className="flex items-center">
                       <Image width={24} height={24} src={ElfIcon} alt="" />
