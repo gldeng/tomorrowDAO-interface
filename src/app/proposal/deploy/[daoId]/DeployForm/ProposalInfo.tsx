@@ -9,7 +9,7 @@ import { ResponsiveSelect } from 'components/ResponsiveSelect';
 import MarkdownEditor from 'components/MarkdownEditor';
 import Editor from '@monaco-editor/react';
 import { ReactComponent as ArrowIcon } from 'assets/imgs/arrow-icon.svg';
-import { ProposalType, proposalTypeList } from 'types';
+import { ContractMethodType, ProposalType, proposalTypeList } from 'types';
 import {
   fetchGovernanceMechanismList,
   fetchContractInfo,
@@ -21,6 +21,9 @@ import { formatDate } from '../util';
 import { proposalCreateContractRequest } from 'contract/proposalCreateContract';
 import { useSelector } from 'redux/store';
 import { curChain } from 'config';
+import { useAsyncEffect } from 'ahooks';
+import { GetDaoProposalTimePeriodContract } from 'contract/callContract';
+import dayjs from 'dayjs';
 
 const contractMethodNamePath = ['transaction', 'contractMethodName'];
 const { Option } = Select;
@@ -30,12 +33,15 @@ interface ProposalInfoProps {
   daoId: string;
   onSubmit: () => void;
 }
+
 const ProposalInfo = (props: ProposalInfoProps) => {
   const [governanceMechanismList, setGovernanceMechanismList] = useState<GovernanceSchemeList>();
+
   const searchParams = useSearchParams();
   const [daoInfo, setDaoInfo] = useState<DaoInfoData>();
   const [contractInfo, setContractInfo] = useState<ContractInfoListData>();
   const [voteScheme, setVoteScheme] = useState<IVoteSchemeListData>();
+  const [timePeriod, setTimePeriod] = useState<ITimePeriod | null>(null);
 
   // const info = store.getState().elfInfo.elfInfo;
   const elfInfo = useSelector((state) => state.elfInfo.elfInfo);
@@ -111,6 +117,13 @@ const ProposalInfo = (props: ProposalInfoProps) => {
       form.setFieldValue(contractMethodNamePath, undefined);
     }
   }, [contractAddress, form, contractInfo]);
+  // const
+  useAsyncEffect(async () => {
+    const timePeriod = await GetDaoProposalTimePeriodContract(daoId, {
+      type: ContractMethodType.VIEW,
+    });
+    setTimePeriod(timePeriod);
+  }, [daoId]);
   return (
     <div className={className}>
       <h2 className="text-[20px] leading-[28px] font-weight">Proposal Details</h2>
@@ -283,13 +296,13 @@ const ProposalInfo = (props: ProposalInfoProps) => {
       >
         <div className="flex h-[48px] px-[16px] py-[8px] items-center rounded-[6px] border-[1px] border-solid border-Neutral-Border bg-Neutral-Hover-BG">
           <span className="text-neutralTitle text-[14px] font-400 leading-[22px] pr-[16px]">
-            readonly value
-            {/* {formatDate(daoInfo)} */}
+            {dayjs().format('DD MMM, YYYY')}
           </span>
           <ArrowIcon className="color-[#B8B8B8]" />
           <span className="text-neutralTitle text-[14px] font-400 leading-[22px] pl-[16px]">
-            {/* 12 Dec, 2024 */}
-            readonly value
+            {timePeriod?.activeTimePeriod
+              ? dayjs().add(Number(timePeriod?.activeTimePeriod), 'days').format('DD MMM, YYYY')
+              : '-'}
           </span>
         </div>
       </Form.Item>
@@ -305,13 +318,13 @@ const ProposalInfo = (props: ProposalInfoProps) => {
       >
         <div className="flex h-[48px] px-[16px] py-[8px] items-center rounded-[6px] border-[1px] border-solid border-Neutral-Border bg-Neutral-Hover-BG">
           <span className="text-neutralTitle text-[14px] font-400 leading-[22px] pr-[16px]">
-            {/* 05 Dec, 2024 */}
-            readonly value
+            {dayjs().format('DD MMM, YYYY')}
           </span>
           <ArrowIcon className="color-[#B8B8B8]" />
           <span className="text-neutralTitle text-[14px] font-400 leading-[22px] pl-[16px]">
-            {/* 12 Dec, 2024 */}
-            readonly value
+            {timePeriod?.executeTimePeriod
+              ? dayjs().add(Number(timePeriod?.executeTimePeriod), 'days').format('DD MMM, YYYY')
+              : '-'}
           </span>
         </div>
       </Form.Item>

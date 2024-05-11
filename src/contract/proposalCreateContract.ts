@@ -36,6 +36,9 @@ export const proposalCreateContractRequest = async <T>(
     if (result?.error || result?.code || result?.Error) {
       throw formatErrorMsg(result);
     }
+    if (options?.type === ContractMethodType.VIEW) {
+      return res;
+    }
 
     const { transactionId, TransactionId } = result.result || result;
     const resTransactionId = TransactionId || transactionId;

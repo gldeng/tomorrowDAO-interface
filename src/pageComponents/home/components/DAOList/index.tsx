@@ -31,7 +31,14 @@ export default function DAOList() {
           {data?.list ? (
             data?.list?.map((item) => {
               return (
-                <Link key={item.daoId} href={`/dao/${item.daoId}`}>
+                <Link
+                  key={item.daoId}
+                  href={
+                    item.isNetworkDAO
+                      ? `/network-dao/proposal-list?daoId=${item.daoId}`
+                      : `/dao/${item.daoId}`
+                  }
+                >
                   <DAOListItem item={item} />
                 </Link>
               );

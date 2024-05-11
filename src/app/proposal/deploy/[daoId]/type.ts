@@ -11,8 +11,8 @@ export interface IContractInfo {
 }
 
 export enum EVoteMechanismNameType {
-  UniqueVote = 'UniqueVote',
-  TokenBallot = 'TokenBallot',
+  UniqueVote = 'UNIQUE_VOTE',
+  TokenBallot = 'TOKEN_BALLOT',
 }
 
 export enum EVoteOption {

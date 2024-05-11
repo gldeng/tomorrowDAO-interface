@@ -29,7 +29,7 @@ const ProposalTab = (props: IProposalTabProps) => {
             </div>
             <div>
               <Typography.Text className="text-Neutral-Secondary-Text">
-                {proposalDetailData?.transaction?.contractMethodName}
+                {proposalDetailData?.transaction?.contractMethodName ?? '-'}
               </Typography.Text>
             </div>
           </div>

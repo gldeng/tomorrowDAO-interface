@@ -46,7 +46,7 @@ const ProposalDetails = () => {
           </div>
 
           <StatusInfo proposalDetailData={proposalDetailRes?.data} />
-          <VoteResultTable />
+          <VoteResultTable voteTopList={proposalDetailRes?.data?.voteTopList ?? []} />
         </>
       )}
     </div>
