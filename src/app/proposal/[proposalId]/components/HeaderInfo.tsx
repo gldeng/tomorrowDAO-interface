@@ -57,7 +57,7 @@ const HeaderInfo = (props: IHeaderInfoProps) => {
             <DetailTag
               key={tag}
               customStyle={{
-                text: tag.toString() ?? '-',
+                text: tag?.toString() ?? '-',
                 height: 20,
                 color: '#919191',
                 bgColor: '#FAFAFA',

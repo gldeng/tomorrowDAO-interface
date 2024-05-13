@@ -6,4 +6,3 @@ const PageIndex = dynamicReq(() => import('./CreateDaoPage'), { ssr: false });
 export default function Page() {
   return <PageIndex />;
 }
-export const ssg = false;

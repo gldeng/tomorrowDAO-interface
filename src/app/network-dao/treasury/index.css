@@ -11,3 +11,7 @@
     @apply flex-grow-0 pl-[8px];
   }
 }
+
+.token-logo {
+  @apply w-[16px] h-[16px];
+}

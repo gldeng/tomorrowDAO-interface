@@ -6,4 +6,3 @@ const PageIndex = dynamicReq(() => import('./_page'), { ssr: false });
 export default function Page() {
   return <PageIndex />;
 }
-export const ssg = false;

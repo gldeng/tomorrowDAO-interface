@@ -7,6 +7,8 @@ import useTokenListData, { ITokenListItem } from '../../../hooks/useTokenListDat
 import BoxWrapper from '../../proposal/[proposalId]/components/BoxWrapper';
 import TransferTable from './Table/Table';
 import { ColumnsType } from 'antd/es/table';
+import { TokenIconMap } from './constant';
+
 import './index.css';
 
 export default function Transparent() {
@@ -30,6 +32,14 @@ export default function Transparent() {
       dataIndex: 'symbol',
       align: 'left',
       className: 'treasury-token-column',
+      render(token) {
+        return (
+          <span>
+            <img className="token-logo " src={TokenIconMap[token]} alt="" />
+            {token}
+          </span>
+        );
+      },
     },
     {
       title: 'balance',

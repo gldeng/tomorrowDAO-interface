@@ -102,6 +102,7 @@ interface DaoInfoData {
   executeTimePeriod: number;
   vetoExecuteTimePeriod: number;
   createTime: string;
+  isNetworkDAO: boolean;
 }
 
 interface DaoInfoReq {

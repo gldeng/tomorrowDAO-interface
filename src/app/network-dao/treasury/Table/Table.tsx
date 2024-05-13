@@ -7,9 +7,10 @@ import NoData from './NoData';
 import { treasuryAccountAddress } from 'config';
 import { useRequest } from 'ahooks';
 import { fetchAddressTransferList } from 'api/request';
-import useResponsive from 'hooks/useResponsive';
+// import useResponsive from 'hooks/useResponsive';
 import { getFormattedDate } from 'utils/time';
 import { numberFormatter } from 'utils/numberFormatter';
+import { TokenIconMap } from '../constant';
 
 const checkIsOut = (address: string, record: AddressTransferListDataListItem) => {
   const { from, to, isCrossChain } = record;
@@ -93,7 +94,6 @@ export default function RecordTable() {
       title: 'From',
       dataIndex: 'from',
       render(from, record) {
-        const isOut = checkIsOut(treasuryAccountAddress, record);
         return (
           <div className="from">
             <HashAddress address={from} preLen={8} endLen={8} />
@@ -105,8 +105,18 @@ export default function RecordTable() {
       title: 'Interacted With (To )',
       dataIndex: 'to',
       render(to, record) {
+        const isOut = checkIsOut(treasuryAccountAddress, record);
         return (
-          <div className="to">
+          <div className="to flex">
+            {isOut ? (
+              <Tag color="error" className="w-[36px] flex justify-center">
+                out
+              </Tag>
+            ) : (
+              <Tag color="success" className="w-[36px] flex justify-center">
+                in
+              </Tag>
+            )}
             <HashAddress address={to} preLen={8} endLen={8} />
           </div>
         );
@@ -123,7 +133,12 @@ export default function RecordTable() {
       title: 'Token',
       dataIndex: 'symbol',
       render(symbol) {
-        return <div className="token">{symbol}</div>;
+        return (
+          <div className="token">
+            <img src={TokenIconMap[symbol]} className="token-logo " alt="" />
+            {symbol}
+          </div>
+        );
       },
     },
     {
