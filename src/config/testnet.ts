@@ -21,3 +21,6 @@ export const symbolmarketUrl = 'https://test.eforest.finance/symbolmarket';
 export const explorer = 'https://explorer-test-side02.aelf.io/';
 
 export const voteAddress = '2LpoLYNPAnjiBUozyYwcfaeekxRFehjt6hDR78VKgk47UwkvAv';
+
+// network-dao
+export const electionContractAddr = 'NrVf8B7XUduXn1oGHZeF1YANFXEXAhvCymz2WPyKZt4DE2zSg';

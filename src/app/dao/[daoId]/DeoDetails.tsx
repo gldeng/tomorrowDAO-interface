@@ -3,10 +3,11 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Tabs, Typography, FontWeightEnum, Button, Pagination } from 'aelf-design';
 import { Form, message, Empty } from 'antd';
+import { useSelector } from 'react-redux';
 import { SkeletonList } from 'components/Skeleton';
 import useResponsive from 'hooks/useResponsive';
 import ProposalsItem from './components/ProposalsItem';
-import HighCounCilTab from './components/HighCouncilTab';
+import HighCounCilTable from './components/HighCouncilTable';
 import DaoInfo from './components/DaoInfo';
 import ExecutdProposals from './components/ExecutdProposals';
 import MyRecords from './components/MyRecords';
@@ -29,7 +30,6 @@ export default function DeoDetails(props: IProps) {
 
   const [form] = Form.useForm();
   const [tabKey, setTabKey] = useState(TabKey.PROPOSALS);
-  const [hcType, setHcType] = useState(HCType.MEMBER);
 
   const {
     data: daoData,
@@ -42,6 +42,7 @@ export default function DeoDetails(props: IProps) {
     }
     return fetchDaoInfo({ daoId, chainId: curChain });
   });
+  const { walletInfo } = useSelector((store: any) => store.userInfo);
   // const [daoDetail, setDaoDetail] = useState<IDaoDetail>(data);
   // const [proposalList, setProposalList] = useState<IProposalsItem[]>(list);
 
@@ -108,12 +109,14 @@ export default function DeoDetails(props: IProps) {
           </div>
         ),
       },
-      {
+    ];
+    if (daoData?.data.isNetworkDAO) {
+      items.push({
         key: TabKey.HC,
         label: 'High Council',
-        children: <HighCounCilTab hcType={hcType} onChangeHcType={setHcType} />,
-      },
-    ];
+        children: <HighCounCilTable />,
+      });
+    }
     if (!isLG) {
       return items;
     } else {
@@ -126,7 +129,7 @@ export default function DeoDetails(props: IProps) {
         },
       ];
     }
-  }, [form, tableParams, hcType, isLG, rightContent, daoId]);
+  }, [form, tableParams, isLG, rightContent, daoId, daoData]);
 
   const pageChange = useCallback((page: number) => {
     console.log('page', page);
@@ -161,8 +164,6 @@ export default function DeoDetails(props: IProps) {
   };
 
   const handleChangeHCparams = useCallback((type: HCType) => {
-    setHcType(type);
-    console.log('click type', type);
     setTabKey(TabKey.HC);
   }, []);
 
@@ -179,7 +180,7 @@ export default function DeoDetails(props: IProps) {
 
   useEffect(() => {
     run();
-  }, [tableParams]);
+  }, [tableParams, run]);
 
   return (
     <div className="dao-detail">
@@ -220,7 +221,7 @@ export default function DeoDetails(props: IProps) {
             {isLG && tabKey === TabKey.MYINFO && (
               <>
                 <ExecutdProposals />
-                <MyRecords daoId={daoId} />
+                {walletInfo.address && <MyRecords daoId={daoId} />}
               </>
             )}
           </div>
@@ -229,7 +230,7 @@ export default function DeoDetails(props: IProps) {
             <div className="dao-detail-content-right">
               {rightContent}
               <ExecutdProposals />
-              <MyRecords daoId={daoId} />
+              {walletInfo.address && <MyRecords daoId={daoId} />}
             </div>
           )}
         </div>

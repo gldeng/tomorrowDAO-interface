@@ -1,16 +1,16 @@
 'use client';
 import React from 'react';
-import { useParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import DaoDetail from '../../dao/[daoId]/DeoDetails'
 import qs from 'query-string';
 
 interface IProps {
 }
 export default function DeoDetails(props: IProps) {
-  const { daoId } = qs.parse(window.location.search);
+  const search = useSearchParams();
   return (
     <div>
-       <DaoDetail daoId={daoId as string} />
+       <DaoDetail daoId={search.get('daoId') ?? ''} />
     </div>
   )
 }
