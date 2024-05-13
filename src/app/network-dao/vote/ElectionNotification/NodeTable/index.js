@@ -203,7 +203,7 @@ class NodeTable extends PureComponent {
         render: (text, record) => (
           <Tooltip title={text}>
             <Link
-              href={{ pathname: "/vote/team", search: `pubkey=${record.pubkey}` }}
+              href={{ pathname: "/network-dao/vote/team", search: `pubkey=${record.pubkey}` }}
             >
               {text}
             </Link>

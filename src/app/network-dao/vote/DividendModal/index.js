@@ -26,7 +26,6 @@ const DividendModal = (props) => {
     setClaimLoading,
   } = props;
   const tokenCounts = useMemo(() => getTokenCounts(dividends), [dividends]);
-  console.log(dividends.amounts, "dividends.amounts");
   return (
     <Modal
       className="dividend-modal"

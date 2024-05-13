@@ -137,10 +137,18 @@ const CreateDaoPage = () => {
               url: file.response.url,
             };
           }) ?? [];
+        let governanceConfig = stepForm[StepEnum.step1].submitedRes;
+        if (governanceConfig && daoCreateToken) {
+          const minimalVoteThreshold = governanceConfig.minimalVoteThreshold;
+          governanceConfig = cloneDeep(governanceConfig);
+          governanceConfig.minimalVoteThreshold = Number(
+            timesDecimals(minimalVoteThreshold, daoCreateToken.decimals),
+          );
+        }
         const params: any = {
           ...metadata,
           governanceSchemeThreshold: {
-            ...(stepForm[StepEnum.step1].submitedRes ?? {}),
+            ...(governanceConfig ?? {}),
           },
           files,
           isNetworkDao: isNetworkDaoLocal
@@ -151,11 +159,16 @@ const CreateDaoPage = () => {
           let highCouncilInput = stepForm[StepEnum.step2].submitedRes;
           if (highCouncilInput && daoCreateToken?.decimals) {
             const stakingAmount = highCouncilInput.highCouncilConfig.stakingAmount;
+            const minimalVoteThreshold =
+              highCouncilInput.governanceSchemeThreshold.minimalVoteThreshold;
             const stakingAmountDecimals = Number(
               timesDecimals(stakingAmount, daoCreateToken.decimals),
             );
             highCouncilInput = cloneDeep(highCouncilInput);
             highCouncilInput.highCouncilConfig.stakingAmount = stakingAmountDecimals;
+            highCouncilInput.governanceSchemeThreshold.minimalVoteThreshold = Number(
+              timesDecimals(minimalVoteThreshold, daoCreateToken.decimals),
+            );
           }
 
           params.highCouncilInput = {
@@ -173,7 +186,7 @@ const CreateDaoPage = () => {
             <>
               Feel free to join TMRWDAO&lsquo;s
               <Link
-                className="text-colorPrimary cursor-pointer"
+                className="text-colorPrimary cursor-pointer px-[3px]"
                 href={'https://t.me/tmrwdao'}
                 target="_blank"
               >

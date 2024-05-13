@@ -16,30 +16,32 @@ import publicKeyToAddress from "@utils/publicKeyToAddress";
 import { getAllTeamDesc } from "@api/vote";
 import { WebLoginState } from "aelf-web-login";
 import "./index.css";
-import MyVote from "./MyVote/MyVote";
-import ElectionNotification from "./ElectionNotification/ElectionNotification";
-import KeyInTeamInfo from "./KeyInTeamInfo";
-import TeamDetail from "./TeamDetail";
-import VoteModal from "./VoteModal";
-import DividendModal from "./DividendModal";
-import RedeemModal from "./RedeemModal";
+import MyVote from "../MyVote/MyVote";
+import ElectionNotification from "../ElectionNotification/ElectionNotification";
+import KeyInTeamInfo from "../KeyInTeamInfo";
+import TeamDetail from "../TeamDetail";
+import VoteModal from "../VoteModal";
+import DividendModal from "../DividendModal";
+import RedeemModal from "../RedeemModal";
 // eslint-disable-next-line import/no-named-as-default
-import RedeemAnVoteModal from "./RedeemAnVoteModal";
-import * as constants from "./constants";
+import RedeemAnVoteModal from "../RedeemAnVoteModal";
+import { allowPathMap } from '../constants/index'
+import * as constants from "../constants";
 import {
   contractsNeedToLoad,
   FROM_WALLET,
   FROM_EXPIRED_VOTES,
   FROM_ACTIVE_VOTES,
   routePaths,
-} from "./constants";
-import { getFormatedLockTime } from "./utils";
+} from "../constants";
+import { getFormatedLockTime } from "../utils";
 import getAllTokens from "@utils/getAllTokens";
 import addressFormat from "@utils/addressFormat";
 // import { withRouter } from "../../routes/utils";
 import { WebLoginInstance } from "@utils/webLogin";
-import { fakeWallet } from "../_src/common/utils";
+import { fakeWallet } from "../../_src/common/utils";
 import { dispatch } from "redux/store";
+import Link from "next/link";
 
 const voteConfirmFormItemLayout = {
   labelCol: {
@@ -1128,24 +1130,24 @@ class VoteContainer extends Component {
   }
 
   renderSecondaryLevelNav() {
+    const { pagePath } = this.props;
     return (
       <section className="vote-container vote-container-simple basic-container basic-container-white vote-menu">
-        <Menu selectedKeys={[window.location.pathname]} mode="horizontal">
+        <Menu selectedKeys={pagePath} mode="horizontal">
           <Menu.Item
-            key={routePaths.electionNotifi}
-            onClick={() => {
-              this.props.navigate(routePaths.electionNotifi);
-            }}
+            key={allowPathMap.election}
           >
+            <Link href="/network-dao/vote/election">
             Election Notification
+            </Link>
+            
           </Menu.Item>
           <Menu.Item
-            key={routePaths.myVote}
-            onClick={() => {
-              this.props.navigate(routePaths.myVote);
-            }}
+            key={allowPathMap.myvote}
           >
+            <Link href="/network-dao/vote/myvote">
             My Vote
+            </Link>
           </Menu.Item>
         </Menu>
       </section>
@@ -1199,54 +1201,56 @@ class VoteContainer extends Component {
       voteLoading,
     } = this.state;
 
-    const path2Component = [
-      [
-        routePaths.electionNotifi,
-        <ElectionNotification
-          multiTokenContract={multiTokenContract}
-          voteContract={voteContract}
-          electionContract={electionContract}
-          profitContract={profitContract}
-          profitContractFromExt={profitContractFromExt}
-          dividendContract={dividendContract}
-          consensusContract={consensusContract}
-          isCandidate={isCandidate}
-          judgeCurrentUserIsCandidate={this.judgeCurrentUserIsCandidate}
-          handleDividendClick={this.handleDividendClick}
-          dividends={dividends}
-          electionContractFromExt={electionContractFromExt}
-          shouldRefreshNodeTable={shouldRefreshNodeTable}
-          nodeTableRefreshTime={nodeTableRefreshTime}
-          shouldRefreshMyWallet={shouldRefreshMyWallet}
-          changeVoteState={this.changeVoteState}
-          checkExtensionLockStatus={this.checkExtensionLockStatus}
-          shouldRefreshElectionNotifiStatis={shouldRefreshElectionNotifiStatis}
-        />,
-      ],
-      [
-        routePaths.teamInfoKeyin,
-        <KeyInTeamInfo
-          electionContract={electionContract}
-          isPluginLock={isPluginLock}
-          checkExtensionLockStatus={this.checkExtensionLockStatus}
-        />,
-      ],
-      [
-        routePaths.teamDetail,
-        <TeamDetail
-          consensusContract={consensusContract}
-          electionContract={electionContract}
-        />,
-      ],
-      [
-        routePaths.myVote,
-        <MyVote
-          electionContract={electionContract}
-          handleVoteTypeChange={this.handleVoteTypeChange}
-          checkExtensionLockStatus={this.checkExtensionLockStatus}
-        />,
-      ],
-    ];
+    const { pagePath } = this.props;
+
+    // const path2Component = [
+    //   [
+    //     routePaths.electionNotifi,
+    //     <ElectionNotification
+    //       multiTokenContract={multiTokenContract}
+    //       voteContract={voteContract}
+    //       electionContract={electionContract}
+    //       profitContract={profitContract}
+    //       profitContractFromExt={profitContractFromExt}
+    //       dividendContract={dividendContract}
+    //       consensusContract={consensusContract}
+    //       isCandidate={isCandidate}
+    //       judgeCurrentUserIsCandidate={this.judgeCurrentUserIsCandidate}
+    //       handleDividendClick={this.handleDividendClick}
+    //       dividends={dividends}
+    //       electionContractFromExt={electionContractFromExt}
+    //       shouldRefreshNodeTable={shouldRefreshNodeTable}
+    //       nodeTableRefreshTime={nodeTableRefreshTime}
+    //       shouldRefreshMyWallet={shouldRefreshMyWallet}
+    //       changeVoteState={this.changeVoteState}
+    //       checkExtensionLockStatus={this.checkExtensionLockStatus}
+    //       shouldRefreshElectionNotifiStatis={shouldRefreshElectionNotifiStatis}
+    //     />,
+    //   ],
+    //   [
+    //     routePaths.teamInfoKeyin,
+    //     <KeyInTeamInfo
+    //       electionContract={electionContract}
+    //       isPluginLock={isPluginLock}
+    //       checkExtensionLockStatus={this.checkExtensionLockStatus}
+    //     />,
+    //   ],
+    //   [
+    //     routePaths.teamDetail,
+    //     <TeamDetail
+    //       consensusContract={consensusContract}
+    //       electionContract={electionContract}
+    //     />,
+    //   ],
+    //   [
+    //     routePaths.myVote,
+    //     <MyVote
+    //       electionContract={electionContract}
+    //       handleVoteTypeChange={this.handleVoteTypeChange}
+    //       checkExtensionLockStatus={this.checkExtensionLockStatus}
+    //     />,
+    //   ],
+    // ];
 
     const secondaryLevelNav = this.renderSecondaryLevelNav();
     return (
@@ -1262,26 +1266,49 @@ class VoteContainer extends Component {
               <Route path={item[0].split("/vote")[1]} element={item[1]} />
             ))}
           </Routes> */}
-          <ElectionNotification
-            multiTokenContract={multiTokenContract}
-            voteContract={voteContract}
-            electionContract={electionContract}
-            profitContract={profitContract}
-            profitContractFromExt={profitContractFromExt}
-            dividendContract={dividendContract}
-            consensusContract={consensusContract}
-            isCandidate={isCandidate}
-            judgeCurrentUserIsCandidate={this.judgeCurrentUserIsCandidate}
-            handleDividendClick={this.handleDividendClick}
-            dividends={dividends}
-            electionContractFromExt={electionContractFromExt}
-            shouldRefreshNodeTable={shouldRefreshNodeTable}
-            nodeTableRefreshTime={nodeTableRefreshTime}
-            shouldRefreshMyWallet={shouldRefreshMyWallet}
-            changeVoteState={this.changeVoteState}
-            checkExtensionLockStatus={this.checkExtensionLockStatus}
-            shouldRefreshElectionNotifiStatis={shouldRefreshElectionNotifiStatis}
-          />
+          {
+            pagePath === allowPathMap.election && <ElectionNotification
+              multiTokenContract={multiTokenContract}
+              voteContract={voteContract}
+              electionContract={electionContract}
+              profitContract={profitContract}
+              profitContractFromExt={profitContractFromExt}
+              dividendContract={dividendContract}
+              consensusContract={consensusContract}
+              isCandidate={isCandidate}
+              judgeCurrentUserIsCandidate={this.judgeCurrentUserIsCandidate}
+              handleDividendClick={this.handleDividendClick}
+              dividends={dividends}
+              electionContractFromExt={electionContractFromExt}
+              shouldRefreshNodeTable={shouldRefreshNodeTable}
+              nodeTableRefreshTime={nodeTableRefreshTime}
+              shouldRefreshMyWallet={shouldRefreshMyWallet}
+              changeVoteState={this.changeVoteState}
+              checkExtensionLockStatus={this.checkExtensionLockStatus}
+              shouldRefreshElectionNotifiStatis={shouldRefreshElectionNotifiStatis}
+            />
+          }
+          {
+            pagePath === allowPathMap.apply &&  <KeyInTeamInfo
+              electionContract={electionContract}
+              isPluginLock={isPluginLock}
+              checkExtensionLockStatus={this.checkExtensionLockStatus}
+            />
+          }
+          {
+            pagePath === allowPathMap.team && <TeamDetail
+              consensusContract={consensusContract}
+              electionContract={electionContract}
+            />
+          }
+          {
+            pagePath === allowPathMap.myvote && <MyVote
+              electionContract={electionContract}
+              handleVoteTypeChange={this.handleVoteTypeChange}
+              checkExtensionLockStatus={this.checkExtensionLockStatus}
+            />
+          }
+
 
           <VoteModal
             voteModalVisible={voteModalVisible}
@@ -1410,6 +1437,6 @@ const VoteContainerConnect = (
   connect(mapStateToProps, mapDispatchToProps)(VoteContainer)
 );
 
-export default function VoteContainerPage() {
-  return <VoteContainerConnect />
+export default function VoteContainerPage(props) {
+  return <VoteContainerConnect {...props} />
 }
