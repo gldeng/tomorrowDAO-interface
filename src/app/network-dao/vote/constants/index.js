@@ -103,7 +103,12 @@ const routePaths = {
   teamDetail: "/vote/team",
   myVote: "/vote/myvote",
 };
-
+const allowPathMap = {
+  'election': 'election',
+  'apply': 'apply',
+  'team': 'team',
+  'myvote': 'myvote'
+}
 export {
   contractsNeedToLoad,
   contractsNeedToLoadFromExt,
@@ -125,4 +130,5 @@ export {
   A_NUMBER_LARGE_ENOUGH_TO_GET_ALL,
   routePaths,
   voteTypeFormItemsMap,
+  allowPathMap
 };

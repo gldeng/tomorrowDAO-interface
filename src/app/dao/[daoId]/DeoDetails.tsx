@@ -29,6 +29,7 @@ export default function DeoDetails(props: IProps) {
   const { isLG, isSM } = useResponsive();
 
   const [form] = Form.useForm();
+  // todo
   const [tabKey, setTabKey] = useState(TabKey.PROPOSALS);
 
   const {
@@ -193,7 +194,7 @@ export default function DeoDetails(props: IProps) {
         />
 
         <div className="dao-detail-content">
-          <div className={` ${isSM ? 'w-full' : 'dao-detail-content-left'}`}>
+          <div className={`dao-detail-content-left`}>
             <div className="dao-detail-content-left-tab">{tabCom}</div>
             {tabKey === TabKey.PROPOSALS && (
               <div>

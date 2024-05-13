@@ -72,12 +72,9 @@ export default function MyRecords(props: IProps) {
       </div>
 
       <div className="max-h-96 overflow-scroll">
-        {voteHistoryData?.data?.items?.map((item) => {
+        {voteHistoryData?.data?.items?.map((item, i) => {
           return (
-            <div
-              className="flex justify-between items-center px-4 lg:px-8 max-h-80 mb-8"
-              key={item.transactionId}
-            >
+            <div className="flex justify-between items-center px-4 lg:px-8 max-h-80 mb-8" key={i}>
               <div>
                 <div className="time">
                   <span className="text-Neutral-Secondary-Text mr-2">

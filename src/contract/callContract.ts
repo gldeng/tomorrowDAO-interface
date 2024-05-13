@@ -1,4 +1,4 @@
-import { IContractOptions, IContractError, ContractMethodType } from 'types';
+import { IContractOptions, IContractError, ContractMethodType, SupportedELFChainId } from 'types';
 import { formatErrorMsg } from './util';
 import { getTxResult } from 'utils/getTxResult';
 import { sleep } from 'utils/common';
@@ -49,6 +49,39 @@ export const callContract = async <T>(
     return transaction;
   } catch (error) {
     console.error('=====tokenAdapterContractRequest error:', methodName, JSON.stringify(error));
+    const resError = error as IContractError;
+    const a = formatErrorMsg(resError);
+    throw a;
+  }
+};
+
+export const callMainNetViewContract = async <T>(
+  methodName: string,
+  params: T,
+  address: string,
+  options?: IContractOptions,
+): Promise<any> => {
+  const CallContractMethod = GetContractServiceMethod(
+    SupportedELFChainId.MAIN_NET,
+    ContractMethodType.VIEW,
+  );
+
+  try {
+    const res = await CallContractMethod({
+      contractAddress: address,
+      methodName,
+      args: params,
+    });
+    console.log('=====callMainNetViewContract res: ', methodName, res);
+    const result = res as IContractError;
+
+    if (result?.error || result?.code || result?.Error) {
+      throw formatErrorMsg(result);
+    }
+
+    return result;
+  } catch (error) {
+    console.error('=====callMainNetViewContract error:', methodName, JSON.stringify(error));
     const resError = error as IContractError;
     const a = formatErrorMsg(resError);
     throw a;

@@ -110,6 +110,7 @@ class MyVote extends Component {
       }),
     ])
       .then((resArr) => {
+        console.log('my vote', resArr)
         this.processData(resArr);
       })
       .catch((err) => {
@@ -173,16 +174,25 @@ class MyVote extends Component {
       (total, current) => total + +current.amount,
       0
     );
-    this.processStatistData(
-      "myTotalVotesAmount",
-      "num",
-      myTotalVotesAmount / ELF_DECIMAL
-    );
-    this.processStatistData(
-      "withdrawableVotesAmount",
-      "num",
-      withdrawableVoteAmount / ELF_DECIMAL
-    );
+    const { statistData } = this.state;
+    const newStatistData = {
+      ...statistData,
+      ['myTotalVotesAmount']: {
+        ...(statistData['myTotalVotesAmount'] || {}),
+        ['num']: Number(myTotalVotesAmount) / ELF_DECIMAL,
+      },
+      ['withdrawableVotesAmount']: {
+        ...(statistData['withdrawableVotesAmount'] || {}),
+        ['num']: withdrawableVoteAmount / ELF_DECIMAL
+      },
+    }
+    console.log('myTotalVotesAmount', myTotalVotesAmount, withdrawableVoteAmount, newStatistData)
+    this.processStatistData(newStatistData);
+    // this.processStatistData(
+    //   "withdrawableVotesAmount",
+    //   "num",
+    //   withdrawableVoteAmount / ELF_DECIMAL
+    // );
     this.processTableData(myVoteRecords, allTeamInfo);
   }
 
@@ -231,16 +241,9 @@ class MyVote extends Component {
     });
   }
 
-  processStatistData(key, param, value) {
-    const { statistData } = this.state;
+  processStatistData(statistData) {
     this.setState({
-      statistData: {
-        ...statistData,
-        [key]: {
-          ...(statistData[key] || {}),
-          [param]: value,
-        },
-      },
+      statistData: statistData,
       spinningLoading: false,
     });
   }
@@ -255,6 +258,7 @@ class MyVote extends Component {
 
     const { loginState } = WebLoginInstance.get().getWebLoginContext();
 
+    console.log('statistData', statistData)
     const renderNotLogin = () => {
       if (isActivityBrowser()) {
         return (

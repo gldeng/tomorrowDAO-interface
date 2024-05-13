@@ -39,7 +39,7 @@ const RESOURCE_REALTIME_RECORDS = "/resource/realtime-records";
 const RESOURCE_TURNOVER = "/resource/turnover";
 const RESOURCE_RECORDS = "/resource/records";
 const SOCKET_URL = "/socket";
-const SOCKET_URL_NEW = "/new-socket";
+const SOCKET_URL_NEW = "https://explorer-test.aelf.io/new-socket";
 const BASIC_INFO = "/chain-info";
 
 const LOWER_SYMBOL = SYMBOL.toLocaleLowerCase();
