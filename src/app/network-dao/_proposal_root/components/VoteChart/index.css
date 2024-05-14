@@ -2,7 +2,7 @@
   margin-bottom: 1em;
 }
 
-.proposal-vote .proposal-vote-chart .ant-col {
+.proposal-vote .proposal-vote-chart .antExplorer-col {
   display: flex;
   flex-flow: column nowrap;
   align-items: center;

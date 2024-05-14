@@ -338,7 +338,7 @@ class MyWalletCard extends PureComponent {
                       Log In
                     </Button>
                   )}
-
+                {/* 
                 {!this.isPhone && currentWallet?.address && (
                   <Button
                     type="text"
@@ -349,7 +349,7 @@ class MyWalletCard extends PureComponent {
                     <LogoutOutlined />
                     Log Out
                   </Button>
-                )}
+                )} */}
 
                 <Button
                   type="text"

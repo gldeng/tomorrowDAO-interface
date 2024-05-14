@@ -165,16 +165,6 @@ function Vote(props: TVoteTypes) {
           setShowTokenBallotModal(false);
         }}
       >
-        <p className="text-center color-text-Primary-Text font-medium">
-          An upgrade of smart contract
-          <HashAddress
-            address={walletInfo.address}
-            preLen={8}
-            endLen={9}
-            className="justify-center"
-          />
-          on MainChain {curChain}
-        </p>
         <div className="text-center color-text-Primary-Text font-medium">
           <span className="text-[32px] mr-1">{elfBalance}</span>
           <span>ELF</span>

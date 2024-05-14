@@ -105,7 +105,7 @@ export enum ProposalTypeString {
   Governance = 'Governance',
   Improvement = 'Advisory',
   Veto = 'Veto',
-  'On-Chain' = 'ONCHAIN',
+  'On-Chain' = 'OnChain',
 }
 // for filter ProposalStatusString
 export enum ProposalStatusString {

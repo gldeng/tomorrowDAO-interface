@@ -1,29 +1,36 @@
-.proposal-detail .ant-card-head {
+.proposal-detail .antExplorer-card-head {
   background-color: #ededed;
 }
+
 .proposal-detail .detail-flex {
   display: flex;
   flex-flow: row nowrap;
 }
+
 .proposal-detail .detail-flex .sub-title {
   white-space: nowrap;
 }
+
 .proposal-detail .vote-data-button {
   display: flex;
   flex-flow: column nowrap;
   justify-content: space-evenly;
 }
+
 .proposal-detail-header-divider {
   margin-top: 0;
 }
+
 @media screen and (max-width: 576px) {
   .proposal-detail .detail-flex {
     display: block;
     flex-flow: row nowrap;
   }
+
   .proposal-detail .detail-flex span {
     display: block;
   }
+
   .proposal-detail .vote-data-button {
     flex-flow: row;
     justify-content: space-between;

@@ -212,7 +212,7 @@ const ResourceWallet = React.forwardRef(
                   <SyncOutlined type="sync" spin={loading} />
                 </Button>
 
-                {!isPhone && currentWallet && currentWallet.address && (
+                {/* {!isPhone && currentWallet && currentWallet.address && (
                   <Button
                     type="text"
                     className="resource-wallet-address-update update-btn"
@@ -224,7 +224,7 @@ const ResourceWallet = React.forwardRef(
                     Logout
                     <LogoutOutlined type="logout" />
                   </Button>
-                )}
+                )} */}
               </Col>
             </Row>
 

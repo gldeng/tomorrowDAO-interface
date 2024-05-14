@@ -7,28 +7,34 @@
   width: 100%;
   border-radius: 8px;
 }
-.table-layer > .table-layer-block {
+
+.table-layer>.table-layer-block {
   min-width: 16px;
   height: 41px;
   border-bottom: #e6e6e6 1px solid !important;
 }
-.table-layer .ant-table-wrapper {
+
+.table-layer .antExplorer-table-wrapper {
   min-width: calc(100% - 32px);
 }
-.table-layer .ant-table-wrapper .ant-table-thead tr th {
+
+.table-layer .antExplorer-table-wrapper .antExplorer-table-thead tr th {
   font-family: "Roboto-Medium";
   background: #ffffff !important;
   border-bottom: #e6e6e6 1px solid !important;
   font-weight: 400;
   max-height: 20px;
 }
-.table-layer .ant-table-wrapper .ant-table-thead tr th::before {
+
+.table-layer .antExplorer-table-wrapper .antExplorer-table-thead tr th::before {
   display: none !important;
   width: 0 !important;
 }
-.table-layer .ant-table-wrapper .ant-table-tbody tr td {
+
+.table-layer .antExplorer-table-wrapper .antExplorer-table-tbody tr td {
   border: none;
 }
+
 .table-layer.mobile {
   padding: 0 0 10px;
   overflow-x: scroll;
@@ -36,7 +42,8 @@
   border-radius: 4px;
   padding-bottom: 10px;
 }
-.table-layer.mobile > .table-layer-block {
+
+.table-layer.mobile>.table-layer-block {
   min-width: 8px;
   height: 41px;
   border-bottom: #e6e6e6 1px solid !important;

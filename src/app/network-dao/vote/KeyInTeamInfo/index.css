@@ -9,43 +9,52 @@
 .candidate-apply-team-info-key-in-container {
   padding: 0 10px 50px;
 }
+
 .candidate-apply-team-info-key-in-container .candidate-apply-team-info-key-in-no-auth {
   text-align: center;
   padding-top: 50px;
   color: #fff;
   font-size: 18px;
 }
+
 .candidate-apply-team-info-key-in-container .candidate-apply-team-info-key-in-title {
   margin: 20px;
   padding: 20px 0;
   font-size: 18px;
   color: #266cd3;
 }
+
 .candidate-apply-team-info-key-in-container .candidate-apply-team-info-key-in-form {
   width: 50%;
   margin: 0 auto;
 }
+
 .candidate-apply-team-info-key-in-container .candidate-apply-team-info-key-in-footer {
   margin-top: 100px;
   text-align: center;
 }
-.candidate-apply-team-info-key-in-container .candidate-apply-team-info-key-in-footer .ant-btn + .ant-btn {
+
+.candidate-apply-team-info-key-in-container .candidate-apply-team-info-key-in-footer .antExplorer-btn+.antExplorer-btn {
   margin-left: 100px;
 }
-.candidate-apply-team-info-key-in-container .ant-input,
-.candidate-apply-team-info-key-in-container .ant-select-selection,
-.candidate-apply-team-info-key-in-container .ant-btn {
+
+.candidate-apply-team-info-key-in-container .antExplorer-input,
+.candidate-apply-team-info-key-in-container .antExplorer-select-selection,
+.candidate-apply-team-info-key-in-container .antExplorer-btn {
   border-radius: 16px;
 }
-.candidate-apply-team-info-key-in-container .ant-input-group-addon:first-child {
+
+.candidate-apply-team-info-key-in-container .antExplorer-input-group-addon:first-child {
   border-bottom-left-radius: 16px;
   border-top-left-radius: 16px;
 }
-.loading-container .ant-spin {
+
+.loading-container .antExplorer-spin {
   display: block;
   padding: 60px;
   margin: 0 56px 30px;
 }
+
 @media (max-width: 768px) {
   .candidate-apply-team-info-key-in-container .candidate-apply-team-info-key-in-form {
     width: 80%;

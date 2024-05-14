@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import dynamicReq from 'next/dynamic';
-import { Result } from 'antd';
+import { Result, ConfigProvider } from 'antd';
 import { allowPathMap } from '../constants/index'
 const PageIndex = dynamicReq(() => import('./_page'), { ssr: false });
 
@@ -21,5 +21,9 @@ export default function Page(props: IProps) {
       />
     )
   }
-  return <PageIndex pagePath={path} />;
+  return (
+    <ConfigProvider prefixCls="antExplorer">
+      <PageIndex pagePath={path} />
+    </ConfigProvider>
+  );
 }
