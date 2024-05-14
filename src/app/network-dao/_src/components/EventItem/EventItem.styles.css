@@ -7,15 +7,18 @@
   border: none;
   line-height: 22px;
 }
+
 .event-item textarea:disabled {
   color: #595959;
   opacity: 1;
   -webkit-text-fill-color: #595959;
 }
+
 .event-item button {
   width: 104px;
 }
-.event-item button.ant-btn-text {
+
+.event-item button.antExplorer-btn-text {
   width: fit-content;
   padding: 0;
 }

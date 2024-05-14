@@ -10,7 +10,7 @@
 
     .dao-detail-content-left {
       @apply flex-1;
-      width: calc(100vw - 493px);
+      width: calc(100% - 462px);
     }
 
     .dao-detail-content-left-tab {

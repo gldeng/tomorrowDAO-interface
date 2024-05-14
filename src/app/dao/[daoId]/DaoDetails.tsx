@@ -19,7 +19,7 @@ import Link from 'next/link';
 import { fetchDaoInfo, fetchProposalList } from 'api/request';
 import { curChain } from 'config';
 import './page.css';
-import { ALL } from './constants';
+import { ALL, NetWorkDaoCreateProposal } from './constants';
 
 interface IProps {
   daoId: string;
@@ -227,7 +227,14 @@ export default function DeoDetails(props: IProps) {
                   <div>proposal error, refresh pleaase</div>
                 ) : proposalData?.data?.items?.length ? (
                   proposalData?.data?.items?.map((item) => (
-                    <Link key={item.proposalId} href={`/proposal/${item.proposalId}`}>
+                    <Link
+                      key={item.proposalId}
+                      href={`${
+                        item.proposalSource === NetWorkDaoCreateProposal
+                          ? `/proposal/${item.proposalId}`
+                          : `/network-dao/proposal-detail?proposalId=${item.proposalId}`
+                      } `}
+                    >
                       <ProposalsItem data={item} />
                     </Link>
                   ))

@@ -9,10 +9,12 @@
 .election-rule-card {
   padding: 16px 16px 0;
 }
+
 .election-rule-card .election-rule-content {
   border-bottom: 1px solid #e6e6e6;
   padding-bottom: 16px;
 }
+
 .election-rule-card .election-intro {
   font-size: 14px;
   font-style: normal;
@@ -20,20 +22,24 @@
   line-height: 22px;
   padding-bottom: 8px;
 }
+
 .election-rule-card .election-container {
   padding: 8px 0 0;
 }
+
 .election-rule-card .election-container .view-plan-link {
   text-decoration: underline;
   margin-left: 30px;
 }
+
 .election-rule-card .election-header-title {
   padding: 8px 0 0;
   overflow: hidden;
   font-size: 14px;
   font-weight: 500;
 }
-.election-rule-card .election-header-title .anticon svg {
+
+.election-rule-card .election-header-title .antExplorericon svg {
   display: flex;
   width: 12px;
   height: 12px;
@@ -41,16 +47,19 @@
   align-items: center;
   margin-right: 4px;
 }
+
 .election-rule-card .btn-group {
   position: relative;
   overflow: hidden;
   text-align: center;
   margin: 8px 0;
 }
+
 .election-rule-card .btn-group .view-node-election-plan-btn a {
   color: #000;
   font-size: 14px;
 }
+
 .election-rule-card .btn-group .apply-to-be-a-node-btn {
   height: 32px;
   background: #266cd3;
@@ -59,12 +68,15 @@
   height: 40px;
   padding: 0px 20px;
 }
+
 .election-rule-card .btn-group .apply-to-be-a-node-btn:hover {
   background: #327dec;
 }
+
 .election-rule-card .btn-group .apply-to-be-a-node-btn a:hover {
   color: #fff !important;
 }
+
 .election-rule-card .btn-group .quit-button {
   cursor: pointer;
   color: #266cd3;
@@ -73,12 +85,14 @@
   justify-content: center;
   margin: 12px 0 0 0;
 }
+
 .election-rule-card .btn-group .quit-button .quit-logo {
   display: inline-block;
   height: 18px;
   width: 18px;
   margin: 0 0 0 4px;
 }
+
 @media (max-width: 640px) {
   .apply-to-be-a-node-btn {
     width: 100%;

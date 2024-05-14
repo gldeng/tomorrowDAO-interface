@@ -21,6 +21,7 @@ import {
 import { thousandsCommaWithDecimal } from "@utils/formater";
 import { get } from "../../../../_src/utils";
 import "./RealTimeTransactions.css";
+import { mainExplorer } from "config";
 
 const fetchLimit = 20;
 const displayLimit = 5;
@@ -34,7 +35,7 @@ class RealTimeTransactions extends PureComponent {
   }
 
   componentDidMount() {
-    // this.getResourceRealtimeRecords();
+    this.getResourceRealtimeRecords();
   }
 
   componentDidUpdate(prevProps) {
@@ -107,7 +108,7 @@ class RealTimeTransactions extends PureComponent {
           // eslint-disable-next-line react/no-array-index-key
           <Row className="table-sell" type="flex" align="middle" key={index}>
             <Col span={4}>
-              <Link href={`/tx/${item.tx_id}`}>{date}</Link>
+              <Link href={`${mainExplorer}/tx/${item.tx_id}`}>{date}</Link>
             </Col>
             <Col span={3} className="sell">
               Sell

@@ -16,7 +16,7 @@ import { emitLoading } from 'utils/myEvent';
 import { getExploreLink } from 'utils/common';
 import Vote from './vote';
 import { timesDecimals, divDecimals } from 'utils/calculate';
-import { IContractError, IFormValidateError } from 'types';
+import { IContractError } from 'types';
 
 type TInfoTypes = {
   height?: number;

@@ -1,40 +1,48 @@
 .resource-currency-chart {
   margin-bottom: 40px;
 }
+
 .resource-currency-chart .resource-header {
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
   line-height: 32px;
 }
+
 .resource-currency-chart .resource-header-title {
   height: 32px;
   line-height: 32px;
   display: flex;
   align-items: center;
 }
+
 .resource-currency-chart .time-button {
   margin-left: 8px;
   width: 72px;
 }
-.resource-currency-chart .time-button.ant-btn-round.ant-btn-sm:not(.ant-btn-primary) {
+
+.resource-currency-chart .time-button.antExplorer-btn-round.antExplorer-btn-sm:not(.antExplorer-btn-primary) {
   background-color: #ffffff;
   border: 1px solid #e5e5e5;
 }
-.resource-currency-chart .ant-divider.ant-divider-horizontal {
+
+.resource-currency-chart .antExplorer-divider.antExplorer-divider-horizontal {
   margin: 0;
   margin-top: 20px;
 }
+
 @media (min-width: 1600px) {
-  .ant-col-xxl-16 {
+  .antExplorer-col-xxl-16 {
     margin-left: 40px;
   }
 }
+
 @media (max-width: 768px) {
   .resource-currency-chart {
     overflow: scroll;
     margin-bottom: 20px;
   }
+
   .select-button {
     display: flex;
     flex-wrap: wrap;
@@ -42,6 +50,7 @@
     margin-left: 0;
   }
 }
+
 @media screen and (max-width: 768px) {
   .resource-currency-chart .resource-header {
     padding: 0;

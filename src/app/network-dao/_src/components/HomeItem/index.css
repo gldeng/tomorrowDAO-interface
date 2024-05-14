@@ -2,26 +2,33 @@
   margin-top: 8px;
   padding: 0 12px;
 }
-.home-item div.ant-col {
+
+.home-item div.antExplorer-col {
   text-align: left !important;
 }
+
 .home-item-time {
   color: #999999;
 }
+
 .home-item .home-item-title {
   text-align: left !important;
   white-space: nowrap;
 }
-.home-item .home-item-title > a.home-title-link {
+
+.home-item .home-item-title>a.home-title-link {
   text-align: left !important;
   color: #266cd3;
 }
+
 .home-item .gap-bottom-small {
   margin-bottom: 8px;
 }
+
 .home-item .gap-top-small {
   margin-top: 8px;
 }
-.home-item div.home-item-right.ant-col .home-item-title {
+
+.home-item div.home-item-right.antExplorer-col .home-item-title {
   text-align: right !important;
 }

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { Component } from "react";
-import { message } from "antd";
+import { message, ConfigProvider } from "antd";
 import { connect } from "react-redux";
 
 import { aelf } from "../_src/utils";
@@ -276,5 +276,5 @@ const mapStateToProps = (state) => ({
 
 const ResourceConnected = connect(mapStateToProps)(Resource);
 export default function ResourcePage() {
-  return <ResourceConnected />
+  return (<ResourceConnected />);
 };

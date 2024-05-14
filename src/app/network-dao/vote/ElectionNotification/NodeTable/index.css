@@ -6,39 +6,48 @@
  * @LastEditTime: 2019-12-07 18:50:20
  * @Description: file content
  */
-.ant-table-pagination {
+.antExplorer-table-pagination {
   text-align: right !important;
 }
+
 .node-table {
   padding: 0 16px;
 }
+
 .node-table-header {
   font-size: 14px;
   font-weight: 500;
   line-height: 22px;
   padding: 16px 0;
 }
-.node-table .ant-progress-text {
+
+.node-table .antExplorer-progress-text {
   color: #fff;
 }
-.node-table .ant-progress-inner {
+
+.node-table .antExplorer-progress-inner {
   background: none;
   border: 1px solid #fff;
 }
+
 .node-table .node-table-wrapper {
   margin: 0;
   padding: 0;
 }
+
 .node-table .node-table-wrapper .table-layer-block {
   display: none;
 }
-.node-table-btn-group > button {
+
+.node-table-btn-group>button {
   display: inline-block;
 }
-.node-table-btn-group > button:first-child {
+
+.node-table-btn-group>button:first-child {
   margin-right: 20px;
 }
-.node-table .ant-table-tbody > tr.ant-table-row:hover > td,
-.node-table .ant-table-tbody > tr > td.ant-table-cell-row-hover {
+
+.node-table .antExplorer-table-tbody>tr.antExplorer-table-row:hover>td,
+.node-table .antExplorer-table-tbody>tr>td.antExplorer-table-cell-row-hover {
   background: #f7f8f9 !important;
 }

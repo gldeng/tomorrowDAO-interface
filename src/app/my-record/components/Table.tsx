@@ -13,6 +13,7 @@ import { useSearchParams } from 'next/navigation';
 import dayjs from 'dayjs';
 
 const defaultPageSize = 20;
+const allValue = 'All';
 export default function RecordTable() {
   const searchParams = useSearchParams();
   const { walletInfo } = useSelector((store: any) => store.userInfo);
@@ -45,7 +46,10 @@ export default function RecordTable() {
     {
       title: 'Time',
       dataIndex: 'timeStamp',
-      sorter: true,
+      fixed: 'left',
+      sorter: (a, b) => {
+        return dayjs(a.timeStamp).unix() - dayjs(b.timeStamp).unix();
+      },
       defaultSortOrder: 'descend',
       render(time) {
         return <span>{dayjs(time).format('YYYY-MM-DD HH:mm:ss')}</span>;
@@ -59,28 +63,41 @@ export default function RecordTable() {
     {
       title: 'proposalId',
       dataIndex: 'proposalId',
-      render(text) {
+      render(text, record) {
         return (
-          <HashAddress
-            className="pl-[4px]"
-            ignorePrefixSuffix={true}
-            preLen={8}
-            endLen={11}
-            address={text}
-          ></HashAddress>
+          <div>
+            <div>
+              <HashAddress
+                className="pl-[4px]"
+                ignorePrefixSuffix={true}
+                preLen={8}
+                endLen={11}
+                address={text}
+              ></HashAddress>
+            </div>
+            <div>{record.executer === walletInfo.address ? <span>Executed by me</span> : ''}</div>
+          </div>
         );
       },
     },
     {
-      title: 'My Operation',
+      title: 'My Option',
       dataIndex: 'myOption',
+      filterMultiple: false,
       filters: [
-        { text: 'All', value: '' },
-        { text: 'Member', value: 'Member' },
-        { text: 'Candidate', value: 'Candidate' },
+        { text: 'All', value: allValue },
+        { text: 'Approve', value: 0 },
+        { text: 'Reject', value: 1 },
+        { text: 'Abstain', value: 2 },
       ],
+      onFilter: (value, record) => {
+        if (value === allValue) {
+          return true;
+        }
+        return record.myOption === value;
+      },
       render(option) {
-        return <span>{EVoteOption[option]}</span>;
+        return <span className={`vote-record-${option}`}>{EVoteOption[option]}</span>;
       },
     },
     {
@@ -101,10 +118,6 @@ export default function RecordTable() {
           ></HashAddress>
         );
       },
-    },
-    {
-      title: 'executer',
-      dataIndex: 'executer',
     },
   ];
 
@@ -132,7 +145,7 @@ export default function RecordTable() {
   return (
     <ConfigProvider renderEmpty={() => <NoData></NoData>}>
       <Table
-        scroll={{ x: 800 }}
+        scroll={{ x: true }}
         className="custom-table-style"
         columns={columns as any}
         loading={voteHistoryLoading}

@@ -1,6 +1,10 @@
 .proposal-item {
   @apply block lg:flex justify-between border-solid border-[1px] border-Neutral-Divider rounded-lg px-8 py-6 bg-white mb-4;
 
+  .vote-data-analysis {
+    @apply lg:w-[266px] lg:ml-[48px] lg:shrink-0;
+  }
+
   .proposal-item-time {
     @apply text-Neutral-Secondary-Text ml-4;
   }
@@ -11,7 +15,7 @@
 
   .vote {
     .vote-dis {
-      @apply text-Neutral-Secondary-Text flex items-center text-[12px] font-[400] leading-[20px];
+      @apply text-Neutral-Secondary-Text flex items-center text-[12px] font-[400] h-[20px] pt-[4px];
 
       img {
         @apply w-[12px] h-[12px] mr-[4px];

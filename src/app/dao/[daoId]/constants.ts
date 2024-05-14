@@ -83,3 +83,5 @@ export const getTimeDesc = (status: string, data: IProposalsItem) => {
       return '';
   }
 };
+// the proposal is created by network dao, not tmrw dao
+export const NetWorkDaoCreateProposal = 0;

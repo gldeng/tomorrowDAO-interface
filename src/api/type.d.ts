@@ -163,15 +163,16 @@ interface IProposalsItem {
   expiredTime: string;
   transaction: Transaction;
   votesAmount: number;
-  approvedCount: string;
-  rejectionCount: string;
-  abstentionCount: string;
+  approvedCount: number;
+  rejectionCount: number;
+  abstentionCount: number;
   voterCount: number;
   minimalRequiredThreshold: number;
   minimalVoteThreshold: number;
   minimalApproveThreshold: number;
   maximalRejectionThreshold: number;
   maximalAbstentionThreshold: number;
+  proposalSource?: number;
 }
 interface ProposalListResData {
   totalCount: number;

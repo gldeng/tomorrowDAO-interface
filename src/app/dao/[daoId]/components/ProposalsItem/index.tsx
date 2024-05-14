@@ -30,7 +30,6 @@ export default function ProposalsItem(props: { data: IProposalsItem }) {
   }, [data]);
 
   const proposalComplete = (proposalStatus as any) === ProposalStatusString.Approved;
-
   return (
     <div className="proposal-item">
       <div>
@@ -83,25 +82,29 @@ export default function ProposalsItem(props: { data: IProposalsItem }) {
       </div>
       {isLG && <Divider></Divider>}
 
-      <div className="vote flex flex-col justify-between">
+      <div className="vote vote-data-analysis flex flex-col justify-between">
         <div className="vote-top">
-          <Typography.Title fontWeight={FontWeightEnum.Regular} level={7}>
-            Total {data.votesAmount} votes
-          </Typography.Title>
-          {proposalComplete ? (
-            <div className="vote-dis">
-              <Image width={12} height={12} src={CheckedIcon} alt=""></Image>
-              Insufficient votes： {data.votesAmount}/{data.minimalVoteThreshold} (min required)
-            </div>
-          ) : (
-            <div className="vote-dis">
-              <Image width={12} height={12} src={WarningGrayIcon} alt=""></Image>
-              Minimum voting requirement met：
-              {data.votesAmount < data.minimalVoteThreshold
-                ? `${data.votesAmount}/${data.minimalVoteThreshold}`
-                : `${data.voterCount}/${data.minimalRequiredThreshold}`}
-            </div>
-          )}
+          <div className="h-[22px] vote-top-title">
+            <Typography.Title fontWeight={FontWeightEnum.Regular} level={7}>
+              Total {data.votesAmount} votes
+            </Typography.Title>
+          </div>
+          <div className="vote-dis">
+            {data.votesAmount < data.minimalVoteThreshold ? (
+              <>
+                <Image width={12} height={12} src={WarningGrayIcon} alt=""></Image>
+                <div>
+                  Insufficient votes: {data.votesAmount}/{data.minimalVoteThreshold}(min required)
+                </div>
+              </>
+            ) : (
+              <>
+                <Image width={12} height={12} src={CheckedIcon} alt=""></Image>
+                Minimum voting requirement met: {data.votesAmount}/{data.minimalVoteThreshold}
+              </>
+            )}
+          </div>
+          {/* )} */}
         </div>
         <div>
           <CustomProgress data={data} />
@@ -113,27 +116,31 @@ export default function ProposalsItem(props: { data: IProposalsItem }) {
 
 function CustomProgress(props: { data: IProposalsItem }) {
   const { data } = props;
+  const approvePercent = data.votesAmount === 0 ? 0 : (data.approvedCount / data.votesAmount) * 100;
+  const abstainPercent =
+    data.votesAmount === 0 ? 0 : (data.abstentionCount / data.votesAmount) * 100;
+  const rejectPercent = data.votesAmount === 0 ? 0 : (data.rejectionCount / data.votesAmount) * 100;
   return (
     <>
       <div className="flex">
         <div className="flex-1 text-approve">
           <div className="font-medium leading-10">Approved</div>
-          <div className="leading-4">{data.minimalApproveThreshold}%</div>
+          <div className="leading-4">{approvePercent}%</div>
         </div>
         <div className="flex-1 text-abstention">
           <div className="font-medium leading-10">Asbtained</div>
-          <div className="leading-4">{data.maximalAbstentionThreshold}%</div>
+          <div className="leading-4">{abstainPercent}%</div>
         </div>
         <div className="justify-self-end text-rejection">
           <div className="font-medium leading-10">Rejected</div>
-          <div className="leading-4">{data.maximalRejectionThreshold}%</div>
+          <div className="leading-4">{rejectPercent}%</div>
         </div>
       </div>
       <Progress
         trailColor="#F55D6E"
         strokeColor="#687083"
-        percent={data.minimalApproveThreshold + data.maximalAbstentionThreshold}
-        success={{ percent: data.minimalApproveThreshold, strokeColor: '#3888FF' }}
+        percent={approvePercent + abstainPercent}
+        success={{ percent: approvePercent, strokeColor: '#3888FF' }}
       />
     </>
   );

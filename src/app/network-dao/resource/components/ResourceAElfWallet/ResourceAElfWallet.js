@@ -237,7 +237,7 @@ export default class ResourceAElfWallet extends PureComponent {
                   <SyncOutlined type="sync" spin={loading} />
                 </Button>
 
-                {!isPhone && currentWallet && currentWallet.name && (
+                {/* {!isPhone && currentWallet && currentWallet.name && (
                   <Button
                     type="text"
                     className="resource-wallet-address-update update-btn"
@@ -249,7 +249,7 @@ export default class ResourceAElfWallet extends PureComponent {
                     Logout
                     <LogoutOutlined type="logout" />
                   </Button>
-                )}
+                )} */}
               </Col>
             </Row>
 

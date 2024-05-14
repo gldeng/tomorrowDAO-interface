@@ -1,40 +1,49 @@
-.trading-sell .ant-slider-track {
+.trading-sell .antExplorer-slider-track {
   background: #d34a64;
 }
-.trading-sell .ant-slider-dot-active {
+
+.trading-sell .antExplorer-slider-dot-active {
   border-color: #d34a64;
   background: #d34a64;
 }
-.trading-sell .ant-slider-handle {
+
+.trading-sell .antExplorer-slider-handle {
   border-color: #d34a64;
   background: #d34a64;
-  border: solid 2px #d34a64;
   transform: none !important;
 }
-.trading-sell .ant-slider-handle:focus {
+
+.trading-sell .antExplorer-slider-handle:focus {
   box-shadow: none;
 }
-.trading-sell .ant-slider-track:focus {
+
+.trading-sell .antExplorer-slider-track:focus {
   background: #d34a64;
 }
-.trading-sell .ant-slider:hover .ant-slider-track {
+
+.trading-sell .antExplorer-slider:hover .antExplorer-slider-track {
   background: #d34a64;
 }
-.trading-sell .ant-slider:hover .ant-slider-handle {
+
+.trading-sell .antExplorer-slider:hover .antExplorer-slider-handle {
   border: none;
 }
-.trading-sell .ELF-value .ant-spin-nested-loading {
+
+.trading-sell .ELF-value .antExplorer-spin-nested-loading {
   position: relative;
   display: inline-block;
   min-height: 30px;
 }
-.trading-sell .ant-spin-container {
+
+.trading-sell .antExplorer-spin-container {
   padding: 3px;
 }
-.trading-sell .ant-form-item {
+
+.trading-sell .antExplorer-form-item {
   margin-bottom: 0;
 }
-.trading-sell .ant-form-item .ant-form-explain {
+
+.trading-sell .antExplorer-form-item .antExplorer-form-explain {
   position: absolute;
   top: -50%;
 }
