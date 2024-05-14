@@ -13,8 +13,8 @@ export const fetchDaoInfo = async (params: DaoInfoReq): Promise<DaoInfoRes> => {
 };
 
 export const fetchProposalList = async (params: ProposalListReq): Promise<ProposalListRes> => {
-  return apiServer.get('/proposal/list', {
-    params,
+  return apiServer.post('/proposal/list', {
+    ...params,
   });
 };
 

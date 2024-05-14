@@ -15,6 +15,7 @@ import { proposalCreateContractRequest } from 'contract/proposalCreateContract';
 import { emitLoading } from 'utils/myEvent';
 import { parseJSON, uint8ToBase64 } from 'utils/parseJSON';
 import { getContract } from '../util';
+import { NetworkDaoProposalOnChain } from 'config';
 
 interface IGovernanceModelProps {
   daoId: string;
@@ -55,6 +56,14 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
         ],
       },
     });
+  };
+  const handleNext = () => {
+    const proposalType = form.getFieldValue('proposalType');
+    if (proposalType === NetworkDaoProposalOnChain.label) {
+      router.push(`/network-dao/apply`);
+    } else {
+      setNext(true);
+    }
   };
   const handleSubmit = async (voteSchemeId: string) => {
     try {
@@ -151,12 +160,7 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
           }
         }}
       >
-        <ProposalType
-          className={clsx({ hidden: isNext })}
-          next={() => {
-            setNext(true);
-          }}
-        />
+        <ProposalType className={clsx({ hidden: isNext })} next={handleNext} />
         <ProposalInfo className={clsx({ hidden: !isNext })} daoId={daoId} onSubmit={handleSubmit} />
       </Form>
       <CommonOperationResultModal

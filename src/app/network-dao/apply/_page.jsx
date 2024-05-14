@@ -33,6 +33,7 @@ import {
 import WithoutApprovalModal from "../_proposal_root/components/WithoutApprovalModal/index";
 import { deserializeLog, isPhoneCheck } from "@common/utils";
 import { interval } from "@utils/timeUtils";
+import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import { get } from "../_src/utils.js";
 // import { isPortkeyApp } from "../../../../utils/isWebView";
 import { VIEWER_GET_CONTRACT_NAME } from "@api/url";
@@ -59,8 +60,9 @@ const initApplyModal = {
 const GET_CONTRACT_VERSION_TIMEOUT = 1000 * 60 * 10;
 
 const CreateProposal = () => {
-  // const { orgAddress = "" } = useParams();
-  const orgAddress = "";
+  // const { orgAddress = "" } = useSearchParams();
+  const searchParams = useSearchParams()
+  const orgAddress = searchParams.get('orgAddress');
   const modifyData = useSelector((state) => state.proposalModify);
   const common = useSelector((state) => state.common);
   const proposalSelect = useSelector((state) => state.proposalSelect);

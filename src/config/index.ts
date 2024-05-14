@@ -1,5 +1,5 @@
 export * from './testnet';
-
+export * from './net-work-dao';
 export enum WalletType {
   unknown = 'unknown',
   discover = 'discover',

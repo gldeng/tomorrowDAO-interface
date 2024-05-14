@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
 // import { useNavigate, Link, useLocation } from "react-router-dom";
+import { useRouter } from 'next/navigation';
 import Link from "next/link";
 import {
   Tabs,
@@ -35,6 +36,7 @@ const keyFromHash = {
 
 const OrganizationList = () => {
   // const navigate = useNavigate();
+  const router = useRouter()
   const location = window.location.hash;
   const [activeKey, setActiveKey] = useState(proposalTypes.PARLIAMENT);
   const common = useSelector((state) => state.common, shallowEqual);
@@ -117,6 +119,7 @@ const OrganizationList = () => {
         "Modifying the organization requires initiating a proposal to modify. Are you sure you want to modify?",
       onOk() {
         dispatch(setCurrentOrg(org));
+        router.push(`/network-dao/apply?orgAddress=${orgAddress}`)
         // navigate(`/proposal/apply/${org.orgAddress}`);
       },
       cancelButtonProps: { type: "primary" },
@@ -130,7 +133,7 @@ const OrganizationList = () => {
         animated={false}
         tabBarExtraContent={
           logStatus === LOG_STATUS.LOGGED ? (
-            <Link href="/proposal/createOrganizations">
+            <Link href="/network-dao/create-organization">
               Create Organization&gt;
             </Link>
           ) : null

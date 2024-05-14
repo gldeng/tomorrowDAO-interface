@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import Link from 'next/link';
 import { connect } from "react-redux";
-import { Input, Button, Table, Tooltip } from "antd";
+import { Input, Button, Tooltip } from "antd";
+import { Table } from 'aelf-design';
 
 import { SearchOutlined } from "@ant-design/icons";
 import publicKeyToAddress from "@utils/publicKeyToAddress";
@@ -34,7 +35,7 @@ function genMyVoteRecordsCols() {
         <Tooltip title={text}>
           <Link
             href={{
-              pathname: "/vote/team",
+              pathname: "/network-dao/vote/team",
               search: `pubkey=${record.candidate}`,
             }}
           >
@@ -210,7 +211,7 @@ class MyVoteRecords extends Component {
             dataSource={data}
             pagination={pagination}
             rowKey={(record) => record.voteId}
-            scroll={{ x: 1024 }}
+          // scroll={{ x: 1024 }}
           />
         </TableLayer>
       </section>

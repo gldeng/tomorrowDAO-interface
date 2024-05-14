@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Tabs, Typography, FontWeightEnum, Button, Pagination } from 'aelf-design';
 import { Form, message, Empty } from 'antd';
 import { useSelector } from 'react-redux';
@@ -13,7 +13,7 @@ import ExecutdProposals from './components/ExecutdProposals';
 import MyRecords from './components/MyRecords';
 import MyInfo from './components/MyInfo';
 import Filter from './components/Filter';
-import { useRequest } from 'ahooks';
+import { useRequest, usePrevious } from 'ahooks';
 import { HCType, IProposalTableParams, TabKey } from './type';
 import Link from 'next/link';
 import { fetchDaoInfo, fetchProposalList } from 'api/request';
@@ -23,9 +23,10 @@ import { ALL } from './constants';
 
 interface IProps {
   daoId: string;
+  isNetworkDAO?: boolean;
 }
 export default function DeoDetails(props: IProps) {
-  const daoId = props.daoId;
+  const { daoId, isNetworkDAO } = props;
   const { isLG, isSM } = useResponsive();
 
   const [form] = Form.useForm();
@@ -55,7 +56,8 @@ export default function DeoDetails(props: IProps) {
       total: 0,
     },
   });
-  const fetchProposalListWithParams = async () => {
+  const previousTableParams = usePrevious(tableParams);
+  const fetchProposalListWithParams = async (preData: ProposalListRes | null) => {
     const { proposalType, proposalStatus } = tableParams;
     const params: ProposalListReq = {
       daoId: daoId,
@@ -63,15 +65,37 @@ export default function DeoDetails(props: IProps) {
       skipCount:
         ((tableParams.pagination.current ?? 1) - 1) * (tableParams.pagination.pageSize ?? 20),
       maxResultCount: tableParams.pagination.pageSize,
+      isNetworkDAO,
     };
+    // skip ALL
     if (proposalType !== ALL && proposalType) {
       params.proposalType = proposalType;
     }
+    // skip ALL
     if (proposalStatus !== ALL && proposalStatus) {
       params.proposalStatus = proposalStatus;
     }
+    // search content
     if (tableParams.content) {
       params.content = tableParams.content;
+    }
+    // when pagesize change pagination.current will be 1
+    if (tableParams.pagination.current !== 1 && preData?.data) {
+      const prePageNo = previousTableParams?.pagination.current;
+      const currentPageNo = tableParams.pagination.current;
+      if (
+        typeof prePageNo === 'number' &&
+        typeof currentPageNo === 'number' &&
+        prePageNo > currentPageNo
+      ) {
+        params.pageInfo = {
+          ...(preData.data.previousPageInfo ?? {}),
+        };
+      } else {
+        params.pageInfo = {
+          ...(preData.data.nextPageInfo ?? {}),
+        };
+      }
     }
     const listRes = await fetchProposalList(params);
     return listRes;
@@ -84,6 +108,8 @@ export default function DeoDetails(props: IProps) {
   } = useRequest(fetchProposalListWithParams, {
     manual: true,
   });
+  const previousProposalDataRef = useRef<ProposalListRes | undefined>();
+  previousProposalDataRef.current = proposalData;
 
   const rightContent = useMemo(() => {
     return <MyInfo daoId={daoId} />;
@@ -133,7 +159,6 @@ export default function DeoDetails(props: IProps) {
   }, [form, tableParams, isLG, rightContent, daoId, daoData]);
 
   const pageChange = useCallback((page: number) => {
-    console.log('page', page);
     setTableParams((state) => {
       return {
         ...state,
@@ -146,7 +171,6 @@ export default function DeoDetails(props: IProps) {
   }, []);
 
   const pageSizeChange = useCallback((page: number, pageSize: number) => {
-    console.log('pageSize', page, pageSize);
     setTableParams((state) => {
       return {
         ...state,
@@ -160,7 +184,6 @@ export default function DeoDetails(props: IProps) {
   }, []);
 
   const handleTabChange = (key: string) => {
-    console.log('key', key);
     setTabKey(key as TabKey);
   };
 
@@ -180,7 +203,7 @@ export default function DeoDetails(props: IProps) {
   }, [isLG, tabItems, tabKey]);
 
   useEffect(() => {
-    run();
+    run(previousProposalDataRef.current ?? null);
   }, [tableParams, run]);
 
   return (
@@ -213,6 +236,7 @@ export default function DeoDetails(props: IProps) {
                 )}
                 <Pagination
                   {...tableParams.pagination}
+                  total={proposalData?.data?.totalCount ?? 0}
                   pageChange={pageChange}
                   pageSizeChange={pageSizeChange}
                 />

@@ -32,6 +32,8 @@
     "src/app/network-dao/proposal-list/**/*",
     "src/app/network-dao/resource/**/*",
     "src/app/network-dao/vote/**/*",
+    "src/app/network-dao/proposal-detail/**/*",
+    "src/app/network-dao/create-organization/**/*",
     "src/app/network-dao/layout.tsx"
   ],
   "rules": {

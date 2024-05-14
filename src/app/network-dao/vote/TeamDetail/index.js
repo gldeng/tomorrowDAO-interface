@@ -49,7 +49,13 @@ class TeamDetail extends PureComponent {
       isCandidate: true,
     };
 
+
     this.teamPubkey = queryString.parse(window.location.search).pubkey;
+    // console.log('queryString.parse(window.location.search).pubkey', queryString.parse(window.location.search), window.location.search)
+  }
+  getTeamPubkey() {
+    const teamPubkey = queryString.parse(window.location.search).pubkey;
+    return teamPubkey;
   }
 
   componentDidMount() {
@@ -141,11 +147,11 @@ class TeamDetail extends PureComponent {
     const candidateVotesArr = allCandidateInfo
       .map((item) => item.obtainedVotesAmount)
       .sort((a, b) => b - a);
+    const teamPubkey = this.getTeamPubkey();
     const currentCandidate = allCandidateInfo.find(
-      (item) => item.candidateInformation.pubkey === this.teamPubkey
+      (item) => item.candidateInformation.pubkey === teamPubkey
     );
-
-    const candidateAddress = publicKeyToAddress(this.teamPubkey);
+    const candidateAddress = publicKeyToAddress(teamPubkey);
     const formattedAddress = addressFormat(candidateAddress);
 
     if (!currentCandidate) {
@@ -352,7 +358,7 @@ class TeamDetail extends PureComponent {
                   <Button type="primary" shape="round" className="edit-btn">
                     <Link
                       href={{
-                        pathname: "/vote/apply/keyin",
+                        pathname: "/network-dao/vote/apply",
                         search: `pubkey=${this.teamPubkey}`,
                       }}
                     >
