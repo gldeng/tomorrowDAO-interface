@@ -3,6 +3,7 @@ import { IBlockchainWallet } from '@portkey/types';
 import { ManagerInfoType } from '@portkey/did-ui-react';
 import { DiscoverInfo, PortkeyInfo } from 'aelf-web-login';
 import type { AElfContextType } from '@aelf-react/core/dist/types';
+import { NetworkDaoProposalOnChain } from 'config/net-work-dao';
 
 export type TokenInfo = {
   decimals: number;
@@ -104,6 +105,7 @@ export enum ProposalTypeString {
   Governance = 'Governance',
   Improvement = 'Advisory',
   Veto = 'Veto',
+  'On-Chain' = 'ONCHAIN',
 }
 // for filter ProposalStatusString
 export enum ProposalStatusString {
@@ -112,7 +114,8 @@ export enum ProposalStatusString {
   Abstained = 'Abstained',
   Expired = 'Expired',
   Executed = 'Executed',
-  'Subject to Veto' = 'PendingVote',
+  'Subject to Veto' = 'BelowThreshold',
+  Challenged = 'Challenged',
   'Being Vetoed' = 'Vetoed',
 }
 // all ProposalStatusString
@@ -141,6 +144,11 @@ export const proposalTypeList = [
     label: 'Veto',
     desc: `Veto proposals are intended to prevent the execution of governance proposal by the High Council. Voting on veto proposals can only be conducted through a referendum.`,
     value: ProposalType.VETO,
+  },
+  {
+    label: NetworkDaoProposalOnChain.label,
+    desc: NetworkDaoProposalOnChain.desc,
+    value: NetworkDaoProposalOnChain.label,
   },
 ];
 

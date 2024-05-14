@@ -1,0 +1,15 @@
+.create-organization-header {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+}
+
+.create-organization-header-title {
+  font-size: 16px;
+  font-weight: bold;
+  color: #000000;
+}
+
+.create-organization .ant-input-number {
+  width: 100%;
+}

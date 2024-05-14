@@ -235,7 +235,7 @@ export async function getTokenList(search = "") {
     const { list = [] } = await request(
       config.API_PATH.GET_TOKEN_LIST,
       {
-        search,
+        ...search,
       },
       {
         method: "GET",

@@ -51,7 +51,7 @@ export default function Header() {
             key: 'Organisations',
           },
           {
-            label: <Link href={formatUrl('/network-dao/vote')}>BP Elections</Link>,
+            label: <Link href={formatUrl('/network-dao/vote/election')}>BP Elections</Link>,
             key: 'BP Elections',
           },
           {

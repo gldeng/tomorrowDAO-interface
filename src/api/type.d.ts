@@ -126,6 +126,11 @@ interface ProposalListReq {
   proposalType?: string;
   proposalStatus?: string;
   content?: string;
+  pageInfo?: {
+    previousPageInfo?: any;
+    nextPageInfo?: any;
+  };
+  isNetworkDAO?: boolean;
 }
 
 interface ProposalMyInfoReq {
@@ -171,6 +176,8 @@ interface IProposalsItem {
 interface ProposalListResData {
   totalCount: number;
   items: IProposalsItem[];
+  previousPageInfo?: any;
+  nextPageInfo?: any;
 }
 
 interface ProposalListRes {
