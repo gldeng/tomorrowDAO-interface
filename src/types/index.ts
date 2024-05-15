@@ -3,7 +3,6 @@ import { IBlockchainWallet } from '@portkey/types';
 import { ManagerInfoType } from '@portkey/did-ui-react';
 import { DiscoverInfo, PortkeyInfo } from 'aelf-web-login';
 import type { AElfContextType } from '@aelf-react/core/dist/types';
-import { NetworkDaoProposalOnChain } from 'config/net-work-dao';
 
 export type TokenInfo = {
   decimals: number;
@@ -129,7 +128,12 @@ export enum AllProposalStatusString {
   'Being Vetoed' = 'Vetoed',
   'BelowThreshold' = 'BelowThreshold',
 }
-export const proposalTypeList = [
+interface IProposalTypeListItem {
+  label: string;
+  desc: string;
+  value: string | number;
+}
+export const proposalTypeList: Array<IProposalTypeListItem> = [
   {
     label: 'Governance',
     desc: `Governance proposals typically encompass changes to the DAO's crucial parameters governing its operations. The execution of these proposals is carried out by calling smart contracts.`,
@@ -144,11 +148,6 @@ export const proposalTypeList = [
     label: 'Veto',
     desc: `Veto proposals are intended to prevent the execution of governance proposal by the High Council. Voting on veto proposals can only be conducted through a referendum.`,
     value: ProposalType.VETO,
-  },
-  {
-    label: NetworkDaoProposalOnChain.label,
-    desc: NetworkDaoProposalOnChain.desc,
-    value: NetworkDaoProposalOnChain.label,
   },
 ];
 

@@ -1,22 +1,20 @@
 import { useEffect, useRef, useState } from 'react';
-import { Table, Typography, FontWeightEnum, HashAddress, Tooltip } from 'aelf-design';
+import { Table, Typography, FontWeightEnum, Tooltip } from 'aelf-design';
 import { ConfigProvider } from 'antd';
 import publicKeyToAddress from 'app/network-dao/_src/utils/publicKeyToAddress';
 import addressFormat from 'app/network-dao/_src/utils/addressFormat';
 import { useSelector } from 'react-redux';
 import io from 'socket.io-client';
-
 import NoData from '../NoData';
-import './index.css';
-// import { callContract } from 'contract/callContract';
 import { consensusDPoSAddr, electionContractAddr, SOCKET_URL_NEW } from 'config';
 import { callMainNetViewContract } from 'contract/callContract';
 import { explorerServer } from 'api/axios';
 import dayjs from 'dayjs';
-import { useAsyncEffect, useRequest } from 'ahooks';
-import Link from 'next/link';
-import { ELF_DECIMAL } from 'app/network-dao/vote/constants';
+import { useAsyncEffect } from 'ahooks';
+import LinkReplaceLastPathName from 'components/LinkReplaceLastPathName';
+import { ELF_DECIMAL } from 'app/network-dao/[networkDaoId]/vote/constants';
 
+import './index.css';
 const TableItemCount = 20;
 export default function HighCounCilTab() {
   const { walletInfo } = useSelector((store: any) => store.userInfo);
@@ -216,9 +214,11 @@ export default function HighCounCilTab() {
       key: 'nodeName',
       render: (text: any, record: any) => (
         <Tooltip title={text}>
-          <Link href={{ pathname: '/network-dao/vote/team', search: `pubkey=${record.pubkey}` }}>
+          <LinkReplaceLastPathName
+            href={{ pathname: '/vote/team', search: `pubkey=${record.pubkey}` }}
+          >
             {text}
-          </Link>
+          </LinkReplaceLastPathName>
         </Tooltip>
       ),
     },
@@ -257,18 +257,6 @@ export default function HighCounCilTab() {
         `${value}%`,
       sorter: (a: any, b: any) => a.votedRate - b.votedRate,
     },
-    // {
-    //   title: 'My Votes',
-    //   key: 'myVotes',
-    //   width: 100,
-    //   dataIndex: 'myTotalVoteAmount',
-    //   sorter: (a: any, b: any) => {
-    //     const myA = a.myTotalVoteAmount === '-' ? 0 : a.myTotalVoteAmount;
-    //     const myB = b.myTotalVoteAmount === '-' ? 0 : b.myTotalVoteAmount;
-    //     return myA - myB;
-    //   },
-    //   render: (value: any) => (value && value !== '-' ? value / ELF_DECIMAL : '-'),
-    // },
   ];
   return (
     <div className="high-council">

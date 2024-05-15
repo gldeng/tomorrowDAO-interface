@@ -8,6 +8,7 @@ import { useRequest } from 'ahooks';
 import { curChain } from 'config';
 import { EVoteOption } from 'types/vote';
 import dayjs from 'dayjs';
+import LinkReplaceLastPathName from 'components/LinkReplaceLastPathName';
 
 interface IStatus {
   Approved: string;
@@ -24,9 +25,10 @@ const colorMap: IStatus = {
 };
 interface IProps {
   daoId: string;
+  isNetworkDAO?: boolean;
 }
 export default function MyRecords(props: IProps) {
-  const { daoId } = props;
+  const { daoId, isNetworkDAO } = props;
   const { walletInfo } = useSelector((store: any) => store.userInfo);
   const {
     data: voteHistoryData,
@@ -55,6 +57,12 @@ export default function MyRecords(props: IProps) {
     );
   };
 
+  const LoadMoreButton = (
+    <Button type="link" size="medium" className="!p-0 text-[#1A1A1A]">
+      Load More
+      <Image width={12} height={12} src={arrowRightIcon} alt=""></Image>
+    </Button>
+  );
   return (
     <div className="border border-Neutral-Divider border-solid rounded-lg bg-white mb-4 lg:my-4">
       <div className="px-4 lg:px-8 py-6 lg:py-4 flex justify-between items-center">
@@ -62,12 +70,11 @@ export default function MyRecords(props: IProps) {
           My Votes
         </Typography.Title>
         <div className="records-header-morebtn">
-          <Link href={`/my-record?daoId=${daoId}`}>
-            <Button type="link" size="medium" className="!p-0 text-[#1A1A1A]">
-              Load More
-              <Image width={12} height={12} src={arrowRightIcon} alt=""></Image>
-            </Button>
-          </Link>
+          {isNetworkDAO ? (
+            <LinkReplaceLastPathName href={`/my-record`}>{LoadMoreButton}</LinkReplaceLastPathName>
+          ) : (
+            <Link href={`/my-record?daoId=${daoId}`}>{LoadMoreButton}</Link>
+          )}
         </div>
       </div>
 
