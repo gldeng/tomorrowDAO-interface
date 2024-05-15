@@ -14,6 +14,7 @@ import addressFormat from "./utils/addressFormat";
 import { removeAElfPrefix } from "./utils/utils";
 // eslint-disable-next-line import/no-cycle
 import Dividends from "./components/Dividends";
+import { mainExplorer } from "config";
 const { DEFAUTRPCSERVER, SYMBOL, CHAIN_ID } = config;
 dayjs.extend(relativeTime);
 
@@ -328,7 +329,7 @@ const RESOURCE_DETAILS_COLUMN = [
     key: "tx_id",
     align: "center",
     ellipsis: true,
-    render: (text) => <Link href={`/tx/${text}`}>{text}</Link>,
+    render: (text) => <Link href={`${mainExplorer}/tx/${text}`}>{text}</Link>,
   },
   {
     title: "Time",

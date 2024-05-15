@@ -1,13 +1,15 @@
 'use client';
 import { memo } from 'react';
-import DeployForm from './DeployForm';
-import './index.css';
 import { useParams } from 'next/navigation';
+import DeployForm from './DeployForm';
+import useIsNetworkDao from 'hooks/useIsNetworkDao';
+import './index.css';
 const ProposalDeploy = () => {
-  const { daoId } = useParams<{ daoId: string }>();
+  const { isNetWorkDao, networkDaoId } = useIsNetworkDao();
+  const { daoId } = useParams<{ daoId: string; networkDaoId: string }>();
   return (
     <div className="deploy-form">
-      <DeployForm daoId={daoId} />
+      <DeployForm daoId={isNetWorkDao ? networkDaoId : daoId} />
     </div>
   );
 };

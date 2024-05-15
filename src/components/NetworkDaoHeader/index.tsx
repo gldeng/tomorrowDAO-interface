@@ -10,26 +10,18 @@ import { ReactComponent as MenuArrow } from 'assets/imgs/menu-arrow.svg';
 import { MenuProps } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 // import { useRouter } from 'next/router';
-import { usePathname } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 
 export default function Header() {
   const { isLG } = useResponsive();
 
-  const formatUrl = (pathname: string) => {
-    const url = `${pathname}${window.location.search}`;
-    return url;
-  };
-
   const pathname = usePathname();
+  const { networkDaoId } = useParams();
 
   const items: MenuProps['items'] = useMemo(() => {
     return [
-      // {
-      //   label: <Link href={formatUrl('/network-dao')}>Home</Link>,
-      //   key: 'Home',
-      // },
       {
-        label: <Link href={formatUrl('/network-dao/treasury')}>Treasury</Link>,
+        label: <Link href={`/network-dao/${networkDaoId}/treasury`}>Treasury</Link>,
         key: 'treasury',
       },
       {
@@ -43,23 +35,23 @@ export default function Header() {
         key: 'Governance',
         children: [
           {
-            label: <Link href={formatUrl(`/network-dao/proposal-list`)}>Proposals</Link>,
+            label: <Link href={`/network-dao/${networkDaoId}/proposal-list`}>Proposals</Link>,
             key: 'Proposals',
           },
           {
-            label: <Link href={formatUrl('/network-dao/organization')}>Organisations</Link>,
+            label: <Link href={`/network-dao/${networkDaoId}/organization`}>Organisations</Link>,
             key: 'Organisations',
           },
           {
-            label: <Link href={formatUrl('/network-dao/vote/election')}>BP Elections</Link>,
+            label: <Link href={`/network-dao/${networkDaoId}/vote/election`}>BP Elections</Link>,
             key: 'BP Elections',
           },
           {
-            label: <Link href={formatUrl('/network-dao/apply')}>Contract Management</Link>,
+            label: <Link href={`/network-dao/${networkDaoId}/apply`}>Contract Management</Link>,
             key: 'Contract Management',
           },
           {
-            label: <Link href={formatUrl('/network-dao/resource')}>Resource Token Trade</Link>,
+            label: <Link href={`/network-dao/${networkDaoId}/resource`}>Resource Token Trade</Link>,
             key: 'Resource Token Trade',
           },
         ],

@@ -2,7 +2,7 @@
 
 import { Form } from 'antd';
 import { memo, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import useReplaceLastPath from 'hooks/useReplaceLastPath';
 import ProposalType from './ProposalType';
 import ProposalInfo from './ProposalInfo';
 import { IContractError, IFormValidateError, ProposalType as ProposalTypeEnum } from 'types';
@@ -16,6 +16,8 @@ import { emitLoading } from 'utils/myEvent';
 import { parseJSON, uint8ToBase64 } from 'utils/parseJSON';
 import { getContract } from '../util';
 import { NetworkDaoProposalOnChain } from 'config';
+import { useRouter } from 'next/navigation';
+import useIsNetworkDao from 'hooks/useIsNetworkDao';
 
 interface IGovernanceModelProps {
   daoId: string;
@@ -33,7 +35,9 @@ const INIT_RESULT_MODAL_CONFIG: TResultModalConfig = {
 const GovernanceModel = (props: IGovernanceModelProps) => {
   const [form] = Form.useForm();
   const [isNext, setNext] = useState(false);
-  const router = useRouter();
+  const router = useReplaceLastPath();
+  const { isNetWorkDao, networkDaoId } = useIsNetworkDao();
+  const nextRouter = useRouter();
   const [resultModalConfig, setResultModalConfig] = useState(INIT_RESULT_MODAL_CONFIG);
   const { daoId } = props;
   const openErrorModal = (
@@ -60,12 +64,12 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
   const handleNext = () => {
     const proposalType = form.getFieldValue('proposalType');
     if (proposalType === NetworkDaoProposalOnChain.label) {
-      router.push(`/network-dao/apply`);
+      router.push(`/apply`);
     } else {
       setNext(true);
     }
   };
-  const handleSubmit = async (voteSchemeId: string) => {
+  const handleSubmit = async () => {
     try {
       if (!daoId) {
         openErrorModal();
@@ -118,7 +122,9 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
             {
               children: 'OK',
               onClick: () => {
-                router.push(`/dao/${daoId}`);
+                nextRouter.push(
+                  isNetWorkDao ? `/network-dao/${networkDaoId}/proposal-list` : `/dao/${daoId}`,
+                );
               },
             },
           ],

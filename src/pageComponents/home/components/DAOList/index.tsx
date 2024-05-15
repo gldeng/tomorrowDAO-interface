@@ -35,7 +35,7 @@ export default function DAOList() {
                   key={item.daoId}
                   href={
                     item.isNetworkDAO
-                      ? `/network-dao/proposal-list?daoId=${item.daoId}`
+                      ? `/network-dao/${item.daoId}/proposal-list`
                       : `/dao/${item.daoId}`
                   }
                 >

@@ -15,11 +15,12 @@ import MyInfo from './components/MyInfo';
 import Filter from './components/Filter';
 import { useRequest, usePrevious } from 'ahooks';
 import { HCType, IProposalTableParams, TabKey } from './type';
-import Link from 'next/link';
+import LinkReplaceLastPathName from 'components/LinkReplaceLastPathName';
 import { fetchDaoInfo, fetchProposalList } from 'api/request';
 import { curChain } from 'config';
 import './page.css';
 import { ALL, NetWorkDaoCreateProposal } from './constants';
+import Link from 'next/link';
 
 interface IProps {
   daoId: string;
@@ -116,6 +117,11 @@ export default function DeoDetails(props: IProps) {
   }, [daoId]);
 
   const tabItems = useMemo(() => {
+    const CreateButton = (
+      <Button size="medium" type="primary">
+        Create a Proposal
+      </Button>
+    );
     const items = [
       {
         key: TabKey.PROPOSALS,
@@ -126,11 +132,13 @@ export default function DeoDetails(props: IProps) {
               <Typography.Title fontWeight={FontWeightEnum.Medium} level={6}>
                 Proposals
               </Typography.Title>
-              <Link href={`/proposal/deploy/${daoId}`}>
-                <Button size="medium" type="primary">
-                  Create a Proposal
-                </Button>
-              </Link>
+              {isNetworkDAO ? (
+                <LinkReplaceLastPathName href={`/proposal-deploy`}>
+                  {CreateButton}
+                </LinkReplaceLastPathName>
+              ) : (
+                <Link href={`/proposal/deploy/${daoId}`}>{CreateButton}</Link>
+              )}
             </div>
             <Filter form={form} tableParams={tableParams} onChangeTableParams={setTableParams} />
           </div>
@@ -226,18 +234,34 @@ export default function DeoDetails(props: IProps) {
                 ) : proposalError ? (
                   <div>proposal error, refresh pleaase</div>
                 ) : proposalData?.data?.items?.length ? (
-                  proposalData?.data?.items?.map((item) => (
-                    <Link
-                      key={item.proposalId}
-                      href={`${
-                        item.proposalSource === NetWorkDaoCreateProposal
-                          ? `/proposal/${item.proposalId}`
-                          : `/network-dao/proposal-detail?proposalId=${item.proposalId}`
-                      } `}
-                    >
-                      <ProposalsItem data={item} />
-                    </Link>
-                  ))
+                  proposalData?.data?.items?.map((item) => {
+                    // tmrw
+                    if (item.proposalSource === NetWorkDaoCreateProposal) {
+                      if (isNetworkDAO) {
+                        return (
+                          <LinkReplaceLastPathName
+                            key={item.proposalId}
+                            href={`/proposal-detail-tmrw/${item.proposalId}`}
+                          >
+                            <ProposalsItem data={item} />
+                          </LinkReplaceLastPathName>
+                        );
+                      }
+                      return (
+                        <Link key={item.proposalId} href={`/proposal/${item.proposalId}`}>
+                          <ProposalsItem data={item} />
+                        </Link>
+                      );
+                    }
+                    return (
+                      <LinkReplaceLastPathName
+                        key={item.proposalId}
+                        href={`/proposal-detail?proposalId=${item.proposalId}`}
+                      >
+                        <ProposalsItem data={item} />
+                      </LinkReplaceLastPathName>
+                    );
+                  })
                 ) : (
                   <Empty />
                 )}
@@ -253,7 +277,7 @@ export default function DeoDetails(props: IProps) {
             {isLG && tabKey === TabKey.MYINFO && (
               <>
                 <ExecutdProposals />
-                {walletInfo.address && <MyRecords daoId={daoId} />}
+                {walletInfo.address && <MyRecords daoId={daoId} isNetworkDAO={isNetworkDAO} />}
               </>
             )}
           </div>
@@ -262,7 +286,7 @@ export default function DeoDetails(props: IProps) {
             <div className="dao-detail-content-right">
               {rightContent}
               <ExecutdProposals />
-              {walletInfo.address && <MyRecords daoId={daoId} />}
+              {walletInfo.address && <MyRecords daoId={daoId} isNetworkDAO={isNetworkDAO} />}
             </div>
           )}
         </div>

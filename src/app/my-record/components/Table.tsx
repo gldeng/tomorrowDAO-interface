@@ -7,9 +7,9 @@ import { useSelector } from 'react-redux';
 import { fetchVoteHistory } from 'api/request';
 import { EVoteOption } from 'types/vote';
 import NoData from './NoData';
-import { curChain } from 'config';
+import { curChain, NetworkDaoHomePathName } from 'config';
 import { useRequest } from 'ahooks';
-import { useSearchParams } from 'next/navigation';
+import { useParams, usePathname, useSearchParams } from 'next/navigation';
 import dayjs from 'dayjs';
 
 const defaultPageSize = 20;
@@ -17,6 +17,10 @@ const allValue = 'All';
 export default function RecordTable() {
   const searchParams = useSearchParams();
   const { walletInfo } = useSelector((store: any) => store.userInfo);
+  const pathName = usePathname();
+  const { networkDaoId } = useParams();
+  const isNetWorkDao = pathName.includes(NetworkDaoHomePathName);
+  const daoId = (isNetWorkDao ? networkDaoId : searchParams.get('daoId') ?? '') as string;
 
   const [tableParams, setTableParams] = useState<{ page: number; pageSize: number }>({
     page: 1,
@@ -34,7 +38,7 @@ export default function RecordTable() {
         chainId: curChain,
         skipCount: (tableParams.page - 1) * tableParams.pageSize,
         maxResultCount: tableParams.pageSize,
-        daoId: searchParams.get('daoId') ?? '',
+        daoId: daoId,
       });
     },
     {

@@ -5,7 +5,7 @@ import 'aelf-web-login/dist/assets/index.css';
 import 'styles/global.css';
 import 'aelf-design/css';
 import Layout from 'pageComponents/layout';
-import NetworkDaoLayout from 'pageComponents/network-dao/layout';
+import NetworkDaoLayout from 'app/network-dao/[networkDaoId]/layout';
 
 import Provider from 'provider/';
 import Script from 'next/script';
@@ -36,13 +36,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
       </head>
       <body>
         <StyleRegistry>
-          <Provider>
-            {isNetWorkDao ? (
-              <NetworkDaoLayout>{children}</NetworkDaoLayout>
-            ) : (
-              <Layout>{children}</Layout>
-            )}
-          </Provider>
+          <Provider>{isNetWorkDao ? <div>{children}</div> : <Layout>{children}</Layout>}</Provider>
         </StyleRegistry>
       </body>
     </html>

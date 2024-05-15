@@ -69,7 +69,6 @@ export default function MyInfo(props: TInfoTypes) {
 
     const res = await fetchProposalMyInfo(reqMyInfoParams);
     const data: ProposalMyInfo = res?.data || {};
-    // handle res data
     if (!data?.symbol) {
       data.symbol = 'ELF';
     }
