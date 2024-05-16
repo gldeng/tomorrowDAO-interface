@@ -26,3 +26,5 @@ export const voteAddress = '2LpoLYNPAnjiBUozyYwcfaeekxRFehjt6hDR78VKgk47UwkvAv';
 // network-dao
 export const electionContractAddr = 'NrVf8B7XUduXn1oGHZeF1YANFXEXAhvCymz2WPyKZt4DE2zSg';
 export const consensusDPoSAddr = 'pGa4e5hNGsgkfjEGm72TEvbF7aRDqKBd4LuXtab4ucMbXLcgJ';
+
+export const sideChainSuffix = 'tDVW';

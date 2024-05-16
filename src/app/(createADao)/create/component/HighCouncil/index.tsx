@@ -4,27 +4,18 @@ import { Input, Tooltip } from 'aelf-design';
 import { Form, InputNumber } from 'antd';
 import { memo, useContext } from 'react';
 import { InfoCircleOutlined } from '@aelf-design/icons';
-import { useRequest } from 'ahooks';
 import InputSlideBind from 'components/InputSlideBind';
 import { integerRule, min2maxIntegerRule, validatorCreate, useRegisterForm } from '../utils';
 import { StepEnum, StepsContext } from '../../type';
 import { useSelector } from 'redux/store';
-import { fetchContractInfo } from 'api/request';
 import { electionContractAddress } from 'config/index';
 import './index.css';
 
 const HighCouncil = () => {
   const [form] = Form.useForm();
-  const elfInfo = useSelector((store) => store.elfInfo.elfInfo);
   const daoCreateToken = useSelector((store) => store.daoCreate.token);
   const { stepForm } = useContext(StepsContext);
-  console.log('daoCreateToken', daoCreateToken);
   useRegisterForm(form, StepEnum.step2);
-  const { data } = useRequest(() => {
-    return fetchContractInfo({
-      chainId: elfInfo.curChain,
-    });
-  });
   const metaData = stepForm[StepEnum.step0].submitedRes;
   const disabled = !metaData?.governanceToken;
   return (

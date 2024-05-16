@@ -3,7 +3,7 @@
  * @author atom-yang
  */
 // eslint-disable-next-line no-use-before-define
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { If, Then } from "react-if";
 import { QuestionCircleOutlined } from "@ant-design/icons";
@@ -17,6 +17,7 @@ import { PRIMARY_COLOR } from "@common/constants";
 // import { getContractURL } from "../../_proposal_root/";
 import addressFormat from "@utils/addressFormat";
 import { isJsonString } from "@utils/utils";
+import { mainExplorer } from "config";
 
 const { viewer } = config;
 
@@ -31,7 +32,7 @@ function getContractName(address) {
 }
 export function getContractURL(address) {
   // eslint-disable-next-line max-len
-  return `${window.location.protocol}//${window.location.host}/contract/${address}#contract`;
+  return `${mainExplorer}/contract/${address}#contract`;
 }
 
 const ContractDetail = (props) => {
@@ -83,6 +84,10 @@ const ContractDetail = (props) => {
       setParams(JSON.stringify(null, null, 2));
     }
   }, [contractAddress]);
+  const ref = useRef(null);
+  useEffect(() => { 
+    ref.current.innerHTML = params;
+  }, [params])
 
   return (
     <Card
@@ -140,7 +145,7 @@ const ContractDetail = (props) => {
           <span className="sub-title">Contract Params</span>
         </Col>
         <Col sm={20} xs={24}>
-          <pre className="view-params">{params}</pre>
+          <pre className="view-params" ref={ref}>{params}</pre>
         </Col>
       </Row>
     </Card>

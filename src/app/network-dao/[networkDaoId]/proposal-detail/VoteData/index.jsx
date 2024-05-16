@@ -71,7 +71,7 @@ const VoteData = (props) => {
           <div>
             <Button
               className='gap-right-large'
-              type='danger'
+              danger
               shape='round'
               disabled={!canThisUserVote}
               onClick={handleReject}

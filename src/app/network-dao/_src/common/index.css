@@ -113,12 +113,12 @@
 pre.view-params {
   background-color: #eeeeee;
   max-height: 220px;
+  height: max-content;
   border-radius: 5px;
-  overflow: auto;
+  overflow: scroll;
   flex-grow: 1;
-  margin-bottom: 0;
   white-space: pre-wrap;
-  display: flex;
+  text-wrap: wrap;
 }
 
 .main-container {

@@ -1,9 +1,8 @@
 import { Divider, Form, InputNumber, message } from 'antd';
-import { Button, HashAddress } from 'aelf-design';
+import { Button } from 'aelf-design';
 import { useState, useCallback } from 'react';
 import CommonModal from 'components/CommonModal';
 import Image from 'next/image';
-import ElfIcon from 'assets/imgs/elf-icon.svg';
 import { EVoteMechanismNameType } from 'app/proposal/deploy/[daoId]/type';
 import { useSelector } from 'react-redux';
 import { voteApproveMessage, voteRejectMessage, voteAbstainMessage } from 'utils/constant';
@@ -15,6 +14,7 @@ import { emitLoading } from 'utils/myEvent';
 import { curChain, voteAddress } from 'config';
 import { timesDecimals } from 'utils/calculate';
 import { EVoteOption } from 'types/vote';
+import { TokenIconMap } from 'constants/token';
 import { IContractError, SupportedELFChainId } from 'types';
 import BigNumber from 'bignumber.js';
 
@@ -203,8 +203,10 @@ function Vote(props: TVoteTypes) {
               max={elfBalance}
               prefix={
                 <div className="flex items-center">
-                  <Image width={24} height={24} src={ElfIcon} alt="" />
-                  <span className="text-Neutral-Secondary-Text ml-1">ELF</span>
+                  {TokenIconMap[symbol] && (
+                    <Image width={24} height={24} src={TokenIconMap[symbol]} alt="" />
+                  )}
+                  <span className="text-Neutral-Secondary-Text ml-1">{symbol}</span>
                   <Divider type="vertical" />
                 </div>
               }

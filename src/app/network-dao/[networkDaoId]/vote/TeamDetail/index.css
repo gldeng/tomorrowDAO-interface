@@ -172,3 +172,9 @@
     display: none;
   }
 }
+
+.team-detail-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}

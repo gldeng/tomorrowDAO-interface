@@ -27,7 +27,7 @@ const Layout = dynamicReq(
             <Suspense>
               <div className="flex-1 flex justify-center">
                 <div
-                  className={`flex-1 max-w-[1440px] mx-auto ${
+                  className={`flex-1 max-w-[1440px] mx-auto bg-white ${
                     isHomePage ? '' : 'py-6 mb-6 px-4 lg:px-10'
                   }`}
                 >

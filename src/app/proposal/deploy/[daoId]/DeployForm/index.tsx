@@ -41,8 +41,8 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
   const [resultModalConfig, setResultModalConfig] = useState(INIT_RESULT_MODAL_CONFIG);
   const { daoId } = props;
   const openErrorModal = (
-    primaryContent = 'Failed to Create the DAO',
-    secondaryContent = 'Failed to Create the DAO',
+    primaryContent = 'Failed to Create the proposal',
+    secondaryContent = 'Failed to Create the proposal',
   ) => {
     setResultModalConfig({
       open: true,

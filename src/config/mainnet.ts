@@ -24,3 +24,5 @@ export const voteAddress = 'todo...';
 
 // network-dao
 export const electionContractAddr = 'NrVf8B7XUduXn1oGHZeF1YANFXEXAhvCymz2WPyKZt4DE2zSg';
+
+export const sideChainSuffix = 'tDVV';

@@ -313,10 +313,12 @@ class TeamDetail extends PureComponent {
                 )}
               </Col>
               <Col className={`${clsPrefix}-team-info`} md={18} sm={18} xs={18}>
-                <h5 className={`${clsPrefix}-node-name ellipsis`}>
-                  {data.name ? data.name : formattedAddress}
-                  <Tag color="#f50">{getTag()}</Tag>
-                </h5>
+                <div className="flex align-middle">
+                  <h5 className={`${clsPrefix}-node-name ellipsis`}>
+                    {data.name ? data.name : formattedAddress}
+                  </h5>
+                  <Tag color="#f50" className="pl-[4px]">{getTag()}</Tag>
+                </div>
                 <Paragraph ellipsis={{ rows: 1 }}>
                   Location: {data.location || "-"}
                 </Paragraph>
@@ -353,7 +355,6 @@ class TeamDetail extends PureComponent {
                         pathname: '/vote/apply',
                         search: `pubkey=${this.teamPubkey}`,
                       }}
-                      replaceStart="vote"
                     >
                       Edit
                     </LinkReplaceLastPathName>
@@ -364,9 +365,8 @@ class TeamDetail extends PureComponent {
           </Col>
           <Col md={6} xs={0} className="card-container-right">
             <Button
-              className="table-btn vote-btn"
+              className="table-btn vote-btn flex justify-center align-middle team-detail-btn"
               type="primary"
-              shape="round"
               disabled={!isCandidate}
               data-role="vote"
               data-shoulddetectlock
@@ -378,9 +378,8 @@ class TeamDetail extends PureComponent {
               Vote
             </Button>
             <Button
-              className="table-btn redeem-btn"
+              className="table-btn redeem-btn flex justify-center align-middle team-detail-btn"
               type="primary"
-              shape="round"
               data-role="redeem"
               data-shoulddetectlock
               data-nodeaddress={formattedAddress}

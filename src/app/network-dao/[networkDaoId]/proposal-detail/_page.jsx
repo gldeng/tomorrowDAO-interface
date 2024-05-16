@@ -52,6 +52,7 @@ import { PRIMARY_COLOR } from "@common/constants";
 import removeHash from "@utils/removeHash";
 import addressFormat from "@utils/addressFormat";
 import { NETWORK_TYPE } from '@config/config';
+import { mainExplorer } from "config";
 
 const {
   proposalActions,
@@ -307,22 +308,26 @@ const ProposalDetail = () => {
       {info.loadingStatus === LOADING_STATUS.SUCCESS ? (
         <>
           <div>
-            <h2>Proposal Detail</h2>
-            <p><CountDown time={expiredTime} status={status} /></p>
-            {
-              votedStatus && votedStatus !== "none" ? (
-                <Tag color={ACTIONS_COLOR_MAP[votedStatus]}>
-                  {ACTIONS_ICON_MAP[votedStatus]}
-                  {votedStatus}
-                </Tag>
-              ) : null
-            }
-            <Extra
-                {...info.proposal}
-                currentWallet={currentWallet}
-                logStatus={logStatus}
-                handleRelease={handleRelease}
-              />
+            <div className="flex justify-between items-center mb-[6px]">
+              <div className="flex items-center">
+                <h2>Proposal Detail</h2>
+                <p className="ml-[4px]"><CountDown time={expiredTime} status={status} /></p>
+               </div>
+                  {
+                  votedStatus && votedStatus !== "none" ? (
+                    <Tag color={ACTIONS_COLOR_MAP[votedStatus]}>
+                      {ACTIONS_ICON_MAP[votedStatus]}
+                      {votedStatus}
+                    </Tag>
+                  ) : null
+              }
+                          <Extra
+                          {...info.proposal}
+                          currentWallet={currentWallet}
+                          logStatus={logStatus}
+                          handleRelease={handleRelease}
+                        />
+            </div>
           </div>
           <Divider className="proposal-detail-header-divider" />
           {isPhoneCheck() ? (
@@ -366,7 +371,7 @@ const ProposalDetail = () => {
                 <span className="sub-title gap-right">Proposer:</span>
                 <span className="text-ellipsis">
                   <a
-                    href={`${viewer.addressUrl}/${addressFormat(proposer)}`}
+                    href={`${mainExplorer}/address/${addressFormat(proposer)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     title={`ELF_${proposer}_${viewer.chainId}`}

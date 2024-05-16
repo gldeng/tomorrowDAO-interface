@@ -14,6 +14,7 @@ import { usePathname } from 'next/navigation';
 
 export default function Header() {
   const { isLG } = useResponsive();
+  const pathname = usePathname();
   const items: MenuProps['items'] = useMemo(() => {
     return [
       {
@@ -83,9 +84,6 @@ export default function Header() {
     ];
   }, [isLG]);
   const router = useRouter();
-
-  const pathname = usePathname();
-
   const [current, setCurrent] = useState('CreateDAO');
 
   const onClick: MenuProps['onClick'] = (e) => {
@@ -100,6 +98,8 @@ export default function Header() {
   useEffect(() => {
     if (pathname === '/guide' || pathname === '/create') {
       setCurrent('CreateDAO');
+    } else {
+      setCurrent('');
     }
   }, [pathname]);
 

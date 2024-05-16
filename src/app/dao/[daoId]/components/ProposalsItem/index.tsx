@@ -94,7 +94,7 @@ export default function ProposalsItem(props: { data: IProposalsItem }) {
               <>
                 <Image width={12} height={12} src={WarningGrayIcon} alt=""></Image>
                 <div>
-                  Insufficient votes: {data.votesAmount}/{data.minimalVoteThreshold}(min required)
+                  Insufficient votes: {data.votesAmount}/{data.minimalVoteThreshold} (min required)
                 </div>
               </>
             ) : (
