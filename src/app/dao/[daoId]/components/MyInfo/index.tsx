@@ -156,7 +156,9 @@ export default function MyInfo(props: TInfoTypes) {
     const contractParams = {
       daoId,
       withdrawAmount: timesDecimals(info?.availableUnStakeAmount, info?.decimal).toNumber(),
-      votingItemIdList: info.withdrawList?.[0]?.proposalIdList ?? [],
+      votingItemIdList: {
+        value: info.withdrawList?.[0]?.proposalIdList ?? [],
+      },
     };
     try {
       emitLoading(true, 'The unstake is being processed...');
