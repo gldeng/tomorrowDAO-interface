@@ -5,6 +5,8 @@ import { TVotingOption } from './type';
 import { ColumnsType } from 'antd/es/table';
 import thousandsNumber from 'utils/thousandsNumber';
 import clsx from 'clsx';
+import dayjs from 'dayjs';
+import { sideChainSuffix } from 'config';
 
 const columns: ColumnsType<IProposalDetailDataVoteTopListItem> = [
   {
@@ -12,7 +14,7 @@ const columns: ColumnsType<IProposalDetailDataVoteTopListItem> = [
     title: <Typography.Text className="text-Neutral-Secondary-Text">Voters</Typography.Text>,
     dataIndex: 'voter',
     render: (text) => {
-      return <HashAddress address={text} preLen={8} endLen={9} />;
+      return <HashAddress address={text} preLen={8} endLen={9} chain={sideChainSuffix} />;
     },
   },
   {
@@ -62,8 +64,9 @@ const columns: ColumnsType<IProposalDetailDataVoteTopListItem> = [
     title: <Typography.Text className="text-Neutral-Secondary-Text">Time</Typography.Text>,
     dataIndex: 'voteTime',
     align: 'right',
+    width: 200,
     render: (text) => {
-      return <Typography.Text>{text}</Typography.Text>;
+      return <Typography.Text>{dayjs(text).format('YYYY-MM-DD HH:mm:ss')}</Typography.Text>;
     },
   },
 ];
@@ -114,6 +117,7 @@ const VoteResultTable = (props: IVoteResultTableProps) => {
       </div>
       <Table
         columns={columns as any}
+        scroll={{ x: true }}
         pagination={{
           ...tableParams,
           total: voteTopList?.length ?? 0,

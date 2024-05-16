@@ -59,7 +59,7 @@ class Request {
             break;
 
           case 401:
-            message.error('The signature has expired. Please log in again.');
+            message.error('The signature has expired. Please Login again.');
             setTimeout(() => {
               location.pathname = '/';
             }, 3000);

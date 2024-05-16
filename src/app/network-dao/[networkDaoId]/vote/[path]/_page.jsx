@@ -1255,7 +1255,6 @@ class VoteContainer extends Component {
     const secondaryLevelNav = this.renderSecondaryLevelNav();
     return (
       <div className="vote-wrapper">
-        <header>Vote</header>
         {secondaryLevelNav}
         <section
           className="vote-container vote-container-simple basic-container basic-container-white vote-content"

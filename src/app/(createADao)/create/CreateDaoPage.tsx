@@ -176,7 +176,7 @@ const CreateDaoPage = () => {
           };
         }
         emitLoading(true, 'The transaction is being processed...');
-        const createRes = await daoCreateContractRequest('CreateDAO', params);
+        await daoCreateContractRequest('CreateDAO', params);
         emitLoading(false);
         submitButtonRef.current?.setResultModalConfig({
           open: true,
@@ -330,7 +330,7 @@ const CreateDaoPage = () => {
     <Result
       className="px-4 lg:px-8"
       status="warning"
-      title="Please log in first before creating a DAO"
+      title="Please Login first before creating a DAO"
     />
   );
 };

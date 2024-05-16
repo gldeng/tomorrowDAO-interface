@@ -10,7 +10,7 @@ import { fetchAddressTransferList } from 'api/request';
 // import useResponsive from 'hooks/useResponsive';
 import { getFormattedDate } from 'utils/time';
 import { numberFormatter } from 'utils/numberFormatter';
-import { TokenIconMap } from '../constant';
+import { TokenIconMap } from 'constants/token';
 
 const checkIsOut = (address: string, record: AddressTransferListDataListItem) => {
   const { from, to, isCrossChain } = record;
@@ -141,7 +141,7 @@ export default function RecordTable() {
       render(symbol) {
         return (
           <div className="token">
-            <img src={TokenIconMap[symbol]} className="token-logo " alt="" />
+            {TokenIconMap[symbol] && <img src={TokenIconMap[symbol]} className="token-logo " alt="" />}
             {symbol}
           </div>
         );

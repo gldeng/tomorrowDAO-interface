@@ -2,7 +2,6 @@ import { Descriptions, Divider, Form, InputNumber, message } from 'antd';
 import { HashAddress, Typography, FontWeightEnum, Button } from 'aelf-design';
 import { ReactNode, useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
-import ElfIcon from 'assets/imgs/elf-icon.svg';
 import SuccessGreenIcon from 'assets/imgs/success-green.svg';
 import CommonModal from 'components/CommonModal';
 import { useWalletService } from 'hooks/useWallet';
@@ -11,12 +10,13 @@ import { fetchProposalMyInfo } from 'api/request';
 import { store } from 'redux/store';
 import { useSelector } from 'react-redux';
 import { callContract, GetBalanceByContract } from 'contract/callContract';
-import { curChain, voteAddress } from 'config';
+import { curChain, sideChainSuffix, voteAddress } from 'config';
 import { emitLoading } from 'utils/myEvent';
 import { getExploreLink } from 'utils/common';
 import Vote from './vote';
 import { timesDecimals, divDecimals } from 'utils/calculate';
 import { IContractError } from 'types';
+import { TokenIconMap } from 'constants/token';
 
 type TInfoTypes = {
   height?: number;
@@ -120,6 +120,7 @@ export default function MyInfo(props: TInfoTypes) {
           endLen={11}
           address={walletInfo.address}
           className="address"
+          chain={sideChainSuffix}
         ></HashAddress>
       ),
     },
@@ -161,6 +162,7 @@ export default function MyInfo(props: TInfoTypes) {
       },
     };
     try {
+      setIsModalOpen(false);
       emitLoading(true, 'The unstake is being processed...');
       const result = await callContract('Withdraw', contractParams, voteAddress);
       emitLoading(false);
@@ -204,7 +206,7 @@ export default function MyInfo(props: TInfoTypes) {
               size="medium"
               onClick={() => {
                 if (info?.availableUnStakeAmount === 0) {
-                  message.info('Available to unstake is 0!');
+                  message.info('Available to unstake is 0');
                 } else {
                   setIsModalOpen(true);
                 }
@@ -220,7 +222,7 @@ export default function MyInfo(props: TInfoTypes) {
               elfBalance={elfBalance}
               symbol={info?.symbol}
               fetchMyInfo={fetchMyInfo}
-              votesAmount={info?.votesAmount}
+              votesAmount={info?.votesAmount ?? 0}
               decimal={info?.decimal}
             />
           )}
@@ -236,7 +238,7 @@ export default function MyInfo(props: TInfoTypes) {
           >
             <div className="text-center color-text-Primary-Text font-medium">
               <span className="text-[32px] mr-1">{info?.availableUnStakeAmount}</span>
-              <span>ELF</span>
+              <span>{info.symbol}</span>
             </div>
             <div className="text-center text-Neutral-Secondary-Text">Available to unstake</div>
             <Form form={form} layout="vertical" variant="filled" onFinish={handleClaim}>
@@ -252,8 +254,10 @@ export default function MyInfo(props: TInfoTypes) {
                   disabled
                   prefix={
                     <div className="flex items-center">
-                      <Image width={24} height={24} src={ElfIcon} alt="" />
-                      <span className="text-Neutral-Secondary-Text ml-1">ELF</span>
+                      {TokenIconMap[info.symbol] && (
+                        <Image width={24} height={24} src={TokenIconMap[info.symbol]} alt="" />
+                      )}
+                      <span className="text-Neutral-Secondary-Text ml-1">{info.symbol}</span>
                       <Divider type="vertical" />
                     </div>
                   }

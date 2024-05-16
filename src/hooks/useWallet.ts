@@ -75,7 +75,7 @@ export const useWalletInit = () => {
     message.error(`${error.message || 'LOGIN_ERROR'}`);
   });
   useWebLoginEvent(WebLoginEvents.LOGINED, () => {
-    message.success('log in');
+    message.success('Login');
   });
 
   useWebLoginEvent(WebLoginEvents.LOGOUT, () => {

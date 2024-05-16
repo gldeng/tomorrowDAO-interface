@@ -127,7 +127,7 @@ const OrganizationList = () => {
   };
 
   return (
-    <div className="organization-list">
+    <div className="organization-list bg-white">
       <Tabs
         animated={false}
         tabBarExtraContent={
@@ -180,7 +180,7 @@ const OrganizationList = () => {
             <Spin spinning={loadingStatus === LOADING_STATUS.LOADING}>
               <Row gutter={16}>
                 {list.map((item) => (
-                  <Col sm={12} xs={24} key={item.orgAddress}>
+                  <Col sm={12} xs={24} key={item.orgAddress} className="mt-[12px]">
                     <Organization
                       {...item}
                       bpList={bpList}
@@ -213,7 +213,7 @@ const OrganizationList = () => {
         </If>
       </div>
       <Pagination
-        className="float-right gap-top"
+        className="float-right gap-top mt-[12px]"
         showQuickJumper
         total={total}
         current={params.pageNum}

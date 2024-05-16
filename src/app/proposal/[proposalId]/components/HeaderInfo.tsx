@@ -2,11 +2,12 @@ import BoxWrapper from './BoxWrapper';
 import DetailTag from 'components/DetailTag';
 import { Typography, FontWeightEnum, HashAddress } from 'aelf-design';
 import { colorfulSocialMediaIconMap } from 'assets/imgs/socialMediaIcon';
-import ProposalDetailFile from 'assets/imgs/proposal-detail-file.svg';
 import Image from 'next/image';
 import { memo, useMemo } from 'react';
 import dayjs from 'dayjs';
+import { sideChainSuffix } from 'config';
 
+// import ProposalDetailFile from 'assets/imgs/proposal-detail-file.svg';
 interface IHeaderInfoProps {
   proposalDetailData: ProposalDetailData;
 }
@@ -15,6 +16,13 @@ const HeaderInfo = (props: IHeaderInfoProps) => {
   const tagList = useMemo(() => {
     return [proposalDetailData.governanceMechanism];
   }, [proposalDetailData]);
+  const handleShare = () => {
+    const twTitle = proposalDetailData.proposalTitle;
+    const twUrl = window.location.href;
+    // eslint-disable-next-line prettier/prettier
+    const url = `http://twitter.com/share?text=${twTitle}&url=${twUrl}`;
+    window.open(url);
+  };
   return (
     <BoxWrapper>
       <div className="flex justify-between items-center">
@@ -42,7 +50,10 @@ const HeaderInfo = (props: IHeaderInfoProps) => {
               Documentation
             </Typography.Text>
           </div> */}
-          <div className="w-8 h-8 cursor-pointer bg-Neutral-Default-BG rounded-md flex justify-center items-center">
+          <div
+            className="w-8 h-8 cursor-pointer bg-Neutral-Default-BG rounded-md flex justify-center items-center"
+            onClick={handleShare}
+          >
             <Image src={colorfulSocialMediaIconMap.Twitter} alt="x" width={11} height={10} />
           </div>
         </div>
@@ -70,7 +81,12 @@ const HeaderInfo = (props: IHeaderInfoProps) => {
       <div className="border-0 border-t border-solid border-Neutral-Divider flex pt-6 gap-y-4 gap-x-0 lg:gap-x-16 lg:gap-y-0 lg:flex-row flex-col">
         <div className="flex items-center gap-4">
           <Typography.Text className="text-Neutral-Secondary-Text">Poster:</Typography.Text>
-          <HashAddress preLen={8} endLen={9} address={proposalDetailData.proposer}></HashAddress>
+          <HashAddress
+            preLen={8}
+            endLen={9}
+            address={proposalDetailData.proposer}
+            chain={sideChainSuffix}
+          ></HashAddress>
         </div>
         <div className="flex items-center gap-4">
           <Typography.Text className="text-Neutral-Secondary-Text">Proposal ID:</Typography.Text>
@@ -85,7 +101,7 @@ const HeaderInfo = (props: IHeaderInfoProps) => {
           <Typography.Text className="text-Neutral-Secondary-Text">Poster on:</Typography.Text>
           <Typography.Text>
             {proposalDetailData.deployTime
-              ? dayjs(proposalDetailData.deployTime).format('YYYY/MM/DD HH:mm:ss')
+              ? dayjs(proposalDetailData.deployTime).format('YYYY-MM-DD HH:mm:ss')
               : '-'}
           </Typography.Text>
         </div>

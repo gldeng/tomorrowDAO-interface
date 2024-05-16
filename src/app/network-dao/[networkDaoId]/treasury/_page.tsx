@@ -7,7 +7,7 @@ import useTokenListData, { ITokenListItem } from '../../../../hooks/useTokenList
 import BoxWrapper from '../../../proposal/[proposalId]/components/BoxWrapper';
 import TransferTable from './Table/Table';
 import { ColumnsType } from 'antd/es/table';
-import { TokenIconMap } from './constant';
+import { TokenIconMap } from 'constants/token';
 
 import './index.css';
 
@@ -35,7 +35,7 @@ export default function Transparent() {
       render(token) {
         return (
           <span>
-            <img className="token-logo " src={TokenIconMap[token]} alt="" />
+            {TokenIconMap[token] && <img className="token-logo " src={TokenIconMap[token]} alt="" />}
             {token}
           </span>
         );

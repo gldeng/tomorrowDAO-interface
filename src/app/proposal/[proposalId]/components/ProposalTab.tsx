@@ -1,5 +1,6 @@
 import { Typography, FontWeightEnum, HashAddress } from 'aelf-design';
 import { Tabs } from 'aelf-design';
+import { ProposalTypeString } from 'types';
 
 interface IProposalTabProps {
   proposalDetailData?: ProposalDetailData;
@@ -14,7 +15,9 @@ const ProposalTab = (props: IProposalTabProps) => {
         <div className="text-base px-8 py-4">{proposalDetailData?.proposalDescription}</div>
       ),
     },
-    {
+  ];
+  if (proposalDetailData?.proposalType === ProposalTypeString.Governance) {
+    tabItems.push({
       key: '2',
       label: (
         <span className="flex flex-col lg:flex-row">
@@ -52,8 +55,8 @@ const ProposalTab = (props: IProposalTabProps) => {
           </div>
         </div>
       ),
-    },
-  ];
+    });
+  }
   return <Tabs items={tabItems} />;
 };
 export { ProposalTab };

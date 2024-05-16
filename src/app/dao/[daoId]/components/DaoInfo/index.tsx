@@ -13,6 +13,7 @@ import DaoLogo from 'assets/imgs/dao-logo.svg';
 import Link from 'next/link';
 import { getExploreLink } from 'utils/common';
 import './index.css';
+import { sideChainSuffix } from 'config';
 
 const firstLetterToLowerCase = (str: string) => {
   return str.charAt(0).toLowerCase() + str.slice(1);
@@ -97,6 +98,7 @@ export default function DaoInfo(props: IParams) {
           className="address"
           preLen={8}
           endLen={11}
+          chain={sideChainSuffix}
           address={data?.creator ?? '-'}
         ></HashAddress>
       ),
@@ -120,31 +122,31 @@ export default function DaoInfo(props: IParams) {
           <span
             className="dis-common-span"
             onClick={() => {
-              onChangeHCParams(HC_MEMBER);
+              // onChangeHCParams(HC_MEMBER);
             }}
           >
-            {data?.memberCount ?? '-'} Members
+            {/* {data?.memberCount ?? '-'} Members */}
           </span>
           <span>Rotates Every {data?.highCouncilConfig?.electionPeriod} Days.</span>
         </div>
       ),
     },
-    {
-      key: '6',
-      label: 'High Council Candidates:',
-      children: (
-        <div className="dis-item">
-          <span
-            className="dis-common-span"
-            onClick={() => {
-              onChangeHCParams(HC_CANDIDATE);
-            }}
-          >
-            {data?.candidateCount ?? '-'} Candidates
-          </span>
-        </div>
-      ),
-    },
+    // {
+    //   key: '6',
+    //   label: 'High Council Candidates',
+    //   children: (
+    //     <div className="dis-item">
+    //       <span
+    //         className="dis-common-span"
+    //         onClick={() => {
+    //           onChangeHCParams(HC_CANDIDATE);
+    //         }}
+    //       >
+    //         {data?.candidateCount ?? '-'} Candidates
+    //       </span>
+    //     </div>
+    //   ),
+    // },
   ];
 
   return (
