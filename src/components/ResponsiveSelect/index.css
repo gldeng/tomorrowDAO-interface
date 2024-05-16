@@ -4,6 +4,10 @@
   &.item-selected {
     @apply text-colorPrimary;
   }
+
+  &.item-disable {
+    pointer-events: none;
+  }
 }
 
 .responsive-select-title-close {

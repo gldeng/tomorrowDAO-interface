@@ -139,7 +139,7 @@ export default function BasicDetails() {
               ...mediaValidatorMap.Twitter.validator,
               {
                 type: 'string',
-                max: 15,
+                max: 16,
                 message: 'The X (Twitter) user name should be shorter than 15 characters.',
               },
             ]}

@@ -1,22 +1,28 @@
 import { usePathname, useRouter } from 'next/navigation';
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 
 export default function useReplaceLastPath() {
   const router = useRouter();
   const pathName = usePathname();
-  const paths = useMemo(() => {
-    const parts = pathName.split('/').filter(Boolean);
-    parts.pop();
-    return parts;
-  }, [pathName]);
   const push = useCallback(
-    (path: string) => {
+    (path: string, replaceStart?: string) => {
+      const parts = pathName.split('/').filter(Boolean);
       const suffix = path.split('/').filter(Boolean);
-      paths.push(...suffix);
-      const newPath = paths.join('/');
+      if (replaceStart) {
+        const index = parts.findIndex((part) => part === replaceStart);
+        if (index !== -1) {
+          parts.splice(index);
+        } else {
+          parts.pop();
+        }
+      } else {
+        parts.pop();
+      }
+      parts.push(...suffix);
+      const newPath = parts.join('/');
       router.push('/' + newPath);
     },
-    [paths, router],
+    [pathName, router],
   );
   return {
     push,

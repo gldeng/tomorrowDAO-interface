@@ -53,42 +53,6 @@ const ProposalTab = (props: IProposalTabProps) => {
         </div>
       ),
     },
-    {
-      key: '3',
-      label: (
-        <span className="flex flex-col lg:flex-row">
-          <span>Organization</span>&nbsp;
-          <span>Information</span>
-        </span>
-      ),
-      children: (
-        <div className="text-base	px-8 py-4">
-          <div className="flex flex-col gap-2 pb-8">
-            <div>
-              <Typography.Text fontWeight={FontWeightEnum.Medium}>
-                Organization Name
-              </Typography.Text>
-            </div>
-            <div>
-              <Typography.Text className="text-Neutral-Secondary-Text">
-                Organization name 01
-              </Typography.Text>
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-2 pb-2">
-            <div>
-              <Typography.Text fontWeight={FontWeightEnum.Medium}>
-                Organization Address
-              </Typography.Text>
-            </div>
-            <div>
-              <HashAddress address="JRmBduh4nXWi1aXgdUsj5gJrzeZb2LxmrAbf7W99faZS" />
-            </div>
-          </div>
-        </div>
-      ),
-    },
   ];
   return <Tabs items={tabItems} />;
 };

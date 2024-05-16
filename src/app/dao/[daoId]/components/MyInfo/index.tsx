@@ -30,7 +30,9 @@ type TInfoTypes = {
 type TFieldType = {
   unstakeAmount: number;
 };
-
+interface IMyInfo extends ProposalMyInfo {
+  votesAmount?: number;
+}
 export default function MyInfo(props: TInfoTypes) {
   const { height, clssName, daoId, proposalId = '', voteMechanismName = '' } = props;
   const { login, isLogin } = useWalletService();
@@ -38,14 +40,16 @@ export default function MyInfo(props: TInfoTypes) {
   const { walletInfo } = useSelector((store: any) => store.userInfo);
   const [elfBalance, setElfBalance] = useState(0);
   const [txHash, setTxHash] = useState('');
-  const [info, setInfo] = useState<ProposalMyInfo>({
+  const [info, setInfo] = useState<IMyInfo>({
     symbol: 'ELF',
     decimal: '8',
     availableUnStakeAmount: 0,
     stakeAmount: 0,
     votesAmount: 0,
     canVote: false,
-    proposalIdList: [],
+    withdrawList: [],
+    votesAmountTokenBallot: 0,
+    votesAmountUniqueVote: 0,
   });
 
   const [form] = Form.useForm();
@@ -68,14 +72,18 @@ export default function MyInfo(props: TInfoTypes) {
     }
 
     const res = await fetchProposalMyInfo(reqMyInfoParams);
-    const data: ProposalMyInfo = res?.data || {};
+    if (!res.data) {
+      return;
+    }
+    const data: IMyInfo = res?.data;
     if (!data?.symbol) {
       data.symbol = 'ELF';
     }
     const decimal = data?.decimal;
     data.availableUnStakeAmount = divDecimals(data?.availableUnStakeAmount, decimal).toNumber();
     data.stakeAmount = divDecimals(data?.stakeAmount, decimal).toNumber();
-    data.votesAmount = divDecimals(data?.votesAmount, decimal).toNumber();
+    const votesAmountTokenBallot = divDecimals(data.votesAmountTokenBallot, decimal).toNumber();
+    data.votesAmount = votesAmountTokenBallot + data.votesAmountUniqueVote;
     setInfo(data);
   }, [daoId, proposalId, elfInfo.curChain, walletInfo.address, isLogin]);
 
@@ -117,8 +125,12 @@ export default function MyInfo(props: TInfoTypes) {
     },
     {
       key: '1',
-      label: 'ELF Balance',
-      children: <div className="w-full text-right">{elfBalance} ELF</div>,
+      label: `${info?.symbol || 'ELF'} Balance`,
+      children: (
+        <div className="w-full text-right">
+          {elfBalance} {info?.symbol || 'ELF'}
+        </div>
+      ),
     },
     {
       key: '2',
@@ -144,7 +156,7 @@ export default function MyInfo(props: TInfoTypes) {
     const contractParams = {
       daoId,
       withdrawAmount: timesDecimals(info?.availableUnStakeAmount, info?.decimal).toNumber(),
-      votingItemIdList: info?.proposalIdList,
+      votingItemIdList: info.withdrawList?.[0]?.proposalIdList ?? [],
     };
     try {
       emitLoading(true, 'The unstake is being processed...');
@@ -161,7 +173,7 @@ export default function MyInfo(props: TInfoTypes) {
       });
       emitLoading(false);
     }
-  }, [daoId, info?.proposalIdList, info?.decimal, info?.availableUnStakeAmount]);
+  }, [daoId, info.withdrawList, info?.decimal, info?.availableUnStakeAmount]);
 
   return (
     <div

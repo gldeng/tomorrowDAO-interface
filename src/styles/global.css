@@ -49,3 +49,7 @@ code {
 .TMRWDAO-table-container .TMRWDAO-select-single {
   @apply h-[32px];
 }
+
+.TMRWDAO-select-item-option-disabled {
+  @apply !text-Neutral-Disable-Text
+}

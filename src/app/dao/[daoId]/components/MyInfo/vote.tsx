@@ -10,12 +10,13 @@ import { voteApproveMessage, voteRejectMessage, voteAbstainMessage } from 'utils
 import SuccessGreenIcon from 'assets/imgs/success-green.svg';
 import { getExploreLink } from 'utils/common';
 import Info from '../Info';
-import { callContract, ApproveByContract } from 'contract/callContract';
+import { callContract, ApproveByContract, GetAllowanceByContract } from 'contract/callContract';
 import { emitLoading } from 'utils/myEvent';
 import { curChain, voteAddress } from 'config';
 import { timesDecimals } from 'utils/calculate';
 import { EVoteOption } from 'types/vote';
-import { IContractError } from 'types';
+import { IContractError, SupportedELFChainId } from 'types';
+import BigNumber from 'bignumber.js';
 
 type TVoteTypes = {
   proposalId: string;
@@ -92,17 +93,34 @@ function Vote(props: TVoteTypes) {
     try {
       emitLoading(true, 'The vote is being processed...');
       if (voteMechanismName === EVoteMechanismNameType.TokenBallot) {
-        const approveRes = await ApproveByContract(
+        const allowance = await GetAllowanceByContract(
           {
-            spender: voteAddress,
+            spender: voteAddress || '',
             symbol: symbol || 'ELF',
-            amount: contractParams.voteAmount,
+            owner: walletInfo.aelfChainAddress,
           },
           {
             chain: curChain,
           },
         );
-        console.log('token approve finish', approveRes);
+        if (allowance.error) {
+          message.error(allowance.errorMessage?.message || 'unknown error');
+        }
+        const bigA = BigNumber(contractParams.voteAmount);
+        const allowanceBN = BigNumber(allowance?.allowance);
+        if (allowanceBN.lt(bigA)) {
+          const approveRes = await ApproveByContract(
+            {
+              spender: voteAddress,
+              symbol: symbol || 'ELF',
+              amount: contractParams.voteAmount,
+            },
+            {
+              chain: curChain,
+            },
+          );
+          console.log('token approve finish', approveRes);
+        }
       }
 
       const result = await callContract('Vote', contractParams, voteAddress);

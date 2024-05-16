@@ -5,6 +5,7 @@ import { colorfulSocialMediaIconMap } from 'assets/imgs/socialMediaIcon';
 import ProposalDetailFile from 'assets/imgs/proposal-detail-file.svg';
 import Image from 'next/image';
 import { memo, useMemo } from 'react';
+import dayjs from 'dayjs';
 
 interface IHeaderInfoProps {
   proposalDetailData: ProposalDetailData;
@@ -76,12 +77,17 @@ const HeaderInfo = (props: IHeaderInfoProps) => {
           <HashAddress
             preLen={8}
             endLen={9}
+            ignorePrefixSuffix={true}
             address={proposalDetailData.proposalId ?? '-'}
           ></HashAddress>
         </div>
         <div className="flex items-center gap-4">
           <Typography.Text className="text-Neutral-Secondary-Text">Poster on:</Typography.Text>
-          <Typography.Text>{proposalDetailData.deployTime ?? '-'}</Typography.Text>
+          <Typography.Text>
+            {proposalDetailData.deployTime
+              ? dayjs(proposalDetailData.deployTime).format('YYYY/MM/DD HH:mm:ss')
+              : '-'}
+          </Typography.Text>
         </div>
       </div>
     </BoxWrapper>

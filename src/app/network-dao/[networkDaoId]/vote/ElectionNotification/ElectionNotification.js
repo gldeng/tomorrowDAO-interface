@@ -27,7 +27,7 @@ import ElectionRuleCard from "./ElectionRuleCard/ElectionRuleCard";
 import MyWalletCard from "./MyWalletCard/MyWalletCard";
 import Dividends from "@components/Dividends";
 import "./ElectionNotification.style.css";
-// import CandidateApplyModal from "./CandidateApplyModal/CandidateApplyModal";
+import CandidateApplyModal from "./CandidateApplyModal/CandidateApplyModal";
 import { getTokenDecimal } from "@utils/utils";
 import { WebLoginInstance } from "@utils/webLogin";
 import { onlyOkModal } from "@components/SimpleModal/index.tsx";
@@ -382,6 +382,7 @@ class ElectionNotification extends PureComponent {
         });
         return;
       }
+      console.log('electionContractFromExt', electionContractFromExt.address)
       WebLoginInstance.get()
         .callContract({
           contractAddress: electionContractFromExt.address,
@@ -392,6 +393,7 @@ class ElectionNotification extends PureComponent {
           }
         })
         .then((res) => {
+          console.log('AnnounceElection', res);
           if (res.error) {
             message.error(res.error.message || res.errorMessage.message);
             return;
@@ -421,7 +423,7 @@ class ElectionNotification extends PureComponent {
               console.log(e);
               message.error(e.message || e.Error || "Network error");
             }
-          }, 4000);
+          }, 5000);
         })
         .catch((err) => {
           console.error(err);
@@ -490,11 +492,11 @@ class ElectionNotification extends PureComponent {
           nodeTableRefreshTime={nodeTableRefreshTime}
           changeVoteState={changeVoteState}
         />
-        {/* <CandidateApplyModal
+        <CandidateApplyModal
           visible={applyModalVisible}
           onOk={this.handleApplyModalOk}
           onCancel={this.handleApplyModalCancel}
-        /> */}
+        />
       </section>
     );
   }

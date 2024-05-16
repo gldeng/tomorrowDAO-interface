@@ -116,10 +116,12 @@ export default function ProposalsItem(props: { data: IProposalsItem }) {
 
 function CustomProgress(props: { data: IProposalsItem }) {
   const { data } = props;
-  const approvePercent = data.votesAmount === 0 ? 0 : (data.approvedCount / data.votesAmount) * 100;
+  const approvePercent =
+    data.votesAmount === 0 ? 0 : Math.floor((data.approvedCount / data.votesAmount) * 100);
   const abstainPercent =
-    data.votesAmount === 0 ? 0 : (data.abstentionCount / data.votesAmount) * 100;
-  const rejectPercent = data.votesAmount === 0 ? 0 : (data.rejectionCount / data.votesAmount) * 100;
+    data.votesAmount === 0 ? 0 : Math.floor((data.abstentionCount / data.votesAmount) * 100);
+  const rejectPercent =
+    data.votesAmount === 0 ? 0 : Math.floor((data.rejectionCount / data.votesAmount) * 100);
   return (
     <>
       <div className="flex">

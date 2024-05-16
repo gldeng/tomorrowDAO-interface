@@ -16,9 +16,11 @@ import "./ElectionRuleCard.style.css";
 import Svg from "@components/Svg/Svg";
 import { onlyOkModal } from "@components/SimpleModal/index.tsx";
 import { isActivityBrowser } from "@utils/isWebView";
+import useReplaceLastPath from "hooks/useReplaceLastPath";
 
 function ElectionRuleCard(props) {
   // const navigate = useNavigate();
+  const router = useReplaceLastPath()
   const { isCandidate, displayApplyModal, currentWallet, quitElection } = props;
 
   const onClick = () => {
@@ -33,7 +35,7 @@ function ElectionRuleCard(props) {
     }
 
     if (isCandidate) {
-      // navigate(`/vote/apply/keyin?pubkey=${currentWallet?.publicKey}`);
+      router.push(`/vote/apply?pubkey=${currentWallet?.publicKey}`, 'vote');
     } else {
       displayApplyModal();
     }
