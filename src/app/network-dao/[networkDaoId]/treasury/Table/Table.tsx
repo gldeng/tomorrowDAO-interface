@@ -98,7 +98,9 @@ export default function RecordTable() {
       render(from, record) {
         return (
           <div className="from">
-            <HashAddress address={from} preLen={8} endLen={8} />
+            <Link href={`${mainExplorer}/address/${from}`} target="_blank">
+              <HashAddress className='treasury-address' address={from} preLen={8} endLen={8} />
+            </Link>
           </div>
         );
       },
@@ -119,7 +121,9 @@ export default function RecordTable() {
                 in
               </Tag>
             )}
-            <HashAddress address={to} preLen={8} endLen={8} />
+            <Link href={`${mainExplorer}/address/${to}`} target="_blank">
+              <HashAddress className='treasury-address' address={to} preLen={8} endLen={8} />
+            </Link>
           </div>
         );
       },

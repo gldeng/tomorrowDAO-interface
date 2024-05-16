@@ -112,7 +112,6 @@ export default class StatisticalData extends PureComponent {
   render() {
     const { spinning, style, tooltip, inline } = this.props;
     const { arr } = this.state;
-    console.log('arr------', arr)
     if (!arr) return null;
 
     const arrFormatted = arrFormate(arr);

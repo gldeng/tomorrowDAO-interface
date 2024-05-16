@@ -9,7 +9,7 @@ export interface IAelfInfoState {
 const initialState: IAelfInfoState = {
   elfInfo: {
     networkType: 'TESTNET',
-    rpcUrlAELF: 'https://aelf-test-node.aelf.io',
+    rpcUrlAELF: 'https://explorer-test.aelf.io/chain',
     rpcUrlTDVV: 'https://tdvw-test-node.aelf.io',
     rpcUrlTDVW: 'https://tdvw-test-node.aelf.io',
     connectServer: 'https://auth-portkey-test.portkey.finance',

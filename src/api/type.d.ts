@@ -186,15 +186,19 @@ interface ProposalListRes {
   data: ProposalListResData;
   message: string;
 }
-
+interface IWithdrawListItem {
+  proposalIdList: string[];
+  withdrawAmount: number;
+}
 interface ProposalMyInfo {
   symbol: string;
   decimal: string;
   availableUnStakeAmount: number;
   stakeAmount: number;
-  votesAmount: number;
+  votesAmountTokenBallot: number;
+  votesAmountUniqueVote: number;
   canVote: boolean;
-  proposalIdList: Array;
+  withdrawList: IWithdrawListItem[];
 }
 
 interface ProposalMyInfoRes {
@@ -417,7 +421,7 @@ interface TokenPriceRes {
 
 // -------------------------------------vote-history-----------------------------
 interface IVoteHistoryReq {
-  daoId?: string;
+  daoId: string;
   chainId: string;
   skipCount: number;
   maxResultCount: number;

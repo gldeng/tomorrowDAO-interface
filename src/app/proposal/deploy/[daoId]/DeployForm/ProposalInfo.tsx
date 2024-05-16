@@ -21,8 +21,11 @@ import { curChain } from 'config';
 import { useAsyncEffect } from 'ahooks';
 import { GetDaoProposalTimePeriodContract } from 'contract/callContract';
 import dayjs from 'dayjs';
+import { HighCouncilName, ReferendumName, VoteMechanismNameLabel } from 'constants/proposal';
 
 const contractMethodNamePath = ['transaction', 'contractMethodName'];
+const voterAndExecuteNamePath = ['proposalBasicInfo', 'schemeAddress'];
+
 interface ProposalInfoProps {
   next?: () => void;
   className?: string;
@@ -35,7 +38,6 @@ const ProposalInfo = (props: ProposalInfoProps) => {
 
   const searchParams = useSearchParams();
   const [daoInfo, setDaoInfo] = useState<DaoInfoData>();
-  console.log(searchParams, daoInfo);
   const [contractInfo, setContractInfo] = useState<ContractInfoListData>();
   const [voteScheme, setVoteScheme] = useState<IVoteSchemeListData>();
   const [timePeriod, setTimePeriod] = useState<ITimePeriod | null>(null);
@@ -44,14 +46,6 @@ const ProposalInfo = (props: ProposalInfoProps) => {
   const elfInfo = useSelector((state) => state.elfInfo.elfInfo);
   const { className, daoId, onSubmit } = props;
 
-  const governanceMechanismOptions = useMemo(() => {
-    return governanceMechanismList?.map((item) => {
-      return {
-        label: item.governanceMechanism,
-        value: item.schemeAddress,
-      };
-    });
-  }, [governanceMechanismList]);
   const contractInfoOptions = useMemo(() => {
     return contractInfo?.contractInfoList.map((item) => {
       return {
@@ -65,6 +59,24 @@ const ProposalInfo = (props: ProposalInfoProps) => {
   const proposalType = Form.useWatch('proposalType', form);
   const schemeAddress = Form.useWatch(['proposalBasicInfo', 'schemeAddress'], form);
   const params = Form.useWatch(['transaction', 'params'], form);
+  const voterAndExecute = Form.useWatch(voterAndExecuteNamePath, form);
+  const currentGovernanceMechanism = useMemo(() => {
+    return governanceMechanismList?.find((item) => item.schemeAddress === voterAndExecute);
+  }, [voterAndExecute, governanceMechanismList]);
+  const isReferendum = currentGovernanceMechanism?.governanceMechanism === ReferendumName;
+  const isHighCouncil = currentGovernanceMechanism?.governanceMechanism === HighCouncilName;
+  const isGovernance = proposalType === ProposalType.GOVERNANCE;
+
+  const governanceMechanismOptions = useMemo(() => {
+    return governanceMechanismList?.map((item) => {
+      return {
+        label: item.governanceMechanism,
+        value: item.schemeAddress,
+        disabled:
+          proposalType === ProposalType.VETO && item.governanceMechanism === HighCouncilName,
+      };
+    });
+  }, [governanceMechanismList, proposalType]);
   const contractMethodOptions = useMemo(() => {
     const contract = contractInfo?.contractInfoList.find(
       (item) => item.contractAddress === contractAddress,
@@ -172,10 +184,32 @@ const ProposalInfo = (props: ProposalInfoProps) => {
       >
         <Input type="text" placeholder="https://URL" />
       </Form.Item>
+      {/* veto proposal id */}
+      {proposalType === ProposalType.VETO && (
+        <Form.Item
+          name={'vetoProposalId'}
+          label={
+            <Tooltip title="You can find the published proposal id on the proposal details page">
+              <span className="form-item-label">
+                Veto proposal id <InfoCircleOutlined className="cursor-pointer label-icon" />
+              </span>
+            </Tooltip>
+          }
+          rules={[
+            {
+              required: true,
+              message: 'the veto proposal id is required',
+              max: 100,
+            },
+          ]}
+        >
+          <Input type="text" placeholder="Enter the veto proposal id" />
+        </Form.Item>
+      )}
 
       {/* Voters and executors: */}
       <Form.Item
-        name={['proposalBasicInfo', 'schemeAddress']}
+        name={voterAndExecuteNamePath}
         label={<span className="form-item-label">Voters and executors</span>}
         rules={[
           {
@@ -208,7 +242,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
           {voteScheme?.voteSchemeList.map((item) => {
             return (
               <Radio value={item.voteSchemeId} key={item.voteSchemeId}>
-                {item.voteMechanismName}
+                {VoteMechanismNameLabel[item.voteMechanismName]}
               </Radio>
             );
           })}
@@ -293,28 +327,56 @@ const ProposalInfo = (props: ProposalInfoProps) => {
           </span>
         </div>
       </Form.Item>
-      <Form.Item
-        label={
-          <Tooltip title="If the proposal is initiated around or at UTC 00:00 and is created after 00:00, the creation date will be the second day. As a result, the execution period will be extended by one day.">
-            <span className="form-item-label">
-              Execution Period
-              <InfoCircleOutlined className="cursor-pointer label-icon" />
-            </span>
-          </Tooltip>
-        }
-      >
-        <div className="flex h-[48px] px-[16px] py-[8px] items-center rounded-[6px] border-[1px] border-solid border-Neutral-Border bg-Neutral-Hover-BG">
-          <span className="text-neutralTitle text-[14px] font-400 leading-[22px] pr-[16px]">
-            {dayjs().format('DD MMM, YYYY')}
-          </span>
-          <ArrowIcon className="color-[#B8B8B8]" />
-          <span className="text-neutralTitle text-[14px] font-400 leading-[22px] pl-[16px]">
-            {timePeriod?.executeTimePeriod
-              ? dayjs().add(Number(timePeriod?.executeTimePeriod), 'days').format('DD MMM, YYYY')
-              : '-'}
-          </span>
-        </div>
-      </Form.Item>
+      {/* 
+  advisory -> null
+  Vote -> [now + activeTimePeriod, now + activeTimePeriod + executeTimePeriod]
+  Governance 
+    R: [now + activeTimePeriod, now + activeTimePeriod + executeTimePeriod]
+    H: [now + activeTimePeriod + pendingTimePeriod
+  , now + activeTimePeriod + executeTimePeriod + pendingTimePeriod]
+      */}
+      {[ProposalType.VETO, ProposalType.GOVERNANCE].includes(proposalType) &&
+        currentGovernanceMechanism && (
+          <Form.Item
+            label={
+              <Tooltip title="If the proposal is initiated around or at UTC 00:00 and is created after 00:00, the creation date will be the second day. As a result, the execution period will be extended by one day.">
+                <span className="form-item-label">
+                  Execution Period
+                  <InfoCircleOutlined className="cursor-pointer label-icon" />
+                </span>
+              </Tooltip>
+            }
+          >
+            <div className="flex h-[48px] px-[16px] py-[8px] items-center rounded-[6px] border-[1px] border-solid border-Neutral-Border bg-Neutral-Hover-BG">
+              <span className="text-neutralTitle text-[14px] font-400 leading-[22px] pr-[16px]">
+                {(proposalType === ProposalType.VETO || (isGovernance && isReferendum)) &&
+                  dayjs().add(Number(timePeriod?.activeTimePeriod), 'days').format('DD MMM, YYYY')}
+                {isGovernance &&
+                  isHighCouncil &&
+                  dayjs()
+                    .add(Number(timePeriod?.activeTimePeriod), 'days')
+                    .add(Number(timePeriod?.pendingTimePeriod), 'days')
+                    .format('DD MMM, YYYY')}
+              </span>
+              <ArrowIcon className="color-[#B8B8B8]" />
+              <span className="text-neutralTitle text-[14px] font-400 leading-[22px] pl-[16px]">
+                {(proposalType === ProposalType.VETO || (isGovernance && isReferendum)) &&
+                  dayjs()
+                    .add(Number(timePeriod?.activeTimePeriod), 'days')
+                    .add(Number(timePeriod?.executeTimePeriod), 'days')
+                    .format('DD MMM, YYYY')}
+                {isGovernance &&
+                  isHighCouncil &&
+                  dayjs()
+                    .add(Number(timePeriod?.activeTimePeriod), 'days')
+                    .add(Number(timePeriod?.pendingTimePeriod), 'days')
+                    .add(Number(timePeriod?.executeTimePeriod), 'days')
+                    .format('DD MMM, YYYY')}
+              </span>
+            </div>
+          </Form.Item>
+        )}
+
       <div className="flex justify-end mt-[100px]">
         <Button
           type="primary"

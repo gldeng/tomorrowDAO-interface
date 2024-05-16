@@ -124,3 +124,25 @@ export const GetDaoProposalTimePeriodContract = async (
   })) as unknown as ITimePeriod;
   return res;
 };
+interface IGetAllowanceParams {
+  symbol: string;
+  owner: string;
+  spender: string;
+}
+interface IGetAllowanceResponse {
+  symbol: string;
+  owner: string;
+  spender: string;
+  allowance: number;
+}
+
+export const GetAllowanceByContract = async (
+  params: IGetAllowanceParams,
+  options?: IContractOptions,
+): Promise<IGetAllowanceResponse & IContractError> => {
+  const res = (await multiTokenContractRequest('GetAllowance', params, {
+    ...options,
+    type: ContractMethodType.VIEW,
+  })) as IGetAllowanceResponse & IContractError;
+  return res;
+};

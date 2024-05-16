@@ -31,7 +31,7 @@
     "@types/lodash-es": "^4.17.9",
     "@xstate/react": "^4.1.0",
     "aelf-sdk": "^3.4.8",
-    "aelf-web-login": "2.0.1-beta.10",
+    "aelf-web-login": "2.0.1-beta.11",
     "ahooks": "^3.7.11",
     "antd": "^5.13.1",
     "apisauce": "^0.16.0",
