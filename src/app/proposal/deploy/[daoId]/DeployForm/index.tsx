@@ -101,9 +101,6 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
           params: finalParams,
         };
       }
-      if (res.proposalType === ProposalTypeEnum.ADVISORY) {
-        contractParams.transaction = {};
-      }
       emitLoading(true, 'The transaction is being processed...');
       const methodName =
         res.proposalType === ProposalTypeEnum.VETO ? 'CreateVetoProposal' : 'CreateProposal';

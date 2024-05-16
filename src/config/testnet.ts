@@ -14,7 +14,7 @@ export const daoAddress = 'RRF7deQbmicUh6CZ1R2y7U9M8n2eHPyCgXVHwiSkmNETLbL4D';
 export const propalAddress = '2sJ8MDufVDR3V8fDhBPUKMdP84CUf1oJroi9p8Er1yRvMp3fq7';
 // token contract address
 export const mainChainAddress = 'JRmBduh4nXWi1aXgdUsj5gJrzeZb2LxmrAbf7W99faZSvoAaE';
-export const sideChainAddress = 'zv7YnQ2dLM45ssfifN1dpwqBwdxH13pqGm9GDH6peRdH8F3hD';
+export const sideChainAddress = 'ASh2Wt7nSEmYqnGxPPzp4pnVDU4uhj1XW9Se5VeZcX2UDdyjx';
 
 export const symbolmarketUrl = 'https://test.eforest.finance/symbolmarket';
 
