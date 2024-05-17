@@ -1,4 +1,4 @@
-interface IProposalCreated {
+interface IContractResult {
   proposalId: string;
   TransactionId: string;
 }

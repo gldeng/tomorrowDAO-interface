@@ -9,6 +9,7 @@ import DetailTag from 'components/DetailTag';
 
 import './index.css';
 import { useMemo } from 'react';
+import { EVoteMechanismNameType } from 'app/proposal/deploy/[daoId]/type';
 
 export interface IProposalsItemProps {
   proposalStatus: string;
@@ -27,6 +28,8 @@ export default function ProposalsItem(props: { data: IProposalsItem }) {
   const tagList = useMemo(() => {
     return [data.governanceMechanism];
   }, [data]);
+
+  const is1t1v = data.voteMechanismName === EVoteMechanismNameType.TokenBallot;
 
   return (
     <div className="proposal-item">

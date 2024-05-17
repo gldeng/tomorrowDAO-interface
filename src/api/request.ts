@@ -72,6 +72,13 @@ export const fetchTokenInfo = async (params: {
     params,
   });
 };
+export const fetchExecutableList = async (
+  params: IExecutableListReq,
+): Promise<IExecutableListRes> => {
+  return apiServer.get('/proposal/executable-list', {
+    params,
+  });
+};
 
 // explore
 export const fetchAddressTokenList = async (params: {

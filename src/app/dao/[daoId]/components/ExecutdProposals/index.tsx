@@ -1,12 +1,23 @@
 import { Typography, FontWeightEnum, Button, HashAddress } from 'aelf-design';
 import CommonModal from 'components/CommonModal';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import Info from '../Info';
+import { fetchExecutableList } from 'api/request';
+import { curChain, mainExplorer } from 'config';
+import { useRequest } from 'ahooks';
+import dayjs from 'dayjs';
+import './index.css';
+import { emitLoading } from 'utils/myEvent';
+import { proposalCreateContractRequest } from 'contract/proposalCreateContract';
+import Link from 'next/link';
+import NoData from '../NoData';
 
 type TmodalInfoType = {
   title: string;
   type: 'success' | 'failed';
   btnText: string;
+  txId?: string;
+  firstText?: string;
 };
 
 const successModalInfo: TmodalInfoType = {
@@ -15,36 +26,74 @@ const successModalInfo: TmodalInfoType = {
   btnText: 'I Know',
 };
 const failedModalInfo: TmodalInfoType = {
-  title: 'Proposal Executed Successfully',
-  type: 'success',
+  title: 'Proposal Executed Failed',
+  type: 'failed',
   btnText: 'I Know',
 };
+interface IExecutdProposals {
+  daoId: string;
+  address: string;
+}
 
-export default function ExecutdProposals() {
-  const data = Array.from({ length: 5 }, (index) => {
-    return {
-      title: 'sdfasdfasdfads',
-      pid: 'ELF_2PedfasdfadsfasW28l_tDVW',
-      id: index,
+export default function ExecutdProposals(props: IExecutdProposals) {
+  const { daoId, address } = props;
+  // confirm modal: boolean
+  const [showModal, setShowModal] = useState(false);
+  // success or fail modal: boolean
+  const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
+  // success or fail modal content
+  const [modalInfo, setModalInfo] = useState<TmodalInfoType>(successModalInfo);
+  const currentProposalidref = useRef<string>('');
+  const {
+    data: executableListData,
+    error: executableListError,
+    // loading: executableListLoading,
+  } = useRequest(async () => {
+    const params: IExecutableListReq = {
+      skipCount: 0,
+      maxResultCount: 1000,
+      chainId: curChain,
+      daoId: daoId,
+      proposer: address,
     };
+    return fetchExecutableList(params);
   });
 
-  const [showModal, setShowModal] = useState(false);
-  const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
-  const [modalInfo, setModalInfo] = useState<TmodalInfoType>(successModalInfo);
-
-  const handleExecute = () => {
+  const handleExecute = (id: string) => {
     setShowModal(true);
+    currentProposalidref.current = id;
   };
 
   const handleClose = () => {
     setShowModal(false);
   };
 
-  const handleMaskExecuted = () => {
-    setShowInfoModal(true);
-    const result = false;
-    setModalInfo(result ? successModalInfo : failedModalInfo);
+  const handleMaskExecuted = async () => {
+    if (!currentProposalidref.current) {
+      return;
+    }
+    try {
+      setShowModal(false);
+      emitLoading(true, 'The transaction is being processed...');
+      const createRes = await proposalCreateContractRequest(
+        'ExecuteProposal',
+        currentProposalidref.current,
+      );
+      setShowInfoModal(true);
+      setModalInfo({
+        ...successModalInfo,
+        txId: createRes.TransactionId,
+      });
+      emitLoading(false);
+    } catch (error: any) {
+      const message = error?.errorMessage?.message || error?.message;
+      setShowInfoModal(true);
+      setModalInfo({
+        ...failedModalInfo,
+        firstText: message,
+      });
+      emitLoading(false);
+    }
   };
 
   const handleCloseInfo = () => {
@@ -61,23 +110,27 @@ export default function ExecutdProposals() {
         To be executed proposals
       </Typography.Title>
       <div className="max-h-96 overflow-scroll">
-        {data.map((item, index) => {
+        {!executableListData?.data?.items?.length && <NoData />}
+        {executableListError && <span>api error, refresh please</span>}
+        {executableListData?.data?.items.map((item, index) => {
           return (
             <div className="flex justify-between items-center px-8 max-h-80 mb-8" key={index}>
               <div>
                 <div className="block lg:flex items-center">
                   <Typography.Text fontWeight={FontWeightEnum.Medium}>Proposal ID:</Typography.Text>
-                  <HashAddress
-                    preLen={8}
-                    endLen={11}
-                    address={'ELF_2PedfasdfadsfasW28l_tDVW'}
-                  ></HashAddress>
+                  <HashAddress preLen={8} endLen={11} address={item.proposalId}></HashAddress>
                 </div>
                 <Typography.Text className="text-Neutral-Secondary-Text">
-                  Will expires on Nov 13, 2023
+                  {dayjs(item.expiredTime).format('YYYY-MM-DD HH:mm:ss')}
                 </Typography.Text>
               </div>
-              <Button type="primary" size="small" onClick={handleExecute}>
+              <Button
+                type="primary"
+                size="small"
+                onClick={() => {
+                  handleExecute(item.proposalId);
+                }}
+              >
                 Execute
               </Button>
             </div>
@@ -89,26 +142,28 @@ export default function ExecutdProposals() {
         onCancel={handleClose}
         title="This proposal needs to be executed"
       >
-        <Typography.Text>
+        {/* <Typography.Text>
           As a member of this organization， you need to initiate a request to this organization to
           execute the proposal.
         </Typography.Text>
         <Button type="link" className="!px-0">
           Click here to view how to execute a proposal
-        </Button>
+        </Button> */}
         <Typography.Text>
           Once you mark this proposal as executed, it wil be tagged as executed status meaning that
           other addresses within your organization will no longer be able to execute this proposal.
           Please ensure that you have completed the execution of this proposal before marking its
           status.
         </Typography.Text>
-        <div className="flex mt-6 flex-col lg:flex-row">
-          <Button className="flex-1 mr-4 order-1 lg:order-2">Cancel</Button>
+        <div className="flex mt-6 flex-col  execute-confirm-buttons-group">
+          <Button className="order-1 lg:order-2 execute-confirm-button">Cancel</Button>
           <Button
-            className="flex-1 order-2 lg:order-1"
+            className="order-2 lg:order-1 execute-confirm-button"
             type="primary"
             danger
-            onClick={handleMaskExecuted}
+            onClick={() => {
+              handleMaskExecuted();
+            }}
           >
             Mark as executed
           </Button>
@@ -120,10 +175,15 @@ export default function ExecutdProposals() {
           type={modalInfo.type}
           btnText={modalInfo.btnText}
           onOk={handleCloseInfo}
+          firstText={modalInfo.firstText}
         ></Info>
-        <Button className="mx-auto" type="link">
-          View Transaction Details
-        </Button>
+        {modalInfo.txId && (
+          <Link href={`${mainExplorer}/tx/${modalInfo.txId}`}>
+            <Button className="mx-auto" type="link">
+              View Transaction Details
+            </Button>
+          </Link>
+        )}
       </CommonModal>
     </div>
   );

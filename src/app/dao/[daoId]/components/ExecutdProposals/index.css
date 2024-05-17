@@ -1,0 +1,7 @@
+.execute-confirm-buttons-group {
+  @apply lg:flex-row lg:justify-between;
+
+  .execute-confirm-button {
+    @apply lg:w-[45%];
+  }
+}

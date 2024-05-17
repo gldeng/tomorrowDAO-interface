@@ -174,6 +174,7 @@ interface IProposalsItem {
   maximalRejectionThreshold: number;
   maximalAbstentionThreshold: number;
   proposalSource?: number;
+  voteMechanismName?: string;
 }
 interface IProposalListResData {
   totalCount: number;
@@ -446,5 +447,44 @@ interface IVoteHistoryResData {
 interface IVoteHistoryRes {
   code: string;
   data: IVoteHistoryResData;
+  message: string;
+}
+
+// -------------------  executable-list ---------------------------------
+interface IExecutableListReq {
+  skipCount: number;
+  maxResultCount: number;
+  chainId: string;
+  daoId: string;
+  proposer: string;
+}
+interface IExecutableListResData {
+  totalCount: number;
+  items: {
+    chainId: string;
+    proposalId: string;
+    releaseAddress: string;
+    deployTime: string;
+    proposalTitle: string;
+    governanceMechanism: string;
+    proposalStatus: string;
+    proposalDescription: string;
+    proposalType: string;
+    startTime: string;
+    endTime: string;
+    expiredTime: string;
+    transaction: {
+      contractMethodName: string;
+      toAddress: string;
+      params: {
+        param1: string;
+        param2: string;
+      };
+    };
+  }[];
+}
+interface IExecutableListRes {
+  code: string;
+  data: IExecutableListResData;
   message: string;
 }
