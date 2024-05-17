@@ -1,10 +1,8 @@
 'use client';
 
-import { useState } from 'react';
 import { Form, Card } from 'antd';
 import Filter from './components/Filter';
 import RecordTable from './components/Table';
-import useResponsive from 'hooks/useResponsive';
 import './page.css';
 
 export default function MyRecord() {

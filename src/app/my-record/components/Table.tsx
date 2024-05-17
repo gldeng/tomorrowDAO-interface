@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useEffect, useState } from 'react';
 import { Table, HashAddress } from 'aelf-design';
 import { ConfigProvider } from 'antd';
@@ -21,6 +21,7 @@ export default function RecordTable() {
   const { networkDaoId } = useParams();
   const isNetWorkDao = pathName.includes(NetworkDaoHomePathName);
   const daoId = (isNetWorkDao ? networkDaoId : searchParams.get('daoId') ?? '') as string;
+  const runFetchVoteHistoryRef = useRef<() => void>();
 
   const [tableParams, setTableParams] = useState<{ page: number; pageSize: number }>({
     page: 1,
@@ -45,6 +46,7 @@ export default function RecordTable() {
       manual: true,
     },
   );
+  runFetchVoteHistoryRef.current = run;
 
   const columns: ColumnsType<IVoteHistoryItem> = [
     {
@@ -143,7 +145,7 @@ export default function RecordTable() {
     return 'customRow';
   };
   useEffect(() => {
-    run();
+    runFetchVoteHistoryRef.current?.();
   }, [tableParams]);
 
   return (

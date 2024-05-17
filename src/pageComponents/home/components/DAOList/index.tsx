@@ -52,7 +52,7 @@ export default function DAOList() {
       <div className="dao-more">
         <div className="more-button" onClick={loadMore}>
           {loadingMore ? (
-            <Spin indicator={<LoadingOutlined spin rev={undefined} />} />
+            <Spin indicator={<LoadingOutlined />} />
           ) : (
             <>
               <span className="more-text">Load More</span>

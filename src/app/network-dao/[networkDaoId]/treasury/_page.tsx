@@ -59,8 +59,16 @@ export default function Transparent() {
   ];
   return (
     <div>
+      {/* 
+      font-family: Roboto;
+font-size: 24px;
+font-style: normal;
+font-weight: 500;
+line-height: 32px; / */}
       <BoxWrapper>
-        Network DAO Transparency Hub
+        <span className='text-Primary-Text leading-[32px] font-[500] text-[24px]'>
+         Network DAO Transparency Hub
+        </span>
         <Divider className="mb-2 lg:mb-6" />
         <div>
           <div className="text-Neutral-Secondary-Text text-[14px] font-not-italic font-500 h-[22px]">

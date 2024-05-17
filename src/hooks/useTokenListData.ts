@@ -1,10 +1,9 @@
-import { explorerServer } from 'api/axios';
 import { useRequest } from 'ahooks';
 import { fetchTokenPrice, fetchAddressTokenList } from 'api/request';
 import { treasuryAccountAddress } from 'config';
 import { useMemo } from 'react';
 import BigNumber from 'bignumber.js';
-export interface ITokenListItem extends AddressTokenListDataItem {
+export interface ITokenListItem extends IAddressTokenListDataItem {
   price?: number;
   valueUSD?: BigNumber;
 }
@@ -21,11 +20,7 @@ export default function useTokenListData() {
   const tokens = useMemo(() => {
     return tokenListData?.data.map((item) => item.symbol);
   }, [tokenListData]);
-  const {
-    data: tokenPriceData,
-    error: tokenPriceError,
-    loading: tokenPriceLoading,
-  } = useRequest(async () => {
+  const { data: tokenPriceData } = useRequest(async () => {
     const res: Record<string, number> = {};
     if (!tokens) {
       return res;

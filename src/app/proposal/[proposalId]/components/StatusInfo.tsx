@@ -5,7 +5,7 @@ import { memo } from 'react';
 import useResponsive from 'hooks/useResponsive';
 
 interface IStatusInfoProps {
-  proposalDetailData?: ProposalDetailData;
+  proposalDetailData?: IProposalDetailData;
 }
 const StatusInfo = (props: IStatusInfoProps) => {
   const { isLG } = useResponsive();

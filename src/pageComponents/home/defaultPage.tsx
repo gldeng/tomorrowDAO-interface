@@ -1,4 +1,3 @@
-import { store } from 'redux/store';
 import DAOHeader from './components/DAOHeader';
 import DAOList from './components/DAOList';
 import './index.css';

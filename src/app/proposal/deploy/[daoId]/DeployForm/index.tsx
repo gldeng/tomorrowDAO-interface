@@ -18,6 +18,7 @@ import { getContract } from '../util';
 import { NetworkDaoProposalOnChain } from 'config';
 import { useRouter } from 'next/navigation';
 import useIsNetworkDao from 'hooks/useIsNetworkDao';
+import formValidateScrollFirstError from 'utils/formValidateScrollFirstError';
 
 interface IGovernanceModelProps {
   daoId: string;
@@ -143,9 +144,9 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
       const error = err as IFormValidateError | IContractError;
       // form Error
       if ('errorFields' in error) {
+        formValidateScrollFirstError(form, error);
         return;
       }
-      console.log('error', error);
       const message = error?.errorMessage?.message || error?.message;
       emitLoading(false);
       openErrorModal(undefined, message);

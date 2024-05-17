@@ -5,7 +5,7 @@
 
 import React, { PureComponent } from 'react';
 // import svgList from '../../assets/svgList';
-// import svgList from '../../assets/svgs';
+import svgList from './svgs';
 
 export default class Svg extends PureComponent {
   constructor(props) {
@@ -20,14 +20,13 @@ export default class Svg extends PureComponent {
     const svg = svgList[icon];
 
     return (
-      // <div
-      //   style={this.state.style}
-      //   className={this.props.className}
-      //   onClick={this.props.click}
-      //   dangerouslySetInnerHTML={{ __html: svg }}
-      //   {...this.props}
-      // />
-      <>svg</>
+      <div
+        style={this.state.style}
+        className={this.props.className}
+        onClick={this.props.click}
+        dangerouslySetInnerHTML={{ __html: svg }}
+        {...this.props}
+      />
     );
   }
 }

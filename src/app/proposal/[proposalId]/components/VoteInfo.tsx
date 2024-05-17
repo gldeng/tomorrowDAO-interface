@@ -3,10 +3,9 @@ import MyInfo from 'app/dao/[daoId]/components/MyInfo';
 import BoxWrapper from './BoxWrapper';
 import { divDecimals } from 'utils/calculate';
 import { memo } from 'react';
-import BigNumber from 'bignumber.js';
 
 interface IHeaderInfoProps {
-  proposalDetailData: ProposalDetailData;
+  proposalDetailData: IProposalDetailData;
 }
 const VoteInfo = (props: IHeaderInfoProps) => {
   const { proposalDetailData } = props;

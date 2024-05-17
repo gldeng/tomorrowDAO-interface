@@ -8,29 +8,30 @@ interface IListDaoReq {
 interface IDaoItem {
   chainId: string;
   daoId: string;
-  logo: string; //
-  name: string; //
-  description: string; //
-  creator: string; //
-  proposalsNum: number; //
+  logo: string;
+  name: string;
+  description: string;
+  creator: string;
+  proposalsNum: number;
   symbol: string;
-  symbolHoldersNum: number; //
-  votersNum: number; //
+  symbolHoldersNum: number;
+  votersNum: number;
   isNetworkDAO?: boolean;
+  highCouncilMemberCount: number;
 }
 
-interface DaoData {
+interface IDaoData {
   totalCount: number;
   items: IDaoItem[];
 }
 
-interface ListDaoRes {
+interface IListDaoRes {
   code: string;
-  data: DaoData;
+  data: IDaoData;
   message: string;
 }
 // -------------------------------------dao-info-----------------------------
-interface SocialMedia {
+interface ISocialMedia {
   twitter: string;
   facebook: string;
   discrod: string;
@@ -38,7 +39,7 @@ interface SocialMedia {
   reddit: string;
 }
 
-interface ProposalTimePeriodSet {
+interface IProposalTimePeriodSet {
   activeTimePeriod: number;
   vetoActiveTimePeriod: number;
   pendingTimePeriod: number;
@@ -46,7 +47,7 @@ interface ProposalTimePeriodSet {
   vetoExecuteTimePeriod: number;
 }
 
-interface FileInfo {
+interface IFileInfo {
   file: {
     name: string;
     cid: string;
@@ -56,7 +57,7 @@ interface FileInfo {
   uploadTime: string;
 }
 
-interface DaoInfoData {
+interface IDaoInfoData {
   id: string;
   chainId: string;
   blockHeight: number;
@@ -85,7 +86,7 @@ interface DaoInfoData {
     stakingAmount: number;
   };
   highCouncilTermNumber: number;
-  fileInfoList: FileInfo[];
+  fileInfoList: IFileInfo[];
   isTreasuryContractNeeded: boolean;
   subsistStatus: boolean;
   treasuryContractAddress: string;
@@ -105,19 +106,19 @@ interface DaoInfoData {
   isNetworkDAO: boolean;
 }
 
-interface DaoInfoReq {
+interface IDaoInfoReq {
   daoId: string;
   chainId: string;
 }
 
-interface DaoInfoRes {
+interface IDaoInfoRes {
   code: string;
-  data: DaoInfoData;
+  data: IDaoInfoData;
   message: string;
 }
 // -------------------------------------propal-list-----------------------------
 
-interface ProposalListReq {
+interface IProposalListReq {
   skipCount?: number;
   maxResultCount?: number;
   chainId: string;
@@ -133,14 +134,14 @@ interface ProposalListReq {
   isNetworkDAO?: boolean;
 }
 
-interface ProposalMyInfoReq {
+interface IProposalMyInfoReq {
   chainId: string;
   daoId: string;
   proposalId?: string;
   address: string;
 }
 
-interface Transaction {
+interface ITransaction {
   contractMethodName: string;
   toAddress: string;
   params: {
@@ -161,7 +162,7 @@ interface IProposalsItem {
   startTime: string;
   endTime: string;
   expiredTime: string;
-  transaction: Transaction;
+  transaction: ITransaction;
   votesAmount: number;
   approvedCount: number;
   rejectionCount: number;
@@ -174,23 +175,23 @@ interface IProposalsItem {
   maximalAbstentionThreshold: number;
   proposalSource?: number;
 }
-interface ProposalListResData {
+interface IProposalListResData {
   totalCount: number;
   items: IProposalsItem[];
   previousPageInfo?: any;
   nextPageInfo?: any;
 }
 
-interface ProposalListRes {
+interface IProposalListRes {
   code: string;
-  data: ProposalListResData;
+  data: IProposalListResData;
   message: string;
 }
 interface IWithdrawListItem {
   proposalIdList: string[];
   withdrawAmount: number;
 }
-interface ProposalMyInfo {
+interface IProposalMyInfo {
   symbol: string;
   decimal: string;
   availableUnStakeAmount: number;
@@ -201,25 +202,25 @@ interface ProposalMyInfo {
   withdrawList: IWithdrawListItem[];
 }
 
-interface ProposalMyInfoRes {
+interface IProposalMyInfoRes {
   code: string;
-  data: ProposalMyInfo;
+  data: IProposalMyInfo;
   message: string;
 }
 
 // -------------------------------------propal-detail-----------------------------
 
-interface ProposalDetailReq {
+interface IProposalDetailReq {
   proposalId: string;
   chainId: string;
 }
 
-interface ProposalLife {
+interface IProposalLife {
   proposalStatus: string;
   proposalStage: string;
 }
 
-interface Transaction {
+interface IProposalDetailDataTransaction {
   toAddress: string;
   contractMethodName: string;
   params: Record<string, unknown>;
@@ -232,9 +233,9 @@ interface IProposalDetailDataVoteTopListItem {
   voter: string;
   votingItemId: string;
 }
-interface ProposalDetailData {
+interface IProposalDetailData {
   decimals: string;
-  proposalLifeList: ProposalLife[];
+  proposalLifeList: IProposalLife[];
   voteTopList: IProposalDetailDataVoteTopListItem[];
   chainId: string;
   blockHeight: number;
@@ -253,7 +254,7 @@ interface ProposalDetailData {
   proposalStage: string;
   proposer: string;
   schemeAddress: string;
-  transaction: Transaction;
+  transaction: IProposalDetailDataTransaction;
   voteSchemeId: null | string;
   voteMechanismName: string;
   vetoProposalId: null | string;
@@ -277,13 +278,13 @@ interface ProposalDetailData {
   abstentionCount: number;
 }
 
-interface ProposalDetailRes {
+interface IProposalDetailRes {
   code: string;
-  data: ProposalDetailData;
+  data: IProposalDetailData;
   message: string;
 }
 // -------------------------------------governance-model-list-----------------------------
-interface SchemeThreshold {
+interface ISchemeThreshold {
   minimalRequiredThreshold: number;
   minimalVoteThreshold: number;
   minimalApproveThreshold: number;
@@ -291,7 +292,7 @@ interface SchemeThreshold {
   maximalAbstentionThreshold: number;
 }
 
-interface GovernanceScheme {
+interface IGovernanceScheme {
   id: string;
   daoId: string;
   schemeId: string;
@@ -299,33 +300,33 @@ interface GovernanceScheme {
   chainId: string;
   governanceMechanism: string;
   governanceToken: string;
-  schemeThreshold?: SchemeThreshold;
+  schemeThreshold?: ISchemeThreshold;
 }
 
-type GovernanceSchemeList = GovernanceScheme[];
-interface GovernanceModelListData {
-  data: GovernanceSchemeList;
+type TGovernanceSchemeList = IGovernanceScheme[];
+interface IGovernanceModelListData {
+  data: TGovernanceSchemeList;
 }
-interface GovernanceModelListRes {
+interface IGovernanceModelListRes {
   code: string;
-  data: GovernanceModelListData;
+  data: IGovernanceModelListData;
   message: string;
 }
 // -------------------------------------contracts-info-----------------------------
 
-interface ContractInfo {
+interface IContractInfo {
   contractAddress: string;
   contractName: string;
   functionList: string[];
 }
 
-interface ContractInfoListData {
-  contractInfoList: ContractInfo[];
+interface IContractInfoListData {
+  contractInfoList: IContractInfo[];
 }
 
-interface ContractInfoListRes {
+interface IContractInfoListRes {
   code: string;
-  data: ContractInfoListData;
+  data: IContractInfoListData;
   message: string;
 }
 // -------------------------------------vote-scheme-list-----------------------------
@@ -351,7 +352,7 @@ interface IVoteSchemeListRes {
 }
 // -------------------------------------token-info-----------------------------
 
-interface TokenInfoData {
+interface ITokenInfoData {
   chainId?: string;
   decimals?: number;
   imageUrl?: string;
@@ -365,26 +366,26 @@ interface TokenInfoData {
 interface ITokenInfoRes {
   msg: string;
   code: number;
-  data: TokenInfoData;
+  data: ITokenInfoData;
 }
 
 // -------------------------------------explore-----------------------------
-interface AddressTokenListDataItem {
+interface IAddressTokenListDataItem {
   symbol: string;
   balance: string;
 }
 
-interface AddressTokenListRes {
+interface IAddressTokenListRes {
   msg: string;
   code: number;
-  data: AddressTokenListDataItem[];
+  data: IAddressTokenListDataItem[];
 }
 // -------------------------------------explore-----------------------------
-interface AddressTransferListTxFee {
+interface IAddressTransferListTxFee {
   ELF: number;
 }
 
-interface AddressTransferListDataListItem {
+interface IAddressTransferListDataListItem {
   id: number;
   txId: string;
   from: string;
@@ -395,7 +396,7 @@ interface AddressTransferListDataListItem {
   isCrossChain: string;
   relatedChainId: string;
   memo: null;
-  txFee: AddressTransferListTxFee;
+  txFee: IAddressTransferListTxFee;
   time: string;
   method: string;
   blockHeight: number;
@@ -403,18 +404,18 @@ interface AddressTransferListDataListItem {
   addressTo: string;
 }
 
-interface AddressTransferListData {
-  list: AddressTransferListDataListItem[];
+interface IAddressTransferListData {
+  list: IAddressTransferListDataListItem[];
   total: number;
 }
 
-interface AddressTransferListRes {
+interface IAddressTransferListRes {
   msg: string;
   code: number;
-  data: AddressTransferListData;
+  data: IAddressTransferListData;
 }
-// -------------------------------------TokenPriceRes-----------------------------
-interface TokenPriceRes {
+// -------------------------------------ITokenPriceRes-----------------------------
+interface ITokenPriceRes {
   USD?: number;
   symbol: string;
 }

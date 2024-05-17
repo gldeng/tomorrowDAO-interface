@@ -4,7 +4,7 @@ import { Upload, IUploadProps, UploadButton } from 'aelf-design';
 import { GetProp, UploadFile, message } from 'antd';
 import clsx from 'clsx';
 import pinFileToIPFS from 'components/PinFileToIPFS';
-export type FileType = Parameters<GetProp<IUploadProps, 'beforeUpload'>>[0];
+export type TFileType = Parameters<GetProp<IUploadProps, 'beforeUpload'>>[0];
 import { checkImgSize } from 'utils/checkImgSize';
 import './index.css';
 
@@ -87,7 +87,7 @@ const FUpload: React.FC<IFUploadProps> = ({
     onChange?.(newFileList);
   };
 
-  const onBeforeUpload = async (file: FileType) => {
+  const onBeforeUpload = async (file: TFileType) => {
     let result = true;
 
     const isLteLimit = file.size <= handleLimit(fileLimit);

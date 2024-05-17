@@ -7,10 +7,10 @@ import Link from 'next/link';
 import ProposalDetailFile from 'assets/imgs/proposal-detail-file.svg';
 import CommonDrawer from 'components/CommonDrawer';
 
-type PropsType = {
-  list: FileInfo[];
+type TPropsType = {
+  list: IFileInfo[];
 };
-export default function PreviewFile(props: PropsType) {
+export default function PreviewFile(props: TPropsType) {
   const { list = [] } = props;
   const { isSM } = useResponsive();
 

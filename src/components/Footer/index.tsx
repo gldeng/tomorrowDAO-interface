@@ -1,6 +1,5 @@
 import './index.css';
 import { FooterLogo } from 'components/Logo';
-import Icon from '@ant-design/icons';
 import { Divider } from 'antd';
 import TwitterIcon from 'assets/imgs/twitter.svg';
 import TGIcon from 'assets/imgs/telegram.svg';

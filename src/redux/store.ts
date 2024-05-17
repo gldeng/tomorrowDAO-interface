@@ -58,11 +58,11 @@ const makeStore = () => {
   };
 };
 
-export type AppStore = ReturnType<typeof makeStore>;
-export type AppDispatch = typeof store.dispatch;
-export type AppState = ReturnType<AppStore['getState']>;
-export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, AppState, unknown, Action>;
+export type TAppStore = ReturnType<typeof makeStore>;
+export type TAppDispatch = typeof store.dispatch;
+export type TAppState = ReturnType<TAppStore['getState']>;
+export type TAppThunk<ReturnType = void> = ThunkAction<ReturnType, TAppState, unknown, Action>;
 
-export const store: AppStore = makeStore();
-export const dispatch: AppDispatch = store.dispatch;
-export const useSelector: TypedUseSelectorHook<AppState> = useReduxSelector;
+export const store: TAppStore = makeStore();
+export const dispatch: TAppDispatch = store.dispatch;
+export const useSelector: TypedUseSelectorHook<TAppState> = useReduxSelector;

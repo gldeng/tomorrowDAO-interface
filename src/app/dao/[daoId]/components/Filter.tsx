@@ -11,14 +11,14 @@ import SwitchBtn from 'assets/imgs/switch-btn.svg';
 import { proposalTypeList, proposalStatusList, tagMap, ALL } from '../constants';
 import { IProposalTableParams, TTableParamsKey } from '../type';
 import CloseTag from 'assets/imgs/close-tag.svg';
-type PropsType = {
+type TPropsType = {
   form: FormInstance;
   // onFechData: (params: IProposalTableParams) => void;
   tableParams: IProposalTableParams;
   onChangeTableParams: any;
 };
 
-export default function Filter(props: PropsType) {
+export default function Filter(props: TPropsType) {
   const { form, tableParams, onChangeTableParams } = props;
 
   const [modalForm] = Form.useForm();

@@ -1,34 +1,34 @@
 import { apiServer, explorerServer } from './axios';
 
-export const fetchDaoList = async (params: IListDaoReq): Promise<ListDaoRes> => {
+export const fetchDaoList = async (params: IListDaoReq): Promise<IListDaoRes> => {
   return apiServer.get('/dao/dao-list', {
     params,
   });
 };
 
-export const fetchDaoInfo = async (params: DaoInfoReq): Promise<DaoInfoRes> => {
+export const fetchDaoInfo = async (params: IDaoInfoReq): Promise<IDaoInfoRes> => {
   return apiServer.get('/dao/dao-info', {
     params,
   });
 };
 
-export const fetchProposalList = async (params: ProposalListReq): Promise<ProposalListRes> => {
+export const fetchProposalList = async (params: IProposalListReq): Promise<IProposalListRes> => {
   return apiServer.post('/proposal/list', {
     ...params,
   });
 };
 
 export const fetchProposalMyInfo = async (
-  params: ProposalMyInfoReq,
-): Promise<ProposalMyInfoRes> => {
+  params: IProposalMyInfoReq,
+): Promise<IProposalMyInfoRes> => {
   return apiServer.get('/proposal/my-info', {
     params,
   });
 };
 
 export const fetchProposalDetail = async (
-  params: ProposalDetailReq,
-): Promise<ProposalDetailRes> => {
+  params: IProposalDetailReq,
+): Promise<IProposalDetailRes> => {
   return apiServer.get('/proposal/detail', {
     params,
   });
@@ -37,7 +37,7 @@ export const fetchProposalDetail = async (
 export const fetchGovernanceMechanismList = async (params: {
   chainId: string;
   daoId: string;
-}): Promise<GovernanceModelListRes> => {
+}): Promise<IGovernanceModelListRes> => {
   return apiServer.get('/governance/list', {
     params,
   });
@@ -45,7 +45,7 @@ export const fetchGovernanceMechanismList = async (params: {
 
 export const fetchContractInfo = async (params: {
   chainId: string;
-}): Promise<ContractInfoListRes> => {
+}): Promise<IContractInfoListRes> => {
   return apiServer.get('/contract/contracts-info', {
     params,
   });
@@ -76,7 +76,7 @@ export const fetchTokenInfo = async (params: {
 // explore
 export const fetchAddressTokenList = async (params: {
   address: string;
-}): Promise<AddressTokenListRes> => {
+}): Promise<IAddressTokenListRes> => {
   return explorerServer.get('/viewer/balances', {
     params,
   });
@@ -86,7 +86,7 @@ export const fetchAddressTransferList = async (params: {
   pageSize: number;
   pageNum: number;
   address: string;
-}): Promise<AddressTransferListRes> => {
+}): Promise<IAddressTransferListRes> => {
   return explorerServer.get('/viewer/transferList', {
     params,
   });
@@ -94,7 +94,7 @@ export const fetchAddressTransferList = async (params: {
 export const fetchTokenPrice = async (params: {
   fsym: string;
   syms?: string;
-}): Promise<TokenPriceRes> => {
+}): Promise<ITokenPriceRes> => {
   if (!params.syms) {
     params.syms = 'USD';
   }

@@ -4,19 +4,12 @@ import { Radio, Input, Tooltip, Button } from 'aelf-design';
 import { InfoCircleOutlined } from '@aelf-design/icons';
 import { Form } from 'antd';
 import { memo, useEffect, useMemo, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
 import { ResponsiveSelect } from 'components/ResponsiveSelect';
 import MarkdownEditor from 'components/MarkdownEditor';
 import Editor from '@monaco-editor/react';
 import { ReactComponent as ArrowIcon } from 'assets/imgs/arrow-icon.svg';
 import { ContractMethodType, ProposalType, proposalTypeList } from 'types';
-import {
-  fetchGovernanceMechanismList,
-  fetchContractInfo,
-  fetchDaoInfo,
-  fetchVoteSchemeList,
-} from 'api/request';
-import { useSelector } from 'redux/store';
+import { fetchGovernanceMechanismList, fetchContractInfo, fetchVoteSchemeList } from 'api/request';
 import { curChain } from 'config';
 import { useAsyncEffect } from 'ahooks';
 import { GetDaoProposalTimePeriodContract } from 'contract/callContract';
@@ -34,16 +27,12 @@ interface ProposalInfoProps {
 }
 
 const ProposalInfo = (props: ProposalInfoProps) => {
-  const [governanceMechanismList, setGovernanceMechanismList] = useState<GovernanceSchemeList>();
+  const [governanceMechanismList, setGovernanceMechanismList] = useState<TGovernanceSchemeList>();
 
-  const searchParams = useSearchParams();
-  const [daoInfo, setDaoInfo] = useState<DaoInfoData>();
-  const [contractInfo, setContractInfo] = useState<ContractInfoListData>();
+  const [contractInfo, setContractInfo] = useState<IContractInfoListData>();
   const [voteScheme, setVoteScheme] = useState<IVoteSchemeListData>();
   const [timePeriod, setTimePeriod] = useState<ITimePeriod | null>(null);
 
-  // const info = store.getState().elfInfo.elfInfo;
-  const elfInfo = useSelector((state) => state.elfInfo.elfInfo);
   const { className, daoId, onSubmit } = props;
 
   const contractInfoOptions = useMemo(() => {
@@ -57,8 +46,6 @@ const ProposalInfo = (props: ProposalInfoProps) => {
   const form = Form.useFormInstance();
   const contractAddress = Form.useWatch(['transaction', 'toAddress'], form);
   const proposalType = Form.useWatch('proposalType', form);
-  const schemeAddress = Form.useWatch(['proposalBasicInfo', 'schemeAddress'], form);
-  const params = Form.useWatch(['transaction', 'params'], form);
   const voterAndExecute = Form.useWatch(voterAndExecuteNamePath, form);
   const currentGovernanceMechanism = useMemo(() => {
     return governanceMechanismList?.find((item) => item.schemeAddress === voterAndExecute);
@@ -90,22 +77,16 @@ const ProposalInfo = (props: ProposalInfoProps) => {
       }) ?? []
     );
   }, [contractInfo, contractAddress]);
-  useEffect(() => {
-    const run = async () => {
-      const [governanceMechanismListRes, daoInfo, contractInfo, voteSchemeListRes] =
-        await Promise.all([
-          fetchGovernanceMechanismList({ chainId: elfInfo.curChain, daoId: daoId }),
-          fetchDaoInfo({ chainId: elfInfo.curChain, daoId: daoId }),
-          fetchContractInfo({ chainId: elfInfo.curChain }),
-          fetchVoteSchemeList({ chainId: curChain }),
-        ]);
-      setGovernanceMechanismList(governanceMechanismListRes.data.data);
-      setDaoInfo(daoInfo.data);
-      setContractInfo(contractInfo.data);
-      setVoteScheme(voteSchemeListRes.data);
-    };
-    run();
-  }, []);
+  useAsyncEffect(async () => {
+    const [governanceMechanismListRes, contractInfo, voteSchemeListRes] = await Promise.all([
+      fetchGovernanceMechanismList({ chainId: curChain, daoId: daoId }),
+      fetchContractInfo({ chainId: curChain }),
+      fetchVoteSchemeList({ chainId: curChain }),
+    ]);
+    setGovernanceMechanismList(governanceMechanismListRes.data.data);
+    setContractInfo(contractInfo.data);
+    setVoteScheme(voteSchemeListRes.data);
+  }, [daoId]);
   const proposalDetailDesc = useMemo(() => {
     return proposalTypeList.find((item) => item.value === proposalType)?.desc ?? '';
   }, [proposalType]);
@@ -163,7 +144,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
           },
         ]}
       >
-        <MarkdownEditor maxLen={300000} />
+        <MarkdownEditor maxLen={300000} id="proposalBasicInfo_proposalDescription" />
       </Form.Item>
 
       {/* Discussion on forum */}

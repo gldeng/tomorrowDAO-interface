@@ -3,7 +3,7 @@ import { Button } from 'aelf-design';
 import SuccessGreenIcon from 'assets/imgs/success-green.svg';
 import WaringIcon from 'assets/imgs/waring.svg';
 
-type PropsType = {
+type TPropsType = {
   onOk: (p: boolean) => void;
   title: string;
   firstText?: string;
@@ -17,7 +17,7 @@ const typeMap = {
   success: SuccessGreenIcon,
 };
 
-export default function Info(props: PropsType) {
+export default function Info(props: TPropsType) {
   const { onOk, title, firstText, secondText, type, btnText } = props;
   return (
     <div>

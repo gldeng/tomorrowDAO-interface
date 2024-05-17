@@ -3,7 +3,7 @@ import { Tabs } from 'aelf-design';
 import { ProposalTypeString } from 'types';
 
 interface IProposalTabProps {
-  proposalDetailData?: ProposalDetailData;
+  proposalDetailData?: IProposalDetailData;
 }
 const ProposalTab = (props: IProposalTabProps) => {
   const { proposalDetailData } = props;

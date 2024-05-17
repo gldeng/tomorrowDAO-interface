@@ -37,6 +37,6 @@ export default function LinkReplaceLastPathName(props: LinkReplaceLastPathNamePr
         pathname: '/' + parts.join('/'),
       };
     }
-  }, [pathName, originHref]);
+  }, [pathName, replaceStart, originHref]);
   return <Link {...props} href={newPath} />;
 }

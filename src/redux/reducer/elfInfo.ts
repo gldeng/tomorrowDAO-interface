@@ -1,9 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { HYDRATE } from 'next-redux-wrapper';
-import { AppState } from 'redux/store';
+import { TAppState } from 'redux/store';
 
 export interface IAelfInfoState {
-  elfInfo: IConfigItems;
+  elfInfo: TConfigItems;
 }
 
 const initialState: IAelfInfoState = {
@@ -48,6 +48,6 @@ export const elfInfoSlice = createSlice({
 
 export const { setElfInfo } = elfInfoSlice.actions;
 
-export const getElfInfo = (state: AppState) => state.elfInfo.elfInfo;
+export const getElfInfo = (state: TAppState) => state.elfInfo.elfInfo;
 
 export default elfInfoSlice.reducer;

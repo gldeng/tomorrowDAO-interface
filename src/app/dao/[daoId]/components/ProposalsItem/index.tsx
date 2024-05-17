@@ -1,7 +1,6 @@
 import { Divider, Space } from 'antd';
 import { Typography, FontWeightEnum, HashAddress, Progress } from 'aelf-design';
 import Image from 'next/image';
-import { ProposalStatusString } from 'types';
 import WarningGrayIcon from 'assets/imgs/warning-gray.svg';
 import CheckedIcon from 'assets/imgs/checked.svg';
 import useResponsive from 'hooks/useResponsive';
@@ -29,7 +28,6 @@ export default function ProposalsItem(props: { data: IProposalsItem }) {
     return [data.governanceMechanism];
   }, [data]);
 
-  const proposalComplete = (proposalStatus as any) === ProposalStatusString.Approved;
   return (
     <div className="proposal-item">
       <div>

@@ -12,9 +12,10 @@ interface IMarkdownEditorProps {
   value?: string;
   onChange?: (value: string) => void;
   maxLen?: number;
+  id?: string;
 }
 
-export default function MarkdownEditor({ value, onChange, maxLen }: IMarkdownEditorProps) {
+export default function MarkdownEditor({ value, onChange, maxLen, id }: IMarkdownEditorProps) {
   const handleEditorChange: MdEditor['props']['onChange'] = ({ text }) => {
     onChange?.(text.slice(0, maxLen));
   };
@@ -42,6 +43,7 @@ export default function MarkdownEditor({ value, onChange, maxLen }: IMarkdownEdi
       value={value}
       onChange={handleEditorChange}
       onImageUpload={handleImageUpload}
+      id={id}
     />
   );
 }

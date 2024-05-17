@@ -30,7 +30,7 @@ type TInfoTypes = {
 type TFieldType = {
   unstakeAmount: number;
 };
-interface IMyInfo extends ProposalMyInfo {
+interface IMyInfo extends IProposalMyInfo {
   votesAmount?: number;
 }
 export default function MyInfo(props: TInfoTypes) {
@@ -62,7 +62,7 @@ export default function MyInfo(props: TInfoTypes) {
     if (!isLogin || !elfInfo.curChain || !daoId || !walletInfo.address) {
       return;
     }
-    const reqMyInfoParams: ProposalMyInfoReq = {
+    const reqMyInfoParams: IProposalMyInfoReq = {
       chainId: elfInfo.curChain,
       daoId: daoId,
       address: walletInfo.address,
@@ -207,7 +207,6 @@ export default function MyInfo(props: TInfoTypes) {
               onClick={() => {
                 if (info?.availableUnStakeAmount === 0) {
                   message.info('Available to unstake is 0');
-                  setIsModalOpen(true);
                 } else {
                   setIsModalOpen(true);
                 }

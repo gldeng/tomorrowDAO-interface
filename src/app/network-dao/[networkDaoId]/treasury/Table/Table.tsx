@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Table, HashAddress } from 'aelf-design';
 import { ConfigProvider, Tag, Tooltip } from 'antd';
 import { ColumnsType } from 'antd/es/table';
@@ -12,7 +12,7 @@ import { getFormattedDate } from 'utils/time';
 import { numberFormatter } from 'utils/numberFormatter';
 import { TokenIconMap } from 'constants/token';
 
-const checkIsOut = (address: string, record: AddressTransferListDataListItem) => {
+const checkIsOut = (address: string, record: IAddressTransferListDataListItem) => {
   const { from, to, isCrossChain } = record;
   if (isCrossChain === 'Transfer' || isCrossChain === 'no') {
     if (from === address) {
@@ -56,7 +56,7 @@ export default function RecordTable() {
     setTimeFormat(timeFormat === 'Age' ? 'Date Time' : 'Age');
   };
 
-  const columns: ColumnsType<AddressTransferListDataListItem> = [
+  const columns: ColumnsType<IAddressTransferListDataListItem> = [
     {
       title: 'Txn Hash',
       dataIndex: 'txId',
@@ -140,10 +140,12 @@ export default function RecordTable() {
       dataIndex: 'symbol',
       render(symbol) {
         return (
-          <div className="token">
-            {TokenIconMap[symbol] && <img src={TokenIconMap[symbol]} className="token-logo " alt="" />}
-            {symbol}
-          </div>
+          <Link href={`${mainExplorer}/token/${symbol}`}>
+            <div className="token">
+              {TokenIconMap[symbol] && <img src={TokenIconMap[symbol]} className="token-logo " alt="" />}
+              {symbol}
+            </div>
+          </Link>
         );
       },
     },

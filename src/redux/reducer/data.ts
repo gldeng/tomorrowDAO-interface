@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { AppState } from 'redux/store';
+import { TAppState } from 'redux/store';
 import { HYDRATE } from 'next-redux-wrapper';
 
 const initialState: {
@@ -33,5 +33,5 @@ export const dataSlice = createSlice({
 });
 
 export const { setEthData } = dataSlice.actions;
-export const selectData = (state: AppState) => state.data;
+export const selectData = (state: TAppState) => state.data;
 export default dataSlice.reducer;
