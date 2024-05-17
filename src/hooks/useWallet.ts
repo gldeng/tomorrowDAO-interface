@@ -16,12 +16,12 @@ import { dispatch } from 'redux/store';
 import { setWalletInfo } from 'redux/reducer/userInfo';
 import { useLocalStorage } from 'react-use';
 import { cloneDeep } from 'lodash-es';
-import { WalletInfoType } from 'types';
+import { TWalletInfoType } from 'types';
 import { storages } from 'utils/constant';
 import { useRegisterContractServiceMethod } from 'contract/baseContract';
 
 export const useWalletInit = () => {
-  const [, setLocalWalletInfo] = useLocalStorage<WalletInfoType>(storages.walletInfo);
+  const [, setLocalWalletInfo] = useLocalStorage<TWalletInfoType>(storages.walletInfo);
   const getAccountInAELF = useGetAccount('AELF');
   const { wallet, walletType } = useWebLogin();
   // register Contract method
@@ -32,7 +32,7 @@ export const useWalletInit = () => {
         // backToHomeByRoute();
       }
       if (state === WebLoginState.logined) {
-        const walletInfo: WalletInfoType = {
+        const walletInfo: TWalletInfoType = {
           address: wallet?.address || '',
           publicKey: wallet?.publicKey,
           aelfChainAddress: '',
@@ -75,7 +75,7 @@ export const useWalletInit = () => {
     message.error(`${error.message || 'LOGIN_ERROR'}`);
   });
   useWebLoginEvent(WebLoginEvents.LOGINED, () => {
-    message.success('Login');
+    message.success('log in');
   });
 
   useWebLoginEvent(WebLoginEvents.LOGOUT, () => {

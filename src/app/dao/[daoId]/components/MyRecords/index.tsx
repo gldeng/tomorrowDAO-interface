@@ -10,19 +10,6 @@ import { EVoteOption } from 'types/vote';
 import dayjs from 'dayjs';
 import LinkReplaceLastPathName from 'components/LinkReplaceLastPathName';
 
-interface IStatus {
-  Approved: string;
-  Rejected: string;
-  Asbtained: string;
-  Executed: string;
-}
-
-const colorMap: IStatus = {
-  Approved: '#3888FF',
-  Rejected: '#F55D6E',
-  Asbtained: '#687083',
-  Executed: '#05C4A2',
-};
 interface IProps {
   daoId: string;
   isNetworkDAO?: boolean;
@@ -44,18 +31,18 @@ export default function MyRecords(props: IProps) {
     });
   });
 
-  const statusCom = (text: keyof IStatus, size = 500) => {
-    return (
-      <span
-        style={{
-          color: colorMap[text],
-          fontWeight: size,
-        }}
-      >
-        {text}
-      </span>
-    );
-  };
+  // const statusCom = (text: keyof IStatus, size = 500) => {
+  //   return (
+  //     <span
+  //       style={{
+  //         color: colorMap[text],
+  //         fontWeight: size,
+  //       }}
+  //     >
+  //       {text}
+  //     </span>
+  //   );
+  // };
 
   const LoadMoreButton = (
     <Button type="link" size="medium" className="!p-0 text-[#1A1A1A]">

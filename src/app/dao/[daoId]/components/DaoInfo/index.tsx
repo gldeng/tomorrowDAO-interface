@@ -5,9 +5,6 @@ import useResponsive from 'hooks/useResponsive';
 import PreviewFile from 'components/PreviewFile';
 import { Skeleton } from 'components/Skeleton';
 import { colorfulSocialMediaIconMap } from 'assets/imgs/socialMediaIcon';
-
-import { HC_CANDIDATE, HC_MEMBER } from '../../constants';
-
 import DaoLogo from 'assets/imgs/dao-logo.svg';
 
 import Link from 'next/link';
@@ -33,7 +30,7 @@ const getSocialUrl = (key: string, val: string) => {
   return val;
 };
 interface IParams {
-  data?: DaoInfoData;
+  data?: IDaoInfoData;
   onChangeHCParams: any;
   isLoading: boolean;
   isError?: Error;
@@ -49,13 +46,7 @@ const contractMapList = [
   },
 ];
 export default function DaoInfo(props: IParams) {
-  const {
-    data,
-    data: { metadata, fileInfoList = [] } = {},
-    onChangeHCParams,
-    isLoading,
-    isError,
-  } = props;
+  const { data, data: { metadata, fileInfoList = [] } = {}, isLoading, isError } = props;
 
   const { isLG } = useResponsive();
   const socialMedia = metadata?.socialMedia ?? {};
@@ -70,7 +61,7 @@ export default function DaoInfo(props: IParams) {
   const contractItems = contractMapList
     .map((obj) => {
       const dataKey = obj.key;
-      const address = data?.[dataKey as keyof DaoInfoData];
+      const address = data?.[dataKey as keyof IDaoInfoData];
       if (!address) return null;
       return {
         key: dataKey,

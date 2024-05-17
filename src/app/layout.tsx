@@ -5,8 +5,6 @@ import 'aelf-web-login/dist/assets/index.css';
 import 'styles/global.css';
 import 'aelf-design/css';
 import Layout from 'pageComponents/layout';
-import NetworkDaoLayout from 'app/network-dao/[networkDaoId]/layout';
-
 import Provider from 'provider/';
 import Script from 'next/script';
 import StyleRegistry from './StyleRegistry';
@@ -17,6 +15,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
   const isNetWorkDao = pathname.startsWith(NetworkDaoHomePathName);
   return (
     <html lang="en">
+      {/* eslint-disable-next-line @next/next/no-head-element */}
       <head>
         <meta
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;"

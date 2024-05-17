@@ -14,7 +14,7 @@ import MyRecords from './components/MyRecords';
 import MyInfo from './components/MyInfo';
 import Filter from './components/Filter';
 import { useRequest, usePrevious } from 'ahooks';
-import { HCType, IProposalTableParams, TabKey } from './type';
+import { IProposalTableParams, TabKey } from './type';
 import LinkReplaceLastPathName from 'components/LinkReplaceLastPathName';
 import { fetchDaoInfo, fetchProposalList } from 'api/request';
 import { curChain } from 'config';
@@ -28,7 +28,7 @@ interface IProps {
 }
 export default function DeoDetails(props: IProps) {
   const { daoId, isNetworkDAO } = props;
-  const { isLG, isSM } = useResponsive();
+  const { isLG } = useResponsive();
 
   const [form] = Form.useForm();
   // todo
@@ -58,9 +58,9 @@ export default function DeoDetails(props: IProps) {
     },
   });
   const previousTableParams = usePrevious(tableParams);
-  const fetchProposalListWithParams = async (preData: ProposalListRes | null) => {
+  const fetchProposalListWithParams = async (preData: IProposalListRes | null) => {
     const { proposalType, proposalStatus } = tableParams;
-    const params: ProposalListReq = {
+    const params: IProposalListReq = {
       daoId: daoId,
       chainId: curChain,
       skipCount:
@@ -109,7 +109,7 @@ export default function DeoDetails(props: IProps) {
   } = useRequest(fetchProposalListWithParams, {
     manual: true,
   });
-  const previousProposalDataRef = useRef<ProposalListRes | undefined>();
+  const previousProposalDataRef = useRef<IProposalListRes | undefined>();
   previousProposalDataRef.current = proposalData;
 
   const rightContent = useMemo(() => {
@@ -164,7 +164,7 @@ export default function DeoDetails(props: IProps) {
         },
       ];
     }
-  }, [form, tableParams, isLG, rightContent, daoId, daoData]);
+  }, [isNetworkDAO, daoId, form, tableParams, daoData?.data.isNetworkDAO, isLG, rightContent]);
 
   const pageChange = useCallback((page: number) => {
     setTableParams((state) => {
@@ -195,7 +195,7 @@ export default function DeoDetails(props: IProps) {
     setTabKey(key as TabKey);
   };
 
-  const handleChangeHCparams = useCallback((type: HCType) => {
+  const handleChangeHCparams = useCallback(() => {
     setTabKey(TabKey.HC);
   }, []);
 

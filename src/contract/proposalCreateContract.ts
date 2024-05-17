@@ -1,4 +1,4 @@
-import { IContractOptions, ContractMethodType, ISendResult, IContractError } from 'types';
+import { IContractOptions, ContractMethodType, IContractError } from 'types';
 import { formatErrorMsg } from './util';
 import { getTxResult } from 'utils/getTxResult';
 import { sleep } from 'utils/common';

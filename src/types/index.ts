@@ -78,12 +78,12 @@ export interface IDIDWalletInfo {
   walletInfo: IBlockchainWallet | { [key: string]: any };
   accountInfo: ManagerInfoType;
 }
-export type PortkeyInfoType = Partial<IDIDWalletInfo> & {
+export type TPortkeyInfoType = Partial<IDIDWalletInfo> & {
   accounts?: { [key: string]: any };
   walletInfo?: { [key: string]: any } | IBlockchainWallet;
 };
 
-export type WalletInfoType = {
+export type TWalletInfoType = {
   address: string;
   publicKey?: string;
   token?: string;
@@ -150,10 +150,14 @@ export const proposalTypeList: Array<IProposalTypeListItem> = [
     value: ProposalType.VETO,
   },
 ];
-
+interface IerrorFieldsItem {
+  errors: Array<any>;
+  name: string | string[];
+  warnings: Array<any>;
+}
 export interface IFormValidateError {
   values?: {};
-  errorFields: [];
+  errorFields: IerrorFieldsItem[];
   outOfDate?: Boolean;
 }
 

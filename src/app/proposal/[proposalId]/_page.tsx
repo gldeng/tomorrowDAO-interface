@@ -1,7 +1,6 @@
 'use client';
 import React from 'react';
 import { memo } from 'react';
-import { Tabs } from 'aelf-design';
 import './index.css';
 
 import HeaderInfo from './components/HeaderInfo';

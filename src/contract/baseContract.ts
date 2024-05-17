@@ -2,24 +2,24 @@ import { CallContractParams, useCallContract } from 'aelf-web-login';
 import { SupportedELFChainId, ContractMethodType } from 'types';
 import { store } from 'redux/store';
 
-type MethodType = <T, R>(params: CallContractParams<T>) => Promise<R>;
+type TMethodType = <T, R>(params: CallContractParams<T>) => Promise<R>;
 
-type ChainAndRpcMapType = {
+type TChainAndRpcMapType = {
   [key in SupportedELFChainId]?: {
     chainId: string;
     rpcUrl: string;
   };
 };
 interface ICallMethodMap {
-  callSendMethod: MethodType;
-  callViewMethod: MethodType;
+  callSendMethod: TMethodType;
+  callViewMethod: TMethodType;
 }
-type contractMethodMapType = {
+type TContractMethodMapType = {
   [key in SupportedELFChainId]?: ICallMethodMap;
 };
 
-export const contractMethodMap: contractMethodMapType = {};
-const chainAndRPCMap: ChainAndRpcMapType = {};
+export const contractMethodMap: TContractMethodMapType = {};
+const chainAndRPCMap: TChainAndRpcMapType = {};
 
 export function useRegisterContractServiceMethod() {
   const info = store.getState().elfInfo.elfInfo;
@@ -60,7 +60,7 @@ export function GetContractServiceMethod(
 ): <T, R>(params: CallContractParams<T>, sendOptions?: undefined) => Promise<R> {
   const info = store.getState().elfInfo.elfInfo;
 
-  const chainAndRPCMap: ChainAndRpcMapType = {};
+  const chainAndRPCMap: TChainAndRpcMapType = {};
 
   [
     SupportedELFChainId.MAIN_NET,

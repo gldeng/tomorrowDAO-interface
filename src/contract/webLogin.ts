@@ -7,7 +7,7 @@ export interface IWebLoginArgs {
   chainId: string;
 }
 
-type MethodType = <T, R>(params: CallContractParams<T>) => Promise<R>;
+type TMethodType = <T, R>(params: CallContractParams<T>) => Promise<R>;
 
 export default class WebLoginInstance {
   public contract: any;
@@ -16,12 +16,12 @@ export default class WebLoginInstance {
 
   private static instance: WebLoginInstance | null = null;
   private context: WebLoginInterface | null = null;
-  private aelfSendMethod?: MethodType = undefined;
-  private aelfViewMethod?: MethodType = undefined;
-  private tdvvSendMethod?: MethodType = undefined;
-  private tdvvViewMethod?: MethodType = undefined;
-  private tdvwSendMethod?: MethodType = undefined;
-  private tdvwViewMethod?: MethodType = undefined;
+  private aelfSendMethod?: TMethodType = undefined;
+  private aelfViewMethod?: TMethodType = undefined;
+  private tdvvSendMethod?: TMethodType = undefined;
+  private tdvvViewMethod?: TMethodType = undefined;
+  private tdvwSendMethod?: TMethodType = undefined;
+  private tdvwViewMethod?: TMethodType = undefined;
 
   constructor(options?: IWebLoginArgs) {
     this.address = options?.address;
@@ -44,8 +44,8 @@ export default class WebLoginInstance {
     viewMethod,
   }: {
     chain: Chain;
-    sendMethod: MethodType;
-    viewMethod: MethodType;
+    sendMethod: TMethodType;
+    viewMethod: TMethodType;
   }) {
     switch (chain) {
       case SupportedELFChainId.MAIN_NET: {
@@ -69,8 +69,8 @@ export default class WebLoginInstance {
   setContractMethod(
     contractMethod: {
       chain: Chain;
-      sendMethod: MethodType;
-      viewMethod: MethodType;
+      sendMethod: TMethodType;
+      viewMethod: TMethodType;
     }[],
   ) {
     contractMethod.forEach((item) => {

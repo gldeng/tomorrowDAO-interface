@@ -9,7 +9,7 @@ import { sideChainSuffix } from 'config';
 
 // import ProposalDetailFile from 'assets/imgs/proposal-detail-file.svg';
 interface IHeaderInfoProps {
-  proposalDetailData: ProposalDetailData;
+  proposalDetailData: IProposalDetailData;
 }
 const HeaderInfo = (props: IHeaderInfoProps) => {
   const { proposalDetailData } = props;
@@ -17,7 +17,7 @@ const HeaderInfo = (props: IHeaderInfoProps) => {
     return [proposalDetailData.governanceMechanism];
   }, [proposalDetailData]);
   const handleShare = () => {
-    const twTitle = proposalDetailData.proposalTitle;
+    const twTitle = `${proposalDetailData.proposalTitle} @tmrwdao`;
     const twUrl = window.location.href;
     // eslint-disable-next-line prettier/prettier
     const url = `http://twitter.com/share?text=${twTitle}&url=${twUrl}`;

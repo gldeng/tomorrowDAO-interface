@@ -40,7 +40,7 @@ export interface GovernanceMechanismList {
   governanceMechanismList: GovernanceMechanism[];
 }
 
-interface SocialMedia {
+interface ISocialMedia {
   twitter: string;
   facebook: string;
   discord: string;
@@ -48,7 +48,7 @@ interface SocialMedia {
   reddit: string;
 }
 
-interface FileInfo {
+interface IFileInfo {
   name: string;
   cid: string;
   url: string;
@@ -58,7 +58,7 @@ interface Metadata {
   name: string;
   logoUrl: string;
   description: string;
-  socialMedia: SocialMedia;
+  socialMedia: ISocialMedia;
 }
 
 export interface DaoInfo {
@@ -75,7 +75,7 @@ export interface DaoInfo {
   electionContractAddress: string;
   governanceContractAddress: string;
   timelockContractAddress: string;
-  fileInfoList: FileInfo[];
+  fileInfoList: IFileInfo[];
   proposalTimePeriodSet: {
     activeTimePeriod: number;
     vetoActiveTimePeriod: number;
@@ -91,7 +91,7 @@ interface ContractInfoItem {
   FunctionList: string[];
 }
 
-export interface ContractInfo {
+export interface IContractInfo {
   contractInfoList: ContractInfoItem[];
 }
 

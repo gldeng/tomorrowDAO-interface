@@ -9,7 +9,6 @@ import { MobileMenu } from 'components/Menu';
 import { ReactComponent as MenuArrow } from 'assets/imgs/menu-arrow.svg';
 import { MenuProps } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
-// import { useRouter } from 'next/router';
 import { useParams, usePathname } from 'next/navigation';
 
 export default function Header() {
@@ -57,7 +56,7 @@ export default function Header() {
         ],
       },
     ];
-  }, [isLG]);
+  }, [isLG, networkDaoId]);
 
   const [current, setCurrent] = useState('CreateDAO');
 

@@ -24,6 +24,7 @@ import Link from 'next/link';
 import { IFormValidateError, IContractError } from 'types';
 import { cloneDeep, cloneDeepWith } from 'lodash-es';
 import { NetworkName } from 'config';
+import formValidateScrollFirstError from 'utils/formValidateScrollFirstError';
 
 const initItems: StepsProps['items'] = [
   {
@@ -55,6 +56,7 @@ const CreateDaoPage = () => {
   const isNotFirstStep = currentStep > 0;
   const { isMD } = useResponsive();
   const [items, setItems] = useState(initItems);
+  const [nextLoading, setNextLoading] = useState(false);
 
   const updateStep = (step: StepProps) => {
     const itemsCopy = [...items];
@@ -67,16 +69,24 @@ const CreateDaoPage = () => {
   const handleNextStep = () => {
     const form = stepsFormMapRef.current.stepForm[currentStepString].formInstance;
     if (form) {
-      form?.validateFields().then((res) => {
-        stepsFormMapRef.current.stepForm[currentStepString].submitedRes = res;
-        if (isHighCouncilStep) {
-          isSkipHighCouncil.current = false;
-          updateStep({
-            title: 'High Council',
-          });
-        }
-        send({ type: 'NEXT' });
-      });
+      setNextLoading(true);
+      form
+        ?.validateFields()
+        .then((res) => {
+          setNextLoading(false);
+          stepsFormMapRef.current.stepForm[currentStepString].submitedRes = res;
+          if (isHighCouncilStep) {
+            isSkipHighCouncil.current = false;
+            updateStep({
+              title: 'High Council',
+            });
+          }
+          send({ type: 'NEXT' });
+        })
+        .catch((err: IFormValidateError) => {
+          setNextLoading(false);
+          formValidateScrollFirstError(form, err);
+        });
     } else {
       messageApi.open({
         type: 'error',
@@ -180,6 +190,8 @@ const CreateDaoPage = () => {
               },
               governanceSchemeThreshold: {
                 ...highCouncilForm.governanceSchemeThreshold,
+                minimalRequiredThreshold:
+                  highCouncilForm.governanceSchemeThreshold.minimalRequiredThreshold * 100,
                 minimalVoteThreshold: Number(
                   timesDecimals(minimalVoteThreshold, daoCreateToken.decimals),
                 ),
@@ -336,6 +348,7 @@ const CreateDaoPage = () => {
                   type="primary"
                   className="flex-1 lg:w-40 lg:flex-none gap-2 create-dao-rigth-btn"
                   onClick={handleNextStep}
+                  loading={nextLoading}
                 >
                   <span>Next</span>
                   <ArrowRight />

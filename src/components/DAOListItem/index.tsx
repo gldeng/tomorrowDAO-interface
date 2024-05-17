@@ -38,10 +38,17 @@ export default function DAOListItem(props: IDAOListItemProps) {
           <div className="count-title">Holders</div>
           <div className="count-amount">{item.symbolHoldersNum}</div>
         </div>
-        <div className="count-item">
-          <div className="count-title">Voters</div>
-          <div className="count-amount">{item.votersNum}</div>
-        </div>
+        {item.isNetworkDAO ? (
+          <div className="count-item">
+            <div className="count-title">BP</div>
+            <div className="count-amount">{item.highCouncilMemberCount}</div>
+          </div>
+        ) : (
+          <div className="count-item">
+            <div className="count-title">Voters</div>
+            <div className="count-amount">{item.votersNum}</div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -15,7 +15,7 @@ import { curChain, voteAddress } from 'config';
 import { timesDecimals } from 'utils/calculate';
 import { EVoteOption } from 'types/vote';
 import { TokenIconMap } from 'constants/token';
-import { IContractError, SupportedELFChainId } from 'types';
+import { IContractError } from 'types';
 import BigNumber from 'bignumber.js';
 
 type TVoteTypes = {
@@ -142,7 +142,16 @@ function Vote(props: TVoteTypes) {
     setShowTokenBallotModal(false);
     setShowVoteModal(false);
     form.setFieldValue('stakeAmount', 0);
-  }, [currentVoteType, form, proposalId, voteMechanismName, symbol, fetchMyInfo, decimal]);
+  }, [
+    proposalId,
+    currentVoteType,
+    voteMechanismName,
+    form,
+    decimal,
+    fetchMyInfo,
+    symbol,
+    walletInfo.aelfChainAddress,
+  ]);
 
   return (
     <div className="flex justify-between items-center mt-4">

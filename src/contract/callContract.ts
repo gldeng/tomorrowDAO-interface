@@ -5,7 +5,6 @@ import { sleep } from 'utils/common';
 import { GetContractServiceMethod } from './baseContract';
 import { curChain } from 'config';
 import { multiTokenContractRequest } from './multiTokenContract';
-import { daoCreateContractRequest } from './daoCreateContract';
 import { proposalCreateContractRequest } from './proposalCreateContract';
 
 export const callContract = async <T>(
@@ -59,7 +58,6 @@ export const callMainNetViewContract = async <T>(
   methodName: string,
   params: T,
   address: string,
-  options?: IContractOptions,
 ): Promise<any> => {
   const CallContractMethod = GetContractServiceMethod(
     SupportedELFChainId.MAIN_NET,

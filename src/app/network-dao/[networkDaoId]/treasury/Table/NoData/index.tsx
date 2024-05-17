@@ -2,11 +2,11 @@ import React from 'react';
 import Image from 'next/image';
 import { Typography } from 'aelf-design';
 import NoDataIcon from 'assets/imgs/no-data.svg';
-type NoDataType = {
+type TNoDataType = {
   imgW?: number;
   imgH?: number;
 };
-export default function NoData(props: NoDataType) {
+export default function NoData(props: TNoDataType) {
   const { imgW = 80, imgH = 80 } = props;
   return (
     <div>

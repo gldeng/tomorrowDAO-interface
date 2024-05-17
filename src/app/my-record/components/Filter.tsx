@@ -1,13 +1,13 @@
 import React from 'react';
 import { Form } from 'antd';
 import { Search } from 'aelf-design';
-type PropsType = {
+type TPropsType = {
   form: any;
   onSearch: any;
   query?: Object;
 };
 
-export default function Filter(props: PropsType) {
+export default function Filter(props: TPropsType) {
   const { form, onSearch } = props;
 
   return (

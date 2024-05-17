@@ -1,9 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { HYDRATE } from 'next-redux-wrapper';
-import { AppState } from 'redux/store';
+import { TAppState } from 'redux/store';
 
 export interface IDaoCreateState {
-  token?: TokenInfoData;
+  token?: ITokenInfoData;
 }
 
 const initialState: IDaoCreateState = {};
@@ -31,6 +31,6 @@ export const daoCreateSlice = createSlice({
 
 export const { setToken } = daoCreateSlice.actions;
 
-export const getDaoCreateInfo = (state: AppState) => state;
+export const getDaoCreateInfo = (state: TAppState) => state;
 
 export default daoCreateSlice.reducer;

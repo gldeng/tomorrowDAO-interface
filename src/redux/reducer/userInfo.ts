@@ -1,14 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { HYDRATE } from 'next-redux-wrapper';
-import { AppState } from 'redux/store';
-import { WalletInfoType } from 'types';
+import { TAppState } from 'redux/store';
+import { TWalletInfoType } from 'types';
 
 export interface IUserInfoState {
-  userInfo: UserInfoType;
-  walletInfo: WalletInfoType;
+  userInfo: TUserInfoType;
+  walletInfo: TWalletInfoType;
 }
 
-export const logOutUserInfo: UserInfoType = {
+export const logOutUserInfo: TUserInfoType = {
   address: '',
   fullAddress: '',
   name: '',
@@ -53,5 +53,5 @@ export const userInfoSlice = createSlice({
 });
 
 export const { setWalletInfo, setUserInfo } = userInfoSlice.actions;
-export const getMyAddress = (state: AppState) => state.userInfo.userInfo.address;
+export const getMyAddress = (state: TAppState) => state.userInfo.userInfo.address;
 export default userInfoSlice.reducer;

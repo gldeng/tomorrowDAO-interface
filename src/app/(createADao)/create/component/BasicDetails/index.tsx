@@ -125,7 +125,7 @@ export default function BasicDetails() {
             ]}
             label=""
           >
-            <div className="mt-8">
+            <div className="mt-8" id="baseInfo_metadata_socialMedia_title">
               <Typography.Title level={6}>Social Media</Typography.Title>
             </div>
             <div className={cx('Media-info', mediaError && '!text-Reject-Reject')}>

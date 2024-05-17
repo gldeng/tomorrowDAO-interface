@@ -1,9 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { AppState } from 'redux/store';
+import { TAppState } from 'redux/store';
 import { HYDRATE } from 'next-redux-wrapper';
-import { InfoStateType } from 'redux/types/reducerTypes';
+import { TInfoStateType } from 'redux/types/reducerTypes';
 
-const initialState: InfoStateType = {
+const initialState: TInfoStateType = {
   isMobile: false,
   isSmallScreen: false,
   baseInfo: {
@@ -34,5 +34,5 @@ export const infoSlice = createSlice({
 });
 
 export const { setIsMobile } = infoSlice.actions;
-export const selectInfo = (state: AppState) => state.info;
+export const selectInfo = (state: TAppState) => state.info;
 export default infoSlice.reducer;

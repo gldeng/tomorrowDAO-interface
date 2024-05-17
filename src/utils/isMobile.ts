@@ -14,14 +14,14 @@ const otherOpera = /Opera Mini/i;
 const otherChrome = /\b(CriOS|Chrome)(?:.+)Mobile/i;
 const otherFirefox = /Mobile(?:.+)Firefox\b/i; // Match 'Mobile' AND 'Firefox'
 
-export type UserAgent = string;
-export type Navigator = {
+export type TUserAgent = string;
+export type TNavigator = {
   userAgent: string;
   platform: string;
   maxTouchPoints?: number;
 };
 
-const isAppleTabletOnIos13 = (navigator?: Navigator): boolean => {
+const isAppleTabletOnIos13 = (navigator?: TNavigator): boolean => {
   return (
     typeof navigator !== 'undefined' &&
     navigator.platform === 'MacIntel' &&
@@ -30,11 +30,11 @@ const isAppleTabletOnIos13 = (navigator?: Navigator): boolean => {
   );
 };
 
-function createMatch(userAgent: UserAgent): (regex: RegExp) => boolean {
+function createMatch(userAgent: TUserAgent): (regex: RegExp) => boolean {
   return (regex: RegExp): boolean => regex.test(userAgent);
 }
 
-export type isMobileResult = {
+export type TIsMobileResult = {
   apple: {
     phone: boolean;
     ipod: boolean;
@@ -70,10 +70,10 @@ export type isMobileResult = {
   any: boolean;
 };
 
-export type IsMobileParameter = UserAgent | Navigator;
+export type TIsMobileParameter = TUserAgent | TNavigator;
 
-export default function isMobile(param?: IsMobileParameter): isMobileResult {
-  let nav: Navigator = {
+export default function isMobile(param?: TIsMobileParameter): TIsMobileResult {
+  let nav: TNavigator = {
     userAgent: '',
     platform: '',
     maxTouchPoints: 0,
@@ -114,7 +114,7 @@ export default function isMobile(param?: IsMobileParameter): isMobileResult {
 
   const match = createMatch(userAgent);
 
-  const result: isMobileResult = {
+  const result: TIsMobileResult = {
     apple: {
       phone: match(appleIphone) && !match(windowsPhone),
       ipod: match(appleIpod),

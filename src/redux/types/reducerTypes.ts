@@ -1,4 +1,4 @@
-export type InfoStateType = {
+export type TInfoStateType = {
   isMobile?: boolean;
   isSmallScreen?: boolean;
   theme: string | undefined | null;

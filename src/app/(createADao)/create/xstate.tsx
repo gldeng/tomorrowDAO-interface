@@ -4,18 +4,12 @@ import GovernanceModel from './component/GovernanceModel';
 import ContractsAndFiles from './component/ContractsAndFiles';
 import HighCouncil from './component/HighCouncil';
 
-export type Event = { type: 'NEXT' } | { type: 'PREVIOUS' };
-
-export type View = {
+export type TView = {
   Component: React.ReactNode;
   step: number;
 };
 
-export type Context = {
-  currentView: View;
-};
-
-export type State = {
+export type TState = {
   states: {
     basicDetails: StateNode;
     governanceModel: StateNode;
@@ -24,7 +18,7 @@ export type State = {
   };
 };
 
-export const mapNameToView: Record<string, View> = {
+export const mapNameToView: Record<string, TView> = {
   basicDetails: {
     Component: <BasicDetails />,
     step: 0,
@@ -49,7 +43,7 @@ const initialStateName = 'basicDetails';
 const formMachineConfig = {
   types: {} as {
     context: {
-      currentView: View;
+      currentView: TView;
     };
   },
   id: 'createState',

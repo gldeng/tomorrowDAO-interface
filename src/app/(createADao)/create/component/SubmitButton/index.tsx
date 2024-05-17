@@ -46,7 +46,7 @@ const SubmitButton = forwardRef<ISubmitRef, ISubmitButtonProps>(
         open: false,
       });
       onConfirm?.();
-    }, []);
+    }, [onConfirm]);
 
     useImperativeHandle(ref, () => ({
       setResultModalConfig,
