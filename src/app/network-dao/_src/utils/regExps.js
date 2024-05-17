@@ -7,7 +7,7 @@
  * @Description: file content
  */
 // todo: make the reg allow the format like 0.
-export const regPos = /^\d+(\.\d*)?$/; // 非负浮点数, allow 0.
+export const regPos = /^\d+(\.\d*)?$/;
 
 // export const regBuyTooManyResource = /must be 0/;
 export const regBuyTooManyResource = /InvalidValueException/;

@@ -102,7 +102,6 @@ export default class AelfBridgeCheck {
       });
       return accountInfo;
     };
-    // 钱包APP目前没有切换钱包的功能
     aelfInstanceByBridge.logout = (param, callback) => {
       accountInfo = null;
       callback();

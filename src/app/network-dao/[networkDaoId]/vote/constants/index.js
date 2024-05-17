@@ -54,9 +54,6 @@ const myVoteStatistData = {
     title: "Total Votes",
     tooltip: MY_VOTE_DATA_TIP,
   },
-  // myVoteProfit: {
-  //   title: `投票收益(${LOWER_SYMBOL})`
-  // },
   withdrawableVotesAmount: {
     title: "Redeemable Votes",
   },

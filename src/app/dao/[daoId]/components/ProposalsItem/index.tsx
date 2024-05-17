@@ -90,6 +90,7 @@ export default function ProposalsItem(props: { data: IProposalsItem }) {
             </Typography.Title>
           </div>
           <div className="vote-dis">
+            {/* todo: deal 1t1v 1a1v */}
             {data.votesAmount < data.minimalVoteThreshold ? (
               <>
                 <Image width={12} height={12} src={WarningGrayIcon} alt=""></Image>

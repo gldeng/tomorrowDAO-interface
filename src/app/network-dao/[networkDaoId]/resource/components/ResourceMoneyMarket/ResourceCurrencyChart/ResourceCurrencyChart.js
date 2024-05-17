@@ -170,7 +170,7 @@ class ResourceCurrencyChart extends PureComponent {
   }
 
   componentDidUpdate(prevProps, prevStates) {
-    // 时间维度
+    //
     if (prevStates.buttonIndex !== this.state.buttonIndex) {
       clearTimeout(this.getEchartDataTime);
       this.getEchartData();

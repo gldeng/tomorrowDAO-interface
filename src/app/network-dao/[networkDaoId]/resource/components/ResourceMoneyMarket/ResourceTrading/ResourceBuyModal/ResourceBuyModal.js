@@ -81,7 +81,7 @@ export default class ResourceBuyModal extends PureComponent {
         aelf.chain
           .getTxResult(transactionId)
           .then((txRes) => {
-            // todo: 没有将token合约的approve方法添加到白名单时，发交易在这里会出错
+            // todo:
             getStateJudgment(txRes.Status, transactionId);
             this.props.onRefresh();
             this.setState({
@@ -168,7 +168,6 @@ export default class ResourceBuyModal extends PureComponent {
   //         aelf.chain
   //           .getTxResult(transactionId)
   //           .then((txRes) => {
-  //             // todo: 没有将token合约的approve方法添加到白名单时，发交易在这里会出错
   //             getStateJudgment(txRes.Status, transactionId);
   //             this.props.onRefresh();
   //             this.setState({

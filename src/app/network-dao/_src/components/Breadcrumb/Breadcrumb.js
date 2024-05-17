@@ -23,13 +23,6 @@ const noBreadcrumb = (pathname) => {
 };
 
 const BREADCRUMB_NAME_MAP = {
-  // "/blocks": "区块列表",
-  // "/txs": "交易列表",
-  // "/txs/block": "区块交易",
-  // "/adresses": "地址",
-  // "/block": "区块信息",
-  // "/tx": "交易信息",
-  // "/address": "地址信息"
   "/blocks": "Block List",
   // "/unconfirmedBlocks": "Unconfirmed Block List",
   "/txs": "Transaction List",
@@ -153,7 +146,7 @@ class BrowserBreadcrumb extends Component {
     );
   }
 
-  // TODO: 如果没有收录，则不展示面包屑。
+  // TODO: 
   getExtraBreadcrumbItems(pathSnippets, reloadUrl) {
     return pathSnippets.map((item, index) => {
       if (index === 0) {

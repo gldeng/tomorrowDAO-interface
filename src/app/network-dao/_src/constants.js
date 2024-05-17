@@ -56,10 +56,6 @@ const RESOURCE_CURRENCY_CHART_FETCH_INTERVAL = 1000 * 60;
 const LONG_NOTIFI_TIME = 10; // s
 // todo: use the code as follows
 const TXSSTATUS = {
-  // NotExisted: '不存在',
-  // Pending: '交易中',
-  // Failed: '失败',
-  // Mined: '成功',
   NotExisted: "NotExisted",
   Pending: "Pending",
   Failed: "Failed",
@@ -67,10 +63,6 @@ const TXSSTATUS = {
 };
 
 const txStatusInUpperCase = {
-  // NotExisted: '不存在',
-  // Pending: '交易中',
-  // Failed: '失败',
-  // Mined: '成功',
   notExisted: "NOT_EXISTED",
   pending: "PENDING",
   failed: "FAILED",
@@ -125,7 +117,7 @@ const GET_NULL = "Cannot read property 'error' of null";
 const FEE_RATE = 0.005;
 const SHORTEST_LOCK_TIME = 90; // day
 
-// TODO 用户可选RPCSERVER
+// TODO 
 var RPCSERVER = DEFAUTRPCSERVER;
 
 // TODO: Why is this undefined?
@@ -416,7 +408,6 @@ const RESOURCE_DETAILS_COLUMN = [
   },
 ];
 
-// button 判断是否可点击 在数据上做判断操作
 
 export {
   ALL_BLOCKS_API_URL,

@@ -207,6 +207,7 @@ export default function MyInfo(props: TInfoTypes) {
               onClick={() => {
                 if (info?.availableUnStakeAmount === 0) {
                   message.info('Available to unstake is 0');
+                  setIsModalOpen(true);
                 } else {
                   setIsModalOpen(true);
                 }
@@ -229,7 +230,7 @@ export default function MyInfo(props: TInfoTypes) {
           {/* Claim Modal  */}
           <CommonModal
             open={isModalOpen}
-            title={<div className="text-center">Claim ELF on MainChain AELF</div>}
+            title={<div className="text-center">Claim {info?.symbol} on SideChain AELF</div>}
             destroyOnClose
             onCancel={() => {
               form.setFieldValue('unStakeAmount', 0);
@@ -245,7 +246,7 @@ export default function MyInfo(props: TInfoTypes) {
               <Form.Item<TFieldType>
                 label="Unstake Amount"
                 name="unstakeAmount"
-                tooltip="Currently, only one-time withdrawal of all unlocked ELF is supported."
+                tooltip="Currently, only one-time withdrawal of all unlocked token is supported."
               >
                 <InputNumber
                   className="w-full"
@@ -279,7 +280,7 @@ export default function MyInfo(props: TInfoTypes) {
             }}
             footer={null}
           >
-            <p>Currently, only one-time withdrawal of all unlocked ELF is supported.</p>
+            <p>Currently, only one-time withdrawal of all unlocked token is supported.</p>
             <Button
               className="mx-auto"
               type="primary"
@@ -302,7 +303,7 @@ export default function MyInfo(props: TInfoTypes) {
             <Image className="mx-auto block" width={56} height={56} src={SuccessGreenIcon} alt="" />
             <div className="text-center text-Primary-Text font-medium">
               <span className="text-[32px] mr-1">{form.getFieldValue('unstakeAmount')}</span>
-              <span>ELF</span>
+              <span>{info.symbol}</span>
             </div>
             <p className="text-center text-Neutral-Secondary-Text font-medium">
               Congratulations, transaction submitted successfully!
