@@ -276,7 +276,9 @@ export default function DeoDetails(props: IProps) {
             {/* < 1024 */}
             {isLG && tabKey === TabKey.MYINFO && (
               <>
-                <ExecutdProposals />
+                {walletInfo.address && (
+                  <ExecutdProposals daoId={daoId} address={walletInfo.address} />
+                )}
                 {walletInfo.address && <MyRecords daoId={daoId} isNetworkDAO={isNetworkDAO} />}
               </>
             )}
@@ -285,7 +287,9 @@ export default function DeoDetails(props: IProps) {
           {!isLG && (
             <div className="dao-detail-content-right">
               {rightContent}
-              <ExecutdProposals />
+              {walletInfo.address && (
+                <ExecutdProposals daoId={daoId} address={walletInfo.address} />
+              )}
               {walletInfo.address && <MyRecords daoId={daoId} isNetworkDAO={isNetworkDAO} />}
             </div>
           )}
