@@ -1,7 +1,7 @@
 /**
  * @file getResoruceConverter.js
  * @author zhouminghui
- * @description 获取资源权重与数量信息
+ * @description
 */
 
 import getResourceWeight from './getResourceWeight';

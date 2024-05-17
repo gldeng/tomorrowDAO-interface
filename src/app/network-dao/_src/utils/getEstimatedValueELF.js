@@ -1,7 +1,6 @@
 /**
  * @file getPredictedValue
  * @author zhouminghui
- * 获取资源所等值的ELF数量
  */
 
 import GetAmountToPayFromReturn from './GetAmountToPayFromReturn';

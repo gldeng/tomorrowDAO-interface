@@ -1,7 +1,6 @@
 /**
  * @file getContractAddress.js
  * @author zhouminghui
- * 获取查询使用的公共钱包与合约地址
  */
 
 import AElf from 'aelf-sdk';

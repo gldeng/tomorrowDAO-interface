@@ -15,7 +15,6 @@ import walletInstance from "@redux/common/wallet";
 export default class ResourceMoneyMarket extends PureComponent {
   constructor(props) {
     super(props);
-    // 这个组件作为一个集合可以用作组件之间数据交互
     this.state = {
       currentResourceSymbol: props.account.resourceTokens[0].symbol,
       currentWallet: null,
@@ -33,7 +32,7 @@ export default class ResourceMoneyMarket extends PureComponent {
   }
 
   getMenuClick(symbol) {
-    // TODO 切换所有模块数据源  写一个状态判断用来判断当前是哪一个数据
+    // TODO
     if (this.state.currentResourceSymbol === symbol) {
       return;
     }

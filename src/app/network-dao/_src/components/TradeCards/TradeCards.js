@@ -64,27 +64,7 @@ export default class TradeCards extends Component {
                 BTC
               </span>
             </li>
-            {/* <li className="card-left-desc">
-                        开盘价: <span>{tick.open} BTC</span>
-                        </li>
-                        <li className="card-left-desc">
-                        24H累计成交数: <span>{tick.count}</span>
-                        </li> */}
           </ul>
-          {/* <ul className="card-right">
-                        <li>
-                        24H 最高 <span>{tick.high} BTC</span>
-                        </li>
-                        <li>
-                        24H 最低 <span>{tick.low} BTC</span>
-                        </li>
-                        <li>
-                        当前价: <span>{tick.open} BTC</span>
-                        </li>
-                        <li>
-                        24H累计成交额: <span>{tick.vol.toFixed(6)} BTC</span>
-                        </li>
-                    </ul> */}
         </div>
       </div>
     );

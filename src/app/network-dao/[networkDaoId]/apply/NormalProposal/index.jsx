@@ -361,7 +361,6 @@ const NormalProposal = (props) => {
     contractMethod: false,
   });
 
-  // 合约地址变了，方法列表也要变
   const handleContractAddressChange = async (address) => {
     let list = [];
     try {
@@ -445,7 +444,6 @@ const NormalProposal = (props) => {
     }
   }, []);
 
-  // 方法变了
   const handleMethodChange = (method) => {
     setMethods({
       ...methods,
@@ -484,18 +482,8 @@ const NormalProposal = (props) => {
       let parsed;
       if (paramsInputMethod === "format") {
         parsed = parsedParams(inputType, leftParams);
-        // 校验不好使，对于integer string类型不好操作
-        // const error = inputType.verify(parsedParamsWithoutSpecial(inputType, leftParams));
-        // if (error) {
-        //   throw new Error(`Contract params ${error}`);
-        // }
       } else {
         parsed = parseJSON(leftParams.realSpecialPlain);
-        // 无法verify
-        // const error = inputType.verify(parsedParamsWithoutSpecial(inputType, parsed));
-        // if (error) {
-        //   throw new Error(`Contract params ${error}`);
-        // }
       }
       let decoded;
       if (Array.isArray(parsed)) {
@@ -505,8 +493,6 @@ const NormalProposal = (props) => {
       } else {
         decoded = method.packInput(parsed);
       }
-      // decoded decode 过的
-      // origin 原文
       submit({
         expiredTime: formExpiredTime,
         contractMethodName: formContractMethod,

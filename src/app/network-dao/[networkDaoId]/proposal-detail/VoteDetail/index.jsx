@@ -35,6 +35,7 @@ import "./index.css";
 import { removePrefixOrSuffix } from "@common/utils";
 import TableLayer from "@components/TableLayer/TableLayer";
 import addressFormat from "@utils/addressFormat";
+import { mainExplorer } from "config";
 
 const { Title } = Typography;
 const { viewer } = config;
@@ -66,7 +67,7 @@ const listColumn = [
     width: 300,
     render: (voter) => (
       <a
-        href={`${viewer.addressUrl}/${addressFormat(voter)}`}
+        href={`${mainExplorer}/address/${addressFormat(voter)}`}
         target="_blank"
         rel="noopener noreferrer"
       >
@@ -82,7 +83,7 @@ const listColumn = [
     width: 300,
     render: (txId) => (
       <a
-        href={`${viewer.txUrl}/${txId}`}
+        href={`${mainExplorer}/tx/${txId}`}
         target="_blank"
         rel="noopener noreferrer"
       >

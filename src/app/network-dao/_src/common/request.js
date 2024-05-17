@@ -1,5 +1,5 @@
 /**
- * @file 请求方法
+ * @file
  * @author atom-yang
  */
 import axios from 'axios';
@@ -25,11 +25,10 @@ const purify = (rawData) => (needPurify(rawData)
   : rawData);
 
 /**
- * @desc 处理xhr status 200,但是数据status不为200的情况
+ * @desc
  * @param response
  */
 const handleInvalidError = ({ data }) => {
-  // 处理response数据的errno
   if (+data.code === 0) {
     return data.data;
   }
@@ -38,11 +37,11 @@ const handleInvalidError = ({ data }) => {
 };
 
 /**
- * @desc 处理xhr status不为200的情况
- * @param {Error} error 错误信息
+ * @desc 
+ * @param {Error} error
  */
 const handleRequestError = (error) => {
-  // todo: 处理错误情况
+  // todo: 
   throw error;
 };
 
@@ -67,10 +66,9 @@ const makeRequestConfig = (url, params, { headers = {}, ...extraOptions }) => {
 };
 
 /**
- * S为参数类型，T为API返回值data类型
- * @param {string} url 地址
- * @param {Object} params 参数
- * @param {Object} extraOptions 额外的参数
+ * @param {string} url 
+ * @param {Object} params 
+ * @param {Object} extraOptions 
  */
 export const request = (url, params, extraOptions = {}) => http.request(makeRequestConfig(url, params, extraOptions))
   .then((res) => handleInvalidError(res), handleRequestError);

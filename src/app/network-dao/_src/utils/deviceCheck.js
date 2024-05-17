@@ -6,7 +6,6 @@
 let isPhoneChecked = false;
 let phoneCheckResult = null;
 export const isPhoneCheck = () => {
-  // 判断是否手机端访问
   if (!isPhoneChecked) {
     const userAgentInfo = navigator.userAgent.toLowerCase();
     const agents = [
@@ -27,7 +26,6 @@ export const isPhoneCheck = () => {
 let isIPhoneChecked = false;
 let iPhoneCheckResult = null;
 export const isIPhone = () => {
-  // 判断是否手机端访问
   if (!isIPhoneChecked) {
     const userAgentInfo = navigator.userAgent.toLowerCase();
     const agents = ["iphone", "ipad", "ipod"];

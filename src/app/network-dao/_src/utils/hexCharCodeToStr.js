@@ -1,7 +1,6 @@
 /**
  * @file hexCharCodeToStr.js
  * @author zhouminghui
- * 16进制转字符
  */
 
 export default function hexCharCodeToStr(hexCharCodeStr) {

@@ -1,8 +1,6 @@
 /**
  * @file getPredictedValue
  * @author zhouminghui
- * 获取ELF所能购买的资源数量
- * TODO:未计算手续费
  *
  * @author yangpeiyang
  * In fact: sell resource

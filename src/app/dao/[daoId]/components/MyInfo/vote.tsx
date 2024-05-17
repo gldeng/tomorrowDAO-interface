@@ -185,14 +185,14 @@ function Vote(props: TVoteTypes) {
       >
         <div className="text-center color-text-Primary-Text font-medium">
           <span className="text-[32px] mr-1">{elfBalance}</span>
-          <span>ELF</span>
+          <span>{symbol}</span>
         </div>
         <div className="text-center text-Neutral-Secondary-Text">Available to unstake</div>
         <Form form={form} layout="vertical" variant="filled" onFinish={() => handlerVote()}>
           <Form.Item<TFieldType>
             label="Stake Amount"
             name="stakeAmount"
-            tooltip="Currently, only one-time withdrawal of all unlocked ELF is supported."
+            tooltip="Currently, only one-time withdrawal of all unlocked token is supported."
             rules={[{ required: true, message: 'Please input stake Amount!' }]}
           >
             <InputNumber

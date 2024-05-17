@@ -82,7 +82,6 @@ const CreateDaoPage = () => {
         type: 'error',
         content: 'No registration form',
       });
-      // send({ type: 'NEXT' });
     }
   };
   const handleSkip = () => {
@@ -138,12 +137,21 @@ const CreateDaoPage = () => {
             };
           }) ?? [];
         let governanceConfig = stepForm[StepEnum.step1].submitedRes;
-        if (governanceConfig && daoCreateToken) {
+        // governanceToken is exist
+        if (governanceConfig && daoCreateToken && metadata.governanceToken) {
           const minimalVoteThreshold = governanceConfig.minimalVoteThreshold;
           governanceConfig = cloneDeep(governanceConfig);
           governanceConfig.minimalVoteThreshold = Number(
             timesDecimals(minimalVoteThreshold, daoCreateToken.decimals),
           );
+        }
+        if (governanceConfig) {
+          governanceConfig = {
+            ...governanceConfig,
+            minimalApproveThreshold: governanceConfig.minimalApproveThreshold * 100,
+            maximalRejectionThreshold: governanceConfig.maximalRejectionThreshold * 100,
+            maximalAbstentionThreshold: governanceConfig.maximalAbstentionThreshold * 100,
+          };
         }
         const params: any = {
           ...metadata,
@@ -155,24 +163,38 @@ const CreateDaoPage = () => {
             ? isNetworkDaoLocal === 'true'
             : metadata.metadata.name === NetworkName,
         };
+        // highCouncil not skip
         if (!isSkipHighCouncil.current) {
-          let highCouncilInput = stepForm[StepEnum.step2].submitedRes;
-          if (highCouncilInput && daoCreateToken?.decimals) {
-            const stakingAmount = highCouncilInput.highCouncilConfig.stakingAmount;
+          let highCouncilForm = stepForm[StepEnum.step2].submitedRes;
+          if (highCouncilForm && daoCreateToken?.decimals) {
+            const stakingAmount = highCouncilForm.highCouncilConfig.stakingAmount;
             const minimalVoteThreshold =
-              highCouncilInput.governanceSchemeThreshold.minimalVoteThreshold;
+              highCouncilForm.governanceSchemeThreshold.minimalVoteThreshold;
             const stakingAmountDecimals = Number(
               timesDecimals(stakingAmount, daoCreateToken.decimals),
             );
-            highCouncilInput = cloneDeep(highCouncilInput);
-            highCouncilInput.highCouncilConfig.stakingAmount = stakingAmountDecimals;
-            highCouncilInput.governanceSchemeThreshold.minimalVoteThreshold = Number(
-              timesDecimals(minimalVoteThreshold, daoCreateToken.decimals),
-            );
+            highCouncilForm = {
+              highCouncilConfig: {
+                ...highCouncilForm.highCouncilConfig,
+                stakingAmount: stakingAmountDecimals,
+              },
+              governanceSchemeThreshold: {
+                ...highCouncilForm.governanceSchemeThreshold,
+                minimalVoteThreshold: Number(
+                  timesDecimals(minimalVoteThreshold, daoCreateToken.decimals),
+                ),
+                minimalApproveThreshold:
+                  highCouncilForm.governanceSchemeThreshold.minimalApproveThreshold * 100,
+                maximalRejectionThreshold:
+                  highCouncilForm.governanceSchemeThreshold.maximalRejectionThreshold * 100,
+                maximalAbstentionThreshold:
+                  highCouncilForm.governanceSchemeThreshold.maximalAbstentionThreshold * 100,
+              },
+            };
           }
 
           params.highCouncilInput = {
-            ...(highCouncilInput ?? {}),
+            ...(highCouncilForm ?? {}),
           };
         }
         emitLoading(true, 'The transaction is being processed...');
@@ -239,8 +261,6 @@ const CreateDaoPage = () => {
   const isLogin = loginState === WebLoginState.logined;
   const isFillGovernanceToken =
     stepsFormMapRef.current?.stepForm[StepEnum.step0]?.submitedRes?.governanceToken;
-
-  console.log('currentStepString', currentStepString);
 
   return isLogin ? (
     <div className="px-4 lg:px-8">

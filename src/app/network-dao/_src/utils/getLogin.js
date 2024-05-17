@@ -34,8 +34,6 @@ function nightELFLogin(useLock) {
   }
   getLoginLock = true;
 
-  // 钱包APP，取消登录没有返回信息，先简单处理一下
-  // 浏览器插件，直接插掉，也没有返回信息
   setTimeout(() => {
     getLoginLock = false;
   }, isPhone ? 5000 : 1500);
@@ -87,7 +85,6 @@ function nightELFLogin(useLock) {
 //     }
 //     getLoginBridgeLock = true;
 //
-//     // 钱包APP，取消登录没有返回信息，先简单处理一下
 //     setTimeout(() => {
 //         getLoginBridgeLock = false;
 //     }, 1000);

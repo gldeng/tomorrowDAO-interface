@@ -239,7 +239,7 @@ class ResourceBuy extends Component {
     )
       .then((result) => {
         const regNeg =
-          /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/; // 负浮点数
+          /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/; //
         if (regPos.test(result) || regNeg.test(result)) {
           // todo: the code of rounding off maybe wrong so I comment it.
           const amountToPay = result;

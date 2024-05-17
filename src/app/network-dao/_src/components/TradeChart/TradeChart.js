@@ -78,7 +78,7 @@ export default class TradeChart extends React.Component {
         data,
         loading: false,
       });
-    } catch (e) {}
+    } catch (e) { }
   }
 
   getOption() {
@@ -96,16 +96,15 @@ export default class TradeChart extends React.Component {
       title: [
         {
           left: 'center',
-          text: '1小时交易记录',
+          text: '1 hour transaction record',
         },
       ],
       tooltip: {
         trigger: 'axis',
         formatter: (params) => {
           console.log(params);
-          return `成交量: ${params.data[0].data[0].account} <br /> 成交方向: ${
-            params.data[0].data[0].direction
-          }`;
+          return `Volume: ${params.data[0].data[0].account} <br /> Transaction direction: ${params.data[0].data[0].direction
+            }`;
         },
       },
       xAxis: [
@@ -120,7 +119,7 @@ export default class TradeChart extends React.Component {
       ],
       series: [
         {
-          name: '成交量',
+          name: 'Volume',
           type: 'line',
           showSymbol: false,
           smooth: true,

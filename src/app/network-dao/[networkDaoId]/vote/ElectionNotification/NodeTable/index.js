@@ -556,24 +556,6 @@ class NodeTable extends PureComponent {
       <section className={`${clsPrefix}`}>
         <h2 className={`${clsPrefix}-header table-card-header`}>
           Node Table
-          {/* <span className='node-color-intro-group'>
-              <span className='node-color-intro-item'>BP节点</span>
-              <span className='node-color-intro-item'>候选节点</span>
-            </span> */}
-          {/* <Search
-              placeholder='输入节点名称'
-              onSearch={value => console.log(value)}
-            /> */}
-          {/* <Button
-            type='primary'
-            onClick={() => {
-              this.props.changeVoteState({
-                shouldRefreshNodeTable: true
-              });
-            }}
-          >
-            Refresh
-          </Button> */}
         </h2>
         <TableLayer className="node-table-wrapper">
           <Table

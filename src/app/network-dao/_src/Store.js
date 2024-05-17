@@ -105,5 +105,3 @@ export const AppIncrStore = types.model('AppIncrStore', {
 // @inject("appIncrStore")
 // @observer
 // export default class HomePage extends Component {
-// // 引用 const store = this.props.appIncrStore;
-// // 写入 store.blockList.addBlock(chainBlocks); // 如何声明见40行

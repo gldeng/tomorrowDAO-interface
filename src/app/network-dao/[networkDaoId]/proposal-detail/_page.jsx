@@ -146,7 +146,6 @@ Extra.propTypes = {
 const ProposalDetail = () => {
   const searchParams = useSearchParams();
   const proposalId = searchParams.get('proposalId')
-  console.log('proposalId', proposalId)
   const navigate = useRouter();
   const location = window.location;
   const common = useSelector((state) => state.common);

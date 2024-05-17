@@ -34,7 +34,6 @@ export const checkWalletIsExist = () => async (dispatch) => {
   }
 };
 
-// 登录
 export const LOG_IN_ACTIONS = arrayToMap([
   "LOG_IN_START",
   "LOG_IN_SUCCESS",
@@ -76,7 +75,6 @@ export const logIn = () => async (dispatch) => {
   }
 };
 
-// 登出
 export const LOG_OUT_ACTIONS = arrayToMap([
   "LOG_OUT_START",
   "LOG_OUT_SUCCESS",

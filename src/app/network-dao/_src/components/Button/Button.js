@@ -1,7 +1,6 @@
 /**
  * @file Button
  * @author zhouminghui
- * 可复用按钮
 */
 
 import React, { PureComponent } from 'react';
