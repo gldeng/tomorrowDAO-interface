@@ -10,7 +10,7 @@ import { Row, Col, Spin, Button, Icon, message } from "antd";
 import { SYMBOL, ELF_DECIMAL } from "@src/constants";
 import { thousandsCommaWithDecimal } from "@utils/formater";
 import { APPNAME, resourceTokens } from "@config/config";
-import LinkReplaceLastPathName from "components/LinkReplaceLastPathName";
+import LinkNetworkDao from "components/LinkNetworkDao";
 import {
   WalletOutlined,
   SyncOutlined,
@@ -195,9 +195,9 @@ export default class ResourceAElfWallet extends PureComponent {
                   </div>
                   <div>
                     {wallet.address !== "-" && (
-                      <LinkReplaceLastPathName href={`/resource-detail/${wallet.address}`}>
+                      <LinkNetworkDao href={`/resource-detail/${wallet.address}`}>
                         Transaction Details
-                      </LinkReplaceLastPathName>
+                      </LinkNetworkDao>
                     )}
                   </div>
                 </Col>
@@ -208,9 +208,9 @@ export default class ResourceAElfWallet extends PureComponent {
                   {addressFormat(wallet.address)}
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   {wallet.address !== "-" && (
-                    <LinkReplaceLastPathName href={`/resource-detail/${wallet.address}`}>
+                    <LinkNetworkDao href={`/resource-detail/${wallet.address}`}>
                       Transaction Details
-                    </LinkReplaceLastPathName>
+                    </LinkNetworkDao>
                   )}
                 </Col>
               )}
