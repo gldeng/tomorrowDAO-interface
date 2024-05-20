@@ -32,6 +32,7 @@ import { getTokenDecimal } from "@utils/utils";
 import { WebLoginInstance } from "@utils/webLogin";
 import { onlyOkModal } from "@components/SimpleModal/index.tsx";
 import { fetchAllCandidateInfo } from "../utils";
+import useNetworkDaoRouter from "hooks/useNetworkDaoRouter";
 
 const electionNotifiStatisData = {
   termEndTime: {
@@ -323,6 +324,9 @@ class ElectionNotification extends PureComponent {
               args: {
                 value: currentWallet?.address,
               },
+              options: {
+                chainId: "AELF"
+              }
             });
           }
           return res;
@@ -382,7 +386,6 @@ class ElectionNotification extends PureComponent {
         });
         return;
       }
-      console.log('electionContractFromExt', electionContractFromExt.address)
       WebLoginInstance.get()
         .callContract({
           contractAddress: electionContractFromExt.address,
@@ -393,7 +396,6 @@ class ElectionNotification extends PureComponent {
           }
         })
         .then((res) => {
-          console.log('AnnounceElection', res);
           if (res.error) {
             message.error(res.error.message || res.errorMessage.message);
             return;
@@ -416,14 +418,14 @@ class ElectionNotification extends PureComponent {
               judgeCurrentUserIsCandidate();
               if (status === txStatusInUpperCase.mined) {
                 this.props.navigate(
-                  `/vote/apply/keyin?pubkey=${currentWallet?.publicKey}`
+                  `/vote/apply?pubkey=${currentWallet?.publicKey}`
                 );
               }
             } catch (e) {
               console.log(e);
               message.error(e.message || e.Error || "Network error");
             }
-          }, 5000);
+          }, 4000);
         })
         .catch((err) => {
           console.error(err);
@@ -507,4 +509,9 @@ const mapStateToProps = (state) => {
     currentWallet,
   };
 };
-export default connect(mapStateToProps)((ElectionNotification));
+const ElectionNotificationConnect = connect(mapStateToProps)((ElectionNotification));
+
+export default function WrapElectionNotification(props) {
+  const router = useNetworkDaoRouter()
+  return <ElectionNotificationConnect {...props} navigate={router.push} />
+}

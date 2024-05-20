@@ -25,12 +25,12 @@ const handleLimit = (limit: string) => {
   const unit_K = 1 * 1024;
   const unit_M = unit_K * 1024;
 
-  if (limit.includes('M')) {
-    return +limit.replace('M', '') * unit_M;
+  if (limit.includes('MB')) {
+    return +limit.replace('MB', '') * unit_M;
   }
 
-  if (limit.includes('K')) {
-    return +limit.replace('K', '') * unit_K;
+  if (limit.includes('KB')) {
+    return +limit.replace('KB', '') * unit_K;
   }
 
   return 10 * unit_M;
@@ -40,7 +40,7 @@ const FUpload: React.FC<IFUploadProps> = ({
   needCheckImgSize = false,
   fileList,
   maxFileCount,
-  fileLimit = '1M',
+  fileLimit = '1 MB',
   fileNameLengthLimit,
   onChange,
   tips,
@@ -92,7 +92,10 @@ const FUpload: React.FC<IFUploadProps> = ({
 
     const isLteLimit = file.size <= handleLimit(fileLimit);
     if (!isLteLimit) {
-      message.error(`File too large. Please upload an File no larger than ${fileLimit}`);
+      const contentType = needCheckImgSize ? 'Image' : 'File';
+      message.error(
+        `${contentType} too large. Please upload an ${contentType} no larger than ${fileLimit}`,
+      );
     }
     result = isLteLimit;
 

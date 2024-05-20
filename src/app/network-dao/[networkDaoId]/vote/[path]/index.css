@@ -6,6 +6,53 @@
  * @LastEditTime: 2019-12-10 00:17:33
  * @Description: file content
  */
+.claim-dividend-modal {
+  .antExplorer-modal-content {
+    border-radius: 8px;
+
+    .antExplorer-modal-body {
+      padding: 0;
+
+      .antExplorer-modal-confirm-title {
+        display: flex;
+        padding: 17px 16px;
+        justify-content: center;
+        align-items: center;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 22px;
+        border-bottom: 1px solid #e6e6e6;
+      }
+
+      .antExplorer-modal-confirm-content {
+        margin-top: 0;
+        padding: 24px 16px 16px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .antExplorer-modal-confirm-btns {
+        margin-top: 8px;
+        margin-bottom: 24px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .antExplorer-btn-default {
+          display: none;
+        }
+
+        .antExplorer-btn-primary {
+          margin-left: 0;
+          width: 214px;
+          height: 40px;
+        }
+      }
+    }
+  }
+}
+
 .card-container {
   margin-bottom: 20px;
   padding: 20px 30px;
@@ -358,7 +405,6 @@
 
 .plugin-lock-modal .antExplorer-form .antExplorer-form-item .antExplorer-form-item-label label {
   color: #999;
-  margin-left: 20px;
 }
 
 .plugin-lock-modal .antExplorer-form .antExplorer-form-item .form-item-value,
@@ -397,6 +443,9 @@
   width: 78px;
   height: 26px;
   border-radius: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .table-btn.antExplorer-btn-primary[disabled] {
@@ -550,7 +599,6 @@
 .vote-confirm-modal .antExplorer-form .antExplorer-form-item .antExplorer-form-item-label label,
 .plugin-lock-modal .antExplorer-form .antExplorer-form-item .antExplorer-form-item-label label {
   color: #999;
-  margin-left: 20px;
 }
 
 .vote-modal .antExplorer-form .antExplorer-form-item .form-item-value,

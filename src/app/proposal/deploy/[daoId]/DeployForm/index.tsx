@@ -1,6 +1,6 @@
 'use client';
 
-import { Form } from 'antd';
+import { Form, message as antdMessage } from 'antd';
 import { memo, useState } from 'react';
 import useNetworkDaoRouter from 'hooks/useNetworkDaoRouter';
 import ProposalType from './ProposalType';
@@ -19,6 +19,7 @@ import { NetworkDaoProposalOnChain } from 'config';
 import { useRouter } from 'next/navigation';
 import useIsNetworkDao from 'hooks/useIsNetworkDao';
 import formValidateScrollFirstError from 'utils/formValidateScrollFirstError';
+// import { useWalletSyncCompleted } from 'hooks/useWalletSyncCompleted';
 
 interface IGovernanceModelProps {
   daoId: string;
@@ -40,6 +41,7 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
   const { isNetWorkDao, networkDaoId } = useIsNetworkDao();
   const nextRouter = useRouter();
   const [resultModalConfig, setResultModalConfig] = useState(INIT_RESULT_MODAL_CONFIG);
+  // const { getAccountInfoSync } = useWalletSyncCompleted();
   const { daoId } = props;
   const openErrorModal = (
     primaryContent = 'Failed to Create the proposal',
@@ -72,6 +74,8 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
   };
   const handleSubmit = async () => {
     try {
+      // const mainAddress = await getAccountInfoSync();
+      // if (!mainAddress) return;
       if (!daoId) {
         openErrorModal();
       }
@@ -123,6 +127,10 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
             {
               children: 'OK',
               onClick: () => {
+                antdMessage.open({
+                  type: 'success',
+                  content: 'created successfully, it will appear in the list in a few minutes',
+                });
                 nextRouter.push(
                   isNetWorkDao ? `/network-dao/${networkDaoId}/proposal-list` : `/dao/${daoId}`,
                 );
@@ -141,6 +149,13 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
         },
       });
     } catch (err) {
+      if (typeof err === 'string') {
+        antdMessage.open({
+          type: 'error',
+          content: 'Please check your internet connection and try again. ',
+        });
+        return;
+      }
       const error = err as IFormValidateError | IContractError;
       // form Error
       if ('errorFields' in error) {

@@ -113,6 +113,7 @@ export enum ProposalStatusString {
   Abstained = 'Abstained',
   Expired = 'Expired',
   Executed = 'Executed',
+  PendingVote = 'PendingVote',
   'Subject to Veto' = 'BelowThreshold',
   Challenged = 'Challenged',
   'Being Vetoed' = 'Vetoed',

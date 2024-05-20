@@ -225,7 +225,7 @@ export default function BasicDetails() {
                 setShowSymbol(checked);
               }}
             />
-            <span className="token-title">Governance token</span>
+            <span className="token-title">Governance Token</span>
             <Tooltip
               placement="top"
               title={
@@ -240,11 +240,9 @@ export default function BasicDetails() {
                   </div>
                   <div>
                     2. If a governance token is not used, only one type of proposal voting mechanism
-                    {/* eslint-disable-next-line react/no-unescaped-entities */}
-                    is supported: "1 address = 1 vote". With the governance token enabled, DAOs can
-                    {/* eslint-disable-next-line react/no-unescaped-entities */}
-                    support an additional mechanism: "1 token = 1 vote". You can choose the voting
-                    mechanism when you create proposals.
+                    is supported: &quot;1 address = 1 vote&quot;. With the governance token enabled,
+                    DAOs can support an additional mechanism: &quot;1 token = 1 vote&quot;. You can
+                    choose the voting mechanism when you create proposals.
                   </div>
                 </div>
               }
