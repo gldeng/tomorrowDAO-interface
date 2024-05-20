@@ -104,13 +104,13 @@ const VoteResultTable = (props: IVoteResultTableProps) => {
           <Search
             inputSize="small"
             onClear={() => {
-              console.log(1);
+              //
             }}
-            onSelectChange={(obj) => {
-              console.log(obj);
+            onSelectChange={() => {
+              //
             }}
             onPressEnter={() => {
-              console.log('enter');
+              //
             }}
           />
         </div>

@@ -14,7 +14,6 @@ export const daoCreateSlice = createSlice({
   initialState,
   reducers: {
     setToken(state, action) {
-      console.log(12366666666, action);
       state.token = action.payload;
     },
   },

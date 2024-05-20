@@ -31,6 +31,27 @@ export default function ProposalsItem(props: { data: IProposalsItem }) {
 
   const is1t1v = data.voteMechanismName === EVoteMechanismNameType.TokenBallot;
 
+  const voteText = is1t1v ? 'votes' : 'voters';
+
+  const renderVoteInfo = (currentVote: number, requiredVote: number) => {
+    return (
+      <>
+        {currentVote < requiredVote ? (
+          <>
+            <Image width={12} height={12} src={WarningGrayIcon} alt=""></Image>
+            <div>
+              Insufficient {voteText}: {currentVote}/{requiredVote} (min required)
+            </div>
+          </>
+        ) : (
+          <>
+            <Image width={12} height={12} src={CheckedIcon} alt=""></Image>
+            Minimum {voteText} requirement met: {currentVote}/{requiredVote}
+          </>
+        )}
+      </>
+    );
+  };
   return (
     <div className="proposal-item">
       <div>
@@ -87,26 +108,14 @@ export default function ProposalsItem(props: { data: IProposalsItem }) {
         <div className="vote-top">
           <div className="h-[22px] vote-top-title">
             <Typography.Title fontWeight={FontWeightEnum.Regular} level={7}>
-              Total {data.votesAmount} votes
+              Total {is1t1v ? data.votesAmount : data.voterCount} {voteText}
             </Typography.Title>
           </div>
           <div className="vote-dis">
-            {/* todo: deal 1t1v 1a1v */}
-            {data.votesAmount < data.minimalVoteThreshold ? (
-              <>
-                <Image width={12} height={12} src={WarningGrayIcon} alt=""></Image>
-                <div>
-                  Insufficient votes: {data.votesAmount}/{data.minimalVoteThreshold} (min required)
-                </div>
-              </>
-            ) : (
-              <>
-                <Image width={12} height={12} src={CheckedIcon} alt=""></Image>
-                Minimum voting requirement met: {data.votesAmount}/{data.minimalVoteThreshold}
-              </>
-            )}
+            {is1t1v
+              ? renderVoteInfo(data.votesAmount, data.minimalVoteThreshold)
+              : renderVoteInfo(data.voterCount, data.minimalRequiredThreshold)}
           </div>
-          {/* )} */}
         </div>
         <div>
           <CustomProgress data={data} />

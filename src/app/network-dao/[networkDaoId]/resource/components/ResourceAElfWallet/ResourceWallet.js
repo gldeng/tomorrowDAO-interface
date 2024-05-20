@@ -20,7 +20,7 @@ import "./ResourceAElfWallet.css";
 import addressFormat from "@utils/addressFormat";
 import { isPhoneCheck } from "@utils/deviceCheck";
 import { isActivityBrowser } from "@utils/isWebView";
-import LinkReplaceLastPathName from "components/LinkReplaceLastPathName";
+import LinkNetworkDao from "components/LinkNetworkDao";
 
 const ResourceWallet = React.forwardRef(
   (
@@ -160,9 +160,9 @@ const ResourceWallet = React.forwardRef(
                   </div>
                   <div>
                     {wallet.address !== "-" && (
-                      <LinkReplaceLastPathName href={`/resource-detail/${wallet.address}`}>
+                      <LinkNetworkDao href={`/resource-detail/${wallet.address}`}>
                         Transaction Details
-                      </LinkReplaceLastPathName>
+                      </LinkNetworkDao>
                     )}
                   </div>
                 </Col>
@@ -173,9 +173,9 @@ const ResourceWallet = React.forwardRef(
                   {addressFormat(wallet.address)}
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   {wallet.address !== "-" && (
-                    <LinkReplaceLastPathName href={`/resource-detail/${wallet.address}`}>
+                    <LinkNetworkDao href={`/resource-detail/${wallet.address}`}>
                       Transaction Details
-                    </LinkReplaceLastPathName>
+                    </LinkNetworkDao>
                   )}
                 </Col>
               )}

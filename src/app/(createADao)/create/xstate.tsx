@@ -62,8 +62,7 @@ const formMachineConfig = {
         NEXT: {
           target: 'governanceModel',
           actions: assign({
-            currentView: ({ context, event }, params) => {
-              console.log(context, event, params);
+            currentView: () => {
               return mapNameToView['governanceModel'];
             },
           }),
@@ -75,8 +74,7 @@ const formMachineConfig = {
         PREVIOUS: {
           target: 'basicDetails',
           actions: assign({
-            currentView: ({ context, event }, params) => {
-              console.log(context, event, params);
+            currentView: () => {
               return mapNameToView['basicDetails'];
             },
           }),
@@ -84,8 +82,7 @@ const formMachineConfig = {
         NEXT: {
           target: 'highCouncil',
           actions: assign({
-            currentView: ({ context, event }, params) => {
-              console.log(context, event, params);
+            currentView: () => {
               return mapNameToView['highCouncil'];
             },
           }),
@@ -97,8 +94,7 @@ const formMachineConfig = {
         PREVIOUS: {
           target: 'governanceModel',
           actions: assign({
-            currentView: ({ context, event }, params) => {
-              console.log(context, event, params);
+            currentView: () => {
               return mapNameToView['governanceModel'];
             },
           }),
@@ -106,8 +102,7 @@ const formMachineConfig = {
         NEXT: {
           target: 'contractsAndFiles',
           actions: assign({
-            currentView: ({ context, event }, params) => {
-              console.log(context, event, params);
+            currentView: () => {
               return mapNameToView['contractsAndFiles'];
             },
           }),
@@ -119,8 +114,7 @@ const formMachineConfig = {
         PREVIOUS: {
           target: 'highCouncil',
           actions: assign({
-            currentView: ({ context, event }, params) => {
-              console.log(context, event, params);
+            currentView: () => {
               return mapNameToView['highCouncil'];
             },
           }),

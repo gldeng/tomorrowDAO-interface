@@ -88,7 +88,7 @@ function Vote(props: TVoteTypes) {
       voteAmount:
         voteMechanismName === EVoteMechanismNameType.TokenBallot
           ? timesDecimals(form.getFieldValue('stakeAmount'), decimal || '8').toNumber()
-          : timesDecimals(1, decimal || '8').toNumber(),
+          : 1,
     };
     try {
       emitLoading(true, 'The vote is being processed...');

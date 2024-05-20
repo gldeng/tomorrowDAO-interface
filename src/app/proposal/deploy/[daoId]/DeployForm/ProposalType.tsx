@@ -7,9 +7,6 @@ import { proposalTypeList } from 'types';
 import useIsNetworkDao from 'hooks/useIsNetworkDao';
 import { NetworkDaoProposalOnChain } from 'config/net-work-dao';
 
-const defaultType = proposalTypeList[0].value;
-console.log('defaultType', defaultType, proposalTypeList);
-
 interface ProposalTypeProps {
   next?: () => void;
   className?: string;
