@@ -14,6 +14,13 @@ buildCommand.stdout.on('data', (data) => {
   }
 });
 
-buildCommand.on('error', (error) => {
-  console.error(`build error: ${error.message}`);
+buildCommand.stderr.on('data', (data) => {
+  console.error(`stderr: ${data}`);
+});
+
+buildCommand.on('close', (code) => {
+  console.log(`child process exited with code ${code}`);
+  if (code !== 0) {
+    process.exit(1);
+  }
 });

@@ -1,16 +1,16 @@
 'use client';
 
-import { Form, Card } from 'antd';
-import Filter from './components/Filter';
+import { Card } from 'antd';
+// import Filter from './components/Filter';
 import RecordTable from './components/Table';
 import './page.css';
 
 export default function MyRecord() {
-  const [form] = Form.useForm();
+  // const [form] = Form.useForm();
 
-  const handleSearch = () => {
-    console.log(form.getFieldsValue());
-  };
+  // const handleSearch = () => {
+  //   console.log(form.getFieldsValue());
+  // };
   return (
     <div className="myRecord w-full">
       <Card
@@ -18,7 +18,7 @@ export default function MyRecord() {
         title={
           <div className="py-6 block lg:flex justify-between items-center">
             <div className="mb-4 lg:m-0">My Votes</div>
-            <Filter form={form} onSearch={handleSearch} />
+            {/* <Filter form={form} onSearch={handleSearch} /> */}
           </div>
         }
         // extra={!isSM && <Filter form={form} onSearch={handleSearch} />}

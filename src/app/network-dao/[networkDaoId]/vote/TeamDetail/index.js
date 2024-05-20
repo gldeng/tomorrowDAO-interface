@@ -313,7 +313,7 @@ class TeamDetail extends PureComponent {
                 )}
               </Col>
               <Col className={`${clsPrefix}-team-info`} md={18} sm={18} xs={18}>
-                <div className="flex align-middle">
+                <div className="flex items-center">
                   <h5 className={`${clsPrefix}-node-name ellipsis`}>
                     {data.name ? data.name : formattedAddress}
                   </h5>
@@ -404,7 +404,7 @@ class TeamDetail extends PureComponent {
     return (
       <section className={`${clsPrefix}`}>
         {topTeamInfo}
-        <StatisticalData data={staticsData} inline />
+        <StatisticalData data={staticsData} />
         <section className={`${clsPrefix}-intro card-container`}>
           <h5 className="card-header">
             <EditOutlined className="card-header-icon" />

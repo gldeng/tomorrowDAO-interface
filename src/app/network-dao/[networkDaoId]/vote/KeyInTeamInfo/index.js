@@ -5,6 +5,7 @@ import { APPNAME } from "@config/config";
 import { post, get } from "@src/utils";
 import { rand16Num } from "@utils/utils";
 import { NO_AUTHORIZATION_ERROR_TIP, UNLOCK_PLUGIN_TIP } from "@src/constants";
+import useNetworkDaoRouter from 'hooks/useNetworkDaoRouter';
 import { urlRegExp } from "../constants";
 import { addUrlPrefix, removeUrlPrefix } from "@utils/formater";
 import { LockTwoTone } from "@ant-design/icons";
@@ -418,4 +419,9 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)((KeyInTeamInfo));
+const KeyInTeamInfoConnect = connect(mapStateToProps)((KeyInTeamInfo));
+
+export default function WrapKeyInTeamInfo(props) {
+  const router = useNetworkDaoRouter()
+  return <KeyInTeamInfoConnect {...props} navigate={router.push} />
+}

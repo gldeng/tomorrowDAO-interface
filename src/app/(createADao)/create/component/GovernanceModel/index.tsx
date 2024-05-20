@@ -19,6 +19,7 @@ const GovernanceModel = () => {
   useRegisterForm(form, StepEnum.step1);
   return (
     <div className="governance-form">
+      <h2 className="pb-[18px]">Referendum, the primary governance mechamism</h2>
       <Form
         form={form}
         layout="vertical"
@@ -57,15 +58,12 @@ const GovernanceModel = () => {
                 <div>
                   <div>
                     The minimum number of votes required to finalise a proposal, only applicable to
-                    {/* eslint-disable-next-line react/no-unescaped-entities */}
-                    the voting mechanism where "1 token = 1 vote".
+                    the voting mechanism where &quot;1 token = 1 vote&quot;.
                   </div>
                   <div>
-                    {/* eslint-disable-next-line react/no-unescaped-entities */}
-                    Note: There are two types of voting mechanisms: "1 token = 1 vote" and "1
-                    {/* eslint-disable-next-line react/no-unescaped-entities */}
-                    address = 1 vote". You can choose the voting mechanism when you create the
-                    proposal.
+                    Note: There are two types of voting mechanisms: &quot;1 token = 1 vote&quot; and
+                    &quot;1 address = 1 vote&quot;. You can choose the voting mechanism when you
+                    create the proposal.
                   </div>
                 </div>
               }

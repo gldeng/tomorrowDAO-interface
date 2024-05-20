@@ -192,7 +192,10 @@ const HighCouncil = () => {
               title={`The minimum number of votes required to finalise proposals, only applicable to the voting mechanism where "1 token = 1 vote".
             Note: There are two types of voting mechanisms: "1 token = 1 vote" and "1 address = 1 vote". You can choose the voting mechanism when you create the proposal.`}
             >
-              <span className="form-item-label">Minimum Vote Requirement</span>
+              <span className="form-item-label">
+                Minimum Vote Requirement
+                <InfoCircleOutlined className="cursor-pointer label-icon" />
+              </span>
             </Tooltip>
           }
           validateFirst={true}

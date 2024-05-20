@@ -20,7 +20,7 @@ const ProposalDeploy = () => {
     <Result
       className="px-4 lg:px-8"
       status="warning"
-      title="Please Login first before creating a DAO"
+      title="Please Login first before creating a proposal"
     />
   );
 };

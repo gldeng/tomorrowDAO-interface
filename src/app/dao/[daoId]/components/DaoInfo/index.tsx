@@ -46,7 +46,13 @@ const contractMapList = [
   },
 ];
 export default function DaoInfo(props: IParams) {
-  const { data, data: { metadata, fileInfoList = [] } = {}, isLoading, isError } = props;
+  const {
+    data,
+    data: { metadata, fileInfoList = [], isNetworkDAO } = {},
+    isLoading,
+    isError,
+    onChangeHCParams,
+  } = props;
 
   const { isLG } = useResponsive();
   const socialMedia = metadata?.socialMedia ?? {};
@@ -113,10 +119,12 @@ export default function DaoInfo(props: IParams) {
           <span
             className="dis-common-span"
             onClick={() => {
-              // onChangeHCParams(HC_MEMBER);
+              if (isNetworkDAO) {
+                onChangeHCParams();
+              }
             }}
           >
-            {/* {data?.memberCount ?? '-'} Members */}
+            {data?.highCouncilMemberCount ?? '-'} Members
           </span>
           <span>Rotates Every {data?.highCouncilConfig?.electionPeriod} Days.</span>
         </div>

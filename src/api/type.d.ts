@@ -104,6 +104,7 @@ interface IDaoInfoData {
   vetoExecuteTimePeriod: number;
   createTime: string;
   isNetworkDAO: boolean;
+  highCouncilMemberCount?: number;
 }
 
 interface IDaoInfoReq {

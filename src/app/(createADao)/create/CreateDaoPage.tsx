@@ -4,7 +4,7 @@ import { useMachine } from '@xstate/react';
 import { formMachine } from './xstate';
 import { Button, Typography, FontWeightEnum } from 'aelf-design';
 import React, { memo, useCallback, useRef, useState } from 'react';
-import { Steps, message, FormInstance, Result, StepsProps, StepProps } from 'antd';
+import { Steps, message as antdMessage, FormInstance, Result, StepsProps, StepProps } from 'antd';
 import { useWebLoginEvent, WebLoginEvents, useWebLogin, WebLoginState } from 'aelf-web-login';
 import { useRouter } from 'next/navigation';
 import clsx from 'clsx';
@@ -47,7 +47,7 @@ const CreateDaoPage = () => {
   const currentStepString = currentStep.toString() as StepEnum;
 
   const isHighCouncilStep = currentStepString === StepEnum.step2;
-  const [messageApi, contextHolder] = message.useMessage();
+  const [messageApi, contextHolder] = antdMessage.useMessage();
   const daoCreateToken = useSelector((store) => store.daoCreate.token);
   const isSkipHighCouncil = useRef<boolean>(false);
   const submitButtonRef = useRef<ISubmitRef>(null);
@@ -233,12 +233,32 @@ const CreateDaoPage = () => {
           footerConfig: {
             buttonList: [
               {
-                children: <Link href={`/`}>View My DAO</Link>,
+                children: (
+                  <Link
+                    href={`/`}
+                    onClick={() => {
+                      antdMessage.open({
+                        type: 'success',
+                        content:
+                          'created successfully, it will appear in the list in a few minutes',
+                      });
+                    }}
+                  >
+                    View My DAO
+                  </Link>
+                ),
               },
             ],
           },
         });
       } catch (err) {
+        if (typeof err === 'string') {
+          antdMessage.open({
+            type: 'error',
+            content: 'Please check your internet connection and try again. ',
+          });
+          return;
+        }
         const error = err as IFormValidateError | IContractError;
         // form Error
         if ('errorFields' in error) {
