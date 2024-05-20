@@ -15,7 +15,7 @@ import MyInfo from './components/MyInfo';
 import Filter from './components/Filter';
 import { useRequest, usePrevious } from 'ahooks';
 import { IProposalTableParams, TabKey } from './type';
-import LinkReplaceLastPathName from 'components/LinkReplaceLastPathName';
+import LinkNetworkDao from 'components/LinkNetworkDao';
 import { fetchDaoInfo, fetchProposalList } from 'api/request';
 import { curChain } from 'config';
 import './page.css';
@@ -133,9 +133,7 @@ export default function DeoDetails(props: IProps) {
                 Proposals
               </Typography.Title>
               {isNetworkDAO ? (
-                <LinkReplaceLastPathName href={`/proposal-deploy`}>
-                  {CreateButton}
-                </LinkReplaceLastPathName>
+                <LinkNetworkDao href={`/proposal-deploy`}>{CreateButton}</LinkNetworkDao>
               ) : (
                 <Link href={`/proposal/deploy/${daoId}`}>{CreateButton}</Link>
               )}
@@ -239,12 +237,12 @@ export default function DeoDetails(props: IProps) {
                     if (item.proposalSource === NetWorkDaoCreateProposal) {
                       if (isNetworkDAO) {
                         return (
-                          <LinkReplaceLastPathName
+                          <LinkNetworkDao
                             key={item.proposalId}
                             href={`/proposal-detail-tmrw/${item.proposalId}`}
                           >
                             <ProposalsItem data={item} />
-                          </LinkReplaceLastPathName>
+                          </LinkNetworkDao>
                         );
                       }
                       return (
@@ -254,12 +252,12 @@ export default function DeoDetails(props: IProps) {
                       );
                     }
                     return (
-                      <LinkReplaceLastPathName
+                      <LinkNetworkDao
                         key={item.proposalId}
                         href={`/proposal-detail?proposalId=${item.proposalId}`}
                       >
                         <ProposalsItem data={item} />
-                      </LinkReplaceLastPathName>
+                      </LinkNetworkDao>
                     );
                   })
                 ) : (

@@ -8,7 +8,7 @@ import { useRequest } from 'ahooks';
 import { curChain } from 'config';
 import { EVoteOption } from 'types/vote';
 import dayjs from 'dayjs';
-import LinkReplaceLastPathName from 'components/LinkReplaceLastPathName';
+import LinkNetworkDao from 'components/LinkNetworkDao';
 
 interface IProps {
   daoId: string;
@@ -58,7 +58,7 @@ export default function MyRecords(props: IProps) {
         </Typography.Title>
         <div className="records-header-morebtn">
           {isNetworkDAO ? (
-            <LinkReplaceLastPathName href={`/my-record`}>{LoadMoreButton}</LinkReplaceLastPathName>
+            <LinkNetworkDao href={`/my-record`}>{LoadMoreButton}</LinkNetworkDao>
           ) : (
             <Link href={`/my-record?daoId=${daoId}`}>{LoadMoreButton}</Link>
           )}

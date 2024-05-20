@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import LinkReplaceLastPathName from 'components/LinkReplaceLastPathName';
+import LinkReplaceLastPathName from 'components/LinkNetworkDao';
 import { connect } from "react-redux";
 import { Input, Button, Tooltip } from "antd";
 import { Table } from 'aelf-design';

@@ -11,7 +11,7 @@ import { callMainNetViewContract } from 'contract/callContract';
 import { explorerServer } from 'api/axios';
 import dayjs from 'dayjs';
 import { useAsyncEffect } from 'ahooks';
-import LinkReplaceLastPathName from 'components/LinkReplaceLastPathName';
+import LinkNetworkDao from 'components/LinkNetworkDao';
 import { ELF_DECIMAL } from 'app/network-dao/[networkDaoId]/vote/constants';
 
 import './index.css';
@@ -214,11 +214,9 @@ export default function HighCounCilTab() {
       key: 'nodeName',
       render: (text: any, record: any) => (
         <Tooltip title={text}>
-          <LinkReplaceLastPathName
-            href={{ pathname: '/vote/team', search: `pubkey=${record.pubkey}` }}
-          >
+          <LinkNetworkDao href={{ pathname: '/vote/team', search: `pubkey=${record.pubkey}` }}>
             {text}
-          </LinkReplaceLastPathName>
+          </LinkNetworkDao>
         </Tooltip>
       ),
     },

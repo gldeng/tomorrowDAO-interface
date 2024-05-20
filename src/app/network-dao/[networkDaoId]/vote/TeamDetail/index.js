@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import LinkReplaceLastPathName from 'components/LinkReplaceLastPathName';
+import LinkNetworkDao from 'components/LinkNetworkDao';
 import { If, Then, Else } from "react-if";
 import { Row, Col, Button, Avatar, Tag, Typography, message } from "antd";
 import queryString from "query-string";
@@ -349,15 +349,15 @@ class TeamDetail extends PureComponent {
                   </Then>
                 </If>
                 {hasAuth ? (
-                  <Button type="primary" shape="round" className="edit-btn">
-                    <LinkReplaceLastPathName
+                  <Button type="primary" className="edit-btn">
+                    <LinkNetworkDao
                       href={{
                         pathname: '/vote/apply',
                         search: `pubkey=${this.teamPubkey}`,
                       }}
                     >
                       Edit
-                    </LinkReplaceLastPathName>
+                    </LinkNetworkDao>
                   </Button>
                 ) : null}
               </Col>

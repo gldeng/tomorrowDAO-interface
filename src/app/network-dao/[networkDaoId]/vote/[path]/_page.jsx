@@ -41,7 +41,7 @@ import addressFormat from "@utils/addressFormat";
 import { WebLoginInstance } from "@utils/webLogin";
 import { fakeWallet } from "../../../_src/common/utils";
 import { dispatch } from "redux/store";
-import LinkReplaceLastPathName from "components/LinkReplaceLastPathName";
+import LinkNetworkDao from "components/LinkNetworkDao";
 
 const voteConfirmFormItemLayout = {
   labelCol: {
@@ -1137,17 +1137,17 @@ class VoteContainer extends Component {
           <Menu.Item
             key={allowPathMap.election}
           >
-            <LinkReplaceLastPathName href="/vote/election" replaceStart="vote">
+            <LinkNetworkDao href="/vote/election">
             Election Notification
-            </LinkReplaceLastPathName>
+            </LinkNetworkDao>
             
           </Menu.Item>
           <Menu.Item
             key={allowPathMap.myvote}
           >
-            <LinkReplaceLastPathName href="/vote/myvote" replaceStart="vote">
+            <LinkNetworkDao href="/vote/myvote">
             My Vote
-            </LinkReplaceLastPathName>
+            </LinkNetworkDao>
           </Menu.Item>
         </Menu>
       </section>

@@ -3,7 +3,7 @@ import React, { useEffect, useState, useMemo } from "react";
 import AElf from "aelf-sdk";
 import Decimal from "decimal.js";
 // import {  } from "react-router-dom";
-import LinkReplaceLastPathName  from "components/LinkReplaceLastPathName";
+import LinkNetworkDao  from "components/LinkNetworkDao";
 import { useRouter } from 'next/navigation'
 import ReactIf from "react-if";
 import { useSelector } from "react-redux";
@@ -33,6 +33,7 @@ import { getTokenList, getContract, sleep } from "@common/utils";
 import "./index.css";
 import { WebLoginInstance } from "@utils/webLogin";
 import { showAccountInfoSyncingModal } from "@components/SimpleModal/index";
+import useNetworkDaoRouter from "hooks/useNetworkDaoRouter";
 
 const { Switch: ConditionSwitch, Case } = ReactIf;
 
@@ -360,7 +361,7 @@ const FORM_INITIAL = {
 };
 
 const CreateOrganization = () => {
-  const navigate = useRouter();
+  const navigate = useNetworkDaoRouter();
 
   const [form] = Form.useForm();
   const { validateFields } = form;
@@ -449,7 +450,7 @@ const CreateOrganization = () => {
       });
       showTransactionResult(result);
       await sleep(2000);
-      navigate.push("/network-dao/organization");
+      navigate.push("/organization");
     } catch (e) {
       console.error(e);
       message.error(
@@ -486,9 +487,9 @@ const CreateOrganization = () => {
           Create Organization
         </div>
         <div className="create-organization-header-action">
-          <LinkReplaceLastPathName href="/organization">
+          <LinkNetworkDao href="/organization">
             &lt;Back to Organization List
-          </LinkReplaceLastPathName>
+          </LinkNetworkDao>
         </div>
       </div>
       <Divider />

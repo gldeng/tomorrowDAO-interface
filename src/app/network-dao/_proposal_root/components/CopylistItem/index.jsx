@@ -3,7 +3,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Button, message } from "antd";
 import copy from "copy-to-clipboard";
-import { Link } from "react-router-dom";
+import Link from 'next/link';
 // import IconFont from "../../../../components/IconFont";
 import { omitString } from "@common/utils";
 import "./index.css";

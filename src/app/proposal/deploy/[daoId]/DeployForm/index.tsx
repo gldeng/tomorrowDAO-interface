@@ -2,7 +2,7 @@
 
 import { Form } from 'antd';
 import { memo, useState } from 'react';
-import useReplaceLastPath from 'hooks/useReplaceLastPath';
+import useNetworkDaoRouter from 'hooks/useNetworkDaoRouter';
 import ProposalType from './ProposalType';
 import ProposalInfo from './ProposalInfo';
 import { IContractError, IFormValidateError, ProposalType as ProposalTypeEnum } from 'types';
@@ -36,7 +36,7 @@ const INIT_RESULT_MODAL_CONFIG: TResultModalConfig = {
 const GovernanceModel = (props: IGovernanceModelProps) => {
   const [form] = Form.useForm();
   const [isNext, setNext] = useState(false);
-  const router = useReplaceLastPath();
+  const router = useNetworkDaoRouter();
   const { isNetWorkDao, networkDaoId } = useIsNetworkDao();
   const nextRouter = useRouter();
   const [resultModalConfig, setResultModalConfig] = useState(INIT_RESULT_MODAL_CONFIG);

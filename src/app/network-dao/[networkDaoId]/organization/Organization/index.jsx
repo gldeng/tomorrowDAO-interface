@@ -9,6 +9,7 @@ import moment from "moment";
 import PropTypes from "prop-types";
 import { EditOutlined } from "@ant-design/icons";
 import { Card,Row,Select,Col,Divider } from "antd";
+import { mainExplorer } from 'config'
 import constants, {
   LOG_STATUS,
   organizationInfoPropTypes,
@@ -284,7 +285,7 @@ const Organization = (props) => {
               <span className="sub-title gap-right">Author:</span>
               <span className="text-ellipsis">
                 <a
-                  href={`${viewer.addressUrl}/${addressFormat(creator)}`}
+                  href={`${mainExplorer}/address/${addressFormat(creator)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -434,7 +435,7 @@ const Organization = (props) => {
             <span className="sub-title gap-right">Author:</span>
             <span className="text-ellipsis">
               <a
-                href={`${viewer.addressUrl}/${addressFormat(creator)}`}
+                href={`${mainExplorer}/address/${addressFormat(creator)}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
