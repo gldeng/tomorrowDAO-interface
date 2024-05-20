@@ -285,10 +285,6 @@ const CreateDaoPage = () => {
           className={clsx('dao-steps-wrap', isMD && 'dao-steps-wrap-mobile')}
           current={currentStep}
           items={items}
-          onChange={(current) => {
-            console.log('current', current);
-            // setCurrentStep(current);
-          }}
           labelPlacement={'vertical'}
         />
       </div>

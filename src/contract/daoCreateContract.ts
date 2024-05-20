@@ -17,7 +17,6 @@ export const daoCreateContractRequest = async <T, R>(
   options?: IContractOptions,
 ): Promise<R | ISendResult> => {
   const info = store.getState().elfInfo.elfInfo;
-  console.log('info', store.getState().elfInfo, '123', store.getState());
   const contractAddress = info?.daoAddress ?? 'RRF7deQbmicUh6CZ1R2y7U9M8n2eHPyCgXVHwiSkmNETLbL4D';
 
   const curChain: Chain = info.curChain ?? SupportedELFChainId.TDVW_NET;

@@ -19,6 +19,5 @@ export default function LinkNetworkDao(props: ILinkReplaceLastPathNameProps) {
       };
     }
   }, [networkDaoId, originHref]);
-  console.log('newPath', newPath);
   return <Link {...props} href={newPath} />;
 }

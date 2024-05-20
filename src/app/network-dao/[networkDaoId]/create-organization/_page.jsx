@@ -375,18 +375,15 @@ const CreateOrganization = () => {
   const [formData, setFormData] = useState({
     proposalType: proposalTypes.ASSOCIATION,
   });
-  console.log(111);
 
   const { callContract, wallet } = useWebLogin();
 
   // const [whiteList, setWhiteList] = useState([]);
   useEffect(() => {
     getTokenList({voteValid: true}).then((tokens) => {
-      console.log('tokens', tokens);
       setTokenList(Object.keys(tokens).map((key) => tokens[key]));
     });
     getWhiteList().then((arr) => {
-      console.log('getWhiteList', arr);
       const whiteList = [...arr.bpList, ...arr.parliamentProposerList];
       if (whiteList.indexOf(currentWallet.address) === -1) {
         setSelectOptions(SELECT_OPTIONS_WITH_NO_AUTHORITY);
@@ -399,7 +396,6 @@ const CreateOrganization = () => {
       const formValue = await validateFields();
       setIsLoading(true);
       let param = getContractParams(formValue, tokenList);
-      console.log(param);
       const contract = await getContract(
         aelf,
         getContractAddress(formValue.proposalType)

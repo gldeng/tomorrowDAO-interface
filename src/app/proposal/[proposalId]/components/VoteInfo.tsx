@@ -86,7 +86,7 @@ const VoteInfo = (props: IHeaderInfoProps) => {
           </div>
           <div>
             <Typography.Text size="small" className="text-Neutral-Secondary-Text">
-              Minimum {is1t1v ? 'voting' : 'voter'} requirement met
+              Minimum {is1t1v ? 'votes' : 'voter'} requirement met
               <span className="px-[4px]">
                 {is1t1v ? (
                   <span>

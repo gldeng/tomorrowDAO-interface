@@ -14,7 +14,6 @@ export default async function getAccountInfoSync(
   const filteredHolders = holder.managerInfos.filter(
     (manager) => manager?.address === didWalletInfo?.walletInfo?.address,
   );
-  console.log({ holder, filteredHolders });
 
   return { holder, filteredHolders };
 }

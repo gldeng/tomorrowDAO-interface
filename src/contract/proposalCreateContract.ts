@@ -51,7 +51,6 @@ export const proposalCreateContractRequest = async <T>(
     //   logsName: 'ProposalCreated',
     //   TransactionResult: transaction,
     // });
-    // console.log('proposalCreatedRes', proposalCreatedRes);
     return transaction;
   } catch (error) {
     console.error('=====tokenAdapterContractRequest error:', methodName, JSON.stringify(error));

@@ -790,7 +790,6 @@ class VoteContainer extends Component {
   }
 
   handleLockTimeChange(value) {
-    console.log('value----->', value?.unix?.(), value?.milliseconds?.());
     this.setState({
       lockTime: value,
     });
@@ -1044,7 +1043,6 @@ class VoteContainer extends Component {
           total,
           amounts: dividendAmounts,
         };
-        console.log(dividends, "fetchProfitAmount");
         this.setState({
           dividends,
         });
@@ -1068,7 +1066,6 @@ class VoteContainer extends Component {
           });
           await this.fetchGetContractsAndProfitAmount();
         } catch (e) {
-          console.log(e);
           message.error("Error happened when getting claim amount");
         } finally {
           this.setState({

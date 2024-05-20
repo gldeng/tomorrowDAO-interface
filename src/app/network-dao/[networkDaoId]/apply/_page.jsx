@@ -652,7 +652,6 @@ const CreateProposal = () => {
         }
       };
 
-      console.log("callContract", params);
       const result = await callContract(params);
       showTransactionResult(result);
     } catch (e) {
