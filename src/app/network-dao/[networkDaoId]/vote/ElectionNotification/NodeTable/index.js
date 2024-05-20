@@ -7,7 +7,7 @@
  * @Description: file content
  */
 import React, { PureComponent } from "react";
-import LinkReplaceLastPathName from 'components/LinkReplaceLastPathName';
+import LinkReplaceLastPathName from 'components/LinkNetworkDao';
 import { Table, Button, Input, Tooltip } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import moment from "moment";

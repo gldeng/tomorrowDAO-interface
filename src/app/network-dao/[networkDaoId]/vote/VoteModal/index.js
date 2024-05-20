@@ -12,7 +12,7 @@ import {
   Tooltip,
 } from "antd";
 import { SearchOutlined, InfoCircleFilled } from "@ant-design/icons";
-import LinkReplaceLastPathName from 'components/LinkReplaceLastPathName';
+import LinkReplaceLastPathName from 'components/LinkNetworkDao';
 import DatePickerReact from "react-datepicker";
 import moment from "moment";
 

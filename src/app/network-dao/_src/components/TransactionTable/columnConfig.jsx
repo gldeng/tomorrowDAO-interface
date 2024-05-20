@@ -4,10 +4,8 @@
 /* eslint-disable camelcase */
 import { Spin, Tag, Tooltip } from "antd";
 import React, { useState } from "react";
-import {
-  Link,
-  // useNavigate
-} from "react-router-dom";
+import { mainExplorer } from 'config'
+import Link from 'next/link';
 import Dividends from "../Dividends";
 import { aelf } from "../../utils";
 import addressFormat, { hiddenAddress } from "../../utils/addressFormat";
@@ -16,9 +14,11 @@ import StatusTag from "../StatusTag/StatusTag";
 import IconFont from "../IconFont";
 import { isPhoneCheck } from "../../utils/deviceCheck";
 import CopyButton from "../CopyButton/CopyButton";
+import { useRouter } from "next/router";
 
 const PreviewCard = ({ info, text, price = { USD: 0 } }) => {
   // const nav = useNavigate();
+  const router = useRouter()
   const { quantity = 0, block_height } = info;
   const [confirmations, setConfirmations] = useState(0);
   const [lastBlockLoading, setLastBlockLoading] = useState(true);
@@ -44,7 +44,7 @@ const PreviewCard = ({ info, text, price = { USD: 0 } }) => {
         <span>Additional Info</span>
         <a
           onClick={() => {
-            // nav(`/tx/${text}`);
+            router.push(`${mainExplorer}/tx/${text}`);
           }}
         >
           See more Details <IconFont type="chakangengduojiantou" />
@@ -110,7 +110,7 @@ export default (timeFormat, price, handleFormatChange) => {
             >
               <IconFont type="Eye-on" />
             </Tooltip>
-            <Link href={`/tx/${text}`} title={text}>
+            <Link href={`${mainExplorer}/tx/${text}`} title={text}>
               {text}
             </Link>
           </div>
@@ -136,7 +136,7 @@ export default (timeFormat, price, handleFormatChange) => {
       render: (text) => {
         return (
           <div className="block">
-            <Link href={`/block/${text}`}>{text}</Link>
+            <Link href={`${mainExplorer}/block/${text}`}>{text}</Link>
           </div>
         );
       },
@@ -166,7 +166,7 @@ export default (timeFormat, price, handleFormatChange) => {
                   title={addressFormat(text)}
                   overlayClassName="table-item-tooltip__white"
                 >
-                  <Link href={`/address/${addressFormat(text)}`}>
+                  <Link href={`${mainExplorer}/address/${addressFormat(text)}`}>
                     <span>{addressFormat(hiddenAddress(text))}</span>
                   </Link>
                 </Tooltip>
@@ -193,7 +193,7 @@ export default (timeFormat, price, handleFormatChange) => {
                   title={addressFormat(text)}
                   overlayClassName="table-item-tooltip__white"
                 >
-                  <Link href={`/address/${addressFormat(text)}`}>
+                  <Link href={`${mainExplorer}/address/${addressFormat(text)}`}>
                     {addressFormat(hiddenAddress(text))}
                   </Link>
                 </Tooltip>

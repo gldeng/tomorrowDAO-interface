@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
-import LinkReplaceLastPathName from "components/LinkReplaceLastPathName";
+import LinkNetworkDao from "components/LinkNetworkDao";
 import {
   Tabs,
   Pagination,
@@ -23,7 +23,7 @@ import { getOrganizations } from "@redux/actions/organizationList";
 import "./index.css";
 import { removePrefixOrSuffix, sendHeight } from "@common/utils";
 import removeHash from "@utils/removeHash";
-import useReplaceLastPath from "hooks/useReplaceLastPath";
+import useNetworkDaoRouter from "hooks/useNetworkDaoRouter";
 
 const { TabPane } = Tabs;
 const { Search } = Input;
@@ -35,7 +35,7 @@ const keyFromHash = {
 
 const OrganizationList = () => {
   // const navigate = useNavigate();
-  const router = useReplaceLastPath()
+  const router = useNetworkDaoRouter()
   const location = window.location.hash;
   const [activeKey, setActiveKey] = useState(proposalTypes.PARLIAMENT);
   const common = useSelector((state) => state.common, shallowEqual);
@@ -132,9 +132,9 @@ const OrganizationList = () => {
         animated={false}
         tabBarExtraContent={
           logStatus === LOG_STATUS.LOGGED ? (
-            <LinkReplaceLastPathName href="/create-organization">
+            <LinkNetworkDao href="/create-organization">
               Create Organization&gt;
-            </LinkReplaceLastPathName>
+            </LinkNetworkDao>
           ) : null
         }
         className="organization-list-tab"

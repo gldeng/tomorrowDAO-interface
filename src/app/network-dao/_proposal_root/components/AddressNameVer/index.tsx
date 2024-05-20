@@ -6,6 +6,7 @@ import { omitString } from "@common/utils";
 import addressFormat from "@utils/addressFormat";
 import "./index.css";
 import CopyButton from "@components/CopyButton/CopyButton";
+import { mainExplorer } from "config";
 
 const checkName = (name: string) => {
   if (name === "-1") {
@@ -29,7 +30,7 @@ const AddressNameVer = ({ address, name, ver }) => {
         <div className="contract-address">
           <span className="label">Contract Address:</span>
           <span className="content">
-            <a href={`/address/${addressFormat(address)}`}>
+            <a href={`${mainExplorer}/address/${addressFormat(address)}`}>
               {omitString(address, 10, 10)}
             </a>
             <CopyButton

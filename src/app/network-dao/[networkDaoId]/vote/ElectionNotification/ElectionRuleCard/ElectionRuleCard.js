@@ -16,11 +16,11 @@ import "./ElectionRuleCard.style.css";
 import Svg from "@components/Svg/Svg";
 import { onlyOkModal } from "@components/SimpleModal/index.tsx";
 import { isActivityBrowser } from "@utils/isWebView";
-import useReplaceLastPath from "hooks/useReplaceLastPath";
+import useNetworkDaoRouter from "hooks/useNetworkDaoRouter";
 
 function ElectionRuleCard(props) {
   // const navigate = useNavigate();
-  const router = useReplaceLastPath()
+  const router = useNetworkDaoRouter()
   const { isCandidate, displayApplyModal, currentWallet, quitElection } = props;
 
   const onClick = () => {
