@@ -124,7 +124,7 @@ export default function DaoInfo(props: IParams) {
               }
             }}
           >
-            {data?.highCouncilMemberCount ?? '-'} Members
+            {data?.highCouncilMemberCount ?? '-'} Members,
           </span>
           <span>Rotates Every {data?.highCouncilConfig?.electionPeriod} Days.</span>
         </div>

@@ -4,9 +4,10 @@ import { FontWeightEnum, HashAddress, Search, Table, Typography } from 'aelf-des
 import { TVotingOption } from './type';
 import { ColumnsType } from 'antd/es/table';
 import thousandsNumber from 'utils/thousandsNumber';
+import Link from 'next/link';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
-import { sideChainSuffix } from 'config';
+import { explorer, sideChainSuffix } from 'config';
 
 const columns: ColumnsType<IProposalDetailDataVoteTopListItem> = [
   {
@@ -24,7 +25,11 @@ const columns: ColumnsType<IProposalDetailDataVoteTopListItem> = [
     ),
     dataIndex: 'transactionId',
     render: (text) => {
-      return <HashAddress ignorePrefixSuffix={true} preLen={8} endLen={9} address={text} />;
+      return (
+        <Link href={`${explorer}/tx/${text}`}>
+          <HashAddress ignorePrefixSuffix={true} preLen={8} endLen={9} address={text} />
+        </Link>
+      );
     },
   },
   {
@@ -116,8 +121,9 @@ const VoteResultTable = (props: IVoteResultTableProps) => {
         </div>
       </div>
       <Table
+        rowKey={'transactionId'}
         columns={columns as any}
-        scroll={{ x: true }}
+        scroll={{ x: 'max-content' }}
         pagination={{
           ...tableParams,
           total: voteTopList?.length ?? 0,

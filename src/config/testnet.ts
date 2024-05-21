@@ -18,7 +18,7 @@ export const sideChainAddress = 'ASh2Wt7nSEmYqnGxPPzp4pnVDU4uhj1XW9Se5VeZcX2UDdy
 
 export const symbolmarketUrl = 'https://test.eforest.finance/symbolmarket';
 
-export const explorer = 'https://explorer-test-side02.aelf.io/';
+export const explorer = 'https://explorer-test-side02.aelf.io';
 export const mainExplorer = 'https://explorer-test.aelf.io';
 
 export const voteAddress = '2LpoLYNPAnjiBUozyYwcfaeekxRFehjt6hDR78VKgk47UwkvAv';

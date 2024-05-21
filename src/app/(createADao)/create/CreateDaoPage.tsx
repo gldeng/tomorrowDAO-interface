@@ -227,7 +227,7 @@ const CreateDaoPage = () => {
                 Telegram group
               </Link>
               to connect with the team and get assistance with tasks such as modifying the
-              DAO&lsquo;s information. .
+              DAO&lsquo;s information.
             </>
           ),
           footerConfig: {

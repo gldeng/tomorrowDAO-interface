@@ -7,10 +7,12 @@ import { useSelector } from 'react-redux';
 import { fetchVoteHistory } from 'api/request';
 import { EVoteOption } from 'types/vote';
 import NoData from './NoData';
-import { curChain, NetworkDaoHomePathName } from 'config';
+import { curChain, explorer, NetworkDaoHomePathName } from 'config';
 import { useRequest } from 'ahooks';
 import { useParams, usePathname, useSearchParams } from 'next/navigation';
 import dayjs from 'dayjs';
+import Link from 'next/link';
+import LinkNetworkDao from 'components/LinkNetworkDao';
 
 const defaultPageSize = 20;
 const allValue = 'All';
@@ -52,7 +54,7 @@ export default function RecordTable() {
     {
       title: 'Time',
       dataIndex: 'timeStamp',
-      fixed: 'left',
+      width: 147,
       sorter: (a, b) => {
         return dayjs(a.timeStamp).unix() - dayjs(b.timeStamp).unix();
       },
@@ -64,22 +66,43 @@ export default function RecordTable() {
     {
       title: 'Proposal Name',
       dataIndex: 'proposalTitle',
-      render: (text) => <div>{text}</div>,
+      width: 250,
+      render: (text, record) => {
+        const renderProposalNode = <div className="text-neutralPrimaryText">{text}</div>;
+        if (isNetWorkDao) {
+          return (
+            <LinkNetworkDao href={`/proposal-detail-tmrw/${record.proposalId}`}>
+              {renderProposalNode}
+            </LinkNetworkDao>
+          );
+        }
+        return <Link href={`/proposal/${record.proposalId}`}>{renderProposalNode}</Link>;
+      },
     },
     {
       title: 'proposalId',
+      width: 220,
       dataIndex: 'proposalId',
       render(text, record) {
+        const renderId = (
+          <HashAddress
+            className="pl-[4px]"
+            ignorePrefixSuffix={true}
+            preLen={8}
+            endLen={11}
+            address={text}
+          ></HashAddress>
+        );
         return (
           <div>
             <div>
-              <HashAddress
-                className="pl-[4px]"
-                ignorePrefixSuffix={true}
-                preLen={8}
-                endLen={11}
-                address={text}
-              ></HashAddress>
+              {isNetWorkDao ? (
+                <LinkNetworkDao href={`/proposal-detail-tmrw/${record.proposalId}`}>
+                  {renderId}
+                </LinkNetworkDao>
+              ) : (
+                <Link href={`/proposal/${record.proposalId}`}>{renderId}</Link>
+              )}
             </div>
             <div>{record.executer === walletInfo.address ? <span>Executed by me</span> : ''}</div>
           </div>
@@ -89,6 +112,8 @@ export default function RecordTable() {
     {
       title: 'My Option',
       dataIndex: 'myOption',
+
+      width: 100,
       filterMultiple: false,
       filters: [
         { text: 'All', value: allValue },
@@ -109,19 +134,25 @@ export default function RecordTable() {
     {
       title: 'Votes',
       dataIndex: 'voteNum',
+
+      width: 87,
     },
     {
       title: 'transactionId',
       dataIndex: 'transactionId',
-      render(text) {
+
+      width: 220,
+      render(transactionId) {
         return (
-          <HashAddress
-            className="pl-[4px]"
-            ignorePrefixSuffix={true}
-            preLen={8}
-            endLen={11}
-            address={text}
-          ></HashAddress>
+          <Link href={`${explorer}/tx/${transactionId}`}>
+            <HashAddress
+              className="pl-[4px]"
+              ignorePrefixSuffix={true}
+              preLen={8}
+              endLen={11}
+              address={transactionId}
+            ></HashAddress>
+          </Link>
         );
       },
     },
@@ -145,13 +176,15 @@ export default function RecordTable() {
     return 'customRow';
   };
   useEffect(() => {
-    runFetchVoteHistoryRef.current?.();
-  }, [tableParams]);
+    if (walletInfo.address) {
+      runFetchVoteHistoryRef.current?.();
+    }
+  }, [tableParams, walletInfo]);
 
   return (
     <ConfigProvider renderEmpty={() => <NoData></NoData>}>
       <Table
-        scroll={{ x: true }}
+        scroll={{ x: 'max-content' }}
         className="custom-table-style"
         columns={columns as any}
         loading={voteHistoryLoading}

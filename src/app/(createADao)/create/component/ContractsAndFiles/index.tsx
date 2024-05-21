@@ -24,9 +24,24 @@ export default function ContractsAndFiles() {
 
   const uploadTips = useMemo(() => {
     if (isUploadDisabled) {
-      return `You have reached the upload limit of ${MAX_FILE_COUNT} files. Please remove an existing file to upload a new one, or add the telegram group if you need assistance with managing your files.`;
+      return (
+        <p>
+          You have reached the maximum limit of {MAX_FILE_COUNT} files. Please consider removing
+          some files before uploading a new one. If you need further assistance, you can join
+          TMRWDAO&apos;s
+          <a href="https://t.me/tmrwdao" target="_blank" rel="noreferrer" className="px-[4px]">
+            Telegram
+          </a>
+          group.
+        </p>
+      );
     } else {
-      return `Only supports .pdf format less than ${FILE_LIMIT}.`;
+      return (
+        <>
+          <p>Format supported: PDF.</p>
+          <p>Size: Less than {FILE_LIMIT}. </p>
+        </>
+      );
     }
   }, [isUploadDisabled]);
 
