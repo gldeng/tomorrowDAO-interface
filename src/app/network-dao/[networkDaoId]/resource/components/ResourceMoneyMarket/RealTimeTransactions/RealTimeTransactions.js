@@ -35,6 +35,7 @@ class RealTimeTransactions extends PureComponent {
   }
 
   componentDidMount() {
+    this._mounted = true;
     this.getResourceRealtimeRecords();
   }
 
@@ -78,10 +79,12 @@ class RealTimeTransactions extends PureComponent {
         recordsData: data || [],
       });
       this.props.getRealTimeTransactionLoading();
+      if (!this._mounted) return;
       this.getResourceRealtimeRecordsTimer = setTimeout(() => {
         this.getResourceRealtimeRecords();
       }, REAL_TIME_FETCH_INTERVAL);
     } catch (error) {
+      if (!this._mounted) return;
       this.getResourceRealtimeRecordsTimer = setTimeout(() => {
         this.getResourceRealtimeRecords();
       }, REAL_TIME_FETCH_INTERVAL);
@@ -89,6 +92,7 @@ class RealTimeTransactions extends PureComponent {
   }
 
   componentWillUnmount() {
+    this._mounted = false;
     clearTimeout(this.getResourceRealtimeRecordsTimer);
   }
 

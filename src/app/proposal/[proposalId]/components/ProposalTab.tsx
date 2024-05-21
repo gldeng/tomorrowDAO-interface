@@ -1,10 +1,36 @@
 import { Typography, FontWeightEnum, HashAddress } from 'aelf-design';
 import { Tabs } from 'aelf-design';
+import { getContract } from 'app/proposal/deploy/[daoId]/util';
+import { useEffect, useState } from 'react';
 import { ProposalTypeString } from 'types';
+import base64ToHex from 'utils/base64ToHex';
 
 interface IProposalTabProps {
   proposalDetailData?: IProposalDetailData;
 }
+interface IContractParamsProps {
+  address: string;
+  methodName: string;
+  params: string;
+}
+const ContractParams = (props: IContractParamsProps) => {
+  const { address, methodName, params } = props;
+  const [parsedParams, setParams] = useState(params);
+  useEffect(() => {
+    if (!address || !methodName || !params) {
+      return;
+    }
+    getContract(address)
+      .then((contract) => {
+        const decoded = contract[methodName].unpackPackedInput(base64ToHex(params));
+        setParams(JSON.stringify(decoded, null, 2));
+      })
+      .catch((e) => {
+        console.error('contract params decode error', e);
+      });
+  }, [address, methodName, params]);
+  return <pre className="view-params">{parsedParams}</pre>;
+};
 const ProposalTab = (props: IProposalTabProps) => {
   const { proposalDetailData } = props;
   const tabItems = [
@@ -51,7 +77,11 @@ const ProposalTab = (props: IProposalTabProps) => {
               <Typography.Text fontWeight={FontWeightEnum.Medium}>Contract Params</Typography.Text>
             </div>
             <div className="p-4 rounded-md bg-[#F8F8F8]">
-              {JSON.stringify(proposalDetailData?.transaction?.params, null, 2)}
+              <ContractParams
+                address={proposalDetailData?.transaction?.toAddress}
+                methodName={proposalDetailData?.transaction?.contractMethodName}
+                params={proposalDetailData?.transaction?.params?.param}
+              />
             </div>
           </div>
         </div>

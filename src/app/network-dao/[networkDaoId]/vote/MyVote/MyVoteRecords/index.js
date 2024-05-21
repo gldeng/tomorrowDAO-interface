@@ -212,7 +212,7 @@ class MyVoteRecords extends Component {
             dataSource={data}
             pagination={pagination}
             rowKey={(record) => record.voteId}
-          // scroll={{ x: 1024 }}
+            scroll={{ x: 'max-content' }}
           />
         </TableLayer>
       </section>

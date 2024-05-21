@@ -225,7 +225,9 @@ interface IProposalLife {
 interface IProposalDetailDataTransaction {
   toAddress: string;
   contractMethodName: string;
-  params: Record<string, unknown>;
+  params: {
+    param: string;
+  };
 }
 interface IProposalDetailDataVoteTopListItem {
   amount: number;
@@ -474,6 +476,7 @@ interface IExecutableListResData {
     startTime: string;
     endTime: string;
     expiredTime: string;
+    executeEndTime: string;
     transaction: {
       contractMethodName: string;
       toAddress: string;

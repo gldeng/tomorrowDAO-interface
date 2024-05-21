@@ -60,6 +60,8 @@ export default function RecordTable() {
     {
       title: 'Txn Hash',
       dataIndex: 'txId',
+      width: 168,
+      className: 'treasury-table-column-clear-pl',
       render(hash) {
         return (
           <span className="txn-hash">
@@ -73,6 +75,7 @@ export default function RecordTable() {
     {
       dataIndex: 'action',
       title: 'Method',
+      width: 128,
       render: (text) => {
         return (
           <Tooltip title={text} overlayClassName="table-item-tooltip__white">
@@ -83,6 +86,7 @@ export default function RecordTable() {
     },
     {
       dataIndex: 'time',
+      width: 144,
       title: (
         <div className="time" onClick={handleFormatChange}>
           {timeFormat}
@@ -95,11 +99,12 @@ export default function RecordTable() {
     {
       title: 'From',
       dataIndex: 'from',
+      width: 228,
       render(from, record) {
         return (
           <div className="from">
             <Link href={`${mainExplorer}/address/${from}`} target="_blank">
-              <HashAddress className='treasury-address' address={from} preLen={8} endLen={8} />
+              <HashAddress className='treasury-address' address={from} preLen={8} endLen={9} />
             </Link>
           </div>
         );
@@ -108,21 +113,16 @@ export default function RecordTable() {
     {
       title: 'Interacted With (To )',
       dataIndex: 'to',
+      width: 280,
       render(to, record) {
         const isOut = checkIsOut(treasuryAccountAddress, record);
         return (
           <div className="to flex">
-            {isOut ? (
-              <Tag color="error" className="w-[36px] flex justify-center">
-                out
-              </Tag>
-            ) : (
-              <Tag color="success" className="w-[36px] flex justify-center">
-                in
-              </Tag>
-            )}
+            <Tag color="error" className="w-[36px] flex justify-center">
+              { isOut ? 'out' : 'in' }
+            </Tag>
             <Link href={`${mainExplorer}/address/${to}`} target="_blank">
-              <HashAddress className='treasury-address' address={to} preLen={8} endLen={8} />
+              <HashAddress className='treasury-address' address={to} preLen={8} endLen={9} />
             </Link>
           </div>
         );
@@ -131,6 +131,7 @@ export default function RecordTable() {
     {
       title: 'Amount',
       dataIndex: 'amount',
+      width: 180,
       render(amount) {
         return `${numberFormatter(amount)}`;
       },
@@ -138,6 +139,7 @@ export default function RecordTable() {
     {
       title: 'Token',
       dataIndex: 'symbol',
+      // width: 200,
       render(symbol) {
         return (
           <Link href={`${mainExplorer}/token/${symbol}`}>
@@ -149,15 +151,16 @@ export default function RecordTable() {
         );
       },
     },
-    {
-      title: 'Txn Fee',
-      dataIndex: 'txFee',
-      align: 'right',
-      render(fee, record) {
-        const { symbol } = record;
-        return <div>{fee[symbol] ? `${fee[symbol]}${symbol}` : '-'}</div>;
-      },
-    },
+    // {
+    //   title: 'Txn Fee',
+    //   dataIndex: 'txFee',
+    //   align: 'right',
+    //   width: 150,
+    //   render(fee, record) {
+    //     const { symbol } = record;
+    //     return <div>{fee[symbol] ? `${fee[symbol]}${symbol}` : '-'}</div>;
+    //   },
+    // },
   ];
 
   const pageChange = (page: number, pageSize?: number) => {
@@ -184,7 +187,7 @@ export default function RecordTable() {
   return (
     <ConfigProvider renderEmpty={() => <NoData></NoData>}>
       <Table
-        scroll={{ x: 800 }}
+        scroll={{ x: 'max-content' }}
         className="custom-table-style"
         columns={columns as any}
         loading={transferListLoading}

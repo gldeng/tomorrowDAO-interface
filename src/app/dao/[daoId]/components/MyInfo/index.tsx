@@ -196,7 +196,9 @@ export default function MyInfo(props: TInfoTypes) {
           <Divider className="mt-0 mb-4" />
           <div className="flex justify-between items-start">
             <div>
-              <div className="text-Neutral-Secondary-Text text-sm mb-1">Available to unstake</div>
+              <div className="text-Neutral-Secondary-Text text-sm mb-1">
+                Available for Unstaking
+              </div>
               <div className="text-Primary-Text font-medium">
                 {info?.availableUnStakeAmount} {info?.symbol}
               </div>
@@ -206,13 +208,13 @@ export default function MyInfo(props: TInfoTypes) {
               size="medium"
               onClick={() => {
                 if (info?.availableUnStakeAmount === 0) {
-                  message.info('Available to unstake is 0');
+                  message.info('Available for Unstaking is 0');
                 } else {
                   setIsModalOpen(true);
                 }
               }}
             >
-              Claim
+              Unstake
             </Button>
           </div>
           {info?.canVote && (
@@ -229,7 +231,7 @@ export default function MyInfo(props: TInfoTypes) {
           {/* Claim Modal  */}
           <CommonModal
             open={isModalOpen}
-            title={<div className="text-center">Claim {info?.symbol} on SideChain AELF</div>}
+            title={<div className="text-center">Unstake {info?.symbol} on SideChain AELF</div>}
             destroyOnClose
             onCancel={() => {
               form.setFieldValue('unStakeAmount', 0);
@@ -240,12 +242,12 @@ export default function MyInfo(props: TInfoTypes) {
               <span className="text-[32px] mr-1">{info?.availableUnStakeAmount}</span>
               <span>{info.symbol}</span>
             </div>
-            <div className="text-center text-Neutral-Secondary-Text">Available to unstake</div>
+            <div className="text-center text-Neutral-Secondary-Text">Available for Unstaking</div>
             <Form form={form} layout="vertical" variant="filled" onFinish={handleClaim}>
               <Form.Item<TFieldType>
                 label="Unstake Amount"
                 name="unstakeAmount"
-                tooltip="Currently, only one-time withdrawal of all unlocked token is supported."
+                tooltip={`Currently, the only supported method is to unstake all the available ${info.symbol} in one time.`}
               >
                 <InputNumber
                   className="w-full"
@@ -265,7 +267,7 @@ export default function MyInfo(props: TInfoTypes) {
               </Form.Item>
               <Form.Item>
                 <Button className="mx-auto" type="primary" htmlType="submit">
-                  Claim
+                  Unstake
                 </Button>
               </Form.Item>
             </Form>
@@ -279,7 +281,10 @@ export default function MyInfo(props: TInfoTypes) {
             }}
             footer={null}
           >
-            <p>Currently, only one-time withdrawal of all unlocked token is supported.</p>
+            <p>
+              Currently, the only supported method is to unstake all the available {info.symbol} in
+              one time.
+            </p>
             <Button
               className="mx-auto"
               type="primary"
@@ -305,7 +310,7 @@ export default function MyInfo(props: TInfoTypes) {
               <span>{info.symbol}</span>
             </div>
             <p className="text-center text-Neutral-Secondary-Text font-medium">
-              Congratulations, transaction submitted successfully!
+              Transaction Initiated
             </p>
             <Button
               className="mx-auto mt-6 w-[206px]"
@@ -314,7 +319,7 @@ export default function MyInfo(props: TInfoTypes) {
                 setShowSuccessModal(false);
               }}
             >
-              I Know
+              OK
             </Button>
             <Button
               type="link"
@@ -355,11 +360,9 @@ export default function MyInfo(props: TInfoTypes) {
       ) : (
         <div>
           <Button className="w-full mb-4" type="primary" onClick={login}>
-            Log In
+            Log in
           </Button>
-          <div className="text-center text-Neutral-Secondary-Text">
-            Connect wallet to view your votes.
-          </div>
+          <div className="text-center text-Neutral-Secondary-Text">Log in to view your votes.</div>
         </div>
       )}
       <div>{props.children}</div>

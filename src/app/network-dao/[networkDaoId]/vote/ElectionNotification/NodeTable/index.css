@@ -35,9 +35,6 @@
   padding: 0;
 }
 
-.node-table .node-table-wrapper .table-layer-block {
-  display: none;
-}
 
 .node-table-btn-group>button {
   display: inline-block;

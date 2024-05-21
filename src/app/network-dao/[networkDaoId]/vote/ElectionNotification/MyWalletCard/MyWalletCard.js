@@ -336,7 +336,7 @@ class MyWalletCard extends PureComponent {
                       onClick={this.loginOrUnlock}
                     >
                       <IconFont type="vote-login" />
-                      Log In
+                      Log in
                     </Button>
                   )}
                 {/* 

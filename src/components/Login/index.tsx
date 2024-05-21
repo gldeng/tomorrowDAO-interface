@@ -34,7 +34,7 @@ export default function Login() {
     <div className="login-container">
       {!isLogin ? (
         <Button size={isLG ? 'medium' : 'large'} type="primary" onClick={login}>
-          Log In
+          Log in
         </Button>
       ) : (
         <Popover

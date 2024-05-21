@@ -11,7 +11,7 @@ export default function NoData(props: TNoDataType) {
   return (
     <div>
       <Image className="mx-auto block" width={imgW} height={imgH} src={NoDataIcon} alt="" />
-      <Typography.Text> No Result Found</Typography.Text>
+      <Typography.Text>No results found</Typography.Text>
     </div>
   );
 }

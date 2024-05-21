@@ -10,9 +10,7 @@ export default function TableLayer({ children, className = '', ...props }) {
       className={`table-layer ${  isMobile ? "mobile " : ""  }${className}`}
       {...props}
     >
-      <div className="table-layer-block" />
       {children}
-      <div className="table-layer-block" />
     </div>
   );
 }

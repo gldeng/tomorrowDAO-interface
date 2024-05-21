@@ -6,6 +6,7 @@ import './index.css';
 import { HeaderLogo } from 'components/Logo';
 import { ReactComponent as CloseIcon } from 'assets/imgs/close.svg';
 import type { MenuProps } from 'antd';
+import Link from 'next/link';
 
 export interface IMobileMenuProps extends Omit<MenuProps, 'mode'> {
   className?: string;
@@ -42,7 +43,9 @@ function MobileMenu(props: IMobileMenuProps) {
         width="100%"
         title={
           <div className="menu-header-container">
-            <HeaderLogo />
+            <Link href="/" onClick={onClose}>
+              <HeaderLogo />
+            </Link>
             <CloseIcon className="cursor-pointer" width={16} height={16} onClick={onClose} />
           </div>
         }
@@ -52,7 +55,15 @@ function MobileMenu(props: IMobileMenuProps) {
         onClose={onClose}
         open={open}
       >
-        <Menu mode="inline" className="mobile-custom-menu" {...props} />
+        <Menu
+          mode="inline"
+          className="mobile-custom-menu"
+          {...props}
+          onClick={(...args) => {
+            setOpen(false);
+            props?.onClick?.(...args);
+          }}
+        />
       </Drawer>
     </div>
   );
