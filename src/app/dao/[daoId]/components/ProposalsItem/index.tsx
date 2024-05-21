@@ -10,6 +10,7 @@ import DetailTag from 'components/DetailTag';
 import './index.css';
 import { useMemo } from 'react';
 import { EVoteMechanismNameType } from 'app/proposal/deploy/[daoId]/type';
+import capitalizeFirstLetter from 'utils/capitalizeFirstLetter';
 
 export interface IProposalsItemProps {
   proposalStatus: string;
@@ -34,21 +35,17 @@ export default function ProposalsItem(props: { data: IProposalsItem }) {
   const voteText = is1t1v ? 'votes' : 'voters';
 
   const renderVoteInfo = (currentVote: number, requiredVote: number) => {
-    return (
+    return currentVote < requiredVote ? (
       <>
-        {currentVote < requiredVote ? (
-          <>
-            <Image width={12} height={12} src={WarningGrayIcon} alt=""></Image>
-            <div>
-              Insufficient {voteText}: {currentVote}/{requiredVote} (min required)
-            </div>
-          </>
-        ) : (
-          <>
-            <Image width={12} height={12} src={CheckedIcon} alt=""></Image>
-            Minimum {voteText} requirement met: {currentVote}/{requiredVote}
-          </>
-        )}
+        <Image width={12} height={12} src={WarningGrayIcon} alt=""></Image>
+        <div>
+          Insufficient {voteText}: {currentVote}/{requiredVote}
+        </div>
+      </>
+    ) : (
+      <>
+        <Image width={12} height={12} src={CheckedIcon} alt=""></Image>
+        Minimum voting requirement met: {currentVote}/{requiredVote}
       </>
     );
   };
@@ -108,7 +105,8 @@ export default function ProposalsItem(props: { data: IProposalsItem }) {
         <div className="vote-top">
           <div className="h-[22px] vote-top-title">
             <Typography.Title fontWeight={FontWeightEnum.Regular} level={7}>
-              Total {is1t1v ? data.votesAmount : data.voterCount} {voteText}
+              {is1t1v ? data.votesAmount : data.voterCount} {capitalizeFirstLetter(voteText)} in
+              Total
             </Typography.Title>
           </div>
           <div className="vote-dis">

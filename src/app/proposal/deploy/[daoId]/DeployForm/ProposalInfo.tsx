@@ -106,7 +106,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
   }, [daoId]);
   return (
     <div className={className}>
-      <h2 className="text-[20px] leading-[28px] font-weight">Proposal Details</h2>
+      <h2 className="text-[20px] leading-[28px] font-weight">Create a Proposal</h2>
       <p className=" text-[16px] leading-[24px] text-Neutral-Secondary-Text font-normal mt-[8px] mb-[64px]">
         {proposalDetailDesc}
       </p>
@@ -148,7 +148,9 @@ const ProposalInfo = (props: ProposalInfoProps) => {
       </Form.Item>
 
       {/* Discussion on forum */}
-      <h2 className="title-primary mt-[64px]">Governance Information</h2>
+      <h2 className="title-primary mt-[64px]">
+        {isGovernance ? 'Governance Information' : 'Proposal Information'}
+      </h2>
       <Form.Item
         name={['proposalBasicInfo', 'forumUrl']}
         label={
@@ -273,7 +275,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
           </Form.Item>
           <Form.Item
             name={['transaction', 'params']}
-            label={<span className="form-item-label">Method Params</span>}
+            label={<span className="form-item-label">Method Parameter</span>}
             rules={[
               {
                 required: true,

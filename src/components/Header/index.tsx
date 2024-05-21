@@ -48,7 +48,7 @@ export default function Header() {
       {
         label: (
           <div className="menu-label">
-            <span className="menu-label-text">Community</span>
+            <span className="menu-label-text">Social Media</span>
             {!isLG && <MenuArrow className="transition-all duration-200" />}
           </div>
         ),

@@ -21,14 +21,15 @@ const ProposalTab = (props: IProposalTabProps) => {
       key: '2',
       label: (
         <span className="flex flex-col lg:flex-row">
-          <span>Contract</span>&nbsp; <span>Information</span>
+          <span>Contract</span>
+          <span className="lg:pl-[4px] pl-[0px]">Information</span>
         </span>
       ),
       children: (
         <div className="text-base	px-8 py-4">
           <div className="flex flex-col gap-2 pb-8">
             <div>
-              <Typography.Text fontWeight={FontWeightEnum.Medium}>Contract Name</Typography.Text>
+              <Typography.Text fontWeight={FontWeightEnum.Medium}>Call Method</Typography.Text>
             </div>
             <div>
               <Typography.Text className="text-Neutral-Secondary-Text">
@@ -39,7 +40,7 @@ const ProposalTab = (props: IProposalTabProps) => {
 
           <div className="flex flex-col gap-2 pb-8">
             <div>
-              <Typography.Text fontWeight={FontWeightEnum.Medium}>Contract Address</Typography.Text>
+              <Typography.Text fontWeight={FontWeightEnum.Medium}>Call Contract</Typography.Text>
             </div>
             <div>
               <HashAddress address={proposalDetailData?.transaction?.toAddress ?? '-'} />

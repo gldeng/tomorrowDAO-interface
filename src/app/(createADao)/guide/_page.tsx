@@ -7,10 +7,10 @@ import { ReactComponent as CircleDot } from 'assets/imgs/circle-dot.svg';
 import { symbolmarketUrl } from 'config';
 
 const linkArr = [
-  { label: 'DAO Governance contract', path: '/' },
-  { label: 'Treasury contract', path: '/' },
-  { label: 'Voting contract', path: '/' },
-  { label: 'Election contract', path: '/' },
+  { label: 'DAO Governance Contract', path: '/' },
+  { label: 'Treasury Contract', path: '/' },
+  { label: 'Voting Contract', path: '/' },
+  { label: 'Election Contract', path: '/' },
 ];
 
 const offers = [
@@ -57,6 +57,34 @@ const GuidePage = () => {
           Launch your own DAO with a customisable governance framework tailored to your
           organisation&lsquo;s needs.
         </Typography.Text>
+      </div>
+      <div>
+        <p className="pt-[38px] pb-[20px]">
+          <Typography.Title level={6} fontWeight={FontWeightEnum.Medium}>
+            TMRWDAO supports the creation of Decentralised Autonomous Organisations (DAOs) where
+            creators can customise the governance mechanisms to ensure efficient and fair
+            operations. The two mechanisms supported are &quot;Referendum&quot; and &quot;High
+            Council&quot;.
+          </Typography.Title>
+        </p>
+        <p>
+          <Typography.Text>
+            -&gt; Referendum: This is the primary governance mechanism that all DAOs need to
+            establish. By enabling all members to vote on and execute proposals, referendum ensure
+            inclusiveness and fairness in the decision-making process. It allows everyone to
+            directly express their opinions on important matters and influence the future direction
+            of the DAO through voting on proposals.
+          </Typography.Text>
+        </p>
+        <p className="py-[20px]">
+          <Typography.Text>
+            -&gt; High Council: This is a supplementary governance mechanism that is optional for
+            DAOs to enable. The High Council comprises a small group of users selected based on
+            predefined rules, and its members are granted the authority to review, vote on, and
+            execute proposals. The High Council aims to expedite the decision-making process,
+            ensuring that the DAO can promptly respond to changes and challenges.
+          </Typography.Text>
+        </p>
       </div>
 
       <div className="py-6">

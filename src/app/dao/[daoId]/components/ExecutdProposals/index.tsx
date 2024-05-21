@@ -11,6 +11,8 @@ import { emitLoading } from 'utils/myEvent';
 import { proposalCreateContractRequest } from 'contract/proposalCreateContract';
 import Link from 'next/link';
 import NoData from '../NoData';
+import useIsNetworkDao from 'hooks/useIsNetworkDao';
+import LinkNetworkDao from 'components/LinkNetworkDao';
 
 type TmodalInfoType = {
   title: string;
@@ -44,6 +46,7 @@ export default function ExecutdProposals(props: IExecutdProposals) {
   // success or fail modal content
   const [modalInfo, setModalInfo] = useState<TmodalInfoType>(successModalInfo);
   const currentProposalidref = useRef<string>('');
+  const { isNetWorkDao } = useIsNetworkDao();
   const {
     data: executableListData,
     error: executableListError,
@@ -118,7 +121,25 @@ export default function ExecutdProposals(props: IExecutdProposals) {
               <div>
                 <div className="block lg:flex items-center">
                   <Typography.Text fontWeight={FontWeightEnum.Medium}>Proposal ID:</Typography.Text>
-                  <HashAddress preLen={8} endLen={11} address={item.proposalId}></HashAddress>
+                  {isNetWorkDao ? (
+                    <LinkNetworkDao href={`/proposal-detail-tmrw/${item.proposalId}`}>
+                      <HashAddress
+                        ignorePrefixSuffix
+                        preLen={8}
+                        endLen={11}
+                        address={item.proposalId}
+                      ></HashAddress>
+                    </LinkNetworkDao>
+                  ) : (
+                    <Link href={`/proposal/${item.proposalId}`}>
+                      <HashAddress
+                        ignorePrefixSuffix
+                        preLen={8}
+                        endLen={11}
+                        address={item.proposalId}
+                      ></HashAddress>
+                    </Link>
+                  )}
                 </div>
                 <Typography.Text className="text-Neutral-Secondary-Text">
                   {dayjs(item.expiredTime).format('YYYY-MM-DD HH:mm:ss')}

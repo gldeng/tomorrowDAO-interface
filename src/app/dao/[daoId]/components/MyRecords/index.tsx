@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { fetchVoteHistory } from 'api/request';
 import { useSelector } from 'react-redux';
 import { useRequest } from 'ahooks';
-import { curChain } from 'config';
+import { curChain, explorer } from 'config';
 import { EVoteOption } from 'types/vote';
 import dayjs from 'dayjs';
 import LinkNetworkDao from 'components/LinkNetworkDao';
@@ -46,7 +46,7 @@ export default function MyRecords(props: IProps) {
 
   const LoadMoreButton = (
     <Button type="link" size="medium" className="!p-0 text-[#1A1A1A]">
-      Load More
+      View More
       <Image width={12} height={12} src={arrowRightIcon} alt=""></Image>
     </Button>
   );
@@ -58,9 +58,9 @@ export default function MyRecords(props: IProps) {
         </Typography.Title>
         <div className="records-header-morebtn">
           {isNetworkDAO ? (
-            <LinkNetworkDao href={`/my-record`}>{LoadMoreButton}</LinkNetworkDao>
+            <LinkNetworkDao href={`/my-votes`}>{LoadMoreButton}</LinkNetworkDao>
           ) : (
-            <Link href={`/my-record?daoId=${daoId}`}>{LoadMoreButton}</Link>
+            <Link href={`/my-votes?daoId=${daoId}`}>{LoadMoreButton}</Link>
           )}
         </div>
       </div>
@@ -82,24 +82,40 @@ export default function MyRecords(props: IProps) {
                       transactionId:
                     </Typography.Text>
 
-                    <HashAddress
-                      className="pl-[4px]"
-                      ignorePrefixSuffix={true}
-                      preLen={8}
-                      endLen={11}
-                      address={item.transactionId}
-                    ></HashAddress>
+                    <Link href={`${explorer}/tx/${item.transactionId}`}>
+                      <HashAddress
+                        className="pl-[4px]"
+                        ignorePrefixSuffix={true}
+                        preLen={8}
+                        endLen={11}
+                        address={item.transactionId}
+                      ></HashAddress>
+                    </Link>
                   </span>
                 </div>
                 <div className="block lg:flex items-center">
                   <Typography.Text fontWeight={FontWeightEnum.Medium}>Proposal ID:</Typography.Text>
-                  <HashAddress
-                    className="pl-[4px]"
-                    ignorePrefixSuffix={true}
-                    preLen={8}
-                    endLen={11}
-                    address={item.proposalId}
-                  ></HashAddress>
+                  {isNetworkDAO ? (
+                    <LinkNetworkDao href={`/proposal-detail-tmrw/${item.proposalId}`}>
+                      <HashAddress
+                        className="pl-[4px]"
+                        ignorePrefixSuffix={true}
+                        preLen={8}
+                        endLen={11}
+                        address={item.proposalId}
+                      ></HashAddress>
+                    </LinkNetworkDao>
+                  ) : (
+                    <Link href={`/proposal/${item.proposalId}`}>
+                      <HashAddress
+                        className="pl-[4px]"
+                        ignorePrefixSuffix={true}
+                        preLen={8}
+                        endLen={11}
+                        address={item.proposalId}
+                      ></HashAddress>
+                    </Link>
+                  )}
                 </div>
               </div>
             </div>

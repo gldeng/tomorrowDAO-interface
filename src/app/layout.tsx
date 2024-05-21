@@ -13,6 +13,7 @@ import { NetworkDaoHomePathName } from 'config';
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
   const isNetWorkDao = pathname.startsWith(NetworkDaoHomePathName);
+  console.log('isNetWorkDao', isNetWorkDao);
   return (
     <html lang="en">
       {/* eslint-disable-next-line @next/next/no-head-element */}

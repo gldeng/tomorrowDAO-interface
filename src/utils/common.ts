@@ -14,17 +14,17 @@ export function getExploreLink(
 ): string {
   switch (type) {
     case 'transaction': {
-      return `${explorer}tx/${data}`;
+      return `${explorer}/tx/${data}`;
     }
     case 'token': {
-      return `${explorer}token/${data}`;
+      return `${explorer}/token/${data}`;
     }
     case 'block': {
-      return `${explorer}block/${data}`;
+      return `${explorer}/block/${data}`;
     }
     case 'address':
     default: {
-      return `${explorer}address/${data}`;
+      return `${explorer}/address/${data}`;
     }
   }
 }
