@@ -24,6 +24,7 @@ import "./index.css";
 import { removePrefixOrSuffix, sendHeight } from "@common/utils";
 import removeHash from "@utils/removeHash";
 import useNetworkDaoRouter from "hooks/useNetworkDaoRouter";
+import useResponsive from "hooks/useResponsive";
 
 const { TabPane } = Tabs;
 const { Search } = Input;
@@ -35,6 +36,7 @@ const keyFromHash = {
 
 const OrganizationList = () => {
   // const navigate = useNavigate();
+  const { isLG } = useResponsive()
   const router = useNetworkDaoRouter()
   const location = window.location.hash;
   const [activeKey, setActiveKey] = useState(proposalTypes.PARLIAMENT);
@@ -129,6 +131,7 @@ const OrganizationList = () => {
   return (
     <div className="organization-list bg-white">
       <Tabs
+        size={isLG ? 'small' : 'middle'}
         animated={false}
         tabBarExtraContent={
           logStatus === LOG_STATUS.LOGGED ? (

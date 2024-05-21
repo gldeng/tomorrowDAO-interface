@@ -163,6 +163,7 @@ class ResourceCurrencyChart extends PureComponent {
   }
 
   componentDidMount() {
+    this._mounted = true;
     this.echartStyle = {
       height: 540,
     };
@@ -201,6 +202,7 @@ class ResourceCurrencyChart extends PureComponent {
         loading: false,
       });
       this.props.getEchartsLoading();
+      if (!this._mounted) return;
       this.getEchartDataTime = setTimeout(() => {
         this.getEchartData();
       }, RESOURCE_CURRENCY_CHART_FETCH_INTERVAL);
@@ -208,6 +210,7 @@ class ResourceCurrencyChart extends PureComponent {
       this.setState({
         loading: false,
       });
+      if (!this._mounted) return;
       this.getEchartDataTime = setTimeout(() => {
         this.getEchartData();
       }, RESOURCE_CURRENCY_CHART_FETCH_INTERVAL);
@@ -215,6 +218,7 @@ class ResourceCurrencyChart extends PureComponent {
   }
 
   componentWillUnmount() {
+    this._mounted = false;
     clearTimeout(this.getEchartDataTime);
   }
 

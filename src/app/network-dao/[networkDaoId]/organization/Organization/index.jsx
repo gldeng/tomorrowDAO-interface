@@ -148,7 +148,7 @@ export function getOrganizationLeftInfo(
   const proposerList =
     proposers.length > 0 ? (
       // eslint-disable-next-line max-len
-      <Select size="small" defaultValue={proposers[0]}>
+      <Select size="small" defaultValue={proposers[0]} className="w-full">
         {proposers.map((v) => (
           <Option key={v} value={v}>{`ELF_${v}_${viewer.chainId}`}</Option>
         ))}
@@ -159,7 +159,7 @@ export function getOrganizationLeftInfo(
   const members =
     organizationMembers.length > 0 ? (
       // eslint-disable-next-line max-len
-      <Select size="small" defaultValue={organizationMembers[0]}>
+      <Select size="small" defaultValue={organizationMembers[0]} className="w-full">
         {organizationMembers.map((v) => (
           <Option key={v} value={v}>{`ELF_${v}_${viewer.chainId}`}</Option>
         ))}

@@ -142,7 +142,7 @@ export default function ExecutdProposals(props: IExecutdProposals) {
                   )}
                 </div>
                 <Typography.Text className="text-Neutral-Secondary-Text">
-                  {dayjs(item.expiredTime).format('YYYY-MM-DD HH:mm:ss')}
+                  Expires On {dayjs(item.executeEndTime).format('YYYY-MM-DD HH:mm:ss')}
                 </Typography.Text>
               </div>
               <Button
@@ -177,7 +177,14 @@ export default function ExecutdProposals(props: IExecutdProposals) {
           status.
         </Typography.Text>
         <div className="flex mt-6 flex-col  execute-confirm-buttons-group">
-          <Button className="order-1 lg:order-2 execute-confirm-button">Cancel</Button>
+          <Button
+            className="order-1 lg:order-2 execute-confirm-button"
+            onClick={() => {
+              handleClose();
+            }}
+          >
+            Cancel
+          </Button>
           <Button
             className="order-2 lg:order-1 execute-confirm-button"
             type="primary"

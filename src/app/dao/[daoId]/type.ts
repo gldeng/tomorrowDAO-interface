@@ -47,12 +47,15 @@ export const enum ProposalStatus {
   EXPIRED = 'Expired',
   EXECUTED = 'Executed',
 }
-
+export enum EFilterParams {
+  proposalType = 'proposalType',
+  proposalStatus = 'proposalStatus',
+}
 export interface IProposalTableParams {
   pagination: IPaginationProps;
   // governanceMechanism?: string;
-  proposalType?: string;
-  proposalStatus?: string;
+  [EFilterParams.proposalStatus]?: string;
+  [EFilterParams.proposalType]?: string;
   content?: string;
 }
 

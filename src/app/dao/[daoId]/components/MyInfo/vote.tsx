@@ -196,12 +196,12 @@ function Vote(props: TVoteTypes) {
           <span className="text-[32px] mr-1">{elfBalance}</span>
           <span>{symbol}</span>
         </div>
-        <div className="text-center text-Neutral-Secondary-Text">Available to unstake</div>
+        <div className="text-center text-Neutral-Secondary-Text">Available for Unstaking</div>
         <Form form={form} layout="vertical" variant="filled" onFinish={() => handlerVote()}>
           <Form.Item<TFieldType>
             label="Stake Amount"
             name="stakeAmount"
-            tooltip="Currently, only one-time withdrawal of all unlocked token is supported."
+            tooltip={`Currently, the only supported method is to unstake all the available ${symbol} in one time.`}
             rules={[{ required: true, message: 'Please input stake Amount!' }]}
           >
             <InputNumber
@@ -272,7 +272,7 @@ function Vote(props: TVoteTypes) {
             setShowSuccessModal(false);
           }}
         >
-          I Know
+          OK
         </Button>
         <Button
           type="link"
@@ -299,7 +299,7 @@ function Vote(props: TVoteTypes) {
         <Info
           title="Transaction Failed!"
           firstText={modalInfo.message}
-          btnText="I Know"
+          btnText="OK"
           type="failed"
           onOk={() => {
             setShowFailedModal({

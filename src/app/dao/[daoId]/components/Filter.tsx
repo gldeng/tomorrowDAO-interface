@@ -9,7 +9,7 @@ import CommonDrawer from 'components/CommonDrawer';
 import type { FormInstance } from 'antd';
 import SwitchBtn from 'assets/imgs/switch-btn.svg';
 import { proposalTypeList, proposalStatusList, tagMap, ALL } from '../constants';
-import { IProposalTableParams, TTableParamsKey } from '../type';
+import { EFilterParams, IProposalTableParams, TTableParamsKey } from '../type';
 import CloseTag from 'assets/imgs/close-tag.svg';
 type TPropsType = {
   form: FormInstance;
@@ -19,6 +19,7 @@ type TPropsType = {
 };
 
 export default function Filter(props: TPropsType) {
+  // all table query params
   const { form, tableParams, onChangeTableParams } = props;
 
   const [modalForm] = Form.useForm();
@@ -27,14 +28,31 @@ export default function Filter(props: TPropsType) {
   const [isShowDrawer, setIsShowDrawer] = useState(false);
 
   const tags = useMemo(() => {
-    const keyArr = ['proposalType', 'proposalStatus'];
+    // filter from all table params: keyArr
+    const keyArr: EFilterParams[] = [EFilterParams.proposalStatus, EFilterParams.proposalType];
     const keyList = Object.keys(tableParams) as TTableParamsKey[];
-    const list = keyList.filter((key) => tableParams[key] && keyArr.includes(key));
+    const list = keyList.filter(
+      (key) => tableParams[key] && keyArr.includes(key as EFilterParams),
+    ) as EFilterParams[];
 
+    const queryLabel = (targetListReferanceKey: TTableParamsKey, value?: string) => {
+      let targetList: {
+        value: string;
+        label: string;
+      }[] = [];
+      if (targetListReferanceKey === EFilterParams.proposalStatus) {
+        targetList = proposalStatusList;
+      } else if (targetListReferanceKey === EFilterParams.proposalType) {
+        targetList = proposalTypeList;
+      }
+      const targetItem = targetList.find((item) => item.value === value);
+      return targetItem?.label ?? value;
+    };
     return list.map((key) => {
       return {
         key: key,
         value: tableParams[key] === ALL ? tagMap[key] : tableParams[key],
+        label: queryLabel(key, tableParams[key]),
       };
     });
   }, [tableParams]);
@@ -82,8 +100,8 @@ export default function Filter(props: TPropsType) {
 
   const handleCloseAll = () => {
     const values = {
-      proposalType: ALL,
-      proposalStatus: ALL,
+      proposalType: '',
+      proposalStatus: '',
     };
     form.setFieldsValue(values);
     onChangeTableParams((state: IProposalTableParams) => {
@@ -161,14 +179,21 @@ export default function Filter(props: TPropsType) {
               return (
                 <TagCom
                   key={index}
-                  label={item.value as string}
+                  label={item.label as string}
                   onCloseTag={() => {
                     handleCloseTag(item.key);
                   }}
                 />
               );
             })}
-            {tags.length > 0 && <TagCom label="Clear ALL" onCloseTag={handleCloseAll} />}
+            {tags.length > 0 && (
+              <span
+                className="mr-1.5 font-medium text-colorPrimary px-4 py-1 "
+                onClick={handleCloseAll}
+              >
+                Clear All
+              </span>
+            )}
           </Space>
         )}
       </Form>

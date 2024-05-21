@@ -8,11 +8,6 @@
   border-radius: 8px;
 }
 
-.table-layer>.table-layer-block {
-  min-width: 16px;
-  height: 41px;
-  border-bottom: #e6e6e6 1px solid !important;
-}
 
 .table-layer .antExplorer-table-wrapper {
   min-width: calc(100% - 32px);
@@ -41,10 +36,4 @@
   background: white;
   border-radius: 4px;
   padding-bottom: 10px;
-}
-
-.table-layer.mobile>.table-layer-block {
-  min-width: 8px;
-  height: 41px;
-  border-bottom: #e6e6e6 1px solid !important;
 }

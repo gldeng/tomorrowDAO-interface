@@ -10,7 +10,9 @@ import { ReactComponent as MenuArrow } from 'assets/imgs/menu-arrow.svg';
 import { MenuProps } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { useParams, usePathname } from 'next/navigation';
-
+export enum ENetworkDaoNav {
+  treasury = 'treasury',
+}
 export default function Header() {
   const { isLG } = useResponsive();
 
@@ -21,7 +23,7 @@ export default function Header() {
     return [
       {
         label: <Link href={`/network-dao/${networkDaoId}/treasury`}>Treasury</Link>,
-        key: 'treasury',
+        key: ENetworkDaoNav.treasury,
       },
       {
         label: (
@@ -65,8 +67,8 @@ export default function Header() {
   };
 
   useEffect(() => {
-    if (pathname === '/guide' || pathname === '/create') {
-      setCurrent('CreateDAO');
+    if (pathname.includes('/treasury')) {
+      setCurrent(ENetworkDaoNav.treasury);
     }
   }, [pathname]);
 
