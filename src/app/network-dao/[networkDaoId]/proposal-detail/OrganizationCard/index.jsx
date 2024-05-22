@@ -51,7 +51,7 @@ const OrganizationCard = (props) => {
     <Card className={className} title="Organization Info">
       <div className="gap-bottom-large">
         <span className="sub-title">Address:</span>
-        <span>{addressFormat(orgAddress)}</span>
+        <span className="break-all">{addressFormat(orgAddress)}</span>
       </div>
       <Row gutter={16}>
         <Col sm={12} xs={24}>

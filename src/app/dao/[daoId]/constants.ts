@@ -58,11 +58,21 @@ export const tagColorMap = {
     bgColor: '#E4F8F5',
     textColor: '#05C4A2',
   },
+  [AllProposalStatusString.PendingVote]: {
+    bgColor: '#F2EEFF',
+    textColor: '#764DF1',
+  },
   [AllProposalStatusString.BelowThreshold]: {
     bgColor: '#FEF7EC',
     textColor: '#F8B042',
-    firstText: 'Can be vetoed before',
-    secondText: '',
+  },
+  [AllProposalStatusString.Challenged]: {
+    bgColor: '#FEEFF1',
+    textColor: '#F55D6E',
+  },
+  [AllProposalStatusString.Vetoed]: {
+    bgColor: '#FEEFF1',
+    textColor: '#F55D6E',
   },
 };
 export const getTimeDesc = (status: string, data: IProposalsItem) => {
@@ -84,4 +94,4 @@ export const getTimeDesc = (status: string, data: IProposalsItem) => {
   }
 };
 // the proposal is created by network dao, not tmrw dao
-export const NetWorkDaoCreateProposal = 0;
+export const TMRWCreateProposal = 0;

@@ -53,3 +53,7 @@ code {
 .TMRWDAO-select-item-option-disabled {
   @apply !text-Neutral-Disable-Text
 }
+
+.hash-link-color>span {
+  @apply !text-inherit;
+}

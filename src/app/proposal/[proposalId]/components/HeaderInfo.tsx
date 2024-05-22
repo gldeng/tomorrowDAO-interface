@@ -3,9 +3,14 @@ import DetailTag from 'components/DetailTag';
 import { Typography, FontWeightEnum, HashAddress } from 'aelf-design';
 import { colorfulSocialMediaIconMap } from 'assets/imgs/socialMediaIcon';
 import Image from 'next/image';
-import { memo, useMemo } from 'react';
+import { memo } from 'react';
 import dayjs from 'dayjs';
 import { sideChainSuffix } from 'config';
+import ProposalTag from 'app/dao/[daoId]/components/ProposalsItem/ProposalTag';
+import { ProposalTypeString } from 'types';
+import useIsNetworkDao from 'hooks/useIsNetworkDao';
+import LinkNetworkDao from 'components/LinkNetworkDao';
+import Link from 'next/link';
 
 // import ProposalDetailFile from 'assets/imgs/proposal-detail-file.svg';
 interface IHeaderInfoProps {
@@ -13,9 +18,6 @@ interface IHeaderInfoProps {
 }
 const HeaderInfo = (props: IHeaderInfoProps) => {
   const { proposalDetailData } = props;
-  const tagList = useMemo(() => {
-    return [proposalDetailData.governanceMechanism];
-  }, [proposalDetailData]);
   const handleShare = () => {
     const twTitle = `${proposalDetailData.proposalTitle} @tmrwdao`;
     const twUrl = window.location.href;
@@ -23,6 +25,7 @@ const HeaderInfo = (props: IHeaderInfoProps) => {
     const url = `http://twitter.com/share?text=${twTitle}&url=${twUrl}`;
     window.open(url);
   };
+  const { isNetWorkDao } = useIsNetworkDao();
   return (
     <BoxWrapper>
       <div className="flex justify-between items-center">
@@ -64,21 +67,43 @@ const HeaderInfo = (props: IHeaderInfoProps) => {
         </Typography.Title>
       </div>
       <div className="flex gap-2 pb-6">
-        {tagList.map((tag) => {
-          return (
-            <DetailTag
-              key={tag}
-              customStyle={{
-                text: tag?.toString() ?? '-',
-                height: 20,
-                color: '#919191',
-                bgColor: '#FAFAFA',
-              }}
-            />
-          );
-        })}
+        <ProposalTag
+          proposalType={proposalDetailData.proposalType}
+          proposalSource={proposalDetailData.proposalSource}
+          governanceMechanism={proposalDetailData.governanceMechanism}
+        />
       </div>
-      <div className="border-0 border-t border-solid border-Neutral-Divider flex pt-6 gap-y-4 gap-x-0 lg:gap-x-16 lg:gap-y-0 lg:flex-row flex-col">
+      <div className="border-0 border-t border-solid border-Neutral-Divider flex pt-6 gap-y-4 gap-x-0 lg:gap-x-16 lg:gap-y-0 lg:flex-row flex-col flex-wrap">
+        {proposalDetailData.proposalType === ProposalTypeString.Veto && (
+          <div className="flex items-center gap-4">
+            <Typography.Text className="text-Neutral-Secondary-Text">
+              Veto Proposal:
+            </Typography.Text>
+            {isNetWorkDao ? (
+              <LinkNetworkDao
+                href={`/proposal-detail?proposalId=${proposalDetailData.vetoProposalId}`}
+              >
+                <HashAddress
+                  preLen={8}
+                  endLen={9}
+                  ignorePrefixSuffix={true}
+                  address={proposalDetailData.vetoProposalId ?? '-'}
+                  className="hash-link-color"
+                ></HashAddress>
+              </LinkNetworkDao>
+            ) : (
+              <Link href={`/proposal/${proposalDetailData.vetoProposalId}`}>
+                <HashAddress
+                  preLen={8}
+                  endLen={9}
+                  ignorePrefixSuffix={true}
+                  className="hash-link-color"
+                  address={proposalDetailData.vetoProposalId ?? '-'}
+                ></HashAddress>
+              </Link>
+            )}
+          </div>
+        )}
         <div className="flex items-center gap-4">
           <Typography.Text className="text-Neutral-Secondary-Text">Poster:</Typography.Text>
           <HashAddress

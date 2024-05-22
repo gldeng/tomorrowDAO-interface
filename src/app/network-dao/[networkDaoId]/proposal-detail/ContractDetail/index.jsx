@@ -122,6 +122,7 @@ const ContractDetail = (props) => {
         </Col>
         <Col sm={20} xs={24}>
           <a
+            className="break-all"
             href={getContractURL(addressFormat(contractAddress))}
             target="_blank"
             rel="noopener noreferrer"
