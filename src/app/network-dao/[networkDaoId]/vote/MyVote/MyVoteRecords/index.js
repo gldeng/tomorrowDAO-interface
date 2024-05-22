@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import LinkReplaceLastPathName from 'components/LinkNetworkDao';
 import { connect } from "react-redux";
-import { Input, Button, Tooltip } from "antd";
-import { Table } from 'aelf-design';
+import { Input, Button, Tooltip, Table } from "antd";
 
 import { SearchOutlined } from "@ant-design/icons";
 import publicKeyToAddress from "@utils/publicKeyToAddress";

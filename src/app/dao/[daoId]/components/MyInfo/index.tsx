@@ -201,6 +201,22 @@ export default function MyInfo(props: TInfoTypes) {
     >
       <Typography.Title fontWeight={FontWeightEnum.Medium} level={6} className="pb-6">
         My Info
+        {/* <button
+          onClick={async () => {
+            if (!isSyncQuery()) {
+              return;
+            }
+            const contractParams = {
+              votingItemId: 'f101135317f49c9670182f94be9161843d67d9d14b25f03ac697a7283b9423f2',
+              voteOption: 0,
+              voteAmount: 1,
+            };
+            const result = await callContract('Vote', contractParams, voteAddress);
+            console.log('result', result);
+          }}
+        >
+          local env test vote 
+        </button> */}
       </Typography.Title>
       {isLogin ? (
         <div>

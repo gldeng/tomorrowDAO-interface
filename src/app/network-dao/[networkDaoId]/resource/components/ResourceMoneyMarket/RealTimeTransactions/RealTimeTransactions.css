@@ -13,6 +13,10 @@
   min-height: 268px;
 }
 
+.real-time-transactions .antExplorer-col {
+  font-size: inherit;
+}
+
 .real-time-transactions .real-time-transactions-body .table-head {
   background-color: #f7f8f9;
   height: 30px;
@@ -35,6 +39,7 @@
 
 .real-time-transactions .real-time-transactions-body .table-sell .antExplorer-col {
   white-space: nowrap;
+  font-size: inherit;
 }
 
 .real-time-transactions .real-time-transactions-body .table-buy {

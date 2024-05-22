@@ -54,6 +54,7 @@ export const useWalletInit = () => {
         setTimeout(() => {
           getAccountInAELF()
             .then((aelfChainAddress: string) => {
+              console.log('getAccountInAELF res', aelfChainAddress);
               walletInfo.aelfChainAddress = getOriginalAddress(aelfChainAddress);
             })
             .catch((error) => {
