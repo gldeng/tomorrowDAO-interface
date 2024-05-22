@@ -6,13 +6,14 @@ import { GetContractServiceMethod } from './baseContract';
 import { curChain } from 'config';
 import { multiTokenContractRequest } from './multiTokenContract';
 import { proposalCreateContractRequest } from './proposalCreateContract';
+import { TransactionResult } from '@portkey/types';
 
 export const callContract = async <T>(
   methodName: string,
   params: T,
   address: string,
   options?: IContractOptions,
-): Promise<IProposalCreated> => {
+): Promise<TransactionResult> => {
   console.log(
     '=====multiTokenContractRequest methodName, type, contractAddress, curChain, params: ',
     methodName,
