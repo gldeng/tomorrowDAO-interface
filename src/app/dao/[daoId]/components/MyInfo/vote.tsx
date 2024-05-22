@@ -4,7 +4,6 @@ import { useState, useCallback } from 'react';
 import CommonModal from 'components/CommonModal';
 import Image from 'next/image';
 import { EVoteMechanismNameType } from 'app/proposal/deploy/[daoId]/type';
-import { useSelector } from 'react-redux';
 import { voteApproveMessage, voteRejectMessage, voteAbstainMessage } from 'utils/constant';
 import SuccessGreenIcon from 'assets/imgs/success-green.svg';
 import { getExploreLink } from 'utils/common';
@@ -15,9 +14,11 @@ import { curChain, voteAddress } from 'config';
 import { timesDecimals } from 'utils/calculate';
 import { EVoteOption, EVoteOptionLabel } from 'types/vote';
 import { TokenIconMap } from 'constants/token';
+import { useSelector } from 'redux/store';
 import { IContractError } from 'types';
 import BigNumber from 'bignumber.js';
 import useAelfWebLoginSync from 'hooks/useAelfWebLoginSync';
+import { useWebLogin } from 'aelf-web-login';
 
 type TVoteTypes = {
   proposalId: string;
@@ -47,7 +48,8 @@ function Vote(props: TVoteTypes) {
     isOpen: false,
     message: '',
   });
-  const { walletInfo } = useSelector((store: any) => store.userInfo);
+  const { walletInfo } = useSelector((store) => store.userInfo);
+  const { wallet } = useWebLogin();
   const [txHash, setTxHash] = useState('');
 
   const handlerModal = (voteType: number) => {
@@ -102,7 +104,7 @@ function Vote(props: TVoteTypes) {
           {
             spender: voteAddress || '',
             symbol: symbol || 'ELF',
-            owner: walletInfo.aelfChainAddress,
+            owner: walletInfo.aelfChainAddress || wallet.address,
           },
           {
             chain: curChain,
@@ -157,6 +159,7 @@ function Vote(props: TVoteTypes) {
     fetchMyInfo,
     symbol,
     walletInfo.aelfChainAddress,
+    wallet.address,
   ]);
 
   return (

@@ -75,23 +75,5 @@ export const tagColorMap = {
     textColor: '#F55D6E',
   },
 };
-export const getTimeDesc = (status: string, data: IProposalsItem) => {
-  switch (status) {
-    // case ProposalStatusString.Pending:
-    //   return `Can be vetoed before xxxx`;
-    case ProposalStatusString.Approved:
-      return `Availabe to be executed before ${data.expiredTime}`;
-    case ProposalStatusString.Rejected:
-      return `Rejected on ${data.endTime}`;
-    case ProposalStatusString.Abstained:
-      return `Abstained on ${data.endTime}`;
-    case ProposalStatusString.Expired:
-      return `Expired on ${data.expiredTime}`;
-    case ProposalStatusString.Executed:
-      return `Executed on ${data.startTime}`;
-    default:
-      return '';
-  }
-};
 // the proposal is created by network dao, not tmrw dao
 export const TMRWCreateProposal = 0;

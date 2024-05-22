@@ -130,6 +130,13 @@ export enum AllProposalStatusString {
   'Challenged' = 'Challenged',
   'Vetoed' = 'Vetoed',
 }
+export enum AllProposalStageString {
+  Default = 'Default',
+  Active = 'Active',
+  Pending = 'Pending',
+  Execute = 'Execute',
+  Finished = 'Finished',
+}
 interface IProposalTypeListItem {
   label: string;
   desc: string;

@@ -129,7 +129,7 @@ const OrganizationList = () => {
   };
 
   return (
-    <div className="organization-list bg-white">
+    <div className="organization-list bg-white overflow-hidden">
       <Tabs
         size={isLG ? 'small' : 'middle'}
         animated={false}

@@ -11,6 +11,7 @@ import { ProposalTypeString } from 'types';
 import useIsNetworkDao from 'hooks/useIsNetworkDao';
 import LinkNetworkDao from 'components/LinkNetworkDao';
 import Link from 'next/link';
+import ProposalStatusDesc from 'app/dao/[daoId]/components/ProposalsItem/ProposalStatusDesc';
 
 // import ProposalDetailFile from 'assets/imgs/proposal-detail-file.svg';
 interface IHeaderInfoProps {
@@ -38,9 +39,9 @@ const HeaderInfo = (props: IHeaderInfoProps) => {
               bgColor: '#FEF7EC',
             }}
           />
-          {/* <Typography.Text size="small" className="text-Neutral-Secondary-Text">
-            Will expire on {proposalDetailData.expiredTime}
-          </Typography.Text> */}
+          <Typography.Text size="small" className="text-Neutral-Secondary-Text">
+            <ProposalStatusDesc proposalItem={proposalDetailData as unknown as IProposalsItem} />
+          </Typography.Text>
         </div>
         <div className="flex gap-6">
           {/* <div className="flex items-center gap-2 py-1.5 px-4 rounded-md bg-Neutral-Default-BG">

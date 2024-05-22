@@ -9,6 +9,7 @@ export default function useAelfWebLoginSync() {
       message.open({
         type: 'info',
         content: 'synchronizing information on the chain, please try again later.',
+        duration: 6,
       });
       return false;
     }

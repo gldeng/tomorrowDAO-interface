@@ -741,3 +741,7 @@
 .statistical-data-container .vote-statistic .antExplorericon {
   position: static;
 }
+
+.ant-statistic.vote-statistic {
+  text-align: center;
+}
