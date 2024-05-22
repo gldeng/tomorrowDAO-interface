@@ -1,6 +1,7 @@
 import { Typography, FontWeightEnum, HashAddress } from 'aelf-design';
 import { Tabs } from 'aelf-design';
 import { getContract } from 'app/proposal/deploy/[daoId]/util';
+import { MarkdownPreview } from 'components/MarkdownEditor';
 import { useEffect, useState } from 'react';
 import { ProposalTypeString } from 'types';
 import base64ToHex from 'utils/base64ToHex';
@@ -38,7 +39,11 @@ const ProposalTab = (props: IProposalTabProps) => {
       key: '1',
       label: <span className="flex flex-col lg:flex-row">Description</span>,
       children: (
-        <div className="text-base px-8 py-4">{proposalDetailData?.proposalDescription}</div>
+        <div className="text-base px-8 py-4">
+          <div className="custom-html-style">
+            <MarkdownPreview text={proposalDetailData?.proposalDescription ?? ''} />
+          </div>
+        </div>
       ),
     },
   ];

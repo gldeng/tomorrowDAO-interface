@@ -22,4 +22,8 @@
       }
     }
   }
+
+  .proposal-tag+.proposal-tag {
+    @apply ml-[8px]
+  }
 }

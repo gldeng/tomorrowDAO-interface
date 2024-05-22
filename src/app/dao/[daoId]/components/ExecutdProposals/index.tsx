@@ -3,7 +3,7 @@ import CommonModal from 'components/CommonModal';
 import { useRef, useState } from 'react';
 import Info from '../Info';
 import { fetchExecutableList } from 'api/request';
-import { curChain, mainExplorer } from 'config';
+import { curChain, explorer } from 'config';
 import { useRequest } from 'ahooks';
 import dayjs from 'dayjs';
 import './index.css';
@@ -208,7 +208,7 @@ export default function ExecutdProposals(props: IExecutdProposals) {
           firstText={modalInfo.firstText}
         ></Info>
         {modalInfo.txId && (
-          <Link href={`${mainExplorer}/tx/${modalInfo.txId}`}>
+          <Link href={`${explorer}/tx/${modalInfo.txId}`}>
             <Button className="mx-auto" type="link">
               View Transaction Details
             </Button>

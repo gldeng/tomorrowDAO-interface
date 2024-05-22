@@ -280,6 +280,7 @@ interface IProposalDetailData {
   approvedCount: number;
   rejectionCount: number;
   abstentionCount: number;
+  proposalSource: number;
 }
 
 interface IProposalDetailRes {

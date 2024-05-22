@@ -139,12 +139,12 @@ const ProposalInfo = (props: ProposalInfoProps) => {
           },
           {
             min: 0,
-            max: 300000,
+            max: 256,
             message: 'The proposal description supports a maximum of 300,000 characters',
           },
         ]}
       >
-        <MarkdownEditor maxLen={300000} id="proposalBasicInfo_proposalDescription" />
+        <MarkdownEditor maxLen={256} id="proposalBasicInfo_proposalDescription" />
       </Form.Item>
 
       {/* Discussion on forum */}

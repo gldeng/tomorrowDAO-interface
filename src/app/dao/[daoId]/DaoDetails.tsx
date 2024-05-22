@@ -19,7 +19,7 @@ import LinkNetworkDao from 'components/LinkNetworkDao';
 import { fetchDaoInfo, fetchProposalList } from 'api/request';
 import { curChain } from 'config';
 import './page.css';
-import { ALL, NetWorkDaoCreateProposal } from './constants';
+import { ALL, TMRWCreateProposal } from './constants';
 import Link from 'next/link';
 
 interface IProps {
@@ -234,7 +234,7 @@ export default function DeoDetails(props: IProps) {
                 ) : proposalData?.data?.items?.length ? (
                   proposalData?.data?.items?.map((item) => {
                     // tmrw
-                    if (item.proposalSource === NetWorkDaoCreateProposal) {
+                    if (item.proposalSource === TMRWCreateProposal) {
                       if (isNetworkDAO) {
                         return (
                           <LinkNetworkDao

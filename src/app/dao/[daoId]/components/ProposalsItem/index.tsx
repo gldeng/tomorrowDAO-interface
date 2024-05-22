@@ -6,11 +6,10 @@ import CheckedIcon from 'assets/imgs/checked.svg';
 import useResponsive from 'hooks/useResponsive';
 import { tagColorMap } from '../../constants';
 import DetailTag from 'components/DetailTag';
-
-import './index.css';
-import { useMemo } from 'react';
 import { EVoteMechanismNameType } from 'app/proposal/deploy/[daoId]/type';
 import capitalizeFirstLetter from 'utils/capitalizeFirstLetter';
+import ProposalTag from './ProposalTag';
+import './index.css';
 
 export interface IProposalsItemProps {
   proposalStatus: string;
@@ -25,10 +24,6 @@ export default function ProposalsItem(props: { data: IProposalsItem }) {
   const { isLG } = useResponsive();
 
   const proposalStatus = data.proposalStatus as TagColorKey;
-
-  const tagList = useMemo(() => {
-    return [data.governanceMechanism];
-  }, [data]);
 
   const is1t1v = data.voteMechanismName === EVoteMechanismNameType.TokenBallot;
 
@@ -85,17 +80,11 @@ export default function ProposalsItem(props: { data: IProposalsItem }) {
         </div>
         <div>
           <Space>
-            {tagList.map((item: any) => (
-              <DetailTag
-                key={item}
-                customStyle={{
-                  text: item,
-                  height: 20,
-                  color: '#919191',
-                  bgColor: '#F6F6F6',
-                }}
-              />
-            ))}
+            <ProposalTag
+              governanceMechanism={data.governanceMechanism}
+              proposalSource={data.proposalSource}
+              proposalType={data.proposalType}
+            />
           </Space>
         </div>
       </div>

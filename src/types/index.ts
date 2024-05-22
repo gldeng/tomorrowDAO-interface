@@ -125,9 +125,10 @@ export enum AllProposalStatusString {
   Abstained = 'Abstained',
   Expired = 'Expired',
   Executed = 'Executed',
-  'Subject to Veto' = 'PendingVote',
-  'Being Vetoed' = 'Vetoed',
+  PendingVote = 'PendingVote',
   'BelowThreshold' = 'BelowThreshold',
+  'Challenged' = 'Challenged',
+  'Vetoed' = 'Vetoed',
 }
 interface IProposalTypeListItem {
   label: string;

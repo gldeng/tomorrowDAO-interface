@@ -47,3 +47,4 @@ export default function MarkdownEditor({ value, onChange, maxLen, id }: IMarkdow
     />
   );
 }
+export { MarkdownPreview };
