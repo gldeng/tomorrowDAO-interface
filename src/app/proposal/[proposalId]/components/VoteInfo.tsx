@@ -107,6 +107,7 @@ const VoteInfo = (props: IHeaderInfoProps) => {
         daoId={proposalDetailData.daoId || ''}
         proposalId={proposalDetailData.proposalId}
         voteMechanismName={proposalDetailData.voteMechanismName}
+        notLoginTip={'Connect wallet to view your votes.'}
       />
     </div>
   );

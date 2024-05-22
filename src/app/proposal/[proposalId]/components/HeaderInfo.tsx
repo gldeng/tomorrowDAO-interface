@@ -54,10 +54,11 @@ const HeaderInfo = (props: IHeaderInfoProps) => {
             </Typography.Text>
           </div> */}
           <div
-            className="w-8 h-8 cursor-pointer bg-Neutral-Default-BG rounded-md flex justify-center items-center"
+            className="h-8 cursor-pointer bg-Neutral-Default-BG rounded-md flex justify-center items-center px-[10px]"
             onClick={handleShare}
           >
             <Image src={colorfulSocialMediaIconMap.Twitter} alt="x" width={11} height={10} />
+            <span className="pl-[4px]">Share on X</span>
           </div>
         </div>
       </div>
@@ -123,7 +124,7 @@ const HeaderInfo = (props: IHeaderInfoProps) => {
           ></HashAddress>
         </div>
         <div className="flex items-center gap-4">
-          <Typography.Text className="text-Neutral-Secondary-Text">Poster on:</Typography.Text>
+          <Typography.Text className="text-Neutral-Secondary-Text">Published:</Typography.Text>
           <Typography.Text>
             {proposalDetailData.deployTime
               ? dayjs(proposalDetailData.deployTime).format('YYYY-MM-DD HH:mm:ss')

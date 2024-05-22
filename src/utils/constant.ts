@@ -3,11 +3,8 @@ export const storages = {
   walletInfo: 'wallet-info',
 };
 
-export const voteApproveMessage =
-  'A innovative upgrade of the hash function used by aelf network, from traditional hash function to Poseidon  hash function.';
+export const voteApproveMessage = '1 approve votes are casted for the proposal.';
 
-export const voteRejectMessage =
-  'A innovative upgrade of the hash function used by aelf network, from traditional hash function to Poseidon  hash function.';
+export const voteRejectMessage = '1 reject votes are casted for the proposal.';
 
-export const voteAbstainMessage =
-  'A innovative upgrade of the hash function used by aelf network, from traditional hash function to Poseidon  hash function.';
+export const voteAbstainMessage = '1 abstain votes are casted for the proposal.';
