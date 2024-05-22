@@ -17,6 +17,7 @@ import { EVoteOption } from 'types/vote';
 import { TokenIconMap } from 'constants/token';
 import { IContractError } from 'types';
 import BigNumber from 'bignumber.js';
+import useAelfWebLoginSync from 'hooks/useAelfWebLoginSync';
 
 type TVoteTypes = {
   proposalId: string;
@@ -78,6 +79,7 @@ function Vote(props: TVoteTypes) {
     }
     setShowVoteModal(true);
   };
+  const { isSyncQuery } = useAelfWebLoginSync();
 
   const handlerVote = useCallback(async () => {
     const contractParams = {
@@ -91,6 +93,9 @@ function Vote(props: TVoteTypes) {
           : 1,
     };
     try {
+      if (!isSyncQuery()) {
+        return;
+      }
       emitLoading(true, 'The vote is being processed...');
       if (voteMechanismName === EVoteMechanismNameType.TokenBallot) {
         const allowance = await GetAllowanceByContract(
@@ -148,6 +153,7 @@ function Vote(props: TVoteTypes) {
     voteMechanismName,
     form,
     decimal,
+    isSyncQuery,
     fetchMyInfo,
     symbol,
     walletInfo.aelfChainAddress,

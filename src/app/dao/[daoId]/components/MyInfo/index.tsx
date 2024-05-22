@@ -17,6 +17,7 @@ import Vote from './vote';
 import { timesDecimals, divDecimals } from 'utils/calculate';
 import { IContractError } from 'types';
 import { TokenIconMap } from 'constants/token';
+import useAelfWebLoginSync from 'hooks/useAelfWebLoginSync';
 
 type TInfoTypes = {
   height?: number;
@@ -151,6 +152,7 @@ export default function MyInfo(props: TInfoTypes) {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUnstakeAmModalOpen, setIsUnstakeAmIsModalOpen] = useState(false);
+  const { isSyncQuery } = useAelfWebLoginSync();
 
   const handleClaim = useCallback(async () => {
     // call contract
@@ -162,6 +164,9 @@ export default function MyInfo(props: TInfoTypes) {
       },
     };
     try {
+      if (!isSyncQuery()) {
+        return;
+      }
       setIsModalOpen(false);
       emitLoading(true, 'The unstake is being processed...');
       const result = await callContract('Withdraw', contractParams, voteAddress);
@@ -177,7 +182,7 @@ export default function MyInfo(props: TInfoTypes) {
       });
       emitLoading(false);
     }
-  }, [daoId, info.withdrawList, info?.decimal, info?.availableUnStakeAmount]);
+  }, [daoId, info?.availableUnStakeAmount, info?.decimal, info.withdrawList, isSyncQuery]);
 
   return (
     <div
