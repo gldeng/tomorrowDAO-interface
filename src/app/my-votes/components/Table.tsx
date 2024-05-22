@@ -80,7 +80,7 @@ export default function RecordTable() {
       },
     },
     {
-      title: 'proposalId',
+      title: 'Proposal ID',
       width: 220,
       dataIndex: 'proposalId',
       render(text, record) {
@@ -110,9 +110,8 @@ export default function RecordTable() {
       },
     },
     {
-      title: 'My Option',
+      title: 'Vote',
       dataIndex: 'myOption',
-
       width: 100,
       filterMultiple: false,
       filters: [
@@ -134,13 +133,11 @@ export default function RecordTable() {
     {
       title: 'Votes',
       dataIndex: 'voteNum',
-
       width: 87,
     },
     {
-      title: 'transactionId',
+      title: 'Txn Hash',
       dataIndex: 'transactionId',
-
       width: 220,
       render(transactionId) {
         return (

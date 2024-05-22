@@ -109,7 +109,7 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
           params: finalParams,
         };
       }
-      emitLoading(true, 'The transaction is being processed...');
+      emitLoading(true, 'Publishing the proposal...');
       const methodName =
         res.proposalType === ProposalTypeEnum.VETO ? 'CreateVetoProposal' : 'CreateProposal';
       const createRes = await proposalCreateContractRequest(methodName, contractParams);
@@ -119,7 +119,7 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
       setResultModalConfig({
         open: true,
         type: CommonOperationResultModalType.Success,
-        primaryContent: 'Proposal Submitted!',
+        primaryContent: 'Proposal Published',
         secondaryContent: (
           <>
             {res.proposalBasicInfo.proposalTitle}:{res.proposalBasicInfo.proposalDescription}

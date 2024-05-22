@@ -12,7 +12,7 @@ import { explorer, sideChainSuffix } from 'config';
 const columns: ColumnsType<IProposalDetailDataVoteTopListItem> = [
   {
     width: 320,
-    title: <Typography.Text className="text-Neutral-Secondary-Text">Voters</Typography.Text>,
+    title: <Typography.Text className="text-Neutral-Secondary-Text">Voter</Typography.Text>,
     dataIndex: 'voter',
     render: (text) => {
       return <HashAddress address={text} preLen={8} endLen={9} chain={sideChainSuffix} />;
@@ -21,7 +21,7 @@ const columns: ColumnsType<IProposalDetailDataVoteTopListItem> = [
   {
     width: 320,
     title: (
-      <Typography.Text className="text-Neutral-Secondary-Text">Transaction Id</Typography.Text>
+      <Typography.Text className="text-Neutral-Secondary-Text">Transaction ID</Typography.Text>
     ),
     dataIndex: 'transactionId',
     render: (text) => {

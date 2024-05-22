@@ -13,7 +13,7 @@ import { callContract, ApproveByContract, GetAllowanceByContract } from 'contrac
 import { emitLoading } from 'utils/myEvent';
 import { curChain, voteAddress } from 'config';
 import { timesDecimals } from 'utils/calculate';
-import { EVoteOption } from 'types/vote';
+import { EVoteOption, EVoteOptionLabel } from 'types/vote';
 import { TokenIconMap } from 'constants/token';
 import { IContractError } from 'types';
 import BigNumber from 'bignumber.js';
@@ -57,10 +57,6 @@ function Vote(props: TVoteTypes) {
       return;
     }
     setCurrentVoteType(voteType);
-    if (voteMechanismName === EVoteMechanismNameType.TokenBallot) {
-      setShowTokenBallotModal(true);
-      return;
-    }
     switch (voteType) {
       case EVoteOption.APPROVED:
         setCurrentTitle('Approve Proposal');
@@ -76,6 +72,10 @@ function Vote(props: TVoteTypes) {
         break;
       default:
         break;
+    }
+    if (voteMechanismName === EVoteMechanismNameType.TokenBallot) {
+      setShowTokenBallotModal(true);
+      return;
     }
     setShowVoteModal(true);
   };
@@ -192,7 +192,7 @@ function Vote(props: TVoteTypes) {
       <CommonModal
         open={showTokenBallotModal}
         destroyOnClose
-        title={<div className="text-center">TokenBallot Proposal</div>}
+        title={<div className="text-center">{currentTitle}</div>}
         onCancel={() => {
           form.setFieldValue('stakeAmount', 0);
           setShowTokenBallotModal(false);
@@ -202,17 +202,23 @@ function Vote(props: TVoteTypes) {
           <span className="text-[32px] mr-1">{elfBalance}</span>
           <span>{symbol}</span>
         </div>
-        <div className="text-center text-Neutral-Secondary-Text">Available for Unstaking</div>
-        <Form form={form} layout="vertical" variant="filled" onFinish={() => handlerVote()}>
+        {/* <div className="text-center text-Neutral-Secondary-Text">Available for Unstaking</div> */}
+        <Form
+          form={form}
+          layout="vertical"
+          variant="filled"
+          onFinish={() => handlerVote()}
+          className="mt-[10px]"
+        >
           <Form.Item<TFieldType>
-            label="Stake Amount"
+            label="Stake and Vote"
             name="stakeAmount"
             tooltip={`Currently, the only supported method is to unstake all the available ${symbol} in one time.`}
             rules={[{ required: true, message: 'Please input stake Amount!' }]}
           >
             <InputNumber
               className="w-full"
-              placeholder="pleas input stake Amount"
+              placeholder="pleas input stake amount"
               autoFocus
               min={0}
               max={elfBalance}
@@ -258,18 +264,15 @@ function Vote(props: TVoteTypes) {
 
       {/* success */}
       <CommonModal
-        title="Transaction submitted successfully!"
+        title="Transaction submitted successfully"
         open={showSuccessModal}
         onCancel={() => {
           setShowSuccessModal(false);
         }}
       >
         <Image className="mx-auto block" width={56} height={56} src={SuccessGreenIcon} alt="" />
-        <div className="text-center text-Primary-Text font-medium">
-          Transaction Submitted Successfully
-        </div>
         <p className="text-center text-Neutral-Secondary-Text font-medium">
-          Voted {EVoteOption[currentVoteType]} vote on the proposal!
+          {EVoteOptionLabel[currentVoteType]} votes are casted for the proposal.
         </p>
         <Button
           className="mx-auto mt-6 w-[206px]"

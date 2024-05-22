@@ -1,6 +1,6 @@
 import { Descriptions, Divider, Form, InputNumber, message } from 'antd';
 import { HashAddress, Typography, FontWeightEnum, Button } from 'aelf-design';
-import { ReactNode, useState, useEffect, useCallback } from 'react';
+import React, { ReactNode, useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import SuccessGreenIcon from 'assets/imgs/success-green.svg';
 import CommonModal from 'components/CommonModal';
@@ -26,6 +26,7 @@ type TInfoTypes = {
   daoId: string;
   proposalId?: string;
   voteMechanismName?: string;
+  notLoginTip?: React.ReactNode;
 };
 
 type TFieldType = {
@@ -35,7 +36,14 @@ interface IMyInfo extends IProposalMyInfo {
   votesAmount?: number;
 }
 export default function MyInfo(props: TInfoTypes) {
-  const { height, clssName, daoId, proposalId = '', voteMechanismName = '' } = props;
+  const {
+    height,
+    clssName,
+    daoId,
+    proposalId = '',
+    voteMechanismName = '',
+    notLoginTip = 'Log in to view your votes.',
+  } = props;
   const { login, isLogin } = useWalletService();
   const elfInfo = store.getState().elfInfo.elfInfo;
   const { walletInfo } = useSelector((store: any) => store.userInfo);
@@ -367,7 +375,7 @@ export default function MyInfo(props: TInfoTypes) {
           <Button className="w-full mb-4" type="primary" onClick={login}>
             Log in
           </Button>
-          <div className="text-center text-Neutral-Secondary-Text">Log in to view your votes.</div>
+          <div className="text-center text-Neutral-Secondary-Text">{notLoginTip}</div>
         </div>
       )}
       <div>{props.children}</div>
