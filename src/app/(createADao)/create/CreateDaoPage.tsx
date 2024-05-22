@@ -25,6 +25,7 @@ import { IFormValidateError, IContractError } from 'types';
 import { cloneDeep, cloneDeepWith } from 'lodash-es';
 import { NetworkName } from 'config';
 import formValidateScrollFirstError from 'utils/formValidateScrollFirstError';
+import useAelfWebLoginSync from 'hooks/useAelfWebLoginSync';
 
 const initItems: StepsProps['items'] = [
   {
@@ -49,6 +50,7 @@ const CreateDaoPage = () => {
   const isHighCouncilStep = currentStepString === StepEnum.step2;
   const [messageApi, contextHolder] = antdMessage.useMessage();
   const daoCreateToken = useSelector((store) => store.daoCreate.token);
+  const { isSyncQuery } = useAelfWebLoginSync();
   const isSkipHighCouncil = useRef<boolean>(false);
   const submitButtonRef = useRef<ISubmitRef>(null);
   const router = useRouter();
@@ -111,6 +113,9 @@ const CreateDaoPage = () => {
     [currentStepString],
   );
   const handleCreateDao = async () => {
+    if (!isSyncQuery()) {
+      return;
+    }
     const stepForm = stepsFormMapRef.current.stepForm;
     const form = stepForm[StepEnum.step3].formInstance;
     const isNetworkDaoLocal = localStorage.getItem('is_network_dao');

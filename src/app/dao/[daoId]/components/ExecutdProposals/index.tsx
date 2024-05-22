@@ -13,6 +13,7 @@ import Link from 'next/link';
 import NoData from '../NoData';
 import useIsNetworkDao from 'hooks/useIsNetworkDao';
 import LinkNetworkDao from 'components/LinkNetworkDao';
+import useAelfWebLoginSync from 'hooks/useAelfWebLoginSync';
 
 type TmodalInfoType = {
   title: string;
@@ -47,6 +48,7 @@ export default function ExecutdProposals(props: IExecutdProposals) {
   const [modalInfo, setModalInfo] = useState<TmodalInfoType>(successModalInfo);
   const currentProposalidref = useRef<string>('');
   const { isNetWorkDao } = useIsNetworkDao();
+  const { isSyncQuery } = useAelfWebLoginSync();
   const {
     data: executableListData,
     error: executableListError,
@@ -72,7 +74,7 @@ export default function ExecutdProposals(props: IExecutdProposals) {
   };
 
   const handleMaskExecuted = async () => {
-    if (!currentProposalidref.current) {
+    if (!currentProposalidref.current || !isSyncQuery()) {
       return;
     }
     try {

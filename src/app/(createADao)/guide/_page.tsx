@@ -1,17 +1,17 @@
 'use client';
 import { Button, Typography, FontWeightEnum } from 'aelf-design';
-import Link from 'next/link';
+// import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import useJumpByPath from 'hooks/useJumpByPath';
 import { ReactComponent as CircleDot } from 'assets/imgs/circle-dot.svg';
 import { symbolmarketUrl } from 'config';
 
-const linkArr = [
-  { label: 'DAO Governance Contract', path: '/' },
-  { label: 'Treasury Contract', path: '/' },
-  { label: 'Voting Contract', path: '/' },
-  { label: 'Election Contract', path: '/' },
-];
+// const linkArr = [
+//   { label: 'DAO Governance Contract', path: '/' },
+//   { label: 'Treasury Contract', path: '/' },
+//   { label: 'Voting Contract', path: '/' },
+//   { label: 'Election Contract', path: '/' },
+// ];
 
 const offers = [
   {
@@ -145,7 +145,7 @@ const GuidePage = () => {
             </li>
           </ul>
 
-          {linkArr.map((item, index) => (
+          {/* {linkArr.map((item, index) => (
             <div className='before:content-["·"] before:text-Brand-Brand pt-4 pl-3' key={index}>
               <Link href={item.path} className="pl-2">
                 <Typography.Text
@@ -156,7 +156,7 @@ const GuidePage = () => {
                 </Typography.Text>
               </Link>
             </div>
-          ))}
+          ))} */}
         </div>
       </div>
 

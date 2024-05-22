@@ -12,6 +12,7 @@ import CommonOperationResultModal, {
   TCommonOperationResultModalProps,
 } from 'components/CommonOperationResultModal';
 import { proposalCreateContractRequest } from 'contract/proposalCreateContract';
+import useAelfWebLoginSync from 'hooks/useAelfWebLoginSync';
 import { emitLoading } from 'utils/myEvent';
 import { parseJSON, uint8ToBase64 } from 'utils/parseJSON';
 import { getContract } from '../util';
@@ -41,6 +42,7 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
   const { isNetWorkDao, networkDaoId } = useIsNetworkDao();
   const nextRouter = useRouter();
   const [resultModalConfig, setResultModalConfig] = useState(INIT_RESULT_MODAL_CONFIG);
+  const { isSyncQuery } = useAelfWebLoginSync();
   // const { getAccountInfoSync } = useWalletSyncCompleted();
   const { daoId } = props;
   const openErrorModal = (
@@ -74,8 +76,9 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
   };
   const handleSubmit = async () => {
     try {
-      // const mainAddress = await getAccountInfoSync();
-      // if (!mainAddress) return;
+      if (!isSyncQuery()) {
+        return;
+      }
       if (!daoId) {
         openErrorModal();
       }
