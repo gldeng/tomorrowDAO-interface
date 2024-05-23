@@ -11,6 +11,8 @@ export interface IProposalStatusDescProps {
 proposalStage: "Active" ：activeEndTime
 proposalStage-> Pending & Challenged ? Veto : !veto.  proposalStatus=   executeStartTime. 暂无跳转id
 statge=Execute. ：Availabe to be executed before {executeEndTime}.
+
+stage Finish
 state=Finished && status=Approved: Approved on {activeEndTime}
 
 state=Finished && status=reject.  xx on {activeEndTime}
@@ -18,6 +20,10 @@ state=Finished && status=anstanin  xx on {activeEndTime}
 
 state=Finished && status=expired  xx on {executeEndTime}
 state=Finished && status=Executed  Executed on {executeEndTime}
+
+Expired. Insufficient voters/ In sufficient votes.
+Vetoed on {24 Dec, 2023}.
+Failed to be executed, expired on {24 December, 2023}.
  */
 const dateFormat = 'YYYY-MM-DD';
 const getDate = (date: string) => (date ? dayjs(date).format(dateFormat) : '');
@@ -55,7 +61,7 @@ export default function ProposalStatusDesc(props: IProposalStatusDescProps) {
         return `Expired on ${getDate(proposalItem.activeEndTime)}`;
       }
       if (proposalStatus === AllProposalStatusString.Executed) {
-        return `Executed on ${getDate(proposalItem.executeEndTime)}`;
+        return `Executed. Executed on ${getDate(proposalItem.executeEndTime)}`;
       }
     }
   }, [proposalItem]);

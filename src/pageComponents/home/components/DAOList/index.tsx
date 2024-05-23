@@ -26,29 +26,26 @@ export default function DAOList() {
     <div className="dao-list">
       {loading ? (
         <SkeletonList />
-      ) : (
+      ) : data?.list ? (
         <div className="dao-list-container">
-          {data?.list ? (
-            data?.list?.map((item) => {
-              return (
-                <Link
-                  key={item.daoId}
-                  href={
-                    item.isNetworkDAO
-                      ? `/network-dao/${item.daoId}/proposal-list`
-                      : `/dao/${item.daoId}`
-                  }
-                >
-                  <DAOListItem item={item} />
-                </Link>
-              );
-            })
-          ) : (
-            <Empty />
-          )}
+          {data?.list?.map((item) => {
+            return (
+              <Link
+                key={item.daoId}
+                href={
+                  item.isNetworkDAO
+                    ? `/network-dao/${item.daoId}/proposal-list`
+                    : `/dao/${item.daoId}`
+                }
+              >
+                <DAOListItem item={item} />
+              </Link>
+            );
+          })}
         </div>
+      ) : (
+        <Empty description="No results found" className="mb-[30px]" />
       )}
-
       <div className="dao-more">
         <div className="more-button" onClick={loadMore}>
           {loadingMore ? (

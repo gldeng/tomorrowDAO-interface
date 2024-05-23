@@ -26,7 +26,7 @@ type TmodalInfoType = {
 const successModalInfo: TmodalInfoType = {
   title: 'Proposal Executed Successfully',
   type: 'success',
-  btnText: 'I Know',
+  btnText: 'OK',
 };
 const failedModalInfo: TmodalInfoType = {
   title: 'Proposal Executed Failed',
@@ -116,7 +116,6 @@ export default function ExecutdProposals(props: IExecutdProposals) {
       </Typography.Title>
       <div className="max-h-96 overflow-scroll">
         {!executableListData?.data?.items?.length && <NoData />}
-        {executableListError && <span>api error, refresh please</span>}
         {executableListData?.data?.items.map((item, index) => {
           return (
             <div className="flex justify-between items-center px-8 max-h-80 mb-8" key={index}>

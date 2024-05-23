@@ -9,6 +9,7 @@ import CopylistItem from "../../_proposal_root/components/CopylistItem";
 import { getDeserializeLog } from "./utils.js";
 import { get } from "../../_src/utils";
 import { VIEWER_GET_CONTRACT_NAME } from "@api/url";
+import { mainExplorer } from "config";
 import AddressNameVer from "../../_proposal_root/components/AddressNameVer";
 
 export const useCallbackAssem = () => {
@@ -136,7 +137,7 @@ export const useReleaseApprovedContractAction = () => {
               label="Transaction ID"
               isParentHref
               value={txsId}
-              href={`/tx/${txsId}`}
+              href={`${mainExplorer}/tx/${txsId}`}
             />
           </div>
         ),
