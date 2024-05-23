@@ -1,19 +1,22 @@
 name: Build and Push Image
-
 on:
   push:
     branches: ['dev','feat/ci-k8s']
-    paths-ignore:
-      - '.github/workflows/**'
-
 jobs:
   build-and-push-image:
     runs-on: tmrwdao-runner
     permissions:
       contents: read
+    outputs:
+      short_sha: ${{ steps.vars.outputs.short_sha }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Set short git commit SHA
+        id: vars
+        run: |
+          calculatedSha=$(git rev-parse --short ${{ github.sha }})
+          echo "short_sha=$calculatedSha" >> "$GITHUB_OUTPUT"
       - name: Create image tag
         id: meta
         uses: docker/metadata-action@v5
