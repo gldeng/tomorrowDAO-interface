@@ -4,18 +4,18 @@ import { useInfiniteScroll } from 'ahooks';
 import DownIcon from 'assets/imgs/down.svg';
 import { LoadingOutlined } from '@ant-design/icons';
 import { Empty, Spin } from 'antd';
-import { store } from 'redux/store';
-import './index.css';
 import { fetchDaoList } from 'api/request';
 import { SkeletonList } from 'components/Skeleton';
+import { curChain } from 'config';
+
+import './index.css';
 
 export default function DAOList() {
-  const info = store.getState().elfInfo.elfInfo;
   const fetchDaoInner = async (data: { list: IDaoItem[] } | undefined) => {
     const res = await fetchDaoList({
       skipCount: data?.list?.length ?? 0,
       maxResultCount: 6,
-      chainId: info.curChain,
+      chainId: curChain,
     });
     return {
       list: res.data.items,

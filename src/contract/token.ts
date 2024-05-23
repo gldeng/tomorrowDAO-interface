@@ -10,6 +10,7 @@ import { formatErrorMsg } from './util';
 import { getTxResult } from 'utils/getTxResult';
 import { sleep } from 'utils/common';
 import { GetContractServiceMethod } from './baseContract';
+import { mainChainAddress, sideChainAddress } from 'config';
 
 export const multiTokenContractRequest = async <T, R>(
   methodName: string,
@@ -18,8 +19,8 @@ export const multiTokenContractRequest = async <T, R>(
 ): Promise<R | ISendResult> => {
   const info = store.getState().elfInfo.elfInfo;
   const contractAddressMap = {
-    main: info?.mainChainAddress || '',
-    side: info?.sideChainAddress || '',
+    main: mainChainAddress,
+    side: sideChainAddress,
   };
   const contractAddress = (options?.chain === SupportedELFChainId.MAIN_NET
     ? contractAddressMap.main

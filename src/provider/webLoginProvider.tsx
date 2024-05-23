@@ -1,5 +1,6 @@
 'use client';
 import { NetworkType } from '@portkey/did-ui-react';
+import { curChain } from 'config';
 import dynamicReq from 'next/dynamic';
 
 import { store } from 'redux/store';
@@ -31,8 +32,7 @@ const WebLoginProviderDynamic = dynamicReq(
 
     webLogin.setGlobalConfig({
       appName: APP_NAME,
-      chainId: info.curChain || '',
-      // chainId: 'AELF' || '',
+      chainId: curChain,
       onlyShowV2: true,
       portkey: {},
       portkeyV2: {
@@ -67,7 +67,6 @@ const WebLoginProviderDynamic = dynamicReq(
         (info?.[`rpcUrl${String(info?.curChain).toUpperCase()}`] as unknown as string) ||
         info?.rpcUrlTDVW ||
         '',
-      // defaultRpcUrl: 'https://explorer-test.aelf.io/chain',
       networkType: info?.networkType || 'TESTNET',
     });
     return webLogin.WebLoginProvider;

@@ -10,6 +10,7 @@ import {
 } from 'apisauce';
 import AElf from 'aelf-sdk';
 import dayjs from 'dayjs';
+import { explorerRPC } from "config";
 import Cookies from 'js-cookie';
 
 import {
@@ -43,7 +44,7 @@ const header = [{
 }];
 // console.log('RPCSERVER', RPCSERVER);
 const aelf = new AElf(new AElf.providers.HttpProvider(
-  'https://explorer-test.aelf.io/chain',
+  explorerRPC,
   60000,
   // user,
   // password,

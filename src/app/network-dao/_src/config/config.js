@@ -3,6 +3,7 @@
  * @file config.js
  * @author huangzongzhe
  */
+import { explorerRPC } from "config";
 const config = require("./config.json");
 
 // the block chain URL this explorer is serving
@@ -24,7 +25,7 @@ const WALLET_DOMAIN = "https://wallet-test.aelf.io/";
 const APPNAME = "explorer.aelf.io";
 const commonPrivateKey =
   "0000000000000000000000000000000000000000000000000000000000000001";
-const DEFAUTRPCSERVER = typeof location !== 'undefined' ? `https://explorer-test.aelf.io/chain` : 'https://explorer-test.aelf.io/chain';
+const DEFAUTRPCSERVER = explorerRPC;
 
 module.exports = {
   DEFAUTRPCSERVER,

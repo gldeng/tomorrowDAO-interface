@@ -10,6 +10,7 @@ import walletInstance from "@redux/common/wallet";
 import config from "./config";
 import { request } from "./request";
 import constants from "../redux/common/constants";
+import { explorerRPC } from "config";
 // eslint-disable-next-line import/no-cycle
 
 const { ellipticEc } = AElf.wallet;
@@ -172,10 +173,7 @@ export const fakeWallet = AElf.wallet.getWalletByPrivateKey(
   config.wallet.privateKey
 );
 
-const DEFAUT_RPCSERVER =
-  process.env.NODE_ENV === "production"
-    ? `https://explorer-test.aelf.io/chain`
-    : `https://explorer-test.aelf.io/chain`;
+const DEFAUT_RPCSERVER = explorerRPC;
 
 export const defaultAElfInstance = new AElf(
   new AElf.providers.HttpProvider(DEFAUT_RPCSERVER)
