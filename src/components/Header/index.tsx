@@ -40,12 +40,16 @@ export default function Header() {
         key: ENavKeys.Resources,
         popupClassName: 'pc-menu-popup',
         children: [
+          // {
+          //   label: 'Documentation',
+          //   key: ENavKeys.Documentation,
+          // },
           {
-            label: 'Documentation',
-            key: ENavKeys.Documentation,
-          },
-          {
-            label: 'GitHub',
+            label: (
+              <Link href="https://github.com/TomorrowDAOProject" target="_blank">
+                GitHub
+              </Link>
+            ),
             key: ENavKeys.GitHub,
           },
           {
