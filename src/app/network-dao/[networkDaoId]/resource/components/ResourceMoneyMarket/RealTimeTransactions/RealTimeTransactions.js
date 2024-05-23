@@ -37,6 +37,7 @@ class RealTimeTransactions extends PureComponent {
   componentDidMount() {
     this._mounted = true;
     this.getResourceRealtimeRecords();
+    window.addEventListener('resize', this.update)
   }
 
   componentDidUpdate(prevProps) {
@@ -57,6 +58,9 @@ class RealTimeTransactions extends PureComponent {
         <Col span={6}>Cumulative</Col>
       </Row>
     );
+  }
+  update = () => {
+    this.forceUpdate()
   }
 
   async getResourceRealtimeRecords() {
@@ -94,6 +98,7 @@ class RealTimeTransactions extends PureComponent {
   componentWillUnmount() {
     this._mounted = false;
     clearTimeout(this.getResourceRealtimeRecordsTimer);
+    window.removeEventListener('resize', this.update)
   }
 
   // eslint-disable-next-line consistent-return
@@ -128,7 +133,7 @@ class RealTimeTransactions extends PureComponent {
 
   // todo: Move to utils or redesign the mobile view
   formatDate(date) {
-    const { isSmallScreen } = this.props;
+    const isSmallScreen = document.body.offsetWidth < 768;
 
     const format = isSmallScreen ? "HH:mm:ss" : "HH:mm:ss.SSS";
     return moment(date).format(format);

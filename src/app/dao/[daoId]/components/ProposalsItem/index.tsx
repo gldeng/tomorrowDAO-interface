@@ -9,6 +9,7 @@ import DetailTag from 'components/DetailTag';
 import { EVoteMechanismNameType } from 'app/proposal/deploy/[daoId]/type';
 import capitalizeFirstLetter from 'utils/capitalizeFirstLetter';
 import ProposalTag from './ProposalTag';
+import ProposalStatusDesc from './ProposalStatusDesc';
 import './index.css';
 
 export interface IProposalsItemProps {
@@ -61,6 +62,7 @@ export default function ProposalsItem(props: { data: IProposalsItem }) {
             size="small"
             fontWeight={FontWeightEnum.Regular}
           >
+            <ProposalStatusDesc proposalItem={data} />
             {/* {getTimeDesc(proposalStatus, data)} */}
           </Typography.Text>
         </div>

@@ -151,13 +151,16 @@ interface ITransaction {
   };
 }
 interface IProposalsItem {
+  activeEndTime: string;
+  executeStartTime: string;
+  executeEndTime: string;
   chainId: string;
   proposalId: string;
-  releaseAddress: string;
   deployTime: string;
   proposalTitle: string;
   governanceMechanism: string;
   proposalStatus: string;
+  proposalStage: string;
   proposalDescription: string;
   proposalType: string;
   startTime: string;
@@ -238,6 +241,12 @@ interface IProposalDetailDataVoteTopListItem {
   votingItemId: string;
 }
 interface IProposalDetailData {
+  startTime: string;
+  endTime: string;
+  activeEndTime: string;
+  executeStartTime: string;
+  executeEndTime: string;
+  expiredTime: string;
   decimals: string;
   proposalLifeList: IProposalLife[];
   voteTopList: IProposalDetailDataVoteTopListItem[];
