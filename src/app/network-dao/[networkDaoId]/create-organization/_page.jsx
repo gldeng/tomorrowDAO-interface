@@ -218,11 +218,13 @@ const FIELDS_MAP = {
     placeholder: "Input the address list of proposers, separated by commas",
     rules: [
       {
-        required: false,
+        required: true,
         type: "string",
-        // message: 'Please input the correct proposers list',
-        validator: validateAddressList,
+        message: "Please input the correct proposers list",
       },
+      ({ getFieldValue }) => ({
+        validator: validateAddressList,
+      }),
     ],
   },
 };
@@ -547,6 +549,7 @@ const CreateOrganization = () => {
           <FormItem
             label={FIELDS_MAP.proposers.label}
             {...FIELDS_MAP.proposers}
+            required
           >
             <TextArea placeholder={FIELDS_MAP.proposers.placeholder} autoSize />
           </FormItem>

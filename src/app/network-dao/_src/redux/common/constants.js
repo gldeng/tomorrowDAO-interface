@@ -4,6 +4,7 @@
  */
 import PropTypes from 'prop-types';
 import AElf from 'aelf-sdk';
+import { explorerRPC } from "config";
 import config from '../../common/config';
 
 const { constants, viewer, wallet } = config;
@@ -112,13 +113,7 @@ export default {
     ...proposalStatus,
   },
   viewer,
-  DEFAUT_RPCSERVER:
-    process.env.NODE_ENV === 'production'
-      ? `https://explorer-test.aelf.io/chain/`
-      : `https://explorer-test.aelf.io/chain/`,
+  DEFAUT_RPCSERVER: explorerRPC,
   APP_NAME: 'explorer.aelf.io',
 };
-export const DEFAUT_RPCSERVER =
-  process.env.NODE_ENV === 'production'
-    ? `https://explorer-test.aelf.io/chain/`
-    : `https://explorer-test.aelf.io/chain/`;
+export const DEFAUT_RPCSERVER = explorerRPC;

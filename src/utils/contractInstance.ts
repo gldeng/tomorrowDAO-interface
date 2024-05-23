@@ -1,8 +1,8 @@
 import AElf from 'aelf-sdk';
-
+import { explorerRPC } from 'config';
 // create a new instance of AElf
 // use our test environment url or prod environment url
-const aelf = new AElf(new AElf.providers.HttpProvider('https://explorer-test.aelf.io/chain'));
+const aelf = new AElf(new AElf.providers.HttpProvider(explorerRPC));
 
 // create a new wallet
 const newWallet = AElf.wallet.createNewWallet();

@@ -27,6 +27,7 @@ const Layout = dynamicReq(
         return state.common.currentWallet;
       });
       WebLoginInstance.get().setWebLoginContext(webLoginContext);
+      // dispatch wallet to network-dao redux
       useEffect(() => {
         if (loginState === WebLoginState.initial && currentWallet.address) {
           dispatch({

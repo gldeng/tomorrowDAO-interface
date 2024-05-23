@@ -10,6 +10,7 @@ import { formatErrorMsg } from './util';
 import { getTxResult } from 'utils/getTxResult';
 import { sleep } from 'utils/common';
 import { GetContractServiceMethod } from './baseContract';
+import { daoAddress } from 'config';
 
 export const daoCreateContractRequest = async <T, R>(
   methodName: string,
@@ -17,7 +18,7 @@ export const daoCreateContractRequest = async <T, R>(
   options?: IContractOptions,
 ): Promise<R | ISendResult> => {
   const info = store.getState().elfInfo.elfInfo;
-  const contractAddress = info?.daoAddress ?? 'RRF7deQbmicUh6CZ1R2y7U9M8n2eHPyCgXVHwiSkmNETLbL4D';
+  const contractAddress = daoAddress;
 
   const curChain: Chain = info.curChain ?? SupportedELFChainId.TDVW_NET;
 

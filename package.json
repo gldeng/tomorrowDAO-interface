@@ -7,6 +7,7 @@
     "build-todo": "NODE_OPTIONS=--max-old-space-size=4096 && next build",
     "next-compile": "next experimental-compile",
     "build": "node ./script/build.js",
+    "build:mainnet": "APP_ENV=mainnet node ./script/build.js",
     "start": "next start",
     "lint": "next lint",
     "prettier": "prettier -c --write '**/*'",
