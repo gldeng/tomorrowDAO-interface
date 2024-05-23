@@ -13,6 +13,7 @@ import { store } from 'redux/store';
 import { ProposalTab } from './components/ProposalTab';
 import { Skeleton, SkeletonList } from 'components/Skeleton';
 import { useParams } from 'next/navigation';
+import ErrorResult from 'components/ErrorResult';
 
 const ProposalDetails = () => {
   const { proposalId } = useParams<{ proposalId: string }>();
@@ -34,7 +35,7 @@ const ProposalDetails = () => {
           <SkeletonList />
         </>
       ) : error ? (
-        <>error</>
+        <ErrorResult />
       ) : (
         <>
           {proposalDetailRes?.data && <HeaderInfo proposalDetailData={proposalDetailRes?.data} />}

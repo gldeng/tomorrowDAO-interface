@@ -144,7 +144,7 @@ export default function MyInfo(props: TInfoTypes) {
     },
     {
       key: '2',
-      label: 'Staked ' + info?.symbol,
+      label: `${info?.symbol} Staked`,
       children: (
         <div className="w-full text-right">
           {info?.stakeAmount} {info?.symbol}
@@ -153,7 +153,7 @@ export default function MyInfo(props: TInfoTypes) {
     },
     {
       key: '3',
-      label: 'Voted',
+      label: 'Votes',
       children: <div className="w-full text-right">{info?.votesAmount} Votes</div>,
     },
   ];
@@ -327,7 +327,7 @@ export default function MyInfo(props: TInfoTypes) {
 
           {/* success */}
           <CommonModal
-            title="Transaction submitted successfully!"
+            title="Transaction Initiated"
             open={showSuccessModal}
             onCancel={() => {
               setShowSuccessModal(false);
@@ -335,12 +335,12 @@ export default function MyInfo(props: TInfoTypes) {
           >
             <Image className="mx-auto block" width={56} height={56} src={SuccessGreenIcon} alt="" />
             <div className="text-center text-Primary-Text font-medium">
-              <span className="text-[32px] mr-1">{form.getFieldValue('unstakeAmount')}</span>
-              <span>{info.symbol}</span>
+              {/* <span className="text-[32px] mr-1">{form.getFieldValue('unstakeAmount')}</span>
+              <span>{info.symbol}</span> */}
             </div>
-            <p className="text-center text-Neutral-Secondary-Text font-medium">
+            {/* <p className="text-center text-Neutral-Secondary-Text font-medium">
               Transaction Initiated
-            </p>
+            </p> */}
             <Button
               className="mx-auto mt-6 w-[206px]"
               type="primary"

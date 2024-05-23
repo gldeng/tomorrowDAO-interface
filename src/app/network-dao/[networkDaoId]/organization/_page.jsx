@@ -211,7 +211,7 @@ const OrganizationList = () => {
           }
         >
           <Then>
-            <Empty />
+            <Empty description="No results found"/>
           </Then>
         </If>
       </div>

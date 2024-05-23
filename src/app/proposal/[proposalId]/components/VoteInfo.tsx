@@ -79,9 +79,8 @@ const VoteInfo = (props: IHeaderInfoProps) => {
         <div className="border-0 border-t border-solid border-Neutral-Divider flex flex-col py-8">
           <div>
             <Typography.Text fontWeight={FontWeightEnum.Medium} className="text-Primary-Text">
-              Total
-              <span className="px-[4px]">{proposalDetailData.votesAmount}</span>
-              votes
+              <span className="pr-[4px]">{proposalDetailData.votesAmount}</span>
+              Votes in Total
             </Typography.Text>
           </div>
           <div>

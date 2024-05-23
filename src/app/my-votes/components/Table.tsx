@@ -31,7 +31,7 @@ export default function RecordTable() {
   });
   const {
     data: voteHistoryData,
-    // error: voteHistoryError,
+    error: voteHistoryError,
     loading: voteHistoryLoading,
     run,
   } = useRequest(

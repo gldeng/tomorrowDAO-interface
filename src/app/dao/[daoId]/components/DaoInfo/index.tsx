@@ -6,7 +6,7 @@ import PreviewFile from 'components/PreviewFile';
 import { Skeleton } from 'components/Skeleton';
 import { colorfulSocialMediaIconMap } from 'assets/imgs/socialMediaIcon';
 import DaoLogo from 'assets/imgs/dao-logo.svg';
-
+import ErrorResult from 'components/ErrorResult';
 import Link from 'next/link';
 import { getExploreLink } from 'utils/common';
 import './index.css';
@@ -153,7 +153,9 @@ export default function DaoInfo(props: IParams) {
       {isLoading ? (
         <Skeleton />
       ) : isError ? (
-        <div>error, please refresh page</div>
+        <div>
+          <ErrorResult />
+        </div>
       ) : (
         <>
           <div className="dao-detail-dis-title px-4 lg:px-8">

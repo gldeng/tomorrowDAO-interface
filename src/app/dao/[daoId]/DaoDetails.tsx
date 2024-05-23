@@ -21,6 +21,7 @@ import { curChain } from 'config';
 import './page.css';
 import { ALL, TMRWCreateProposal } from './constants';
 import Link from 'next/link';
+import ErrorResult from 'components/ErrorResult';
 
 interface IProps {
   daoId: string;
@@ -230,7 +231,9 @@ export default function DeoDetails(props: IProps) {
                 {proposalLoading ? (
                   <SkeletonList />
                 ) : proposalError ? (
-                  <div>proposal error, refresh pleaase</div>
+                  <div>
+                    <ErrorResult />
+                  </div>
                 ) : proposalData?.data?.items?.length ? (
                   proposalData?.data?.items?.map((item) => {
                     // tmrw
@@ -261,7 +264,7 @@ export default function DeoDetails(props: IProps) {
                     );
                   })
                 ) : (
-                  <Empty />
+                  <Empty description="No results found" />
                 )}
                 <Pagination
                   {...tableParams.pagination}

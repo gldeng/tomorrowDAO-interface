@@ -157,7 +157,7 @@ class RealTimeTransactions extends PureComponent {
           // eslint-disable-next-line react/no-array-index-key
           <Row className="table-buy" type="flex" align="middle" key={index}>
             <Col span={4}>
-              <Link href={`/tx/${item.tx_id}`}>{date}</Link>
+              <Link href={`${mainExplorer}/tx/${item.tx_id}`}>{date}</Link>
             </Col>
             <Col span={3} className="sell">
               Buy

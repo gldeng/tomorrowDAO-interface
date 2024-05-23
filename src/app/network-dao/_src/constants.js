@@ -173,7 +173,7 @@ const BLOCKS_LIST_COLUMNS = [
     width: 60,
     render: (text, row) =>
       !Number.isNaN(+row.tx_count) && +row.tx_count !== 0 ? (
-        <Link href={`/txs/block?${row.block_hash}`}> {row.tx_count} </Link>
+        <Link href={`${mainExplorer}/txs/block?${row.block_hash}`}> {row.tx_count} </Link>
       ) : (
         row.tx_count
       ),
@@ -199,7 +199,7 @@ const ALL_TXS_LIST_COLUMNS = [
     width: 300,
     ellipsis: true,
     render: (text, row) => (
-      <Link href={`/tx/${row.tx_id}`} title={row.tx_id}>
+      <Link href={`${mainExplorer}/tx/${row.tx_id}`} title={row.tx_id}>
         {row.tx_id}
       </Link>
     ),
@@ -211,7 +211,7 @@ const ALL_TXS_LIST_COLUMNS = [
     width: 150,
     align: "center",
     render: (text, row) => (
-      <Link href={`/block/${row.block_height}`} title={row.block_height}>
+      <Link href={`${mainExplorer}/block/${row.block_height}`} title={row.block_height}>
         {" "}
         {row.block_height}{" "}
       </Link>
@@ -223,7 +223,7 @@ const ALL_TXS_LIST_COLUMNS = [
     key: "address_from",
     ellipsis: true,
     render: (text) => (
-      <Link href={`/address/${text}`} title={addressFormat(text)}>
+      <Link href={`${mainExplorer}/address/${text}`} title={addressFormat(text)}>
         {" "}
         {addressFormat(text)}
       </Link>

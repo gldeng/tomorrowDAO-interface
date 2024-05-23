@@ -9,12 +9,11 @@ module.exports = {
     return rewritesConfig;
   },
   images: {
-    domains: ['www.baidu.com', '**.baidu.com'],
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'silver-abstract-unicorn-590.mypinata.cloud',
-        pathname: '/**/*',
+        hostname: '**.mypinata.cloud',
+        port: '',
       },
     ],
   },

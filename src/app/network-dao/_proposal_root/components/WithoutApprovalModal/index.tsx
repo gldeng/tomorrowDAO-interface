@@ -7,6 +7,7 @@ import {
   CheckCircleFilled,
 } from "@ant-design/icons";
 import { Modal } from "antd";
+import { mainExplorer } from "config";
 import CopylistItem from "../CopylistItem";
 import "./index.css";
 // import useMobile from "../../../../hooks/useMobile";
@@ -76,7 +77,7 @@ const getMessageByExec = (props: IModalProps) => {
             label="Transaction ID"
             value={transactionId}
             href=""
-            valueHref={`/tx/${transactionId}`}
+            valueHref={`${mainExplorer}/tx/${transactionId}`}
           />
         </div>
       );
@@ -112,7 +113,7 @@ const getMessage = (props) => {
               label="Transaction ID"
               value={transactionId}
               href=""
-              valueHref={`/tx/${transactionId}`}
+              valueHref={`${mainExplorer}/tx/${transactionId}`}
             />
           )}
         </div>

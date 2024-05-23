@@ -47,6 +47,7 @@ import {
   onlyOkModal,
   showAccountInfoSyncingModal,
 } from "@components/SimpleModal/index.tsx";
+import { mainExplorer } from 'config';
 
 const { TabPane } = Tabs;
 
@@ -550,7 +551,7 @@ const CreateProposal = () => {
               label="Transaction ID"
               isParentHref
               value={txsId}
-              href={`/tx/${txsId}`}
+              href={`${mainExplorer}/tx/${txsId}`}
             />
           </div>
         ),
