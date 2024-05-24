@@ -1,4 +1,4 @@
-name: Build and Push Image TestNet
+name: Build and Push Image
 on:
   push:
     branches: ['dev']
