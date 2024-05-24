@@ -8,7 +8,7 @@ type TNoDataType = {
 export default function NoData(props: TNoDataType) {
   const { imgW = 80, imgH = 80 } = props;
   return (
-    <div className="flex justify-center flex-col items-center mb-[10px]">
+    <div className="flex justify-center flex-col items-center">
       <Image className="mx-auto block" width={imgW} height={imgH} src={NoDataIcon} alt="" />
       <Typography.Text>No results found</Typography.Text>
     </div>

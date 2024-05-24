@@ -59,6 +59,12 @@ export default function Transparent() {
   ];
   return (
     <div>
+      {/* 
+      font-family: Roboto;
+font-size: 24px;
+font-style: normal;
+font-weight: 500;
+line-height: 32px; / */}
       <BoxWrapper>
         <span className='text-Primary-Text leading-[32px] font-[500] text-[24px]'>
         Network DAO Treasury

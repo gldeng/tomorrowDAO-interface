@@ -11,7 +11,7 @@ import { useRequest } from 'ahooks';
 import { fetchProposalDetail } from 'api/request';
 import { store } from 'redux/store';
 import { ProposalTab } from './components/ProposalTab';
-import { SkeletonList } from 'components/Skeleton';
+import { Skeleton, SkeletonList } from 'components/Skeleton';
 import { useParams } from 'next/navigation';
 import ErrorResult from 'components/ErrorResult';
 
@@ -31,6 +31,7 @@ const ProposalDetails = () => {
     <div className="proposal-details-wrapper">
       {loading ? (
         <>
+          <Skeleton />
           <SkeletonList />
         </>
       ) : error ? (
