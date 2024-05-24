@@ -1,10 +1,10 @@
 module.exports = [
   {
     source: '/api/:path*',
-    destination: 'https://test-api.tmrwdao.com/api/:path*',
+    destination: 'https://api.tmrwdao.com/api/:path*',
   },
   {
     source: '/explorer-api/:path*',
-    destination: 'https://explorer-test.aelf.io/api/:path*',
+    destination: 'https://explorer.aelf.io/api/:path*',
   },
 ];

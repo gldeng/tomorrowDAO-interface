@@ -1,6 +1,6 @@
 // static config for disable label value todo...
-export const electionContractAddress = '2akycoQt8nYSQbarup4tTJYxQ4SzdKbwBfBCcCF9yqWYtMXt9j';
-// for network-dao treasury account todo...
+export const electionContractAddress = 'QWMSafkNs3oydr7EqktZ7kR2cE8j9c8qAbKymds5FLQZXcPiD';
+// for network-dao treasury account
 export const treasuryAccountAddress = 'KNdM6U6PyPsgyena8rPHTbCoMrkrALhxAy1b8Qx2cgi4169xr';
 
 // ------------------aelf-web-login-start------------------------
@@ -21,9 +21,9 @@ export const mainChainAddress = 'JRmBduh4nXWi1aXgdUsj5gJrzeZb2LxmrAbf7W99faZSvoA
 export const sideChainAddress = '7RzVGiuVWkvL4VfVHdZfQF2Tri3sgLe9U991bohHFfSRZXuGX';
 
 // tmrw contract: biz contract todo...
-export const daoAddress = 'RRF7deQbmicUh6CZ1R2y7U9M8n2eHPyCgXVHwiSkmNETLbL4D';
-export const propalAddress = '2sJ8MDufVDR3V8fDhBPUKMdP84CUf1oJroi9p8Er1yRvMp3fq7';
-export const voteAddress = 'todo...';
+export const daoAddress = '2izSidAeMiZ6tmD7FKmnoWbygjFSmH5nko3cGJ9EtbfC44BycC';
+export const propalAddress = '2tCM3oV6dTCmwFxSiFGPEVhGngdMwBV741wi156vj8kmqfp6da';
+export const voteAddress = '2A8h4hLynLt86RxqvpNY43x6Js8CYhgyuAzj7sDGQ2ecP77Zgp';
 // explorer config
 export const explorer = 'https://tdvv-explorer.aelf.io';
 export const mainExplorer = 'https://explorer.aelf.io';
