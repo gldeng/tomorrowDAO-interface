@@ -4682,10 +4682,10 @@ aelf-bridge@^0.0.10:
     socket.io-client "^2.3.0"
     uuid "^3.3.3"
 
-aelf-design@^1.0.0-alpha.15:
-  version "1.0.0-alpha.15"
-  resolved "https://registry.npmjs.org/aelf-design/-/aelf-design-1.0.0-alpha.15.tgz#5735da39e18ccc8d4d413a58ebff309f3e00c687"
-  integrity sha512-3i4js4uzPljDwEOvnCqOELiKug8gxPjlXwQCrYxMM6FSy94L3bkYDxeBlNqJELDSxfG5/gzFQC4Zj+ej5Wz8VA==
+aelf-design@^1.0.0-alpha.16:
+  version "1.0.0-alpha.17"
+  resolved "https://registry.npmjs.org/aelf-design/-/aelf-design-1.0.0-alpha.17.tgz#49ac1f5e84d8bfb0cdc347a27819568a418b9e06"
+  integrity sha512-Kspimme96GB92V0OTJn44Jyfv9nXw1mZKRNWXHooQbD8C9lrgaeB3aMEznCSSGcm+amWDhsBB1Bw/dpXwl7n5Q==
   dependencies:
     "@aelf-design/common" "1.0.0-alpha.14"
     "@aelf-design/icons" "1.0.0-alpha.15"

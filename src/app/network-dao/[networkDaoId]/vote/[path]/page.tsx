@@ -2,8 +2,12 @@
 import React from 'react';
 import dynamicReq from 'next/dynamic';
 import { Result, ConfigProvider } from 'antd';
+import { SkeletonList } from 'components/Skeleton';
 import { allowPathMap } from '../constants/index';
-const PageIndex = dynamicReq(() => import('./_page'), { ssr: false });
+const PageIndex = dynamicReq(() => import('./_page'), {
+  ssr: false,
+  loading: () => <SkeletonList />,
+});
 
 interface IProps {
   params: {
