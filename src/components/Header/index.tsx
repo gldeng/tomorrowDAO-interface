@@ -52,10 +52,10 @@ export default function Header() {
             ),
             key: ENavKeys.GitHub,
           },
-          {
-            label: 'White Paper',
-            key: ENavKeys.WhitePaper,
-          },
+          // {
+          //   label: 'White Paper',
+          //   key: ENavKeys.WhitePaper,
+          // },
         ],
       },
       {
