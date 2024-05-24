@@ -42,6 +42,7 @@ jobs:
           build-args: |
             NEXT_PUBLIC_PINATA_JWT=${{ secrets.TESTNET_NEXT_PUBLIC_PINATA_JWT }}
             NEXT_PUBLIC_GATEWAY_TOKEN=${{ secrets.TESTNET_NEXT_PUBLIC_GATEWAY_TOKEN }}
+            APP_ENV=testnet
   dispatch:
     runs-on: tmrwdao-runner
     needs: build-and-push-image

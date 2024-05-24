@@ -20,8 +20,10 @@ RUN \
 FROM base AS builder
 ARG NEXT_PUBLIC_PINATA_JWT
 ARG NEXT_PUBLIC_GATEWAY_TOKEN
+ARG APP_ENV
 ENV NEXT_PUBLIC_PINATA_JWT=${NEXT_PUBLIC_PINATA_JWT}
 ENV NEXT_PUBLIC_GATEWAY_TOKEN=${NEXT_PUBLIC_GATEWAY_TOKEN}
+ENV APP_ENV=${APP_ENV}
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
@@ -32,9 +34,9 @@ COPY . .
 # ENV NEXT_TELEMETRY_DISABLED 1
 
 RUN \
-  if [ -f yarn.lock ]; then yarn run build; \
-  elif [ -f package-lock.json ]; then npm run build; \
-  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \
+  if [ -f yarn.lock ]; then APP_ENV=${APP_ENV} yarn run build; \
+  elif [ -f package-lock.json ]; then APP_ENV=${APP_ENV} npm run build; \
+  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && APP_ENV=${APP_ENV} pnpm run build; \
   else echo "Lockfile not found." && exit 1; \
   fi
 
