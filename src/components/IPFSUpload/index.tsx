@@ -4,7 +4,7 @@ import { Upload, IUploadProps, UploadButton } from 'aelf-design';
 import { GetProp, UploadFile, message } from 'antd';
 import clsx from 'clsx';
 import pinFileToIPFS from 'components/PinFileToIPFS';
-export type FileType = Parameters<GetProp<IUploadProps, 'beforeUpload'>>[0];
+export type TFileType = Parameters<GetProp<IUploadProps, 'beforeUpload'>>[0];
 import { checkImgSize } from 'utils/checkImgSize';
 import './index.css';
 
@@ -25,12 +25,12 @@ const handleLimit = (limit: string) => {
   const unit_K = 1 * 1024;
   const unit_M = unit_K * 1024;
 
-  if (limit.includes('M')) {
-    return +limit.replace('M', '') * unit_M;
+  if (limit.includes('MB')) {
+    return +limit.replace('MB', '') * unit_M;
   }
 
-  if (limit.includes('K')) {
-    return +limit.replace('K', '') * unit_K;
+  if (limit.includes('KB')) {
+    return +limit.replace('KB', '') * unit_K;
   }
 
   return 10 * unit_M;
@@ -40,7 +40,7 @@ const FUpload: React.FC<IFUploadProps> = ({
   needCheckImgSize = false,
   fileList,
   maxFileCount,
-  fileLimit = '1M',
+  fileLimit = '1 MB',
   fileNameLengthLimit,
   onChange,
   tips,
@@ -76,31 +76,33 @@ const FUpload: React.FC<IFUploadProps> = ({
 
     if (!file?.status) return;
 
-    const newFileList = fileList.map((file) => {
-      if (file.response) {
-        file.url = file.response.url;
-      }
-      return file;
-    });
-
-    console.log('onFileChange', newFileList);
+    const newFileList = fileList
+      .map((file) => {
+        if (file.response) {
+          file.url = file.response.url;
+        }
+        return file;
+      })
+      .filter((file) => file.status !== 'error');
     onChange?.(newFileList);
-    setFileList(newFileList);
   };
 
-  const onBeforeUpload = async (file: FileType) => {
+  const onBeforeUpload = async (file: TFileType) => {
     let result = true;
 
     const isLteLimit = file.size <= handleLimit(fileLimit);
     if (!isLteLimit) {
-      message.error(`Only files smaller than ${fileLimit}B are supported.`);
+      const contentType = needCheckImgSize ? 'Image' : 'File';
+      message.error(
+        `${contentType} too large. Please upload an ${contentType} no larger than ${fileLimit}`,
+      );
     }
     result = isLteLimit;
 
     if (needCheckImgSize) {
       const checkSize = await checkImgSize(file);
       if (!checkSize) {
-        message.error('Only images of 512*512 are supported.');
+        message.error('Please upload an imgae of 512*512.');
       }
       result = result && checkSize;
     }
@@ -122,10 +124,14 @@ const FUpload: React.FC<IFUploadProps> = ({
     try {
       emitLoading(true, 'Uploading...');
       const uploadData = await pinFileToIPFS(file as File);
+      if (!uploadData.cid) {
+        onError?.(new Error('upload no hash'));
+        return;
+      }
       const fileUrl = uploadData?.url ?? '';
-      console.log('ipfs-success', fileUrl);
       onSuccess?.({ url: fileUrl });
     } catch (error) {
+      message.error(`Please check your internet connection and try again.`);
       onError?.(error as Error);
     } finally {
       emitLoading(false);

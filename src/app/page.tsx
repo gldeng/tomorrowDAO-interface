@@ -1,4 +1,11 @@
 'use client';
-
-import dynamic from 'next/dynamic';
-export default dynamic(() => import('pageComponents/home'), { ssr: false });
+import React from 'react';
+import dynamicReq from 'next/dynamic';
+import { SkeletonList } from 'components/Skeleton';
+const PageIndex = dynamicReq(() => import('pageComponents/home'), {
+  ssr: false,
+  loading: () => <SkeletonList />,
+});
+export default function Page() {
+  return <PageIndex />;
+}

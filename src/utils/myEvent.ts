@@ -30,21 +30,21 @@ eventsServer.prototype.addListener = function (eventType: string, listener: (dat
 
 eventsServer.prototype.parseEvent('base', EventList);
 
-export type MyEventEmitter = {
+export type TMyEventEmitter = {
   remove: () => void;
 } & EventEmitter;
 
-export type MyEventsTypes = {
+export type TMyEventsTypes = {
   [x in (typeof EventList)[number]]: {
     emit: (...params: any[]) => void;
-    addListener: (listener: (data: any) => void) => MyEventEmitter;
+    addListener: (listener: (data: any) => void) => TMyEventEmitter;
     name: string;
   };
 };
 
 const myEvents = { ...eventsServer.prototype.base };
 
-export default myEvents as unknown as MyEventsTypes;
+export default myEvents as unknown as TMyEventsTypes;
 
 export const emitLoading = (isLoading: boolean, text?: string | ReactNode) =>
   myEvents.SetGlobalLoading.emit({

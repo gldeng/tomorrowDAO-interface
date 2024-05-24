@@ -1,6 +1,7 @@
 'use client';
 import { NetworkType } from '@portkey/did-ui-react';
-import dynamic from 'next/dynamic';
+import { curChain } from 'config';
+import dynamicReq from 'next/dynamic';
 
 import { store } from 'redux/store';
 
@@ -13,15 +14,14 @@ function addBasePath(url: string) {
   return `${url}`;
 }
 
-const PortkeyProviderDynamic = dynamic(
+const PortkeyProviderDynamic = dynamicReq(
   async () => {
     const weblogin = await import('aelf-web-login').then((module) => module);
     return weblogin.PortkeyProvider;
   },
   { ssr: false },
 ) as any;
-
-const WebLoginProviderDynamic = dynamic(
+const WebLoginProviderDynamic = dynamicReq(
   async () => {
     const info = store.getState().elfInfo.elfInfo;
     const server = info.portkeyServer;
@@ -32,7 +32,7 @@ const WebLoginProviderDynamic = dynamic(
 
     webLogin.setGlobalConfig({
       appName: APP_NAME,
-      chainId: info.curChain || '',
+      chainId: curChain,
       onlyShowV2: true,
       portkey: {},
       portkeyV2: {

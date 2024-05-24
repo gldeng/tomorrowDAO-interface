@@ -1,24 +1,23 @@
 import './index.css';
 import { FooterLogo } from 'components/Logo';
-import Icon from '@ant-design/icons';
 import { Divider } from 'antd';
 import TwitterIcon from 'assets/imgs/twitter.svg';
 import TGIcon from 'assets/imgs/telegram.svg';
 import DiscordIcon from 'assets/imgs/icon_discord.svg';
 import dayjs from 'dayjs';
 const DocsItems = [
-  {
-    title: 'Docs',
-    path: '/Docs',
-  },
+  // {
+  //   title: 'Docs',
+  //   path: '/Docs',
+  // },
   {
     title: 'White Paper',
     path: '/White Paper',
   },
-  {
-    title: 'Send Feedback',
-    path: '/Feedback',
-  },
+  // {
+  //   title: 'Send Feedback',
+  //   path: '/Feedback',
+  // },
 ];
 export default function Footer() {
   return (
@@ -42,17 +41,17 @@ export default function Footer() {
         <div className="footer-media">
           <div className="footer-media-items">
             <div className="footer-media-item">
-              <a href="https://twitter.com/TMRWDAO">
+              <a target="_blank" rel="noreferrer" href="https://discord.com/invite/Y73pZaWy">
                 <img src={DiscordIcon} alt="discord" />
               </a>
             </div>
             <div className="footer-media-item">
-              <a href="https://twitter.com/TMRWDAO">
+              <a target="_blank" rel="noreferrer" href="https://t.me/tmrwdao">
                 <img src={TGIcon} alt="telegram" />
               </a>
             </div>
             <div className="footer-media-item">
-              <a href="https://twitter.com/TMRWDAO">
+              <a target="_blank" rel="noreferrer" href="https://twitter.com/tmrwdao">
                 <img src={TwitterIcon} alt="twitter" />
               </a>
             </div>

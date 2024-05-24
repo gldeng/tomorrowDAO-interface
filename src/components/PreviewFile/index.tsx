@@ -1,43 +1,30 @@
 import { useCallback, useMemo, useState } from 'react';
-import useJumpByPath from 'hooks/useJumpByPath';
 import useResponsive from 'hooks/useResponsive';
 import { Dropdown } from 'aelf-design';
 import { List, type MenuProps } from 'antd';
 import Image from 'next/image';
+import Link from 'next/link';
 import ProposalDetailFile from 'assets/imgs/proposal-detail-file.svg';
 import CommonDrawer from 'components/CommonDrawer';
 
-type itemType = {
-  name: string;
-  url: string;
+type TPropsType = {
+  list: IFileInfo[];
 };
-
-type PropsType = {
-  list: itemType[];
-};
-export default function PreviewFile(props: PropsType) {
+export default function PreviewFile(props: TPropsType) {
   const { list = [] } = props;
   const { isSM } = useResponsive();
-  const jump = useJumpByPath();
 
   const [showDrawerModal, setShowDrawerModal] = useState(false);
-
-  const handleViewPdf = (url: string) => {
-    jump(url);
-  };
 
   const fileItems: MenuProps['items'] = list.map((item, index) => {
     return {
       ...item,
       key: `${index}`,
       label: (
-        <div
-          className="min-w-36"
-          onClick={() => {
-            handleViewPdf(item.url);
-          }}
-        >
-          {item.name}
+        <div className="min-w-36">
+          <Link href={item.file.url} target="_blank">
+            {item.file.name}
+          </Link>
         </div>
       ),
     };
@@ -53,7 +40,7 @@ export default function PreviewFile(props: PropsType) {
     return (
       <div className="flex items-center justify-center h-8 bg-Neutral-Default-BG px-2 leading-8 rounded-md cursor-pointer">
         <Image width={14} height={14} src={ProposalDetailFile} alt="" onClick={handleClick}></Image>
-        {!isSM && <span className="ml-1">Preview File</span>}
+        {!isSM && <span className="ml-1">Documentation</span>}
       </div>
     );
   }, [handleClick, isSM]);
@@ -71,17 +58,15 @@ export default function PreviewFile(props: PropsType) {
           {btnCom}
         </Dropdown>
       )}
-      <CommonDrawer title="Preview File" open={showDrawerModal} onClose={handleClose}>
+      <CommonDrawer title="Documentation" open={showDrawerModal} onClose={handleClose}>
         <List
           size="small"
           dataSource={list}
           renderItem={(item) => (
-            <List.Item
-              onClick={() => {
-                handleViewPdf(item.url);
-              }}
-            >
-              {item.name}
+            <List.Item>
+              <Link href={item.file.url} target="_blank">
+                {item.file.name}
+              </Link>
             </List.Item>
           )}
         />

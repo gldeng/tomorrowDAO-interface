@@ -16,12 +16,12 @@ import { dispatch } from 'redux/store';
 import { setWalletInfo } from 'redux/reducer/userInfo';
 import { useLocalStorage } from 'react-use';
 import { cloneDeep } from 'lodash-es';
-import { WalletInfoType } from 'types';
+import { TWalletInfoType } from 'types';
 import { storages } from 'utils/constant';
 import { useRegisterContractServiceMethod } from 'contract/baseContract';
 
 export const useWalletInit = () => {
-  const [, setLocalWalletInfo] = useLocalStorage<WalletInfoType>(storages.walletInfo);
+  const [, setLocalWalletInfo] = useLocalStorage<TWalletInfoType>(storages.walletInfo);
   const getAccountInAELF = useGetAccount('AELF');
   const { wallet, walletType } = useWebLogin();
   // register Contract method
@@ -32,8 +32,7 @@ export const useWalletInit = () => {
         // backToHomeByRoute();
       }
       if (state === WebLoginState.logined) {
-        message.info('login success');
-        const walletInfo: WalletInfoType = {
+        const walletInfo: TWalletInfoType = {
           address: wallet?.address || '',
           publicKey: wallet?.publicKey,
           aelfChainAddress: '',
@@ -55,6 +54,7 @@ export const useWalletInit = () => {
         setTimeout(() => {
           getAccountInAELF()
             .then((aelfChainAddress: string) => {
+              console.log('getAccountInAELF res', aelfChainAddress);
               walletInfo.aelfChainAddress = getOriginalAddress(aelfChainAddress);
             })
             .catch((error) => {

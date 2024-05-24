@@ -1,8 +1,8 @@
 import AElf from 'aelf-sdk';
-
+import { explorerRPC } from 'config';
 // create a new instance of AElf
 // use our test environment url or prod environment url
-const aelf = new AElf(new AElf.providers.HttpProvider('https://explorer-test.aelf.io/chain'));
+const aelf = new AElf(new AElf.providers.HttpProvider(explorerRPC));
 
 // create a new wallet
 const newWallet = AElf.wallet.createNewWallet();
@@ -18,7 +18,9 @@ export const getTokenContractAddress = async () => {
   // get genesis contract instance
   const zeroContract = await aelf.chain.contractAt(GenesisContractAddress, newWallet);
   // get contract address by the read only method `GetContractAddressByName` of genesis contract
-  const tokenContractAddress = await zeroContract.GetContractAddressByName.call(AElf.utils.sha256(tokenContractName));
+  const tokenContractAddress = await zeroContract.GetContractAddressByName.call(
+    AElf.utils.sha256(tokenContractName),
+  );
   return tokenContractAddress;
 };
 
@@ -46,7 +48,6 @@ export const getBalance = async (tokenContract: any) => {
   });
   return result;
 };
-
 
 export const getAElfInstance = (rpcUrl: string) => {
   return new AElf(new AElf.providers.HttpProvider(rpcUrl));

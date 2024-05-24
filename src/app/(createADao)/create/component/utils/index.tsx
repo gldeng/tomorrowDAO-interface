@@ -56,7 +56,7 @@ export const min2maxIntegerRule: Rule[] = [
   },
 ];
 
-const twitterUsernameRegex = /^@[A-Za-z0-9_]{1,14}$/;
+const twitterUsernameRegex = /^@[A-Za-z0-9_]+$/;
 const facebookUrlRegex =
   /^(https?:\/\/)?(www\.)?(facebook\.com|discord\.com|t\.me|reddit\.com)\/.*/;
 
@@ -65,7 +65,7 @@ export const mediaValidatorMap = {
     validator: [
       validatorCreate(
         (v) => v && !twitterUsernameRegex.test(v),
-        'Please enter the correct Twitter account, starting with @.',
+        'Please enter a correct X handle, starting with @.',
       ),
     ],
   },
@@ -73,7 +73,7 @@ export const mediaValidatorMap = {
     validator: [
       validatorCreate(
         (v) => v && !facebookUrlRegex.test(v),
-        'Please enter the correct website address. Short links are not supported.',
+        'Please enter a correct link. Shortened URLs are not supported.',
       ),
     ],
   },

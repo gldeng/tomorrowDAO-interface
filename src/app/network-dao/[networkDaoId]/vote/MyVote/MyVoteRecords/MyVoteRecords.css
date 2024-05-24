@@ -1,0 +1,13 @@
+.my-vote-records-section {
+  padding: 0 16px;
+}
+
+.my-vote-records-header {
+  margin: 0 0 24px 0;
+  color: #000;
+}
+
+.node-list-btn-group {
+  display: flex;
+  justify-content: center;
+}

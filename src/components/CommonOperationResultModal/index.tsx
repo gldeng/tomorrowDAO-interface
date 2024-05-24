@@ -1,7 +1,6 @@
 import { ReactNode } from 'react';
 import { Flex } from 'antd';
 import { FontWeightEnum, Typography } from 'aelf-design';
-import Image from 'antd/lib/image';
 import CommonModal, { TCommonModalProps } from 'components/CommonModal';
 import successFilledIcon from 'assets/imgs/successFilled.svg';
 import errorFilledIcon from 'assets/imgs/errorFilled.svg';
@@ -39,7 +38,7 @@ export default function CommonOperationResultModal({
   return (
     <CommonModal {...modalProps}>
       <Flex vertical align="center" gap={16}>
-        <Image src={ICON_MAP[type]} alt="icon" width={64} height={64} />
+        <img src={ICON_MAP[type]} alt="icon" width={64} height={64} />
         <Title className="text-center" level={6} fontWeight={FontWeightEnum.Medium}>
           {primaryContent}
         </Title>

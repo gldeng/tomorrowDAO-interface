@@ -1,0 +1,14 @@
+.proposal-details-wrapper {
+
+   @apply flex flex-col gap-6;
+
+   .TMRWDAO-select-single {
+      @apply h-[32px];
+   }
+
+   .TMRWDAO-tabs-nav-list {
+      .TMRWDAO-tabs-tab {
+         @apply px-[16px] lg:px-[32px];
+      }
+   }
+}

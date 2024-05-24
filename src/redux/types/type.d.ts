@@ -1,4 +1,4 @@
-declare type UserInfoType = {
+declare type TUserInfoType = {
   address: string;
   fullAddress: string;
   name: string;
@@ -11,16 +11,17 @@ declare type UserInfoType = {
   [key: string]: string | null;
 };
 
-declare type IConfigItems = {
+declare type TConfigItems = {
   networkType: 'TESTNET' | 'MAIN';
+  curChain: Chain;
   connectServer?: string;
   connectUrl?: string;
   graphqlServer?: string;
   portkeyServer?: string;
-  curChain?: Chain;
   rpcUrlAELF?: string;
   rpcUrlTDVV?: string;
   rpcUrlTDVW?: string;
+  daoAddress?: string;
   mainChainAddress?: string;
   sideChainAddress?: string;
   mainCaAddress?: string;

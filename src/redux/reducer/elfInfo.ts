@@ -1,23 +1,33 @@
 import { createSlice } from '@reduxjs/toolkit';
+import {
+  connectServer,
+  connectUrl,
+  curChain,
+  graphqlServer,
+  networkType,
+  portkeyServer,
+  rpcUrlAELF,
+  rpcUrlTDVV,
+  rpcUrlTDVW,
+} from 'config';
 import { HYDRATE } from 'next-redux-wrapper';
-import { AppState } from 'redux/store';
+import { TAppState } from 'redux/store';
 
 export interface IAelfInfoState {
-  elfInfo: IConfigItems;
+  elfInfo: TConfigItems;
 }
 
 const initialState: IAelfInfoState = {
   elfInfo: {
-    networkType: 'TESTNET',
-    rpcUrlAELF: 'https://aelf-test-node.aelf.io',
-    rpcUrlTDVV: 'https://tdvw-test-node.aelf.io',
-    rpcUrlTDVW: 'https://tdvw-test-node.aelf.io',
-    connectServer: 'https://auth-portkey-test.portkey.finance',
-    graphqlServer:
-      'https://dapp-aa-portkey-test.portkey.finance/Portkey_V2_DID/PortKeyIndexerCASchema/graphql',
-    portkeyServer: 'https://aa-portkey-test.portkey.finance',
-    curChain: 'tDVW',
-    connectUrl: 'https://auth-aa-portkey-test.portkey.finance',
+    networkType: networkType,
+    rpcUrlAELF: rpcUrlAELF,
+    rpcUrlTDVV: rpcUrlTDVV,
+    rpcUrlTDVW: rpcUrlTDVW,
+    connectServer: connectServer,
+    graphqlServer: graphqlServer,
+    portkeyServer: portkeyServer,
+    connectUrl: connectUrl,
+    curChain: curChain,
   },
 };
 
@@ -43,6 +53,6 @@ export const elfInfoSlice = createSlice({
 
 export const { setElfInfo } = elfInfoSlice.actions;
 
-export const getElfInfo = (state: AppState) => state.elfInfo.elfInfo;
+export const getElfInfo = (state: TAppState) => state.elfInfo.elfInfo;
 
 export default elfInfoSlice.reducer;

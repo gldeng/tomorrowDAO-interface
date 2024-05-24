@@ -23,8 +23,8 @@ export default function DAOHeader() {
             Tomorrow DAO
           </Typography.Title>
           <div className="description">
-            A broad-based DAO platform and governance model for aelfand the aelf ecosystem to
-            achieve decentralized governance.
+            A DAO platform that empowers decentralised governance in the aelf network and ecosystem.
+            Creating, managing, and engaging with DAOs is as simple as a few clicks.
           </div>
         </div>
         <div>

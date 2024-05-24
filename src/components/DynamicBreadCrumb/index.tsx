@@ -1,11 +1,16 @@
 'use client';
 import Breadcrumb from 'components/Breadcrumb';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useMemo } from 'react';
+import { LeftOutlined } from '@aelf-design/icons';
 import { INavItemProps } from 'components/Breadcrumb';
+import useResponsive from 'hooks/useResponsive';
 
 const DynamicBreadCrumb = () => {
   const pathname = usePathname();
+
+  const { isLG } = useResponsive();
+  const router = useRouter();
 
   const items: INavItemProps[] = useMemo(() => {
     if (pathname === '/') {
@@ -17,20 +22,33 @@ const DynamicBreadCrumb = () => {
       if (index === 0) {
         arr.push({
           title: 'TMRW DAO',
-          href: '/',
         });
       } else {
         arr.push({
           title: path,
-          href: `/${path}`,
         });
       }
     });
-    delete arr[pathArr.length - 1].href;
     return arr;
   }, [pathname]);
 
-  return <Breadcrumb items={items} />;
+  return (
+    <div className="pb-6 ">
+      {isLG ? (
+        <span
+          className="breadcrumb-back-button flex items-center"
+          onClick={() => {
+            router.back();
+          }}
+        >
+          <LeftOutlined className="icon" />
+          <span>Back</span>
+        </span>
+      ) : (
+        <Breadcrumb items={items} />
+      )}
+    </div>
+  );
 };
 
 export default DynamicBreadCrumb;

@@ -21,3 +21,4 @@ yarn-error.log*
 
 # out
 storybook-static
+src/app/network-dao/**/*

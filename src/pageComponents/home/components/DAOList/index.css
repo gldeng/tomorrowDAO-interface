@@ -1,13 +1,15 @@
 .dao-list {
-  @apply max-w-[1440px] m-auto px-4 lg:px-10 ;
   .dao-list-container {
     @apply grid grid-cols-1 gap-3 lg:grid-cols-2 lg:gap-6 mb-6 lg:mb-8;
   }
+
   .dao-more {
     @apply w-full flex justify-center;
   }
+
   .more-button {
     @apply cursor-pointer w-[200px] h-12 flex items-center justify-center border border-Neutral-Border border-solid rounded-lg hover:border-Neutral-Secondary-Text;
+
     .more-text {
       @apply mr-2 text-sm text-Primary-Text;
     }

@@ -28,20 +28,20 @@ class Request {
     this.instance.interceptors.response.use(
       <T>(response: AxiosResponse<ResponseType<T>>) => {
         const res = response.data;
-        const { code, data, message: errorMessage } = response.data;
-        if (response.config.url?.includes('api.etherscan.io')) {
-          return res;
-        }
-        if (config.baseURL?.includes('cms')) {
-          return data;
-        }
-        if (config.baseURL?.includes('connect')) {
-          return res;
+        const { code, message: errorMessage } = res;
+        if (config.baseURL?.includes('/explorer-api')) {
+          switch (response.status) {
+            case 200:
+              return res;
+            default:
+              message.error(errorMessage);
+              return res;
+          }
         }
 
         switch (code) {
           case '20000':
-            return data;
+            return res;
           case '20001':
             return {};
           case '50000':
@@ -59,7 +59,7 @@ class Request {
             break;
 
           case 401:
-            message.error('The signature has expired. Please log in again.');
+            message.error('The signature has expired. Please Login again.');
             setTimeout(() => {
               location.pathname = '/';
             }, 3000);
@@ -74,11 +74,11 @@ class Request {
           case 502:
           case 503:
           case 504:
-            errMessage = `${error.response.status}: something is wrong in server`;
+            errMessage = `${error?.response?.status}: something is wrong in server`;
             break;
 
           default:
-            errMessage = `${error.response.status}: something is wrong, please try again later`;
+            errMessage = `${error?.response?.status}: something is wrong, please try again later`;
             break;
         }
 
@@ -113,9 +113,13 @@ class Request {
   }
 }
 
-const tokenRequest = new Request({
-  baseURL: '/connect',
+const apiServer = new Request({
+  baseURL: '/api/app',
 });
 
-export default new Request({});
-export { tokenRequest };
+const explorerServer = new Request({
+  baseURL: '/explorer-api/',
+});
+const req = new Request({});
+export default req;
+export { apiServer, explorerServer };

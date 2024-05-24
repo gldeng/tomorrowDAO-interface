@@ -1,55 +1,20 @@
-import { ReactNode } from 'react';
+import { ReactNode, useContext, useState } from 'react';
 import { Flex, Checkbox, CheckboxProps } from 'antd';
 import { FontWeightEnum, Typography, HashAddress } from 'aelf-design';
 import Image from 'next/image';
 import CommonModalSwitchDrawer from 'components/CommonModalSwitchDrawer';
 import CommonDaoLogo, { CommonDaoLogoSizeEnum } from 'components/CommonDaoLogo';
 import { colorfulSocialMediaIconMap } from 'assets/imgs/socialMediaIcon';
+import { useSelector } from 'redux/store';
 import './index.css';
+import { StepsContext, StepEnum } from '../../type';
 
 const { Text, Title } = Typography;
 
-const socialMediaList = [
-  {
-    name: 'telegram',
-    url: 'https://t.me/aelfblockchain',
-  },
-  {
-    name: 'medium',
-    url: 'https://medium.com/aelfblockchain',
-  },
-  {
-    name: 'facebook',
-    url: 'https://www.facebook.com/aelfofficial',
-  },
-  {
-    name: 'reddit',
-    url: 'https://www.reddit.com/r/aelfofficial/',
-  },
-  {
-    name: 'discord',
-    url: 'https://discord.gg/3gV2rPf',
-  },
-  {
-    name: 'station',
-    url: 'https://www.google.com',
-  },
-  {
-    name: 'x',
-    url: 'https://www.google.com',
-  },
-] as const;
-
-function SocialMediaItem({
-  name,
-  url,
-}: {
-  name: keyof typeof colorfulSocialMediaIconMap;
-  url: string;
-}) {
+function SocialMediaItem({ name, url }: { name: string; url: string }) {
   return (
     <Flex className="social-media-item" gap={8} align="center">
-      <Image src={colorfulSocialMediaIconMap[name]} alt="media" width={16} height={16} />
+      <Image src={(colorfulSocialMediaIconMap as any)[name]} alt="media" width={16} height={16} />
       <Text>{url}</Text>
     </Flex>
   );
@@ -71,7 +36,7 @@ function CheckboxItem({
 }) {
   return (
     <Flex vertical gap={16}>
-      <Checkbox checked={checked} onChange={onChange}>
+      <Checkbox checked={checked} onChange={onChange} className="preview-modal-checkbox">
         <Title fontWeight={FontWeightEnum.Medium}>{label}</Title>
       </Checkbox>
       {descriptionList?.map(({ content, children }, index) => (
@@ -123,13 +88,41 @@ export interface ICreatePreviewModalProps {
 }
 
 export default function CreatePreviewModal({ open, onClose, onConfirm }: ICreatePreviewModalProps) {
+  const { stepForm } = useContext(StepsContext);
+  const [state, setState] = useState([false, false, false]);
+  const { walletInfo } = useSelector((store: any) => store.userInfo);
+
+  const metaData = stepForm[StepEnum.step0].submitedRes;
+  const governance = stepForm[StepEnum.step1].submitedRes;
+  const highCouncil = stepForm[StepEnum.step2].submitedRes;
+  const files = stepForm[StepEnum.step3].submitedRes;
+
+  const disabled =
+    state.findIndex((item, index) => {
+      // not highCouncil form, must be true
+      if (index !== 1) {
+        return item === false;
+      } else {
+        // highCouncil form, must be true(if highCouncil exist)
+        return highCouncil && item === false;
+      }
+    }) > -1;
+
+  const socialMediaList = Object.keys(metaData?.metadata?.socialMedia ?? {}).map((key) => {
+    return {
+      name: key,
+      url: metaData?.metadata.socialMedia[key],
+    };
+  });
+
+  const logoUrl = metaData?.metadata?.logoUrl?.[0]?.response?.url;
   return (
     <CommonModalSwitchDrawer
       commonClassName="create-preview-modal"
       title="Confirm"
       modalWidth={800}
       footerConfig={{
-        buttonList: [{ children: 'Confirm', onClick: onConfirm }],
+        buttonList: [{ children: 'Confirm', onClick: onConfirm, disabled: disabled }],
       }}
       open={open}
       onClose={onClose}
@@ -137,115 +130,86 @@ export default function CreatePreviewModal({ open, onClose, onConfirm }: ICreate
       <Flex vertical gap={24}>
         <Flex vertical gap={12}>
           <Flex gap={8} align="center">
-            <CommonDaoLogo src="" daoName="Network DAO" size={CommonDaoLogoSizeEnum.Small} />
+            {logoUrl && (
+              <CommonDaoLogo
+                src={logoUrl}
+                daoName={metaData?.metadata?.name}
+                size={CommonDaoLogoSizeEnum.Small}
+              />
+            )}
             <Title level={5} fontWeight={FontWeightEnum.Medium}>
-              Network DAO
+              {metaData?.metadata?.name}
             </Title>
           </Flex>
-          <Text>
-            AELF is a fully decentralized community governed protocol by the ELF token-holders. ELF
-            token-holders collectively discuss, propose, and vote on upgrades to the protocol. ELF
-            token-holders (aelf network only) can either vote themselves on new proposals or
-            delegate to an address of choice. To learn more, check out the Governance documentation.
-          </Text>
+          <Text>{metaData?.metadata.description}</Text>
           <Flex gap={12} wrap="wrap">
-            {socialMediaList.map(({ name, url }, index) => (
-              <SocialMediaItem key={index} name={name} url={url} />
-            ))}
+            {socialMediaList.map(
+              ({ name, url }, index) =>
+                url && <SocialMediaItem key={index} name={name as string} url={url ?? ''} />,
+            )}
           </Flex>
         </Flex>
         <Flex vertical gap={16}>
-          <AddressItem
-            isBoldLabel
-            label="Metadata admin"
-            address="ELF_2XDRhxzMbaYRCTe3NxRpARKBpjfQpyWdBkKscQpc3Tph3m6dqHG_AELF"
-          />
+          <AddressItem isBoldLabel label="Metadata admin" address={walletInfo.address} />
           <Flex gap={8} align="center">
             <Title fontWeight={FontWeightEnum.Medium}>Governance token:</Title>
-            <Text>ELF</Text>
+            <Text>{metaData?.governanceToken}</Text>
           </Flex>
         </Flex>
         <div className="divider" />
         <CheckboxItem
-          label="Fixed governance mechanism"
+          label="Referendum"
+          checked={state[0]}
+          onChange={(e) => setState([e.target.checked, state[1], state[2]])}
           descriptionList={[
             {
-              content: 'Parliament',
+              content: `Each proposal requires a minimum participation of ${governance?.minimalRequiredThreshold} address and ${governance?.minimalVoteThreshold} votes to be finalised`,
             },
             {
-              content:
-                'Each proposal requires the participation of at least 100 members to be effective /Each proposal requires the participation of at least 75% of the members to be effective.',
-            },
-            {
-              content: 'Each proposal must receive more than 65% of approved votes to be approved.',
+              content: `Each proposal must receive at least ${governance?.minimalApproveThreshold}% of approve votes, less than ${governance?.maximalRejectionThreshold}% of reject votes, and less than ${governance?.maximalAbstentionThreshold}% of abstain votes to be approved.`,
             },
           ]}
         />
+        {highCouncil && (
+          <CheckboxItem
+            label="High Council"
+            checked={state[1]}
+            onChange={(e) => setState([state[0], e.target.checked, state[2]])}
+            descriptionList={[
+              {
+                content: `
+                ${highCouncil?.highCouncilConfig.maxHighCouncilMemberCount} members and ${highCouncil?.highCouncilConfig.maxHighCouncilCandidateCount} candidates at most, rotated every ${highCouncil?.highCouncilConfig.electionPeriod} days. Require a staking of at least ${highCouncil?.highCouncilConfig.stakingAmount} ${metaData?.governanceToken} tokens.
+                `,
+              },
+              {
+                content: (
+                  <AddressItem
+                    label="Election contract"
+                    address="ELF_2XDRhxzMbaYRCTe3NxRpARKBpjfQpyWdBkKscQpc3Tph3m6dqHG_AELF"
+                  />
+                ),
+              },
+              {
+                content: `
+                Each proposal requires a minimum participation of ${highCouncil?.governanceSchemeThreshold.minimalRequiredThreshold}% addresses and  ${highCouncil?.governanceSchemeThreshold.minimalVoteThreshold} votes to be finalised.`,
+              },
+              {
+                content: `
+                Each proposal must receive at least ${highCouncil?.governanceSchemeThreshold.minimalApproveThreshold}% of approve votes, less than ${highCouncil?.governanceSchemeThreshold.maximalRejectionThreshold}% of reject votes, and less than ${highCouncil?.governanceSchemeThreshold.maximalAbstentionThreshold}% of abstain votes to be approved.
+                `,
+              },
+            ]}
+          />
+        )}
         <CheckboxItem
-          label="High Council"
-          descriptionList={[
-            {
-              content:
-                '17 members at least, 10,000 candidates at most, with a termrotation every 7 days.',
-            },
-            {
-              content: (
-                <AddressItem
-                  label="Election Contract"
-                  address="ELF_2XDRhxzMbaYRCTe3NxRpARKBpjfQpyWdBkKscQpc3Tph3m6dqHG_AELF"
-                />
-              ),
-            },
-          ]}
-        />
-        <CheckboxItem
-          label={`Documents (${3})`}
-          descriptionList={[
-            {
-              content: 'File Name1.pdf',
-            },
-            {
-              content: 'File Name2.pdf',
-            },
-            {
-              content: 'File Name3.pdf',
-            },
-          ]}
-        />
-        <CheckboxItem
-          label="Governance Contracts (2)"
-          descriptionList={[
-            {
-              content: 'Governance:',
-              children: [
-                <AddressItem
-                  key="Donate"
-                  label="Donate"
-                  address="ELF_2XDRhxzMbaYRCTe3NxRpARKBpjfQpyWdBkKscQpc3Tph3m6dqHG_AELF"
-                />,
-                <AddressItem
-                  key="Transfer"
-                  label="Transfer"
-                  address="ELF_2XDRhxzMbaYRCTe3NxRpARKBpjfQpyWdBkKscQpc3Tph3m6dqHG_AELF"
-                />,
-              ],
-            },
-            {
-              content: 'Treasury:',
-              children: [
-                <AddressItem
-                  key="Donate"
-                  label="Donate"
-                  address="ELF_2XDRhxzMbaYRCTe3NxRpARKBpjfQpyWdBkKscQpc3Tph3m6dqHG_AELF"
-                />,
-                <AddressItem
-                  key="Transfer"
-                  label="Transfer"
-                  address="ELF_2XDRhxzMbaYRCTe3NxRpARKBpjfQpyWdBkKscQpc3Tph3m6dqHG_AELF"
-                />,
-              ],
-            },
-          ]}
+          checked={state[2]}
+          onChange={(e) => setState([state[0], state[1], e.target.checked])}
+          label={`Documentation ${files?.files?.length ? `(${files?.files?.length})` : ''}`}
+          descriptionList={files?.files?.map((item) => {
+            return {
+              content: item.name,
+            };
+          })}
         />
       </Flex>
     </CommonModalSwitchDrawer>

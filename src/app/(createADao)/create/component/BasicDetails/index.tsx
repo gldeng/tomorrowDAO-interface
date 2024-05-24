@@ -1,4 +1,4 @@
-import { Input, Typography, ToolTip } from 'aelf-design';
+import { Input, Typography, Tooltip } from 'aelf-design';
 import './index.css';
 import { Form, Switch } from 'antd';
 import ChainAddress from 'components/Address';
@@ -9,13 +9,16 @@ import { mediaValidatorMap, useRegisterForm } from '../utils';
 import IPFSUpload from 'components/IPFSUpload';
 import { StepEnum } from '../../type';
 import { useSelector } from 'react-redux';
+import { dispatch } from 'redux/store';
+import { fetchTokenInfo } from 'api/request';
+import { setToken } from 'redux/reducer/daoCreate';
 
 const mediaList = [
-  ['metadata', 'social_media', 'Twitter'],
-  ['metadata', 'social_media', 'Facebook'],
-  ['metadata', 'social_media', 'Telegram'],
-  ['metadata', 'social_media', 'Discord'],
-  ['metadata', 'social_media', 'Reddit'],
+  ['metadata', 'socialMedia', 'Twitter'],
+  ['metadata', 'socialMedia', 'Facebook'],
+  ['metadata', 'socialMedia', 'Telegram'],
+  ['metadata', 'socialMedia', 'Discord'],
+  ['metadata', 'socialMedia', 'Reddit'],
 ];
 
 export default function BasicDetails() {
@@ -23,7 +26,7 @@ export default function BasicDetails() {
   const [showSymbol, setShowSymbol] = useState<boolean>(true);
   const [mediaError, setMediaError] = useState<boolean>(false);
   const { walletInfo } = useSelector((store: any) => store.userInfo);
-  const info = useSelector((store: any) => store.elfInfo.elfInfo);
+  const elfInfo = useSelector((store: any) => store.elfInfo.elfInfo);
   useRegisterForm(form, StepEnum.step0);
   return (
     <div className="basic-detail">
@@ -40,23 +43,24 @@ export default function BasicDetails() {
         >
           <Form.Item
             name={['metadata', 'name']}
+            validateFirst
             rules={[
               {
                 required: true,
-                message: 'Name is required',
+                message: 'The name is required',
               },
               {
                 type: 'string',
                 max: 50,
-                message: 'The DAO name cannot be more than 50 characters.',
+                message: 'The name should contain no more than 50 characters.',
               },
             ]}
             label="Name"
           >
-            <Input placeholder="Make it something epic!" />
+            <Input placeholder="Enter a name for the DAO" />
           </Form.Item>
           <Form.Item
-            name={['metadata', 'logo_url']}
+            name={['metadata', 'logoUrl']}
             valuePropName="fileList"
             rules={[
               {
@@ -70,12 +74,13 @@ export default function BasicDetails() {
               maxFileCount={1}
               needCheckImgSize
               accept=".png,.jpg"
-              uploadText="Click to upload"
+              uploadText="Click to Upload"
               uploadIconColor="#1A1A1A"
-              tips="Only supports .png and .jpg formats with a size of 512*512, and less than 1MB."
+              tips="Formats supported: PNG and JPG. 512 x 512 px standard, less than 1 MB."
             />
           </Form.Item>
           <Form.Item
+            validateFirst
             rules={[
               {
                 required: true,
@@ -84,7 +89,7 @@ export default function BasicDetails() {
               {
                 type: 'string',
                 max: 240,
-                message: 'The description cannot be more than 240 characters.',
+                message: 'The description should contain no more than 240 characters.',
               },
             ]}
             name={['metadata', 'description']}
@@ -94,13 +99,14 @@ export default function BasicDetails() {
               className="Description-textArea"
               showCount
               maxLength={240}
+              // eslint-disable-next-line no-inline-styles/no-inline-styles
               style={{ height: 116 }}
-              placeholder={`What is the mission and vision of this DAO? You will be able to change it later.`}
+              placeholder={`Enter the mission and vision of the DAO (240 characters max). This can be modified after DAO is created.`}
             />
           </Form.Item>
           <Form.Item
             className="mb-6"
-            name={['metadata', 'social_media', 'title']}
+            name={['metadata', 'socialMedia', 'title']}
             dependencies={mediaList}
             rules={[
               ({ getFieldValue }) => ({
@@ -119,7 +125,7 @@ export default function BasicDetails() {
             ]}
             label=""
           >
-            <div className="mt-8">
+            <div className="mt-8" id="baseInfo_metadata_socialMedia_title">
               <Typography.Title level={6}>Social Media</Typography.Title>
             </div>
             <div className={cx('Media-info', mediaError && '!text-Reject-Reject')}>
@@ -127,21 +133,23 @@ export default function BasicDetails() {
             </div>
           </Form.Item>
           <Form.Item
-            name={['metadata', 'social_media', 'Twitter']}
+            name={['metadata', 'socialMedia', 'Twitter']}
+            validateFirst
             rules={[
               ...mediaValidatorMap.Twitter.validator,
               {
                 type: 'string',
-                max: 15,
-                message: 'The URL should be shorter than 15 characters.',
+                max: 16,
+                message: 'The X (Twitter) user name should be shorter than 15 characters.',
               },
             ]}
             label="X (Twitter)"
           >
-            <Input placeholder={`Input the DAO's twitter account starts with @`} />
+            <Input placeholder={`Enter the DAO's X handle, starting with @`} />
           </Form.Item>
           <Form.Item
-            name={['metadata', 'social_media', 'Facebook']}
+            name={['metadata', 'socialMedia', 'Facebook']}
+            validateFirst
             rules={[
               ...mediaValidatorMap.Other.validator,
               {
@@ -152,10 +160,11 @@ export default function BasicDetails() {
             ]}
             label="Facebook"
           >
-            <Input placeholder={`Input the DAO's Facebook page address`} />
+            <Input placeholder={`Enter the DAO's Facebook link`} />
           </Form.Item>
           <Form.Item
-            name={['metadata', 'social_media', 'Discord']}
+            name={['metadata', 'socialMedia', 'Discord']}
+            validateFirst
             rules={[
               ...mediaValidatorMap.Other.validator,
               {
@@ -166,10 +175,11 @@ export default function BasicDetails() {
             ]}
             label="Discord"
           >
-            <Input placeholder={`Input the link to join the DAO's Discord group`} />
+            <Input placeholder={`Enter the DAO's Discord community link`} />
           </Form.Item>
           <Form.Item
-            name={['metadata', 'social_media', 'Telegram']}
+            name={['metadata', 'socialMedia', 'Telegram']}
+            validateFirst
             rules={[
               ...mediaValidatorMap.Other.validator,
               {
@@ -180,10 +190,11 @@ export default function BasicDetails() {
             ]}
             label="Telegram"
           >
-            <Input placeholder={`Input the link to join the DAO's Telegram group`} />
+            <Input placeholder={`Enter the DAO's Telegram community link`} />
           </Form.Item>
           <Form.Item
-            name={['metadata', 'social_media', 'Reddit']}
+            name={['metadata', 'socialMedia', 'Reddit']}
+            validateFirst
             rules={[
               ...mediaValidatorMap.Other.validator,
               {
@@ -194,17 +205,17 @@ export default function BasicDetails() {
             ]}
             label="Reddit"
           >
-            <Input placeholder={`Input the link to join the DAO's Reddit community`} />
+            <Input placeholder={`Enter the DAO's subreddit link`} />
           </Form.Item>
           <div className="mb-6 pt-8">
-            <Typography.Title level={6}>TMRW DAO Metadata Admin</Typography.Title>
+            <Typography.Title level={6}>DAO&apos;s Metadata Admin</Typography.Title>
           </div>
           <div className="mb-8">
             <ChainAddress
               size="large"
               address={walletInfo.address}
-              chain={info.curChain}
-              info="The admin can only upgrade settings on the TMRW DAO platform - not the smart contracts."
+              chain={elfInfo.curChain}
+              info="The DAO's metadata admin can modify certain info about the DAO, such as its description, logo, social media, documents, etc."
             />
           </div>
           <div className={cx('symbol-radio', !showSymbol && '!mb-8')}>
@@ -214,23 +225,79 @@ export default function BasicDetails() {
                 setShowSymbol(checked);
               }}
             />
-            <span className="token-title">Governance token</span>
-            <ToolTip placement="top" title="What is the governance token?">
+            <span className="token-title">Governance Token</span>
+            <Tooltip
+              placement="top"
+              title={
+                <div>
+                  <div>
+                    Using a governance token is essential for enabling the High Council and
+                    facilitating additional voting mechanisms.
+                  </div>
+                  <div>
+                    1. If the High Council is to be enabled, its members are elected from top-ranked
+                    addresses who stake governance tokens and receive votes.
+                  </div>
+                  <div>
+                    2. If a governance token is not used, only one type of proposal voting mechanism
+                    is supported: &quot;1 address = 1 vote&quot;. With the governance token enabled,
+                    DAOs can support an additional mechanism: &quot;1 token = 1 vote&quot;. You can
+                    choose the voting mechanism when you create proposals.
+                  </div>
+                </div>
+              }
+            >
               <QuestionIcon className="cursor-pointer" width={16} height={16} />
-            </ToolTip>
+            </Tooltip>
           </div>
           {showSymbol && (
             <Form.Item
+              validateFirst
               rules={[
                 {
                   required: true,
                   message: 'governance_token is required',
                 },
+                {
+                  validator: (_, value) => {
+                    const reqParams = {
+                      symbol: value ?? '',
+                      chainId: elfInfo.curChain,
+                    };
+                    return new Promise<void>((resolve, reject) => {
+                      fetchTokenInfo(reqParams)
+                        .then((res) => {
+                          dispatch(setToken(res.data));
+                          if (!res.data.name) {
+                            reject(new Error('The token is not issued yet.'));
+                          }
+                          if (res.data.isNFT) {
+                            reject(
+                              new Error(
+                                `${value} is an NFT and cannot be used as governance token.`,
+                              ),
+                            );
+                          }
+                          resolve();
+                        })
+                        .catch(() => {
+                          reject(new Error('api error，Re-enter the token'));
+                        });
+                    });
+                  },
+                },
               ]}
-              name="governance_token"
+              validateTrigger="onBlur"
+              name="governanceToken"
               label=""
             >
-              <Input placeholder="Input the token symbol" />
+              <Input
+                placeholder="Enter a token symbol"
+                onBlur={() => {
+                  const token = form.getFieldValue('governanceToken');
+                  form.setFieldValue('governanceToken', token?.toUpperCase());
+                }}
+              />
             </Form.Item>
           )}
         </Form>

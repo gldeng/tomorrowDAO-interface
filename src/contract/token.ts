@@ -1,93 +1,71 @@
-import { webLoginInstance } from './webLogin';
-import contractRequest from './contractRequest';
-import { getTxResultRetry } from 'utils/getTxResult';
 import {
-	ContractMethodType,
-	IContractError,
-	IContractOptions,
-	ISendResult,
-	SupportedELFChainId,
+  SupportedELFChainId,
+  IContractOptions,
+  ContractMethodType,
+  ISendResult,
+  IContractError,
 } from 'types';
+import { store } from 'redux/store';
+import { formatErrorMsg } from './util';
+import { getTxResult } from 'utils/getTxResult';
 import { sleep } from 'utils/common';
-import { formatErrorMsg } from 'utils/formattError';
-import { SECONDS_60 } from 'constants/index';
+import { GetContractServiceMethod } from './baseContract';
+import { mainChainAddress, sideChainAddress } from 'config';
 
-const multiTokenContractRequest = async <T, R>(
-	method: string,
-	params: T,
-	options?: IContractOptions
+export const multiTokenContractRequest = async <T, R>(
+  methodName: string,
+  params: T,
+  options?: IContractOptions,
 ): Promise<R | ISendResult> => {
-	try {
-		const address = 'address';
-		const curChain = 'AELF';
+  const info = store.getState().elfInfo.elfInfo;
+  const contractAddressMap = {
+    main: mainChainAddress,
+    side: sideChainAddress,
+  };
+  const contractAddress = (options?.chain === SupportedELFChainId.MAIN_NET
+    ? contractAddressMap.main
+    : contractAddressMap.side) as unknown as string;
 
-		const contract = webLoginInstance;
-				 
-		if (options?.type === ContractMethodType.VIEW) {
-			const res: R = await contract.callSendMethod(curChain, {
-				contractAddress: address,
-				methodName: method,
-				args: params,
-			});
+  const curChain: Chain = options?.chain || (info?.curChain as Chain);
 
-			const result = res as IContractError;
-			if (result?.error || result?.code || result?.Error) {
-				return Promise.reject(formatErrorMsg(result));
-			}
+  console.log(
+    '=====multiTokenContractRequest methodName, type, contractAddress, curChain, params: ',
+    methodName,
+    options?.type,
+    contractAddress,
+    curChain,
+    params,
+  );
 
-			return Promise.resolve(res);
-		} else {
-			const res: R = await contract.callSendMethod(curChain, {
-				contractAddress: address,
-				methodName: method,
-				args: params,
-			});
+  const CallContractMethod = GetContractServiceMethod(curChain, options?.type);
 
-			const result = res as IContractError;
+  try {
+    const res: R = await CallContractMethod({
+      contractAddress,
+      methodName,
+      args: params,
+    });
+    console.log('=====multiTokenContractRequest res: ', methodName, res);
+    const result = res as IContractError;
 
-			if (result?.error || result?.code || result?.Error) {
-				return Promise.reject(formatErrorMsg(result));
-			}
+    if (result?.error || result?.code || result?.Error) {
+      throw formatErrorMsg(result);
+    }
 
-			const { transactionId, TransactionId } = result.result || result;
-			const resTransactionId = TransactionId || transactionId;
-			await sleep(1000);
-			const transaction = await getTxResultRetry(
-				{
-					TransactionId: resTransactionId!,
-					chainId: curChain,
-					rpcUrl: 'rpcUrl',
-					rePendingEnd: new Date().getTime() + SECONDS_60,
-				}
-			);
+    if (options?.type === ContractMethodType.VIEW) {
+      return res;
+    }
 
-			return Promise.resolve({
-				TransactionId: transaction.TransactionId,
-				TransactionResult: transaction.txResult,
-			});
-		}
-	} catch (error) {
-		console.error(
-			'=====multiTokenContractRequest error:',
-			method,
-			JSON.stringify(error)
-		);
-		const resError = error as IContractError;
-		return Promise.reject(formatErrorMsg(resError));
-	}
-};
+    const { transactionId, TransactionId } = result.result || result;
+    const resTransactionId = TransactionId || transactionId;
+    await sleep(1000);
+    const transaction = await getTxResult(resTransactionId!, curChain as Chain);
 
-export const Create = async (params: any): Promise<ICallSendResponse> => {
-	try {
-		const res: ICallSendResponse = await multiTokenContractRequest(
-			'Create',
-			params,
-			{
-				chain: SupportedELFChainId.MAIN_NET,
-			}
-		);
-		return Promise.resolve(res);
-	} catch (_) {
-		return Promise.reject(null);
-	}
+    console.log('=====multiTokenContractRequest transaction: ', methodName, transaction);
+    return { TransactionId: transaction.TransactionId, TransactionResult: transaction.txResult };
+  } catch (error) {
+    console.error('=====multiTokenContractRequest error:', methodName, JSON.stringify(error));
+    const resError = error as IContractError;
+    throw formatErrorMsg(resError);
+  }
 };

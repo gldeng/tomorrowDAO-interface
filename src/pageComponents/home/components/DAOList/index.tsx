@@ -1,40 +1,58 @@
 import DAOListItem from 'components/DAOListItem';
+import Link from 'next/link';
+import { useInfiniteScroll } from 'ahooks';
 import DownIcon from 'assets/imgs/down.svg';
 import { LoadingOutlined } from '@ant-design/icons';
-import { Spin } from 'antd';
+import { Empty, Spin } from 'antd';
+import { fetchDaoList } from 'api/request';
+import { SkeletonList } from 'components/Skeleton';
+import { curChain } from 'config';
+
 import './index.css';
-import { useState } from 'react';
+
 export default function DAOList() {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [numbersArray, setNumbersArray] = useState(
-    Array.from({ length: 6 }, (_, index) => index + 1),
-  );
-  const loadMore = () => {
-    if (loading) return;
-    setLoading(true);
-    setTimeout(() => {
-      const newNumbersArray = Array.from(
-        { length: 6 },
-        (_, index) => index + numbersArray[numbersArray.length - 1] + 1,
-      );
-      setNumbersArray((prev) => [...prev, ...newNumbersArray]);
-      setLoading(false);
-    }, 1000);
+  const fetchDaoInner = async (data: { list: IDaoItem[] } | undefined) => {
+    const res = await fetchDaoList({
+      skipCount: data?.list?.length ?? 0,
+      maxResultCount: 6,
+      chainId: curChain,
+    });
+    return {
+      list: res.data.items,
+    };
   };
+  const { data, loading, loadMore, loadingMore } = useInfiniteScroll(fetchDaoInner);
   return (
     <div className="dao-list">
-      <div className="dao-list-container">
-        {numbersArray.map((number) => {
-          return <DAOListItem key={number} />;
-        })}
-      </div>
+      {loading ? (
+        <SkeletonList />
+      ) : data?.list ? (
+        <div className="dao-list-container">
+          {data?.list?.map((item) => {
+            return (
+              <Link
+                key={item.daoId}
+                href={
+                  item.isNetworkDAO
+                    ? `/network-dao/${item.daoId}/proposal-list`
+                    : `/dao/${item.daoId}`
+                }
+              >
+                <DAOListItem item={item} />
+              </Link>
+            );
+          })}
+        </div>
+      ) : (
+        <Empty description="No results found" className="mb-[30px]" />
+      )}
       <div className="dao-more">
         <div className="more-button" onClick={loadMore}>
-          {loading ? (
-            <Spin indicator={<LoadingOutlined spin rev={undefined} />} />
+          {loadingMore ? (
+            <Spin indicator={<LoadingOutlined />} />
           ) : (
             <>
-              <span className="more-text">View More</span>
+              <span className="more-text">Load More</span>
               <img className="down-icon" src={DownIcon} alt="down" />
             </>
           )}

@@ -1,6 +1,10 @@
 module.exports = [
   {
     source: '/api/:path*',
-    destination: 'http://192.168.67.187:8068/api/:path*',
+    destination: 'https://api.tmrwdao.com/api/:path*',
+  },
+  {
+    source: '/explorer-api/:path*',
+    destination: 'https://explorer.aelf.io/api/:path*',
   },
 ];

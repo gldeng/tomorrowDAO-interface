@@ -4,18 +4,12 @@ import GovernanceModel from './component/GovernanceModel';
 import ContractsAndFiles from './component/ContractsAndFiles';
 import HighCouncil from './component/HighCouncil';
 
-export type Event = { type: 'NEXT' } | { type: 'PREVIOUS' };
-
-export type View = {
+export type TView = {
   Component: React.ReactNode;
   step: number;
 };
 
-export type Context = {
-  currentView: View;
-};
-
-export type State = {
+export type TState = {
   states: {
     basicDetails: StateNode;
     governanceModel: StateNode;
@@ -24,7 +18,7 @@ export type State = {
   };
 };
 
-export const mapNameToView: Record<string, View> = {
+export const mapNameToView: Record<string, TView> = {
   basicDetails: {
     Component: <BasicDetails />,
     step: 0,
@@ -42,13 +36,14 @@ export const mapNameToView: Record<string, View> = {
     step: 3,
   },
 };
-
+// todo
 const initialStateName = 'basicDetails';
+// const initialStateName = 'governanceModel';
 
 const formMachineConfig = {
   types: {} as {
     context: {
-      currentView: View;
+      currentView: TView;
     };
   },
   id: 'createState',
@@ -67,8 +62,7 @@ const formMachineConfig = {
         NEXT: {
           target: 'governanceModel',
           actions: assign({
-            currentView: ({ context, event }, params) => {
-              console.log(context, event, params);
+            currentView: () => {
               return mapNameToView['governanceModel'];
             },
           }),
@@ -80,8 +74,7 @@ const formMachineConfig = {
         PREVIOUS: {
           target: 'basicDetails',
           actions: assign({
-            currentView: ({ context, event }, params) => {
-              console.log(context, event, params);
+            currentView: () => {
               return mapNameToView['basicDetails'];
             },
           }),
@@ -89,8 +82,7 @@ const formMachineConfig = {
         NEXT: {
           target: 'highCouncil',
           actions: assign({
-            currentView: ({ context, event }, params) => {
-              console.log(context, event, params);
+            currentView: () => {
               return mapNameToView['highCouncil'];
             },
           }),
@@ -102,8 +94,7 @@ const formMachineConfig = {
         PREVIOUS: {
           target: 'governanceModel',
           actions: assign({
-            currentView: ({ context, event }, params) => {
-              console.log(context, event, params);
+            currentView: () => {
               return mapNameToView['governanceModel'];
             },
           }),
@@ -111,8 +102,7 @@ const formMachineConfig = {
         NEXT: {
           target: 'contractsAndFiles',
           actions: assign({
-            currentView: ({ context, event }, params) => {
-              console.log(context, event, params);
+            currentView: () => {
               return mapNameToView['contractsAndFiles'];
             },
           }),
@@ -124,8 +114,7 @@ const formMachineConfig = {
         PREVIOUS: {
           target: 'highCouncil',
           actions: assign({
-            currentView: ({ context, event }, params) => {
-              console.log(context, event, params);
+            currentView: () => {
               return mapNameToView['highCouncil'];
             },
           }),
@@ -135,4 +124,4 @@ const formMachineConfig = {
   },
 };
 
-export const formMachine = createMachine(formMachineConfig);
+export const formMachine = createMachine(formMachineConfig as any);

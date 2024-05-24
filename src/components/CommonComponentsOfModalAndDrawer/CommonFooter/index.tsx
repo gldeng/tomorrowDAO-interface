@@ -6,9 +6,10 @@ import './index.css';
 export interface ICommonFooterProps {
   flexProps?: FlexProps;
   buttonList: IButtonProps[];
+  childrenNode?: React.ReactNode;
 }
 
-export default function CommonFooter({ flexProps, buttonList }: ICommonFooterProps) {
+export default function CommonFooter({ flexProps, buttonList, childrenNode }: ICommonFooterProps) {
   if (!buttonList.length) {
     return null;
   }
@@ -16,6 +17,7 @@ export default function CommonFooter({ flexProps, buttonList }: ICommonFooterPro
     <Flex
       gap={12}
       justify="center"
+      align="center"
       {...flexProps}
       className={clsx('common-footer', flexProps?.className)}
     >
@@ -29,6 +31,7 @@ export default function CommonFooter({ flexProps, buttonList }: ICommonFooterPro
           {buttonProps.children}
         </Button>
       ))}
+      {childrenNode}
     </Flex>
   );
 }

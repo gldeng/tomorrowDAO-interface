@@ -9,16 +9,26 @@ import { MobileMenu } from 'components/Menu';
 import { ReactComponent as MenuArrow } from 'assets/imgs/menu-arrow.svg';
 import { MenuProps } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
-
+export enum ENavKeys {
+  CreateDAO = 'CreateDAO',
+  Resources = 'Resources',
+  Documentation = 'Documentation',
+  GitHub = 'GitHub',
+  WhitePaper = 'WhitePaper',
+  SocialMedia = 'SocialMedia',
+  Twitter = 'Twitter',
+  Discord = 'Discord',
+  Telegram = 'Telegram',
+}
 export default function Header() {
   const { isLG } = useResponsive();
+  const pathname = usePathname();
   const items: MenuProps['items'] = useMemo(() => {
     return [
       {
-        label: 'Create a DAO',
-        key: 'CreateDAO',
+        label: <Link href={'/guide'}>Create a DAO</Link>,
+        key: ENavKeys.CreateDAO,
       },
       {
         label: (
@@ -27,67 +37,78 @@ export default function Header() {
             {!isLG && <MenuArrow className="transition-all duration-200" />}
           </div>
         ),
-        key: 'Resources',
+        key: ENavKeys.Resources,
         popupClassName: 'pc-menu-popup',
         children: [
+          // {
+          //   label: 'Documentation',
+          //   key: ENavKeys.Documentation,
+          // },
           {
-            label: 'Documentation',
-            key: 'Documentation',
-          },
-          {
-            label: 'GitHub',
-            key: 'GitHub',
+            label: (
+              <Link href="https://github.com/TomorrowDAOProject" target="_blank">
+                GitHub
+              </Link>
+            ),
+            key: ENavKeys.GitHub,
           },
           {
             label: 'White Paper',
-            key: 'White Paper',
+            key: ENavKeys.WhitePaper,
           },
         ],
       },
       {
         label: (
           <div className="menu-label">
-            <span className="menu-label-text">Community</span>
+            <span className="menu-label-text">Social Media</span>
             {!isLG && <MenuArrow className="transition-all duration-200" />}
           </div>
         ),
         popupClassName: 'pc-menu-popup',
-        key: 'Community',
+        key: ENavKeys.SocialMedia,
         children: [
           {
-            label: 'Documentation',
-            key: 'Documentation1',
+            label: (
+              <Link href="https://twitter.com/tmrwdao" target="_blank">
+                Twitter
+              </Link>
+            ),
+            key: ENavKeys.Twitter,
           },
           {
-            label: 'GitHub',
-            key: 'GitHub1',
+            label: (
+              <Link href="https://discord.com/invite/Y73pZaWy" target="_blank">
+                Discord
+              </Link>
+            ),
+            key: ENavKeys.Discord,
           },
           {
-            label: 'White Paper',
-            key: 'White Paper1',
+            label: (
+              <Link href="https://t.me/tmrwdao" target="_blank">
+                Telegram
+              </Link>
+            ),
+            key: ENavKeys.Telegram,
           },
         ],
       },
     ];
   }, [isLG]);
-  const router = useRouter();
-
-  const pathname = usePathname();
-
-  const [current, setCurrent] = useState('CreateDAO');
+  const [current, setCurrent] = useState('');
 
   const onClick: MenuProps['onClick'] = (e) => {
-    switch (e.key) {
-      case 'CreateDAO':
-        router.push('/guide');
-        break;
-    }
+    console.log('e.key', e.key);
     setCurrent(e.key);
   };
 
   useEffect(() => {
+    // refresh from path map to nav active
     if (pathname === '/guide' || pathname === '/create') {
-      setCurrent('CreateDAO');
+      setCurrent(ENavKeys.CreateDAO);
+    } else {
+      setCurrent('');
     }
   }, [pathname]);
 

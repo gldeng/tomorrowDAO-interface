@@ -6,6 +6,7 @@ export default function DetailTag(props: {
     color: string;
     bgColor: string;
   };
+  className?: string;
 }) {
   const customStyle = props.customStyle;
   const style = {
@@ -16,7 +17,10 @@ export default function DetailTag(props: {
     backgroundColor: customStyle.bgColor,
   };
   return (
-    <div className="inline-block px-2 rounded leading-5 font-medium" style={{ ...style }}>
+    <div
+      className={`inline-block px-2 rounded leading-5 font-medium ${props.className}`}
+      style={{ ...style }}
+    >
       {customStyle.text}
     </div>
   );

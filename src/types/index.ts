@@ -78,12 +78,12 @@ export interface IDIDWalletInfo {
   walletInfo: IBlockchainWallet | { [key: string]: any };
   accountInfo: ManagerInfoType;
 }
-export type PortkeyInfoType = Partial<IDIDWalletInfo> & {
+export type TPortkeyInfoType = Partial<IDIDWalletInfo> & {
   accounts?: { [key: string]: any };
   walletInfo?: { [key: string]: any } | IBlockchainWallet;
 };
 
-export type WalletInfoType = {
+export type TWalletInfoType = {
   address: string;
   publicKey?: string;
   token?: string;
@@ -92,3 +92,94 @@ export type WalletInfoType = {
   portkeyInfo?: PortkeyInfo;
   nightElfInfo?: AElfContextType;
 };
+
+export enum ProposalType {
+  UNSPECIFIED = 0,
+  GOVERNANCE = 1,
+  ADVISORY = 2,
+  VETO = 3,
+  ALL = 'ALL',
+}
+export enum ProposalTypeString {
+  Governance = 'Governance',
+  Improvement = 'Advisory',
+  Veto = 'Veto',
+  'On-Chain' = 'OnChain',
+}
+// for filter ProposalStatusString
+export enum ProposalStatusString {
+  Approved = 'Approved',
+  Rejected = 'Rejected',
+  Abstained = 'Abstained',
+  Expired = 'Expired',
+  Executed = 'Executed',
+  PendingVote = 'PendingVote',
+  'BelowThreshold' = 'BelowThreshold',
+  'Vetoed' = 'Vetoed',
+  'Being Vetoed' = 'Challenged',
+}
+// all ProposalStatusString
+export enum AllProposalStatusString {
+  Approved = 'Approved',
+  Rejected = 'Rejected',
+  Abstained = 'Abstained',
+  Expired = 'Expired',
+  Executed = 'Executed',
+  PendingVote = 'PendingVote',
+  'BelowThreshold' = 'BelowThreshold',
+  'Challenged' = 'Challenged',
+  'Vetoed' = 'Vetoed',
+}
+export enum AllProposalStageString {
+  Default = 'Default',
+  Active = 'Active',
+  Pending = 'Pending',
+  Execute = 'Execute',
+  Finished = 'Finished',
+}
+interface IProposalTypeListItem {
+  label: string;
+  desc: string;
+  value: string | number;
+}
+export const proposalTypeList: Array<IProposalTypeListItem> = [
+  {
+    label: 'Governance',
+    desc: `Governance proposals typically encompass changes to the DAO's crucial parameters governing its operations. The execution of these proposals is carried out by calling smart contracts.`,
+    value: ProposalType.GOVERNANCE,
+  },
+  {
+    label: 'Improvement',
+    desc: `Improvement proposals typically consist of non-mandatory suggestions for the DAO, like guidance and insights for its development. The execution of these proposals does not require calling smart contracts.`,
+    value: ProposalType.ADVISORY,
+  },
+  {
+    label: 'Veto',
+    desc: `Veto proposals are intended to prevent the execution of governance proposal by the High Council. Voting on veto proposals can only be conducted through a referendum.`,
+    value: ProposalType.VETO,
+  },
+];
+interface IerrorFieldsItem {
+  errors: Array<any>;
+  name: string | string[];
+  warnings: Array<any>;
+}
+export interface IFormValidateError {
+  values?: {};
+  errorFields: IerrorFieldsItem[];
+  outOfDate?: Boolean;
+}
+
+export interface ITransactionResult {
+  TransactionId: string;
+  Status: string;
+  Logs: ITransactionLog[];
+  [props: string]: any;
+}
+
+export interface ITransactionLog {
+  Address: string;
+  Name: string;
+  Indexed: string[];
+  NonIndexed: string;
+}

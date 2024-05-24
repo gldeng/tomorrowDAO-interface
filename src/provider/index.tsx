@@ -6,7 +6,11 @@ import StoreProvider from './store';
 import WebLoginProvider from './webLoginProvider';
 import en_US from 'antd/lib/locale/en_US';
 
-function Provider({ children }: { children: React.ReactNode }) {
+interface IProps {
+  children: React.ReactNode;
+}
+function Provider(props: IProps) {
+  const { children } = props;
   return (
     <StoreProvider>
       <AELFDProvider prefixCls={PREFIXCLS} theme={THEME_CONFIG} customToken={CUSTOM_TOKEN}>

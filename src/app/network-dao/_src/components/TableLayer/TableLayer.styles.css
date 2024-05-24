@@ -1,0 +1,39 @@
+.table-layer {
+  display: flex;
+  background-color: #ffffff !important;
+  overflow-x: auto;
+  padding-bottom: 16px;
+  padding-top: 8px;
+  width: 100%;
+  border-radius: 8px;
+}
+
+
+.table-layer .antExplorer-table-wrapper {
+  min-width: calc(100% - 32px);
+}
+
+.table-layer .antExplorer-table-wrapper .antExplorer-table-thead tr th {
+  font-family: "Roboto-Medium";
+  background: #ffffff !important;
+  border-bottom: #e6e6e6 1px solid !important;
+  font-weight: 400;
+  max-height: 20px;
+}
+
+.table-layer .antExplorer-table-wrapper .antExplorer-table-thead tr th::before {
+  display: none !important;
+  width: 0 !important;
+}
+
+.table-layer .antExplorer-table-wrapper .antExplorer-table-tbody tr td {
+  border: none;
+}
+
+.table-layer.mobile {
+  padding: 0 0 10px;
+  overflow-x: scroll;
+  background: white;
+  border-radius: 4px;
+  padding-bottom: 10px;
+}

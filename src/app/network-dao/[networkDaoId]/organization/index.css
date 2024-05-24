@@ -1,0 +1,13 @@
+.organization-list-list {
+  min-height: 200px;
+}
+
+
+.organization-list-filter .antExplorer-input-search .antExplorer-btn {
+  background-color: #fff;
+  border: 1px solid #d9d9d9;
+}
+
+.organization-list-modal.antExplorer-modal .antExplorer-modal-content {
+  text-align: initial;
+}

@@ -1,0 +1,22 @@
+.myRecord {
+  .TMRWDAO-pagination-container {
+    @apply px-8;
+  }
+
+  .TMRWDAO-select-single {
+    @apply h-[32px];
+  }
+
+  .vote-record-0 {
+    @apply text-approve;
+  }
+
+  .vote-record-1 {
+    @apply text-rejection;
+
+  }
+
+  .vote-record-2 {
+    @apply text-abstention;
+  }
+}

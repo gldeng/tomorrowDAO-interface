@@ -12,7 +12,7 @@ interface Window {
   NightElf?: {};
 }
 
-interface HTMLAttributes<T> {
+interface HTMLAttributes {
   scrollTop?: number;
 }
 
@@ -44,3 +44,4 @@ declare module '*.svg' {
   const src: string;
   export default src;
 }
+declare module 'socket.io-client';

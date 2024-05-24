@@ -1,0 +1,37 @@
+const { spawn } = require('child_process');
+const fs = require('fs');
+
+const APP_ENV = process.env.APP_ENV || 'testnet';
+console.log('APP_ENV:', APP_ENV);
+if (APP_ENV === 'mainnet') {
+  const fileConfigContent = fs.readFileSync('./src/config/index.ts', 'utf-8');
+  let mainnetImportStatement = `export * from './mainnet';`;
+  let testnetImportStatement = `export * from './testnet';`;
+  const newFileContent = fileConfigContent.replace(testnetImportStatement, mainnetImportStatement);
+  fs.writeFileSync('./src/config/index.ts', newFileContent);
+  console.log(`APP_ENV: ${APP_ENV}, replace testnet with mainnet !!!`);
+}
+const buildCommand = spawn('yarn', ['next-compile']);
+
+buildCommand.stdout.on('data', (data) => {
+  const output = data.toString();
+
+  console.log(output);
+
+  if (output.includes('Collecting build traces')) {
+    console.log('build success');
+    buildCommand.kill('SIGKILL');
+    process.exit(0);
+  }
+});
+
+buildCommand.stderr.on('data', (data) => {
+  console.error(`stderr: ${data}`);
+});
+
+buildCommand.on('close', (code) => {
+  console.log(`child process exited with code ${code}`);
+  if (code !== 0) {
+    process.exit(1);
+  }
+});
