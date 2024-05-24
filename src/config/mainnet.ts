@@ -1,7 +1,7 @@
 // static config for disable label value todo...
 export const electionContractAddress = '2akycoQt8nYSQbarup4tTJYxQ4SzdKbwBfBCcCF9yqWYtMXt9j';
 // for network-dao treasury account todo...
-export const treasuryAccountAddress = '';
+export const treasuryAccountAddress = 'KNdM6U6PyPsgyena8rPHTbCoMrkrALhxAy1b8Qx2cgi4169xr';
 
 // ------------------aelf-web-login-start------------------------
 export const networkType = 'MAIN';
