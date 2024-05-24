@@ -10,10 +10,10 @@ const DocsItems = [
   //   title: 'Docs',
   //   path: '/Docs',
   // },
-  {
-    title: 'White Paper',
-    path: '/White Paper',
-  },
+  // {
+  //   title: 'White Paper',
+  //   path: '/White Paper',
+  // },
   // {
   //   title: 'Send Feedback',
   //   path: '/Feedback',
