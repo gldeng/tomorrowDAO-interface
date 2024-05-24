@@ -6,18 +6,18 @@ import TGIcon from 'assets/imgs/telegram.svg';
 import DiscordIcon from 'assets/imgs/icon_discord.svg';
 import dayjs from 'dayjs';
 const DocsItems = [
-  {
-    title: 'Docs',
-    path: '/Docs',
-  },
+  // {
+  //   title: 'Docs',
+  //   path: '/Docs',
+  // },
   {
     title: 'White Paper',
     path: '/White Paper',
   },
-  {
-    title: 'Send Feedback',
-    path: '/Feedback',
-  },
+  // {
+  //   title: 'Send Feedback',
+  //   path: '/Feedback',
+  // },
 ];
 export default function Footer() {
   return (
