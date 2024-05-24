@@ -5,6 +5,7 @@ export const treasuryAccountAddress = 'KNdM6U6PyPsgyena8rPHTbCoMrkrALhxAy1b8Qx2c
 
 // ------------------aelf-web-login-start------------------------
 export const networkType = 'MAINNET';
+export const aelfWebLoginNetworkType = 'MAIN';
 export const rpcUrlAELF = 'https://explorer.aelf.io/chain';
 export const rpcUrlTDVV = 'https://tdvv-public-node.aelf.io';
 export const rpcUrlTDVW = 'https://tdvv-public-node.aelf.io';
