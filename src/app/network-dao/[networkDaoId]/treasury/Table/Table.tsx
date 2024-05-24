@@ -143,7 +143,7 @@ export default function RecordTable() {
       render(symbol) {
         return (
           <Link href={`${mainExplorer}/token/${symbol}`}>
-            <div className="token">
+            <div className="token flex items-center">
               {TokenIconMap[symbol] && <img src={TokenIconMap[symbol]} className="token-logo " alt="" />}
               {symbol}
             </div>

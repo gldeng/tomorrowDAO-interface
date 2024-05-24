@@ -270,6 +270,7 @@ export default function DeoDetails(props: IProps) {
                   {...tableParams.pagination}
                   total={proposalData?.data?.totalCount ?? 0}
                   pageChange={pageChange}
+                  showLast={!isNetworkDAO}
                   pageSizeChange={pageSizeChange}
                 />
               </div>
