@@ -10,7 +10,7 @@ import ErrorResult from 'components/ErrorResult';
 import Link from 'next/link';
 import { getExploreLink } from 'utils/common';
 import './index.css';
-import { sideChainSuffix } from 'config';
+import { curChain } from 'config';
 
 const firstLetterToLowerCase = (str: string) => {
   return str.charAt(0).toLowerCase() + str.slice(1);
@@ -79,6 +79,7 @@ export default function DaoInfo(props: IParams) {
               endLen={11}
               className="address"
               address={address as string}
+              chain={curChain}
             ></HashAddress>
           </Link>
         ),
@@ -95,7 +96,7 @@ export default function DaoInfo(props: IParams) {
           className="address"
           preLen={8}
           endLen={11}
-          chain={sideChainSuffix}
+          chain={curChain}
           address={data?.creator ?? '-'}
         ></HashAddress>
       ),

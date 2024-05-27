@@ -37,3 +37,6 @@ export const consensusDPoSAddr = 'pGa4e5hNGsgkfjEGm72TEvbF7aRDqKBd4LuXtab4ucMbXL
 export const sideChainSuffix = 'tDVV';
 // symbolmarket page url
 export const symbolmarketUrl = 'https://www.eforest.finance/symbolmarket';
+
+// explorer
+export const SOCKET_URL_NEW = 'wss://explorer.aelf.io';

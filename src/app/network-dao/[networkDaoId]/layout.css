@@ -1,0 +1,8 @@
+.antExplorer-pagination {
+    align-items: center;
+
+    .antExplorer-pagination-item {
+        height: 32px;
+        line-height: 32px;
+    }
+}

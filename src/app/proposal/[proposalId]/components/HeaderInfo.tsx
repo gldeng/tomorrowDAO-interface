@@ -12,6 +12,7 @@ import useIsNetworkDao from 'hooks/useIsNetworkDao';
 import LinkNetworkDao from 'components/LinkNetworkDao';
 import Link from 'next/link';
 import ProposalStatusDesc from 'app/dao/[daoId]/components/ProposalsItem/ProposalStatusDesc';
+import useResponsive from 'hooks/useResponsive';
 
 // import ProposalDetailFile from 'assets/imgs/proposal-detail-file.svg';
 interface IHeaderInfoProps {
@@ -26,10 +27,11 @@ const HeaderInfo = (props: IHeaderInfoProps) => {
     const url = `http://twitter.com/share?text=${twTitle}&url=${twUrl}`;
     window.open(url);
   };
+  const { isLG } = useResponsive();
   const { isNetWorkDao } = useIsNetworkDao();
   return (
     <BoxWrapper>
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-start">
         <div className="flex gap-2">
           <DetailTag
             customStyle={{
@@ -59,7 +61,7 @@ const HeaderInfo = (props: IHeaderInfoProps) => {
             onClick={handleShare}
           >
             <Image src={colorfulSocialMediaIconMap.Twitter} alt="x" width={11} height={10} />
-            <span className="pl-[4px]">Share on X</span>
+            <span className="pl-[4px] text-[13px]">{isLG ? 'Share' : 'Share on X'}</span>
           </div>
         </div>
       </div>

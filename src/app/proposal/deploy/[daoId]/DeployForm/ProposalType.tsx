@@ -48,7 +48,7 @@ const ProposalType = (props: ProposalTypeProps) => {
           )}
         ></ResponsiveSelect>
       </Form.Item>
-      <div className="flex justify-end mt-[494px]">
+      <div className="flex justify-end mt-[200px]">
         <Button type="primary" className="w-[156px]" onClick={next}>
           Continue
         </Button>

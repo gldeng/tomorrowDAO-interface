@@ -6,6 +6,7 @@ import dynamicReq from 'next/dynamic';
 import Footer from 'components/Footer';
 import { useWalletInit } from 'hooks/useWallet';
 import PageLoading from 'components/Loading';
+import './layout.css';
 
 const Layout = dynamicReq(
   async () => {

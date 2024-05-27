@@ -48,7 +48,10 @@ class KeyInTeamInfo extends PureComponent {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleBack = this.handleBack.bind(this);
 
-    this.teamPubkey = queryString.parse(window.location.search).pubkey;
+  }
+
+  getTeamPubkey = () => {
+    return queryString.parse(window.location.search).pubkey;
   }
 
   generateTeamInfoKeyInForm(data) {
@@ -156,7 +159,7 @@ class KeyInTeamInfo extends PureComponent {
     if (currentWallet) {
       this.setState(
         {
-          hasAuth: currentWallet.publicKey === this.teamPubkey,
+          hasAuth: currentWallet.publicKey === this.getTeamPubkey(),
         },
         this.fetchCandidateInfo
       );
@@ -173,7 +176,7 @@ class KeyInTeamInfo extends PureComponent {
       ) {
         this.setState(
           {
-            hasAuth: currentWallet.publicKey === this.teamPubkey,
+            hasAuth: currentWallet.publicKey === this.getTeamPubkey(),
           },
           this.fetchCandidateInfo
         );
