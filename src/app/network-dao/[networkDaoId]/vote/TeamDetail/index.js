@@ -48,10 +48,6 @@ class TeamDetail extends PureComponent {
       hasAuth: false,
       isCandidate: true,
     };
-
-
-    this.teamPubkey = queryString.parse(window.location.search).pubkey;
-    // console.log('queryString.parse(window.location.search).pubkey', queryString.parse(window.location.search), window.location.search)
   }
   getTeamPubkey() {
     const teamPubkey = queryString.parse(window.location.search).pubkey;
@@ -59,6 +55,7 @@ class TeamDetail extends PureComponent {
   }
 
   componentDidMount() {
+    const teamPubkey = this.getTeamPubkey();
     const { consensusContract, electionContract, currentWallet } = this.props;
 
     this.fetchData();
@@ -73,12 +70,13 @@ class TeamDetail extends PureComponent {
 
     if (currentWallet?.address) {
       this.setState({
-        hasAuth: currentWallet?.publicKey === this.teamPubkey,
+        hasAuth: currentWallet?.publicKey === teamPubkey,
       });
     }
   }
 
   componentDidUpdate(prevProps) {
+    const teamPubkey = this.getTeamPubkey();
     const { consensusContract, electionContract, currentWallet } = this.props;
 
     if (consensusContract !== prevProps.consensusContract) {
@@ -91,7 +89,7 @@ class TeamDetail extends PureComponent {
     if (prevProps.currentWallet !== currentWallet) {
       this.setState(
         {
-          hasAuth: currentWallet?.publicKey === this.teamPubkey,
+          hasAuth: currentWallet?.publicKey === teamPubkey,
         },
         this.fetchCandidateInfo
       );
@@ -99,7 +97,8 @@ class TeamDetail extends PureComponent {
   }
 
   fetchData() {
-    getTeamDesc(this.teamPubkey)
+    const teamPubkey = this.getTeamPubkey();
+    getTeamDesc(teamPubkey)
       .then((res) => {
         if (res.code !== 0) {
           return;
@@ -221,9 +220,10 @@ class TeamDetail extends PureComponent {
   computeUserRedeemableVoteAmountForOneCandidate(
     usersActiveVotingRecords = []
   ) {
+    const teamPubkey = this.getTeamPubkey();
     const userVoteRecordsForOneCandidate = filterUserVoteRecordsForOneCandidate(
       usersActiveVotingRecords,
-      this.teamPubkey
+      teamPubkey
     );
     const userRedeemableVoteAmountForOneCandidate =
       computeUserRedeemableVoteAmountForOneCandidate(
@@ -235,11 +235,12 @@ class TeamDetail extends PureComponent {
   }
 
   justifyIsBP() {
+    const teamPubkey = this.getTeamPubkey();
     const { consensusContract } = this.props;
 
     fetchCurrentMinerPubkeyList(consensusContract)
       .then((res) => {
-        if (res.pubkeys.indexOf(this.teamPubkey) !== -1) {
+        if (res.pubkeys.indexOf(teamPubkey) !== -1) {
           this.setState({
             isBP: true,
           });
@@ -353,7 +354,7 @@ class TeamDetail extends PureComponent {
                     <LinkNetworkDao
                       href={{
                         pathname: '/vote/apply',
-                        search: `pubkey=${this.teamPubkey}`,
+                        search: `pubkey=${this.getTeamPubkey()}`,
                       }}
                     >
                       Edit
@@ -373,7 +374,7 @@ class TeamDetail extends PureComponent {
               data-votetype={FROM_WALLET}
               data-nodeaddress={formattedAddress}
               data-nodename={data.name || formattedAddress}
-              data-targetpublickey={this.teamPubkey}
+              data-targetpublickey={this.getTeamPubkey()}
             >
               Vote
             </Button>
@@ -383,7 +384,7 @@ class TeamDetail extends PureComponent {
               data-role="redeem"
               data-shoulddetectlock
               data-nodeaddress={formattedAddress}
-              data-targetpublickey={this.teamPubkey}
+              data-targetpublickey={this.getTeamPubkey()}
               data-nodename={data.name}
               disabled={userRedeemableVoteAmountForOneCandidate <= 0}
             >

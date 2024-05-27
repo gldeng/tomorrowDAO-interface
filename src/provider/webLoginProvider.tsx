@@ -1,6 +1,6 @@
 'use client';
 import { NetworkType } from '@portkey/did-ui-react';
-import { curChain } from 'config';
+import { aelfWebLoginNetworkType, curChain } from 'config';
 import dynamicReq from 'next/dynamic';
 
 import { store } from 'redux/store';
@@ -67,7 +67,7 @@ const WebLoginProviderDynamic = dynamicReq(
         (info?.[`rpcUrl${String(info?.curChain).toUpperCase()}`] as unknown as string) ||
         info?.rpcUrlTDVW ||
         '',
-      networkType: info?.networkType || 'TESTNET',
+      networkType: aelfWebLoginNetworkType,
     });
     return webLogin.WebLoginProvider;
   },

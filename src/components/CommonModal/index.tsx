@@ -23,6 +23,7 @@ export default function CommonModal({
       className={clsx('common-modal', className)}
       title={<CommonHeader title={title} onClose={props.onCancel} />}
       footer={null}
+      maskClosable={false}
       centered
     >
       {children}

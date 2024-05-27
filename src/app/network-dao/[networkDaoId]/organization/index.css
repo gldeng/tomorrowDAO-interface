@@ -2,6 +2,9 @@
   min-height: 200px;
 }
 
+.organization-list-search-input .antExplorer-input-affix-wrapper {
+  height: 48px;
+}
 
 .organization-list-filter .antExplorer-input-search .antExplorer-btn {
   background-color: #fff;

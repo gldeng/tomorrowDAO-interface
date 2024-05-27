@@ -5,6 +5,7 @@ export const treasuryAccountAddress = 'KNdM6U6PyPsgyena8rPHTbCoMrkrALhxAy1b8Qx2c
 
 // ------------------aelf-web-login-start------------------------
 export const networkType = 'TESTNET';
+export const aelfWebLoginNetworkType = 'TESTNET';
 export const rpcUrlAELF = 'https://explorer-test.aelf.io/chain';
 export const rpcUrlTDVV = 'https://tdvw-test-node.aelf.io';
 export const rpcUrlTDVW = 'https://tdvw-test-node.aelf.io';
@@ -36,3 +37,6 @@ export const consensusDPoSAddr = 'pGa4e5hNGsgkfjEGm72TEvbF7aRDqKBd4LuXtab4ucMbXL
 export const sideChainSuffix = 'tDVW';
 // symbolmarket page url
 export const symbolmarketUrl = 'https://test.eforest.finance/symbolmarket';
+
+// explorer
+export const SOCKET_URL_NEW = 'wss://explorer-test.aelf.io';

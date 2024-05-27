@@ -2,6 +2,7 @@ import { Typography, FontWeightEnum, HashAddress } from 'aelf-design';
 import { Tabs } from 'aelf-design';
 import { getContract } from 'app/proposal/deploy/[daoId]/util';
 import { MarkdownPreview } from 'components/MarkdownEditor';
+import { curChain } from 'config';
 import { useEffect, useState } from 'react';
 import { ProposalTypeString } from 'types';
 import base64ToHex from 'utils/base64ToHex';
@@ -74,7 +75,10 @@ const ProposalTab = (props: IProposalTabProps) => {
               <Typography.Text fontWeight={FontWeightEnum.Medium}>Call Contract</Typography.Text>
             </div>
             <div>
-              <HashAddress address={proposalDetailData?.transaction?.toAddress ?? '-'} />
+              <HashAddress
+                address={proposalDetailData?.transaction?.toAddress ?? '-'}
+                chain={curChain}
+              />
             </div>
           </div>
           <div className="flex flex-col gap-2">

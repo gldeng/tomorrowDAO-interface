@@ -17,6 +17,3 @@ export const ElectionContractName = 'Election';
 
 export const NetworkDaoHomePathName = '/network-dao';
 export const NetworkName = 'Network DAO';
-
-// explorer
-export const SOCKET_URL_NEW = 'wss://explorer-test.aelf.io';

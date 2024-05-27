@@ -25,7 +25,7 @@ import publicKeyToAddress from "@utils/publicKeyToAddress";
 import { FROM_WALLET, ELF_DECIMAL } from "../../constants";
 import { connect } from "react-redux";
 import "./index.css";
-import { SOCKET_URL_NEW } from "@src/constants";
+import { SOCKET_URL_NEW } from 'config';
 import addressFormat from "@utils/addressFormat";
 import TableLayer from "@components/TableLayer/TableLayer";
 import { isActivityBrowser } from "@utils/isWebView";
@@ -48,21 +48,18 @@ class NodeTable extends PureComponent {
         showSizeChanger: false,
       },
     };
-    // this.socket = io({
-    //   path: SOCKET_URL_NEW,
-    // });
   }
 
   // todo: how to combine cdm & cdu
   componentDidMount() {
-    // this.wsProducedBlocks();
+    this.wsProducedBlocks();
     if (this.props.electionContract && this.props.consensusContract) {
       this.fetchNodes();
     }
   }
 
   componentWillUnmount() {
-    // this.socket.disconnect();
+    this.socket.disconnect();
   }
 
   componentDidUpdate(prevProps) {
@@ -96,6 +93,9 @@ class NodeTable extends PureComponent {
   }
 
   wsProducedBlocks() {
+    this.socket = io(SOCKET_URL_NEW, {
+      path: '/new-socket',
+    });
     this.socket.on("produced_blocks", (data) => {
       this.setState({
         producedBlocks: data,

@@ -8,6 +8,7 @@ import { colorfulSocialMediaIconMap } from 'assets/imgs/socialMediaIcon';
 import { useSelector } from 'redux/store';
 import './index.css';
 import { StepsContext, StepEnum } from '../../type';
+import { curChain } from 'config';
 
 const { Text, Title } = Typography;
 
@@ -76,7 +77,7 @@ function AddressItem({
       ) : (
         <Text className="mr-2">{label}:</Text>
       )}
-      <HashAddress className="address" ignoreEvent address={address} />
+      <HashAddress className="address" ignoreEvent address={address} chain={curChain} />
     </Flex>
   );
 }

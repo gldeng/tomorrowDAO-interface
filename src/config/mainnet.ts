@@ -4,7 +4,8 @@ export const electionContractAddress = 'QWMSafkNs3oydr7EqktZ7kR2cE8j9c8qAbKymds5
 export const treasuryAccountAddress = 'KNdM6U6PyPsgyena8rPHTbCoMrkrALhxAy1b8Qx2cgi4169xr';
 
 // ------------------aelf-web-login-start------------------------
-export const networkType = 'MAIN';
+export const networkType = 'MAINNET';
+export const aelfWebLoginNetworkType = 'MAIN';
 export const rpcUrlAELF = 'https://explorer.aelf.io/chain';
 export const rpcUrlTDVV = 'https://tdvv-public-node.aelf.io';
 export const rpcUrlTDVW = 'https://tdvv-public-node.aelf.io';
@@ -36,3 +37,6 @@ export const consensusDPoSAddr = 'pGa4e5hNGsgkfjEGm72TEvbF7aRDqKBd4LuXtab4ucMbXL
 export const sideChainSuffix = 'tDVV';
 // symbolmarket page url
 export const symbolmarketUrl = 'https://www.eforest.finance/symbolmarket';
+
+// explorer
+export const SOCKET_URL_NEW = 'wss://explorer.aelf.io';
