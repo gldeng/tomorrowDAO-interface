@@ -88,7 +88,7 @@
     "@types/react-dom": "18.0.5",
     "@typescript-eslint/eslint-plugin": "^5.30.4",
     "@typescript-eslint/parser": "^5.30.4",
-    "aelf-design": "^1.0.0-alpha.15",
+    "aelf-design": "^1.0.0-alpha.16",
     "amber-lint": "^1.0.3",
     "antd-mobile": "^5.34.0",
     "antd-style": "^3.5.2",
