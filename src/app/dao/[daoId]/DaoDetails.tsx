@@ -271,6 +271,7 @@ export default function DeoDetails(props: IProps) {
                   total={proposalData?.data?.totalCount ?? 0}
                   pageChange={pageChange}
                   pageSizeChange={pageSizeChange}
+                  showLast={!isNetworkDAO}
                 />
               </div>
             )}
