@@ -118,7 +118,7 @@ export default function RecordTable() {
         const isOut = checkIsOut(treasuryAccountAddress, record);
         return (
           <div className="to flex">
-            <Tag color="error" className="w-[36px] flex justify-center">
+            <Tag color={isOut ? "error" : 'success'} className="w-[36px] flex justify-center">
               { isOut ? 'out' : 'in' }
             </Tag>
             <Link href={`${mainExplorer}/address/${to}`} target="_blank">
@@ -143,7 +143,7 @@ export default function RecordTable() {
       render(symbol) {
         return (
           <Link href={`${mainExplorer}/token/${symbol}`}>
-            <div className="token">
+            <div className="token flex items-center">
               {TokenIconMap[symbol] && <img src={TokenIconMap[symbol]} className="token-logo " alt="" />}
               {symbol}
             </div>

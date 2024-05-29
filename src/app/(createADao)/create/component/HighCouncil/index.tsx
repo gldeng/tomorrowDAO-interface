@@ -8,7 +8,7 @@ import InputSlideBind from 'components/InputSlideBind';
 import { integerRule, min2maxIntegerRule, validatorCreate, useRegisterForm } from '../utils';
 import { StepEnum, StepsContext } from '../../type';
 import { useSelector } from 'redux/store';
-import { electionContractAddress } from 'config/index';
+import { curChain, electionContractAddress } from 'config/index';
 import './index.css';
 
 const HighCouncil = () => {
@@ -48,7 +48,7 @@ const HighCouncil = () => {
             </Tooltip>
           }
         >
-          <Input disabled defaultValue={electionContractAddress} />
+          <Input disabled defaultValue={`ELF_${electionContractAddress}_${curChain}`} />
         </Form.Item>
 
         <Form.Item
