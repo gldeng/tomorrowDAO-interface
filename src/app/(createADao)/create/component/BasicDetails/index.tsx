@@ -76,7 +76,7 @@ export default function BasicDetails() {
               accept=".png,.jpg"
               uploadText="Click to Upload"
               uploadIconColor="#1A1A1A"
-              tips="Formats supported: PNG and JPG. 512 x 512 px standard, less than 1 MB."
+              tips="Formats supported: PNG and JPG. make sure the width and height of the pictures are the same, less than 1 MB."
             />
           </Form.Item>
           <Form.Item

@@ -1,14 +1,15 @@
 import axios from 'axios';
 import { message } from 'antd';
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { apiServer } from './request/api-server';
+import { eventBus, UnAuth } from 'utils/myEvent';
+export const apiServerBaseURL = '/api/app';
 
+export const LoginExpiredTip = 'Login expired, please log in again';
 interface ResponseType<T> {
   code: string;
   message: string;
   data: T;
 }
-
 class Request {
   instance: AxiosInstance;
   baseConfig: AxiosRequestConfig = { baseURL: '/api', timeout: 60000 };
@@ -19,6 +20,10 @@ class Request {
 
     this.instance.interceptors.request.use(
       async (config: AxiosRequestConfig) => {
+        const token = this.token;
+        if (token && ['/proposal/my-info', '/proposal/vote-history'].includes(config.url || '')) {
+          config.headers = { ...config.headers, Authorization: `Bearer ${token}` };
+        }
         return config;
       },
       (error) => {
@@ -31,16 +36,8 @@ class Request {
       <T>(response: AxiosResponse<ResponseType<T>>) => {
         const res = response.data;
         const { code, message: errorMessage } = res;
-        if (config.baseURL?.includes('/explorer-api')) {
-          switch (response.status) {
-            case 200:
-              return res;
-            default:
-              message.error(errorMessage);
-              return res;
-          }
-        }
 
+        console.log(code, errorMessage);
         switch (code) {
           case '20000':
             return res;
@@ -61,10 +58,8 @@ class Request {
             break;
 
           case 401:
-            message.error('The signature has expired. Please Login again.');
-            setTimeout(() => {
-              location.pathname = '/';
-            }, 3000);
+            eventBus.emit(UnAuth);
+            errMessage = 'The signature has expired. Please Login again.';
             break;
 
           case 404:
@@ -118,12 +113,8 @@ class Request {
   }
 }
 
-const explorerServer = new Request({
-  baseURL: '/explorer-api/',
+const apiServer = new Request({
+  baseURL: apiServerBaseURL,
 });
-const tokenServer = new Request({
-  baseURL: '',
-});
-const req = new Request({});
-export default req;
-export { apiServer, explorerServer, tokenServer };
+
+export { apiServer };

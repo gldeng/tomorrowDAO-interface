@@ -1,11 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { WalletInfo } from 'aelf-web-login';
 import { HYDRATE } from 'next-redux-wrapper';
 import { TAppState } from 'redux/store';
 import { TWalletInfoType } from 'types';
 
 export interface IUserInfoState {
   userInfo: TUserInfoType;
-  walletInfo: TWalletInfoType;
+  walletInfo?: TWalletInfoType;
 }
 
 export const logOutUserInfo: TUserInfoType = {
@@ -24,8 +25,7 @@ const initialState: IUserInfoState = {
   userInfo: logOutUserInfo,
   walletInfo: {
     address: '',
-    aelfChainAddress: '',
-  },
+  } as WalletInfo,
 };
 
 // Actual Slice
