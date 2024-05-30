@@ -102,7 +102,7 @@ const FUpload: React.FC<IFUploadProps> = ({
     if (needCheckImgSize) {
       const checkSize = await checkImgSize(file);
       if (!checkSize) {
-        message.error('Please upload an imgae of 512*512.');
+        message.error('Please upload an image with the same width and height.');
       }
       result = result && checkSize;
     }

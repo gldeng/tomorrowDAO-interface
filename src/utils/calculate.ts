@@ -1,4 +1,5 @@
 import BigNumber from 'bignumber.js';
+import BN, { isBN } from 'bn.js';
 
 const ZERO = new BigNumber(0);
 
@@ -36,4 +37,8 @@ export function fixedPrice(price: number, decimalsFix = 4) {
     return new BigNumber(stringResult).toNumber();
   }
   return price;
+}
+
+export function zeroFill(str: string | BN) {
+  return isBN(str) ? str.toString(16, 64) : str.padStart(64, '0');
 }

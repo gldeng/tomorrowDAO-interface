@@ -10,6 +10,7 @@ import { ReactComponent as MenuArrow } from 'assets/imgs/menu-arrow.svg';
 import { MenuProps } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { usePathname } from 'next/navigation';
+import { networkType } from 'config';
 export enum ENavKeys {
   CreateDAO = 'CreateDAO',
   Resources = 'Resources',
@@ -24,6 +25,7 @@ export enum ENavKeys {
 export default function Header() {
   const { isLG } = useResponsive();
   const pathname = usePathname();
+  const isHome = pathname === '/';
   const items: MenuProps['items'] = useMemo(() => {
     return [
       {
@@ -122,7 +124,7 @@ export default function Header() {
             </Link>
             {!isLG && <PCMenu selectedKeys={[current]} items={items} onClick={onClick} />}
           </div>
-          <Login />
+          {!isHome && <Login />}
         </div>
         {isLG && (
           <div className="header-menu-icon">

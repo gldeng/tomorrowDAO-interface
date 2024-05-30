@@ -1,7 +1,7 @@
 import { Accounts, ChainId } from '@portkey/provider-types';
 import { IBlockchainWallet } from '@portkey/types';
 import { ManagerInfoType } from '@portkey/did-ui-react';
-import { DiscoverInfo, PortkeyInfo } from 'aelf-web-login';
+import { DiscoverInfo, PortkeyInfo, PortkeyInfoV1, WalletInfo } from 'aelf-web-login';
 import type { AElfContextType } from '@aelf-react/core/dist/types';
 
 export type TokenInfo = {
@@ -25,10 +25,14 @@ export enum ContractMethodType {
   SEND = 'send',
   VIEW = 'view',
 }
-
 export interface IContractError extends Error {
   code?: number;
-  error?: number;
+  error?:
+    | number
+    | string
+    | {
+        message?: string;
+      };
   errorMessage?: {
     message: string;
     name?: string;
@@ -83,15 +87,7 @@ export type TPortkeyInfoType = Partial<IDIDWalletInfo> & {
   walletInfo?: { [key: string]: any } | IBlockchainWallet;
 };
 
-export type TWalletInfoType = {
-  address: string;
-  publicKey?: string;
-  token?: string;
-  aelfChainAddress?: string;
-  discoverInfo?: DiscoverInfo;
-  portkeyInfo?: PortkeyInfo;
-  nightElfInfo?: AElfContextType;
-};
+export type TWalletInfoType = WalletInfo;
 
 export enum ProposalType {
   UNSPECIFIED = 0,
@@ -182,4 +178,9 @@ export interface ITransactionLog {
   Name: string;
   Indexed: string[];
   NonIndexed: string;
+}
+export interface IAccountInfo {
+  account?: string;
+  token?: string;
+  expirationTime?: number;
 }

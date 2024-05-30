@@ -9,6 +9,8 @@ import { curChain, explorer } from 'config';
 import { EVoteOption } from 'types/vote';
 import dayjs from 'dayjs';
 import LinkNetworkDao from 'components/LinkNetworkDao';
+import { useEffect } from 'react';
+import { useWalletService } from 'hooks/useWallet';
 
 interface IProps {
   daoId: string;
@@ -17,19 +19,31 @@ interface IProps {
 export default function MyRecords(props: IProps) {
   const { daoId, isNetworkDAO } = props;
   const { walletInfo } = useSelector((store: any) => store.userInfo);
+  const { isLogin } = useWalletService();
   const {
     data: voteHistoryData,
+    run,
     // error: voteHistoryError,
     // loading: voteHistoryLoading,
-  } = useRequest(() => {
-    return fetchVoteHistory({
-      address: walletInfo.address,
-      chainId: curChain,
-      skipCount: 0,
-      maxResultCount: 10,
-      daoId,
-    });
-  });
+  } = useRequest(
+    () => {
+      return fetchVoteHistory({
+        address: walletInfo.address,
+        chainId: curChain,
+        skipCount: 0,
+        maxResultCount: 10,
+        daoId,
+      });
+    },
+    {
+      manual: true,
+    },
+  );
+  useEffect(() => {
+    if (isLogin) {
+      run();
+    }
+  }, [isLogin]);
 
   // const statusCom = (text: keyof IStatus, size = 500) => {
   //   return (
