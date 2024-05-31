@@ -7,9 +7,9 @@ export const checkImgSize = (file: File): Promise<boolean> => {
       img.src = e.target?.result as string;
       img.onload = function () {
         if (img.width == img.height) {
-          resolve(false);
-        } else {
           resolve(true);
+        } else {
+          resolve(false);
         }
       };
     };
