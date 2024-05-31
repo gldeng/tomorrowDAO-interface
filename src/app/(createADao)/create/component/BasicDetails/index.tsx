@@ -12,6 +12,7 @@ import { useSelector } from 'react-redux';
 import { dispatch } from 'redux/store';
 import { fetchTokenInfo } from 'api/request';
 import { setToken } from 'redux/reducer/daoCreate';
+import Link from 'next/link';
 
 const mediaList = [
   ['metadata', 'socialMedia', 'Twitter'],
@@ -251,54 +252,65 @@ export default function BasicDetails() {
             </Tooltip>
           </div>
           {showSymbol && (
-            <Form.Item
-              validateFirst
-              rules={[
-                {
-                  required: true,
-                  message: 'governance_token is required',
-                },
-                {
-                  validator: (_, value) => {
-                    const reqParams = {
-                      symbol: value ?? '',
-                      chainId: elfInfo.curChain,
-                    };
-                    return new Promise<void>((resolve, reject) => {
-                      fetchTokenInfo(reqParams)
-                        .then((res) => {
-                          dispatch(setToken(res.data));
-                          if (!res.data.name) {
-                            reject(new Error('The token is not issued yet.'));
-                          }
-                          if (res.data.isNFT) {
-                            reject(
-                              new Error(
-                                `${value} is an NFT and cannot be used as governance token.`,
-                              ),
-                            );
-                          }
-                          resolve();
-                        })
-                        .catch(() => {
-                          reject(new Error('api error，Re-enter the token'));
-                        });
-                    });
+            <>
+              <Form.Item
+                validateFirst
+                rules={[
+                  {
+                    required: true,
+                    message: 'governance_token is required',
                   },
-                },
-              ]}
-              validateTrigger="onBlur"
-              name="governanceToken"
-              label=""
-            >
-              <Input
-                placeholder="Enter a token symbol"
-                onBlur={() => {
-                  const token = form.getFieldValue('governanceToken');
-                  form.setFieldValue('governanceToken', token?.toUpperCase());
-                }}
-              />
-            </Form.Item>
+                  {
+                    validator: (_, value) => {
+                      const reqParams = {
+                        symbol: value ?? '',
+                        chainId: elfInfo.curChain,
+                      };
+                      return new Promise<void>((resolve, reject) => {
+                        fetchTokenInfo(reqParams)
+                          .then((res) => {
+                            dispatch(setToken(res.data));
+                            if (!res.data.name) {
+                              reject(new Error('The token has not yet been issued'));
+                            }
+                            if (res.data.isNFT) {
+                              reject(
+                                new Error(
+                                  `${value} is an NFT and cannot be used as governance token.`,
+                                ),
+                              );
+                            }
+                            resolve();
+                          })
+                          .catch(() => {
+                            reject(new Error('The token has not yet been issued.'));
+                          });
+                      });
+                    },
+                  },
+                ]}
+                validateTrigger="onBlur"
+                name="governanceToken"
+                label=""
+                className="governance-token-item"
+              >
+                <Input
+                  placeholder="Enter a token symbol"
+                  onBlur={() => {
+                    const token = form.getFieldValue('governanceToken');
+                    form.setFieldValue('governanceToken', token?.toUpperCase());
+                  }}
+                />
+              </Form.Item>
+              <div className="mb-[20px]">
+                <Link
+                  href="https://medium.com/@NFT_Forest_NFT/tutorial-how-to-buy-seeds-and-create-tokens-on-symbol-market-de3aa948bcb4"
+                  target="_blank"
+                >
+                  How to create a token?
+                </Link>
+              </div>
+            </>
           )}
         </Form>
       </div>

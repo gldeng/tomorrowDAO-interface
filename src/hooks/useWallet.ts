@@ -17,36 +17,28 @@ import { TWalletInfoType } from 'types';
 import { storages } from 'storages';
 import { useRegisterContractServiceMethod } from 'contract/baseContract';
 import { useGetToken } from './useGetToken';
-import useGetLoginStatus from 'redux/hooks/useGetLoginStatus';
 import { setLoginStatus, resetLoginStatus } from 'redux/reducer/loginStatus';
 import { useAsyncEffect } from 'ahooks';
 import { emitLoading, eventBus, UnAuth } from 'utils/myEvent';
 import { apiServer } from 'api/axios';
 import { getCaHashAndOriginChainIdByWallet, getManagerAddressByWallet } from 'utils/wallet';
-import { setLocalJWT } from 'utils/localJWT';
+import { removeJWT, setLocalJWT } from 'utils/localJWT';
 import { authManager } from 'utils/walletAndTokenInfo';
+import { curChain } from 'config';
 
 export const useCheckLoginAndToken = () => {
   const { loginState, login, logout, wallet, walletType } = useWebLogin();
   const isConnectWallet = useMemo(() => loginState === WebLoginState.logined, [loginState]);
   const { getToken, checkTokenValid } = useGetToken();
-  const { isLogin } = useGetLoginStatus();
-  const success = useRef<<T = any>() => T | void>();
 
-  const checkLogin = async (params?: { onSuccess?: <T = any>() => T | void }) => {
-    const { onSuccess } = params || {};
-    success.current = onSuccess;
-    login();
-  };
   const getTokenUpdate = async () => {
     const tokenRes = await getToken({
       needLoading: true,
     });
-    const { caHash } = await getCaHashAndOriginChainIdByWallet(wallet, walletType);
-    const managerAddress = await getManagerAddressByWallet(wallet, walletType);
-    const key = caHash + managerAddress;
+    // const { caHash } = await getCaHashAndOriginChainIdByWallet(wallet, walletType);
+    // const managerAddress = await getManagerAddressByWallet(wallet, walletType);
+    const key = `ELF_${wallet.address}_${curChain}`;
     // // emitLoading(false, 'Authorize account...');
-    console.log('tokenRes', tokenRes);
     emitLoading(false);
     if (tokenRes?.access_token) {
       dispatch(
@@ -57,6 +49,11 @@ export const useCheckLoginAndToken = () => {
       );
       apiServer.setToken(tokenRes?.access_token);
       setLocalJWT(key, tokenRes as LocalJWTData);
+      message.success('log in');
+    } else {
+      logout();
+      dispatch(resetLoginStatus());
+      message.error('log in failed');
     }
   };
   useAsyncEffect(async () => {
@@ -64,9 +61,7 @@ export const useCheckLoginAndToken = () => {
       if (authManager.isAuthing) return;
       authManager.isAuthing = true;
       emitLoading(true, 'Authorize account...');
-      console.log('isConnectWallet', isConnectWallet);
       const checkRes = await checkTokenValid();
-      console.log('checkRes', checkRes);
       if (checkRes) {
         apiServer.setToken(checkRes?.access_token);
         dispatch(
@@ -77,6 +72,7 @@ export const useCheckLoginAndToken = () => {
         );
         emitLoading(false);
         authManager.isAuthing = false;
+        message.success('log in');
         return;
       }
       await getTokenUpdate();
@@ -85,31 +81,9 @@ export const useCheckLoginAndToken = () => {
     }
   }, [isConnectWallet]);
 
-  useEffect(() => {
-    if (isLogin) {
-      success.current && success.current();
-      success.current = undefined;
-    }
-  }, [isLogin]);
-
-  // useAsyncEffect(async () => {
-  //   const { caHash } = await getCaHashAndOriginChainIdByWallet(wallet, walletType);
-  //   const managerAddress = await getManagerAddressByWallet(wallet, walletType);
-  //   const accountInfo = getLocalJWT(caHash + managerAddress);
-  //   if (accountInfo?.access_token) {
-  //     dispatch(
-  //       setLoginStatus({
-  //         hasToken: true,
-  //       }),
-  //     );
-  //     return;
-  //   }
-  // }, []);
-
   return {
     checkTokenValid,
     logout,
-    checkLogin,
     getTokenUpdate,
   };
 };
@@ -156,9 +130,7 @@ export const useWalletInit = () => {
   useWebLoginEvent(WebLoginEvents.LOGIN_ERROR, (error) => {
     message.error(`${error.message || 'LOGIN_ERROR'}`);
   });
-  useWebLoginEvent(WebLoginEvents.LOGINED, () => {
-    message.success('log in');
-  });
+  // useWebLoginEvent(WebLoginEvents.LOGINED, () => {});
 
   useWebLoginEvent(WebLoginEvents.LOGOUT, () => {
     localStorage.removeItem(storages.daoAccessToken);
@@ -177,6 +149,7 @@ export const useWalletInit = () => {
   const handleClear = () => {
     logout();
     dispatch(resetLoginStatus());
+    removeJWT();
   };
   handleClearRef.current = handleClear;
   useEffect(() => {

@@ -31,6 +31,9 @@ class Request {
       <T>(response: AxiosResponse<ResponseType<T>>) => {
         const res = response.data;
         const { code, message: errorMessage } = res;
+        if (response.config.url?.includes('/connect/token')) {
+          return res;
+        }
         if (config.baseURL?.includes('/explorer-api')) {
           switch (response.status) {
             case 200:

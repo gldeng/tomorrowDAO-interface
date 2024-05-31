@@ -22,3 +22,7 @@ export const setLocalJWT = (key: string, data: LocalJWTData) => {
   };
   return localStorage.setItem(storages.daoAccessToken, JSON.stringify({ [key]: localData }));
 };
+
+export const removeJWT = () => {
+  localStorage.removeItem(storages.daoAccessToken);
+};
