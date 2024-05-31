@@ -7,6 +7,7 @@ interface ITokenParams {
   signature?: string;
   timestamp?: number;
   source: string;
+  ca_hash?: string;
 }
 interface ITokenRes {
   access_token: string;

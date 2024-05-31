@@ -4711,29 +4711,7 @@ aelf-design@^1.0.0-alpha.16:
     rc-slider "^10.5.0"
     swiper "^11.0.5"
 
-aelf-sdk@3.4.1, aelf-sdk@^3.3.0:
-  version "3.4.1"
-  resolved "https://registry.npmjs.org/aelf-sdk/-/aelf-sdk-3.4.1.tgz#498afcf3fba256e624d2e00679a5ea6fa3937cad"
-  integrity sha512-ab3wH8Xilw97hM2her4TgcPaa/Ftpr5TLa2h1UpSzbi9uBydJfQUlnKZL+BRIezwOaZmC1VdJJ847YhI+jvdMA==
-  dependencies:
-    "@aelfqueen/protobufjs" "^6.8.9"
-    "@aws-crypto/sha256-js" "^5.0.0"
-    "@babel/runtime" "^7.4.5"
-    assert "^2.0.0"
-    bignumber.js "^9.0.0"
-    bip39 "^3.0.2"
-    browserify-cipher "^1.0.1"
-    bs58 "^4.0.1"
-    buffer "^5.2.1"
-    crypto-js "^3.1.9-1"
-    elliptic "^6.4.1"
-    hdkey "^1.1.1"
-    query-string "5.1.1"
-    randombytes "^2.1.0"
-    scryptsy "^2.1.0"
-    xmlhttprequest "^1.8.0"
-
-aelf-sdk@^3.4.8:
+aelf-sdk@^3.3.0, aelf-sdk@^3.4.8:
   version "3.4.8"
   resolved "https://registry.npmjs.org/aelf-sdk/-/aelf-sdk-3.4.8.tgz#4651246f23bedc4947e6ac5997be1d72ec9345ec"
   integrity sha512-1AnfBcwfDg4q3ex+x1dM1BWlOEKxPDB0ht3J0HwOa1FmI05p0ScHSK7QMlTr1bv83PQZdKgCc9Qs1bip+xxcgQ==
@@ -6104,11 +6082,6 @@ cross-spawn@^7.0.0, cross-spawn@^7.0.2, cross-spawn@^7.0.3:
     path-key "^3.1.0"
     shebang-command "^2.0.0"
     which "^2.0.1"
-
-crypto-js@^3.1.9-1:
-  version "3.3.0"
-  resolved "https://registry.npmjs.org/crypto-js/-/crypto-js-3.3.0.tgz#846dd1cce2f68aacfa156c8578f926a609b7976b"
-  integrity sha512-DIT51nX0dCfKltpRiXV+/TVZq+Qq2NgF4644+K7Ttnla7zEzqc+kjJyiB96BHNyUTBxyjzRcZYpUdZa+QAqi6Q==
 
 crypto-js@^4.2.0:
   version "4.2.0"

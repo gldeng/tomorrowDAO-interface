@@ -32,21 +32,21 @@ export default function Page() {
         <li className="dao-desc-items-card dao-desc-items-card-last">
           <h3>Elect High Council</h3>
           <p>
-            Run for High Council,and you will become a core member of theDAO with more privileges.
+            Run for High Council, and you will become a core member of the DAO with more privileges.
           </p>
         </li>
       </ul>
       <ul className="dao-desc-items">
         <li className="dao-desc-items-card">
-          <h3>Create Proposals</h3>
+          <h3>Create Proposals </h3>
           <p>
             Create proposals to governance your DAO, authorized use of treasury assets and much
-            more....
+            more.
           </p>
         </li>
         <li className="dao-desc-items-card dao-desc-items-card-last">
-          <h3>Treasury Governance</h3>
-          <p>Donate assets to the treasury, which can be used for community development</p>
+          <h3>Treasury Governance </h3>
+          <p>Donate assets to the treasury, which can be used for community development.</p>
         </li>
       </ul>
     </div>
