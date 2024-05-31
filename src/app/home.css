@@ -1,4 +1,6 @@
 .dao-home-container {
+  @apply mb-[50px];
+
   .dao-home-intro {
     @apply flex justify-center my-[80px] flex-col items-center;
 
