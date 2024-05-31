@@ -60,7 +60,7 @@ export const tagColorMap = {
   },
   [AllProposalStatusString.PendingVote]: {
     bgColor: '#F2EEFF',
-    textColor: '#764DF1',
+    textColor: '#FA9D2B',
   },
   [AllProposalStatusString.BelowThreshold]: {
     bgColor: '#FEF7EC',
