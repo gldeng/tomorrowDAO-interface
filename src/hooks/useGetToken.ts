@@ -29,14 +29,14 @@ export const useGetToken = () => {
       const { params, needLoading = false, retryCount = 6 } = props;
       try {
         needLoading && emitLoading(true, 'Authorize account...');
-        // const rest = await fetchToken(params);
-        await sleep(2000);
-        const rest = {
-          access_token:
-            'eyJhbGciOiJSUzI1NiIsImtpZCI6IjU5RTRDRDY0N0Y1MDIzRTc4ODUzNERBNEY3Q0I4MDdDQjIxRTlGMkMiLCJ4NXQiOiJXZVROWkg5UUktZUlVMDJrOTh1QWZMSWVueXciLCJ0eXAiOiJhdCtqd3QifQ.eyJzdWIiOiI1NjgyY2YwZC1mMDkyLTQwN2MtYWZjNC02NmRmZjk0NTQ0ZjAiLCJvaV9wcnN0IjoiU2Nocm9kaW5nZXJTZXJ2ZXJfQXBwIiwiY2xpZW50X2lkIjoiU2Nocm9kaW5nZXJTZXJ2ZXJfQXBwIiwib2lfdGtuX2lkIjoiNmE4NTU5NWMtOThiOS02MDAzLTJhYzYtM2ExMmQ3M2I5YWQyIiwiYXVkIjoiU2Nocm9kaW5nZXJTZXJ2ZXIiLCJzY29wZSI6IlNjaHJvZGluZ2VyU2VydmVyIiwianRpIjoiZjBjMjI1ODctMzA4My00YjA4LThjNDktZjRjMjc5NDE0MWJlIiwiZXhwIjoxNzE3MTcwODI5LCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvIiwiaWF0IjoxNzE2OTk4MDMwfQ.Dp_F1DQ6sDrbapLSUy-LtOIXwbzESE0d_aaediRWwn0ZBi6-JcLv_BxY9mzLM94EcwWwbDNc0ax4aOid_s5biccKPWFbKgcSar6VC_jQPyYkAJRigD5OF-6PtMGyawf6AxscUgI3rcQungqWjpcHKUnZ6T6U9UCQsM47Y-C7nGQgnRe5PNqfJToQPtbOZyYb2d6ssiKup_XQygWB8DJbdMBq9IL1UJWJD0iVvYD-hAVhWGnl7ohUjPCvYSbiBEw2WbCBtBGHDeBmsvPe29Zlq-z5XYSEB7dlaov791QFya0Vu4j_BbAfNaWYe4dCPCHYy6EygwTUfuqdjTJ5w1CDwQ',
-          expires_in: 120,
-          token_type: 'Bearer',
-        };
+        const rest = await fetchToken(params);
+        // await sleep(2000);
+        // const rest = {
+        //   access_token:
+        //     'eyJhbGciOiJSUzI1NiIsImtpZCI6IjU5RTRDRDY0N0Y1MDIzRTc4ODUzNERBNEY3Q0I4MDdDQjIxRTlGMkMiLCJ4NXQiOiJXZVROWkg5UUktZUlVMDJrOTh1QWZMSWVueXciLCJ0eXAiOiJhdCtqd3QifQ.eyJzdWIiOiI1NjgyY2YwZC1mMDkyLTQwN2MtYWZjNC02NmRmZjk0NTQ0ZjAiLCJvaV9wcnN0IjoiU2Nocm9kaW5nZXJTZXJ2ZXJfQXBwIiwiY2xpZW50X2lkIjoiU2Nocm9kaW5nZXJTZXJ2ZXJfQXBwIiwib2lfdGtuX2lkIjoiNmE4NTU5NWMtOThiOS02MDAzLTJhYzYtM2ExMmQ3M2I5YWQyIiwiYXVkIjoiU2Nocm9kaW5nZXJTZXJ2ZXIiLCJzY29wZSI6IlNjaHJvZGluZ2VyU2VydmVyIiwianRpIjoiZjBjMjI1ODctMzA4My00YjA4LThjNDktZjRjMjc5NDE0MWJlIiwiZXhwIjoxNzE3MTcwODI5LCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvIiwiaWF0IjoxNzE2OTk4MDMwfQ.Dp_F1DQ6sDrbapLSUy-LtOIXwbzESE0d_aaediRWwn0ZBi6-JcLv_BxY9mzLM94EcwWwbDNc0ax4aOid_s5biccKPWFbKgcSar6VC_jQPyYkAJRigD5OF-6PtMGyawf6AxscUgI3rcQungqWjpcHKUnZ6T6U9UCQsM47Y-C7nGQgnRe5PNqfJToQPtbOZyYb2d6ssiKup_XQygWB8DJbdMBq9IL1UJWJD0iVvYD-hAVhWGnl7ohUjPCvYSbiBEw2WbCBtBGHDeBmsvPe29Zlq-z5XYSEB7dlaov791QFya0Vu4j_BbAfNaWYe4dCPCHYy6EygwTUfuqdjTJ5w1CDwQ',
+        //   expires_in: 120,
+        //   token_type: 'Bearer',
+        // };
         needLoading && emitLoading(false);
         return rest;
       } catch (error) {
