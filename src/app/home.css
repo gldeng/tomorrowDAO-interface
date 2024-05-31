@@ -13,12 +13,12 @@
 }
 
 .dao-home-background {
-  background: linear-gradient(180deg, #FFF 0%, #F9F7FF 100%);
+  background: linear-gradient(180deg, #FFF 0%, #FFF8F0 100%);
 }
 
 .dao-desc-items-card {
   @apply p-[48px] bg-white flex-half cursor-pointer;
-  box-shadow: 0px 2px 12px 0px #F3ECFF;
+  box-shadow: 0px 2px 12px 0px #F4E4D3;
   border: 1px solid #EDEDED;
 
   h3 {

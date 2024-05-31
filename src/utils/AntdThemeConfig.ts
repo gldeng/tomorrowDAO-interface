@@ -4,9 +4,9 @@ export const PREFIXCLS = 'TMRWDAO';
 
 export const THEME_CONFIG: ThemeConfig = {
   token: {
-    colorPrimary: '#764DF1',
-    colorPrimaryHover: '#7F58F5',
-    colorPrimaryActive: '#6F45EF',
+    colorPrimary: '#FA9D2B',
+    colorPrimaryHover: '#ffb854',
+    colorPrimaryActive: '#d47a19',
     colorBorder: '#E1E1E1',
     colorPrimaryBorder: '#EDEDED',
     controlHeight: 48,
@@ -21,7 +21,7 @@ export const THEME_CONFIG: ThemeConfig = {
     Steps: {
       iconSize: 40,
       controlHeight: 40,
-      finishIconBorderColor: '#764DF1',
+      finishIconBorderColor: '#FA9D2B',
     },
     Slider: {
       handleSize: 8,
@@ -38,6 +38,9 @@ export const THEME_CONFIG: ThemeConfig = {
       headerSortActiveBg: '#fff',
       headerBg: '#FFFFFF',
     },
+    Button: {
+      colorPrimary: '#FA9D2B',
+    },
   },
 };
 
@@ -45,7 +48,7 @@ export const CUSTOM_TOKEN: IAelfdCustomToken = {
   customAddress: {
     primaryLinkColor: '#434343',
     primaryIconColor: '#B8B8B8',
-    addressHoverColor: '#7F58F5',
-    addressActiveColor: '#6F45EF',
+    addressHoverColor: '#ffb854',
+    addressActiveColor: '#d47a19',
   },
 };

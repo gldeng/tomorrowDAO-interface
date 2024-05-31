@@ -68,6 +68,7 @@ export const useCheckLoginAndToken = () => {
       const checkRes = await checkTokenValid();
       console.log('checkRes', checkRes);
       if (checkRes) {
+        apiServer.setToken(checkRes?.access_token);
         dispatch(
           setLoginStatus({
             hasToken: true,
