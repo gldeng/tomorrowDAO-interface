@@ -1,3 +1,22 @@
+interface ITokenParams {
+  grant_type: string;
+  scope: string;
+  client_id: string;
+  pubkey?: string;
+  version?: string;
+  signature?: string;
+  timestamp?: number;
+  source: string;
+  ca_hash?: string;
+}
+interface ITokenRes {
+  access_token: string;
+  expires_in: number;
+  token_type: string;
+}
+interface LocalJWTData extends ITokenRes {
+  expiresTime?: number;
+}
 // -------------------------------------dao-list-----------------------------
 interface IListDaoReq {
   skipCount: number; //  0

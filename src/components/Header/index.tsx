@@ -10,6 +10,7 @@ import { ReactComponent as MenuArrow } from 'assets/imgs/menu-arrow.svg';
 import { MenuProps } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { usePathname } from 'next/navigation';
+import { networkType } from 'config';
 export enum ENavKeys {
   CreateDAO = 'CreateDAO',
   Resources = 'Resources',

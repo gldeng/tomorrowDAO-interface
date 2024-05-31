@@ -1,13 +1,31 @@
 import { Button, HashAddress } from 'aelf-design';
 import useResponsive from 'hooks/useResponsive';
-import { useWalletService } from 'hooks/useWallet';
+import { useCheckLoginAndToken, useWalletService } from 'hooks/useWallet';
+import { dispatch, store, useSelector } from 'redux/store';
+import { resetLoginStatus } from 'redux/reducer/loginStatus';
 import { ReactComponent as AvatarIcon } from 'assets/imgs/avatar-icon.svg';
-import './index.css';
-import { useSelector } from 'react-redux';
-import { WalletType, useWebLogin } from 'aelf-web-login';
+import { WalletType, WebLoginState, useWebLogin } from 'aelf-web-login';
 import { useMemo } from 'react';
 import { Popover } from 'antd';
-
+import './index.css';
+export const LoginAuth = () => {
+  const { isLG } = useResponsive();
+  const { loginState, login } = useWebLogin();
+  const { getTokenUpdate } = useCheckLoginAndToken();
+  const isConnectWallet = useMemo(() => loginState === WebLoginState.logined, [loginState]);
+  if (isConnectWallet) {
+    return (
+      <Button size={isLG ? 'medium' : 'large'} type="primary" onClick={getTokenUpdate}>
+        Authorization
+      </Button>
+    );
+  }
+  return (
+    <Button size={isLG ? 'medium' : 'large'} type="primary" onClick={login}>
+      Log in
+    </Button>
+  );
+};
 export default function Login() {
   const { isLG } = useResponsive();
   const { logout } = useWebLogin();
@@ -33,9 +51,7 @@ export default function Login() {
   return (
     <div className="login-container">
       {!isLogin ? (
-        <Button size={isLG ? 'medium' : 'large'} type="primary" onClick={login}>
-          Log in
-        </Button>
+        <LoginAuth />
       ) : (
         <Popover
           placement="bottomRight"

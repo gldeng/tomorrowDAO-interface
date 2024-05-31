@@ -1,5 +1,11 @@
-import { apiServer, explorerServer } from './axios';
+import { stringify } from 'query-string';
+import { apiServer, explorerServer, tokenServer } from './axios';
 
+export const fetchToken = async (data: ITokenParams) => {
+  return tokenServer.post<string, ITokenRes>('/connect/token', stringify(data), {
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+  });
+};
 export const fetchDaoList = async (params: IListDaoReq): Promise<IListDaoRes> => {
   return apiServer.get('/dao/dao-list', {
     params,
@@ -17,7 +23,7 @@ export const fetchProposalList = async (params: IProposalListReq): Promise<IProp
     ...params,
   });
 };
-
+// need auth
 export const fetchProposalMyInfo = async (
   params: IProposalMyInfoReq,
 ): Promise<IProposalMyInfoRes> => {
@@ -57,7 +63,7 @@ export const fetchVoteSchemeList = async (
     params,
   });
 };
-
+// need auth
 export const fetchVoteHistory = async (params: IVoteHistoryReq): Promise<IVoteHistoryRes> => {
   return apiServer.get('/proposal/vote-history', {
     params,

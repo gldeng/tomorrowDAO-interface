@@ -104,7 +104,7 @@ function Vote(props: TVoteTypes) {
           {
             spender: voteAddress || '',
             symbol: symbol || 'ELF',
-            owner: walletInfo.aelfChainAddress || wallet.address,
+            owner: wallet.address,
           },
           {
             chain: curChain,
@@ -158,7 +158,6 @@ function Vote(props: TVoteTypes) {
     isSyncQuery,
     fetchMyInfo,
     symbol,
-    walletInfo.aelfChainAddress,
     wallet.address,
   ]);
 

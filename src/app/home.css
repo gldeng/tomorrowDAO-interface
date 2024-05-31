@@ -1,0 +1,41 @@
+.dao-home-container {
+  @apply mb-[50px];
+
+  .dao-home-intro {
+    @apply flex justify-center my-[80px] flex-col items-center;
+
+    h2 {
+      @apply text-colorPrimary font-bold text-[48px] leading-[56px];
+    }
+
+    p {
+      @apply text-Neutral-Secondary-Text font-bold text-[24px] leading-[32px] mt-[24px] mb-[48px];
+    }
+  }
+}
+
+.dao-home-background {
+  background: linear-gradient(180deg, #FFF 0%, #FFF8F0 100%);
+}
+
+.dao-desc-items-card {
+  @apply p-[48px] bg-white flex-half cursor-pointer;
+  box-shadow: 0px 2px 12px 0px #F4E4D3;
+  border: 1px solid #EDEDED;
+
+  h3 {
+    @apply text-neutralTitle font-bold text-[24px] leading-[32px] mb-[16px];
+  }
+
+  p {
+    @apply text-neutralPrimaryText font-[400] text-[14px] leading-[22px];
+  }
+}
+
+.dao-desc-items-card-last {
+  @apply ml-0 mt-[24px] lg:ml-[24px] lg:mt-0;
+}
+
+.dao-desc-items {
+  @apply flex flex-col lg:flex-row mt-[24px];
+}
