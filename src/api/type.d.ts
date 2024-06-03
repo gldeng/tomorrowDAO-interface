@@ -86,11 +86,11 @@ interface IDaoInfoData {
     logoUrl: string;
     description: string;
     socialMedia: {
-      twitter?: string;
-      facebook?: string;
-      discrod?: string;
-      telegram?: string;
-      reddit?: string;
+      Twitter?: string;
+      Facebook?: string;
+      Discord?: string;
+      Telegram?: string;
+      Reddit?: string;
     };
   };
   governanceToken: string;

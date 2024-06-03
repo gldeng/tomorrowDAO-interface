@@ -6,6 +6,7 @@ import dynamicReq from 'next/dynamic';
 import Footer from 'components/Footer';
 import { useWalletInit } from 'hooks/useWallet';
 import PageLoading from 'components/Loading';
+import ResultModal from 'components/ResultModal';
 import './layout.css';
 
 const Layout = dynamicReq(
@@ -35,6 +36,7 @@ const Layout = dynamicReq(
             </Suspense>
           </div>
           <PageLoading />
+          <ResultModal />
         </div>
       );
     };

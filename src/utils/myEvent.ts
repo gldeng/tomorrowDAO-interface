@@ -2,6 +2,7 @@ import EventEmitter from 'events';
 import { ReactNode } from 'react';
 
 export const UnAuth = 'unAuth';
+export const ResultModal = 'ResultModal';
 export const eventBus = new EventEmitter();
 
 const EventList = ['SetGlobalLoading'] as const;
