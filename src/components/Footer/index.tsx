@@ -5,7 +5,7 @@ import TwitterIcon from 'assets/imgs/twitter.svg';
 import TGIcon from 'assets/imgs/telegram.svg';
 import DiscordIcon from 'assets/imgs/icon_discord.svg';
 import dayjs from 'dayjs';
-const DocsItems = [
+const DocsItems: any[] = [
   // {
   //   title: 'Docs',
   //   path: '/Docs',
@@ -40,11 +40,11 @@ export default function Footer() {
         <Divider />
         <div className="footer-media">
           <div className="footer-media-items">
-            <div className="footer-media-item">
+            {/* <div className="footer-media-item">
               <a target="_blank" rel="noreferrer" href="https://discord.com/invite/Y73pZaWy">
                 <img src={DiscordIcon} alt="discord" />
               </a>
-            </div>
+            </div> */}
             <div className="footer-media-item">
               <a target="_blank" rel="noreferrer" href="https://t.me/tmrwdao">
                 <img src={TGIcon} alt="telegram" />

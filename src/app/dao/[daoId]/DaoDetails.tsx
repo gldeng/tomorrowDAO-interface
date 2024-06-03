@@ -221,6 +221,7 @@ export default function DeoDetails(props: IProps) {
           isLoading={daoLoading}
           isError={daoError}
           onChangeHCParams={handleChangeHCparams}
+          daoId={daoId}
         />
 
         <div className="dao-detail-content">

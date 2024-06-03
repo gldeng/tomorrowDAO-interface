@@ -5,7 +5,7 @@ module.exports = [
   },
   {
     source: '/connect/token',
-    destination: 'https://api.tmrwdao.com/api/connect/token',
+    destination: 'https://api.tmrwdao.com/connect/token',
   },
   {
     source: '/explorer-api/:path*',

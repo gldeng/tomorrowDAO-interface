@@ -1,6 +1,6 @@
 import { Collapse, HashAddress, Typography } from 'aelf-design';
 import Image from 'next/image';
-import { Divider, Descriptions, DescriptionsProps } from 'antd';
+import { Divider, Descriptions, DescriptionsProps, Button } from 'antd';
 import useResponsive from 'hooks/useResponsive';
 import PreviewFile from 'components/PreviewFile';
 import { Skeleton } from 'components/Skeleton';
@@ -10,7 +10,8 @@ import ErrorResult from 'components/ErrorResult';
 import Link from 'next/link';
 import { getExploreLink } from 'utils/common';
 import './index.css';
-import { curChain } from 'config';
+import { curChain, NetworkDaoHomePathName } from 'config';
+import { useWebLogin } from 'aelf-web-login';
 
 const firstLetterToLowerCase = (str: string) => {
   return str.charAt(0).toLowerCase() + str.slice(1);
@@ -34,6 +35,7 @@ interface IParams {
   onChangeHCParams: any;
   isLoading: boolean;
   isError?: Error;
+  daoId?: string;
 }
 const contractMapList = [
   {
@@ -52,7 +54,9 @@ export default function DaoInfo(props: IParams) {
     isLoading,
     isError,
     onChangeHCParams,
+    daoId,
   } = props;
+  const { wallet } = useWebLogin();
 
   const { isLG } = useResponsive();
   const socialMedia = metadata?.socialMedia ?? {};
@@ -170,7 +174,22 @@ export default function DaoInfo(props: IParams) {
               ></Image>
               <Typography.Title level={5}>{metadata?.name}</Typography.Title>
             </div>
-            <PreviewFile list={fileInfoList} />
+            <div className="flex">
+              {wallet.address === data?.creator && (
+                <Link
+                  href={
+                    isNetworkDAO ? `${NetworkDaoHomePathName}/${daoId}/edit` : `/dao/${daoId}/edit`
+                  }
+                  className="mr-[10px]"
+                >
+                  <Button size="small" className="h-8 leading-none" type="primary">
+                    Settings
+                  </Button>
+                </Link>
+              )}
+
+              <PreviewFile list={fileInfoList} />
+            </div>
           </div>
           <div className="dao-detail-dis-dis px-4 lg:px-8">
             {metadata?.description}

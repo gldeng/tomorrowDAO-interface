@@ -9,6 +9,7 @@ import Footer from 'components/Footer';
 import { useWalletInit } from 'hooks/useWallet';
 import PageLoading from 'components/Loading';
 import { usePathname } from 'next/navigation';
+import ResultModal from 'components/ResultModal';
 
 const Layout = dynamicReq(
   async () => {
@@ -36,6 +37,7 @@ const Layout = dynamicReq(
             </Suspense>
           </div>
           <PageLoading />
+          <ResultModal />
         </div>
       );
     };

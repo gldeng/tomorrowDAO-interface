@@ -56,7 +56,7 @@ const CreateDaoPage = () => {
   const router = useRouter();
   const { loginState } = useWebLogin();
   const isNotFirstStep = currentStep > 0;
-  const { isMD } = useResponsive();
+  const { isMD, isLG } = useResponsive();
   const [items, setItems] = useState(initItems);
   const [nextLoading, setNextLoading] = useState(false);
 
@@ -240,7 +240,7 @@ const CreateDaoPage = () => {
               {
                 children: (
                   <Link
-                    href={`/`}
+                    href={`/explore`}
                     onClick={() => {
                       antdMessage.open({
                         type: 'success',
@@ -311,6 +311,7 @@ const CreateDaoPage = () => {
           current={currentStep}
           items={items}
           labelPlacement={'vertical'}
+          direction={isLG ? 'vertical' : 'horizontal'}
         />
       </div>
       {contextHolder}

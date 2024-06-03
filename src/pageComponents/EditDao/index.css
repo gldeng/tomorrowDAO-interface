@@ -1,0 +1,3 @@
+.dao-edit {
+  @apply w-full block flex-col items-center bg-white p-4 lg:p-8 rounded-lg;
+}
