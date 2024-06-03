@@ -36,8 +36,6 @@ class Request {
       <T>(response: AxiosResponse<ResponseType<T>>) => {
         const res = response.data;
         const { code, message: errorMessage } = res;
-
-        console.log(code, errorMessage);
         switch (code) {
           case '20000':
             return res;

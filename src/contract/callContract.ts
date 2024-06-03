@@ -102,6 +102,16 @@ export const GetBalanceByContract = async (
   })) as { balance: number };
   return res;
 };
+export const GetTokenInfo = async (
+  params: { symbol: string },
+  options?: IContractOptions,
+): Promise<{ decimals: number }> => {
+  const res = (await multiTokenContractRequest('GetTokenInfo', params, {
+    ...options,
+    type: ContractMethodType.VIEW,
+  })) as { decimals: number };
+  return res;
+};
 
 export const ApproveByContract = async (
   params: any,

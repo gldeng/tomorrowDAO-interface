@@ -146,6 +146,28 @@ const GovernanceModel = () => {
             placeholder={'The suggested percentage is no greater than 20%.'}
           />
         </Form.Item>
+        <Form.Item
+          name={'proposalThreshold'}
+          label={
+            <Tooltip title="The minimum number of governance tokens a user must hold to initiate a proposal. Entering 0 means that a user can initiate a proposal without holding any governance tokens.">
+              <span className="form-item-label">
+                Minimum Token Proposal Requirement
+                <InfoCircleOutlined className="cursor-pointer label-icon" />
+              </span>
+            </Tooltip>
+          }
+          validateFirst={true}
+          rules={[
+            integerRule,
+            validatorCreate((v) => v < 0, 'Please input a number not smaller than 0'),
+            validatorCreate(
+              (v) => v >= Number.MAX_SAFE_INTEGER,
+              `Please input a number  not larger than ${Number.MAX_SAFE_INTEGER}`,
+            ),
+          ]}
+        >
+          <InputNumber placeholder="Enter 0 or more" controls={false} />
+        </Form.Item>
       </Form>
     </div>
   );

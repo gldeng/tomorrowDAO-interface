@@ -154,10 +154,13 @@ const CreateDaoPage = () => {
         let governanceConfig = stepForm[StepEnum.step1].submitedRes;
         // governanceToken is exist
         if (governanceConfig && daoCreateToken && metadata.governanceToken) {
-          const minimalVoteThreshold = governanceConfig.minimalVoteThreshold;
+          const { minimalVoteThreshold, proposalThreshold } = governanceConfig;
           governanceConfig = cloneDeep(governanceConfig);
           governanceConfig.minimalVoteThreshold = Number(
             timesDecimals(minimalVoteThreshold, daoCreateToken.decimals),
+          );
+          governanceConfig.proposalThreshold = Number(
+            timesDecimals(proposalThreshold, daoCreateToken.decimals),
           );
         }
         if (governanceConfig) {
