@@ -77,14 +77,14 @@ export default function Header() {
             ),
             key: ENavKeys.Twitter,
           },
-          {
-            label: (
-              <Link href="https://discord.com/invite/Y73pZaWy" target="_blank">
-                Discord
-              </Link>
-            ),
-            key: ENavKeys.Discord,
-          },
+          // {
+          //   label: (
+          //     <Link href="https://discord.com/invite/Y73pZaWy" target="_blank">
+          //       Discord
+          //     </Link>
+          //   ),
+          //   key: ENavKeys.Discord,
+          // },
           {
             label: (
               <Link href="https://t.me/tmrwdao" target="_blank">
