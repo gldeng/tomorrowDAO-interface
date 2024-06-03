@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { MouseEventHandler, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Tabs, Typography, FontWeightEnum, Button, Pagination } from 'aelf-design';
 import { Form, message, Empty } from 'antd';
 import { useSelector } from 'react-redux';
@@ -14,6 +14,7 @@ import MyRecords from './components/MyRecords';
 import MyInfo from './components/MyInfo';
 import Filter from './components/Filter';
 import { useRequest, usePrevious } from 'ahooks';
+import { GetBalanceByContract, GetTokenInfo } from 'contract/callContract';
 import { IProposalTableParams, TabKey } from './type';
 import LinkNetworkDao from 'components/LinkNetworkDao';
 import { fetchDaoInfo, fetchProposalList } from 'api/request';
@@ -22,6 +23,9 @@ import './page.css';
 import { ALL, TMRWCreateProposal } from './constants';
 import Link from 'next/link';
 import ErrorResult from 'components/ErrorResult';
+import useNetworkDaoRouter from 'hooks/useNetworkDaoRouter';
+import { useRouter } from 'next/navigation';
+import { divDecimals } from 'utils/calculate';
 
 interface IProps {
   daoId: string;
@@ -102,6 +106,7 @@ export default function DeoDetails(props: IProps) {
     const listRes = await fetchProposalList(params);
     return listRes;
   };
+  const [createProposalLoading, setCreateProposalLoading] = useState(false);
   const {
     data: proposalData,
     error: proposalError,
@@ -113,13 +118,60 @@ export default function DeoDetails(props: IProps) {
   const previousProposalDataRef = useRef<IProposalListRes | undefined>();
   previousProposalDataRef.current = proposalData;
 
+  const networkDaoRouter = useNetworkDaoRouter();
+  const router = useRouter();
   const rightContent = useMemo(() => {
     return <MyInfo daoId={daoId} />;
   }, [daoId]);
 
+  const handleCreateProposal = async () => {
+    setCreateProposalLoading(true);
+    const [balanceInfo, tokenInfo] = await Promise.all([
+      GetBalanceByContract(
+        {
+          symbol: daoData?.data.governanceToken || 'ELF',
+          owner: walletInfo.address,
+        },
+        { chain: curChain },
+      ),
+      GetTokenInfo(
+        {
+          symbol: daoData?.data.governanceToken || 'ELF',
+        },
+        { chain: curChain },
+      ),
+    ]);
+    const proposalThreshold = daoData?.data?.governanceSchemeThreshold?.proposalThreshold;
+    const decimals = tokenInfo?.decimals;
+    setCreateProposalLoading(false);
+    if (
+      proposalThreshold &&
+      balanceInfo.balance < proposalThreshold &&
+      daoData?.data?.governanceToken
+    ) {
+      message.error(
+        `Can't create a proposal, you need hold at least ${divDecimals(
+          proposalThreshold,
+          decimals,
+        ).toString()} ${daoData?.data?.governanceToken}`,
+      );
+      return;
+    }
+    if (isNetworkDAO) {
+      networkDaoRouter.push(`/proposal-deploy`);
+    } else {
+      router.push(`/proposal/deploy/${daoId}`);
+    }
+  };
+
   const tabItems = useMemo(() => {
     const CreateButton = (
-      <Button size="medium" type="primary">
+      <Button
+        size="medium"
+        type="primary"
+        loading={createProposalLoading}
+        onClick={handleCreateProposal}
+      >
         Create a Proposal
       </Button>
     );
@@ -133,11 +185,7 @@ export default function DeoDetails(props: IProps) {
               <Typography.Title fontWeight={FontWeightEnum.Medium} level={6}>
                 Proposals
               </Typography.Title>
-              {isNetworkDAO ? (
-                <LinkNetworkDao href={`/proposal-deploy`}>{CreateButton}</LinkNetworkDao>
-              ) : (
-                <Link href={`/proposal/deploy/${daoId}`}>{CreateButton}</Link>
-              )}
+              {CreateButton}
             </div>
             <Filter form={form} tableParams={tableParams} onChangeTableParams={setTableParams} />
           </div>
@@ -163,7 +211,15 @@ export default function DeoDetails(props: IProps) {
         },
       ];
     }
-  }, [isNetworkDAO, daoId, form, tableParams, daoData?.data.isNetworkDAO, isLG, rightContent]);
+  }, [
+    createProposalLoading,
+    handleCreateProposal,
+    form,
+    tableParams,
+    daoData?.data.isNetworkDAO,
+    isLG,
+    rightContent,
+  ]);
 
   const pageChange = useCallback((page: number) => {
     setTableParams((state) => {

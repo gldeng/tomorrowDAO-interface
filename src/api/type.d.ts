@@ -98,6 +98,9 @@ interface IDaoInfoData {
   highCouncilAddress: null | string;
   memberCount?: number;
   candidateCount?: number;
+  governanceSchemeThreshold: {
+    proposalThreshold: number;
+  };
   highCouncilConfig: null | {
     electionPeriod: number;
     maxHighCouncilCandidateCount: number;
