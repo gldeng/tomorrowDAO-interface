@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Tabs, Typography, FontWeightEnum, Button, Pagination } from 'aelf-design';
+import { Tabs, Typography, FontWeightEnum, Pagination } from 'aelf-design';
 import { Form, message, Empty } from 'antd';
 import { useSelector } from 'react-redux';
 import { SkeletonList } from 'components/Skeleton';
@@ -28,6 +28,8 @@ import { useRouter } from 'next/navigation';
 import { divDecimals } from 'utils/calculate';
 import { ButtonCheckLogin } from 'components/ButtonCheckLogin';
 import breadCrumb from 'utils/breadCrumb';
+import { eventBus, ResultModal } from 'utils/myEvent';
+import { CommonOperationResultModalType } from 'components/CommonOperationResultModal';
 
 interface IProps {
   daoId: string;
@@ -118,6 +120,7 @@ export default function DeoDetails(props: IProps) {
     manual: true,
   });
   const previousProposalDataRef = useRef<IProposalListRes | undefined>();
+  const handleCreateProposalRef = useRef<() => void>();
   previousProposalDataRef.current = proposalData;
 
   const networkDaoRouter = useNetworkDaoRouter();
@@ -151,12 +154,32 @@ export default function DeoDetails(props: IProps) {
       balanceInfo.balance < proposalThreshold &&
       daoData?.data?.governanceToken
     ) {
-      message.error(
-        `Can't create a proposal, you need hold at least ${divDecimals(
-          proposalThreshold,
-          decimals,
-        ).toString()} ${daoData?.data?.governanceToken}`,
-      );
+      const requiredToken = divDecimals(proposalThreshold, decimals).toString();
+      eventBus.emit(ResultModal, {
+        open: true,
+        type: CommonOperationResultModalType.Warning,
+        primaryContent: 'Insufficient Governance Tokens',
+        secondaryContent: (
+          <div>
+            {/* <div>Minimum Token Proposal Requirement: {requiredToken}</div> */}
+            <div>
+              Your Governance Token:{' '}
+              {divDecimals(balanceInfo.balance, tokenInfo?.decimals || '8').toNumber()}
+            </div>
+            <div>
+              Can&apos;t create a proposal, you need hold at least {requiredToken}{' '}
+              {daoData?.data.governanceToken}. Transfer tokens to your wallet.
+            </div>
+          </div>
+        ),
+        footerConfig: {
+          buttonList: [
+            {
+              children: 'OK',
+            },
+          ],
+        },
+      });
       return;
     }
     if (isNetworkDAO) {
@@ -165,14 +188,17 @@ export default function DeoDetails(props: IProps) {
       router.push(`/proposal/deploy/${daoId}`);
     }
   };
-
+  handleCreateProposalRef.current = handleCreateProposal;
   const tabItems = useMemo(() => {
     const CreateButton = (
       <ButtonCheckLogin
         size="medium"
         type="primary"
         loading={createProposalLoading}
-        onClick={handleCreateProposal}
+        onClick={() => {
+          handleCreateProposalRef.current?.();
+        }}
+        disabled={daoLoading}
       >
         Create a Proposal
       </ButtonCheckLogin>
@@ -215,7 +241,7 @@ export default function DeoDetails(props: IProps) {
     }
   }, [
     createProposalLoading,
-    handleCreateProposal,
+    daoLoading,
     form,
     tableParams,
     daoData?.data.isNetworkDAO,
