@@ -98,6 +98,8 @@ function Vote(props: TVoteTypes) {
       if (!isSyncQuery()) {
         return;
       }
+      setShowVoteModal(false);
+      setShowTokenBallotModal(false);
       emitLoading(true, 'The vote is being processed...');
       if (voteMechanismName === EVoteMechanismNameType.TokenBallot) {
         const allowance = await GetAllowanceByContract(

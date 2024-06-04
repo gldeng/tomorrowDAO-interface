@@ -1,10 +1,14 @@
 'use client';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button } from 'aelf-design';
 import './home.css';
 import Link from 'next/link';
+import breadCrumb from 'utils/breadCrumb';
 
 export default function Page() {
+  useEffect(() => {
+    breadCrumb.clearBreadCrumb();
+  }, []);
   return (
     <div className="dao-home-container">
       <div className="dao-home-intro">

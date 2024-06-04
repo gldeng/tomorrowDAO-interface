@@ -3,7 +3,7 @@
 import { useMachine } from '@xstate/react';
 import { formMachine } from './xstate';
 import { Button, Typography, FontWeightEnum } from 'aelf-design';
-import React, { memo, useCallback, useRef, useState } from 'react';
+import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { Steps, message as antdMessage, FormInstance, Result, StepsProps, StepProps } from 'antd';
 import { useWebLoginEvent, WebLoginEvents, useWebLogin, WebLoginState } from 'aelf-web-login';
 import { useRouter } from 'next/navigation';
@@ -26,6 +26,7 @@ import { cloneDeep, cloneDeepWith } from 'lodash-es';
 import { NetworkName } from 'config';
 import formValidateScrollFirstError from 'utils/formValidateScrollFirstError';
 import useAelfWebLoginSync from 'hooks/useAelfWebLoginSync';
+import breadCrumb from 'utils/breadCrumb';
 
 const initItems: StepsProps['items'] = [
   {
@@ -112,6 +113,9 @@ const CreateDaoPage = () => {
     },
     [currentStepString],
   );
+  useEffect(() => {
+    breadCrumb.clearBreadCrumb();
+  }, []);
   const handleCreateDao = async () => {
     if (!isSyncQuery()) {
       return;
@@ -252,7 +256,7 @@ const CreateDaoPage = () => {
                       });
                     }}
                   >
-                    View My DAO
+                    <span className="text-white">View My DAO</span>
                   </Link>
                 ),
               },

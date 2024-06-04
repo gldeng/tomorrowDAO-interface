@@ -1,6 +1,6 @@
 'use client';
 
-import { MouseEventHandler, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Tabs, Typography, FontWeightEnum, Button, Pagination } from 'aelf-design';
 import { Form, message, Empty } from 'antd';
 import { useSelector } from 'react-redux';
@@ -26,6 +26,8 @@ import ErrorResult from 'components/ErrorResult';
 import useNetworkDaoRouter from 'hooks/useNetworkDaoRouter';
 import { useRouter } from 'next/navigation';
 import { divDecimals } from 'utils/calculate';
+import { ButtonCheckLogin } from 'components/ButtonCheckLogin';
+import breadCrumb from 'utils/breadCrumb';
 
 interface IProps {
   daoId: string;
@@ -166,14 +168,14 @@ export default function DeoDetails(props: IProps) {
 
   const tabItems = useMemo(() => {
     const CreateButton = (
-      <Button
+      <ButtonCheckLogin
         size="medium"
         type="primary"
         loading={createProposalLoading}
         onClick={handleCreateProposal}
       >
         Create a Proposal
-      </Button>
+      </ButtonCheckLogin>
     );
     const items = [
       {
@@ -253,6 +255,9 @@ export default function DeoDetails(props: IProps) {
   const handleChangeHCparams = useCallback(() => {
     setTabKey(TabKey.HC);
   }, []);
+  useEffect(() => {
+    breadCrumb.updateDaoDetailPage(daoId);
+  }, [daoId]);
 
   const tabCom = useMemo(() => {
     return (
