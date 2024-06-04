@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { memo } from 'react';
 import './index.css';
 
@@ -14,6 +14,7 @@ import { ProposalTab } from './components/ProposalTab';
 import { SkeletonList } from 'components/Skeleton';
 import { useParams } from 'next/navigation';
 import ErrorResult from 'components/ErrorResult';
+import breadCrumb from 'utils/breadCrumb';
 
 const ProposalDetails = () => {
   const { proposalId } = useParams<{ proposalId: string }>();
@@ -26,6 +27,13 @@ const ProposalDetails = () => {
   } = useRequest(async () => {
     return fetchProposalDetail({ proposalId, chainId: info.curChain });
   });
+  const daoId = proposalDetailRes?.data?.daoId;
+
+  useEffect(() => {
+    if (daoId) {
+      breadCrumb.updateProposalInformationPage(daoId);
+    }
+  }, [daoId]);
 
   return (
     <div className="proposal-details-wrapper">

@@ -19,6 +19,7 @@ import { IContractError } from 'types';
 import Link from 'next/link';
 import { INIT_RESULT_MODAL_CONFIG } from 'components/ResultModal';
 import formValidateScrollFirstError from 'utils/formValidateScrollFirstError';
+import breadCrumb from 'utils/breadCrumb';
 
 interface IEditDaoProps {
   daoId: string;
@@ -87,7 +88,7 @@ const EditDao: React.FC<IEditDaoProps> = (props) => {
                     eventBus.emit(ResultModal, INIT_RESULT_MODAL_CONFIG);
                   }}
                 >
-                  View The DAO
+                  <span className="text-white">View The DAO</span>
                 </Link>
               ),
             },
@@ -104,6 +105,9 @@ const EditDao: React.FC<IEditDaoProps> = (props) => {
       });
     }
   };
+  useEffect(() => {
+    breadCrumb.updateSettingPage(daoId);
+  }, [daoId]);
   // recover from api response
   useEffect(() => {
     if (!daoData?.data) return;

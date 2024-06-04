@@ -5,7 +5,7 @@ import Header from 'components/Header';
 import dynamicReq from 'next/dynamic';
 
 import Footer from 'components/Footer';
-// import DynamicBreadCrumb from 'components/DynamicBreadCrumb';
+import DynamicBreadCrumb from 'components/DynamicBreadCrumb';
 import PageLoading from 'components/Loading';
 import { usePathname } from 'next/navigation';
 import ResultModal from 'components/ResultModal';
@@ -25,7 +25,7 @@ const Layout = dynamicReq(
             <Suspense>
               <div className={isHome ? 'dao-home-background' : ''}>
                 <div className="flex-1 max-w-[1440px] mx-auto py-6 mb-6 px-4 lg:px-10">
-                  {/* <DynamicBreadCrumb /> */}
+                  <DynamicBreadCrumb />
                   {children}
                 </div>
               </div>

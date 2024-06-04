@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import useJumpByPath from 'hooks/useJumpByPath';
 import { ReactComponent as CircleDot } from 'assets/imgs/circle-dot.svg';
 import { symbolmarketUrl } from 'config';
+import breadCrumb from 'utils/breadCrumb';
+import { useEffect } from 'react';
 
 // const linkArr = [
 //   { label: 'DAO Governance Contract', path: '/' },
@@ -46,6 +48,9 @@ const GuidePage = () => {
   const onJumpHandler = () => {
     jump(symbolmarketUrl);
   };
+  useEffect(() => {
+    breadCrumb.clearBreadCrumb();
+  }, []);
 
   return (
     <div className="px-4 lg:px-8">

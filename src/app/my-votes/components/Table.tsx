@@ -14,6 +14,7 @@ import dayjs from 'dayjs';
 import Link from 'next/link';
 import LinkNetworkDao from 'components/LinkNetworkDao';
 import { useWalletService } from 'hooks/useWallet';
+import breadCrumb from 'utils/breadCrumb';
 
 const defaultPageSize = 20;
 const allValue = 'All';
@@ -52,6 +53,9 @@ export default function RecordTable() {
   );
   runFetchVoteHistoryRef.current = run;
 
+  useEffect(() => {
+    breadCrumb.updateMyVotesPage(daoId);
+  }, [daoId]);
   const columns: ColumnsType<IVoteHistoryItem> = [
     {
       title: 'Time',
