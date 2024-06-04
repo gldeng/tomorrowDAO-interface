@@ -7,8 +7,20 @@ import 'aelf-design/css';
 import Layout from 'pageComponents/layout';
 import Provider from 'provider/';
 import Script from 'next/script';
+import dynamicReq from 'next/dynamic';
+import { useWalletInit } from 'hooks/useWallet';
 import StyleRegistry from './StyleRegistry';
 import { NetworkDaoHomePathName } from 'config';
+
+const WalletInit = dynamicReq(
+  async () => {
+    return () => {
+      useWalletInit();
+      return <></>;
+    };
+  },
+  { ssr: false },
+);
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
@@ -35,7 +47,10 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
       </head>
       <body>
         <StyleRegistry>
-          <Provider>{isNetWorkDao ? <div>{children}</div> : <Layout>{children}</Layout>}</Provider>
+          <Provider>
+            <WalletInit />
+            {isNetWorkDao ? <div>{children}</div> : <Layout>{children}</Layout>}
+          </Provider>
         </StyleRegistry>
       </body>
     </html>

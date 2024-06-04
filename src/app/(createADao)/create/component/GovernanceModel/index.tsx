@@ -110,7 +110,7 @@ const GovernanceModel = () => {
             Note: If the rejection threshold and other thresholds are met simultaneously, the proposal will be rejected. `}
             >
               <span className="form-item-label">
-                Maximum Rejection Rate
+                Minimum Rejection Rate
                 <InfoCircleOutlined className="cursor-pointer label-icon" />
               </span>
             </Tooltip>
@@ -132,7 +132,7 @@ const GovernanceModel = () => {
             Note: If the abstain threshold and approval threshold are met simultaneously, the proposal will be classified as abstained. `}
             >
               <span className="form-item-label">
-                Maximum Abstain Rate
+                Minimum Abstain Rate
                 <InfoCircleOutlined className="cursor-pointer label-icon" />
               </span>
             </Tooltip>

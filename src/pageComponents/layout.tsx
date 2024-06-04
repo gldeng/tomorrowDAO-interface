@@ -6,7 +6,6 @@ import dynamicReq from 'next/dynamic';
 
 import Footer from 'components/Footer';
 // import DynamicBreadCrumb from 'components/DynamicBreadCrumb';
-import { useWalletInit } from 'hooks/useWallet';
 import PageLoading from 'components/Loading';
 import { usePathname } from 'next/navigation';
 import ResultModal from 'components/ResultModal';
@@ -17,7 +16,6 @@ const Layout = dynamicReq(
       const { children } = props;
       const pathName = usePathname();
       const isHome = pathName === '/';
-      useWalletInit();
       return (
         <div className="flex w-[100vw] h-[100vh] flex-col relative box-border min-h-screen bg-global-grey">
           <Suspense>

@@ -18,6 +18,7 @@ import { CommonOperationResultModalType } from 'components/CommonOperationResult
 import { IContractError } from 'types';
 import Link from 'next/link';
 import { INIT_RESULT_MODAL_CONFIG } from 'components/ResultModal';
+import formValidateScrollFirstError from 'utils/formValidateScrollFirstError';
 
 interface IEditDaoProps {
   daoId: string;
@@ -40,7 +41,11 @@ const EditDao: React.FC<IEditDaoProps> = (props) => {
     return fetchDaoInfo({ daoId, chainId: curChain });
   });
   const handleSave = async () => {
-    const res = await form?.validateFields();
+    const res = await form?.validateFields().catch((err) => {
+      formValidateScrollFirstError(form, err);
+      return null;
+    });
+    if (!res) return;
     const socialMedia: Record<string, string> = Object.keys(res.metadata.socialMedia).reduce(
       (acc: Record<string, string>, key: string) => {
         if (res.metadata.socialMedia[key]) {
@@ -167,7 +172,7 @@ const EditDao: React.FC<IEditDaoProps> = (props) => {
                   message: 'Logo is required',
                 },
               ]}
-              label="Logo"
+              label={<span id="baseInfo_metadata_logoUrl">Logo</span>}
             >
               <IPFSUpload
                 maxFileCount={1}
