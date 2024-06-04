@@ -21,7 +21,6 @@ const ResultModalComponent = () => {
   const [resultModalConfig, setResultModalConfig] = useState(INIT_RESULT_MODAL_CONFIG);
   useEffect(() => {
     const handleResultModal = (config: TResultModalConfig) => {
-      console.log('config', config);
       setResultModalConfig(config);
     };
     eventBus.addListener(ResultModal, handleResultModal);

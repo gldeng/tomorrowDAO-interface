@@ -4,7 +4,7 @@ import NetworkDaoHeader from 'components/NetworkDaoHeader';
 
 import dynamicReq from 'next/dynamic';
 import Footer from 'components/Footer';
-import { useWalletInit } from 'hooks/useWallet';
+
 import PageLoading from 'components/Loading';
 import ResultModal from 'components/ResultModal';
 import './layout.css';
@@ -13,8 +13,6 @@ const Layout = dynamicReq(
   async () => {
     return (props: React.PropsWithChildren<{}>) => {
       const { children } = props;
-
-      useWalletInit();
 
       return (
         <div className="flex w-[100vw] h-[100vh] flex-col relative box-border min-h-screen bg-global-grey">
