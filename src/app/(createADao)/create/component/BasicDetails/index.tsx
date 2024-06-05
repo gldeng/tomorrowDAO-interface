@@ -14,7 +14,7 @@ import { fetchTokenInfo } from 'api/request';
 import { setToken } from 'redux/reducer/daoCreate';
 import Link from 'next/link';
 
-const mediaList = [
+export const mediaList = [
   ['metadata', 'socialMedia', 'Twitter'],
   ['metadata', 'socialMedia', 'Facebook'],
   ['metadata', 'socialMedia', 'Telegram'],

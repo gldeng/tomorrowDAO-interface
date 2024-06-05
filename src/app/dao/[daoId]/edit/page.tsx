@@ -1,9 +1,9 @@
 'use client';
 import React from 'react';
-import dynamicReq from 'next/dynamic';
 import { SkeletonList } from 'components/Skeleton';
 
-const PageIndex = dynamicReq(() => import('./CreateDaoPage'), {
+import dynamicReq from 'next/dynamic';
+const PageIndex = dynamicReq(() => import('./_page'), {
   ssr: false,
   loading: () => <SkeletonList />,
 });

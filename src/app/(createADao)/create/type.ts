@@ -12,6 +12,7 @@ export interface IGovernanceSchemeThreshold {
   minimalApproveThreshold: number; // percentage
   maximalRejectionThreshold: number; // percentage
   maximalAbstentionThreshold: number; // percentage
+  proposalThreshold: number;
 }
 
 export interface IHighCouncilConfig {

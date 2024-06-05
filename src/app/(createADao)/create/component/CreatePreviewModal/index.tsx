@@ -1,4 +1,4 @@
-import { ReactNode, useContext, useState } from 'react';
+import { ReactNode, useContext, useMemo, useState } from 'react';
 import { Flex, Checkbox, CheckboxProps } from 'antd';
 import { FontWeightEnum, Typography, HashAddress } from 'aelf-design';
 import Image from 'next/image';
@@ -28,19 +28,25 @@ function CheckboxItem({
   onChange,
 }: {
   label?: string;
-  descriptionList?: {
+  descriptionList?: ({
     content: ReactNode;
     children?: ReactNode[];
-  }[];
+  } | null)[];
   checked?: boolean;
   onChange?: CheckboxProps['onChange'];
 }) {
+  const newDescriptionList = useMemo(() => {
+    return descriptionList?.filter(Boolean) as {
+      content: ReactNode;
+      children?: ReactNode[];
+    }[];
+  }, [descriptionList]);
   return (
     <Flex vertical gap={16}>
       <Checkbox checked={checked} onChange={onChange} className="preview-modal-checkbox">
         <Title fontWeight={FontWeightEnum.Medium}>{label}</Title>
       </Checkbox>
-      {descriptionList?.map(({ content, children }, index) => (
+      {newDescriptionList?.map(({ content, children }, index) => (
         <Flex key={index} className="ml-6" gap={8}>
           <div className="dot" />
           {children?.length ? (
@@ -169,6 +175,11 @@ export default function CreatePreviewModal({ open, onClose, onConfirm }: ICreate
             {
               content: `Each proposal must receive at least ${governance?.minimalApproveThreshold}% of approve votes, less than ${governance?.maximalRejectionThreshold}% of reject votes, and less than ${governance?.maximalAbstentionThreshold}% of abstain votes to be approved.`,
             },
+            metaData?.governanceToken
+              ? {
+                  content: `The minimum ${governance?.proposalThreshold} of governance tokens a user must hold to initiate a proposal`,
+                }
+              : null,
           ]}
         />
         {highCouncil && (

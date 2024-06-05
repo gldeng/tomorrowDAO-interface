@@ -86,11 +86,11 @@ interface IDaoInfoData {
     logoUrl: string;
     description: string;
     socialMedia: {
-      twitter?: string;
-      facebook?: string;
-      discrod?: string;
-      telegram?: string;
-      reddit?: string;
+      Twitter?: string;
+      Facebook?: string;
+      Discord?: string;
+      Telegram?: string;
+      Reddit?: string;
     };
   };
   governanceToken: string;
@@ -98,6 +98,9 @@ interface IDaoInfoData {
   highCouncilAddress: null | string;
   memberCount?: number;
   candidateCount?: number;
+  governanceSchemeThreshold: {
+    proposalThreshold: number;
+  };
   highCouncilConfig: null | {
     electionPeriod: number;
     maxHighCouncilCandidateCount: number;

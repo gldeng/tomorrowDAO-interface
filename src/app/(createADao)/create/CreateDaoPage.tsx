@@ -3,7 +3,7 @@
 import { useMachine } from '@xstate/react';
 import { formMachine } from './xstate';
 import { Button, Typography, FontWeightEnum } from 'aelf-design';
-import React, { memo, useCallback, useRef, useState } from 'react';
+import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { Steps, message as antdMessage, FormInstance, Result, StepsProps, StepProps } from 'antd';
 import { useWebLoginEvent, WebLoginEvents, useWebLogin, WebLoginState } from 'aelf-web-login';
 import { useRouter } from 'next/navigation';
@@ -26,6 +26,7 @@ import { cloneDeep, cloneDeepWith } from 'lodash-es';
 import { NetworkName } from 'config';
 import formValidateScrollFirstError from 'utils/formValidateScrollFirstError';
 import useAelfWebLoginSync from 'hooks/useAelfWebLoginSync';
+import breadCrumb from 'utils/breadCrumb';
 
 const initItems: StepsProps['items'] = [
   {
@@ -56,7 +57,7 @@ const CreateDaoPage = () => {
   const router = useRouter();
   const { loginState } = useWebLogin();
   const isNotFirstStep = currentStep > 0;
-  const { isMD } = useResponsive();
+  const { isMD, isLG } = useResponsive();
   const [items, setItems] = useState(initItems);
   const [nextLoading, setNextLoading] = useState(false);
 
@@ -112,6 +113,9 @@ const CreateDaoPage = () => {
     },
     [currentStepString],
   );
+  useEffect(() => {
+    breadCrumb.clearBreadCrumb();
+  }, []);
   const handleCreateDao = async () => {
     if (!isSyncQuery()) {
       return;
@@ -154,10 +158,13 @@ const CreateDaoPage = () => {
         let governanceConfig = stepForm[StepEnum.step1].submitedRes;
         // governanceToken is exist
         if (governanceConfig && daoCreateToken && metadata.governanceToken) {
-          const minimalVoteThreshold = governanceConfig.minimalVoteThreshold;
+          const { minimalVoteThreshold, proposalThreshold } = governanceConfig;
           governanceConfig = cloneDeep(governanceConfig);
           governanceConfig.minimalVoteThreshold = Number(
             timesDecimals(minimalVoteThreshold, daoCreateToken.decimals),
+          );
+          governanceConfig.proposalThreshold = Number(
+            timesDecimals(proposalThreshold, daoCreateToken.decimals),
           );
         }
         if (governanceConfig) {
@@ -240,7 +247,7 @@ const CreateDaoPage = () => {
               {
                 children: (
                   <Link
-                    href={`/`}
+                    href={`/explore`}
                     onClick={() => {
                       antdMessage.open({
                         type: 'success',
@@ -249,7 +256,7 @@ const CreateDaoPage = () => {
                       });
                     }}
                   >
-                    View My DAO
+                    <span className="text-white">View My DAO</span>
                   </Link>
                 ),
               },
@@ -311,6 +318,7 @@ const CreateDaoPage = () => {
           current={currentStep}
           items={items}
           labelPlacement={'vertical'}
+          direction={isLG ? 'vertical' : 'horizontal'}
         />
       </div>
       {contextHolder}
@@ -332,7 +340,7 @@ const CreateDaoPage = () => {
             <Button
               type="primary"
               ghost
-              className="flex-quarter lg:w-40 lg:flex-none gap-2"
+              className="flex-quarter lg:w-40 lg:flex-none gap-2 !p-[0px]"
               onClick={() => send({ type: 'PREVIOUS' })}
             >
               <ArrowLeft />
@@ -357,7 +365,7 @@ const CreateDaoPage = () => {
               {isHighCouncilStep && (
                 <Button
                   type="primary"
-                  className="flex-1 lg:w-40 lg:flex-none gap-2 create-dao-rigth-btn"
+                  className="flex-1 lg:w-40 lg:flex-none gap-2 create-dao-rigth-btn  !p-[0px]"
                   onClick={handleSkip}
                 >
                   <span>Skip</span>
@@ -367,7 +375,7 @@ const CreateDaoPage = () => {
               {!(isHighCouncilStep && !isFillGovernanceToken) && (
                 <Button
                   type="primary"
-                  className="flex-1 lg:w-40 lg:flex-none gap-2 create-dao-rigth-btn"
+                  className="flex-1 lg:w-40 lg:flex-none gap-2 create-dao-rigth-btn  !p-[0px]"
                   onClick={handleNextStep}
                   loading={nextLoading}
                 >

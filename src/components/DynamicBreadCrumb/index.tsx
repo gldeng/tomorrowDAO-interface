@@ -6,6 +6,7 @@ import { LeftOutlined } from '@aelf-design/icons';
 import { INavItemProps } from 'components/Breadcrumb';
 import useResponsive from 'hooks/useResponsive';
 
+const denyList = ['/', '/explore'];
 const DynamicBreadCrumb = () => {
   const pathname = usePathname();
 
@@ -34,7 +35,7 @@ const DynamicBreadCrumb = () => {
 
   return (
     <div className="pb-6 ">
-      {isLG ? (
+      {isLG && !denyList.includes(pathname) ? (
         <span
           className="breadcrumb-back-button flex items-center"
           onClick={() => {
