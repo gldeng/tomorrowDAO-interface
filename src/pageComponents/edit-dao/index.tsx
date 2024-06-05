@@ -77,6 +77,9 @@ const EditDao: React.FC<IEditDaoProps> = (props) => {
         footerConfig: {
           buttonList: [
             {
+              onClick: () => {
+                eventBus.emit(ResultModal, INIT_RESULT_MODAL_CONFIG);
+              },
               children: (
                 <Link
                   href={
@@ -84,9 +87,6 @@ const EditDao: React.FC<IEditDaoProps> = (props) => {
                       ? `${NetworkDaoHomePathName}/${daoId}/proposal-list`
                       : `/dao/${daoId}`
                   }
-                  onClick={() => {
-                    eventBus.emit(ResultModal, INIT_RESULT_MODAL_CONFIG);
-                  }}
                 >
                   <span className="text-white">View The DAO</span>
                 </Link>
@@ -101,7 +101,18 @@ const EditDao: React.FC<IEditDaoProps> = (props) => {
       eventBus.emit(ResultModal, {
         open: true,
         type: CommonOperationResultModalType.Error,
-        primaryContent: err?.errorMessage?.message || err?.message,
+        primaryContent: 'Save Changes Error',
+        secondaryContent: err?.errorMessage?.message || err?.message,
+        footerConfig: {
+          buttonList: [
+            {
+              children: <span>OK</span>,
+              onClick: () => {
+                eventBus.emit(ResultModal, INIT_RESULT_MODAL_CONFIG);
+              },
+            },
+          ],
+        },
       });
     }
   };

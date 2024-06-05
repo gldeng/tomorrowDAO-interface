@@ -30,6 +30,7 @@ import { ButtonCheckLogin } from 'components/ButtonCheckLogin';
 import breadCrumb from 'utils/breadCrumb';
 import { eventBus, ResultModal } from 'utils/myEvent';
 import { CommonOperationResultModalType } from 'components/CommonOperationResultModal';
+import { INIT_RESULT_MODAL_CONFIG } from 'components/ResultModal';
 
 interface IProps {
   daoId: string;
@@ -175,7 +176,10 @@ export default function DeoDetails(props: IProps) {
         footerConfig: {
           buttonList: [
             {
-              children: 'OK',
+              children: <span>OK</span>,
+              onClick: () => {
+                eventBus.emit(ResultModal, INIT_RESULT_MODAL_CONFIG);
+              },
             },
           ],
         },
