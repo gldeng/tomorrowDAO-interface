@@ -340,7 +340,7 @@ const CreateDaoPage = () => {
             <Button
               type="primary"
               ghost
-              className="flex-quarter lg:w-40 lg:flex-none gap-2"
+              className="flex-quarter lg:w-40 lg:flex-none gap-2 !p-[0px]"
               onClick={() => send({ type: 'PREVIOUS' })}
             >
               <ArrowLeft />
@@ -365,7 +365,7 @@ const CreateDaoPage = () => {
               {isHighCouncilStep && (
                 <Button
                   type="primary"
-                  className="flex-1 lg:w-40 lg:flex-none gap-2 create-dao-rigth-btn"
+                  className="flex-1 lg:w-40 lg:flex-none gap-2 create-dao-rigth-btn  !p-[0px]"
                   onClick={handleSkip}
                 >
                   <span>Skip</span>
@@ -375,7 +375,7 @@ const CreateDaoPage = () => {
               {!(isHighCouncilStep && !isFillGovernanceToken) && (
                 <Button
                   type="primary"
-                  className="flex-1 lg:w-40 lg:flex-none gap-2 create-dao-rigth-btn"
+                  className="flex-1 lg:w-40 lg:flex-none gap-2 create-dao-rigth-btn  !p-[0px]"
                   onClick={handleNextStep}
                   loading={nextLoading}
                 >
