@@ -27,7 +27,7 @@ import useNetworkDaoRouter from 'hooks/useNetworkDaoRouter';
 import { useRouter } from 'next/navigation';
 import { divDecimals } from 'utils/calculate';
 import { ButtonCheckLogin } from 'components/ButtonCheckLogin';
-import breadCrumb from 'utils/breadCrumb';
+import breadCrumb, { defaultDaoName } from 'utils/breadCrumb';
 import { eventBus, ResultModal } from 'utils/myEvent';
 import { CommonOperationResultModalType } from 'components/CommonOperationResultModal';
 import { INIT_RESULT_MODAL_CONFIG } from 'components/ResultModal';
@@ -286,8 +286,8 @@ export default function DeoDetails(props: IProps) {
     setTabKey(TabKey.HC);
   }, []);
   useEffect(() => {
-    breadCrumb.updateDaoDetailPage(daoId);
-  }, [daoId]);
+    breadCrumb.updateDaoDetailPage(daoId, daoData?.data?.metadata?.name);
+  }, [daoId, daoData?.data?.metadata?.name]);
 
   const tabCom = useMemo(() => {
     return (
