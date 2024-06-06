@@ -1,4 +1,6 @@
+import { fetchDaoInfo } from 'api/request';
 import { TBreadcrumbItems } from 'components/Breadcrumb';
+import { curChain } from 'config';
 type TUpdateCallBack = (items: TBreadcrumbItems) => void;
 
 const homePage: TBreadcrumbItems = [
@@ -14,71 +16,103 @@ const explorePage: TBreadcrumbItems = [
     href: '/explore',
   },
 ];
+export const defaultDaoName = 'DAO Information';
+type TBreadcrumbFn = (id: string, daoName: string) => TBreadcrumbItems;
 // ------- href: /dao/:id
-const daoDetailPage: (id: string) => TBreadcrumbItems = (id: string) => {
+const daoDetailPage: TBreadcrumbFn = (id, daoName) => {
   return [
     ...explorePage,
     {
-      title: 'DAO Information',
+      title: daoName,
       href: `/dao/${id}`,
     },
   ];
 };
-const createProposalPage: (id: string) => TBreadcrumbItems = (id: string) => {
+const createProposalPage: TBreadcrumbFn = (id, daoName) => {
   return [
-    ...(daoDetailPage(id) ?? []),
+    ...(daoDetailPage(id, daoName) ?? []),
     {
       title: 'Create Proposal',
     },
   ];
 };
-const myVotesPage: (id: string) => TBreadcrumbItems = (id: string) => {
+const myVotesPage: TBreadcrumbFn = (id, daoName) => {
   return [
-    ...(daoDetailPage(id) ?? []),
+    ...(daoDetailPage(id, daoName) ?? []),
     {
       title: 'My Votes',
     },
   ];
 };
-const settingPage: (id: string) => TBreadcrumbItems = (id: string) => {
+const settingPage: TBreadcrumbFn = (id, daoName) => {
   return [
-    ...(daoDetailPage(id) ?? []),
+    ...(daoDetailPage(id, daoName) ?? []),
     {
       title: 'Settings',
     },
   ];
 };
-const proposalInformationPage: (id: string) => TBreadcrumbItems = (id: string) => {
+const proposalInformationPage: TBreadcrumbFn = (id, daoName) => {
   return [
-    ...(daoDetailPage(id) ?? []),
+    ...(daoDetailPage(id, daoName) ?? []),
     {
       title: 'Proposal',
     },
   ];
 };
+interface IDaoMetaData {
+  name: string;
+}
 class BreadCrumb {
+  cacheDaoInfo: Record<string, IDaoMetaData> = {};
+
+  getDaoName = async (id: string) => {
+    if (this.cacheDaoInfo[id]) {
+      return this.cacheDaoInfo[id].name;
+    }
+    const res = await fetchDaoInfo({
+      daoId: id,
+      chainId: curChain,
+    });
+    const name = res.data?.metadata?.name;
+    this.cacheDaoInfo[id] = {
+      name,
+    };
+    return name;
+  };
   updateBreadCrumb: TUpdateCallBack = () => {
     //
   };
   public setUpdateFunction(cb: TUpdateCallBack) {
     this.updateBreadCrumb = cb;
   }
-  public updateDaoDetailPage(id: string) {
-    this.updateBreadCrumb(daoDetailPage(id));
+  public updateDaoDetailPage(id: string, daoName?: string) {
+    if (daoName) {
+      this.cacheDaoInfo[id] = {
+        name: daoName,
+      };
+    } else {
+      daoName = this.cacheDaoInfo[id]?.name ?? defaultDaoName;
+    }
+    this.updateBreadCrumb(daoDetailPage(id, daoName));
   }
-  public updateCreateProposalPage(id: string) {
-    this.updateBreadCrumb(createProposalPage(id));
+  public async updateCreateProposalPage(id: string) {
+    const daoName = await this.getDaoName(id);
+    this.updateBreadCrumb(createProposalPage(id, daoName));
   }
-  public updateMyVotesPage(id: string) {
-    this.updateBreadCrumb(myVotesPage(id));
+  public async updateMyVotesPage(id: string) {
+    const daoName = await this.getDaoName(id);
+    this.updateBreadCrumb(myVotesPage(id, daoName));
   }
-  public updateSettingPage(id: string) {
-    this.updateBreadCrumb(settingPage(id));
+  public async updateSettingPage(id: string) {
+    const daoName = await this.getDaoName(id);
+    this.updateBreadCrumb(settingPage(id, daoName));
   }
-  public updateProposalInformationPage(id: string) {
-    this.updateBreadCrumb(proposalInformationPage(id));
+  public async updateProposalInformationPage(id: string) {
+    const daoName = await this.getDaoName(id);
+    this.updateBreadCrumb(proposalInformationPage(id, daoName));
   }
-  public clearBreadCrumb() {
+  public async clearBreadCrumb() {
     this.updateBreadCrumb([]);
   }
 }
