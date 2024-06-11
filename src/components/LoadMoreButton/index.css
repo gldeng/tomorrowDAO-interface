@@ -1,0 +1,14 @@
+.more-button {
+
+  button {
+    @apply w-[200px];
+  }
+
+  button>span {
+    @apply flex items-center;
+  }
+
+  .more-text {
+    @apply mr-2 text-sm;
+  }
+}
