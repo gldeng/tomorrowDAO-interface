@@ -12,6 +12,15 @@ export const fetchDaoList = async (params: IListDaoReq): Promise<IListDaoRes> =>
   });
 };
 
+export const fetchMyDaoList = async (
+  params: IMyDaoListQueryParams,
+): Promise<IMyDaoListResponse> => {
+  console.log(1111);
+  return apiServer.get('/dao/my-dao-list', {
+    params,
+  });
+};
+
 export const fetchDaoInfo = async (params: IDaoInfoReq): Promise<IDaoInfoRes> => {
   return apiServer.get('/dao/dao-info', {
     params,

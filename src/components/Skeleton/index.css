@@ -1,3 +1,9 @@
 .skeleton-wrap {
   padding: 1rem 1.5rem;
 }
+
+.my-dao-item-skeleton {
+  .TMRWDAO-skeleton-title {
+    margin-block-start: 8px !important;
+  }
+}

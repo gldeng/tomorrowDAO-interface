@@ -19,18 +19,36 @@
 }
 
 .user-popover {
-  @apply w-[320px];
+  @apply w-[300px];
 
   .TMRWDAO-popover-inner {
     box-shadow: none;
-    @apply border border-solid border-Neutral-Border bg-white rounded-md pt-2 pb-4 px-6;
+    @apply border border-solid border-Neutral-Border bg-white rounded-md p-0 overflow-hidden;
+  }
+}
+
+.header-dropdown-container {
+  .drop-down-items {
+    @apply flex cursor-pointer h-[48px] text-Primary-Text text-[14px] font-[400] leading-[22px] px-[24px] py-[13px];
   }
 
-  .user-chain {
-    @apply text-base font-medium text-Primary-Text mb-1 mt-4;
+  .drop-down-items:hover {
+    @apply bg-Neutral-Hover-BG;
   }
 
-  .logout-button {
-    @apply w-full px-5 box-border h-10 cursor-pointer bg-Neutral-Default-BG rounded-md text-sm leading-[22px] font-medium flex items-center justify-center text-Primary-Text hover:bg-Neutral-Hover-BG active:bg-Neutral-Divider;
+  .prefix-icon {
+    @apply text-[20px] pr-[8px];
+  }
+
+  .TMRWDAO-hash-address {
+    @apply items-center;
+  }
+
+  .TMRWDAO-hash-address>span {
+    font-size: inherit;
+  }
+
+  .icon {
+    @apply text-[16px]
   }
 }

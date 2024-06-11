@@ -49,6 +49,42 @@ interface IListDaoRes {
   data: IDaoData;
   message: string;
 }
+// -------------------------------------my-dao-list----------------------
+interface IMyDaoListDataItem {
+  chainId: string;
+  daoId: string;
+  logo: string;
+  name: string;
+  description: string;
+  creator: string;
+  proposalsNum: number;
+  symbol: string;
+  symbolHoldersNum: number;
+  votersNum: number;
+  isNetworkDAO: boolean;
+  logo: string;
+  highCouncilMemberCount: number;
+}
+
+interface IMyDaoListData {
+  type: number;
+  list: IMyDaoListDataItem[];
+  totalCount: number;
+}
+
+interface IMyDaoListResponse {
+  code: string;
+  data: IMyDaoListData[];
+  message: string;
+}
+
+interface IMyDaoListQueryParams {
+  Type: number;
+  Address: string;
+  ChainId: string;
+  SkipCount: number;
+  MaxResultCount: number;
+}
 // -------------------------------------dao-info-----------------------------
 interface ISocialMedia {
   twitter: string;
