@@ -1,22 +1,41 @@
 import { useRequest } from 'ahooks';
 import { fetchTokenPrice, fetchAddressTokenList } from 'api/request';
-import { treasuryAccountAddress } from 'config';
-import { useMemo } from 'react';
+// import { treasuryAccountAddress } from 'config';
+import { useEffect, useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 export interface ITokenListItem extends IAddressTokenListDataItem {
   price?: number;
   valueUSD?: BigNumber;
 }
-export default function useTokenListData() {
+interface IParams {
+  address?: string;
+  currentChain?: string;
+}
+export default function useTokenListData(params: IParams) {
+  const { address, currentChain } = params;
   const {
     data: tokenListData,
     error: tokenListError,
     loading: tokenListLoading,
-  } = useRequest(() => {
-    return fetchAddressTokenList({
-      address: treasuryAccountAddress,
-    });
-  });
+    run,
+  } = useRequest(
+    () => {
+      return fetchAddressTokenList(
+        {
+          address: address ?? '',
+        },
+        currentChain,
+      );
+    },
+    {
+      manual: true,
+    },
+  );
+  useEffect(() => {
+    if (params.address) {
+      run();
+    }
+  }, [params.address]);
   const tokens = useMemo(() => {
     return tokenListData?.data.map((item) => item.symbol);
   }, [tokenListData]);
@@ -26,9 +45,12 @@ export default function useTokenListData() {
       return res;
     }
     const reqArr = tokens.map((token) => {
-      return fetchTokenPrice({
-        fsym: token,
-      });
+      return fetchTokenPrice(
+        {
+          fsym: token,
+        },
+        currentChain,
+      );
     });
     const resArr = await Promise.all(reqArr);
     for (const priceItem of resArr) {
@@ -43,16 +65,24 @@ export default function useTokenListData() {
       ...item,
       price: tokenPriceData?.[item.symbol],
       valueUSD: tokenPriceData?.[item.symbol]
-        ? new BigNumber(item.balance)
-            .multipliedBy(tokenPriceData[item.symbol])
-            .dp(8, BigNumber.ROUND_DOWN)
+        ? new BigNumber(item.balance).multipliedBy(tokenPriceData[item.symbol])
         : undefined,
     };
   });
+  const totalValueUSD = useMemo(() => {
+    let sum = BigNumber(0);
+    for (const item of tokenList) {
+      if (item.valueUSD) {
+        sum = sum.plus(item.valueUSD);
+      }
+    }
+    return sum.decimalPlaces(8, BigNumber.ROUND_DOWN).toFormat();
+  }, [tokenList]);
   return {
     tokenPriceData,
     tokenList: tokenList,
     tokenListLoading,
     tokenListError,
+    totalValueUSD,
   };
 }

@@ -162,6 +162,7 @@ interface IDaoInfoData {
   vetoExecuteTimePeriod: number;
   createTime: string;
   isNetworkDAO: boolean;
+  treasuryAddress?: string;
   highCouncilMemberCount?: number;
 }
 
@@ -559,4 +560,32 @@ interface IExecutableListRes {
   code: string;
   data: IExecutableListResData;
   message: string;
+}
+// -------------------  treasury-assets ---------------------------------
+interface ITreasuryAssetsReq {
+  chainId: string;
+  daoId: string;
+  symbols?: string[];
+}
+interface ITreasuryAssetsAsset {
+  symbol: string;
+  amount: number;
+  decimal: number;
+}
+
+interface ITreasuryAssetsData {
+  treasuryAddress: string;
+  asserts: ITreasuryAssetsAsset[];
+}
+
+interface ITreasuryAssetsRes {
+  code: number;
+  data: ITreasuryAssetsData;
+}
+// -------------------  treasury-records ---------------------------------
+interface ITreasuryRecordsReq {
+  daoId: string;
+  chainId: string;
+  skipCount: number;
+  maxResultCount: number;
 }

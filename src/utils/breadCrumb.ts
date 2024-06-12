@@ -36,6 +36,14 @@ const createProposalPage: TBreadcrumbFn = (id, daoName) => {
     },
   ];
 };
+const treasuryPage: TBreadcrumbFn = (id, daoName) => {
+  return [
+    ...(daoDetailPage(id, daoName) ?? []),
+    {
+      title: 'Treasury',
+    },
+  ];
+};
 const myVotesPage: TBreadcrumbFn = (id, daoName) => {
   return [
     ...(daoDetailPage(id, daoName) ?? []),
@@ -99,6 +107,10 @@ class BreadCrumb {
   public async updateCreateProposalPage(id: string) {
     const daoName = await this.getDaoName(id);
     this.updateBreadCrumb(createProposalPage(id, daoName));
+  }
+  public async updateTreasuryPage(id: string) {
+    const daoName = await this.getDaoName(id);
+    this.updateBreadCrumb(treasuryPage(id, daoName));
   }
   public async updateMyVotesPage(id: string) {
     const daoName = await this.getDaoName(id);

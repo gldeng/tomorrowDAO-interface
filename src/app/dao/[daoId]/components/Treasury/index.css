@@ -1,0 +1,34 @@
+.treasury-wrap {
+  @apply min-h-[184px] mb-[16px];
+
+  .treasury-info-item {
+    @apply mt-4
+  }
+
+}
+
+.treasury-choice-modal {
+  .choice-item {
+    @apply flex items-center justify-between cursor-pointer;
+  }
+
+  .choice-item+.choice-item {
+    @apply mt-10;
+  }
+
+  .choice-item:hover {
+    @apply text-colorPrimaryHover;
+  }
+
+  .choice-item-text {
+    @apply flex flex-col;
+  }
+
+  .choice-item-text-subtitle {
+    @apply text-Neutral-Secondary-Text;
+  }
+
+  .choice-item-text-title {
+    @apply font-bold text-lg;
+  }
+}

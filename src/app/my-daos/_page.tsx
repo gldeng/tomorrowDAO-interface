@@ -112,7 +112,7 @@ const MyDaosPage = () => {
           </Link>
         </div>
         <div className="flex flex-col gap-[0.75rem]">
-          <p className="list-header">DAO I manage</p>
+          <p className="list-header">My own DAOs</p>
           <div className="list-body">
             {ownLoading ? (
               <SkeletonDaoItemList />
@@ -154,7 +154,7 @@ const MyDaosPage = () => {
           </div>
         </div>
         <div className="flex flex-col gap-[0.75rem]">
-          <p className="list-header">DAOs I participate in</p>
+          <p className="list-header">participated DAOs</p>
           <div className="list-body">
             {participatedLoading ? (
               <SkeletonDaoItemList />

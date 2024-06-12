@@ -3,31 +3,24 @@ import { Table, HashAddress } from 'aelf-design';
 import { ConfigProvider, Tag, Tooltip } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import Link from 'next/link';
-import NoData from './NoData';
-import { mainExplorer, treasuryAccountAddress } from 'config';
+// import NoData from './NoData';
+import { mainExplorer } from 'config';
 import { useRequest } from 'ahooks';
 import { fetchAddressTransferList } from 'api/request';
 // import useResponsive from 'hooks/useResponsive';
 import { getFormattedDate } from 'utils/time';
 import { numberFormatter } from 'utils/numberFormatter';
 import { TokenIconMap } from 'constants/token';
+import NoData from 'app/my-votes/components/NoData';
+import { checkIsOut } from 'utils/transaction';
 
-const checkIsOut = (address: string, record: IAddressTransferListDataListItem) => {
-  const { from, to, isCrossChain } = record;
-  if (isCrossChain === 'Transfer' || isCrossChain === 'no') {
-    if (from === address) {
-      return true;
-    }
-    return false;
-  }
-  // isCrossChain: Receive
-  if (to === address) {
-    return false;
-  }
-  return true;
-};
 const defaultPageSize = 20;
-export default function RecordTable() {
+interface IRecordTableProps {
+  address: string;
+  currentChain?: string;
+}
+export default function RecordTable(props: IRecordTableProps) {
+  const { address, currentChain } = props;
   const [timeFormat, setTimeFormat] = useState('Age');
   // const { isLG } = useResponsive();
 
@@ -42,11 +35,14 @@ export default function RecordTable() {
     run,
   } = useRequest(
     () => {
-      return fetchAddressTransferList({
-        address: treasuryAccountAddress,
-        pageSize: tableParams.pageSize,
-        pageNum: tableParams.page,
-      });
+      return fetchAddressTransferList(
+        {
+          address,
+          pageSize: tableParams.pageSize,
+          pageNum: tableParams.page,
+        },
+        currentChain,
+      );
     },
     {
       manual: true,
@@ -104,7 +100,7 @@ export default function RecordTable() {
         return (
           <div className="from">
             <Link href={`${mainExplorer}/address/${from}`} target="_blank">
-              <HashAddress className='treasury-address' address={from} preLen={8} endLen={9} />
+              <HashAddress className="treasury-address" address={from} preLen={8} endLen={9} />
             </Link>
           </div>
         );
@@ -115,14 +111,14 @@ export default function RecordTable() {
       dataIndex: 'to',
       width: 280,
       render(to, record) {
-        const isOut = checkIsOut(treasuryAccountAddress, record);
+        const isOut = checkIsOut(address, record);
         return (
           <div className="to flex">
-            <Tag color={isOut ? "error" : 'success'} className="w-[36px] flex justify-center">
-              { isOut ? 'out' : 'in' }
+            <Tag color={isOut ? 'error' : 'success'} className="w-[36px] flex justify-center">
+              {isOut ? 'out' : 'in'}
             </Tag>
             <Link href={`${mainExplorer}/address/${to}`} target="_blank">
-              <HashAddress className='treasury-address' address={to} preLen={8} endLen={9} />
+              <HashAddress className="treasury-address" address={to} preLen={8} endLen={9} />
             </Link>
           </div>
         );
@@ -144,7 +140,9 @@ export default function RecordTable() {
         return (
           <Link href={`${mainExplorer}/token/${symbol}`}>
             <div className="token flex items-center">
-              {TokenIconMap[symbol] && <img src={TokenIconMap[symbol]} className="token-logo " alt="" />}
+              {TokenIconMap[symbol] && (
+                <img src={TokenIconMap[symbol]} className="token-logo " alt="" />
+              )}
               {symbol}
             </div>
           </Link>

@@ -11,6 +11,7 @@ import { MenuProps } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { networkType } from 'config';
+import { eventBus, HeaderUpdate } from 'utils/myEvent';
 export enum ENavKeys {
   CreateDAO = 'CreateDAO',
   Resources = 'Resources',
@@ -21,10 +22,12 @@ export enum ENavKeys {
   Twitter = 'Twitter',
   Discord = 'Discord',
   Telegram = 'Telegram',
+  Treasury = 'Treasury',
 }
 export default function Header() {
   const { isLG } = useResponsive();
   const pathname = usePathname();
+  const [daoId, setDaoId] = useState('');
   const items: MenuProps['items'] = useMemo(() => {
     return [
       {
@@ -95,12 +98,24 @@ export default function Header() {
           },
         ],
       },
+      {
+        label: <Link href={`/dao/${daoId}/treasury`}>Treasury</Link>,
+        key: ENavKeys.Treasury,
+      },
     ];
-  }, [isLG]);
+  }, [daoId, isLG]);
+  useEffect(() => {
+    const callBack = (id: string) => {
+      setDaoId(id);
+    };
+    eventBus.on(HeaderUpdate, callBack);
+    return () => {
+      eventBus.off(HeaderUpdate, callBack);
+    };
+  }, []);
   const [current, setCurrent] = useState('');
 
   const onClick: MenuProps['onClick'] = (e) => {
-    console.log('e.key', e.key);
     setCurrent(e.key);
   };
 
@@ -108,6 +123,8 @@ export default function Header() {
     // refresh from path map to nav active
     if (pathname === '/guide' || pathname === '/create') {
       setCurrent(ENavKeys.CreateDAO);
+    } else if (pathname.includes('/treasury')) {
+      setCurrent(ENavKeys.Treasury);
     } else {
       setCurrent('');
     }

@@ -13,6 +13,7 @@ module.exports = {
         approve: '#3888FF',
         rejection: '#F55D6E',
         abstention: '#687083',
+        error: '#f55d6e',
         'Neutral-Secondary-Text': '#919191',
         'Primary-Text': '#1A1A1A',
         'Neutral-Primary-Text': '#434343',
