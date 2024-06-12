@@ -10,7 +10,7 @@ import {
 } from '@aelf-design/icons';
 import { ReactComponent as AvatarIcon } from 'assets/imgs/avatar-icon.svg';
 import { WalletType, WebLoginState, useWebLogin } from 'aelf-web-login';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Popover } from 'antd';
 import Link from 'next/link';
 import './index.css';
@@ -36,6 +36,13 @@ export const LoginAuth = () => {
 export default function Login() {
   const { isLG } = useResponsive();
   const { logout, loginState } = useWebLogin();
+  const [hovered, setHovered] = useState(false);
+  const hide = () => {
+    setHovered(false);
+  };
+  const handleHoverChange = (open: boolean) => {
+    setHovered(open);
+  };
   const { login, isLogin, walletType } = useWalletService();
   const { walletInfo } = useSelector((store: any) => store.userInfo);
   const info = useSelector((store: any) => store.elfInfo.elfInfo);
@@ -66,8 +73,10 @@ export default function Login() {
           overlayClassName="user-popover"
           arrow={false}
           trigger="click"
+          open={hovered}
+          onOpenChange={handleHoverChange}
           content={
-            <div className="header-dropdown-container">
+            <div className="header-dropdown-container" onClick={hide}>
               <Link href={`${explorer}/address/${walletInfo.address}`} target="_blank">
                 <div className="drop-down-items">
                   <span className="prefix-icon">

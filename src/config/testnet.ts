@@ -25,6 +25,7 @@ export const sideChainAddress = 'ASh2Wt7nSEmYqnGxPPzp4pnVDU4uhj1XW9Se5VeZcX2UDdy
 export const daoAddress = 'RRF7deQbmicUh6CZ1R2y7U9M8n2eHPyCgXVHwiSkmNETLbL4D';
 export const propalAddress = '2sJ8MDufVDR3V8fDhBPUKMdP84CUf1oJroi9p8Er1yRvMp3fq7';
 export const voteAddress = '2LpoLYNPAnjiBUozyYwcfaeekxRFehjt6hDR78VKgk47UwkvAv';
+export const treasuryContractAddress = '3FdTVXDuBMVAsXJ598aTm3GifQQey5ahFsonjhanTLs4qnukT';
 // explorer config
 export const explorer = 'https://explorer-test-side02.aelf.io';
 export const mainExplorer = 'https://explorer-test.aelf.io';

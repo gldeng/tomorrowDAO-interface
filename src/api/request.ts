@@ -96,32 +96,52 @@ export const fetchExecutableList = async (
 };
 
 // explore
-export const fetchAddressTokenList = async (params: {
-  address: string;
-}): Promise<IAddressTokenListRes> => {
-  return explorerServer.get('/viewer/balances', {
+export const fetchAddressTokenList = async (
+  params: {
+    address: string;
+  },
+  currentChain?: string,
+): Promise<IAddressTokenListRes> => {
+  const prefix = currentChain ? '/side-explorer-api/' : '/explorer-api/';
+  return explorerServer.get(prefix + '/viewer/balances', {
     params,
   });
 };
 
-export const fetchAddressTransferList = async (params: {
-  pageSize: number;
-  pageNum: number;
-  address: string;
-}): Promise<IAddressTransferListRes> => {
-  return explorerServer.get('/viewer/transferList', {
+export const fetchAddressTransferList = async (
+  params: {
+    pageSize: number;
+    pageNum: number;
+    address: string;
+  },
+  currentChain?: string,
+): Promise<IAddressTransferListRes> => {
+  const prefix = currentChain ? '/side-explorer-api/' : '/explorer-api/';
+  return explorerServer.get(prefix + '/viewer/transferList', {
     params,
   });
 };
-export const fetchTokenPrice = async (params: {
-  fsym: string;
-  syms?: string;
-}): Promise<ITokenPriceRes> => {
+export const fetchTokenPrice = async (
+  params: {
+    fsym: string;
+    syms?: string;
+  },
+  currentChain?: string,
+): Promise<ITokenPriceRes> => {
   if (!params.syms) {
     params.syms = 'USD';
   }
+  const prefix = currentChain ? '/side-explorer-api/' : '/explorer-api/';
 
-  return explorerServer.get('/token/price', {
+  return explorerServer.get(prefix + '/token/price', {
+    params,
+  });
+};
+
+export const fetchTreasuryAssets = async (
+  params: ITreasuryAssetsReq,
+): Promise<ITreasuryAssetsRes> => {
+  return apiServer.get('/treasury/assets', {
     params,
   });
 };

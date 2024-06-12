@@ -211,7 +211,7 @@ export default function DaoInfo(props: IParams) {
           </div>
           <Divider className="mb-2 lg:mb-6" />
           <Collapse defaultActiveKey={['1']} ghost>
-            <Collapse.Panel header={<Typography.Title>Creator</Typography.Title>} key="1">
+            <Collapse.Panel header={<Typography.Title>Dao Information</Typography.Title>} key="1">
               <Descriptions
                 layout={isLG ? 'vertical' : 'horizontal'}
                 items={items}

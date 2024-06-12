@@ -13,6 +13,7 @@ import ExecutdProposals from './components/ExecutdProposals';
 import MyRecords from './components/MyRecords';
 import MyInfo from './components/MyInfo';
 import Filter from './components/Filter';
+import Treasury from './components/Treasury';
 import { useRequest, usePrevious } from 'ahooks';
 import { GetBalanceByContract, GetTokenInfo } from 'contract/callContract';
 import { IProposalTableParams, TabKey } from './type';
@@ -31,6 +32,7 @@ import breadCrumb, { defaultDaoName } from 'utils/breadCrumb';
 import { eventBus, ResultModal } from 'utils/myEvent';
 import { CommonOperationResultModalType } from 'components/CommonOperationResultModal';
 import { INIT_RESULT_MODAL_CONFIG } from 'components/ResultModal';
+import useUpdateHeaderDaoInfo from 'hooks/useUpdateHeaderDaoInfo';
 
 interface IProps {
   daoId: string;
@@ -68,6 +70,7 @@ export default function DeoDetails(props: IProps) {
     },
   });
   const previousTableParams = usePrevious(tableParams);
+  useUpdateHeaderDaoInfo(daoId);
   const fetchProposalListWithParams = async (preData: IProposalListRes | null) => {
     const { proposalType, proposalStatus } = tableParams;
     const params: IProposalListReq = {
@@ -121,7 +124,7 @@ export default function DeoDetails(props: IProps) {
     manual: true,
   });
   const previousProposalDataRef = useRef<IProposalListRes | undefined>();
-  const handleCreateProposalRef = useRef<() => void>();
+  const handleCreateProposalRef = useRef<(customRouter?: boolean) => Promise<boolean>>();
   previousProposalDataRef.current = proposalData;
 
   const networkDaoRouter = useNetworkDaoRouter();
@@ -130,7 +133,7 @@ export default function DeoDetails(props: IProps) {
     return <MyInfo daoId={daoId} />;
   }, [daoId]);
 
-  const handleCreateProposal = async () => {
+  const handleCreateProposal = async (customRouter?: boolean) => {
     setCreateProposalLoading(true);
     const [balanceInfo, tokenInfo] = await Promise.all([
       GetBalanceByContract(
@@ -184,13 +187,17 @@ export default function DeoDetails(props: IProps) {
           ],
         },
       });
-      return;
+      return false;
+    }
+    if (customRouter) {
+      return true;
     }
     if (isNetworkDAO) {
       networkDaoRouter.push(`/proposal-deploy`);
     } else {
       router.push(`/proposal/deploy/${daoId}`);
     }
+    return true;
   };
   handleCreateProposalRef.current = handleCreateProposal;
   const tabItems = useMemo(() => {
@@ -234,7 +241,7 @@ export default function DeoDetails(props: IProps) {
     if (!isLG) {
       return items;
     } else {
-      return [
+      const finalItems = [
         ...items,
         {
           key: TabKey.MYINFO,
@@ -242,16 +249,23 @@ export default function DeoDetails(props: IProps) {
           children: rightContent,
         },
       ];
+      if (!daoData?.data.isNetworkDAO) {
+        finalItems.push({
+          key: TabKey.TREASURY,
+          label: 'Treasury',
+          children: daoData?.data ? (
+            <Treasury
+              daoData={daoData.data}
+              createProposalCheck={handleCreateProposalRef.current}
+            />
+          ) : (
+            <span></span>
+          ),
+        });
+      }
+      return finalItems;
     }
-  }, [
-    createProposalLoading,
-    daoLoading,
-    form,
-    tableParams,
-    daoData?.data.isNetworkDAO,
-    isLG,
-    rightContent,
-  ]);
+  }, [createProposalLoading, daoLoading, form, tableParams, daoData?.data, isLG, rightContent]);
 
   const pageChange = useCallback((page: number) => {
     setTableParams((state) => {
@@ -380,6 +394,9 @@ export default function DeoDetails(props: IProps) {
 
           {!isLG && (
             <div className="dao-detail-content-right">
+              {daoData?.data && !daoData.data.isNetworkDAO && (
+                <Treasury daoData={daoData.data} createProposalCheck={handleCreateProposal} />
+              )}
               {rightContent}
               {walletInfo.address && (
                 <ExecutdProposals daoId={daoId} address={walletInfo.address} />
