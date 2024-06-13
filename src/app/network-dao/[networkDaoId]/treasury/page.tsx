@@ -9,5 +9,5 @@ const PageIndex = dynamicReq(() => import('pageComponents/treasury'), {
 });
 
 export default function Page() {
-  return <PageIndex address={treasuryAccountAddress} />;
+  return <PageIndex address={treasuryAccountAddress} title="Network DAO Treasury"/>;
 }

@@ -10,7 +10,6 @@ import { ReactComponent as MenuArrow } from 'assets/imgs/menu-arrow.svg';
 import { MenuProps } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { usePathname } from 'next/navigation';
-import { networkType } from 'config';
 import { eventBus, HeaderUpdateTreasury } from 'utils/myEvent';
 export enum ENavKeys {
   CreateDAO = 'CreateDAO',
@@ -27,7 +26,7 @@ export enum ENavKeys {
 export default function Header() {
   const { isLG } = useResponsive();
   const pathname = usePathname();
-  const [daoId, setDaoId] = useState(null);
+  const [daoId, setDaoId] = useState<string | null>(null);
   const items: MenuProps['items'] = useMemo(() => {
     return [
       {
@@ -107,7 +106,7 @@ export default function Header() {
     ];
   }, [daoId, isLG]);
   useEffect(() => {
-    const setDaoIdCallBack = (id: string) => {
+    const setDaoIdCallBack = (id: string | null) => {
       setDaoId(id);
     };
     eventBus.on(HeaderUpdateTreasury, setDaoIdCallBack);

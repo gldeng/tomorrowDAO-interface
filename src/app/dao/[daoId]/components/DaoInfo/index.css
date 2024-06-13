@@ -2,7 +2,14 @@
   @apply border border-Neutral-Divider border-solid rounded-lg bg-white pt-6;
 
   .dao-detail-dis-title {
-    @apply flex justify-between;
+    .title {
+      @apply font-[500] text-[40px] leading-[48px];
+    }
+
+    .description {
+      @apply font-[400] text-[16px] leading-[24px] pt-[8px];
+    }
+
   }
 
   .dao-detail-dis-dis {

@@ -60,7 +60,7 @@ const SkeletonLine: React.FC = () => {
       <List
         itemLayout="vertical"
         size="large"
-        dataSource={listData}
+        dataSource={[...listData, ...listData]}
         renderItem={(item) => (
           <List.Item key={item.id} className="skeleton-line">
             <AntdSkeleton loading active avatar={false} paragraph={false}></AntdSkeleton>

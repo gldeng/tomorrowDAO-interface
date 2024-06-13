@@ -4,7 +4,7 @@ import { ConfigProvider, Tag, Tooltip } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import Link from 'next/link';
 // import NoData from './NoData';
-import { mainExplorer } from 'config';
+import { explorer, mainExplorer } from 'config';
 import { useRequest } from 'ahooks';
 import { fetchAddressTransferList } from 'api/request';
 // import useResponsive from 'hooks/useResponsive';
@@ -13,6 +13,7 @@ import { numberFormatter } from 'utils/numberFormatter';
 import { TokenIconMap } from 'constants/token';
 import NoData from 'app/my-votes/components/NoData';
 import { checkIsOut } from 'utils/transaction';
+import { isSideChain } from 'utils/chian';
 
 const defaultPageSize = 20;
 interface IRecordTableProps {
@@ -61,7 +62,10 @@ export default function RecordTable(props: IRecordTableProps) {
       render(hash) {
         return (
           <span className="txn-hash">
-            <Link href={`${mainExplorer}/tx/${hash}`} target="_blank">
+            <Link
+              href={`${isSideChain(currentChain) ? explorer : mainExplorer}/tx/${hash}`}
+              target="_blank"
+            >
               {hash.slice(0, 15)}...
             </Link>
           </span>
@@ -99,7 +103,10 @@ export default function RecordTable(props: IRecordTableProps) {
       render(from, record) {
         return (
           <div className="from">
-            <Link href={`${mainExplorer}/address/${from}`} target="_blank">
+            <Link
+              href={`${isSideChain(currentChain) ? explorer : mainExplorer}/address/${from}`}
+              target="_blank"
+            >
               <HashAddress className="treasury-address" address={from} preLen={8} endLen={9} />
             </Link>
           </div>
@@ -117,7 +124,10 @@ export default function RecordTable(props: IRecordTableProps) {
             <Tag color={isOut ? 'error' : 'success'} className="w-[36px] flex justify-center">
               {isOut ? 'out' : 'in'}
             </Tag>
-            <Link href={`${mainExplorer}/address/${to}`} target="_blank">
+            <Link
+              href={`${isSideChain(currentChain) ? explorer : mainExplorer}/address/${to}`}
+              target="_blank"
+            >
               <HashAddress className="treasury-address" address={to} preLen={8} endLen={9} />
             </Link>
           </div>
@@ -138,7 +148,7 @@ export default function RecordTable(props: IRecordTableProps) {
       // width: 200,
       render(symbol) {
         return (
-          <Link href={`${mainExplorer}/token/${symbol}`}>
+          <Link href={`${isSideChain(currentChain) ? explorer : mainExplorer}/token/${symbol}`}>
             <div className="token flex items-center">
               {TokenIconMap[symbol] && (
                 <img src={TokenIconMap[symbol]} className="token-logo " alt="" />

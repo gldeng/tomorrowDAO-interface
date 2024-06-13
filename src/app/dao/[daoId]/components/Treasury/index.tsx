@@ -1,13 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Form, InputNumber, Spin } from 'antd';
 import { useWebLogin } from 'aelf-web-login';
+import treasuryIconSrc from 'assets/imgs/treasury-icon.svg';
 import { Button, FontWeightEnum, Typography, Input, HashAddress } from 'aelf-design';
 import { RightArrowOutlined } from '@aelf-design/icons';
 import { callContract, callViewContract } from 'contract/callContract';
 import CommonModal from 'components/CommonModal';
 import { GetBalanceByContract, GetTokenInfo } from 'contract/callContract';
 import { emitLoading, eventBus, ResultModal } from 'utils/myEvent';
-import { curChain, daoAddress, explorer, sideChainAddress, treasuryContractAddress } from 'config';
+import { curChain, explorer, sideChainAddress, treasuryContractAddress } from 'config';
 import { CommonOperationResultModalType } from 'components/CommonOperationResultModal';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -20,12 +21,14 @@ import { divDecimals, timesDecimals } from 'utils/calculate';
 import './index.css';
 import { ButtonCheckLogin } from 'components/ButtonCheckLogin';
 import { EProposalActionTabs } from 'app/proposal/deploy/[daoId]/type';
-import { useRequest } from 'ahooks';
+import { useAsyncEffect, useRequest } from 'ahooks';
 import useTokenListData from 'hooks/useTokenListData';
 import { checkIsOut } from 'utils/transaction';
 import { numberFormatter } from 'utils/numberFormatter';
-import { SkeletonLine, SkeletonList } from 'components/Skeleton';
-
+import { SkeletonLine } from 'components/Skeleton';
+import { getExploreLink } from 'utils/common';
+const formSymbol = 'symbol';
+const formAmount = 'amount';
 interface IProps {
   clssName?: string;
   daoData: IDaoInfoData;
@@ -37,6 +40,7 @@ const Treasury: React.FC<IProps> = (props) => {
   const { clssName, daoData, createProposalCheck } = props;
   const [form] = Form.useForm();
   const [choiceOpen, setChoiceOpen] = useState(false);
+  // const [isValidatedSymbol, setIsValidatedSymbol] = useState(false);
   const [depoistOpen, setDepoistOpen] = useState(false);
   const [depositLoading, setDepositLoading] = useState(false);
   const decimalsRef = useRef<number>(8);
@@ -128,6 +132,14 @@ const Treasury: React.FC<IProps> = (props) => {
                 eventBus.emit(ResultModal, INIT_RESULT_MODAL_CONFIG);
               },
               children: 'OK',
+              type: 'primary',
+            },
+            {
+              onClick: () => {
+                window.open(getExploreLink(res.TransactionId, 'transaction'));
+              },
+              children: 'View Transaction Details',
+              type: 'link',
             },
           ],
         },
@@ -197,32 +209,47 @@ const Treasury: React.FC<IProps> = (props) => {
       });
     }
   };
+  // const currentSymbol =
+  // useAsyncEffect(async () => {
+  //   if (isValidatedSymbol) {
+  //     const { balance } = await GetBalanceByContract(
+  //       {
+  //         symbol: info?.symbol || 'ELF',
+  //         owner: walletInfo.address,
+  //       },
+  //       { chain: curChain },
+  //     );
+  //     // aelf decimal 8
+  //     setElfBalance(divDecimals(balance, info?.decimal || '8').toNumber());
+  //   }
+  // }, [isValidatedSymbol, currentSymbol]);
   useEffect(() => {
     if (treasuryAddress) {
       run();
     }
   }, [treasuryAddress]);
-  const cls = `${clssName} treasury-wrap border-0 lg:border lg:mb-[10px] border-Neutral-Divider border-solid rounded-lg bg-white px-4 pt-2 pb-6 lg:px-8  lg:py-6`;
+  const cls = `${clssName} treasury-wrap border-0 lg:border lg:mb-[10px] border-Neutral-Divider border-solid rounded-lg bg-white px-4 lg:px-8  lg:py-6`;
   const existTransaction = transferListData?.data?.total && transferListData?.data?.total > 0;
   const showLoadMore = (transferListData?.data?.total ?? 0) > LoadCount;
   return (
     <div className={cls}>
-      <Typography.Title fontWeight={FontWeightEnum.Medium} level={6} className="pb-[10px]">
-        Treasury Assets
-      </Typography.Title>
       {treasuryAddressLoading ? (
         <SkeletonLine />
       ) : (
         <>
-          {!treasuryAddress && wallet.address === creator && (
-            <>
-              <p className="text-Neutral-neutralTitle text-sm mb-[10px]">
+          {!treasuryAddress && (
+            <div className="flex flex-col items-center">
+              <img src={treasuryIconSrc} alt="" className="treasury-icon" />
+              <h3 className="assets-title">Treasury Assets</h3>
+              <p className="assets-help-message assets-help-message-text-wrap">
                 The treasury function is not currently enabled for this DAO.
               </p>
-              <Button className="w-full" type="primary" size="medium" onClick={initTreasury}>
-                Enable Treasury
-              </Button>
-            </>
+              {wallet.address === creator && (
+                <Button className="w-[172px] mt-6" type="primary" onClick={initTreasury}>
+                  Enable Treasury
+                </Button>
+              )}
+            </div>
           )}
           {treasuryAddress &&
             (transferListLoading ? (
@@ -231,21 +258,23 @@ const Treasury: React.FC<IProps> = (props) => {
               <>
                 {existTransaction ? (
                   <div>
-                    <div className="flex items-center">
-                      <p className="flex-1 text-[18px] font-bold">$ {totalValueUSD}</p>
+                    <h2 className="card-title">Treasury Assets</h2>
+                    <div className="flex items-center mt-6 mb-12">
+                      <p className="usd-value">${totalValueUSD}</p>
                       <ButtonCheckLogin
                         type="primary"
                         onClick={() => {
                           setChoiceOpen(true);
                         }}
+                        className="!h-[30px]"
                         size="medium"
                       >
                         Transfer
                       </ButtonCheckLogin>
                     </div>
                     <div>
-                      <p className="flex justify-between mt-5">
-                        <span className="text-[14px] font-[500]">Transactions</span>
+                      <p className="flex justify-between">
+                        <span className="card-title mb-6">Transactions</span>
                         {showLoadMore && (
                           <Link href={`/dao/${daoData?.id}/treasury`}>
                             <span>Load More</span>
@@ -254,34 +283,41 @@ const Treasury: React.FC<IProps> = (props) => {
                       </p>
                       <ul>
                         {transferListData?.data?.list?.slice(0, LoadCount).map((item) => {
+                          const isOut = checkIsOut(treasuryAddress, item);
                           return (
                             <li className="treasury-info-item" key={item.txId}>
-                              <div className="flex  justify-between text-Neutral-Secondary-Text">
+                              <div className="flex justify-between treasury-info-item-line-1 ">
                                 <span className="">
-                                  {dayjs(item.time).format('YYYY-MM-DD HH:mm:ss')}
+                                  {dayjs(item.time).format('YYYY-MM-DD HH:mm:ss')}{' '}
+                                  {isOut ? 'Withdraw' : 'Deposit'}
                                 </span>
-                                <span className="pl-[4px]">
-                                  {checkIsOut(treasuryAddress, item) ? 'Withdraw' : 'Deposit'}
-                                </span>
-                                <span className="pl-[4px]">
+                                <span>
                                   {numberFormatter(item.amount)} {item.symbol}
                                 </span>
                               </div>
-                              <div>
-                                <span className="block lg:flex items-center">
-                                  <Typography.Text fontWeight={FontWeightEnum.Medium}>
-                                    transactionId:
-                                  </Typography.Text>
-                                  <Link href={`${explorer}/tx/${item.txId}`} target="_blank">
-                                    <HashAddress
-                                      className="pl-[4px]"
-                                      ignorePrefixSuffix={true}
-                                      preLen={8}
-                                      endLen={11}
-                                      address={item.txId}
-                                    ></HashAddress>
-                                  </Link>
-                                </span>
+                              <div className="treasury-info-item-line-2 text-14-22-500">
+                                <span>Transaction ID:</span>
+                                <Link href={`${explorer}/tx/${item.txId}`} target="_blank">
+                                  <HashAddress
+                                    className="pl-[4px]"
+                                    ignorePrefixSuffix={true}
+                                    preLen={8}
+                                    endLen={11}
+                                    address={item.txId}
+                                  ></HashAddress>
+                                </Link>
+                              </div>
+                              <div className="treasury-info-item-line-3 text-14-22-500">
+                                <span>Address:</span>
+                                <Link href={`${explorer}/tx/${item.txId}`} target="_blank">
+                                  <HashAddress
+                                    className="pl-[4px]"
+                                    ignorePrefixSuffix={true}
+                                    preLen={8}
+                                    endLen={11}
+                                    address={isOut ? item.to : item.from}
+                                  ></HashAddress>
+                                </Link>
                               </div>
                             </li>
                           );
@@ -290,20 +326,24 @@ const Treasury: React.FC<IProps> = (props) => {
                     </div>
                   </div>
                 ) : (
-                  <div>
-                    <p className="text-Neutral-neutralTitle text-sm mb-[10px]">
-                      Community development and operations require funding. Deposit the first assets
-                      to the treasury.
+                  <div className="flex flex-col items-center">
+                    <img src={treasuryIconSrc} alt="" className="treasury-icon" />
+                    <h3 className="assets-title">Treasury Assets</h3>
+                    <p className="assets-help-message">
+                      <p>Community development and operations require funding.</p>
+                      <p>Deposit the first assets to the treasury.</p>
                     </p>
-                    <ButtonCheckLogin
-                      type="primary"
-                      size="medium"
-                      onClick={() => {
-                        setDepoistOpen(true);
-                      }}
-                    >
-                      Deposit
-                    </ButtonCheckLogin>
+                    <div>
+                      <ButtonCheckLogin
+                        type="primary"
+                        className="mt-6"
+                        onClick={() => {
+                          setDepoistOpen(true);
+                        }}
+                      >
+                        Deposit
+                      </ButtonCheckLogin>
+                    </div>
                   </div>
                 )}
               </>
@@ -321,27 +361,26 @@ const Treasury: React.FC<IProps> = (props) => {
         }}
         className="treasury-choice-modal"
       >
-        <ul>
-          <li
-            className="choice-item"
-            onClick={() => {
-              setDepoistOpen(true);
-            }}
-          >
-            <div className="choice-item-text">
-              <p className="choice-item-text-title">Deposit assets</p>
-              <p className="choice-item-text-subtitle">Send assets to the DAO treasury</p>
-            </div>
-            <RightArrowOutlined />
+        <ul className="choice-items">
+          <li className="choice-item">
+            <p className="choice-item-text-subtitle">Send assets to the DAO treasury</p>
+            <Button loading={createProposalLoading} onClick={handleCreateProposal}>
+              Withdraw
+            </Button>
           </li>
-          <li className="choice-item" onClick={handleCreateProposal}>
-            <div className="choice-item-text">
-              <p className="choice-item-text-title">Withdraw assets</p>
-              <p className="choice-item-text-subtitle">
-                Create a proposal to withdraw assets to a wallet.
-              </p>
-            </div>
-            {createProposalLoading ? <Spin size="small" /> : <RightArrowOutlined />}
+          <li className="choice-item">
+            <p className="choice-item-text-subtitle">
+              Create a proposal to withdraw assets to a wallet.
+            </p>
+            <Button
+              type="primary"
+              onClick={() => {
+                setDepoistOpen(true);
+                setChoiceOpen(false);
+              }}
+            >
+              Deposit
+            </Button>
           </li>
         </ul>
       </CommonModal>
@@ -349,6 +388,7 @@ const Treasury: React.FC<IProps> = (props) => {
       <CommonModal
         open={depoistOpen}
         destroyOnClose
+        wrapClassName="deposit-modal"
         title={<div className="text-center">Deposit</div>}
         onCancel={() => {
           setDepoistOpen(false);
@@ -363,6 +403,7 @@ const Treasury: React.FC<IProps> = (props) => {
             scrollToFirstError={true}
             autoComplete="off"
             form={form}
+            requiredMark={false}
           >
             <Form.Item
               validateFirst
@@ -378,6 +419,7 @@ const Treasury: React.FC<IProps> = (props) => {
                       symbol: value ?? '',
                       chainId: curChain,
                     };
+                    // setIsValidatedSymbol(false);
                     return new Promise<void>((resolve, reject) => {
                       fetchTokenInfo(reqParams)
                         .then((res) => {
@@ -391,6 +433,7 @@ const Treasury: React.FC<IProps> = (props) => {
                               ),
                             );
                           }
+                          // setIsValidatedSymbol(true);
                           resolve();
                         })
                         .catch(() => {
@@ -400,8 +443,8 @@ const Treasury: React.FC<IProps> = (props) => {
                   },
                 },
               ]}
-              name="symbol"
-              label="Symbol"
+              name={formSymbol}
+              label={<span className="form-label">Symbol</span>}
             >
               <Input
                 placeholder="Enter a token symbol"
@@ -412,8 +455,8 @@ const Treasury: React.FC<IProps> = (props) => {
               />
             </Form.Item>
             <Form.Item
-              dependencies={['symbol']}
-              name="amount"
+              dependencies={[formSymbol]}
+              name={formAmount}
               validateFirst
               rules={[
                 {
@@ -456,7 +499,14 @@ const Treasury: React.FC<IProps> = (props) => {
                           const [balanceInfo, tokenInfo] = res;
                           const decimals = tokenInfo?.decimals;
                           decimalsRef.current = decimals;
-                          if (BigNumber(balanceInfo.balance).lt(timesDecimals(value, decimals))) {
+                          const inputAmount = timesDecimals(value, decimals);
+                          const decimalPlaces = BigNumber(value).decimalPlaces();
+                          if (decimalPlaces && decimalPlaces > decimals) {
+                            return Promise.reject(
+                              new Error(`The maximum number of decimal places is ${decimals}`),
+                            );
+                          }
+                          if (BigNumber(balanceInfo.balance).lt(inputAmount)) {
                             return Promise.reject(new Error('Insufficient balance'));
                           } else {
                             resolve();
@@ -469,7 +519,7 @@ const Treasury: React.FC<IProps> = (props) => {
                   },
                 },
               ]}
-              label="Amount"
+              label={<span className="form-label">Amount</span>}
             >
               <InputNumber
                 placeholder="Please enter the amount you want to deposit"
