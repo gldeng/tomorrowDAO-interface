@@ -20,7 +20,7 @@ interface IActionTabsProps {
   daoId: string;
   onTabChange?: (activeKey: string) => void;
   activeTab?: string;
-  treasuryAssetsData?: ITreasuryAssetsRes;
+  treasuryAssetsData?: IAddressTokenListDataItem[];
 }
 export default function TabsCom(props: IActionTabsProps) {
   const { daoId, onTabChange, activeTab, treasuryAssetsData } = props;
@@ -50,7 +50,7 @@ export default function TabsCom(props: IActionTabsProps) {
   }, [contractInfo, contractAddress]);
   const selectOptions = useMemo(() => {
     return (
-      treasuryAssetsData?.data?.asserts?.map((item) => {
+      treasuryAssetsData?.map((item) => {
         return {
           label: item.symbol,
           value: item.symbol,
@@ -58,6 +58,11 @@ export default function TabsCom(props: IActionTabsProps) {
       }) ?? []
     );
   }, [treasuryAssetsData]);
+  useEffect(() => {
+    if (selectOptions.length) {
+      form.setFieldValue(['treasury', 'amountInfo', 'symbol'], selectOptions?.[0]?.value);
+    }
+  }, [selectOptions, form]);
   useAsyncEffect(async () => {
     const contractInfo = await fetchContractInfo({ chainId: curChain });
     setContractInfo(contractInfo.data);
@@ -142,15 +147,15 @@ export default function TabsCom(props: IActionTabsProps) {
                     validator: (_, value) => {
                       return new Promise<void>((resolve, reject) => {
                         const { amount, symbol } = value;
-                        const symbolInfo = treasuryAssetsData?.data?.asserts?.find(
+                        const symbolInfo = treasuryAssetsData?.find(
                           (item) => item.symbol === symbol,
                         );
                         if (!symbolInfo) {
                           reject(new Error('The symbol is invalid'));
                           return;
                         }
-                        const amountWithDecimals = timesDecimals(amount, symbolInfo.decimal);
-                        if (amountWithDecimals.gt(BigNumber(symbolInfo.amount))) {
+                        const amountWithDecimals = BigNumber(amount);
+                        if (amountWithDecimals.gt(BigNumber(symbolInfo.balance))) {
                           reject(
                             new Error(
                               'The withdrawal amount should be less than the available treasury assets.',

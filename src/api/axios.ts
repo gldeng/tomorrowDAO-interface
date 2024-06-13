@@ -3,7 +3,7 @@ import { message } from 'antd';
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { apiServer } from './request/api-server';
 
-const explorerUrlList = ['explorer-api', 'side-explorer-api'];
+const explorerUrlList = ['explorer-api', 'side-explorer-api', 'token-price-api'];
 interface ResponseType<T> {
   code: string;
   message: string;
@@ -35,7 +35,6 @@ class Request {
         if (response.config.url?.includes('/connect/token')) {
           return res;
         }
-        console.log('response.config.url', response.config);
         if (explorerUrlList.find((path) => response.config.url?.includes(path))) {
           switch (response.status) {
             case 200:

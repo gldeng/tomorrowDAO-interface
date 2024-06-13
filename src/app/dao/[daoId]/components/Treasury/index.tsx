@@ -3,7 +3,7 @@ import { Form, InputNumber, Spin } from 'antd';
 import { useWebLogin } from 'aelf-web-login';
 import { Button, FontWeightEnum, Typography, Input, HashAddress } from 'aelf-design';
 import { RightArrowOutlined } from '@aelf-design/icons';
-import { callContract } from 'contract/callContract';
+import { callContract, callViewContract } from 'contract/callContract';
 import CommonModal from 'components/CommonModal';
 import { GetBalanceByContract, GetTokenInfo } from 'contract/callContract';
 import { emitLoading, eventBus, ResultModal } from 'utils/myEvent';
@@ -24,6 +24,7 @@ import { useRequest } from 'ahooks';
 import useTokenListData from 'hooks/useTokenListData';
 import { checkIsOut } from 'utils/transaction';
 import { numberFormatter } from 'utils/numberFormatter';
+import { SkeletonLine, SkeletonList } from 'components/Skeleton';
 
 interface IProps {
   clssName?: string;
@@ -31,6 +32,7 @@ interface IProps {
   createProposalCheck?: (customRouter?: boolean) => Promise<boolean>;
   // Define your component's props here
 }
+const LoadCount = 5;
 const Treasury: React.FC<IProps> = (props) => {
   const { clssName, daoData, createProposalCheck } = props;
   const [form] = Form.useForm();
@@ -43,13 +45,18 @@ const Treasury: React.FC<IProps> = (props) => {
   const { creator, id } = daoData ?? {};
 
   // treasuryAddress
-  const { data: treasuryAssets, loading } = useRequest(() =>
-    fetchTreasuryAssets({
-      daoId: id,
-      chainId: curChain,
-    }),
-  );
-  const treasuryAddress = treasuryAssets?.data.treasuryAddress;
+  const { data: treasuryAddress, loading: treasuryAddressLoading } = useRequest(async () => {
+    // fetchTreasuryAssets({
+    //   daoId: id,
+    //   chainId: curChain,
+    // }),
+    const res = await callViewContract<string, string>(
+      'GetTreasuryAccountAddress',
+      id,
+      treasuryContractAddress,
+    );
+    return res;
+  });
   const { tokenList, totalValueUSD, tokenListLoading } = useTokenListData({
     address: treasuryAddress,
     currentChain: curChain,
@@ -197,105 +204,117 @@ const Treasury: React.FC<IProps> = (props) => {
   }, [treasuryAddress]);
   const cls = `${clssName} treasury-wrap border-0 lg:border lg:mb-[10px] border-Neutral-Divider border-solid rounded-lg bg-white px-4 pt-2 pb-6 lg:px-8  lg:py-6`;
   const existTransaction = transferListData?.data?.total && transferListData?.data?.total > 0;
+  const showLoadMore = (transferListData?.data?.total ?? 0) > LoadCount;
   return (
     <div className={cls}>
       <Typography.Title fontWeight={FontWeightEnum.Medium} level={6} className="pb-[10px]">
         Treasury Assets
       </Typography.Title>
-      {!treasuryAddress && wallet.address === creator && (
+      {treasuryAddressLoading ? (
+        <SkeletonLine />
+      ) : (
         <>
-          <p className="text-Neutral-neutralTitle text-sm mb-[10px]">
-            The treasury function is not currently enabled for this DAO.
-          </p>
-          <Button className="w-full" type="primary" size="medium" onClick={initTreasury}>
-            Enable Treasury
-          </Button>
-        </>
-      )}
-      {treasuryAddress && (
-        <>
-          {existTransaction ? (
-            <div>
-              <div className="flex items-center">
-                <p className="flex-1">${totalValueUSD}</p>
-                <ButtonCheckLogin
-                  type="primary"
-                  onClick={() => {
-                    setChoiceOpen(true);
-                  }}
-                  size="medium"
-                >
-                  Transfer
-                </ButtonCheckLogin>
-              </div>
-              <div>
-                <p className="flex justify-between mt-5">
-                  <span>Transactions</span>
-                  <Link href={`/dao/${daoData?.id}/treasury`}>
-                    <span>Load More</span>
-                  </Link>
-                </p>
-                <ul>
-                  {transferListData.data.list.map((item) => {
-                    return (
-                      <li className="treasury-info-item" key={item.txId}>
-                        <div className="flex justify-between">
-                          <span className="text-Neutral-Secondary-Text mr-2">
-                            {dayjs(item.time).format('YYYY-MM-DD HH:mm:ss')}
-                            <span className="pl-[4px]">
-                              {checkIsOut(treasuryAddress, item) ? 'Withdraw' : 'Deposit'}
-                            </span>
-                            <span className="pl-[4px]">
-                              {numberFormatter(item.amount)}
-                              {item.symbol}
-                            </span>
-                          </span>
-                        </div>
-                        <div>
-                          <span className="block lg:flex items-center">
-                            <Typography.Text fontWeight={FontWeightEnum.Medium}>
-                              transactionId:
-                            </Typography.Text>
-                            <Link href={`${explorer}/tx/${item.txId}`}>
-                              <HashAddress
-                                className="pl-[4px]"
-                                ignorePrefixSuffix={true}
-                                preLen={8}
-                                endLen={11}
-                                address={'transactionId'}
-                              ></HashAddress>
-                            </Link>
-                          </span>
-                        </div>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            </div>
-          ) : (
-            <div>
+          {!treasuryAddress && wallet.address === creator && (
+            <>
               <p className="text-Neutral-neutralTitle text-sm mb-[10px]">
-                Community development and operations require funding. Deposit the first assets to
-                the treasury.
+                The treasury function is not currently enabled for this DAO.
               </p>
-              <ButtonCheckLogin
-                type="primary"
-                size="medium"
-                onClick={() => {
-                  setDepoistOpen(true);
-                }}
-              >
-                Deposit
-              </ButtonCheckLogin>
-            </div>
+              <Button className="w-full" type="primary" size="medium" onClick={initTreasury}>
+                Enable Treasury
+              </Button>
+            </>
           )}
+          {treasuryAddress &&
+            (transferListLoading ? (
+              <SkeletonLine />
+            ) : (
+              <>
+                {existTransaction ? (
+                  <div>
+                    <div className="flex items-center">
+                      <p className="flex-1 text-[18px] font-bold">$ {totalValueUSD}</p>
+                      <ButtonCheckLogin
+                        type="primary"
+                        onClick={() => {
+                          setChoiceOpen(true);
+                        }}
+                        size="medium"
+                      >
+                        Transfer
+                      </ButtonCheckLogin>
+                    </div>
+                    <div>
+                      <p className="flex justify-between mt-5">
+                        <span className="text-[14px] font-[500]">Transactions</span>
+                        {showLoadMore && (
+                          <Link href={`/dao/${daoData?.id}/treasury`}>
+                            <span>Load More</span>
+                          </Link>
+                        )}
+                      </p>
+                      <ul>
+                        {transferListData?.data?.list?.slice(0, LoadCount).map((item) => {
+                          return (
+                            <li className="treasury-info-item" key={item.txId}>
+                              <div className="flex  justify-between text-Neutral-Secondary-Text">
+                                <span className="">
+                                  {dayjs(item.time).format('YYYY-MM-DD HH:mm:ss')}
+                                </span>
+                                <span className="pl-[4px]">
+                                  {checkIsOut(treasuryAddress, item) ? 'Withdraw' : 'Deposit'}
+                                </span>
+                                <span className="pl-[4px]">
+                                  {numberFormatter(item.amount)} {item.symbol}
+                                </span>
+                              </div>
+                              <div>
+                                <span className="block lg:flex items-center">
+                                  <Typography.Text fontWeight={FontWeightEnum.Medium}>
+                                    transactionId:
+                                  </Typography.Text>
+                                  <Link href={`${explorer}/tx/${item.txId}`} target="_blank">
+                                    <HashAddress
+                                      className="pl-[4px]"
+                                      ignorePrefixSuffix={true}
+                                      preLen={8}
+                                      endLen={11}
+                                      address={item.txId}
+                                    ></HashAddress>
+                                  </Link>
+                                </span>
+                              </div>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </div>
+                  </div>
+                ) : (
+                  <div>
+                    <p className="text-Neutral-neutralTitle text-sm mb-[10px]">
+                      Community development and operations require funding. Deposit the first assets
+                      to the treasury.
+                    </p>
+                    <ButtonCheckLogin
+                      type="primary"
+                      size="medium"
+                      onClick={() => {
+                        setDepoistOpen(true);
+                      }}
+                    >
+                      Deposit
+                    </ButtonCheckLogin>
+                  </div>
+                )}
+              </>
+            ))}
         </>
       )}
       {/* choice: Deposit /  WithDraw*/}
       <CommonModal
         open={choiceOpen}
         title={<div className="text-center">Transfer</div>}
+        wrapClassName="choice-modal-wrap"
         destroyOnClose
         onCancel={() => {
           setChoiceOpen(false);

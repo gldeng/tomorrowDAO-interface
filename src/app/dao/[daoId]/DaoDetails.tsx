@@ -20,7 +20,6 @@ import { IProposalTableParams, TabKey } from './type';
 import LinkNetworkDao from 'components/LinkNetworkDao';
 import { fetchDaoInfo, fetchProposalList } from 'api/request';
 import { curChain } from 'config';
-import './page.css';
 import { ALL, TMRWCreateProposal } from './constants';
 import Link from 'next/link';
 import ErrorResult from 'components/ErrorResult';
@@ -28,11 +27,12 @@ import useNetworkDaoRouter from 'hooks/useNetworkDaoRouter';
 import { useRouter } from 'next/navigation';
 import { divDecimals } from 'utils/calculate';
 import { ButtonCheckLogin } from 'components/ButtonCheckLogin';
-import breadCrumb, { defaultDaoName } from 'utils/breadCrumb';
+import breadCrumb from 'utils/breadCrumb';
 import { eventBus, ResultModal } from 'utils/myEvent';
 import { CommonOperationResultModalType } from 'components/CommonOperationResultModal';
 import { INIT_RESULT_MODAL_CONFIG } from 'components/ResultModal';
 import useUpdateHeaderDaoInfo from 'hooks/useUpdateHeaderDaoInfo';
+import './page.css';
 
 interface IProps {
   daoId: string;
