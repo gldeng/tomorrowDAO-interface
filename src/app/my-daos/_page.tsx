@@ -20,7 +20,6 @@ interface IFetchResult {
 const MyDaosPage = () => {
   const { wallet, login } = useWebLogin();
   const fetchOwnDao: (data?: IFetchResult) => Promise<IFetchResult> = async (data) => {
-    console.log('fetchOwnDao');
     const preList = data?.list ?? [];
     const res = await fetchMyDaoList({
       Type: EMyDAOType.Owned,
@@ -29,7 +28,6 @@ const MyDaosPage = () => {
       SkipCount: preList.length,
       MaxResultCount,
     });
-    console.log('res', res);
     const currentList = res?.data?.[0]?.list ?? [];
     const len = currentList.length + preList.length;
     return {
@@ -52,7 +50,6 @@ const MyDaosPage = () => {
     reload: ownReload,
   } = useInfiniteScroll(fetchOwnDao, { manual: true });
   const fetchParticipatedDao: (data?: IFetchResult) => Promise<IFetchResult> = async (data) => {
-    console.log('fetchParticipatedDao');
     const preList = data?.list ?? [];
     try {
       const res = await fetchMyDaoList({
@@ -62,7 +59,6 @@ const MyDaosPage = () => {
         SkipCount: preList.length,
         MaxResultCount,
       });
-      console.log('res11111111', res);
       const currentList = res?.data?.[0]?.list ?? [];
       const len = currentList.length + preList.length;
       return {

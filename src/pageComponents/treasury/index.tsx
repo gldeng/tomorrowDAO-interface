@@ -2,7 +2,7 @@
 import React, { useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 import { Divider, ConfigProvider } from 'antd';
-import { Table } from 'aelf-design';
+import { HashAddress, IHashAddressProps, Table } from 'aelf-design';
 import TransferTable from './Table/Table';
 import { ColumnsType } from 'antd/es/table';
 import { TokenIconMap } from 'constants/token';
@@ -10,12 +10,16 @@ import useTokenListData, { ITokenListItem } from 'hooks/useTokenListData';
 import BoxWrapper from 'app/proposal/[proposalId]/components/BoxWrapper';
 
 import './index.css';
+import Link from 'next/link';
+import { explorer, mainExplorer } from 'config';
+import { isSideChain } from 'utils/chian';
 interface ITransparentProps {
   address: string;
   currentChain?: string;
+  title: React.ReactNode;
 }
 export default function Transparent(props: ITransparentProps) {
-  const { address, currentChain } = props;
+  const { address, currentChain, title } = props;
   const { tokenList, totalValueUSD, tokenListLoading } = useTokenListData({
     address,
     currentChain,
@@ -57,9 +61,26 @@ export default function Transparent(props: ITransparentProps) {
   return (
     <div>
       <BoxWrapper>
-        <span className="text-Primary-Text leading-[32px] font-[500] text-[24px]">
-          Network DAO Treasury
-        </span>
+        <div className="flex justify-between lg:flex-row flex-col">
+          <span className="text-Primary-Text leading-[32px] font-[500] text-[24px]">{title}</span>
+          <span className="flex lg:flex-row flex-col">
+            <span className="text-Neutral-Secondary-Text leading-[22px] text-[14px] flex pr-[4px]">
+              Treasury Assets Address:
+            </span>
+            <Link
+              href={`${isSideChain(currentChain) ? explorer : mainExplorer}/address/${address}`}
+              target="_blank"
+            >
+              <HashAddress
+                className="treasury-address"
+                address={address}
+                chain={currentChain as IHashAddressProps['chain']}
+                preLen={8}
+                endLen={9}
+              />
+            </Link>
+          </span>
+        </div>
         <Divider className="mb-2 lg:mb-6" />
         <div>
           <div className="text-Neutral-Secondary-Text text-[14px] font-not-italic font-500 h-[22px]">
