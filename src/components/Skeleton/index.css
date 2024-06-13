@@ -7,3 +7,7 @@
     margin-block-start: 8px !important;
   }
 }
+
+.skeleton-line {
+  @apply !py-[10px] !px-[0];
+}

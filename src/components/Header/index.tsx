@@ -11,7 +11,7 @@ import { MenuProps } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { networkType } from 'config';
-import { eventBus, HeaderUpdate } from 'utils/myEvent';
+import { eventBus, HeaderUpdateTreasury } from 'utils/myEvent';
 export enum ENavKeys {
   CreateDAO = 'CreateDAO',
   Resources = 'Resources',
@@ -27,7 +27,7 @@ export enum ENavKeys {
 export default function Header() {
   const { isLG } = useResponsive();
   const pathname = usePathname();
-  const [daoId, setDaoId] = useState('');
+  const [daoId, setDaoId] = useState(null);
   const items: MenuProps['items'] = useMemo(() => {
     return [
       {
@@ -98,19 +98,21 @@ export default function Header() {
           },
         ],
       },
-      {
-        label: <Link href={`/dao/${daoId}/treasury`}>Treasury</Link>,
-        key: ENavKeys.Treasury,
-      },
+      daoId
+        ? {
+            label: <Link href={`/dao/${daoId}/treasury`}>Treasury</Link>,
+            key: ENavKeys.Treasury,
+          }
+        : null,
     ];
   }, [daoId, isLG]);
   useEffect(() => {
-    const callBack = (id: string) => {
+    const setDaoIdCallBack = (id: string) => {
       setDaoId(id);
     };
-    eventBus.on(HeaderUpdate, callBack);
+    eventBus.on(HeaderUpdateTreasury, setDaoIdCallBack);
     return () => {
-      eventBus.off(HeaderUpdate, callBack);
+      eventBus.off(HeaderUpdateTreasury, setDaoIdCallBack);
     };
   }, []);
   const [current, setCurrent] = useState('');

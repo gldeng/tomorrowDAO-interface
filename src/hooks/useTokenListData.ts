@@ -39,27 +39,30 @@ export default function useTokenListData(params: IParams) {
   const tokens = useMemo(() => {
     return tokenListData?.data.map((item) => item.symbol);
   }, [tokenListData]);
-  const { data: tokenPriceData } = useRequest(async () => {
-    const res: Record<string, number> = {};
-    if (!tokens) {
-      return res;
-    }
-    const reqArr = tokens.map((token) => {
-      return fetchTokenPrice(
-        {
-          fsym: token,
-        },
-        currentChain,
-      );
-    });
-    const resArr = await Promise.all(reqArr);
-    for (const priceItem of resArr) {
-      if (priceItem.USD) {
-        res[priceItem.symbol] = priceItem.USD;
+  const { data: tokenPriceData, run: tokenPriceRun } = useRequest(
+    async () => {
+      const res: Record<string, number> = {};
+      if (!tokens) {
+        return res;
       }
-    }
-    return res;
-  });
+      const reqArr = tokens.map((token) => {
+        return fetchTokenPrice(
+          {
+            fsym: token,
+          },
+          currentChain,
+        );
+      });
+      const resArr = await Promise.all(reqArr);
+      for (const priceItem of resArr) {
+        if (priceItem.USD) {
+          res[priceItem.symbol] = priceItem.USD;
+        }
+      }
+      return res;
+    },
+    { manual: true },
+  );
   const tokenList: ITokenListItem[] = (tokenListData?.data ?? []).map((item) => {
     return {
       ...item,
@@ -76,8 +79,13 @@ export default function useTokenListData(params: IParams) {
         sum = sum.plus(item.valueUSD);
       }
     }
-    return sum.decimalPlaces(8, BigNumber.ROUND_DOWN).toFormat();
+    return sum.decimalPlaces(2, BigNumber.ROUND_DOWN).toFormat();
   }, [tokenList]);
+  useEffect(() => {
+    if (tokenListData) {
+      tokenPriceRun();
+    }
+  }, [tokenListData]);
   return {
     tokenPriceData,
     tokenList: tokenList,

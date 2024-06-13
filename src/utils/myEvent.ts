@@ -3,7 +3,8 @@ import { ReactNode } from 'react';
 
 export const UnAuth = 'unAuth';
 export const ResultModal = 'ResultModal';
-export const HeaderUpdate = 'HeaderUpdate';
+export const HeaderUpdateTreasury = 'HeaderUpdateTreasury';
+export const UndoHeaderUpdateTreasury = 'UndoHeaderUpdateTreasury';
 export const eventBus = new EventEmitter();
 
 const EventList = ['SetGlobalLoading'] as const;

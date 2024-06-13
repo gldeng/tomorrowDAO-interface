@@ -102,7 +102,7 @@ export const fetchAddressTokenList = async (
   },
   currentChain?: string,
 ): Promise<IAddressTokenListRes> => {
-  const prefix = currentChain ? '/side-explorer-api/' : '/explorer-api/';
+  const prefix = currentChain ? '/side-explorer-api' : '/explorer-api';
   return explorerServer.get(prefix + '/viewer/balances', {
     params,
   });
@@ -116,7 +116,7 @@ export const fetchAddressTransferList = async (
   },
   currentChain?: string,
 ): Promise<IAddressTransferListRes> => {
-  const prefix = currentChain ? '/side-explorer-api/' : '/explorer-api/';
+  const prefix = currentChain ? '/side-explorer-api' : '/explorer-api';
   return explorerServer.get(prefix + '/viewer/transferList', {
     params,
   });
@@ -124,14 +124,14 @@ export const fetchAddressTransferList = async (
 export const fetchTokenPrice = async (
   params: {
     fsym: string;
-    syms?: string;
+    tsyms?: string;
   },
   currentChain?: string,
 ): Promise<ITokenPriceRes> => {
-  if (!params.syms) {
-    params.syms = 'USD';
+  if (!params.tsyms) {
+    params.tsyms = 'USD';
   }
-  const prefix = currentChain ? '/side-explorer-api/' : '/explorer-api/';
+  const prefix = currentChain ? '/token-price-api' : '/token-price-api';
 
   return explorerServer.get(prefix + '/token/price', {
     params,

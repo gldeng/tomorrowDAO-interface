@@ -12,13 +12,12 @@ interface AmountInputProps {
   value?: IAmountInputValue;
   onChange?: (value: IAmountInputValue) => void;
   selectOptions: SelectProps['options'];
-  treasuryAssetsData?: ITreasuryAssetsRes;
+  treasuryAssetsData?: IAddressTokenListDataItem[];
 }
 export default function AmountInput(props: AmountInputProps) {
   const { value, onChange, treasuryAssetsData, selectOptions } = props;
 
   const handleAmountChange = (amount: number | null) => {
-    console.log(111, amount);
     onChange?.({
       ...value,
       amount,
@@ -32,13 +31,9 @@ export default function AmountInput(props: AmountInputProps) {
   };
   const { status } = Form.Item.useStatus();
   const balance = useMemo(() => {
-    const symbolInfo = treasuryAssetsData?.data.asserts?.find(
-      (item) => item.symbol === value?.symbol,
-    );
+    const symbolInfo = treasuryAssetsData?.find((item) => item.symbol === value?.symbol);
     if (!symbolInfo) return '-';
-    return divDecimals(symbolInfo?.amount, symbolInfo?.decimal)
-      .dp(symbolInfo.decimal, BigNumber.ROUND_DOWN)
-      .toString();
+    return symbolInfo.balance;
   }, [treasuryAssetsData, value?.symbol]);
 
   return (

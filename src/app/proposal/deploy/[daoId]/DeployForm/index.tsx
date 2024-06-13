@@ -16,14 +16,14 @@ import useAelfWebLoginSync from 'hooks/useAelfWebLoginSync';
 import { emitLoading } from 'utils/myEvent';
 import { parseJSON, uint8ToBase64 } from 'utils/parseJSON';
 import { getContract } from '../util';
-import { curChain, NetworkDaoProposalOnChain } from 'config';
+import { curChain, NetworkDaoProposalOnChain, treasuryContractAddress } from 'config';
 import { useRouter, useSearchParams } from 'next/navigation';
 import useIsNetworkDao from 'hooks/useIsNetworkDao';
 import { useRequest } from 'ahooks';
 import formValidateScrollFirstError from 'utils/formValidateScrollFirstError';
 import { EProposalActionTabs } from '../type';
-import { callContract } from 'contract/callContract';
-import { fetchTreasuryAssets } from 'api/request';
+import { callContract, callViewContract, GetTokenInfo } from 'contract/callContract';
+import { fetchAddressTokenList, fetchTreasuryAssets } from 'api/request';
 import { timesDecimals } from 'utils/calculate';
 // import { useWalletSyncCompleted } from 'hooks/useWalletSyncCompleted';
 
@@ -83,30 +83,24 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
       setNext(true);
     }
   };
-  const treasuryAssetsData: ITreasuryAssetsRes = {
-    code: 2000,
-    data: {
-      treasuryAddress: '0x123456789abcdef',
-      asserts: [
-        {
-          symbol: 'USDT',
-          amount: 100000000,
-          decimal: 6,
-        },
-        {
-          symbol: 'ELF',
-          amount: 4566000000,
-          decimal: 8,
-        },
-      ],
-    },
-  };
-  const { data } = useRequest(() =>
-    fetchTreasuryAssets({
-      daoId: daoId,
-      chainId: curChain,
-    }),
-  );
+
+  const { data: addressTokenList } = useRequest(async () => {
+    const address = await callViewContract<string, string>(
+      'GetTreasuryAccountAddress',
+      daoId,
+      treasuryContractAddress,
+    );
+    if (!address) {
+      return null;
+    }
+    return fetchAddressTokenList(
+      {
+        address,
+      },
+      curChain,
+    );
+  });
+  const treasuryAssetsData = addressTokenList?.data;
   const handleSubmit = async () => {
     try {
       if (!isSyncQuery()) {
@@ -123,14 +117,17 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
       };
       emitLoading(true, 'Publishing the proposal...');
       if (activeTab === EProposalActionTabs.TREASURY) {
-        const symbolInfo = treasuryAssetsData.data.asserts.find((item) => {
-          return item.symbol === res.treasury.amountInfo.symbol;
-        });
+        const tokenInfo = await GetTokenInfo(
+          {
+            symbol: res.treasury.amountInfo.symbol,
+          },
+          { chain: curChain },
+        );
         const contractParams = {
           proposalBasicInfo: basicInfo,
           recipient: res.treasury.recipient,
           symbol: res.treasury.amountInfo.symbol,
-          amount: timesDecimals(res.treasury.amountInfo.amount, symbolInfo?.decimal),
+          amount: timesDecimals(res.treasury.amountInfo.amount, tokenInfo.decimals),
         };
         console.log('contractParams', contractParams);
         // CreateTransferProposal

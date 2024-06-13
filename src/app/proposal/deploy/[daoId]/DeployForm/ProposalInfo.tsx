@@ -26,7 +26,7 @@ interface ProposalInfoProps {
   onSubmit: () => void;
   onTabChange?: (activeKey: string) => void;
   activeTab?: string;
-  treasuryAssetsData?: ITreasuryAssetsRes;
+  treasuryAssetsData?: IAddressTokenListDataItem[];
 }
 
 const ProposalInfo = (props: ProposalInfoProps) => {
