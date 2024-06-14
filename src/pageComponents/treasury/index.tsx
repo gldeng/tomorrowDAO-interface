@@ -13,6 +13,7 @@ import './index.css';
 import Link from 'next/link';
 import { explorer, mainExplorer } from 'config';
 import { isSideChain } from 'utils/chian';
+import { numberFormatter } from 'utils/numberFormatter';
 interface ITransparentProps {
   address: string;
   currentChain?: string;
@@ -49,6 +50,9 @@ export default function Transparent(props: ITransparentProps) {
       sorter: (a, b) => Number(a.balance) - Number(b.balance),
       className: 'table-header-sorter-left',
       showSorterTooltip: false,
+      render(balance) {
+        return numberFormatter(balance);
+      },
     },
     {
       title: 'value',

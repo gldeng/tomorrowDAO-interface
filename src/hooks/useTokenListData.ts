@@ -53,10 +53,13 @@ export default function useTokenListData(params: IParams) {
           currentChain,
         );
       });
-      const resArr = await Promise.all(reqArr);
+      const resArr = await Promise.allSettled(reqArr);
       for (const priceItem of resArr) {
-        if (priceItem.USD) {
-          res[priceItem.symbol] = priceItem.USD;
+        if (priceItem.status === 'fulfilled') {
+          const data = priceItem.value;
+          if (data.USD) {
+            res[data.symbol] = data.USD;
+          }
         }
       }
       return res;
