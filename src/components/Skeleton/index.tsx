@@ -29,7 +29,48 @@ const SkeletonList: React.FC = () => {
     </>
   );
 };
+const SkeletonDaoItemList: React.FC = () => {
+  return (
+    <>
+      <List
+        itemLayout="vertical"
+        size="large"
+        dataSource={listData}
+        renderItem={(item) => (
+          <List.Item key={item.id}>
+            <AntdSkeleton
+              className="my-dao-item-skeleton"
+              loading
+              active
+              avatar={{
+                shape: 'circle',
+                size: 'small',
+              }}
+              paragraph={false}
+            ></AntdSkeleton>
+          </List.Item>
+        )}
+      />
+    </>
+  );
+};
+const SkeletonLine: React.FC = () => {
+  return (
+    <>
+      <List
+        itemLayout="vertical"
+        size="large"
+        dataSource={[...listData, ...listData]}
+        renderItem={(item) => (
+          <List.Item key={item.id} className="skeleton-line">
+            <AntdSkeleton loading active avatar={false} paragraph={false}></AntdSkeleton>
+          </List.Item>
+        )}
+      />
+    </>
+  );
+};
 const Skeleton: React.FC = () => {
   return <AntdSkeleton paragraph={{ rows: 4 }} className="skeleton-wrap" active />;
 };
-export { SkeletonList, Skeleton };
+export { SkeletonList, Skeleton, SkeletonDaoItemList, SkeletonLine };

@@ -6,45 +6,39 @@ import { Form } from 'antd';
 import { memo, useEffect, useMemo, useState } from 'react';
 import { ResponsiveSelect } from 'components/ResponsiveSelect';
 import MarkdownEditor from 'components/MarkdownEditor';
-import Editor from '@monaco-editor/react';
 import { ReactComponent as ArrowIcon } from 'assets/imgs/arrow-icon.svg';
 import { ContractMethodType, ProposalType, proposalTypeList } from 'types';
-import { fetchGovernanceMechanismList, fetchContractInfo, fetchVoteSchemeList } from 'api/request';
+import { fetchGovernanceMechanismList, fetchVoteSchemeList } from 'api/request';
 import { curChain } from 'config';
 import { useAsyncEffect } from 'ahooks';
 import { GetDaoProposalTimePeriodContract } from 'contract/callContract';
 import dayjs from 'dayjs';
 import { HighCouncilName, ReferendumName, VoteMechanismNameLabel } from 'constants/proposal';
+import ActionTabs from './ActionTabs/index';
+import { EProposalActionTabs, EVoteMechanismNameType } from '../type';
 
-const contractMethodNamePath = ['transaction', 'contractMethodName'];
 const voterAndExecuteNamePath = ['proposalBasicInfo', 'schemeAddress'];
+const voteSchemeName = ['proposalBasicInfo', 'voteSchemeId'];
 
 interface ProposalInfoProps {
   next?: () => void;
   className?: string;
   daoId: string;
   onSubmit: () => void;
+  onTabChange?: (activeKey: string) => void;
+  activeTab?: string;
+  treasuryAssetsData?: IAddressTokenListDataItem[];
 }
 
 const ProposalInfo = (props: ProposalInfoProps) => {
   const [governanceMechanismList, setGovernanceMechanismList] = useState<TGovernanceSchemeList>();
-
-  const [contractInfo, setContractInfo] = useState<IContractInfoListData>();
   const [voteScheme, setVoteScheme] = useState<IVoteSchemeListData>();
   const [timePeriod, setTimePeriod] = useState<ITimePeriod | null>(null);
 
-  const { className, daoId, onSubmit } = props;
+  const { className, daoId, onSubmit, onTabChange, activeTab, treasuryAssetsData } = props;
 
-  const contractInfoOptions = useMemo(() => {
-    return contractInfo?.contractInfoList.map((item) => {
-      return {
-        label: item.contractName,
-        value: item.contractAddress,
-      };
-    });
-  }, [contractInfo]);
   const form = Form.useFormInstance();
-  const contractAddress = Form.useWatch(['transaction', 'toAddress'], form);
+
   const proposalType = Form.useWatch('proposalType', form);
   const voterAndExecute = Form.useWatch(voterAndExecuteNamePath, form);
   const currentGovernanceMechanism = useMemo(() => {
@@ -64,39 +58,19 @@ const ProposalInfo = (props: ProposalInfoProps) => {
       };
     });
   }, [governanceMechanismList, proposalType]);
-  const contractMethodOptions = useMemo(() => {
-    const contract = contractInfo?.contractInfoList.find(
-      (item) => item.contractAddress === contractAddress,
-    );
-    return (
-      contract?.functionList?.map((item) => {
-        return {
-          label: item,
-          value: item,
-        };
-      }) ?? []
-    );
-  }, [contractInfo, contractAddress]);
+
   useAsyncEffect(async () => {
-    const [governanceMechanismListRes, contractInfo, voteSchemeListRes] = await Promise.all([
+    const [governanceMechanismListRes, voteSchemeListRes] = await Promise.all([
       fetchGovernanceMechanismList({ chainId: curChain, daoId: daoId }),
-      fetchContractInfo({ chainId: curChain }),
       fetchVoteSchemeList({ chainId: curChain }),
     ]);
     setGovernanceMechanismList(governanceMechanismListRes.data.data);
-    setContractInfo(contractInfo.data);
     setVoteScheme(voteSchemeListRes.data);
   }, [daoId]);
   const proposalDetailDesc = useMemo(() => {
     return proposalTypeList.find((item) => item.value === proposalType)?.desc ?? '';
   }, [proposalType]);
-  // reset Method Name if Contract Address change
-  useEffect(() => {
-    const methodName = form.getFieldValue(contractMethodNamePath);
-    if (!contractInfo?.contractInfoList.includes(methodName)) {
-      form.setFieldValue(contractMethodNamePath, undefined);
-    }
-  }, [contractAddress, form, contractInfo]);
+
   // const
   useAsyncEffect(async () => {
     const timePeriod = await GetDaoProposalTimePeriodContract(daoId, {
@@ -104,6 +78,17 @@ const ProposalInfo = (props: ProposalInfoProps) => {
     });
     setTimePeriod(timePeriod);
   }, [daoId]);
+  useEffect(() => {
+    if (activeTab && activeTab === EProposalActionTabs.TREASURY) {
+      const val = form.getFieldValue(voteSchemeName);
+      const item = voteScheme?.voteSchemeList.find(
+        (item) => item.voteMechanismName === 'UNIQUE_VOTE',
+      );
+      if (val === item?.voteSchemeId) {
+        form.setFieldValue(voteSchemeName, '');
+      }
+    }
+  }, [activeTab, form, voteScheme]);
   return (
     <div className={className}>
       <h2 className="text-[20px] leading-[28px] font-weight">Create a Proposal</h2>
@@ -211,7 +196,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
       </Form.Item>
       {/* 1a1v/1t1v */}
       <Form.Item
-        name={['proposalBasicInfo', 'voteSchemeId']}
+        name={voteSchemeName}
         label={<span className="form-item-label">Voting mechanism</span>}
         initialValue={voteScheme?.voteSchemeList?.[0]?.voteSchemeId}
         rules={[
@@ -223,8 +208,11 @@ const ProposalInfo = (props: ProposalInfoProps) => {
       >
         <Radio.Group>
           {voteScheme?.voteSchemeList.map((item) => {
+            const isDisabled =
+              activeTab === EProposalActionTabs.TREASURY &&
+              EVoteMechanismNameType.UniqueVote === item.voteMechanismName;
             return (
-              <Radio value={item.voteSchemeId} key={item.voteSchemeId}>
+              <Radio value={item.voteSchemeId} key={item.voteSchemeId} disabled={isDisabled}>
                 {VoteMechanismNameLabel[item.voteMechanismName]}
               </Radio>
             );
@@ -233,59 +221,12 @@ const ProposalInfo = (props: ProposalInfoProps) => {
       </Form.Item>
       {/* transaction: */}
       {proposalType === ProposalType.GOVERNANCE && (
-        <>
-          <Form.Item
-            name={['transaction', 'toAddress']}
-            rules={[
-              {
-                required: true,
-                message: 'contract address is required',
-              },
-            ]}
-            label={<span className="form-item-label">Contract Address</span>}
-          >
-            <ResponsiveSelect
-              drawerProps={{
-                title: 'Contract Address',
-              }}
-              options={contractInfoOptions}
-              optionLabelProp="label"
-              placeholder="Select a contract"
-            ></ResponsiveSelect>
-          </Form.Item>
-          <Form.Item
-            name={contractMethodNamePath}
-            label={<span className="form-item-label">Method Name</span>}
-            dependencies={['transaction', 'toAddress']}
-            rules={[
-              {
-                required: true,
-                message: 'method name is required',
-              },
-            ]}
-          >
-            <ResponsiveSelect
-              drawerProps={{
-                title: 'Method Name',
-              }}
-              options={contractMethodOptions}
-              optionLabelProp="label"
-              placeholder="Select a method name"
-            ></ResponsiveSelect>
-          </Form.Item>
-          <Form.Item
-            name={['transaction', 'params']}
-            label={<span className="form-item-label">Method Parameter</span>}
-            rules={[
-              {
-                required: true,
-                message: 'method params is required',
-              },
-            ]}
-          >
-            <Editor defaultLanguage="json" height={176} />
-          </Form.Item>
-        </>
+        <ActionTabs
+          onTabChange={onTabChange}
+          daoId={daoId}
+          activeTab={activeTab}
+          treasuryAssetsData={treasuryAssetsData}
+        />
       )}
 
       <Form.Item

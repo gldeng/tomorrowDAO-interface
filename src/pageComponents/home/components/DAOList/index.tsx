@@ -1,24 +1,31 @@
 import DAOListItem from 'components/DAOListItem';
 import Link from 'next/link';
 import { useInfiniteScroll } from 'ahooks';
-import DownIcon from 'assets/imgs/down.svg';
-import { LoadingOutlined } from '@ant-design/icons';
-import { Empty, Spin } from 'antd';
+import { Empty } from 'antd';
 import { fetchDaoList } from 'api/request';
 import { SkeletonList } from 'components/Skeleton';
 import { curChain } from 'config';
 
 import './index.css';
+import LoadMoreButton from 'components/LoadMoreButton';
 
+interface IFetchResult {
+  list: IDaoItem[];
+  hasData: boolean;
+}
 export default function DAOList() {
-  const fetchDaoInner = async (data: { list: IDaoItem[] } | undefined) => {
+  const fetchDaoInner: (data?: IFetchResult) => Promise<IFetchResult> = async (data) => {
+    const preList = data?.list ?? [];
     const res = await fetchDaoList({
-      skipCount: data?.list?.length ?? 0,
+      skipCount: preList.length,
       maxResultCount: 6,
       chainId: curChain,
     });
+    const currentList = res.data.items ?? [];
+    const len = currentList.length + preList.length;
     return {
       list: res.data.items,
+      hasData: len < res.data.totalCount,
     };
   };
   const { data, loading, loadMore, loadingMore } = useInfiniteScroll(fetchDaoInner);
@@ -46,18 +53,11 @@ export default function DAOList() {
       ) : (
         <Empty description="No results found" className="mb-[30px]" />
       )}
-      <div className="dao-more">
-        <div className="more-button" onClick={loadMore}>
-          {loadingMore ? (
-            <Spin indicator={<LoadingOutlined />} />
-          ) : (
-            <>
-              <span className="more-text">Load More</span>
-              <img className="down-icon" src={DownIcon} alt="down" />
-            </>
-          )}
+      {data?.hasData && (
+        <div className="dao-more">
+          <LoadMoreButton onClick={loadMore} loadingMore={loadingMore} />
         </div>
-      </div>
+      )}
     </div>
   );
 }

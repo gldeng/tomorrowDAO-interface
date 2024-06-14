@@ -16,10 +16,15 @@ import useAelfWebLoginSync from 'hooks/useAelfWebLoginSync';
 import { emitLoading } from 'utils/myEvent';
 import { parseJSON, uint8ToBase64 } from 'utils/parseJSON';
 import { getContract } from '../util';
-import { NetworkDaoProposalOnChain } from 'config';
-import { useRouter } from 'next/navigation';
+import { curChain, NetworkDaoProposalOnChain, treasuryContractAddress } from 'config';
+import { useRouter, useSearchParams } from 'next/navigation';
 import useIsNetworkDao from 'hooks/useIsNetworkDao';
+import { useRequest } from 'ahooks';
 import formValidateScrollFirstError from 'utils/formValidateScrollFirstError';
+import { EProposalActionTabs } from '../type';
+import { callContract, callViewContract, GetTokenInfo } from 'contract/callContract';
+import { fetchAddressTokenList, fetchTreasuryAssets } from 'api/request';
+import { timesDecimals } from 'utils/calculate';
 // import { useWalletSyncCompleted } from 'hooks/useWalletSyncCompleted';
 
 interface IGovernanceModelProps {
@@ -37,8 +42,12 @@ const INIT_RESULT_MODAL_CONFIG: TResultModalConfig = {
 };
 const GovernanceModel = (props: IGovernanceModelProps) => {
   const [form] = Form.useForm();
-  const [isNext, setNext] = useState(false);
+  const searchParams = useSearchParams();
+  const tab = searchParams.get('tab');
   const router = useNetworkDaoRouter();
+  const [activeTab, setActiveTab] = useState(tab ?? EProposalActionTabs.TREASURY);
+
+  const [isNext, setNext] = useState(!!tab);
   const { isNetWorkDao, networkDaoId } = useIsNetworkDao();
   const nextRouter = useRouter();
   const [resultModalConfig, setResultModalConfig] = useState(INIT_RESULT_MODAL_CONFIG);
@@ -74,6 +83,24 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
       setNext(true);
     }
   };
+
+  const { data: addressTokenList } = useRequest(async () => {
+    const address = await callViewContract<string, string>(
+      'GetTreasuryAccountAddress',
+      daoId,
+      treasuryContractAddress,
+    );
+    if (!address) {
+      return null;
+    }
+    return fetchAddressTokenList(
+      {
+        address,
+      },
+      curChain,
+    );
+  });
+  const treasuryAssetsData = addressTokenList?.data;
   const handleSubmit = async () => {
     try {
       if (!isSyncQuery()) {
@@ -83,38 +110,56 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
         openErrorModal();
       }
       const res = await form.validateFields();
-      const contractParams = {
-        ...res,
-        proposalBasicInfo: {
-          ...res.proposalBasicInfo,
-          daoId,
-        },
-      };
-      if (res.proposalType === ProposalTypeEnum.GOVERNANCE) {
-        const params = res.transaction.params;
-        const parsedParams = parseJSON(params);
-        const contractInfo = await getContract(res.transaction.toAddress);
-        const method = contractInfo[res.transaction.contractMethodName];
-        let decoded;
-        if (Array.isArray(parsedParams)) {
-          decoded = method.packInput([...parsedParams]);
-        } else if (typeof parsedParams === 'object' && parsedParams !== null) {
-          decoded = method.packInput(JSON.parse(JSON.stringify(parsedParams)));
-        } else {
-          decoded = method.packInput(parsedParams);
-        }
-        const finalParams = uint8ToBase64(decoded || []) || [];
-        contractParams.transaction = {
-          ...res.transaction,
-          params: finalParams,
-        };
-      }
-      emitLoading(true, 'Publishing the proposal...');
-      const methodName =
-        res.proposalType === ProposalTypeEnum.VETO ? 'CreateVetoProposal' : 'CreateProposal';
-      const createRes = await proposalCreateContractRequest(methodName, contractParams);
-      console.log('proposalCreateContractRequest', createRes);
 
+      const basicInfo = {
+        ...res.proposalBasicInfo,
+        daoId,
+      };
+      emitLoading(true, 'Publishing the proposal...');
+      if (activeTab === EProposalActionTabs.TREASURY) {
+        const tokenInfo = await GetTokenInfo(
+          {
+            symbol: res.treasury.amountInfo.symbol,
+          },
+          { chain: curChain },
+        );
+        const contractParams = {
+          proposalBasicInfo: basicInfo,
+          recipient: res.treasury.recipient,
+          symbol: res.treasury.amountInfo.symbol,
+          amount: timesDecimals(res.treasury.amountInfo.amount, tokenInfo.decimals).toNumber(),
+        };
+        console.log('contractParams', contractParams);
+        // CreateTransferProposal
+        await proposalCreateContractRequest('CreateTransferProposal', contractParams);
+      } else {
+        if (res.proposalType === ProposalTypeEnum.GOVERNANCE) {
+          const contractParams = {
+            ...res,
+            proposalBasicInfo: basicInfo,
+          };
+          const params = res.transaction.params;
+          const parsedParams = parseJSON(params);
+          const contractInfo = await getContract(res.transaction.toAddress);
+          const method = contractInfo[res.transaction.contractMethodName];
+          let decoded;
+          if (Array.isArray(parsedParams)) {
+            decoded = method.packInput([...parsedParams]);
+          } else if (typeof parsedParams === 'object' && parsedParams !== null) {
+            decoded = method.packInput(JSON.parse(JSON.stringify(parsedParams)));
+          } else {
+            decoded = method.packInput(parsedParams);
+          }
+          const finalParams = uint8ToBase64(decoded || []) || [];
+          contractParams.transaction = {
+            ...res.transaction,
+            params: finalParams,
+          };
+          const methodName =
+            res.proposalType === ProposalTypeEnum.VETO ? 'CreateVetoProposal' : 'CreateProposal';
+          await proposalCreateContractRequest(methodName, contractParams);
+        }
+      }
       emitLoading(false);
       setResultModalConfig({
         open: true,
@@ -170,6 +215,7 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
       openErrorModal(undefined, message);
     }
   };
+
   return (
     <div className="deploy-proposal-form mt-[24px] mb-[24px]">
       <Form
@@ -186,7 +232,17 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
         }}
       >
         <ProposalType className={clsx({ hidden: isNext })} next={handleNext} />
-        <ProposalInfo className={clsx({ hidden: !isNext })} daoId={daoId} onSubmit={handleSubmit} />
+        <ProposalInfo
+          className={clsx({ hidden: !isNext })}
+          daoId={daoId}
+          onSubmit={handleSubmit}
+          onTabChange={(key: string) => {
+            console.log('key', key);
+            setActiveTab(key);
+          }}
+          activeTab={activeTab}
+          treasuryAssetsData={treasuryAssetsData}
+        />
       </Form>
       <CommonOperationResultModal
         {...resultModalConfig}

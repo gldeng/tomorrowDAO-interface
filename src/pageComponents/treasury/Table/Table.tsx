@@ -3,31 +3,26 @@ import { Table, HashAddress } from 'aelf-design';
 import { ConfigProvider, Tag, Tooltip } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import Link from 'next/link';
-import NoData from './NoData';
-import { mainExplorer, treasuryAccountAddress } from 'config';
+// import NoData from './NoData';
+import { explorer, mainExplorer } from 'config';
 import { useRequest } from 'ahooks';
 import { fetchAddressTransferList } from 'api/request';
 // import useResponsive from 'hooks/useResponsive';
 import { getFormattedDate } from 'utils/time';
 import { numberFormatter } from 'utils/numberFormatter';
 import { TokenIconMap } from 'constants/token';
+import NoData from 'app/my-votes/components/NoData';
+import { checkIsOut } from 'utils/transaction';
+import { isSideChain } from 'utils/chian';
 
-const checkIsOut = (address: string, record: IAddressTransferListDataListItem) => {
-  const { from, to, isCrossChain } = record;
-  if (isCrossChain === 'Transfer' || isCrossChain === 'no') {
-    if (from === address) {
-      return true;
-    }
-    return false;
-  }
-  // isCrossChain: Receive
-  if (to === address) {
-    return false;
-  }
-  return true;
-};
 const defaultPageSize = 20;
-export default function RecordTable() {
+interface IRecordTableProps {
+  address: string;
+  isNft: boolean;
+  currentChain?: string;
+}
+export default function RecordTable(props: IRecordTableProps) {
+  const { address, currentChain, isNft } = props;
   const [timeFormat, setTimeFormat] = useState('Age');
   // const { isLG } = useResponsive();
 
@@ -42,11 +37,15 @@ export default function RecordTable() {
     run,
   } = useRequest(
     () => {
-      return fetchAddressTransferList({
-        address: treasuryAccountAddress,
+      const params: IAddressTransferListReq = {
+        address,
         pageSize: tableParams.pageSize,
         pageNum: tableParams.page,
-      });
+      };
+      if (isNft) {
+        params.isNft = isNft;
+      }
+      return fetchAddressTransferList(params, currentChain);
     },
     {
       manual: true,
@@ -65,7 +64,10 @@ export default function RecordTable() {
       render(hash) {
         return (
           <span className="txn-hash">
-            <Link href={`${mainExplorer}/tx/${hash}`} target="_blank">
+            <Link
+              href={`${isSideChain(currentChain) ? explorer : mainExplorer}/tx/${hash}`}
+              target="_blank"
+            >
               {hash.slice(0, 15)}...
             </Link>
           </span>
@@ -103,8 +105,11 @@ export default function RecordTable() {
       render(from, record) {
         return (
           <div className="from">
-            <Link href={`${mainExplorer}/address/${from}`} target="_blank">
-              <HashAddress className='treasury-address' address={from} preLen={8} endLen={9} />
+            <Link
+              href={`${isSideChain(currentChain) ? explorer : mainExplorer}/address/${from}`}
+              target="_blank"
+            >
+              <HashAddress className="treasury-address" address={from} preLen={8} endLen={9} />
             </Link>
           </div>
         );
@@ -115,14 +120,17 @@ export default function RecordTable() {
       dataIndex: 'to',
       width: 280,
       render(to, record) {
-        const isOut = checkIsOut(treasuryAccountAddress, record);
+        const isOut = checkIsOut(address, record);
         return (
           <div className="to flex">
-            <Tag color={isOut ? "error" : 'success'} className="w-[36px] flex justify-center">
-              { isOut ? 'out' : 'in' }
+            <Tag color={isOut ? 'error' : 'success'} className="w-[36px] flex justify-center">
+              {isOut ? 'out' : 'in'}
             </Tag>
-            <Link href={`${mainExplorer}/address/${to}`} target="_blank">
-              <HashAddress className='treasury-address' address={to} preLen={8} endLen={9} />
+            <Link
+              href={`${isSideChain(currentChain) ? explorer : mainExplorer}/address/${to}`}
+              target="_blank"
+            >
+              <HashAddress className="treasury-address" address={to} preLen={8} endLen={9} />
             </Link>
           </div>
         );
@@ -142,9 +150,11 @@ export default function RecordTable() {
       // width: 200,
       render(symbol) {
         return (
-          <Link href={`${mainExplorer}/token/${symbol}`}>
+          <Link href={`${isSideChain(currentChain) ? explorer : mainExplorer}/token/${symbol}`}>
             <div className="token flex items-center">
-              {TokenIconMap[symbol] && <img src={TokenIconMap[symbol]} className="token-logo " alt="" />}
+              {TokenIconMap[symbol] && (
+                <img src={TokenIconMap[symbol]} className="token-logo pr-[2px]" alt="" />
+              )}
               {symbol}
             </div>
           </Link>

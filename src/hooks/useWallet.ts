@@ -51,7 +51,7 @@ export const useCheckLoginAndToken = () => {
       setLocalJWT(key, tokenRes as LocalJWTData);
       message.success('log in');
     } else {
-      logout();
+      logout({ noModal: true });
       dispatch(resetLoginStatus());
       message.error('log in failed');
     }
@@ -147,7 +147,7 @@ export const useWalletInit = () => {
     message.error('user cancel');
   });
   const handleClear = () => {
-    logout();
+    logout({ noModal: true });
     dispatch(resetLoginStatus());
     removeJWT();
   };

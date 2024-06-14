@@ -54,6 +54,34 @@ export const callContract = async <T>(
     throw a;
   }
 };
+export const callViewContract = async <Req, Res>(
+  methodName: string,
+  params: Req,
+  address: string,
+): Promise<Res> => {
+  const CallContractMethod = GetContractServiceMethod(curChain, ContractMethodType.VIEW);
+
+  try {
+    const res = await CallContractMethod<Req, Res>({
+      contractAddress: address,
+      methodName,
+      args: params,
+    });
+    console.log('=====callViewContract res: ', methodName, res);
+    const result = res as IContractError;
+
+    if (result?.error || result?.code || result?.Error) {
+      throw formatErrorMsg(result);
+    }
+    const finalRes = res as Res;
+    return finalRes;
+  } catch (error) {
+    console.error('=====callViewContract error:', methodName, JSON.stringify(error));
+    const resError = error as IContractError;
+    const a = formatErrorMsg(resError);
+    throw a;
+  }
+};
 
 export const callMainNetViewContract = async <T>(
   methodName: string,

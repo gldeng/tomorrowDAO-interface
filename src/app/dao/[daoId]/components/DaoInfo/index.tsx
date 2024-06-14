@@ -5,6 +5,7 @@ import useResponsive from 'hooks/useResponsive';
 import PreviewFile from 'components/PreviewFile';
 import { Skeleton } from 'components/Skeleton';
 import { colorfulSocialMediaIconMap } from 'assets/imgs/socialMediaIcon';
+import settingSrc from 'assets/imgs/setting-icon.svg';
 import DaoLogo from 'assets/imgs/dao-logo.svg';
 import ErrorResult from 'components/ErrorResult';
 import Link from 'next/link';
@@ -58,7 +59,7 @@ export default function DaoInfo(props: IParams) {
   } = props;
   const { wallet } = useWebLogin();
 
-  const { isLG } = useResponsive();
+  const { isLG, isSM } = useResponsive();
   const socialMedia = metadata?.socialMedia ?? {};
 
   const socialMediaList = Object.keys(socialMedia).map((key) => {
@@ -164,54 +165,61 @@ export default function DaoInfo(props: IParams) {
       ) : (
         <>
           <div className="dao-detail-dis-title px-4 lg:px-8">
-            <div className="md:flex md:items-center">
+            <div className="flex justify-between items-center w-full">
+              <div>
+                <h2 className="title">{metadata?.name}</h2>
+                <p className="description">{metadata?.description}</p>
+              </div>
               <Image
-                width={32}
-                height={32}
+                width={80}
+                height={80}
                 src={metadata?.logoUrl ?? DaoLogo}
                 alt=""
-                className="mr-2"
+                className="mr-2 rounded-full"
               ></Image>
-              <Typography.Title level={5}>{metadata?.name}</Typography.Title>
-            </div>
-            <div className="flex">
-              {wallet.address === data?.creator && (
-                <Link
-                  href={
-                    isNetworkDAO ? `${NetworkDaoHomePathName}/${daoId}/edit` : `/dao/${daoId}/edit`
-                  }
-                  className="mr-[10px]"
-                >
-                  <Button size="small" className="h-8 leading-none" type="primary">
-                    Settings
-                  </Button>
-                </Link>
-              )}
-
-              <PreviewFile list={fileInfoList} />
             </div>
           </div>
           <div className="dao-detail-dis-dis px-4 lg:px-8">
-            {metadata?.description}
-            <div className="flex gap-2 mt-[16px]">
-              {socialMediaList.map(
-                ({ name, url }, index) =>
-                  url && (
-                    <Link href={getSocialUrl(name, url)} target="_blank" key={index}>
-                      <Image
-                        src={(colorfulSocialMediaIconMapKeys as any)[name]}
-                        alt="media"
-                        width={16}
-                        height={16}
-                      />
-                    </Link>
-                  ),
-              )}
+            <div className=" mt-[16px] flex justify-between items-center">
+              <div className="flex gap-2">
+                {socialMediaList.map(
+                  ({ name, url }, index) =>
+                    url && (
+                      <Link href={getSocialUrl(name, url)} target="_blank" key={index}>
+                        <Image
+                          src={(colorfulSocialMediaIconMapKeys as any)[name]}
+                          alt="media"
+                          width={16}
+                          height={16}
+                        />
+                      </Link>
+                    ),
+                )}
+              </div>
+              <div className="flex">
+                {wallet.address === data?.creator && (
+                  <Link
+                    href={
+                      isNetworkDAO
+                        ? `${NetworkDaoHomePathName}/${daoId}/edit`
+                        : `/dao/${daoId}/edit`
+                    }
+                    className="mr-[10px]"
+                  >
+                    <div className="flex items-center justify-center h-8 bg-Neutral-Default-BG px-2 leading-8 rounded-md cursor-pointer">
+                      <Image width={14} height={14} src={settingSrc} alt=""></Image>
+                      {!isSM && <span className="ml-1 text-neutralPrimaryText">Settings</span>}
+                    </div>
+                  </Link>
+                )}
+
+                <PreviewFile list={fileInfoList} />
+              </div>
             </div>
           </div>
           <Divider className="mb-2 lg:mb-6" />
           <Collapse defaultActiveKey={['1']} ghost>
-            <Collapse.Panel header={<Typography.Title>Creator</Typography.Title>} key="1">
+            <Collapse.Panel header={<Typography.Title>Dao Information</Typography.Title>} key="1">
               <Descriptions
                 layout={isLG ? 'vertical' : 'horizontal'}
                 items={items}

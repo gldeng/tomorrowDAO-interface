@@ -1,13 +1,20 @@
 import { Button, HashAddress } from 'aelf-design';
 import useResponsive from 'hooks/useResponsive';
 import { useCheckLoginAndToken, useWalletService } from 'hooks/useWallet';
-import { dispatch, store, useSelector } from 'redux/store';
-import { resetLoginStatus } from 'redux/reducer/loginStatus';
+import { useSelector } from 'redux/store';
+import {
+  ExitOutlined,
+  InfoCircleOutlined,
+  UserProfileOutlined,
+  WalletOutlined,
+} from '@aelf-design/icons';
 import { ReactComponent as AvatarIcon } from 'assets/imgs/avatar-icon.svg';
 import { WalletType, WebLoginState, useWebLogin } from 'aelf-web-login';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Popover } from 'antd';
+import Link from 'next/link';
 import './index.css';
+import { explorer } from 'config';
 export const LoginAuth = () => {
   const { isLG } = useResponsive();
   const { loginState, login } = useWebLogin();
@@ -28,13 +35,21 @@ export const LoginAuth = () => {
 };
 export default function Login() {
   const { isLG } = useResponsive();
-  const { logout } = useWebLogin();
+  const { logout, loginState } = useWebLogin();
+  const [hovered, setHovered] = useState(false);
+  const hide = () => {
+    setHovered(false);
+  };
+  const handleHoverChange = (open: boolean) => {
+    setHovered(open);
+  };
   const { login, isLogin, walletType } = useWalletService();
   const { walletInfo } = useSelector((store: any) => store.userInfo);
   const info = useSelector((store: any) => store.elfInfo.elfInfo);
   const logoutEvent = () => {
     logout();
   };
+  const isPortkeyLogin = walletType === WalletType.portkey && loginState === WebLoginState.logined;
   const userName = useMemo(() => {
     if (walletInfo) {
       if (walletType === WalletType.discover) {
@@ -54,18 +69,51 @@ export default function Login() {
         <LoginAuth />
       ) : (
         <Popover
-          placement="bottomRight"
+          placement={'bottomRight'}
           overlayClassName="user-popover"
           arrow={false}
           trigger="click"
+          open={hovered}
+          onOpenChange={handleHoverChange}
           content={
-            <div className="logout-container">
-              <div className="user-chain">SideChain {info.curChain}</div>
-              <div className="mb-6">
-                <HashAddress size="small" chain={info.curChain} address={walletInfo.address} />
-              </div>
-              <div className="logout-button" onClick={logoutEvent}>
-                Log Out
+            <div className="header-dropdown-container" onClick={hide}>
+              <Link href={`${explorer}/address/${walletInfo.address}`} target="_blank">
+                <div className="drop-down-items">
+                  <span className="prefix-icon">
+                    <InfoCircleOutlined />
+                  </span>
+                  <HashAddress
+                    size="small"
+                    chain={info.curChain}
+                    address={walletInfo.address}
+                    preLen={8}
+                    endLen={9}
+                  />
+                </div>
+              </Link>
+              {isPortkeyLogin && (
+                <Link href={'/assets'}>
+                  <div className="drop-down-items">
+                    <span className="prefix-icon">
+                      <WalletOutlined />
+                    </span>
+                    My Assets
+                  </div>
+                </Link>
+              )}
+              <Link href={'/my-daos'}>
+                <div className="drop-down-items">
+                  <span className="prefix-icon">
+                    <UserProfileOutlined />
+                  </span>
+                  My DAOs
+                </div>
+              </Link>
+              <div className="drop-down-items" onClick={logoutEvent}>
+                <span className="prefix-icon">
+                  <ExitOutlined />
+                </span>
+                <span>Log out</span>
               </div>
             </div>
           }

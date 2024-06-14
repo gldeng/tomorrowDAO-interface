@@ -1,0 +1,35 @@
+.my-daos {
+
+  .list-header {
+    @apply bg-white border-Neutral-Divider border-solid border rounded-t-lg text-[20px] leading-[28px] font-bold px-[24px] py-[16px];
+  }
+
+  .list-body {
+    @apply bg-white border-Neutral-Divider border-solid border rounded-b-lg border-t-0;
+
+  }
+
+  .sub-title {
+    @apply px-[24px] py-[12px] text-[14px] leading-[20px];
+  }
+
+
+  .list-body-content-item {
+    @apply border-Neutral-Divider border-solid border border-l-0 border-b-0 border-r-0 px-[24px] py-[16px] flex gap-[1rem] items-center;
+
+    img {
+      @apply w-[40px] h-[40px] rounded-full;
+    }
+  }
+
+  .loading-more-wrap {
+    @apply w-full flex justify-center px-[24px] pb-[16px];
+  }
+
+  .more-button {
+
+    button {
+      @apply w-[152px] h-[40px];
+    }
+  }
+}

@@ -49,6 +49,42 @@ interface IListDaoRes {
   data: IDaoData;
   message: string;
 }
+// -------------------------------------my-dao-list----------------------
+interface IMyDaoListDataItem {
+  chainId: string;
+  daoId: string;
+  logo: string;
+  name: string;
+  description: string;
+  creator: string;
+  proposalsNum: number;
+  symbol: string;
+  symbolHoldersNum: number;
+  votersNum: number;
+  isNetworkDAO: boolean;
+  logo: string;
+  highCouncilMemberCount: number;
+}
+
+interface IMyDaoListData {
+  type: number;
+  list: IMyDaoListDataItem[];
+  totalCount: number;
+}
+
+interface IMyDaoListResponse {
+  code: string;
+  data: IMyDaoListData[];
+  message: string;
+}
+
+interface IMyDaoListQueryParams {
+  Type: number;
+  Address: string;
+  ChainId: string;
+  SkipCount: number;
+  MaxResultCount: number;
+}
 // -------------------------------------dao-info-----------------------------
 interface ISocialMedia {
   twitter: string;
@@ -126,6 +162,7 @@ interface IDaoInfoData {
   vetoExecuteTimePeriod: number;
   createTime: string;
   isNetworkDAO: boolean;
+  treasuryAddress?: string;
   highCouncilMemberCount?: number;
 }
 
@@ -444,7 +481,12 @@ interface IAddressTransferListData {
   list: IAddressTransferListDataListItem[];
   total: number;
 }
-
+interface IAddressTransferListReq {
+  pageSize: number;
+  pageNum: number;
+  address: string;
+  isNft?: boolean;
+}
 interface IAddressTransferListRes {
   msg: string;
   code: number;
@@ -523,4 +565,32 @@ interface IExecutableListRes {
   code: string;
   data: IExecutableListResData;
   message: string;
+}
+// -------------------  treasury-assets ---------------------------------
+interface ITreasuryAssetsReq {
+  chainId: string;
+  daoId: string;
+  symbols?: string[];
+}
+interface ITreasuryAssetsAsset {
+  symbol: string;
+  amount: number;
+  decimal: number;
+}
+
+interface ITreasuryAssetsData {
+  treasuryAddress: string;
+  asserts: ITreasuryAssetsAsset[];
+}
+
+interface ITreasuryAssetsRes {
+  code: number;
+  data: ITreasuryAssetsData;
+}
+// -------------------  treasury-records ---------------------------------
+interface ITreasuryRecordsReq {
+  daoId: string;
+  chainId: string;
+  skipCount: number;
+  maxResultCount: number;
 }

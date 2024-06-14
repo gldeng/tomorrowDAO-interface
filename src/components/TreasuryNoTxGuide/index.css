@@ -1,0 +1,17 @@
+.treasury-no-tx-icon {
+  @apply mt-6;
+}
+
+.treasury-no-tx-title {
+  @apply font-[500] text-[20px] leading-[28px] mt-6;
+}
+
+.treasury-no-tx-help-message {
+  @apply font-normal text-[14px] leading-[22px] mt-[8px] text-Neutral-Secondary-Text text-center;
+}
+
+.treasury-no-tx-modal {
+  .treasury-no-tx-label {
+    @apply text-[16px] leading-[24px];
+  }
+}

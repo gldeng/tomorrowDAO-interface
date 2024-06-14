@@ -3,6 +3,7 @@ import { message } from 'antd';
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { apiServer } from './request/api-server';
 
+const explorerUrlList = ['explorer-api', 'side-explorer-api', 'token-price-api'];
 interface ResponseType<T> {
   code: string;
   message: string;
@@ -34,7 +35,7 @@ class Request {
         if (response.config.url?.includes('/connect/token')) {
           return res;
         }
-        if (config.baseURL?.includes('/explorer-api')) {
+        if (explorerUrlList.find((path) => response.config.url?.includes(path))) {
           switch (response.status) {
             case 200:
               return res;
@@ -123,7 +124,7 @@ class Request {
 }
 
 const explorerServer = new Request({
-  baseURL: '/explorer-api/',
+  baseURL: '',
 });
 const tokenServer = new Request({
   baseURL: '',

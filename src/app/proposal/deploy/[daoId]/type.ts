@@ -96,3 +96,10 @@ export interface IContractInfo {
 }
 
 export type TContractInfoList = IContractInfo[];
+export interface IProposalSearchParams {
+  tab: string;
+}
+export enum EProposalActionTabs {
+  TREASURY = 'treasury',
+  CUSTOM_ACTION = 'customAction',
+}
