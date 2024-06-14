@@ -245,7 +245,10 @@ const Treasury: React.FC<IProps> = (props) => {
                             </div>
                             <div className="treasury-info-item-line-3 text-14-22-500">
                               <span>Address:</span>
-                              <Link href={`${explorer}/address/${item.txId}`} target="_blank">
+                              <Link
+                                href={`${explorer}/address/${isOut ? item.to : item.from}`}
+                                target="_blank"
+                              >
                                 <HashAddress
                                   className="pl-[4px]"
                                   preLen={8}
