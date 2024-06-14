@@ -14,13 +14,15 @@ import Link from 'next/link';
 import { explorer, mainExplorer } from 'config';
 import { isSideChain } from 'utils/chian';
 import { numberFormatter } from 'utils/numberFormatter';
+import TreasuryNoTxGuide from 'components/TreasuryNoTxGuide';
 interface ITransparentProps {
   address: string;
+  isNetworkDao: boolean;
   currentChain?: string;
   title: React.ReactNode;
 }
 export default function Transparent(props: ITransparentProps) {
-  const { address, currentChain, title } = props;
+  const { address, currentChain, title, isNetworkDao } = props;
   const { tokenList, totalValueUSD, tokenListLoading } = useTokenListData({
     address,
     currentChain,
@@ -66,6 +68,8 @@ export default function Transparent(props: ITransparentProps) {
       },
     },
   ];
+  const isShowGuide = tokenList.length === 0 && !tokenListLoading && !isNetworkDao;
+  console.log('isShowGuide', isShowGuide);
   return (
     <div>
       <BoxWrapper>
@@ -90,48 +94,57 @@ export default function Transparent(props: ITransparentProps) {
           </span>
         </div>
         <Divider className="mb-2 lg:mb-6" />
-        <div>
-          <div className="text-Neutral-Secondary-Text text-[14px] font-not-italic font-500 h-[22px]">
-            Treasury Balance
-          </div>
-          <div className="self-stretch text-neutralTitle text-[24px] font-not-italic font-500 h-[32px] mt-[8px]">
-            $ {totalValueUSD}
-          </div>
-        </div>
-        <div>
-          <ConfigProvider>
-            <Table
-              columns={columns as any}
-              dataSource={tokenList ?? []}
-              loading={tokenListLoading}
-            ></Table>
-          </ConfigProvider>
-        </div>
+        {isShowGuide ? (
+          <TreasuryNoTxGuide address={address} />
+        ) : (
+          <>
+            <div>
+              <div className="text-Neutral-Secondary-Text text-[14px] font-not-italic font-500 h-[22px]">
+                Treasury Balance
+              </div>
+              <div className="self-stretch text-neutralTitle text-[24px] font-not-italic font-500 h-[32px] mt-[8px]">
+                $ {totalValueUSD}
+              </div>
+            </div>
+            <div>
+              <ConfigProvider>
+                <Table
+                  columns={columns as any}
+                  dataSource={tokenList ?? []}
+                  loading={tokenListLoading}
+                ></Table>
+              </ConfigProvider>
+            </div>
+          </>
+        )}
+
         <div></div>
       </BoxWrapper>
-      <BoxWrapper className="mt-[20px]">
-        <h2 className="pb-[20px]">All Income and Expenses</h2>
-        <Tabs
-          defaultActiveKey="1"
-          size="small"
-          items={[
-            {
-              key: '1',
-              label: 'Token Transfers',
-              children: (
-                <TransferTable address={address} currentChain={currentChain} isNft={false} />
-              ),
-            },
-            {
-              key: '2',
-              label: 'NFT Transfers',
-              children: (
-                <TransferTable address={address} currentChain={currentChain} isNft={true} />
-              ),
-            },
-          ]}
-        />
-      </BoxWrapper>
+      {!isShowGuide && (
+        <BoxWrapper className="mt-[20px]">
+          <h2 className="pb-[20px]">All Income and Expenses</h2>
+          <Tabs
+            defaultActiveKey="1"
+            size="small"
+            items={[
+              {
+                key: '1',
+                label: 'Token Transfers',
+                children: (
+                  <TransferTable address={address} currentChain={currentChain} isNft={false} />
+                ),
+              },
+              {
+                key: '2',
+                label: 'NFT Transfers',
+                children: (
+                  <TransferTable address={address} currentChain={currentChain} isNft={true} />
+                ),
+              },
+            ]}
+          />
+        </BoxWrapper>
+      )}
     </div>
   );
 }

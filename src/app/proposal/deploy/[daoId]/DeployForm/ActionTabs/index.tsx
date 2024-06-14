@@ -83,6 +83,7 @@ export default function TabsCom(props: IActionTabsProps) {
       type="card"
       onChange={onTabChange}
       animated
+      destroyInactiveTabPane={true}
       items={[
         {
           label: (

@@ -3,7 +3,7 @@
 import { Radio, Input, Tooltip, Button } from 'aelf-design';
 import { InfoCircleOutlined } from '@aelf-design/icons';
 import { Form } from 'antd';
-import { memo, useMemo, useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 import { ResponsiveSelect } from 'components/ResponsiveSelect';
 import MarkdownEditor from 'components/MarkdownEditor';
 import { ReactComponent as ArrowIcon } from 'assets/imgs/arrow-icon.svg';
@@ -18,6 +18,7 @@ import ActionTabs from './ActionTabs/index';
 import { EProposalActionTabs, EVoteMechanismNameType } from '../type';
 
 const voterAndExecuteNamePath = ['proposalBasicInfo', 'schemeAddress'];
+const voteSchemeName = ['proposalBasicInfo', 'voteSchemeId'];
 
 interface ProposalInfoProps {
   next?: () => void;
@@ -77,6 +78,17 @@ const ProposalInfo = (props: ProposalInfoProps) => {
     });
     setTimePeriod(timePeriod);
   }, [daoId]);
+  useEffect(() => {
+    if (activeTab && activeTab === EProposalActionTabs.TREASURY) {
+      const val = form.getFieldValue(voteSchemeName);
+      const item = voteScheme?.voteSchemeList.find(
+        (item) => item.voteMechanismName === 'UNIQUE_VOTE',
+      );
+      if (val === item?.voteSchemeId) {
+        form.setFieldValue(voteSchemeName, '');
+      }
+    }
+  }, [activeTab, form, voteScheme]);
   return (
     <div className={className}>
       <h2 className="text-[20px] leading-[28px] font-weight">Create a Proposal</h2>
@@ -184,7 +196,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
       </Form.Item>
       {/* 1a1v/1t1v */}
       <Form.Item
-        name={['proposalBasicInfo', 'voteSchemeId']}
+        name={voteSchemeName}
         label={<span className="form-item-label">Voting mechanism</span>}
         initialValue={voteScheme?.voteSchemeList?.[0]?.voteSchemeId}
         rules={[

@@ -45,7 +45,7 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
   const searchParams = useSearchParams();
   const tab = searchParams.get('tab');
   const router = useNetworkDaoRouter();
-  const [activeTab, setActiveTab] = useState(tab ?? '');
+  const [activeTab, setActiveTab] = useState(tab ?? EProposalActionTabs.TREASURY);
 
   const [isNext, setNext] = useState(!!tab);
   const { isNetWorkDao, networkDaoId } = useIsNetworkDao();
@@ -237,6 +237,7 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
           daoId={daoId}
           onSubmit={handleSubmit}
           onTabChange={(key: string) => {
+            console.log('key', key);
             setActiveTab(key);
           }}
           activeTab={activeTab}

@@ -27,6 +27,7 @@ import { checkIsOut } from 'utils/transaction';
 import { numberFormatter } from 'utils/numberFormatter';
 import { SkeletonLine } from 'components/Skeleton';
 import { getExploreLink } from 'utils/common';
+import TreasuryNoTxGuide, { ITreasuryNoTxGuideRef } from 'components/TreasuryNoTxGuide';
 const formSymbol = 'symbol';
 const formAmount = 'amount';
 interface IProps {
@@ -41,8 +42,9 @@ const Treasury: React.FC<IProps> = (props) => {
   const [form] = Form.useForm();
   const [choiceOpen, setChoiceOpen] = useState(false);
   // const [isValidatedSymbol, setIsValidatedSymbol] = useState(false);
-  const [depoistOpen, setDepoistOpen] = useState(false);
-  const [depositLoading, setDepositLoading] = useState(false);
+  // const [depoistOpen, setDepoistOpen] = useState(false);
+  // const [depositLoading, setDepositLoading] = useState(false);
+  const treasuryNoTxGuideref = useRef<ITreasuryNoTxGuideRef>(null);
   const decimalsRef = useRef<number>(8);
   const router = useRouter();
 
@@ -98,71 +100,6 @@ const Treasury: React.FC<IProps> = (props) => {
       console.log('handleCreateProposal', error);
     } finally {
       setCreateProposalLoading(false);
-    }
-  };
-  const handleDeposit = async () => {
-    setDepositLoading(true);
-    const formRes = await form?.validateFields().catch((err) => {
-      console.log(err);
-      return null;
-    });
-    setDepositLoading(false);
-    if (!formRes) return;
-    setDepoistOpen(false);
-    try {
-      const { symbol, amount } = formRes;
-      const params = {
-        symbol,
-        amount: timesDecimals(amount, decimalsRef.current).toNumber(),
-        to: treasuryAddress,
-      };
-      console.log(formRes);
-      emitLoading(true, 'The deposit is being processed...');
-      const res = await callContract('Transfer', params, sideChainAddress);
-      emitLoading(false);
-      console.log('eventBus.emit');
-      eventBus.emit(ResultModal, {
-        open: true,
-        type: CommonOperationResultModalType.Success,
-        primaryContent: 'The deposit have been submitted successfully.',
-        footerConfig: {
-          buttonList: [
-            {
-              onClick: () => {
-                eventBus.emit(ResultModal, INIT_RESULT_MODAL_CONFIG);
-              },
-              children: 'OK',
-              type: 'primary',
-            },
-            {
-              onClick: () => {
-                window.open(getExploreLink(res.TransactionId, 'transaction'));
-              },
-              children: 'View Transaction Details',
-              type: 'link',
-            },
-          ],
-        },
-      });
-    } catch (error) {
-      const err = error as IContractError;
-      emitLoading(false);
-      eventBus.emit(ResultModal, {
-        open: true,
-        type: CommonOperationResultModalType.Error,
-        primaryContent: 'Deposit Error',
-        secondaryContent: err?.errorMessage?.message || err?.message,
-        footerConfig: {
-          buttonList: [
-            {
-              children: <span>OK</span>,
-              onClick: () => {
-                eventBus.emit(ResultModal, INIT_RESULT_MODAL_CONFIG);
-              },
-            },
-          ],
-        },
-      });
     }
   };
   const initTreasury = async () => {
@@ -256,96 +193,80 @@ const Treasury: React.FC<IProps> = (props) => {
               <SkeletonLine />
             ) : (
               <>
-                {existTransaction ? (
+                <div className={existTransaction ? 'block' : 'hidden'}>
+                  <h2 className="card-title">Treasury Assets</h2>
+                  <div className="flex items-center mt-6 mb-12">
+                    <p className="usd-value">${totalValueUSD}</p>
+                    <ButtonCheckLogin
+                      type="primary"
+                      onClick={() => {
+                        setChoiceOpen(true);
+                      }}
+                      className="!h-[30px]"
+                      size="medium"
+                    >
+                      Transfer
+                    </ButtonCheckLogin>
+                  </div>
                   <div>
-                    <h2 className="card-title">Treasury Assets</h2>
-                    <div className="flex items-center mt-6 mb-12">
-                      <p className="usd-value">${totalValueUSD}</p>
-                      <ButtonCheckLogin
-                        type="primary"
-                        onClick={() => {
-                          setChoiceOpen(true);
-                        }}
-                        className="!h-[30px]"
-                        size="medium"
-                      >
-                        Transfer
-                      </ButtonCheckLogin>
-                    </div>
-                    <div>
-                      <p className="flex justify-between">
-                        <span className="card-title mb-6">Transactions</span>
-                        {/* {showLoadMore && (
+                    <p className="flex justify-between">
+                      <span className="card-title mb-6">Transactions</span>
+                      {/* {showLoadMore && (
                           <Link href={`/dao/${daoData?.id}/treasury`}>
                             <span>Load More</span>
                           </Link>
                         )} */}
-                      </p>
-                      <ul>
-                        {transferListData?.data?.list?.slice(0, LoadCount).map((item) => {
-                          const isOut = checkIsOut(treasuryAddress, item);
-                          return (
-                            <li className="treasury-info-item" key={item.txId}>
-                              <div className="flex justify-between treasury-info-item-line-1 ">
-                                <span className="">
-                                  {dayjs(item.time).format('YYYY-MM-DD HH:mm:ss')}{' '}
-                                  {isOut ? 'Withdraw' : 'Deposit'}
-                                </span>
-                                <span>
-                                  {numberFormatter(item.amount)} {item.symbol}
-                                </span>
-                              </div>
-                              <div className="treasury-info-item-line-2 text-14-22-500">
-                                <span>Transaction ID:</span>
-                                <Link href={`${explorer}/tx/${item.txId}`} target="_blank">
-                                  <HashAddress
-                                    className="pl-[4px]"
-                                    ignorePrefixSuffix={true}
-                                    preLen={8}
-                                    endLen={11}
-                                    address={item.txId}
-                                  ></HashAddress>
-                                </Link>
-                              </div>
-                              <div className="treasury-info-item-line-3 text-14-22-500">
-                                <span>Address:</span>
-                                <Link href={`${explorer}/address/${item.txId}`} target="_blank">
-                                  <HashAddress
-                                    className="pl-[4px]"
-                                    preLen={8}
-                                    endLen={11}
-                                    address={isOut ? item.to : item.from}
-                                    chain={curChain}
-                                  ></HashAddress>
-                                </Link>
-                              </div>
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex flex-col items-center">
-                    <img src={treasuryIconSrc} alt="" className="treasury-icon" />
-                    <h3 className="assets-title">Treasury Assets</h3>
-                    <p className="assets-help-message">
-                      <p>Community development and operations require funding.</p>
-                      <p>Deposit the first assets to the treasury.</p>
                     </p>
-                    <div>
-                      <ButtonCheckLogin
-                        type="primary"
-                        className="mt-6"
-                        onClick={() => {
-                          setDepoistOpen(true);
-                        }}
-                      >
-                        Deposit
-                      </ButtonCheckLogin>
-                    </div>
+                    <ul>
+                      {transferListData?.data?.list?.slice(0, LoadCount).map((item) => {
+                        const isOut = checkIsOut(treasuryAddress, item);
+                        return (
+                          <li className="treasury-info-item" key={item.txId}>
+                            <div className="flex justify-between treasury-info-item-line-1 ">
+                              <span className="">
+                                {dayjs(item.time).format('YYYY-MM-DD HH:mm:ss')}{' '}
+                                {isOut ? 'Withdraw' : 'Deposit'}
+                              </span>
+                              <span>
+                                {numberFormatter(item.amount)} {item.symbol}
+                              </span>
+                            </div>
+                            <div className="treasury-info-item-line-2 text-14-22-500">
+                              <span>Transaction ID:</span>
+                              <Link href={`${explorer}/tx/${item.txId}`} target="_blank">
+                                <HashAddress
+                                  className="pl-[4px]"
+                                  ignorePrefixSuffix={true}
+                                  preLen={8}
+                                  endLen={11}
+                                  address={item.txId}
+                                ></HashAddress>
+                              </Link>
+                            </div>
+                            <div className="treasury-info-item-line-3 text-14-22-500">
+                              <span>Address:</span>
+                              <Link href={`${explorer}/address/${item.txId}`} target="_blank">
+                                <HashAddress
+                                  className="pl-[4px]"
+                                  preLen={8}
+                                  endLen={11}
+                                  address={isOut ? item.to : item.from}
+                                  chain={curChain}
+                                ></HashAddress>
+                              </Link>
+                            </div>
+                          </li>
+                        );
+                      })}
+                    </ul>
                   </div>
-                )}
+                </div>
+
+                <TreasuryNoTxGuide
+                  ref={treasuryNoTxGuideref}
+                  address={treasuryAddress}
+                  className={existTransaction ? 'hidden' : 'block'}
+                />
               </>
             ))}
         </>
@@ -363,6 +284,20 @@ const Treasury: React.FC<IProps> = (props) => {
       >
         <ul className="choice-items">
           <li className="choice-item">
+            <p className="choice-item-text-subtitle">Send assets to the DAO treasury</p>
+            <Button
+              type="primary"
+              onClick={() => {
+                // setDepoistOpen(true);
+                treasuryNoTxGuideref.current?.setDepoistOpen(true);
+                setChoiceOpen(false);
+              }}
+              className="choice-item-btn"
+            >
+              Deposit
+            </Button>
+          </li>
+          <li className="choice-item">
             <p className="choice-item-text-subtitle">Create a proposal to withdraw assets</p>
             <Button
               loading={createProposalLoading}
@@ -372,166 +307,7 @@ const Treasury: React.FC<IProps> = (props) => {
               Withdraw
             </Button>
           </li>
-          <li className="choice-item">
-            <p className="choice-item-text-subtitle">Send assets to the DAO treasury</p>
-            <Button
-              type="primary"
-              onClick={() => {
-                setDepoistOpen(true);
-                setChoiceOpen(false);
-              }}
-              className="choice-item-btn"
-            >
-              Deposit
-            </Button>
-          </li>
         </ul>
-      </CommonModal>
-      {/* Deposit form */}
-      <CommonModal
-        open={depoistOpen}
-        destroyOnClose={true}
-        wrapClassName="deposit-modal"
-        title={<div className="text-center">Deposit</div>}
-        onCancel={() => {
-          setDepoistOpen(false);
-        }}
-        afterClose={() => {
-          form.resetFields();
-          setDepositLoading(false);
-        }}
-      >
-        <div>
-          <Form
-            layout="vertical"
-            name="deposit"
-            scrollToFirstError={true}
-            autoComplete="off"
-            form={form}
-            requiredMark={false}
-          >
-            <Form.Item
-              validateFirst
-              validateTrigger="onBlur"
-              rules={[
-                {
-                  required: true,
-                  message: 'symbol is required',
-                },
-                {
-                  validator: (_, value) => {
-                    // setIsValidatedSymbol(false);
-                    return new Promise<void>((resolve, reject) => {
-                      GetTokenInfo(
-                        {
-                          symbol: value,
-                        },
-                        { chain: curChain },
-                      )
-                        .then((res) => {
-                          if (!res) {
-                            reject(new Error('The token has not yet been issued'));
-                          }
-                          // setIsValidatedSymbol(true);
-                          resolve();
-                        })
-                        .catch(() => {
-                          reject(new Error('The token has not yet been issued.'));
-                        });
-                    });
-                  },
-                },
-              ]}
-              name={formSymbol}
-              label={<span className="form-label">Symbol</span>}
-            >
-              <Input
-                placeholder="Enter a token symbol"
-                onBlur={() => {
-                  const token = form.getFieldValue('symbol');
-                  form.setFieldValue('symbol', token?.toUpperCase());
-                }}
-              />
-            </Form.Item>
-            <Form.Item
-              dependencies={[formSymbol]}
-              name={formAmount}
-              validateFirst
-              rules={[
-                {
-                  required: true,
-                },
-                {
-                  validator: (_, value) => {
-                    if (value <= 0) {
-                      return Promise.reject(new Error('The amount must be greater than 0'));
-                    } else {
-                      return Promise.resolve();
-                    }
-                  },
-                },
-                {
-                  validator: (_, value) => {
-                    const symbol = form.getFieldValue('symbol');
-                    console.log('async validator', symbol);
-                    if (!symbol) {
-                      return Promise.reject(new Error('Please enter the token symbol'));
-                    }
-                    return new Promise<void>((resolve, reject) => {
-                      Promise.all([
-                        GetBalanceByContract(
-                          {
-                            symbol: symbol,
-                            owner: wallet.address,
-                          },
-                          { chain: curChain },
-                        ),
-                        GetTokenInfo(
-                          {
-                            symbol: symbol,
-                          },
-                          { chain: curChain },
-                        ),
-                      ])
-                        .then((res) => {
-                          const [balanceInfo, tokenInfo] = res;
-                          const decimals = tokenInfo?.decimals;
-                          decimalsRef.current = decimals;
-                          const inputAmount = timesDecimals(value, decimals);
-                          const decimalPlaces = BigNumber(value).decimalPlaces();
-                          if (decimalPlaces && decimalPlaces > decimals) {
-                            return Promise.reject(
-                              new Error(`The maximum number of decimal places is ${decimals}`),
-                            );
-                          }
-                          if (BigNumber(balanceInfo.balance).lt(inputAmount)) {
-                            return Promise.reject(new Error('Insufficient balance'));
-                          } else {
-                            resolve();
-                          }
-                        })
-                        .catch((err) => {
-                          reject(err);
-                        });
-                    });
-                  },
-                },
-              ]}
-              label={<span className="form-label">Amount</span>}
-            >
-              <InputNumber
-                placeholder="Please enter the amount you want to deposit"
-                className="w-full"
-                controls={false}
-              />
-            </Form.Item>
-          </Form>
-          <div className="flex justify-center">
-            <Button type="primary" size="medium" onClick={handleDeposit} loading={depositLoading}>
-              Submit
-            </Button>
-          </div>
-        </div>
       </CommonModal>
     </div>
   );
