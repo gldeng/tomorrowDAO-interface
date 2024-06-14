@@ -481,7 +481,12 @@ interface IAddressTransferListData {
   list: IAddressTransferListDataListItem[];
   total: number;
 }
-
+interface IAddressTransferListReq {
+  pageSize: number;
+  pageNum: number;
+  address: string;
+  isNft?: boolean;
+}
 interface IAddressTransferListRes {
   msg: string;
   code: number;

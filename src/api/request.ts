@@ -108,11 +108,7 @@ export const fetchAddressTokenList = async (
 };
 
 export const fetchAddressTransferList = async (
-  params: {
-    pageSize: number;
-    pageNum: number;
-    address: string;
-  },
+  params: IAddressTransferListReq,
   currentChain?: string,
 ): Promise<IAddressTransferListRes> => {
   const prefix = currentChain ? '/side-explorer-api' : '/explorer-api';

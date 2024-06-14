@@ -275,11 +275,11 @@ const Treasury: React.FC<IProps> = (props) => {
                     <div>
                       <p className="flex justify-between">
                         <span className="card-title mb-6">Transactions</span>
-                        {showLoadMore && (
+                        {/* {showLoadMore && (
                           <Link href={`/dao/${daoData?.id}/treasury`}>
                             <span>Load More</span>
                           </Link>
-                        )}
+                        )} */}
                       </p>
                       <ul>
                         {transferListData?.data?.list?.slice(0, LoadCount).map((item) => {
@@ -363,21 +363,24 @@ const Treasury: React.FC<IProps> = (props) => {
       >
         <ul className="choice-items">
           <li className="choice-item">
-            <p className="choice-item-text-subtitle">Send assets to the DAO treasury</p>
-            <Button loading={createProposalLoading} onClick={handleCreateProposal}>
+            <p className="choice-item-text-subtitle">Create a proposal to withdraw assets</p>
+            <Button
+              loading={createProposalLoading}
+              onClick={handleCreateProposal}
+              className="choice-item-btn"
+            >
               Withdraw
             </Button>
           </li>
           <li className="choice-item">
-            <p className="choice-item-text-subtitle">
-              Create a proposal to withdraw assets to a wallet
-            </p>
+            <p className="choice-item-text-subtitle">Send assets to the DAO treasury</p>
             <Button
               type="primary"
               onClick={() => {
                 setDepoistOpen(true);
                 setChoiceOpen(false);
               }}
+              className="choice-item-btn"
             >
               Deposit
             </Button>
@@ -387,11 +390,13 @@ const Treasury: React.FC<IProps> = (props) => {
       {/* Deposit form */}
       <CommonModal
         open={depoistOpen}
-        destroyOnClose
+        destroyOnClose={true}
         wrapClassName="deposit-modal"
         title={<div className="text-center">Deposit</div>}
         onCancel={() => {
           setDepoistOpen(false);
+        }}
+        afterClose={() => {
           form.resetFields();
           setDepositLoading(false);
         }}

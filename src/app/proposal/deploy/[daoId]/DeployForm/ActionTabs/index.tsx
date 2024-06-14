@@ -14,6 +14,8 @@ import AmountInput from './AmountInput';
 import './index.css';
 import { timesDecimals } from 'utils/calculate';
 import BigNumber from 'bignumber.js';
+import Symbol from 'components/Symbol';
+import { GetTokenInfo } from 'contract/callContract';
 const contractMethodNamePath = ['transaction', 'contractMethodName'];
 
 interface IActionTabsProps {
@@ -52,7 +54,7 @@ export default function TabsCom(props: IActionTabsProps) {
     return (
       treasuryAssetsData?.map((item) => {
         return {
-          label: item.symbol,
+          label: <Symbol symbol={item.symbol} />,
           value: item.symbol,
         };
       }) ?? []
@@ -154,16 +156,35 @@ export default function TabsCom(props: IActionTabsProps) {
                           reject(new Error('The symbol is invalid'));
                           return;
                         }
-                        const amountWithDecimals = BigNumber(amount);
-                        if (amountWithDecimals.gt(BigNumber(symbolInfo.balance))) {
-                          reject(
-                            new Error(
-                              'The withdrawal amount should be less than the available treasury assets.',
-                            ),
-                          );
-                        } else {
-                          resolve();
-                        }
+                        GetTokenInfo(
+                          {
+                            symbol: symbol,
+                          },
+                          { chain: curChain },
+                        ).then((tokenInfo) => {
+                          if (!tokenInfo) {
+                            reject(new Error('The symbol is invalid'));
+                            return;
+                          }
+                          const amountWithDecimals = BigNumber(amount);
+                          const decimalPlaces = amountWithDecimals.decimalPlaces();
+                          if (decimalPlaces && decimalPlaces > tokenInfo.decimals) {
+                            return reject(
+                              new Error(
+                                `The maximum number of decimal places is ${tokenInfo.decimals}`,
+                              ),
+                            );
+                          }
+                          if (amountWithDecimals.gt(BigNumber(symbolInfo.balance))) {
+                            reject(
+                              new Error(
+                                'The withdrawal amount should be less than the available treasury assets.',
+                              ),
+                            );
+                          } else {
+                            resolve();
+                          }
+                        });
                       });
                     },
                   },
