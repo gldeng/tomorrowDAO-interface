@@ -18,10 +18,11 @@ import { isSideChain } from 'utils/chian';
 const defaultPageSize = 20;
 interface IRecordTableProps {
   address: string;
+  isNft: boolean;
   currentChain?: string;
 }
 export default function RecordTable(props: IRecordTableProps) {
-  const { address, currentChain } = props;
+  const { address, currentChain, isNft } = props;
   const [timeFormat, setTimeFormat] = useState('Age');
   // const { isLG } = useResponsive();
 
@@ -36,14 +37,15 @@ export default function RecordTable(props: IRecordTableProps) {
     run,
   } = useRequest(
     () => {
-      return fetchAddressTransferList(
-        {
-          address,
-          pageSize: tableParams.pageSize,
-          pageNum: tableParams.page,
-        },
-        currentChain,
-      );
+      const params: IAddressTransferListReq = {
+        address,
+        pageSize: tableParams.pageSize,
+        pageNum: tableParams.page,
+      };
+      if (isNft) {
+        params.isNft = isNft;
+      }
+      return fetchAddressTransferList(params, currentChain);
     },
     {
       manual: true,
@@ -151,7 +153,7 @@ export default function RecordTable(props: IRecordTableProps) {
           <Link href={`${isSideChain(currentChain) ? explorer : mainExplorer}/token/${symbol}`}>
             <div className="token flex items-center">
               {TokenIconMap[symbol] && (
-                <img src={TokenIconMap[symbol]} className="token-logo " alt="" />
+                <img src={TokenIconMap[symbol]} className="token-logo pr-[2px]" alt="" />
               )}
               {symbol}
             </div>

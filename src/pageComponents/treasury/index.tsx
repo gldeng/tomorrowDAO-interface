@@ -1,7 +1,7 @@
 'use client';
 import React, { useMemo } from 'react';
 import BigNumber from 'bignumber.js';
-import { Divider, ConfigProvider } from 'antd';
+import { Divider, ConfigProvider, Tabs } from 'antd';
 import { HashAddress, IHashAddressProps, Table } from 'aelf-design';
 import TransferTable from './Table/Table';
 import { ColumnsType } from 'antd/es/table';
@@ -34,9 +34,9 @@ export default function Transparent(props: ITransparentProps) {
       className: 'treasury-table-column-clear-pl',
       render(token) {
         return (
-          <span>
+          <span className="flex items-center">
             {TokenIconMap[token] && (
-              <img className="token-logo " src={TokenIconMap[token]} alt="" />
+              <img className="token-logo pr-[2px]" src={TokenIconMap[token]} alt="" />
             )}
             {token}
           </span>
@@ -46,8 +46,6 @@ export default function Transparent(props: ITransparentProps) {
     {
       title: 'balance',
       dataIndex: 'balance',
-      defaultSortOrder: 'descend',
-      sorter: (a, b) => Number(a.balance) - Number(b.balance),
       className: 'table-header-sorter-left',
       showSorterTooltip: false,
       render(balance) {
@@ -57,8 +55,14 @@ export default function Transparent(props: ITransparentProps) {
     {
       title: 'value',
       dataIndex: 'valueUSD',
+      defaultSortOrder: 'descend',
+      sorter: (a, b) => Number(a.valueUSD) - Number(b.valueUSD),
       render(value) {
-        return <span>{value?.decimalPlaces?.(8, BigNumber.ROUND_DOWN)?.toFormat() ?? '-'}</span>;
+        return (
+          <span>
+            {value === 0 ? '-' : value?.decimalPlaces?.(8, BigNumber.ROUND_DOWN)?.toFormat() ?? '-'}
+          </span>
+        );
       },
     },
   ];
@@ -107,7 +111,26 @@ export default function Transparent(props: ITransparentProps) {
       </BoxWrapper>
       <BoxWrapper className="mt-[20px]">
         <h2 className="pb-[20px]">All Income and Expenses</h2>
-        <TransferTable address={address} currentChain={currentChain} />
+        <Tabs
+          defaultActiveKey="1"
+          size="small"
+          items={[
+            {
+              key: '1',
+              label: 'Token Transfers',
+              children: (
+                <TransferTable address={address} currentChain={currentChain} isNft={false} />
+              ),
+            },
+            {
+              key: '2',
+              label: 'NFT Transfers',
+              children: (
+                <TransferTable address={address} currentChain={currentChain} isNft={true} />
+              ),
+            },
+          ]}
+        />
       </BoxWrapper>
     </div>
   );

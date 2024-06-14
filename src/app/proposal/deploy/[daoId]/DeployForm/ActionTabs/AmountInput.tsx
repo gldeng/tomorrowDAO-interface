@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { InputNumber, Select, Form, SelectProps } from 'antd';
 import { divDecimals } from 'utils/calculate';
 import BigNumber from 'bignumber.js';
+import { numberFormatter } from 'utils/numberFormatter';
 
 interface IAmountInputValue {
   amount?: number | null;
@@ -54,7 +55,7 @@ export default function AmountInput(props: AmountInputProps) {
           value={value?.symbol}
           options={selectOptions}
         />
-        <p className="mt-[8px]">Balance: {balance}</p>
+        <p className="mt-[8px]">Balance: {numberFormatter(balance)}</p>
       </div>
     </div>
   );

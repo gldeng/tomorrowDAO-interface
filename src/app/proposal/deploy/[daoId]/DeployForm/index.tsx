@@ -127,7 +127,7 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
           proposalBasicInfo: basicInfo,
           recipient: res.treasury.recipient,
           symbol: res.treasury.amountInfo.symbol,
-          amount: timesDecimals(res.treasury.amountInfo.amount, tokenInfo.decimals),
+          amount: timesDecimals(res.treasury.amountInfo.amount, tokenInfo.decimals).toNumber(),
         };
         console.log('contractParams', contractParams);
         // CreateTransferProposal

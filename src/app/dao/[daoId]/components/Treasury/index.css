@@ -48,19 +48,23 @@
 
 .treasury-choice-modal {
   .choice-item {
-    @apply flex-1 flex flex-col justify-between;
+    @apply flex-1 flex items-center justify-between;
+
+    .choice-item-btn {
+      @apply w-[124px];
+    }
   }
 
 
   .choice-item-text-subtitle {
-    @apply text-Primary-Text text-[14px] leading-[22px] mb-6 text-center;
+    @apply text-Primary-Text text-[14px] leading-[22px];
 
   }
 
 }
 
 .choice-items {
-  @apply flex justify-between gap-[16px];
+  @apply flex justify-between gap-[16px] flex-col;
 
 }
 

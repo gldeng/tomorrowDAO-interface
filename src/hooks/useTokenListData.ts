@@ -5,7 +5,7 @@ import { useEffect, useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 export interface ITokenListItem extends IAddressTokenListDataItem {
   price?: number;
-  valueUSD?: BigNumber;
+  valueUSD?: BigNumber | number;
 }
 interface IParams {
   address?: string;
@@ -72,7 +72,7 @@ export default function useTokenListData(params: IParams) {
       price: tokenPriceData?.[item.symbol],
       valueUSD: tokenPriceData?.[item.symbol]
         ? new BigNumber(item.balance).multipliedBy(tokenPriceData[item.symbol])
-        : undefined,
+        : 0,
     };
   });
   const totalValueUSD = useMemo(() => {
