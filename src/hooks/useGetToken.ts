@@ -27,7 +27,7 @@ export const useGetToken = () => {
     retryCount?: number;
   }) => Promise<ITokenRes | null> = useCallback(
     async (props: { params: ITokenParams; needLoading?: boolean; retryCount?: number }) => {
-      const { params, needLoading = false, retryCount = 6 } = props;
+      const { params, needLoading = false, retryCount = 20 } = props;
       try {
         needLoading && emitLoading(true, 'Authorize account...');
         const rest = await fetchToken(params);
@@ -35,6 +35,7 @@ export const useGetToken = () => {
         return rest;
       } catch (error) {
         if (retryCount) {
+          message.info('We will automatically re-verify your account');
           await sleep(1000);
           const retry = retryCount - 1;
           return getTokenFromServer({

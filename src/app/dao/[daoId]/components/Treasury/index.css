@@ -71,9 +71,3 @@
 .choice-modal-wrap {
   /* @apply !z-[999]; */
 }
-
-.deposit-modal {
-  .form-label {
-    @apply text-[16px] leading-[24px];
-  }
-}

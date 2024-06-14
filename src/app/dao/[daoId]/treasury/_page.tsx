@@ -47,6 +47,7 @@ export default function TreasuryDetails(props: ITreasuryDetailsProps) {
           address={treasuryAddress}
           currentChain={curChain}
           title={`${daoData?.data?.metadata?.name ?? 'DAO'} Treasury`}
+          isNetworkDao={false}
         />
       )}
     </div>
