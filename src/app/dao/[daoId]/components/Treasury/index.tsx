@@ -309,13 +309,13 @@ const Treasury: React.FC<IProps> = (props) => {
                               </div>
                               <div className="treasury-info-item-line-3 text-14-22-500">
                                 <span>Address:</span>
-                                <Link href={`${explorer}/tx/${item.txId}`} target="_blank">
+                                <Link href={`${explorer}/address/${item.txId}`} target="_blank">
                                   <HashAddress
                                     className="pl-[4px]"
-                                    ignorePrefixSuffix={true}
                                     preLen={8}
                                     endLen={11}
                                     address={isOut ? item.to : item.from}
+                                    chain={curChain}
                                   ></HashAddress>
                                 </Link>
                               </div>
@@ -370,7 +370,7 @@ const Treasury: React.FC<IProps> = (props) => {
           </li>
           <li className="choice-item">
             <p className="choice-item-text-subtitle">
-              Create a proposal to withdraw assets to a wallet.
+              Create a proposal to withdraw assets to a wallet
             </p>
             <Button
               type="primary"
@@ -415,23 +415,17 @@ const Treasury: React.FC<IProps> = (props) => {
                 },
                 {
                   validator: (_, value) => {
-                    const reqParams = {
-                      symbol: value ?? '',
-                      chainId: curChain,
-                    };
                     // setIsValidatedSymbol(false);
                     return new Promise<void>((resolve, reject) => {
-                      fetchTokenInfo(reqParams)
+                      GetTokenInfo(
+                        {
+                          symbol: value,
+                        },
+                        { chain: curChain },
+                      )
                         .then((res) => {
-                          if (!res.data.name) {
+                          if (!res) {
                             reject(new Error('The token has not yet been issued'));
-                          }
-                          if (res.data.isNFT) {
-                            reject(
-                              new Error(
-                                `${value} is an NFT and cannot be used as governance token.`,
-                              ),
-                            );
                           }
                           // setIsValidatedSymbol(true);
                           resolve();
@@ -473,7 +467,6 @@ const Treasury: React.FC<IProps> = (props) => {
                 },
                 {
                   validator: (_, value) => {
-                    console.log(1, value, _);
                     const symbol = form.getFieldValue('symbol');
                     console.log('async validator', symbol);
                     if (!symbol) {
