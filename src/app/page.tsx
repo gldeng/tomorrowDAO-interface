@@ -1,6 +1,7 @@
 'use client';
 import React, { useEffect } from 'react';
 import { Button } from 'aelf-design';
+import { RightOutlined } from '@ant-design/icons';
 import './home.css';
 import Link from 'next/link';
 import breadCrumb from 'utils/breadCrumb';
@@ -24,6 +25,14 @@ export default function Page() {
             </Button>
           </Link>
         </div>
+        <Link
+          target="_blank"
+          href={'https://medium.com/@tmrwdao/how-to-create-a-dao-on-tmrwdao-platform-cc54fed69259'}
+        >
+          <div className="text-Neutral-Secondary-Text flex items-center mt-12 text-[14px]">
+            <span className="pr-[6px]">Learn More</span> <RightOutlined />
+          </div>
+        </Link>
       </div>
       <ul className="dao-desc-items">
         <li className="dao-desc-items-card">
