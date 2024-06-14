@@ -205,17 +205,17 @@ const Treasury: React.FC<IProps> = (props) => {
                       className="!h-[30px]"
                       size="medium"
                     >
-                      Transfer
+                      New transfer
                     </ButtonCheckLogin>
                   </div>
                   <div>
                     <p className="flex justify-between">
                       <span className="card-title mb-6">Transactions</span>
-                      {/* {showLoadMore && (
-                          <Link href={`/dao/${daoData?.id}/treasury`}>
-                            <span>Load More</span>
-                          </Link>
-                        )} */}
+                      {showLoadMore && (
+                        <Link href={`/dao/${daoData?.id}/treasury`}>
+                          <span>Load More</span>
+                        </Link>
+                      )}
                     </p>
                     <ul>
                       {transferListData?.data?.list?.slice(0, LoadCount).map((item) => {
@@ -274,7 +274,7 @@ const Treasury: React.FC<IProps> = (props) => {
       {/* choice: Deposit /  WithDraw*/}
       <CommonModal
         open={choiceOpen}
-        title={<div className="text-center">Transfer</div>}
+        title={<div className="text-center">New transfer</div>}
         wrapClassName="choice-modal-wrap"
         destroyOnClose
         onCancel={() => {
