@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import LinkReplaceLastPathName from 'components/LinkNetworkDao';
+import LinkNetworkDao from 'components/LinkNetworkDao';
 import { connect } from "react-redux";
 import { Input, Button, Tooltip, Table } from "antd";
 
@@ -32,15 +32,17 @@ function genMyVoteRecordsCols() {
       ...this.getColumnSearchProps("name"),
       render: (text, record) => (
         <Tooltip title={text}>
-          <LinkReplaceLastPathName
+          <LinkNetworkDao
             href={{
               pathname: '/vote/team',
-              search: `pubkey=${record.candidate}`,
+              query: {
+                pubkey: record.candidate
+              }
             }}
             replaceStart="vote"
           >
             {text}
-          </LinkReplaceLastPathName>
+          </LinkNetworkDao>
         </Tooltip>
       ),
     },

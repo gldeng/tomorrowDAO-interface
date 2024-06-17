@@ -121,180 +121,180 @@ const SHORTEST_LOCK_TIME = 90; // day
 var RPCSERVER = DEFAUTRPCSERVER;
 
 // TODO: Why is this undefined?
-const BLOCKS_LIST_COLUMNS = [
-  {
-    title: "Height",
-    dataIndex: "block_height",
-    key: "block_height",
-    width: 150,
-    render: (text) => <Link href={`/block/${text}`}> {text} </Link>,
-  },
-  {
-    title: "Block Hash",
-    dataIndex: "block_hash",
-    key: "block_hash",
-    width: 280,
-    ellipsis: true,
-    render: (text, row) => (
-      <Link title={text} href={`/block/${row.block_height}`}>
-        {" "}
-        {text}{" "}
-      </Link>
-    ),
-  },
-  {
-    title: "Miner",
-    dataIndex: "miner",
-    key: "miner",
-    width: 280,
-    ellipsis: true,
-    render(text) {
-      return (
-        <Link
-          title={`${SYMBOL}_${text}_${CHAIN_ID}`}
-          href={`/address/${addressFormat(text)}`}
-        >{`${SYMBOL}_${text}_${CHAIN_ID}`}</Link>
-      );
-    },
-  },
-  {
-    title: "Dividends",
-    dataIndex: "dividends",
-    key: "dividends",
-    width: 120,
-    render(text) {
-      return <Dividends dividends={JSON.parse(text)} />;
-    },
-  },
-  {
-    title: "Txs",
-    dataIndex: "tx_count ",
-    key: "tx_count ",
-    width: 60,
-    render: (text, row) =>
-      !Number.isNaN(+row.tx_count) && +row.tx_count !== 0 ? (
-        <Link href={`${mainExplorer}/txs/block?${row.block_hash}`}> {row.tx_count} </Link>
-      ) : (
-        row.tx_count
-      ),
-  },
-  {
-    title: "Time",
-    dataIndex: "time",
-    key: "time",
-    render: (time) => (
-      <span> {dayjs(time).format("YYYY/MM/DD HH:mm:ss")} </span>
-    ),
-    //     return <span> {dayjs().from(dayjs(time), true)} </span>;
-  },
-];
+// const BLOCKS_LIST_COLUMNS = [
+//   {
+//     title: "Height",
+//     dataIndex: "block_height",
+//     key: "block_height",
+//     width: 150,
+//     render: (text) => <Link href={`/block/${text}`}> {text} </Link>,
+//   },
+//   {
+//     title: "Block Hash",
+//     dataIndex: "block_hash",
+//     key: "block_hash",
+//     width: 280,
+//     ellipsis: true,
+//     render: (text, row) => (
+//       <Link title={text} href={`/block/${row.block_height}`}>
+//         {" "}
+//         {text}{" "}
+//       </Link>
+//     ),
+//   },
+//   {
+//     title: "Miner",
+//     dataIndex: "miner",
+//     key: "miner",
+//     width: 280,
+//     ellipsis: true,
+//     render(text) {
+//       return (
+//         <Link
+//           title={`${SYMBOL}_${text}_${CHAIN_ID}`}
+//           href={`/address/${addressFormat(text)}`}
+//         >{`${SYMBOL}_${text}_${CHAIN_ID}`}</Link>
+//       );
+//     },
+//   },
+//   {
+//     title: "Dividends",
+//     dataIndex: "dividends",
+//     key: "dividends",
+//     width: 120,
+//     render(text) {
+//       return <Dividends dividends={JSON.parse(text)} />;
+//     },
+//   },
+//   {
+//     title: "Txs",
+//     dataIndex: "tx_count ",
+//     key: "tx_count ",
+//     width: 60,
+//     render: (text, row) =>
+//       !Number.isNaN(+row.tx_count) && +row.tx_count !== 0 ? (
+//         <Link href={`${mainExplorer}/txs/block?${row.block_hash}`}> {row.tx_count} </Link>
+//       ) : (
+//         row.tx_count
+//       ),
+//   },
+//   {
+//     title: "Time",
+//     dataIndex: "time",
+//     key: "time",
+//     render: (time) => (
+//       <span> {dayjs(time).format("YYYY/MM/DD HH:mm:ss")} </span>
+//     ),
+//     //     return <span> {dayjs().from(dayjs(time), true)} </span>;
+//   },
+// ];
 
 export const CONTRACT_VIEWER_URL = "/viewer/address.html#/contract/";
 
-const ALL_TXS_LIST_COLUMNS = [
-  {
-    title: "Tx Id",
-    dataIndex: "tx_id",
-    key: "tx_id",
-    width: 300,
-    ellipsis: true,
-    render: (text, row) => (
-      <Link href={`${mainExplorer}/tx/${row.tx_id}`} title={row.tx_id}>
-        {row.tx_id}
-      </Link>
-    ),
-  },
-  {
-    title: "Height",
-    dataIndex: "block_height",
-    key: "block_height",
-    width: 150,
-    align: "center",
-    render: (text, row) => (
-      <Link href={`${mainExplorer}/block/${row.block_height}`} title={row.block_height}>
-        {" "}
-        {row.block_height}{" "}
-      </Link>
-    ),
-  },
-  {
-    title: "From ",
-    dataIndex: "address_from",
-    key: "address_from",
-    ellipsis: true,
-    render: (text) => (
-      <Link href={`${mainExplorer}/address/${text}`} title={addressFormat(text)}>
-        {" "}
-        {addressFormat(text)}
-      </Link>
-    ),
-  },
-  {
-    title: null,
-    key: "payIcon",
-    width: 50,
-    render: () => <ArrowRightOutlined />,
-  },
-  {
-    title: "To",
-    dataIndex: "address_to",
-    key: "address_to",
-    ellipsis: true,
-    render: (text, row) => {
-      const { contractName, isSystemContract } = row.contractName || {};
-      const name = isSystemContract
-        ? removeAElfPrefix(contractName)
-        : contractName;
-      return (
-        <Link href={`/contract/${text}`} title={addressFormat(text)}>
-          {name || addressFormat(text)}
-        </Link>
-      );
-    },
-  },
-  {
-    title: "Method",
-    dataIndex: "method",
-    key: "method",
-    ellipsis: true,
-  },
-  {
-    title: "Tx Fee",
-    dataIndex: "tx_fee",
-    key: "tx_fee",
-    render(text) {
-      return <Dividends dividends={JSON.parse(text)} />;
-    },
-  },
-  {
-    title: "Amount",
-    dataIndex: "amount",
-    key: "amount",
-    render: (text, row) => {
-      let amount = "-";
-      let symbol;
-      if (row.quantity && row.decimals) {
-        // 1e-7
-        if (row.quantity <= 99) {
-          amount = `0.000000${row.quantity}`;
-        } else if (row.quantity <= 9) {
-          amount = `0.0000000${row.quantity}`;
-        } else {
-          amount = row.quantity / 10 ** row.decimals;
-        }
-      }
-      if (row.symbol) {
-        symbol = `(${row.symbol})`;
-      }
-      return (
-        <span>
-          {amount}
-          {symbol}
-        </span>
-      );
-    },
-  },
-];
+// const ALL_TXS_LIST_COLUMNS = [
+//   {
+//     title: "Tx Id",
+//     dataIndex: "tx_id",
+//     key: "tx_id",
+//     width: 300,
+//     ellipsis: true,
+//     render: (text, row) => (
+//       <Link href={`${mainExplorer}/tx/${row.tx_id}`} title={row.tx_id}>
+//         {row.tx_id}
+//       </Link>
+//     ),
+//   },
+//   {
+//     title: "Height",
+//     dataIndex: "block_height",
+//     key: "block_height",
+//     width: 150,
+//     align: "center",
+//     render: (text, row) => (
+//       <Link href={`${mainExplorer}/block/${row.block_height}`} title={row.block_height}>
+//         {" "}
+//         {row.block_height}{" "}
+//       </Link>
+//     ),
+//   },
+//   {
+//     title: "From ",
+//     dataIndex: "address_from",
+//     key: "address_from",
+//     ellipsis: true,
+//     render: (text) => (
+//       <Link href={`${mainExplorer}/address/${text}`} title={addressFormat(text)}>
+//         {" "}
+//         {addressFormat(text)}
+//       </Link>
+//     ),
+//   },
+//   {
+//     title: null,
+//     key: "payIcon",
+//     width: 50,
+//     render: () => <ArrowRightOutlined />,
+//   },
+//   {
+//     title: "To",
+//     dataIndex: "address_to",
+//     key: "address_to",
+//     ellipsis: true,
+//     render: (text, row) => {
+//       const { contractName, isSystemContract } = row.contractName || {};
+//       const name = isSystemContract
+//         ? removeAElfPrefix(contractName)
+//         : contractName;
+//       return (
+//         <Link href={`/contract/${text}`} title={addressFormat(text)}>
+//           {name || addressFormat(text)}
+//         </Link>
+//       );
+//     },
+//   },
+//   {
+//     title: "Method",
+//     dataIndex: "method",
+//     key: "method",
+//     ellipsis: true,
+//   },
+//   {
+//     title: "Tx Fee",
+//     dataIndex: "tx_fee",
+//     key: "tx_fee",
+//     render(text) {
+//       return <Dividends dividends={JSON.parse(text)} />;
+//     },
+//   },
+//   {
+//     title: "Amount",
+//     dataIndex: "amount",
+//     key: "amount",
+//     render: (text, row) => {
+//       let amount = "-";
+//       let symbol;
+//       if (row.quantity && row.decimals) {
+//         // 1e-7
+//         if (row.quantity <= 99) {
+//           amount = `0.000000${row.quantity}`;
+//         } else if (row.quantity <= 9) {
+//           amount = `0.0000000${row.quantity}`;
+//         } else {
+//           amount = row.quantity / 10 ** row.decimals;
+//         }
+//       }
+//       if (row.symbol) {
+//         symbol = `(${row.symbol})`;
+//       }
+//       return (
+//         <span>
+//           {amount}
+//           {symbol}
+//         </span>
+//       );
+//     },
+//   },
+// ];
 
 const ADDRESS_INFO_COLUMN = [
   {
@@ -313,7 +313,7 @@ const ADDRESS_INFO_COLUMN = [
     key: "value",
   },
 ];
-
+// start
 const RESOURCE_DETAILS_COLUMN = [
   {
     title: "Tx Id",
@@ -428,8 +428,8 @@ export {
   TXSSTATUS,
   txStatusInUpperCase,
   RPCSERVER,
-  BLOCKS_LIST_COLUMNS,
-  ALL_TXS_LIST_COLUMNS,
+  // BLOCKS_LIST_COLUMNS,
+  // ALL_TXS_LIST_COLUMNS,
   ADDRESS_INFO_COLUMN,
   RESOURCE_REALTIME_RECORDS,
   RESOURCE_TURNOVER,

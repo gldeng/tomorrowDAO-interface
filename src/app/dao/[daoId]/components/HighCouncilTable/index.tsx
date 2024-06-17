@@ -25,8 +25,9 @@ export default function HighCounCilTab() {
   const producedBlocksRef = useRef<any>();
   nodeListRef.current = nodeList;
 
-  const getAllTeamDesc = async () => {
-    return explorerServer.get('/vote/getAllTeamDesc', {
+  const getAllTeamDesc = async (currentChain?: string) => {
+    const prefix = currentChain ? '/side-explorer-api' : '/explorer-api';
+    return explorerServer.get(prefix + '/vote/getAllTeamDesc', {
       params: {
         isActive: true,
       },
@@ -214,7 +215,14 @@ export default function HighCounCilTab() {
       key: 'nodeName',
       render: (text: any, record: any) => (
         <Tooltip title={text}>
-          <LinkNetworkDao href={{ pathname: '/vote/team', search: `pubkey=${record.pubkey}` }}>
+          <LinkNetworkDao
+            href={{
+              pathname: '/vote/team',
+              query: {
+                pubkey: record.pubkey,
+              },
+            }}
+          >
             {text}
           </LinkNetworkDao>
         </Tooltip>

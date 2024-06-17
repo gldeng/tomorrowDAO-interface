@@ -3,6 +3,8 @@ import { HeaderLogo } from 'components/Logo';
 import './index.css';
 import Login from 'components/Login';
 import { PCMenu } from 'components/Menu';
+import { Select, SelectProps } from 'antd';
+import qs from 'query-string';
 import Link from 'next/link';
 import useResponsive from 'hooks/useResponsive';
 import { MobileMenu } from 'components/Menu';
@@ -10,10 +12,13 @@ import { ReactComponent as MenuArrow } from 'assets/imgs/menu-arrow.svg';
 import { MenuProps } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { useParams, usePathname } from 'next/navigation';
+import { chainIdSelect } from 'config';
+import LinkNetworkDao from 'components/LinkNetworkDao';
 export enum ENetworkDaoNav {
   treasury = 'treasury',
 }
 export default function Header() {
+  const [selectedChain, setSelectedChain] = useState('');
   const { isLG } = useResponsive();
 
   const pathname = usePathname();
@@ -22,7 +27,7 @@ export default function Header() {
   const items: MenuProps['items'] = useMemo(() => {
     return [
       {
-        label: <Link href={`/network-dao/${networkDaoId}/treasury`}>Treasury</Link>,
+        label: <LinkNetworkDao href={`/treasury`}>Treasury</LinkNetworkDao>,
         key: ENetworkDaoNav.treasury,
       },
       {
@@ -36,29 +41,29 @@ export default function Header() {
         key: 'Governance',
         children: [
           {
-            label: <Link href={`/network-dao/${networkDaoId}/proposal-list`}>Proposals</Link>,
+            label: <LinkNetworkDao href={`/proposal-list`}>Proposals</LinkNetworkDao>,
             key: 'Proposals',
           },
           {
-            label: <Link href={`/network-dao/${networkDaoId}/organization`}>Organisations</Link>,
+            label: <LinkNetworkDao href={`/organization`}>Organisations</LinkNetworkDao>,
             key: 'Organisations',
           },
           {
-            label: <Link href={`/network-dao/${networkDaoId}/vote/election`}>BP Elections</Link>,
+            label: <LinkNetworkDao href={`/vote/election`}>BP Elections</LinkNetworkDao>,
             key: 'BP Elections',
           },
           {
-            label: <Link href={`/network-dao/${networkDaoId}/apply`}>Contract Management</Link>,
+            label: <LinkNetworkDao href={`/apply`}>Contract Management</LinkNetworkDao>,
             key: 'Contract Management',
           },
           {
-            label: <Link href={`/network-dao/${networkDaoId}/resource`}>Resource Token Trade</Link>,
+            label: <LinkNetworkDao href={`/resource`}>Resource Token Trade</LinkNetworkDao>,
             key: 'Resource Token Trade',
           },
         ],
       },
     ];
-  }, [isLG, networkDaoId]);
+  }, [isLG]);
 
   const [current, setCurrent] = useState('CreateDAO');
 
@@ -71,6 +76,18 @@ export default function Header() {
       setCurrent(ENetworkDaoNav.treasury);
     }
   }, [pathname]);
+  useEffect(() => {
+    const searchParams = qs.parse(window.location.search);
+    const chainId = (searchParams.chainId ?? 'AELF') as string;
+    setSelectedChain(chainId);
+  }, []);
+  const handleChange: SelectProps['onChange'] = (obj) => {
+    console.log('obj', obj);
+    const url = new URL(window.location.href);
+    url.searchParams.set('chainId', obj);
+    window.history.replaceState({}, '', url.toString());
+    window.location.reload();
+  };
 
   return (
     <header className="header-container">
@@ -82,7 +99,17 @@ export default function Header() {
             </Link>
             {!isLG && <PCMenu selectedKeys={[current]} items={items} onClick={onClick} />}
           </div>
-          <Login />
+          <div className="flex items-center">
+            <div className="mr-1">
+              <Select
+                value={selectedChain}
+                onChange={handleChange}
+                options={chainIdSelect}
+                className="chain-id-select"
+              />
+            </div>
+            <Login />
+          </div>
         </div>
         {isLG && (
           <div className="header-menu-icon">

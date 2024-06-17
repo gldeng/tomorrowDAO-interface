@@ -5,6 +5,8 @@
 import {
   notification,
 } from 'antd';
+import { isSideChain } from 'utils/chian';
+import getChainIdQuery from 'utils/url';
 import {
   create,
 } from 'apisauce';
@@ -20,14 +22,19 @@ import {
 // import apisauce from './utils/apisauce';
 
 const api = create({
-  baseURL: '/explorer-api',
+  baseURL: '',
 });
 
 const httpErrorHandler = (message, des) => notification.open({
   message,
   description: des,
 });
-
+api.addRequestTransform(request => {
+  const chainIdQuery = getChainIdQuery();
+  const isSide = isSideChain(chainIdQuery.chainId);
+  const prefix = isSide ? '/side-explorer-api' : '/explorer-api';
+  request.url = prefix + request.url;
+})
 api.addResponseTransform((res) => {
   if (res.ok) {
     if (res.data.code === /^2\d{2}$/) return res.data;

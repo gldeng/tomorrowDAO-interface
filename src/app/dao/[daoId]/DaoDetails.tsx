@@ -32,6 +32,7 @@ import { eventBus, ResultModal } from 'utils/myEvent';
 import { CommonOperationResultModalType } from 'components/CommonOperationResultModal';
 import { INIT_RESULT_MODAL_CONFIG } from 'components/ResultModal';
 import useUpdateHeaderDaoInfo from 'hooks/useUpdateHeaderDaoInfo';
+import ExplorerProposalList from '../../network-dao/ExplorerProposalList';
 import './page.css';
 
 interface IProps {
@@ -221,12 +222,18 @@ export default function DeoDetails(props: IProps) {
         children: (
           <div className="tab-all-proposals">
             <div className="tab-all-proposals-header">
-              <Typography.Title fontWeight={FontWeightEnum.Medium} level={6}>
-                Proposals
-              </Typography.Title>
+              {!isNetworkDAO ? (
+                <Typography.Title fontWeight={FontWeightEnum.Medium} level={6}>
+                  Proposals
+                </Typography.Title>
+              ) : (
+                <div></div>
+              )}
               {CreateButton}
             </div>
-            <Filter form={form} tableParams={tableParams} onChangeTableParams={setTableParams} />
+            {!isNetworkDAO && (
+              <Filter form={form} tableParams={tableParams} onChangeTableParams={setTableParams} />
+            )}
           </div>
         ),
       },
@@ -332,7 +339,7 @@ export default function DeoDetails(props: IProps) {
         <div className="dao-detail-content">
           <div className={`dao-detail-content-left`}>
             <div className="dao-detail-content-left-tab">{tabCom}</div>
-            {tabKey === TabKey.PROPOSALS && (
+            {tabKey === TabKey.PROPOSALS && !isNetworkDAO && (
               <div>
                 {proposalLoading ? (
                   <SkeletonList />
@@ -363,7 +370,12 @@ export default function DeoDetails(props: IProps) {
                     return (
                       <LinkNetworkDao
                         key={item.proposalId}
-                        href={`/proposal-detail?proposalId=${item.proposalId}`}
+                        href={{
+                          pathname: `/proposal-detail`,
+                          query: {
+                            proposalId: item.proposalId,
+                          },
+                        }}
                       >
                         <ProposalsItem data={item} />
                       </LinkNetworkDao>
@@ -381,6 +393,7 @@ export default function DeoDetails(props: IProps) {
                 />
               </div>
             )}
+            {tabKey === TabKey.PROPOSALS && isNetworkDAO && <ExplorerProposalList />}
             {/* < 1024 */}
             {isLG && tabKey === TabKey.MYINFO && (
               <>

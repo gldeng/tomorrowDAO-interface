@@ -41,3 +41,15 @@ export const symbolmarketUrl = 'https://test.eforest.finance/symbolmarket';
 
 // explorer
 export const SOCKET_URL_NEW = 'wss://explorer-test.aelf.io';
+
+// header
+export const chainIdSelect = [
+  {
+    value: 'AELF',
+    label: 'MainChain',
+  },
+  {
+    value: 'tDVW',
+    label: 'SideChain',
+  },
+];
