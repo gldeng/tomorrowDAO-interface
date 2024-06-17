@@ -26,7 +26,7 @@ export default function HighCounCilTab() {
   nodeListRef.current = nodeList;
 
   const getAllTeamDesc = async () => {
-    return explorerServer.get('/vote/getAllTeamDesc', {
+    return explorerServer.get('/explorer-api/vote/getAllTeamDesc', {
       params: {
         isActive: true,
       },
