@@ -79,6 +79,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
     setTimePeriod(timePeriod);
   }, [daoId]);
   useEffect(() => {
+    // if active treasury, 1a 1v will disable,
     if (activeTab && activeTab === EProposalActionTabs.TREASURY) {
       const val = form.getFieldValue(voteSchemeName);
       const item = voteScheme?.voteSchemeList.find(
@@ -210,7 +211,8 @@ const ProposalInfo = (props: ProposalInfoProps) => {
           {voteScheme?.voteSchemeList.map((item) => {
             const isDisabled =
               activeTab === EProposalActionTabs.TREASURY &&
-              EVoteMechanismNameType.UniqueVote === item.voteMechanismName;
+              EVoteMechanismNameType.UniqueVote === item.voteMechanismName &&
+              proposalType === ProposalType.GOVERNANCE;
             return (
               <Radio value={item.voteSchemeId} key={item.voteSchemeId} disabled={isDisabled}>
                 {VoteMechanismNameLabel[item.voteMechanismName]}
