@@ -116,7 +116,10 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
         daoId,
       };
       emitLoading(true, 'Publishing the proposal...');
-      if (activeTab === EProposalActionTabs.TREASURY) {
+      if (
+        activeTab === EProposalActionTabs.TREASURY &&
+        res.proposalType === ProposalTypeEnum.GOVERNANCE
+      ) {
         const tokenInfo = await GetTokenInfo(
           {
             symbol: res.treasury.amountInfo.symbol,
@@ -133,11 +136,11 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
         // CreateTransferProposal
         await proposalCreateContractRequest('CreateTransferProposal', contractParams);
       } else {
+        const contractParams = {
+          ...res,
+          proposalBasicInfo: basicInfo,
+        };
         if (res.proposalType === ProposalTypeEnum.GOVERNANCE) {
-          const contractParams = {
-            ...res,
-            proposalBasicInfo: basicInfo,
-          };
           const params = res.transaction.params;
           const parsedParams = parseJSON(params);
           const contractInfo = await getContract(res.transaction.toAddress);
@@ -155,10 +158,10 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
             ...res.transaction,
             params: finalParams,
           };
-          const methodName =
-            res.proposalType === ProposalTypeEnum.VETO ? 'CreateVetoProposal' : 'CreateProposal';
-          await proposalCreateContractRequest(methodName, contractParams);
         }
+        const methodName =
+          res.proposalType === ProposalTypeEnum.VETO ? 'CreateVetoProposal' : 'CreateProposal';
+        await proposalCreateContractRequest(methodName, contractParams);
       }
       emitLoading(false);
       setResultModalConfig({
