@@ -85,7 +85,12 @@ const HeaderInfo = (props: IHeaderInfoProps) => {
             </Typography.Text>
             {isNetWorkDao ? (
               <LinkNetworkDao
-                href={`/proposal-detail?proposalId=${proposalDetailData.vetoProposalId}`}
+                href={{
+                  pathname: `/proposal-detail`,
+                  query: {
+                    proposalId: proposalDetailData.vetoProposalId,
+                  },
+                }}
               >
                 <HashAddress
                   preLen={8}

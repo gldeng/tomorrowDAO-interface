@@ -5,13 +5,13 @@
 
 import React, { PureComponent } from "react";
 import { Row, Col, Spin, message, Button } from "antd";
-import { CHAIN_ID } from "@config/config";
 import {
   SYMBOL,
   ELF_DECIMAL,
   BUY_MORE_THAN_HALT_OF_INVENTORY_TIP,
   FAILED_MESSAGE_DISPLAY_TIME,
 } from "@src/constants";
+import getChainIdQuery from 'utils/url';
 import { thousandsCommaWithDecimal } from "@utils/formater";
 import { regBuyTooManyResource } from "@utils/regExps";
 import getStateJudgment from "@utils/getStateJudgment";
@@ -50,12 +50,13 @@ export default class ResourceBuyModal extends PureComponent {
     };
 
     try {
+      const chainIdQuery = getChainIdQuery();
       const result = await WebLoginInstance.get().callContract({
         contractAddress: contracts.tokenConverter,
         methodName: "Buy",
         args: payload,
         options: {
-          chainId: "AELF"
+          chainId: chainIdQuery.chainId
         }
       });
 
@@ -232,6 +233,7 @@ export default class ResourceBuyModal extends PureComponent {
     } = this.props;
     const { loading } = this.state;
 
+    const CHAIN_ID = 'AELF'
     return (
       <div className="modal resource-modal">
         <Row className="modal-form-item">

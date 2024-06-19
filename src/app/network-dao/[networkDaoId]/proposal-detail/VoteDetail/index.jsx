@@ -35,7 +35,8 @@ import "./index.css";
 import { removePrefixOrSuffix } from "@common/utils";
 import TableLayer from "@components/TableLayer/TableLayer";
 import addressFormat from "@utils/addressFormat";
-import { mainExplorer } from "config";
+import { isSideChainByQueryParams } from 'utils/chian'
+import { explorer, mainExplorer } from "config";
 
 const { Title } = Typography;
 const { viewer } = config;
@@ -57,7 +58,7 @@ async function getPersonalVote(params) {
     { method: "GET" }
   );
 }
-
+const isSideChain = isSideChainByQueryParams();
 const listColumn = [
   {
     title: "Voter",
@@ -67,7 +68,7 @@ const listColumn = [
     width: 300,
     render: (voter) => (
       <a
-        href={`${mainExplorer}/address/${addressFormat(voter)}`}
+        href={`${isSideChain ? explorer : mainExplorer}/address/${addressFormat(voter)}`}
         target="_blank"
         rel="noopener noreferrer"
       >
@@ -83,7 +84,7 @@ const listColumn = [
     width: 300,
     render: (txId) => (
       <a
-        href={`${mainExplorer}/tx/${txId}`}
+        href={`${isSideChain ? explorer : mainExplorer}/tx/${txId}`}
         target="_blank"
         rel="noopener noreferrer"
       >

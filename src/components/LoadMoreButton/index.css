@@ -1,14 +1,23 @@
 .more-button {
+  @apply flex items-center justify-center rounded-lg button-border-normal w-[200px] px-[48px] py-[14px] cursor-pointer;
 
-  button {
-    @apply w-[200px];
-  }
 
-  button>span {
-    @apply flex items-center;
+  &:hover {
+    @apply border-Neutral-Secondary-Text;
   }
 
   .more-text {
-    @apply mr-2 text-sm;
+    @apply mr-2 text-sm font-[500];
+  }
+
+  .loading {
+    @apply w-[20px] h-[20px];
+    animation: rotate 1s linear infinite;
+  }
+}
+
+@keyframes rotate {
+  to {
+    transform: rotate(360deg);
   }
 }

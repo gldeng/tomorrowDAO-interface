@@ -3,6 +3,8 @@
  * @author atom-yang
  */
 import axios from 'axios';
+import { isSideChain } from 'utils/chian';
+import qs from 'query-string';
 import { omitBy } from 'lodash/fp';
 import { isObject } from 'lodash';
 
@@ -12,9 +14,8 @@ const defaultRequestOptions = {
   },
   withCredentials: true,
   method: 'POST',
-  baseURL: '/explorer-api'
+  baseURL: ''
 };
-
 const http = axios.create(defaultRequestOptions);
 
 const needPurify = (rawData) => (isObject(rawData) && !Array.isArray(rawData));
@@ -46,6 +47,12 @@ const handleRequestError = (error) => {
 };
 
 const makeRequestConfig = (url, params, { headers = {}, ...extraOptions }) => {
+  const searchParams = qs.parse(window.location.search);
+  console.log('searchParams.chainId', searchParams.chainId);
+  const isSide = isSideChain(searchParams.chainId);
+  const prefix = isSide ? '/side-explorer-api' : '/explorer-api';
+  // console.log('window.location', url, window.location)
+  url = prefix + url;
   const data = purify(params);
   const config = {
     ...defaultRequestOptions,

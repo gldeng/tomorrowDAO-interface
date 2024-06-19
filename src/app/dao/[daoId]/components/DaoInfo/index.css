@@ -1,19 +1,28 @@
+.dao-basic-info {
+  @apply flex lg:flex-row flex-col gap-2;
+}
+
 .dao-detail-dis {
   @apply border border-Neutral-Divider border-solid rounded-lg bg-white pt-6;
 
-  .dao-detail-dis-title {
+  .dao-detail-logo {
+    @apply lg:order-2 order-1 flex flex-row lg:flex-col lg:items-end justify-between;
+
+    .logo-image {
+      @apply mb-[24px]
+    }
+  }
+
+  .dao-detail-desc {
+    @apply text-neutralTitle lg:order-1 order-2;
+
     .title {
       @apply font-[500] text-[40px] leading-[48px];
     }
 
     .description {
-      @apply font-[400] text-[16px] leading-[24px] pt-[8px];
+      @apply font-[400] text-[16px] leading-[24px] pt-[8px] mb-[24px];
     }
-
-  }
-
-  .dao-detail-dis-dis {
-    @apply text-neutralPrimaryText mt-2.5;
   }
 
   .dis-item {

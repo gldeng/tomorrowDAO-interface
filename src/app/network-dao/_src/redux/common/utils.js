@@ -5,6 +5,7 @@
 import { message } from "antd";
 import moment from "moment";
 import dayjs from "dayjs";
+import getChainIdQuery from 'utils/url';
 import constants from "./constants";
 
 const { viewer } = constants;
@@ -228,12 +229,13 @@ export const sendTransactionWith = async (
       methodName: method,
       args: param,
     });
+    const chainIdQuery = getChainIdQuery();
     const result = await callContract({
       contractAddress,
       methodName: method,
       args: param,
       options: {
-        chainId: "AELF"
+        chainId: chainIdQuery.chainId
       }
     });
     showTransactionResult(result);

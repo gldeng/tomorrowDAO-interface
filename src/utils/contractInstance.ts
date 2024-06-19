@@ -1,5 +1,7 @@
 import AElf from 'aelf-sdk';
-import { explorerRPC } from 'config';
+import getExplorerRPC from 'utils/getExplorerRPC';
+
+const explorerRPC = getExplorerRPC();
 // create a new instance of AElf
 // use our test environment url or prod environment url
 const aelf = new AElf(new AElf.providers.HttpProvider(explorerRPC));

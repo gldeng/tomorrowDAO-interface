@@ -99,11 +99,6 @@
   line-height: 28px;
 }
 
-@media (max-width: 1024px) {
-  .vote-wrapper {
-    padding: 0 20px;
-  }
-}
 
 .vote-container {
   padding: 20px 0;
@@ -148,7 +143,6 @@
 .vote-container .antExplorer-menu .antExplorer-menu-item-selected:after {
   left: 0;
   right: 0;
-  border-bottom: 2px solid #266cd3 !important;
   transition: 0.3s;
 }
 

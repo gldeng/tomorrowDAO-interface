@@ -1,7 +1,6 @@
-import { LoadingOutlined } from '@ant-design/icons';
-import { Spin } from 'antd';
-import { Button } from 'aelf-design';
 import { DownOutlined } from '@aelf-design/icons';
+import loadingSrc from '../../assets/imgs/loading.svg';
+
 import './index.css';
 
 interface ILoadMoreButtonProps {
@@ -12,16 +11,14 @@ export default function LoadMoreButton(props: ILoadMoreButtonProps) {
   const { loadingMore } = props;
   return (
     <div className="more-button" onClick={props.onClick}>
-      <Button className="">
-        {loadingMore ? (
-          <Spin indicator={<LoadingOutlined />} />
-        ) : (
-          <>
-            <span className="more-text">Load More</span>
-            <DownOutlined />
-          </>
-        )}
-      </Button>
+      {loadingMore ? (
+        <img src={loadingSrc} className="loading" alt="" />
+      ) : (
+        <>
+          <span className="more-text">Load More</span>
+          <DownOutlined />
+        </>
+      )}
     </div>
   );
 }

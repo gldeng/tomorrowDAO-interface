@@ -7,7 +7,7 @@
  * @Description: file content
  */
 import React, { PureComponent } from "react";
-import LinkReplaceLastPathName from 'components/LinkNetworkDao';
+import LinkNetworkDao from 'components/LinkNetworkDao';
 import { Table, Button, Input, Tooltip } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import moment from "moment";
@@ -202,12 +202,12 @@ class NodeTable extends PureComponent {
         // ellipsis: true,
         render: (text, record) => (
           <Tooltip title={text}>
-            <LinkReplaceLastPathName
-              href={{ pathname: '/vote/team', search: `pubkey=${record.pubkey}` }}
+            <LinkNetworkDao
+              href={{ pathname: '/vote/team', query: { pubkey: record.pubkey } }}
               replaceStart="vote"
             >
               {text}
-            </LinkReplaceLastPathName>
+            </LinkNetworkDao>
           </Tooltip>
         ),
         ...this.getColumnSearchProps("name"),

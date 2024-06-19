@@ -12,7 +12,7 @@ import {
   Tooltip,
 } from "antd";
 import { SearchOutlined, InfoCircleFilled } from "@ant-design/icons";
-import LinkReplaceLastPathName from 'components/LinkNetworkDao';
+import LinkNetworkDao from 'components/LinkNetworkDao';
 import DatePickerReact from "react-datepicker";
 import moment from "moment";
 
@@ -86,10 +86,12 @@ function getColumns() {
       render: (text, record) => (
         // todo: consider to extract the component as a independent component
         <Tooltip title={text}>
-          <LinkReplaceLastPathName
+          <LinkNetworkDao
             href={{
               pathname: "/vote/team",
-              search: `pubkey=${record.candidate}`,
+              query: {
+                pubkey: record.candidate
+              }
             }}
             replaceStart="vote"
             className="node-name-in-table"
@@ -102,7 +104,7 @@ function getColumns() {
             }}
           >
             {text}
-          </LinkReplaceLastPathName>
+          </LinkNetworkDao>
         </Tooltip>
       ),
     },

@@ -17,6 +17,7 @@ import { Switch, Case, If, Then } from "react-if";
 import constants, { LOADING_STATUS, LOG_STATUS } from "@redux/common/constants";
 import { setCurrentOrg } from "@actions/proposalDetail";
 import Total from "@components/Total";
+import getChainIdQuery from 'utils/url';
 import Organization from "./Organization";
 import dynamicReq from 'next/dynamic';
 import { getOrganizations } from "@redux/actions/organizationList";
@@ -120,7 +121,8 @@ const OrganizationList = () => {
         "Modifying the organization requires initiating a proposal to modify. Are you sure you want to modify?",
       onOk() {
         dispatch(setCurrentOrg(org));
-        router.push(`/apply?orgAddress=${orgAddress}`)
+        const chainIdQuery = getChainIdQuery();
+        router.push(`/apply?orgAddress=${orgAddress}&${chainIdQuery.chainIdQueryString}`)
         // navigate(`/proposal/apply/${org.orgAddress}`);
       },
       cancelButtonProps: { type: "primary" },
@@ -129,7 +131,7 @@ const OrganizationList = () => {
   };
 
   return (
-    <div className="organization-list bg-white overflow-hidden">
+    <div className="organization-list bg-white overflow-hidden page-content-padding">
       <Tabs
         size={isLG ? 'small' : 'middle'}
         animated={false}
@@ -215,16 +217,18 @@ const OrganizationList = () => {
           </Then>
         </If>
       </div>
-      <Pagination
-        className="float-right gap-top mt-[12px]"
-        showQuickJumper
-        total={total}
-        current={params.pageNum}
-        pageSize={params.pageSize}
-        hideOnSinglePage
-        onChange={onPageNumChange}
-        showTotal={Total}
-      />
+      <div className="flex justify-end organization-list-pagination">
+        <Pagination
+          className="gap-top mt-[12px]"
+          showQuickJumper
+          total={total}
+          current={params.pageNum}
+          pageSize={params.pageSize}
+          hideOnSinglePage
+          onChange={onPageNumChange}
+          showTotal={Total}
+          />
+        </div>
     </div>
   );
 };

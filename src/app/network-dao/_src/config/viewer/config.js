@@ -1,5 +1,24 @@
 /* eslint-disable global-require */
-const queriedConfig = require('./config.json');
+import { isSideChain } from "utils/chian";
+import { networkType } from "config";
+import getChainIdQuery from 'utils/url';
+const chainIdQuery = getChainIdQuery();
+
+let originQueriedConfig = require('./config-testnet-aelf.json');
+if (networkType === 'TESTNET') {
+  if (isSideChain(chainIdQuery.chainId)) {
+    originQueriedConfig = require("./config-testnet-tdvw.json");
+  } else {
+    originQueriedConfig = require("./config-testnet-aelf.json");
+  }
+} else if (networkType === 'MAINNET') {
+  if (isSideChain(chainIdQuery.chainId)) {
+    originQueriedConfig = require("./config-mainnet-tdvv.json");
+  } else {
+    originQueriedConfig = require("./config-mainnet-aelf.json");
+  }
+}
+
 
 let config = {};
 
@@ -10,6 +29,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 module.exports = {
-  ...queriedConfig,
-  ...config
+  ...originQueriedConfig,
+  ...config,
+  originQueriedConfig
 };
