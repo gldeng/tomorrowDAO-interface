@@ -52,7 +52,8 @@ import { PRIMARY_COLOR } from "@common/constants";
 import removeHash from "@utils/removeHash";
 import addressFormat from "@utils/addressFormat";
 import { NETWORK_TYPE } from '@config/config';
-import { mainExplorer } from "config";
+import { explorer, mainExplorer } from "config";
+import { useChainSelect } from "hooks/useChainSelect";
 
 const {
   proposalActions,
@@ -214,8 +215,11 @@ const ProposalDetail = () => {
   const { leftOrgInfo = {} } = info.organization;
 
   const { wallet: webLoginWallet, callContract } = useWebLogin();
+  const { isSideChain  } = useChainSelect()
 
   const bpCountNumber = useMemo(() => {
+    // todo 1.4.0
+    console.log('NETWORK_TYPE', NETWORK_TYPE);
     if (NETWORK_TYPE === 'MAIN') {
       return getBPCount(status, expiredTime, releasedTime)
     }
@@ -352,7 +356,7 @@ const ProposalDetail = () => {
           </div>
           <div className="proposal-detail-desc-list">
             <Row gutter={48}>
-              <Col sm={12} xs={24} className="detail-flex">
+              <Col sm={12} xs={24} className="detail-flex items-center">
                 <span className="sub-title gap-right">
                   Application Submitted:
                 </span>
@@ -360,17 +364,17 @@ const ProposalDetail = () => {
                   {moment(createAt).format("YYYY/MM/DD HH:mm:ss")}
                 </span>
               </Col>
-              <Col sm={12} xs={24} className="detail-flex">
+              <Col sm={12} xs={24} className="detail-flex items-center">
                 <span className="sub-title gap-right">Proposal Expires:</span>
                 <span className="text-ellipsis">
                   {moment(expiredTime).format("YYYY/MM/DD HH:mm:ss")}
                 </span>
               </Col>
-              <Col sm={12} xs={24} className="detail-flex">
+              <Col sm={12} xs={24} className="detail-flex items-center">
                 <span className="sub-title gap-right">Proposer:</span>
                 <span className="text-ellipsis">
                   <a
-                    href={`${mainExplorer}/address/${addressFormat(proposer)}`}
+                    href={`${isSideChain ? explorer : mainExplorer}/address/${addressFormat(proposer)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     title={`ELF_${proposer}_${viewer.chainId}`}
@@ -379,7 +383,7 @@ const ProposalDetail = () => {
                   </a>
                 </span>
               </Col>
-              <Col sm={12} xs={24} className="detail-flex">
+              <Col sm={12} xs={24} className="detail-flex items-center">
                 <span className="sub-title gap-right">URL:</span>
                 <span className="text-ellipsis">
                   {validateURL(leftInfo.proposalDescriptionUrl || "") ? (
@@ -397,7 +401,7 @@ const ProposalDetail = () => {
                 </span>
               </Col>
               {status === proposalStatus.RELEASED ? (
-                <Col sm={12} xs={24} className="detail-flex">
+                <Col sm={12} xs={24} className="detail-flex items-center">
                   <span className="sub-title gap-right">
                     Proposal Released:
                   </span>

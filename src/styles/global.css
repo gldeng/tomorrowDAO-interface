@@ -2,6 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+
+@layer components {
+  .button-border-normal {
+    @apply border-solid border border-Neutral-Divider;
+  }
+
+  .page-content-padding {
+    @apply px-4 lg:px-8 pb-4 lg:pb-8;
+  }
+}
+
+
 html,
 body {
   overflow-x: hidden;

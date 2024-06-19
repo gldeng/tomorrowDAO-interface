@@ -7,7 +7,8 @@ import {
   CheckCircleFilled,
 } from "@ant-design/icons";
 import { Modal } from "antd";
-import { mainExplorer } from "config";
+import { explorer, mainExplorer } from "config";
+import { useChainSelect } from "hooks/useChainSelect";
 import CopylistItem from "../CopylistItem";
 import "./index.css";
 // import useMobile from "../../../../hooks/useMobile";
@@ -41,7 +42,7 @@ const noticeUpdateContent = [
   "Contract update includes 2 phases and takes around 1-10 minutes.",
   "Contract deployment includes 2 phases and takes around 1-10 minutes.",
 ];
-const getMessageByExec = (props: IModalProps) => {
+const getMessageByExec = (props: IModalProps, isSideChain: Boolean) => {
   const { isUpdate, status, message, transactionId } = props;
   const { execution } = status || {};
   switch (execution) {
@@ -77,7 +78,7 @@ const getMessageByExec = (props: IModalProps) => {
             label="Transaction ID"
             value={transactionId}
             href=""
-            valueHref={`${mainExplorer}/tx/${transactionId}`}
+            valueHref={`${isSideChain ? explorer : mainExplorer}/tx/${transactionId}`}
           />
         </div>
       );
@@ -85,7 +86,7 @@ const getMessageByExec = (props: IModalProps) => {
       return null;
   }
 };
-const getMessage = (props) => {
+const getMessage = (props, isSideChain) => {
   const { isUpdate, status, message, transactionId, title } = props;
   const { verification } = status || {};
   switch (verification) {
@@ -113,18 +114,19 @@ const getMessage = (props) => {
               label="Transaction ID"
               value={transactionId}
               href=""
-              valueHref={`${mainExplorer}/tx/${transactionId}`}
+              valueHref={`${isSideChain ? explorer : mainExplorer}/tx/${transactionId}`}
             />
           )}
         </div>
       );
     case 0:
-      return getMessageByExec(props);
+      return getMessageByExec(props, isSideChain);
     default:
       return null;
   }
 };
 const WithoutApprovalModal = (props: IProps) => {
+  const { isSideChain } = useChainSelect()
   const { open, withoutApprovalProps } = props;
   const { isUpdate, cancel, status } = withoutApprovalProps;
   const noticeContent = isUpdate ? noticeUpdateContent : noticeDeployContent;
@@ -176,7 +178,7 @@ const WithoutApprovalModal = (props: IProps) => {
         </div>
       </div>
       <div className="without-approval-modal-message">
-        {getMessage(withoutApprovalProps)}
+        {getMessage(withoutApprovalProps, isSideChain)}
       </div>
       <div className="without-approval-modal-notice">
         <div className="title">Notice</div>

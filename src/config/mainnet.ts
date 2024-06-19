@@ -29,7 +29,7 @@ export const treasuryContractAddress = 'TUeLJxSYY37kGbK8jf7NcLZ43g8k2DgQufgvzYjn
 // explorer config
 export const explorer = 'https://tdvv-explorer.aelf.io';
 export const mainExplorer = 'https://explorer.aelf.io';
-export const explorerRPC = 'https://explorer.aelf.io/chain';
+// export const explorerRPC = 'https://explorer.aelf.io/chain';
 
 // network-dao contract address: get network dao highCouncil table
 export const electionContractAddr = 'NrVf8B7XUduXn1oGHZeF1YANFXEXAhvCymz2WPyKZt4DE2zSg';
@@ -46,10 +46,10 @@ export const SOCKET_URL_NEW = 'wss://explorer.aelf.io';
 export const chainIdSelect = [
   {
     value: 'AELF',
-    label: 'MainChain',
+    label: 'MainChain AELF',
   },
   {
     value: 'tDVV',
-    label: 'SideChain',
+    label: 'SideChain tDVV',
   },
 ];

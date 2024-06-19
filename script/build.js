@@ -1,6 +1,6 @@
 const { spawn } = require('child_process');
 const fs = require('fs');
-const { getConfig, getContractAddress } = require('./generate-config/queryConfig');
+// const { getConfig, getContractAddress } = require('./generate-config/queryConfig');
 
 const APP_ENV = process.env.APP_ENV || 'testnet';
 console.log('APP_ENV:', APP_ENV);
@@ -16,7 +16,7 @@ async function main() {
     );
     fs.writeFileSync('./src/config/index.ts', newFileContent);
     console.log(`APP_ENV: ${APP_ENV}, replace testnet with mainnet !!!`);
-    await Promise.all([getConfig(), getContractAddress()]);
+    // await Promise.all([getConfig(), getContractAddress()]);
   }
   const buildCommand = spawn('yarn', ['next-compile']);
 

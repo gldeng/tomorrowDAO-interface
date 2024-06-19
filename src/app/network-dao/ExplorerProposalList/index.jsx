@@ -311,6 +311,7 @@ const ProposalList = () => {
         activeKey={activeKey}
         onChange={handleTabChange}
         animated={false}
+        size="small"
       >
         <TabPane
           tab={proposalTypes.PARLIAMENT}
@@ -337,7 +338,7 @@ const ProposalList = () => {
           </Then>
         </If>
         <div className="proposal-list-filter-form">
-          <div className="proposal-list-filter-form-select">
+          <div className="proposal-list-filter-form-select lg:mb-0 mb-2">
             <span className="sub-title gap-right">Status: </span>
             <Select
               className="explorer-select"
@@ -409,17 +410,19 @@ const ProposalList = () => {
           </Then>
         </If>
       </div>
-      <Pagination
-        className="float-right gap-top"
-        showQuickJumper
-        total={total}
-        current={params.pageNum}
-        pageSize={params.pageSize}
-        hideOnSinglePage
-        onChange={onPageNumChange}
-        showTotal={Total}
-        showSizeChanger={false}
-      />
+      <div className="flex justify-end">
+        <Pagination
+          className="gap-top page-content-padding"
+          showQuickJumper
+          total={total}
+          current={params.pageNum}
+          pageSize={params.pageSize}
+          hideOnSinglePage
+          onChange={onPageNumChange}
+          showTotal={Total}
+          showSizeChanger={false}
+        />
+      </div>
       {proposalInfo.visible ? (
         <ApproveTokenModal
           aelf={aelf}
@@ -441,7 +444,6 @@ const WrapAntd = function () {
       },
       components: {
         Input: {
-          /* 这里是你的组件 token */
           paddingBlock: 4
         },
       },

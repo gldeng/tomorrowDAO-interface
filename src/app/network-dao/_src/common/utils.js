@@ -10,9 +10,9 @@ import walletInstance from "@redux/common/wallet";
 import config from "./config";
 import { request } from "./request";
 import constants from "../redux/common/constants";
-import { explorerRPC } from "config";
+import getExplorerRPC from 'utils/getExplorerRPC';
 // eslint-disable-next-line import/no-cycle
-
+const explorerRPC = getExplorerRPC();
 const { ellipticEc } = AElf.wallet;
 
 const { proposalStatus } = constants;

@@ -10,6 +10,11 @@ export default function Page(props) {
     token: {
       controlHeight: 32
     },
+    components: {
+      Input: {
+        paddingBlock: 4
+      },
+    },
   }}
   ><PageIndex /></ConfigProvider>;
 }

@@ -14,6 +14,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useParams, usePathname } from 'next/navigation';
 import { chainIdSelect } from 'config';
 import LinkNetworkDao from 'components/LinkNetworkDao';
+import { useChainSelect } from 'hooks/useChainSelect';
 export enum ENetworkDaoNav {
   treasury = 'treasury',
 }
@@ -22,14 +23,17 @@ export default function Header() {
   const { isLG } = useResponsive();
 
   const pathname = usePathname();
+  const { isMainChain } = useChainSelect();
   const { networkDaoId } = useParams();
 
   const items: MenuProps['items'] = useMemo(() => {
     return [
-      {
-        label: <LinkNetworkDao href={`/treasury`}>Treasury</LinkNetworkDao>,
-        key: ENetworkDaoNav.treasury,
-      },
+      isMainChain
+        ? {
+            label: <LinkNetworkDao href={`/treasury`}>Treasury</LinkNetworkDao>,
+            key: ENetworkDaoNav.treasury,
+          }
+        : null,
       {
         label: (
           <div className="menu-label">
@@ -48,22 +52,30 @@ export default function Header() {
             label: <LinkNetworkDao href={`/organization`}>Organisations</LinkNetworkDao>,
             key: 'Organisations',
           },
-          {
-            label: <LinkNetworkDao href={`/vote/election`}>BP Elections</LinkNetworkDao>,
-            key: 'BP Elections',
-          },
+          isMainChain
+            ? {
+                label: <LinkNetworkDao href={`/vote/election`}>BP Elections</LinkNetworkDao>,
+                key: 'BP Elections',
+              }
+            : null,
           {
             label: <LinkNetworkDao href={`/apply`}>Contract Management</LinkNetworkDao>,
             key: 'Contract Management',
           },
+          isMainChain
+            ? {
+                label: <LinkNetworkDao href={`/resource`}>Resource Token Trade</LinkNetworkDao>,
+                key: 'Resource Token Trade',
+              }
+            : null,
           {
-            label: <LinkNetworkDao href={`/resource`}>Resource Token Trade</LinkNetworkDao>,
-            key: 'Resource Token Trade',
+            label: <LinkNetworkDao href={`/my-proposals`}>My Proposals</LinkNetworkDao>,
+            key: 'My Proposals',
           },
         ],
       },
     ];
-  }, [isLG]);
+  }, [isLG, isMainChain]);
 
   const [current, setCurrent] = useState('CreateDAO');
 
@@ -100,11 +112,16 @@ export default function Header() {
             {!isLG && <PCMenu selectedKeys={[current]} items={items} onClick={onClick} />}
           </div>
           <div className="flex items-center">
-            <div className="mr-1">
+            <div className="chain-id-select-wrap">
               <Select
                 value={selectedChain}
                 onChange={handleChange}
-                options={chainIdSelect}
+                options={chainIdSelect.map((item) => {
+                  return {
+                    ...item,
+                    label: isLG ? item.label?.split(' ')?.[0] ?? item.label : item.label,
+                  };
+                })}
                 className="chain-id-select"
               />
             </div>

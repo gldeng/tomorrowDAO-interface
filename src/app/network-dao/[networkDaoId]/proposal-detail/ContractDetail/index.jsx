@@ -17,7 +17,8 @@ import { PRIMARY_COLOR } from "@common/constants";
 // import { getContractURL } from "../../_proposal_root/";
 import addressFormat from "@utils/addressFormat";
 import { isJsonString } from "@utils/utils";
-import { mainExplorer } from "config";
+import { explorer, mainExplorer } from "config";
+import { useChainSelect } from "hooks/useChainSelect";
 
 const { viewer } = config;
 
@@ -30,9 +31,9 @@ function getContractName(address) {
     { method: "GET" }
   );
 }
-export function getContractURL(address) {
+export function getContractURL(address, isSideChain) {
   // eslint-disable-next-line max-len
-  return `${mainExplorer}/contract/${address}#contract`;
+  return `${isSideChain ? explorer : mainExplorer}/contract/${address}#contract`;
 }
 
 const ContractDetail = (props) => {
@@ -46,6 +47,7 @@ const ContractDetail = (props) => {
   } = props;
   const [name, setName] = useState("");
   const [params, setParams] = useState(contractParams);
+  const { isSideChain } = useChainSelect()
   useEffect(() => {
     getContractName(contractAddress)
       .then((data) => {
@@ -130,7 +132,7 @@ const ContractDetail = (props) => {
         <Col sm={20} xs={24}>
           <a
             className="break-all"
-            href={getContractURL(addressFormat(contractAddress))}
+            href={getContractURL(addressFormat(contractAddress), isSideChain)}
             target="_blank"
             rel="noopener noreferrer"
           >

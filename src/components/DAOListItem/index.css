@@ -5,7 +5,7 @@
     @apply flex items-center h-[40px];
 
     .dao-logo {
-      @apply w-10 h-10 mr-3 rounded-full;
+      @apply w-10 h-10 mr-3 rounded-full overflow-hidden;
 
       img {
         @apply w-[100%] h-[100%];

@@ -6,7 +6,7 @@ import { API_PATH } from "@redux/common/constants";
 import { deserializeLog } from "@common/utils";
 import { WebLoginInstance } from "@utils/webLogin";
 import { APPNAME } from "../../_src/config/config";
-
+console.log('location search', process.env.APP_ENV)
 async function sign(currentWallet, hexToBeSign) {
   if (currentWallet.portkeyInfo) {
     const keypair = currentWallet.portkeyInfo.walletInfo.keyPair;

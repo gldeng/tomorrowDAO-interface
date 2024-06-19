@@ -114,7 +114,6 @@ const Proposal = (props) => {
     logStatus === LOG_STATUS.LOGGED &&
     currentAccount &&
     proposer === currentAccount;
-  console.log('!canThisUserVote', !canThisUserVote)
   return (
     <div className="proposal-list-item gap-bottom">
       <Card

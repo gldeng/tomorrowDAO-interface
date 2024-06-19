@@ -10,6 +10,7 @@ import DaoLogo from 'assets/imgs/dao-logo.svg';
 import ErrorResult from 'components/ErrorResult';
 import Link from 'next/link';
 import { getExploreLink } from 'utils/common';
+import { useChainSelect } from 'hooks/useChainSelect';
 import './index.css';
 import { curChain, NetworkDaoHomePathName } from 'config';
 import { useWebLogin } from 'aelf-web-login';
@@ -60,6 +61,7 @@ export default function DaoInfo(props: IParams) {
   const { wallet } = useWebLogin();
 
   const { isLG, isSM } = useResponsive();
+  const { isSideChain } = useChainSelect();
   const socialMedia = metadata?.socialMedia ?? {};
 
   const socialMediaList = Object.keys(socialMedia).map((key) => {
@@ -92,21 +94,23 @@ export default function DaoInfo(props: IParams) {
     })
     .filter(Boolean) as DescriptionsProps['items'];
 
-  const items: DescriptionsProps['items'] = [
-    {
-      key: '1',
-      label: 'Creator',
-      children: (
-        <HashAddress
-          className="address"
-          preLen={8}
-          endLen={11}
-          chain={curChain}
-          address={data?.creator ?? '-'}
-        ></HashAddress>
-      ),
-    },
-    ...(contractItems ?? []),
+  const items: DescriptionsProps['items'] | Array<null> = [
+    !isNetworkDAO
+      ? {
+          key: '1',
+          label: 'Creator',
+          children: (
+            <HashAddress
+              className="address"
+              preLen={8}
+              endLen={11}
+              chain={curChain}
+              address={data?.creator ?? '-'}
+            ></HashAddress>
+          ),
+        }
+      : null,
+    ...(isNetworkDAO ? [] : contractItems ?? []),
     {
       key: '3',
       label: 'Governance Token',
@@ -117,25 +121,27 @@ export default function DaoInfo(props: IParams) {
       label: 'Governance Mechanism',
       children: `Referendum ${data?.isHighCouncilEnabled ? ' + High Council' : ''}`,
     },
-    {
-      key: '5',
-      label: 'High Council',
-      children: (
-        <div className="dis-item">
-          <span
-            className="dis-common-span"
-            onClick={() => {
-              if (isNetworkDAO) {
-                onChangeHCParams();
-              }
-            }}
-          >
-            {data?.highCouncilMemberCount ?? '-'} Members,
-          </span>
-          <span>Rotates Every {data?.highCouncilConfig?.electionPeriod} Days.</span>
-        </div>
-      ),
-    },
+    isNetworkDAO && isSideChain
+      ? null
+      : {
+          key: '5',
+          label: 'High Council',
+          children: (
+            <div className="dis-item">
+              <span
+                className="dis-common-span"
+                onClick={() => {
+                  if (isNetworkDAO) {
+                    onChangeHCParams();
+                  }
+                }}
+              >
+                {data?.highCouncilMemberCount ?? '-'} Members,
+              </span>
+              <span>Rotates Every {data?.highCouncilConfig?.electionPeriod} Days.</span>
+            </div>
+          ),
+        },
     // {
     //   key: '6',
     //   label: 'High Council Candidates',
@@ -152,7 +158,7 @@ export default function DaoInfo(props: IParams) {
     //     </div>
     //   ),
     // },
-  ];
+  ].filter(Boolean) as DescriptionsProps['items'];
 
   return (
     <div className="dao-detail-dis">
@@ -164,38 +170,15 @@ export default function DaoInfo(props: IParams) {
         </div>
       ) : (
         <>
-          <div className="dao-detail-dis-title px-4 lg:px-8">
-            <div className="flex justify-between items-center w-full">
-              <div>
-                <h2 className="title">{metadata?.name}</h2>
-                <p className="description">{metadata?.description}</p>
-              </div>
+          <div className="dao-basic-info">
+            <div className="dao-detail-logo px-4 lg:px-8">
               <Image
                 width={80}
                 height={80}
                 src={metadata?.logoUrl ?? DaoLogo}
                 alt=""
-                className="mr-2 rounded-full"
+                className="mr-2 rounded-full logo-image"
               ></Image>
-            </div>
-          </div>
-          <div className="dao-detail-dis-dis px-4 lg:px-8">
-            <div className=" mt-[16px] flex justify-between items-center">
-              <div className="flex gap-2">
-                {socialMediaList.map(
-                  ({ name, url }, index) =>
-                    url && (
-                      <Link href={getSocialUrl(name, url)} target="_blank" key={index}>
-                        <Image
-                          src={(colorfulSocialMediaIconMapKeys as any)[name]}
-                          alt="media"
-                          width={16}
-                          height={16}
-                        />
-                      </Link>
-                    ),
-                )}
-              </div>
               <div className="flex">
                 {wallet.address === data?.creator && (
                   <Link
@@ -216,9 +199,30 @@ export default function DaoInfo(props: IParams) {
                 <PreviewFile list={fileInfoList} />
               </div>
             </div>
+            <div className="dao-detail-desc px-4 lg:px-8">
+              <div>
+                <h2 className="title">{metadata?.name}</h2>
+                <p className="description">{metadata?.description}</p>
+              </div>
+              <div className="flex gap-2">
+                {socialMediaList.map(
+                  ({ name, url }, index) =>
+                    url && (
+                      <Link href={getSocialUrl(name, url)} target="_blank" key={index}>
+                        <Image
+                          src={(colorfulSocialMediaIconMapKeys as any)[name]}
+                          alt="media"
+                          width={16}
+                          height={16}
+                        />
+                      </Link>
+                    ),
+                )}
+              </div>
+            </div>
           </div>
           <Divider className="mb-2 lg:mb-6" />
-          <Collapse defaultActiveKey={['1']} ghost>
+          <Collapse defaultActiveKey={isNetworkDAO ? [] : ['1']} ghost>
             <Collapse.Panel header={<Typography.Title>Dao Information</Typography.Title>} key="1">
               <Descriptions
                 layout={isLG ? 'vertical' : 'horizontal'}

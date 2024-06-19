@@ -23,11 +23,11 @@ const Layout = dynamicReq(
             <Suspense>
               <div>
                 <div
-                  className={`flex-1 max-w-[1440px] mx-auto bg-white py-6 mb-6 px-4 lg:px-10 w-full`}
-                >
+                  className={`flex-1 max-w-[1440px] mx-auto py-6 mb-6 px-4 lg:px-8 page-content-wrap`}
+                  >
                   {children}
                 </div>
-              </div>
+                </div>
             </Suspense>
             <Suspense>
               <Footer />

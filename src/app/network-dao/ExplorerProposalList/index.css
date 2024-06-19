@@ -1,9 +1,13 @@
 .proposal-list {
+
   &-list {
     min-height: 200px;
+    /* @apply page-content-padding; */
   }
 
   &-filter {
+    /* @apply page-content-padding; */
+
     .ant-form-item {
       display: flex;
       flex-flow: row wrap;

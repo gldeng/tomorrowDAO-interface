@@ -2,7 +2,7 @@
 // eslint-disable-next-line no-use-before-define
 import React, { useCallback, useState } from "react";
 import AElf from "aelf-sdk";
-import { Tabs, Modal, message } from "antd";
+import { Tabs, Modal, message, Result } from "antd";
 import { useSelector } from "react-redux";
 // import { useParams } from "react-router-dom";
 import {
@@ -13,6 +13,7 @@ import {
   uint8ToBase64,
 } from "@redux/common/utils";
 import debounce from "lodash.debounce";
+import getChainIdQuery from 'utils/url';
 import { getConfig, useWebLogin, did } from "aelf-web-login";
 import NormalProposal from "./NormalProposal/index.jsx";
 import ContractProposal, { contractMethodType } from "./ContractProposal/index.jsx";
@@ -47,7 +48,8 @@ import {
   onlyOkModal,
   showAccountInfoSyncingModal,
 } from "@components/SimpleModal/index.tsx";
-import { mainExplorer } from 'config';
+import { mainExplorer, explorer } from 'config';
+import { useChainSelect } from "hooks/useChainSelect";
 
 const { TabPane } = Tabs;
 
@@ -62,6 +64,7 @@ const GET_CONTRACT_VERSION_TIMEOUT = 1000 * 60 * 10;
 
 const CreateProposal = () => {
   // const { orgAddress = "" } = useSearchParams();
+  const { isSideChain } = useChainSelect()
   const searchParams = useSearchParams()
   const orgAddress = searchParams.get('orgAddress');
   const modifyData = useSelector((state) => state.proposalModify);
@@ -551,7 +554,7 @@ const CreateProposal = () => {
               label="Transaction ID"
               isParentHref
               value={txsId}
-              href={`${mainExplorer}/tx/${txsId}`}
+              href={`${isSideChain ? explorer : mainExplorer}/tx/${txsId}`}
             />
           </div>
         ),
@@ -636,6 +639,8 @@ const CreateProposal = () => {
         params: { decoded },
       } = normalResult;
 
+      const chainIdQuery = getChainIdQuery();
+      // todo 1.4.0
       const params = {
         contractAddress: getContractAddress(proposalType),
         // todo
@@ -649,7 +654,7 @@ const CreateProposal = () => {
           proposalDescriptionUrl,
         },
         options: {
-          chainId: "AELF"
+          chainId: chainIdQuery.chainId
         }
       };
 
@@ -673,8 +678,15 @@ const CreateProposal = () => {
     setApplyModal(initApplyModal);
   }, []);
 
+  if (!webLoginWallet.address) {
+    return <Result
+    className="px-4 lg:px-8"
+    status="warning"
+    title="Please log in before creating a proposal"
+  /> 
+  }
   return (
-    <div className="proposal-apply">
+    <div className="proposal-apply bg-white h-full">
       <Tabs className="proposal-apply-tab" defaultActiveKey="normal">
         <TabPane tab="Ordinary Proposal" key="normal">
           <NormalProposal

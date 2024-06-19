@@ -9,6 +9,7 @@
 import React, { PureComponent } from "react";
 import Decimal from "decimal.js";
 import { message } from "antd";
+import getChainIdQuery from 'utils/url';
 import moment from "moment";
 
 import StatisticalData from "@components/StatisticalData/";
@@ -305,6 +306,7 @@ class ElectionNotification extends PureComponent {
     } = this.props;
 
     checkExtensionLockStatus().then(() => {
+      const chainIdQuery = getChainIdQuery();
       WebLoginInstance.get()
         .callContract({
           contractAddress: electionContractFromExt.address,
@@ -313,11 +315,12 @@ class ElectionNotification extends PureComponent {
             value: currentWallet?.publicKey,
           },
           options: {
-            chainId: "AELF"
+            chainId: chainIdQuery.chainId
           }
         })
         .then((res) => {
           if (!res) {
+            const chainIdQuery = getChainIdQuery();
             return WebLoginInstance.get().callContract({
               contractAddress: electionContractFromExt.address,
               methodName: "QuitElection",
@@ -325,7 +328,7 @@ class ElectionNotification extends PureComponent {
                 value: currentWallet?.address,
               },
               options: {
-                chainId: "AELF"
+                chainId: chainIdQuery.chainId
               }
             });
           }
@@ -386,13 +389,14 @@ class ElectionNotification extends PureComponent {
         });
         return;
       }
+      const chainIdQuery = getChainIdQuery();
       WebLoginInstance.get()
         .callContract({
           contractAddress: electionContractFromExt.address,
           methodName: "AnnounceElection",
           args: admin,
           options: {
-            chainId: "AELF"
+            chainId: chainIdQuery.chainId
           }
         })
         .then((res) => {

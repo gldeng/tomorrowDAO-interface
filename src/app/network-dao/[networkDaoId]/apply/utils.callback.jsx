@@ -5,6 +5,8 @@ import { getOriginProposedContractInputHash } from "@redux/common/util.proposed"
 import { getContractAddress, getTxResult } from "@redux/common/utils";
 import { useWebLogin } from "aelf-web-login";
 import { callGetMethod } from "@utils/utils";
+import getChainIdQuery from 'utils/url';
+import { useChainSelect } from "hooks/useChainSelect";
 import CopylistItem from "../../_proposal_root/components/CopylistItem";
 import { getDeserializeLog } from "./utils.js";
 import { get } from "../../_src/utils";
@@ -19,12 +21,13 @@ export const useCallbackAssem = () => {
   // eslint-disable-next-line no-return-await
   const contractSend = useCallback(
     async (action, params, isOriginResult) => {
+      const chainIdQuery = getChainIdQuery();
       const result = await callContract({
         contractAddress: getContractAddress("Genesis"),
         args: params,
         methodName: action,
         options: {
-          chainId: "AELF"
+          chainId: chainIdQuery.chainId
         }
       });
       if (isOriginResult) return result;
@@ -75,6 +78,7 @@ export const useCallGetMethod = () => {
 };
 
 export const useReleaseApprovedContractAction = () => {
+  const { isSideChain } = useChainSelect()
   const proposalSelect = useSelector((state) => state.proposalSelect);
   const common = useSelector((state) => state.common);
   const { contractSend } = useCallbackAssem();
@@ -137,7 +141,7 @@ export const useReleaseApprovedContractAction = () => {
               label="Transaction ID"
               isParentHref
               value={txsId}
-              href={`${mainExplorer}/tx/${txsId}`}
+              href={`${isSideChain ? explorer : mainExplorer}/tx/${txsId}`}
             />
           </div>
         ),

@@ -7,20 +7,17 @@ import {
 } from 'antd';
 import { isSideChain } from 'utils/chian';
 import getChainIdQuery from 'utils/url';
+import getExplorerRPC from 'utils/getExplorerRPC';
 import {
   create,
 } from 'apisauce';
 import AElf from 'aelf-sdk';
 import dayjs from 'dayjs';
-import { explorerRPC } from "config";
 import Cookies from 'js-cookie';
 
-import {
-  RPCSERVER,
-} from './constants';
 
 // import apisauce from './utils/apisauce';
-
+const explorerRPC = getExplorerRPC()
 const api = create({
   baseURL: '',
 });

@@ -31,7 +31,9 @@ export default function LinkNetworkDao(props: ILinkReplaceLastPathNameProps) {
   }, [networkDaoId, originHref, chainIdQuery]);
   useEffect(() => {
     const chainIdQuery = getChainIdQuery();
-    setChainIdQuery(chainIdQuery);
+    setChainIdQuery({
+      chainId: chainIdQuery.chainId,
+    });
   }, []);
   return <Link {...props} href={newPath} />;
 }

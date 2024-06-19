@@ -24,7 +24,7 @@ const Layout = dynamicReq(
           <div className="flex flex-1 flex-col overflow-y-auto">
             <Suspense>
               <div className={isHome ? 'dao-home-background' : ''}>
-                <div className="flex-1 max-w-[1440px] mx-auto py-6 mb-6 px-4 lg:px-10">
+                <div className="flex-1 max-w-[1440px] mx-auto py-6 mb-6 px-4 lg:px-8 page-content-wrap">
                   <DynamicBreadCrumb />
                   {children}
                 </div>

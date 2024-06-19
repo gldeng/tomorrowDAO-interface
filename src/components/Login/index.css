@@ -14,7 +14,7 @@
 
 @media (max-width: 640px) {
   .user-name {
-    @apply max-w-[100px] overflow-hidden;
+    @apply max-w-[30px] overflow-hidden;
   }
 }
 

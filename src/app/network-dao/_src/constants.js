@@ -15,7 +15,8 @@ import { removeAElfPrefix } from "./utils/utils";
 // eslint-disable-next-line import/no-cycle
 import Dividends from "./components/Dividends";
 import { mainExplorer } from "config";
-const { DEFAUTRPCSERVER, SYMBOL, CHAIN_ID } = config;
+// todo 1.4.0
+const { SYMBOL, CHAIN_ID } = config;
 dayjs.extend(relativeTime);
 
 const ALL_BLOCKS_API_URL = "/all/blocks";
@@ -118,7 +119,7 @@ const FEE_RATE = 0.005;
 const SHORTEST_LOCK_TIME = 90; // day
 
 // TODO 
-var RPCSERVER = DEFAUTRPCSERVER;
+// var RPCSERVER = DEFAUTRPCSERVER;
 
 // TODO: Why is this undefined?
 // const BLOCKS_LIST_COLUMNS = [
@@ -427,7 +428,7 @@ export {
   PAGE_SIZE,
   TXSSTATUS,
   txStatusInUpperCase,
-  RPCSERVER,
+  // RPCSERVER,
   // BLOCKS_LIST_COLUMNS,
   // ALL_TXS_LIST_COLUMNS,
   ADDRESS_INFO_COLUMN,

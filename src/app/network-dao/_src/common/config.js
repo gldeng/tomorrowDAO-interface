@@ -2,10 +2,13 @@
  * @file config
  * @author atom-yang
  */
-import config from "@src/config/viewer/config.json";
+// todo 1.4.0 viewer
 
+import viewerInfo from '../config/viewer/config.js'
+
+const { originQueriedConfig } = viewerInfo;
 export default {
-  ...config,
+  ...originQueriedConfig,
   API_PATH: {
     GET_TRANSACTION_BY_ADDRESS: "/api/address/transactions",
     GET_ALL_CONTRACT_NAME: "/api/viewer/allContracts",
