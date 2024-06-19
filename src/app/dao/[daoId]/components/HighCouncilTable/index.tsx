@@ -25,9 +25,8 @@ export default function HighCounCilTab() {
   const producedBlocksRef = useRef<any>();
   nodeListRef.current = nodeList;
 
-  const getAllTeamDesc = async (currentChain?: string) => {
-    const prefix = currentChain ? '/side-explorer-api' : '/explorer-api';
-    return explorerServer.get(prefix + '/vote/getAllTeamDesc', {
+  const getAllTeamDesc = async () => {
+    return explorerServer.get('/explorer-api/vote/getAllTeamDesc', {
       params: {
         isActive: true,
       },
