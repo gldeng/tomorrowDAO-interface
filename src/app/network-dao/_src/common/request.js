@@ -3,7 +3,7 @@
  * @author atom-yang
  */
 import axios from 'axios';
-import { isSideChain } from 'utils/chian';
+import { isSideChain } from 'utils/chain';
 import qs from 'query-string';
 import { omitBy } from 'lodash/fp';
 import { isObject } from 'lodash';

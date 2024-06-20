@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { Button, message } from "antd";
 import copy from "copy-to-clipboard";
 import Link from 'next/link';
+import { ShareInternalOutlined, CopyOutlined } from '@aelf-design/icons'
 // import IconFont from "../../../../components/IconFont";
 import { omitString } from "@common/utils";
 import "./index.css";
@@ -47,12 +48,12 @@ const CopylistItem = (props) => {
                   window.parent.location.replace(href);
                 }}
               >
-                {/* <IconFont type="shareLink" /> */}
+                <ShareInternalOutlined />
               </Button>
             ) : (
               <Button type="circle">
                 <Link to={href}>
-                  {/* <IconFont type="shareLink" /> */}
+                  <ShareInternalOutlined />
                 </Link>
               </Button>
             )}
@@ -62,7 +63,7 @@ const CopylistItem = (props) => {
         <Button
           onClick={handleCopy}
           type="circle"
-          icon={<IconFont type="copy" />}
+          icon={<CopyOutlined />}
           title="Copy code"
         />
       </span>

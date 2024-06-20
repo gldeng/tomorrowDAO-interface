@@ -5,7 +5,7 @@
 import {
   notification,
 } from 'antd';
-import { isSideChain } from 'utils/chian';
+import { isSideChain } from 'utils/chain';
 import getChainIdQuery from 'utils/url';
 import getExplorerRPC from 'utils/getExplorerRPC';
 import {

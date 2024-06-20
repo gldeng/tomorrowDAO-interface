@@ -4,8 +4,9 @@
  * @author atom-yang
  */
 // eslint-disable-next-line no-use-before-define
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { If, Then, Switch, Case } from "react-if";
+import { Search } from 'aelf-design';
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
 import {
   message,
@@ -44,9 +45,11 @@ import removeHash from "@utils/removeHash";
 import { request } from "@common/request";
 import { GET_PROPOSALS_LIST } from "@redux/actions/proposalList";
 import { debounce } from "lodash";
+import { eventBus } from "utils/myEvent";
 
+const handleStatusChangeEvent = 'handleStatusChange';
+const handleSearchChangeEvent = 'handleSearchChange';
 const { TabPane } = Tabs;
-const { Search } = Input;
 const { Option } = Select;
 const { proposalTypes, proposalStatus } = constants;
 const keyFromHash = {
@@ -63,9 +66,12 @@ const ProposalList = () => {
     visible: false,
   });
   const { bpCount, params, total, list, status: loadingStatus } = proposalList;
+  console.log('params', params)
   const { aelf, logStatus, isALLSettle, wallet, currentWallet } = common;
   const dispatch = useDispatch();
-  const [searchValue, setSearchValue] = useState(params.search);
+  const handleStatusChangeRef = useRef()
+  const handleSearchChangeRef = useRef()
+  
   const [activeKey, setActiveKey] = useState();
   const [loading, setLoading] = useState({
     Release: {},
@@ -91,6 +97,7 @@ const ProposalList = () => {
         address: currentWallet.address,
       };
     }
+    console.log('newParams', newParams)
     dispatch(getProposals(newParams));
   };
   useEffect(() => {
@@ -99,9 +106,7 @@ const ProposalList = () => {
     }
   }, [isALLSettle, logStatus]);
 
-  useEffect(() => {
-    setSearchValue(params.search);
-  }, [params.search]);
+
 
   const onPageNumChange = (pageNum) =>
     fetchList({
@@ -116,6 +121,7 @@ const ProposalList = () => {
       search: removePrefixOrSuffix((value || "").trim()),
     });
   };
+  
 
   const handleStatusChange = (value) =>
     fetchList({
@@ -123,6 +129,8 @@ const ProposalList = () => {
       pageNum: 1,
       status: value,
     });
+  handleSearchChangeRef.current = onSearch;
+  handleStatusChangeRef.current = handleStatusChange;
 
   const handleContractFilter = (e) => {
     fetchList({
@@ -303,8 +311,34 @@ const ProposalList = () => {
       }
     }, 200)();
   };
+  useEffect(() => {
+    const handleStatusChange = (value) => { 
+      handleStatusChangeRef.current?.(value)
+    }
+    const handleSearchChange = (value) => {
+      handleSearchChangeRef.current?.(value)
+    }
+    eventBus.on(handleStatusChangeEvent, handleStatusChange)
+    eventBus.on(handleSearchChangeEvent, handleSearchChange)
+    return () => {
+      eventBus.off(handleStatusChangeEvent, handleStatusChange)
+      eventBus.off(handleSearchChangeEvent, handleSearchChange)
+    }
+  }, [])
 
   return (
+    <ConfigProvider prefixCls="antExplorer"
+    theme={{
+      token: {
+        controlHeight: 32
+      },
+      components: {
+        Input: {
+          paddingBlock: 4
+        },
+      },
+    }}
+    >
     <div className="proposal-list">
       <Tabs
         className="proposal-list-tab"
@@ -337,32 +371,6 @@ const ProposalList = () => {
             </Checkbox>
           </Then>
         </If>
-        <div className="proposal-list-filter-form">
-          <div className="proposal-list-filter-form-select lg:mb-0 mb-2">
-            <span className="sub-title gap-right">Status: </span>
-            <Select
-              className="explorer-select"
-              defaultValue={proposalStatus.ALL}
-              value={params.status}
-              onChange={handleStatusChange}
-            >
-              <Option value={proposalStatus.ALL}>All</Option>
-              <Option value={proposalStatus.PENDING}>Pending</Option>
-              <Option value={proposalStatus.APPROVED}>Approved</Option>
-              <Option value={proposalStatus.RELEASED}>Released</Option>
-              <Option value={proposalStatus.EXPIRED}>Expired</Option>
-            </Select>
-          </div>
-          <Search
-            className="proposal-list-filter-form-input"
-            placeholder="Proposal ID/Contract Address/Proposer"
-            defaultValue={params.search}
-            allowClear
-            value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
-            onSearch={onSearch}
-          />
-        </div>
       </div>
       <div className="proposal-list-list">
         <Switch>
@@ -433,23 +441,49 @@ const ProposalList = () => {
           owner={currentWallet.address}
         />
       ) : null}
-    </div>
+      </div>
+      </ConfigProvider>
   );
 };
-const WrapAntd = function () {
-  return <ConfigProvider prefixCls="antExplorer"
-    theme={{
-      token: {
-        controlHeight: 32
-      },
-      components: {
-        Input: {
-          paddingBlock: 4
-        },
-      },
-    }}
+const ExplorerProposalListFilter = () => {
+  const proposalList = useSelector((state) => state.proposals, shallowEqual);
+  const { params } = proposalList;
+  const handleStatusChange = (value) => {
+    eventBus.emit(handleStatusChangeEvent, value)
+  }
+  const onSearch = (e) => {
+    eventBus.emit(handleSearchChangeEvent, e?.target?.value)
+  }
+  const [searchValue, setSearchValue] = useState(params.search);
+  useEffect(() => {
+    setSearchValue(params.search);
+  }, [params.search]);
+  return <div className="explorer-proposal-list-filter">
+    <Select
+      className="explorer-select"
+      defaultValue={proposalStatus.ALL}
+      value={params.status}
+      onChange={handleStatusChange}
     >
-    <ProposalList />
-  </ConfigProvider>
+      <Option value={proposalStatus.ALL}>All</Option>
+      <Option value={proposalStatus.PENDING}>Pending</Option>
+      <Option value={proposalStatus.APPROVED}>Approved</Option>
+      <Option value={proposalStatus.RELEASED}>Released</Option>
+      <Option value={proposalStatus.EXPIRED}>Expired</Option>
+    </Select>
+    <Search
+      className="proposal-list-filter-form-input"
+      placeholder="Proposal ID/Contract Address/Proposer"
+      defaultValue={params.search}
+      allowClear
+      value={searchValue}
+      onChange={(e) => setSearchValue(e.target.value)}
+      onPressEnter={onSearch}
+      inputSize={'small'}
+    />
+  </div>
 }
-export default React.memo(WrapAntd);
+export default React.memo(ProposalList);
+export {
+  ExplorerProposalListFilter
+}

@@ -19,36 +19,30 @@ export const useCallbackAssem = () => {
   const { wallet } = common;
   const { callContract } = useWebLogin();
   // eslint-disable-next-line no-return-await
-  const contractSend = useCallback(
-    async (action, params, isOriginResult) => {
-      const chainIdQuery = getChainIdQuery();
-      const result = await callContract({
-        contractAddress: getContractAddress("Genesis"),
-        args: params,
-        methodName: action,
-        options: {
-          chainId: chainIdQuery.chainId
-        }
-      });
-      if (isOriginResult) return result;
-      if ((result && +result.error === 0) || !result.error) {
-        return result;
+  const contractSend =  async (action, params, isOriginResult) => {
+    const chainIdQuery = getChainIdQuery();
+    const result = await callContract({
+      contractAddress: getContractAddress("Genesis"),
+      args: params,
+      methodName: action,
+      options: {
+        chainId: chainIdQuery.chainId
       }
-      throw new Error(
-        result.error.message ||
-          (result.errorMessage || {}).message ||
-          "Send transaction failed"
-      );
-    },
-    [wallet]
-  );
+    });
+    if (isOriginResult) return result;
+    if ((result && +result.error === 0) || !result.error) {
+      return result;
+    }
+    throw new Error(
+      result?.error?.message ||
+        (result?.errorMessage || {}).message ||
+        "Send transaction failed"
+    );
+  }
 
-  return useMemo(
-    () => ({
-      contractSend,
-    }),
-    [contractSend]
-  );
+  return {
+    contractSend,
+  }
 };
 
 export const useCallGetMethod = () => {
@@ -69,12 +63,9 @@ export const useCallGetMethod = () => {
     },
     [wallet]
   );
-  return useMemo(
-    () => ({
-      callGetMethodSend,
-    }),
-    [callGetMethodSend]
-  );
+  return {
+    callGetMethodSend,
+  }
 };
 
 export const useReleaseApprovedContractAction = () => {
@@ -83,72 +74,69 @@ export const useReleaseApprovedContractAction = () => {
   const common = useSelector((state) => state.common);
   const { contractSend } = useCallbackAssem();
   const { aelf } = common;
-  return useCallback(
-    async (contract) => {
-      const { contractMethod, proposalId } = contract;
-      const proposalItem = proposalSelect.list.find(
-        (item) => item.proposalId === proposalId
+  return  async (contract) => {
+    const { contractMethod, proposalId } = contract;
+    const proposalItem = proposalSelect.list.find(
+      (item) => item.proposalId === proposalId
+    );
+    if (!proposalItem)
+      throw new Error("Please check if the proposalId is valid");
+    const res = await getDeserializeLog(
+      aelf,
+      proposalItem.createTxId,
+      "ContractProposed"
+    );
+    const { proposedContractInputHash } = res ?? {};
+    if (!proposedContractInputHash)
+      throw new Error("Please check if the proposalId is valid");
+    const param = {
+      proposalId,
+      proposedContractInputHash,
+    };
+    const result = await contractSend(contractMethod, param, true);
+    let isError = false;
+    if (!((result && +result.error === 0) || !result.error)) {
+      isError = true;
+      throw new Error(
+        (result.errorMessage || {}).message ||
+          result?.error?.message ||
+          "Send transaction failed"
       );
-      if (!proposalItem)
-        throw new Error("Please check if the proposalId is valid");
-      const res = await getDeserializeLog(
-        aelf,
-        proposalItem.createTxId,
-        "ContractProposed"
-      );
-      const { proposedContractInputHash } = res ?? {};
-      if (!proposedContractInputHash)
-        throw new Error("Please check if the proposalId is valid");
-      const param = {
-        proposalId,
-        proposedContractInputHash,
-      };
-      const result = await contractSend(contractMethod, param, true);
-      let isError = false;
-      if (!((result && +result.error === 0) || !result.error)) {
-        isError = true;
-        throw new Error(
-          (result.errorMessage || {}).message ||
-            result?.error?.message ||
-            "Send transaction failed"
-        );
-      }
-      const txsId =
-        result?.TransactionId ||
-        result?.result?.TransactionId ||
-        result.transactionId ||
-        "";
-      const Log = await getDeserializeLog(aelf, txsId, "ProposalCreated");
-      const { proposalId: newProposalId } = Log ?? "";
-      return {
-        visible: true,
-        title:
-          !isError && newProposalId
-            ? "Proposal is created！"
-            : "Proposal failed to be created！",
-        children: (
-          <div style={{ textAlign: "left" }}>
-            {!isError && newProposalId ? (
-              <CopylistItem
-                label="Proposal ID"
-                value={newProposalId ?? ""}
-                // href={`/proposalsDetail/${newProposalId}`}
-              />
-            ) : (
-              "This may be due to transaction failure. Please check it via Transaction ID:"
-            )}
+    }
+    const txsId =
+      result?.TransactionId ||
+      result?.result?.TransactionId ||
+      result.transactionId ||
+      "";
+    const Log = await getDeserializeLog(aelf, txsId, "ProposalCreated");
+    const { proposalId: newProposalId } = Log ?? "";
+    return {
+      visible: true,
+      title:
+        !isError && newProposalId
+          ? "Proposal is created！"
+          : "Proposal failed to be created！",
+      children: (
+        <div style={{ textAlign: "left" }}>
+          {!isError && newProposalId ? (
             <CopylistItem
-              label="Transaction ID"
-              isParentHref
-              value={txsId}
-              href={`${isSideChain ? explorer : mainExplorer}/tx/${txsId}`}
+              label="Proposal ID"
+              value={newProposalId ?? ""}
+              // href={`/proposalsDetail/${newProposalId}`}
             />
-          </div>
-        ),
-      };
-    },
-    [proposalSelect, contractSend]
-  );
+          ) : (
+            "This may be due to transaction failure. Please check it via Transaction ID:"
+          )}
+          <CopylistItem
+            label="Transaction ID"
+            isParentHref
+            value={txsId}
+            href={`${isSideChain ? explorer : mainExplorer}/tx/${txsId}`}
+          />
+        </div>
+      ),
+    };
+  };
 };
 
 export const useReleaseCodeCheckedContractAction = () => {
@@ -157,108 +145,105 @@ export const useReleaseCodeCheckedContractAction = () => {
   const { contractSend } = useCallbackAssem();
   const { callGetMethodSend } = useCallGetMethod();
   const { aelf } = common;
-  return useCallback(
-    async (contract, isDeploy) => {
-      const { contractMethod, proposalId } = contract;
-      const proposalItem = proposalSelect.list.find(
-        (item) => item.proposalId === proposalId
+  return  async (contract, isDeploy) => {
+    const { contractMethod, proposalId } = contract;
+    const proposalItem = proposalSelect.list.find(
+      (item) => item.proposalId === proposalId
+    );
+    if (!proposalItem)
+      throw new Error("Please check if the proposalId is valid");
+    const proposedContractInputHash =
+      await getOriginProposedContractInputHash({
+        txId: proposalItem.createTxId,
+      });
+    if (!proposedContractInputHash)
+      throw new Error("Please check if the proposalId is valid");
+    const param = {
+      proposalId,
+      proposedContractInputHash,
+    };
+
+    const result = await contractSend(contractMethod, param, true);
+    let isError = false;
+    if (!((result && +result.error === 0) || !result.error)) {
+      isError = true;
+      throw new Error(
+        (result.errorMessage || {}).message ||
+          result?.error?.message ||
+          "Send transaction failed"
       );
-      if (!proposalItem)
-        throw new Error("Please check if the proposalId is valid");
-      const proposedContractInputHash =
-        await getOriginProposedContractInputHash({
-          txId: proposalItem.createTxId,
-        });
-      if (!proposedContractInputHash)
-        throw new Error("Please check if the proposalId is valid");
-      const param = {
-        proposalId,
-        proposedContractInputHash,
-      };
+    }
+    const txsId =
+      result?.TransactionId ||
+      result?.result?.TransactionId ||
+      result.transactionId ||
+      "";
+    let txResult;
+    if (result.data) {
+      // portkey sdk login
+      txResult = result.data;
+    } else {
+      txResult = await getTxResult(aelf, txsId ?? "");
+    }
+    if (!txResult) {
+      throw Error("Can not get transaction result.");
+    }
 
-      const result = await contractSend(contractMethod, param, true);
-      let isError = false;
-      if (!((result && +result.error === 0) || !result.error)) {
-        isError = true;
-        throw new Error(
-          (result.errorMessage || {}).message ||
-            result?.error?.message ||
-            "Send transaction failed"
+    if (txResult.Status.toLowerCase() === "mined") {
+      isError = false;
+    } else {
+      isError = true;
+    }
+    let contractAddress = "";
+    let contractVersion = "";
+    if (!isError) {
+      const logs = await getDeserializeLog(aelf, txsId, [
+        "ContractDeployed",
+        "CodeUpdated",
+      ]);
+      const { address } = logs ?? {};
+      contractVersion = (logs || {}).contractVersion;
+      contractAddress = address;
+    }
+    // get contractVersion
+    let contractName = "";
+    if (contractAddress) {
+      if (!contractVersion) {
+        const verRes = await callGetMethodSend(
+          "Genesis",
+          "GetContractInfo",
+          contractAddress
         );
+        contractVersion = verRes.contractVersion;
       }
-      const txsId =
-        result?.TransactionId ||
-        result?.result?.TransactionId ||
-        result.transactionId ||
-        "";
-      let txResult;
-      if (result.data) {
-        // portkey sdk login
-        txResult = result.data;
-      } else {
-        txResult = await getTxResult(aelf, txsId ?? "");
-      }
-      if (!txResult) {
-        throw Error("Can not get transaction result.");
-      }
+      // get contractName
+      const nameRes = await get(VIEWER_GET_CONTRACT_NAME, {
+        address: contractAddress,
+      });
+      contractName = nameRes.data.name;
+    }
 
-      if (txResult.Status.toLowerCase() === "mined") {
-        isError = false;
-      } else {
-        isError = true;
-      }
-      let contractAddress = "";
-      let contractVersion = "";
-      if (!isError) {
-        const logs = await getDeserializeLog(aelf, txsId, [
-          "ContractDeployed",
-          "CodeUpdated",
-        ]);
-        const { address } = logs ?? {};
-        contractVersion = (logs || {}).contractVersion;
-        contractAddress = address;
-      }
-      // get contractVersion
-      let contractName = "";
-      if (contractAddress) {
-        if (!contractVersion) {
-          const verRes = await callGetMethodSend(
-            "Genesis",
-            "GetContractInfo",
-            contractAddress
-          );
-          contractVersion = verRes.contractVersion;
-        }
-        // get contractName
-        const nameRes = await get(VIEWER_GET_CONTRACT_NAME, {
-          address: contractAddress,
-        });
-        contractName = nameRes.data.name;
-      }
-
-      return {
-        visible: true,
-        title:
-          !isError && contractAddress
-            ? `Contract is ${isDeploy ? "deployed" : "updated"}！`
-            : `Contract failed to be ${isDeploy ? "deployed" : "updated"}！`,
-        children: (
-          <div style={{ textAlign: "left" }}>
-            {!isError && contractAddress ? (
-              <div>
-                <AddressNameVer
-                  address={contractAddress}
-                  name={contractName || contract.name}
-                  ver={contractVersion}
-                />
-              </div>
-            ) : (
-              "Please check your Proposal ."
-            )}
-          </div>
-        ),
-      };
-    },
-    [proposalSelect, contractSend]
-  );
+    return {
+      visible: true,
+      title:
+        !isError && contractAddress
+          ? `Contract is ${isDeploy ? "deployed" : "updated"}！`
+          : `Contract failed to be ${isDeploy ? "deployed" : "updated"}！`,
+      children: (
+        <div style={{ textAlign: "left" }}>
+          {!isError && contractAddress ? (
+            <div>
+              <AddressNameVer
+                address={contractAddress}
+                name={contractName || contract.name}
+                ver={contractVersion}
+              />
+            </div>
+          ) : (
+            "Please check your Proposal ."
+          )}
+        </div>
+      ),
+    };
+  }
 };

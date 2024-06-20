@@ -32,7 +32,9 @@ import { eventBus, ResultModal } from 'utils/myEvent';
 import { CommonOperationResultModalType } from 'components/CommonOperationResultModal';
 import { INIT_RESULT_MODAL_CONFIG } from 'components/ResultModal';
 import useUpdateHeaderDaoInfo from 'hooks/useUpdateHeaderDaoInfo';
-import ExplorerProposalList from '../../network-dao/ExplorerProposalList';
+import ExplorerProposalList, {
+  ExplorerProposalListFilter,
+} from '../../network-dao/ExplorerProposalList';
 import './page.css';
 import { useChainSelect } from 'hooks/useChainSelect';
 import getChainIdQuery from 'utils/url';
@@ -224,20 +226,15 @@ export default function DeoDetails(props: IProps) {
         key: TabKey.PROPOSALS,
         label: 'All Proposals',
         children: (
-          <div className={`tab-all-proposals ${isNetworkDAO ? '!pb-0' : ''}`}>
-            <div className={`tab-all-proposals-header ${isNetworkDAO ? '!mb-2' : ''}`}>
-              {!isNetworkDAO ? (
-                <Typography.Title fontWeight={FontWeightEnum.Medium} level={6}>
-                  Proposals
-                </Typography.Title>
-              ) : (
-                <div></div>
-              )}
+          <div className={`tab-all-proposals `}>
+            <div className={`tab-all-proposals-header `}>
+              <h3 className="title">Proposals</h3>
               {CreateButton}
             </div>
             {!isNetworkDAO && (
               <Filter form={form} tableParams={tableParams} onChangeTableParams={setTableParams} />
             )}
+            {isNetworkDAO && <ExplorerProposalListFilter />}
           </div>
         ),
       },

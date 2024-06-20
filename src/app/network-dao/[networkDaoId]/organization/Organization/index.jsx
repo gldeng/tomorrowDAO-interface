@@ -9,7 +9,7 @@ import moment from "moment";
 import PropTypes from "prop-types";
 import { EditOutlined } from "@ant-design/icons";
 import { Card,Row,Select,Col,Divider } from "antd";
-import { mainExplorer } from 'config'
+import { mainExplorer, explorer } from 'config'
 import constants, {
   LOG_STATUS,
   organizationInfoPropTypes,
@@ -20,6 +20,7 @@ import "./index.css";
 import { isPhoneCheck } from "@common/utils";
 import { PRIMARY_COLOR } from "@common/constants";
 import addressFormat from "@utils/addressFormat";
+import { useChainSelect } from "hooks/useChainSelect";
 
 const { viewer } = config;
 
@@ -239,6 +240,7 @@ const Organization = (props) => {
       ),
     [proposalType, releaseThreshold, leftOrgInfo]
   );
+  const { isSideChain } = useChainSelect()
   // console.log("votesData", votesData);
   const leftOrg = useMemo(
     () =>
@@ -285,7 +287,7 @@ const Organization = (props) => {
               <span className="sub-title gap-right">Author:</span>
               <span className="text-ellipsis">
                 <a
-                  href={`${mainExplorer}/address/${addressFormat(creator)}`}
+                  href={`${isSideChain ? explorer : mainExplorer}/address/${addressFormat(creator)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -435,7 +437,7 @@ const Organization = (props) => {
             <span className="sub-title gap-right">Author:</span>
             <span className="text-ellipsis">
               <a
-                href={`${mainExplorer}/address/${addressFormat(creator)}`}
+                href={`${isSideChain ? explorer : mainExplorer}/address/${addressFormat(creator)}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >

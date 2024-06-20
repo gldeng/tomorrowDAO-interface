@@ -86,7 +86,7 @@ const getMessageByExec = (props: IModalProps, isSideChain: Boolean) => {
       return null;
   }
 };
-const getMessage = (props, isSideChain) => {
+const getMessage = (props: IModalProps, isSideChain: boolean) => {
   const { isUpdate, status, message, transactionId, title } = props;
   const { verification } = status || {};
   switch (verification) {

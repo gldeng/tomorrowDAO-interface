@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { isSideChain } from 'utils/chian';
+import { isSideChain } from 'utils/chain';
 import getChainIdQuery from 'utils/url';
 
 function useChainSelect() {

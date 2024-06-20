@@ -12,7 +12,7 @@ import BoxWrapper from 'app/proposal/[proposalId]/components/BoxWrapper';
 import './index.css';
 import Link from 'next/link';
 import { explorer, mainExplorer } from 'config';
-import { isSideChain } from 'utils/chian';
+import { isSideChain } from 'utils/chain';
 import { numberFormatter } from 'utils/numberFormatter';
 import TreasuryNoTxGuide from 'components/TreasuryNoTxGuide';
 interface ITransparentProps {
