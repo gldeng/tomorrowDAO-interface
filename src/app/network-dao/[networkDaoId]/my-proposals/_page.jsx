@@ -5,7 +5,7 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { useSelector } from "react-redux";
 import moment from "moment";
-import { Tooltip, Menu, message, Tabs, Tag, Row, Col } from "antd";
+import { Tooltip, Menu, message, Tabs, Tag, Row, Col, Result } from "antd";
 import LinkNetworkDao from 'components/LinkNetworkDao';
 import List from "./List";
 import constants, {
@@ -18,12 +18,15 @@ import {
   removePrefixOrSuffix,
   sendHeight,
 } from "@common/utils";
+import { isSideChainByQueryParams } from 'utils/chain'
+import { explorer, mainExplorer } from "config";
 import config from "@common/config";
 import OrgAddress from "../../_proposal_root/components/OrgAddress";
 import { request } from "@common/request";
 
-import "./index.css";
 
+import "./index.css";
+const isSideChain = isSideChainByQueryParams()
 const { SubMenu, Item: MenuItem } = Menu;
 const { TabPane } = Tabs;
 const { proposalTypes } = constants;
@@ -72,7 +75,7 @@ const LIST_TABS = {
         render(text) {
           return (
             <a
-              href={`${config.viewer.txUrl}/${text}`}
+              href={`${isSideChain ? explorer : mainExplorer}/tx/${text}`}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -128,7 +131,7 @@ const LIST_TABS = {
         render(text) {
           return (
             <a
-              href={`${config.viewer.txUrl}/${text}`}
+              href={`${isSideChain ? explorer : mainExplorer}/tx/${text}`}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -177,7 +180,7 @@ const LIST_TABS = {
         render(text) {
           return (
             <a
-              href={`${config.viewer.txUrl}/${text}`}
+              href={`${isSideChain ? explorer : mainExplorer}/tx/${text}`}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -240,7 +243,7 @@ const LIST_TABS = {
         render(text) {
           return (
             <a
-              href={`${config.viewer.txUrl}/${text}`}
+              href={`${isSideChain ? explorer : mainExplorer}/tx/${text}`}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -420,6 +423,13 @@ const MyProposal = () => {
       },
       params.currentMenu
     );
+  }
+  if (!currentWallet.address) {
+    return <Result
+      className="px-4 lg:px-8"
+      status="warning"
+      title="Please log in before viewing the content"
+    />;
   }
 
   return (

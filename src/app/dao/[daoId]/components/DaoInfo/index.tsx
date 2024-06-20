@@ -78,17 +78,19 @@ export default function DaoInfo(props: IParams) {
       if (!address) return null;
       return {
         key: dataKey,
-        label: obj.label,
+        label: <span className="dao-collapse-panel-label">{obj.label}</span>,
         children: (
-          <Link href={getExploreLink(address as string, 'address')} target="_blank">
-            <HashAddress
-              preLen={8}
-              endLen={11}
-              className="address"
-              address={address as string}
-              chain={curChain}
-            ></HashAddress>
-          </Link>
+          <span className="dao-collapse-panel-child">
+            <Link href={getExploreLink(address as string, 'address')} target="_blank">
+              <HashAddress
+                preLen={8}
+                endLen={11}
+                className="address"
+                address={address as string}
+                chain={curChain}
+              ></HashAddress>
+            </Link>
+          </span>
         ),
       };
     })
@@ -98,48 +100,56 @@ export default function DaoInfo(props: IParams) {
     !isNetworkDAO
       ? {
           key: '1',
-          label: 'Creator',
+          label: <span className="dao-collapse-panel-label">Creator</span>,
           children: (
-            <HashAddress
-              className="address"
-              preLen={8}
-              endLen={11}
-              chain={curChain}
-              address={data?.creator ?? '-'}
-            ></HashAddress>
+            <span className="dao-collapse-panel-child">
+              <HashAddress
+                className="address"
+                preLen={8}
+                endLen={11}
+                chain={curChain}
+                address={data?.creator ?? '-'}
+              ></HashAddress>
+            </span>
           ),
         }
       : null,
     ...(isNetworkDAO ? [] : contractItems ?? []),
     {
       key: '3',
-      label: 'Governance Token',
-      children: data?.governanceToken ?? '-',
+      label: <span className="dao-collapse-panel-label">Governance Token</span>,
+      children: <span className="dao-collapse-panel-child">{data?.governanceToken ?? '-'}</span>,
     },
     {
       key: '4',
-      label: 'Governance Mechanism',
-      children: `Referendum ${data?.isHighCouncilEnabled ? ' + High Council' : ''}`,
+      label: <span className="dao-collapse-panel-label">Governance Mechanism</span>,
+      children: (
+        <span className="dao-collapse-panel-child">{`Referendum ${
+          data?.isHighCouncilEnabled ? ' + High Council' : ''
+        } `}</span>
+      ),
     },
     isNetworkDAO && isSideChain
       ? null
       : {
           key: '5',
-          label: 'High Council',
+          label: <span className="dao-collapse-panel-label">High Council</span>,
           children: (
-            <div className="dis-item">
-              <span
-                className="dis-common-span"
-                onClick={() => {
-                  if (isNetworkDAO) {
-                    onChangeHCParams();
-                  }
-                }}
-              >
-                {data?.highCouncilMemberCount ?? '-'} Members,
+            <span className="dao-collapse-panel-child">
+              <span className="dis-item">
+                <span
+                  className="dis-common-span"
+                  onClick={() => {
+                    if (isNetworkDAO) {
+                      onChangeHCParams();
+                    }
+                  }}
+                >
+                  {data?.highCouncilMemberCount ?? '-'} Members,
+                </span>
+                <span>Rotates Every {data?.highCouncilConfig?.electionPeriod} Days.</span>
               </span>
-              <span>Rotates Every {data?.highCouncilConfig?.electionPeriod} Days.</span>
-            </div>
+            </span>
           ),
         },
     // {
@@ -177,7 +187,7 @@ export default function DaoInfo(props: IParams) {
                 height={80}
                 src={metadata?.logoUrl ?? DaoLogo}
                 alt=""
-                className="mr-2 rounded-full logo-image"
+                className="rounded-full logo-image"
               ></Image>
               <div className="flex">
                 {wallet.address === data?.creator && (
@@ -204,13 +214,14 @@ export default function DaoInfo(props: IParams) {
                 <h2 className="title">{metadata?.name}</h2>
                 <p className="description">{metadata?.description}</p>
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-4">
                 {socialMediaList.map(
                   ({ name, url }, index) =>
                     url && (
                       <Link href={getSocialUrl(name, url)} target="_blank" key={index}>
                         <Image
                           src={(colorfulSocialMediaIconMapKeys as any)[name]}
+                          className="social-media-item-logo"
                           alt="media"
                           width={16}
                           height={16}
@@ -223,7 +234,10 @@ export default function DaoInfo(props: IParams) {
           </div>
           <Divider className="mb-2 lg:mb-6" />
           <Collapse defaultActiveKey={isNetworkDAO ? [] : ['1']} ghost>
-            <Collapse.Panel header={<Typography.Title>Dao Information</Typography.Title>} key="1">
+            <Collapse.Panel
+              header={<h3 className="dao-collapse-panel">Dao Information</h3>}
+              key="1"
+            >
               <Descriptions
                 layout={isLG ? 'vertical' : 'horizontal'}
                 items={items}

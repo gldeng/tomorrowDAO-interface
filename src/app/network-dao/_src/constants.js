@@ -15,7 +15,6 @@ import { removeAElfPrefix } from "./utils/utils";
 // eslint-disable-next-line import/no-cycle
 import Dividends from "./components/Dividends";
 import { mainExplorer } from "config";
-// todo 1.4.0
 const { SYMBOL, CHAIN_ID } = config;
 dayjs.extend(relativeTime);
 

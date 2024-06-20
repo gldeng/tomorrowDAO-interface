@@ -7,8 +7,8 @@ export const treasuryAccountAddress = 'KNdM6U6PyPsgyena8rPHTbCoMrkrALhxAy1b8Qx2c
 export const networkType = 'MAINNET';
 export const aelfWebLoginNetworkType = 'MAIN';
 export const rpcUrlAELF = 'https://explorer.aelf.io/chain';
-export const rpcUrlTDVV = 'https://tdvv-public-node.aelf.io';
-export const rpcUrlTDVW = 'https://tdvv-public-node.aelf.io';
+export const rpcUrlTDVV = 'https://tdvv-explorer.aelf.io/chain';
+export const rpcUrlTDVW = 'https://tdvv-explorer.aelf.io/chain';
 export const connectServer = 'https://auth-portkey.portkey.finance';
 export const graphqlServer =
   'https://dapp-aa-portkey.portkey.finance/Portkey_V2_DID/PortKeyIndexerCASchema/graphql';

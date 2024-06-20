@@ -34,7 +34,7 @@ import {
 import WithoutApprovalModal from "../../_proposal_root/components/WithoutApprovalModal/index";
 import { deserializeLog, isPhoneCheck } from "@common/utils";
 import { interval } from "@utils/timeUtils";
-import { useRouter, usePathname, useSearchParams } from 'next/navigation'
+import { useRouter, usePathname, useSearchParams, useParams } from 'next/navigation'
 import { get } from "../../_src/utils.js";
 // import { isPortkeyApp } from "../../../../utils/isWebView";
 import { VIEWER_GET_CONTRACT_NAME } from "@api/url";
@@ -65,6 +65,7 @@ const GET_CONTRACT_VERSION_TIMEOUT = 1000 * 60 * 10;
 const CreateProposal = () => {
   // const { orgAddress = "" } = useSearchParams();
   const { isSideChain } = useChainSelect()
+  const { networkDaoId } = useParams();
   const searchParams = useSearchParams()
   const orgAddress = searchParams.get('orgAddress');
   const modifyData = useSelector((state) => state.proposalModify);
@@ -119,25 +120,19 @@ const CreateProposal = () => {
     });
   }
 
-  const ReleaseApprovedContractAction = useCallback(
-    async (contract) => {
-      const modalContent = await releaseApprovedContractHandler(contract);
-      setApplyModal(modalContent);
-    },
-    [proposalSelect]
-  );
+  const ReleaseApprovedContractAction =  async (contract) => {
+    const modalContent = await releaseApprovedContractHandler(contract);
+    setApplyModal(modalContent);
+  }
 
-  const ReleaseCodeCheckedContractAction = useCallback(
-    async (contract, isDeploy) => {
-      const modalContent = await releaseCodeCheckedContractHandler(
-        contract,
-        isDeploy
-      );
+  const ReleaseCodeCheckedContractAction = async (contract, isDeploy) => {
+    const modalContent = await releaseCodeCheckedContractHandler(
+      contract,
+      isDeploy
+    );
 
-      setApplyModal(modalContent);
-    },
-    [proposalSelect]
-  );
+    setApplyModal(modalContent);
+  }
 
   const cancelWithoutApproval = () => {
     // to destroy sure modal
@@ -192,7 +187,7 @@ const CreateProposal = () => {
       }
     });
   };
-  const openFailedWithoutApprovalModal = (isUpdate, transactionId) => {
+  const openFailedWithoutApprovalModal = (isUpdate, transactionId, status) => {
     // exec fail modal
     onOpenWithoutApprovalModal({
       isUpdate,
@@ -204,6 +199,7 @@ const CreateProposal = () => {
       title: `Contract deployment failed!`,
       message: (
         <div>
+          status: {status}
           <div>
             1. The contract code you deployed didn&apos;t pass the codecheck,
             possibly due to that it didn&apos;t implement methods in the ACS12
@@ -322,6 +318,7 @@ const CreateProposal = () => {
       contractMethod,
       approvalMode,
     } = contract;
+    console.log('contract', contract);
     let params = {};
     try {
       // bp and without approval, both process is below when onlyUpdateName.
@@ -452,6 +449,7 @@ const CreateProposal = () => {
               isUpdate,
               address
             );
+            // todo 1.4.0
             if (minedRes.status === "success") {
               const { contractAddress, contractName, contractVersion } =
                 minedRes;
@@ -481,7 +479,7 @@ const CreateProposal = () => {
                 },
                 cancel: cancelWithoutApproval,
                 message:
-                  "This may be due to the failure in transaction which can be vviewed via Transaction ID:",
+                  "This may be due to the failure in transaction which can be viewed via Transaction ID:",
                 transactionId,
               });
             }
@@ -532,6 +530,7 @@ const CreateProposal = () => {
           address: currentWallet.address,
         });
       }
+      const chainIdQuery = getChainIdQuery();
       setApplyModal({
         visible: true,
         title: proposalId
@@ -544,7 +543,7 @@ const CreateProposal = () => {
                 <CopylistItem
                   label="Proposal ID"
                   value={proposalId}
-                  // href={`/proposalsDetail/${proposalId}`}
+                  href={`${NetworkDaoHomePathName}/${networkDaoId}/proposal-detail/?proposalId=${proposalId}&${chainIdQuery.chainIdQueryString}`}
                 />
               </div>
             ) : (
@@ -640,10 +639,8 @@ const CreateProposal = () => {
       } = normalResult;
 
       const chainIdQuery = getChainIdQuery();
-      // todo 1.4.0
       const params = {
         contractAddress: getContractAddress(proposalType),
-        // todo
         methodName: "CreateProposal",
         args: {
           contractMethodName,
@@ -703,6 +700,7 @@ const CreateProposal = () => {
             submit={handleNormalSubmit}
           />
         </TabPane>
+        {/* contract deploy */}
         <TabPane tab="Deploy/Update Contract" key="contract">
           <ContractProposal
             loading={contractResult.confirming}

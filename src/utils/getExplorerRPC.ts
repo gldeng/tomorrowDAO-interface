@@ -1,4 +1,4 @@
-import { isSideChain } from 'utils/chian';
+import { isSideChain } from 'utils/chain';
 import { networkType } from 'config';
 import getChainIdQuery from 'utils/url';
 

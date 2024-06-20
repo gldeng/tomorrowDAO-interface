@@ -1,32 +1,44 @@
 .dao-basic-info {
-  @apply flex lg:flex-row flex-col gap-2;
+  @apply flex lg:flex-row flex-col gap-2 justify-between;
 }
 
 .dao-detail-dis {
   @apply border border-Neutral-Divider border-solid rounded-lg bg-white pt-6;
 
+  .TMRWDAO-descriptions .TMRWDAO-descriptions-row>td {
+    @apply pb-[12px];
+  }
+
+  .TMRWDAO-descriptions .TMRWDAO-descriptions-row>th {
+    @apply pb-0;
+  }
+
   .dao-detail-logo {
     @apply lg:order-2 order-1 flex flex-row lg:flex-col lg:items-end justify-between;
 
     .logo-image {
-      @apply mb-[24px]
+      @apply lg:w-[80px] lg:h-[80px] w-[48px] h-[48px];
     }
   }
 
   .dao-detail-desc {
-    @apply text-neutralTitle lg:order-1 order-2;
+    @apply lg:order-1 order-2;
 
     .title {
-      @apply font-[500] text-[40px] leading-[48px];
+      @apply font-[500] lg:text-[40px] lg:leading-[48px] text-[24px] leading-[32px] text-neutralTitle lg:pt-[0px] pt-[8px];
     }
 
     .description {
-      @apply font-[400] text-[16px] leading-[24px] pt-[8px] mb-[24px];
+      @apply font-[400] lg:text-[16px] lg:leading-[24px] text-[14px] leading-[22px] lg:pt-[8px] pt-[16px] lg:mb-[24px] mb-[16px] text-neutralTitle;
+    }
+
+    .social-media-item-logo {
+      @apply w-[20px] h-[20px];
     }
   }
 
   .dis-item {
-    @apply flex items-center text-neutralPrimaryText;
+    @apply flex items-center text-neutralTitle;
 
     .dis-common-span {
       @apply text-colorPrimary mr-1 cursor-pointer;
@@ -40,4 +52,16 @@
   .TMRWDAO-collapse-content-box {
     @apply px-4 lg:px-8 !important;
   }
+}
+
+.dao-collapse-panel {
+  @apply font-[500] text-[16px] leading-[24px] text-neutralTitle;
+}
+
+.dao-collapse-panel-label {
+  @apply font-[400] text-[14px] leading-[22px] text-Neutral-Secondary-Text;
+}
+
+.dao-collapse-panel-child {
+  @apply font-[500] text-[14px] leading-[22px] text-neutralTitle;
 }

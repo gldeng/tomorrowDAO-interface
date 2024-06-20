@@ -4,7 +4,7 @@
  * @author huangzongzhe
  */
 import { networkType } from "config";
-import { isSideChain } from "utils/chian";
+import { isSideChain } from "utils/chain";
 import getExplorerRPC from 'utils/getExplorerRPC';
 import getChainIdQuery from 'utils/url';
 const chainIdQuery = getChainIdQuery();
@@ -24,7 +24,6 @@ if (networkType === 'TESTNET') {
   }
 }
 
-// todo 1.4.0
 // the block chain URL this explorer is serving
 
 const BUILD_ENDPOINT =

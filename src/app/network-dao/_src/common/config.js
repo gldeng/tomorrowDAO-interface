@@ -2,7 +2,6 @@
  * @file config
  * @author atom-yang
  */
-// todo 1.4.0 viewer
 
 import viewerInfo from '../config/viewer/config.js'
 

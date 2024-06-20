@@ -47,7 +47,8 @@ const PreviewCard = ({ info, text, price = { USD: 0 } }) => {
             router.push(`${mainExplorer}/tx/${text}`);
           }}
         >
-          See more Details <IconFont type="chakangengduojiantou" />
+          See more Details
+          <IconFont type="chakangengduojiantou" />
         </a>
       </div>
       <div className="bottom">
@@ -145,7 +146,8 @@ export default (timeFormat, price, handleFormatChange) => {
       dataIndex: "time",
       title: (
         <div className="time" onClick={handleFormatChange}>
-          {timeFormat} <IconFont type="change" />
+          {timeFormat}
+          <IconFont type="change" />
         </div>
       ),
       width: isMobile ? 140 : 162,
