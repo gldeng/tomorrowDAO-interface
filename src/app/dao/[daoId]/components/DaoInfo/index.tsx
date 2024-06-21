@@ -12,8 +12,11 @@ import Link from 'next/link';
 import { getExploreLink } from 'utils/common';
 import { useChainSelect } from 'hooks/useChainSelect';
 import './index.css';
-import { curChain, NetworkDaoHomePathName } from 'config';
+import { curChain, daoAddress, NetworkDaoHomePathName } from 'config';
 import { useWebLogin } from 'aelf-web-login';
+import { useAsyncEffect } from 'ahooks';
+import { callViewContract } from 'contract/callContract';
+import { useState } from 'react';
 
 const firstLetterToLowerCase = (str: string) => {
   return str.charAt(0).toLowerCase() + str.slice(1);
@@ -25,7 +28,9 @@ const colorfulSocialMediaIconMapKeys = Object.keys(colorfulSocialMediaIconMap).r
   }),
   {},
 );
-
+interface IViewFileContract {
+  data: Record<string, IFileInfo>;
+}
 const getSocialUrl = (key: string, val: string) => {
   if (key === 'twitter') {
     return `https://twitter.com/${val.includes('@') ? val.split('@')[1] : val}`;
@@ -59,6 +64,7 @@ export default function DaoInfo(props: IParams) {
     daoId,
   } = props;
   const { wallet } = useWebLogin();
+  const [contractFiles, setContractFiles] = useState<IFileInfo[]>([]);
 
   const { isLG, isSM } = useResponsive();
   const { isSideChain } = useChainSelect();
@@ -170,6 +176,19 @@ export default function DaoInfo(props: IParams) {
     // },
   ].filter(Boolean) as DescriptionsProps['items'];
 
+  useAsyncEffect(async () => {
+    if (!daoId) return;
+    const res = await callViewContract<string, IViewFileContract>(
+      'GetFileInfos',
+      daoId,
+      daoAddress,
+    );
+    if (res) {
+      const contractFiles = Object.values(res.data);
+      setContractFiles(contractFiles);
+    }
+  }, [daoId]);
+
   return (
     <div className="dao-detail-dis">
       {isLoading ? (
@@ -206,7 +225,7 @@ export default function DaoInfo(props: IParams) {
                   </Link>
                 )}
 
-                <PreviewFile list={fileInfoList} />
+                <PreviewFile list={fileInfoList?.length ? fileInfoList : contractFiles} />
               </div>
             </div>
             <div className="dao-detail-desc px-4 lg:px-8">
