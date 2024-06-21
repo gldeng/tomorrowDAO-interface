@@ -182,7 +182,7 @@ const FIELDS_MAP = {
     name: "members",
     label: (
       <span>
-        Organization members&nbsp;
+        Organisation members&nbsp;
         <Tooltip
           title="Input the address list of members,
           separated by commas, such as
@@ -484,11 +484,11 @@ const CreateOrganization = () => {
     <div className="create-organization">
       <div className="create-organization-header">
         <div className="create-organization-header-title">
-          Create Organization
+          Create Organisation
         </div>
         <div className="create-organization-header-action">
           <LinkNetworkDao href="/organization">
-            &lt;Back to Organization List
+            &lt;Back to Organisation List
           </LinkNetworkDao>
         </div>
       </div>
