@@ -7,7 +7,7 @@ import React from 'react';
 const Total = (total) => (
   <span>
     Total
-    <span>{total}</span>
+    <span> {total}</span>
     {' '}
     Items
   </span>

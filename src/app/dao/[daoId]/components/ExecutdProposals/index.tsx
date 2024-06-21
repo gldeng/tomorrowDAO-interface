@@ -165,7 +165,7 @@ export default function ExecutdProposals(props: IExecutdProposals) {
         title="This proposal needs to be executed"
       >
         {/* <Typography.Text>
-          As a member of this organization， you need to initiate a request to this organization to
+          As a member of this organisation， you need to initiate a request to this organisation to
           execute the proposal.
         </Typography.Text>
         <Button type="link" className="!px-0">
@@ -173,7 +173,7 @@ export default function ExecutdProposals(props: IExecutdProposals) {
         </Button> */}
         <Typography.Text>
           Once you mark this proposal as executed, it wil be tagged as executed status meaning that
-          other addresses within your organization will no longer be able to execute this proposal.
+          other addresses within your organisation will no longer be able to execute this proposal.
           Please ensure that you have completed the execution of this proposal before marking its
           status.
         </Typography.Text>
