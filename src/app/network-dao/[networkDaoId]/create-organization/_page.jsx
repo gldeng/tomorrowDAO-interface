@@ -454,7 +454,7 @@ const CreateOrganization = () => {
     } catch (e) {
       console.error(e);
       message.error(
-        (e.errorMessage || {}).message ||
+        (e?.errorMessage || {})?.message?.Message ||
           e.message || e?.Error?.Message ||
           "Please input the required form field"
       );

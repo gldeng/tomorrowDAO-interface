@@ -561,7 +561,7 @@ const CreateProposal = () => {
     } catch (e) {
       console.error(e);
       message.error(
-        (e.errorMessage || {}).message || e.message || e.msg || "Error happened"
+        (e.errorMessage || {})?.message?.toString() || e.message || e.msg || "Error happened"
       );
     } finally {
       if (onSuccess) onSuccess();
@@ -660,7 +660,7 @@ const CreateProposal = () => {
     } catch (e) {
       console.error(e);
       message.error(
-        (e.errorMessage || {}).message || e.message || "Error happened"
+        (e?.errorMessage || {})?.message?.Message || e.message || "Error happened"
       );
     } finally {
       setNormalResult({
