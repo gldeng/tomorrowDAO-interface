@@ -32,7 +32,12 @@ import { eventBus, ResultModal } from 'utils/myEvent';
 import { CommonOperationResultModalType } from 'components/CommonOperationResultModal';
 import { INIT_RESULT_MODAL_CONFIG } from 'components/ResultModal';
 import useUpdateHeaderDaoInfo from 'hooks/useUpdateHeaderDaoInfo';
+import ExplorerProposalList, {
+  ExplorerProposalListFilter,
+} from '../../network-dao/ExplorerProposalList';
 import './page.css';
+import { useChainSelect } from 'hooks/useChainSelect';
+import getChainIdQuery from 'utils/url';
 
 interface IProps {
   daoId: string;
@@ -42,6 +47,7 @@ export default function DeoDetails(props: IProps) {
   const { daoId, isNetworkDAO } = props;
   const { isLG } = useResponsive();
 
+  const { isMainChain } = useChainSelect();
   const [form] = Form.useForm();
   // todo
   const [tabKey, setTabKey] = useState(TabKey.PROPOSALS);
@@ -193,7 +199,8 @@ export default function DeoDetails(props: IProps) {
       return true;
     }
     if (isNetworkDAO) {
-      networkDaoRouter.push(`/proposal-deploy`);
+      const chainIdQuery = getChainIdQuery();
+      networkDaoRouter.push(`/apply?${chainIdQuery.chainIdQueryString}`);
     } else {
       router.push(`/proposal/deploy/${daoId}`);
     }
@@ -219,19 +226,20 @@ export default function DeoDetails(props: IProps) {
         key: TabKey.PROPOSALS,
         label: 'All Proposals',
         children: (
-          <div className="tab-all-proposals">
-            <div className="tab-all-proposals-header">
-              <Typography.Title fontWeight={FontWeightEnum.Medium} level={6}>
-                Proposals
-              </Typography.Title>
+          <div className={`tab-all-proposals `}>
+            <div className={`tab-all-proposals-header `}>
+              <h3 className="title">Proposals</h3>
               {CreateButton}
             </div>
-            <Filter form={form} tableParams={tableParams} onChangeTableParams={setTableParams} />
+            {!isNetworkDAO && (
+              <Filter form={form} tableParams={tableParams} onChangeTableParams={setTableParams} />
+            )}
+            {isNetworkDAO && <ExplorerProposalListFilter />}
           </div>
         ),
       },
     ];
-    if (daoData?.data.isNetworkDAO) {
+    if (daoData?.data.isNetworkDAO && isMainChain) {
       items.push({
         key: TabKey.HC,
         label: 'High Council',
@@ -241,31 +249,41 @@ export default function DeoDetails(props: IProps) {
     if (!isLG) {
       return items;
     } else {
-      const finalItems = [
-        ...items,
-        {
-          key: TabKey.MYINFO,
-          label: 'My Info',
-          children: rightContent,
-        },
-      ];
+      const finalItems = [...items];
       if (!daoData?.data.isNetworkDAO) {
-        finalItems.push({
-          key: TabKey.TREASURY,
-          label: 'Treasury',
-          children: daoData?.data ? (
-            <Treasury
-              daoData={daoData.data}
-              createProposalCheck={handleCreateProposalRef.current}
-            />
-          ) : (
-            <span></span>
-          ),
-        });
+        finalItems.push(
+          {
+            key: TabKey.MYINFO,
+            label: 'My Info',
+            children: rightContent,
+          },
+          {
+            key: TabKey.TREASURY,
+            label: 'Treasury',
+            children: daoData?.data ? (
+              <Treasury
+                daoData={daoData.data}
+                createProposalCheck={handleCreateProposalRef.current}
+              />
+            ) : (
+              <span></span>
+            ),
+          },
+        );
       }
       return finalItems;
     }
-  }, [createProposalLoading, daoLoading, form, tableParams, daoData?.data, isLG, rightContent]);
+  }, [
+    createProposalLoading,
+    daoLoading,
+    isNetworkDAO,
+    form,
+    tableParams,
+    daoData?.data,
+    isMainChain,
+    isLG,
+    rightContent,
+  ]);
 
   const pageChange = useCallback((page: number) => {
     setTableParams((state) => {
@@ -331,8 +349,8 @@ export default function DeoDetails(props: IProps) {
 
         <div className="dao-detail-content">
           <div className={`dao-detail-content-left`}>
-            <div className="dao-detail-content-left-tab">{tabCom}</div>
-            {tabKey === TabKey.PROPOSALS && (
+            <div className={`dao-detail-content-left-tab`}>{tabCom}</div>
+            {tabKey === TabKey.PROPOSALS && !isNetworkDAO && (
               <div>
                 {proposalLoading ? (
                   <SkeletonList />
@@ -363,7 +381,12 @@ export default function DeoDetails(props: IProps) {
                     return (
                       <LinkNetworkDao
                         key={item.proposalId}
-                        href={`/proposal-detail?proposalId=${item.proposalId}`}
+                        href={{
+                          pathname: `/proposal-detail`,
+                          query: {
+                            proposalId: item.proposalId,
+                          },
+                        }}
                       >
                         <ProposalsItem data={item} />
                       </LinkNetworkDao>
@@ -381,6 +404,7 @@ export default function DeoDetails(props: IProps) {
                 />
               </div>
             )}
+            {tabKey === TabKey.PROPOSALS && isNetworkDAO && <ExplorerProposalList />}
             {/* < 1024 */}
             {isLG && tabKey === TabKey.MYINFO && (
               <>
@@ -392,9 +416,9 @@ export default function DeoDetails(props: IProps) {
             )}
           </div>
 
-          {!isLG && (
+          {!isLG && !isNetworkDAO && (
             <div className="dao-detail-content-right">
-              {daoData?.data && !daoData.data.isNetworkDAO && (
+              {daoData?.data && !isNetworkDAO && (
                 <Treasury daoData={daoData.data} createProposalCheck={handleCreateProposal} />
               )}
               {rightContent}

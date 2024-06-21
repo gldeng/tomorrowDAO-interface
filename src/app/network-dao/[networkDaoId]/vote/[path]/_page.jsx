@@ -10,6 +10,7 @@ import config, { schemeIds as originSchemeIds } from "@config/config";
 import { connect } from "react-redux";
 import { setContractWithName } from "@actions/voteContracts.ts";
 import Decimal from "decimal.js";
+import getChainIdQuery from 'utils/url';
 import debounce from "lodash.debounce";
 import { SYMBOL, ELF_DECIMAL, NEED_PLUGIN_AUTHORIZE_TIP } from "@src/constants";
 import getStateJudgment from "@utils/getStateJudgment";
@@ -706,13 +707,14 @@ class VoteContainer extends Component {
       this.setVoteConfirmLoading(false);
       this.setRedeemConfirmLoading(false);
     } else {
+      const chainIdQuery = getChainIdQuery();
       WebLoginInstance.get()
         .callContract({
           contractAddress: electionContractFromExt.address,
           methodName: "Withdraw",
           args: item,
           options: {
-            chainId: "AELF"
+            chainId: chainIdQuery.chainId
           }
         })
         .then((res) => {
@@ -834,13 +836,14 @@ class VoteContainer extends Component {
         nanos: lockTime.valueOf() * 1000000,
       },
     };
+    const chainIdQuery = getChainIdQuery();
     WebLoginInstance.get()
       .callContract({
         contractAddress: electionContractFromExt.address,
         methodName: "Vote",
         args: payload,
         options: {
-          chainId: "AELF"
+          chainId: chainIdQuery.chainId
         }
       })
       .then((res) => {
@@ -918,13 +921,14 @@ class VoteContainer extends Component {
       candidatePubkey: targetPublicKey,
       isResetVotingTime: true,
     };
+    const chainIdQuery = getChainIdQuery();
     WebLoginInstance.get()
       .callContract({
         contractAddress: electionContractFromExt.address,
         methodName: "ChangeVotingOption",
         args: payload,
         options: {
-          chainId: "AELF"
+          chainId: chainIdQuery.chainId
         }
       })
       .then((res) => {
@@ -1147,6 +1151,7 @@ class VoteContainer extends Component {
       claimDisabled: true,
     });
     if (loginState === WebLoginState.logined) {
+      const chainIdQuery = getChainIdQuery();
       WebLoginInstance.get()
         .callContract({
           contractAddress: profitContractFromExt.address,
@@ -1156,7 +1161,7 @@ class VoteContainer extends Component {
             beneficiary: currentWallet?.address,
           },
           options: {
-            chainId: "AELF"
+            chainId: chainIdQuery.chainId
           }
         })
         .then((res) => {
@@ -1331,7 +1336,7 @@ class VoteContainer extends Component {
 
     const secondaryLevelNav = this.renderSecondaryLevelNav();
     return (
-      <div className="vote-wrapper">
+      <div className="vote-wrapper bg-white">
         {secondaryLevelNav}
         <section
           className="vote-container vote-container-simple basic-container basic-container-white vote-content"

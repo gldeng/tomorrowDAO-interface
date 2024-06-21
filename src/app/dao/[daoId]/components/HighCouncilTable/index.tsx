@@ -214,7 +214,14 @@ export default function HighCounCilTab() {
       key: 'nodeName',
       render: (text: any, record: any) => (
         <Tooltip title={text}>
-          <LinkNetworkDao href={{ pathname: '/vote/team', search: `pubkey=${record.pubkey}` }}>
+          <LinkNetworkDao
+            href={{
+              pathname: '/vote/team',
+              query: {
+                pubkey: record.pubkey,
+              },
+            }}
+          >
             {text}
           </LinkNetworkDao>
         </Tooltip>

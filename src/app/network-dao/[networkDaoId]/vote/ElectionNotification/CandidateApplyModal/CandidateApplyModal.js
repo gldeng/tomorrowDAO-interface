@@ -22,7 +22,7 @@ import { NETWORK_TYPE } from "@config/config";
 import { connect } from "react-redux";
 import "./CandidateApplyModal.style.css";
 import addressFormat from "@utils/addressFormat";
-// import IconFont from "../../../../components/IconFont";
+import IconFont from "@components/IconFont";
 
 const handleStrToArr = (str) => {
   const arr = str.split(",");
@@ -184,7 +184,7 @@ class CandidateApplyModal extends PureComponent {
           </Form.Item>
         </Form>
         <p className="tip-color">
-          {/* <IconFont type="circle-warning" /> */}
+          <IconFont type="circle-warning" />
           <strong>Important Notice:</strong>
           <span className="notice-text">
             <div>{RUN_INDIVIDUAL_NODES_TIP}</div>

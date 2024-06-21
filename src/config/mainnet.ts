@@ -7,8 +7,8 @@ export const treasuryAccountAddress = 'KNdM6U6PyPsgyena8rPHTbCoMrkrALhxAy1b8Qx2c
 export const networkType = 'MAINNET';
 export const aelfWebLoginNetworkType = 'MAIN';
 export const rpcUrlAELF = 'https://explorer.aelf.io/chain';
-export const rpcUrlTDVV = 'https://tdvv-public-node.aelf.io';
-export const rpcUrlTDVW = 'https://tdvv-public-node.aelf.io';
+export const rpcUrlTDVV = 'https://tdvv-explorer.aelf.io/chain';
+export const rpcUrlTDVW = 'https://tdvv-explorer.aelf.io/chain';
 export const connectServer = 'https://auth-portkey.portkey.finance';
 export const graphqlServer =
   'https://dapp-aa-portkey.portkey.finance/Portkey_V2_DID/PortKeyIndexerCASchema/graphql';
@@ -29,7 +29,7 @@ export const treasuryContractAddress = 'TUeLJxSYY37kGbK8jf7NcLZ43g8k2DgQufgvzYjn
 // explorer config
 export const explorer = 'https://tdvv-explorer.aelf.io';
 export const mainExplorer = 'https://explorer.aelf.io';
-export const explorerRPC = 'https://explorer.aelf.io/chain';
+// export const explorerRPC = 'https://explorer.aelf.io/chain';
 
 // network-dao contract address: get network dao highCouncil table
 export const electionContractAddr = 'NrVf8B7XUduXn1oGHZeF1YANFXEXAhvCymz2WPyKZt4DE2zSg';
@@ -41,3 +41,15 @@ export const symbolmarketUrl = 'https://www.eforest.finance/symbolmarket';
 
 // explorer
 export const SOCKET_URL_NEW = 'wss://explorer.aelf.io';
+
+// header
+export const chainIdSelect = [
+  {
+    value: 'AELF',
+    label: 'MainChain AELF',
+  },
+  {
+    value: 'tDVV',
+    label: 'SideChain tDVV',
+  },
+];

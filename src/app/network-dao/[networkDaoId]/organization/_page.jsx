@@ -17,6 +17,7 @@ import { Switch, Case, If, Then } from "react-if";
 import constants, { LOADING_STATUS, LOG_STATUS } from "@redux/common/constants";
 import { setCurrentOrg } from "@actions/proposalDetail";
 import Total from "@components/Total";
+import getChainIdQuery from 'utils/url';
 import Organization from "./Organization";
 import dynamicReq from 'next/dynamic';
 import { getOrganizations } from "@redux/actions/organizationList";
@@ -115,12 +116,13 @@ const OrganizationList = () => {
     const org = list.filter((item) => item.orgAddress === orgAddress)[0];
     Modal.confirm({
       className: "organization-list-modal",
-      title: "Modify Organization?",
+      title: "Modify Organisation?",
       content:
-        "Modifying the organization requires initiating a proposal to modify. Are you sure you want to modify?",
+        "Modifying the organisation requires initiating a proposal to modify. Are you sure you want to modify?",
       onOk() {
         dispatch(setCurrentOrg(org));
-        router.push(`/apply?orgAddress=${orgAddress}`)
+        const chainIdQuery = getChainIdQuery();
+        router.push(`/apply?orgAddress=${orgAddress}&${chainIdQuery.chainIdQueryString}`)
         // navigate(`/proposal/apply/${org.orgAddress}`);
       },
       cancelButtonProps: { type: "primary" },
@@ -129,14 +131,14 @@ const OrganizationList = () => {
   };
 
   return (
-    <div className="organization-list bg-white overflow-hidden">
+    <div className="organization-list bg-white overflow-hidden page-content-padding">
       <Tabs
         size={isLG ? 'small' : 'middle'}
         animated={false}
         tabBarExtraContent={
           logStatus === LOG_STATUS.LOGGED ? (
             <LinkNetworkDao href="/create-organization">
-              Create Organization&gt;
+              Create Organisation&gt;
             </LinkNetworkDao>
           ) : null
         }
@@ -162,7 +164,7 @@ const OrganizationList = () => {
           <Col sm={6} xs={24}>
             <Search
               className="organization-list-search-input"
-              placeholder="Organization Address"
+              placeholder="Organisation Address"
               defaultValue={params.search}
               allowClear
               value={searchValue}
@@ -215,16 +217,18 @@ const OrganizationList = () => {
           </Then>
         </If>
       </div>
-      <Pagination
-        className="float-right gap-top mt-[12px]"
-        showQuickJumper
-        total={total}
-        current={params.pageNum}
-        pageSize={params.pageSize}
-        hideOnSinglePage
-        onChange={onPageNumChange}
-        showTotal={Total}
-      />
+      <div className="flex justify-end organization-list-pagination">
+        <Pagination
+          className="gap-top mt-[12px]"
+          showQuickJumper
+          total={total}
+          current={params.pageNum}
+          pageSize={params.pageSize}
+          hideOnSinglePage
+          onChange={onPageNumChange}
+          showTotal={Total}
+          />
+        </div>
     </div>
   );
 };

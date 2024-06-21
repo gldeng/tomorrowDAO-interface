@@ -2,7 +2,7 @@
 // eslint-disable-next-line no-use-before-define
 import React, { useCallback, useState } from "react";
 import AElf from "aelf-sdk";
-import { Tabs, Modal, message } from "antd";
+import { Tabs, Modal, message, Result } from "antd";
 import { useSelector } from "react-redux";
 // import { useParams } from "react-router-dom";
 import {
@@ -13,6 +13,7 @@ import {
   uint8ToBase64,
 } from "@redux/common/utils";
 import debounce from "lodash.debounce";
+import getChainIdQuery from 'utils/url';
 import { getConfig, useWebLogin, did } from "aelf-web-login";
 import NormalProposal from "./NormalProposal/index.jsx";
 import ContractProposal, { contractMethodType } from "./ContractProposal/index.jsx";
@@ -33,7 +34,7 @@ import {
 import WithoutApprovalModal from "../../_proposal_root/components/WithoutApprovalModal/index";
 import { deserializeLog, isPhoneCheck } from "@common/utils";
 import { interval } from "@utils/timeUtils";
-import { useRouter, usePathname, useSearchParams } from 'next/navigation'
+import { useRouter, usePathname, useSearchParams, useParams } from 'next/navigation'
 import { get } from "../../_src/utils.js";
 // import { isPortkeyApp } from "../../../../utils/isWebView";
 import { VIEWER_GET_CONTRACT_NAME } from "@api/url";
@@ -47,7 +48,8 @@ import {
   onlyOkModal,
   showAccountInfoSyncingModal,
 } from "@components/SimpleModal/index.tsx";
-import { mainExplorer } from 'config';
+import { mainExplorer, explorer } from 'config';
+import { useChainSelect } from "hooks/useChainSelect";
 
 const { TabPane } = Tabs;
 
@@ -62,6 +64,8 @@ const GET_CONTRACT_VERSION_TIMEOUT = 1000 * 60 * 10;
 
 const CreateProposal = () => {
   // const { orgAddress = "" } = useSearchParams();
+  const { isSideChain } = useChainSelect()
+  const { networkDaoId } = useParams();
   const searchParams = useSearchParams()
   const orgAddress = searchParams.get('orgAddress');
   const modifyData = useSelector((state) => state.proposalModify);
@@ -116,25 +120,19 @@ const CreateProposal = () => {
     });
   }
 
-  const ReleaseApprovedContractAction = useCallback(
-    async (contract) => {
-      const modalContent = await releaseApprovedContractHandler(contract);
-      setApplyModal(modalContent);
-    },
-    [proposalSelect]
-  );
+  const ReleaseApprovedContractAction =  async (contract) => {
+    const modalContent = await releaseApprovedContractHandler(contract);
+    setApplyModal(modalContent);
+  }
 
-  const ReleaseCodeCheckedContractAction = useCallback(
-    async (contract, isDeploy) => {
-      const modalContent = await releaseCodeCheckedContractHandler(
-        contract,
-        isDeploy
-      );
+  const ReleaseCodeCheckedContractAction = async (contract, isDeploy) => {
+    const modalContent = await releaseCodeCheckedContractHandler(
+      contract,
+      isDeploy
+    );
 
-      setApplyModal(modalContent);
-    },
-    [proposalSelect]
-  );
+    setApplyModal(modalContent);
+  }
 
   const cancelWithoutApproval = () => {
     // to destroy sure modal
@@ -189,7 +187,7 @@ const CreateProposal = () => {
       }
     });
   };
-  const openFailedWithoutApprovalModal = (isUpdate, transactionId) => {
+  const openFailedWithoutApprovalModal = (isUpdate, transactionId, status) => {
     // exec fail modal
     onOpenWithoutApprovalModal({
       isUpdate,
@@ -201,6 +199,7 @@ const CreateProposal = () => {
       title: `Contract deployment failed!`,
       message: (
         <div>
+          status: {status}
           <div>
             1. The contract code you deployed didn&apos;t pass the codecheck,
             possibly due to that it didn&apos;t implement methods in the ACS12
@@ -319,6 +318,7 @@ const CreateProposal = () => {
       contractMethod,
       approvalMode,
     } = contract;
+    console.log('contract', contract);
     let params = {};
     try {
       // bp and without approval, both process is below when onlyUpdateName.
@@ -449,6 +449,7 @@ const CreateProposal = () => {
               isUpdate,
               address
             );
+            // todo 1.4.0
             if (minedRes.status === "success") {
               const { contractAddress, contractName, contractVersion } =
                 minedRes;
@@ -478,7 +479,7 @@ const CreateProposal = () => {
                 },
                 cancel: cancelWithoutApproval,
                 message:
-                  "This may be due to the failure in transaction which can be vviewed via Transaction ID:",
+                  "This may be due to the failure in transaction which can be viewed via Transaction ID:",
                 transactionId,
               });
             }
@@ -529,6 +530,7 @@ const CreateProposal = () => {
           address: currentWallet.address,
         });
       }
+      const chainIdQuery = getChainIdQuery();
       setApplyModal({
         visible: true,
         title: proposalId
@@ -541,7 +543,7 @@ const CreateProposal = () => {
                 <CopylistItem
                   label="Proposal ID"
                   value={proposalId}
-                  // href={`/proposalsDetail/${proposalId}`}
+                  href={`${NetworkDaoHomePathName}/${networkDaoId}/proposal-detail/?proposalId=${proposalId}&${chainIdQuery.chainIdQueryString}`}
                 />
               </div>
             ) : (
@@ -551,7 +553,7 @@ const CreateProposal = () => {
               label="Transaction ID"
               isParentHref
               value={txsId}
-              href={`${mainExplorer}/tx/${txsId}`}
+              href={`${isSideChain ? explorer : mainExplorer}/tx/${txsId}`}
             />
           </div>
         ),
@@ -559,7 +561,7 @@ const CreateProposal = () => {
     } catch (e) {
       console.error(e);
       message.error(
-        (e.errorMessage || {}).message || e.message || e.msg || "Error happened"
+        (e.errorMessage || {})?.message?.toString() || e.message || e.msg || "Error happened"
       );
     } finally {
       if (onSuccess) onSuccess();
@@ -636,9 +638,9 @@ const CreateProposal = () => {
         params: { decoded },
       } = normalResult;
 
+      const chainIdQuery = getChainIdQuery();
       const params = {
         contractAddress: getContractAddress(proposalType),
-        // todo
         methodName: "CreateProposal",
         args: {
           contractMethodName,
@@ -649,7 +651,7 @@ const CreateProposal = () => {
           proposalDescriptionUrl,
         },
         options: {
-          chainId: "AELF"
+          chainId: chainIdQuery.chainId
         }
       };
 
@@ -658,7 +660,7 @@ const CreateProposal = () => {
     } catch (e) {
       console.error(e);
       message.error(
-        (e.errorMessage || {}).message || e.message || "Error happened"
+        (e?.errorMessage || {})?.message?.Message || e.message || "Error happened"
       );
     } finally {
       setNormalResult({
@@ -673,8 +675,15 @@ const CreateProposal = () => {
     setApplyModal(initApplyModal);
   }, []);
 
+  if (!webLoginWallet.address) {
+    return <Result
+    className="px-4 lg:px-8"
+    status="warning"
+    title="Please log in before creating a proposal"
+  /> 
+  }
   return (
-    <div className="proposal-apply">
+    <div className="proposal-apply bg-white h-full">
       <Tabs className="proposal-apply-tab" defaultActiveKey="normal">
         <TabPane tab="Ordinary Proposal" key="normal">
           <NormalProposal
@@ -691,6 +700,7 @@ const CreateProposal = () => {
             submit={handleNormalSubmit}
           />
         </TabPane>
+        {/* contract deploy */}
         <TabPane tab="Deploy/Update Contract" key="contract">
           <ContractProposal
             loading={contractResult.confirming}
@@ -715,7 +725,7 @@ const CreateProposal = () => {
             </span>
           </div>
           <div className="proposal-result-list-item gap-bottom">
-            <span className="sub-title gap-right">Organization Address:</span>
+            <span className="sub-title gap-right">Organisation Address:</span>
             <span className="proposal-result-list-item-value text-ellipsis">
               {normalResult.organizationAddress}
             </span>

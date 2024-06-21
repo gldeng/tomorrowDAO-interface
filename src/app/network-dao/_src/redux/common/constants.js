@@ -4,11 +4,11 @@
  */
 import PropTypes from 'prop-types';
 import AElf from 'aelf-sdk';
-import { explorerRPC } from "config";
+import getExplorerRPC from 'utils/getExplorerRPC';
 import config from '../../common/config';
 
 const { constants, viewer, wallet } = config;
-
+const explorerRPC = getExplorerRPC();
 export const FAKE_WALLET = AElf.wallet.getWalletByPrivateKey(wallet.privateKey);
 
 export const API_PATH = {

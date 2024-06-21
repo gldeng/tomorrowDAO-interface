@@ -48,7 +48,7 @@ const OrganizationCard = (props) => {
     [proposalType, leftOrgInfo, bpList, parliamentProposerList]
   );
   return (
-    <Card className={className} title="Organization Info">
+    <Card className={className} title="Organisation Info">
       <div className="gap-bottom-large">
         <span className="sub-title">Address:</span>
         <span className="break-all">{addressFormat(orgAddress)}</span>

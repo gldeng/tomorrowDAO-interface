@@ -24,7 +24,8 @@ export default function StatusTag({ status }) {
   const { [status]: icon = "CNotExisted" } = iconObj;
   return (
     <p className={`status-tag status-${sta.toLowerCase()}`}>
-      <IconFont type={icon} /> {sta}
+      <IconFont type={icon} />
+      {sta}
     </p>
   );
 }

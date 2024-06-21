@@ -13,7 +13,7 @@ import { numberFormatter } from 'utils/numberFormatter';
 import { TokenIconMap } from 'constants/token';
 import NoData from 'app/my-votes/components/NoData';
 import { checkIsOut } from 'utils/transaction';
-import { isSideChain } from 'utils/chian';
+import { isSideChain } from 'utils/chain';
 
 const defaultPageSize = 20;
 interface IRecordTableProps {

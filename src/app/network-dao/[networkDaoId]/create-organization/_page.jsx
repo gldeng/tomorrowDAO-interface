@@ -5,6 +5,7 @@ import Decimal from "decimal.js";
 // import {  } from "react-router-dom";
 import LinkNetworkDao  from "components/LinkNetworkDao";
 import { useRouter } from 'next/navigation'
+import getChainIdQuery from 'utils/url';
 import ReactIf from "react-if";
 import { useSelector } from "react-redux";
 import { QuestionCircleOutlined } from "@ant-design/icons";
@@ -181,7 +182,7 @@ const FIELDS_MAP = {
     name: "members",
     label: (
       <span>
-        Organization members&nbsp;
+        Organisation members&nbsp;
         <Tooltip
           title="Input the address list of members,
           separated by commas, such as
@@ -409,7 +410,6 @@ const CreateOrganization = () => {
       const isOrgExist = await contract.ValidateOrganizationExist.call(
         orgAddress
       );
-      console.log(orgAddress, isOrgExist);
       if (isOrgExist) {
         param = {
           ...param,
@@ -437,23 +437,25 @@ const CreateOrganization = () => {
       }
       
       console.log("callContract", param);
+      const chainIdQuery = getChainIdQuery();
       // debugger;
       const result = await WebLoginInstance.get().callContract({
         contractAddress: getContractAddress(formValue.proposalType),
         methodName: "CreateOrganization",
         args: param,
         options: {
-          chainId: "AELF"
+          chainId: chainIdQuery.chainId
         }
       });
       showTransactionResult(result);
       await sleep(2000);
-      navigate.push("/organization");
+      
+      navigate.push(`/organization?${chainIdQuery.chainIdQueryString}`);
     } catch (e) {
       console.error(e);
       message.error(
-        (e.errorMessage || {}).message ||
-          e.message ||
+        (e?.errorMessage || {})?.message?.Message ||
+          e.message || e?.Error?.Message ||
           "Please input the required form field"
       );
     } finally {
@@ -482,11 +484,11 @@ const CreateOrganization = () => {
     <div className="create-organization">
       <div className="create-organization-header">
         <div className="create-organization-header-title">
-          Create Organization
+          Create Organisation
         </div>
         <div className="create-organization-header-action">
           <LinkNetworkDao href="/organization">
-            &lt;Back to Organization List
+            &lt;Back to Organisation List
           </LinkNetworkDao>
         </div>
       </div>

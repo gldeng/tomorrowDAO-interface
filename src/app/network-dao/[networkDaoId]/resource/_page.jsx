@@ -5,7 +5,7 @@ import { message, ConfigProvider } from "antd";
 import { connect } from "react-redux";
 
 import { aelf } from "../../_src/utils";
-import configJSON from "../../_src/config/config.json";
+import configJSON from "../../_src/config/config-testnet-aelf.json";
 import DownloadPlugins from "@components/DownloadPlugins/DownloadPlugins";
 import ResourceWallet from "./components/ResourceAElfWallet/ResourceWallet";
 import getContractAddress from "@utils/getContractAddress";

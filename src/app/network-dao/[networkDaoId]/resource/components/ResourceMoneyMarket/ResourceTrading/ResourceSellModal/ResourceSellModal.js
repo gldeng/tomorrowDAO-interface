@@ -5,9 +5,9 @@
 
 import React, { PureComponent } from "react";
 import { Row, Col, Spin, message, Button } from "antd";
-import { CHAIN_ID } from "@config/config";
 import { thousandsCommaWithDecimal } from "@utils/formater";
 import { SYMBOL, ELF_DECIMAL } from "@src/constants";
+import getChainIdQuery from 'utils/url';
 import getStateJudgment from "@utils/getStateJudgment";
 import { aelf } from "../../../../../../_src/utils";
 import walletInstance from "@redux/common/wallet";
@@ -54,12 +54,13 @@ export default class ResourceSellModal extends PureComponent {
 
 
     try {
+      const chainIdQuery = getChainIdQuery();
       const result = await WebLoginInstance.get().callContract({
         contractAddress: contracts.tokenConverter,
         methodName: "Sell",
         args: payload,
         options: {
-          chainId: "AELF"
+          chainId: chainIdQuery.chainId
         }
       })
       if (result.error) {
@@ -123,6 +124,7 @@ export default class ResourceSellModal extends PureComponent {
     } = this.props;
     const { loading } = this.state;
 
+    const CHAIN_ID = 'AELF'
     return (
       <div className="modal resource-modal">
         <Row className="modal-form-item">

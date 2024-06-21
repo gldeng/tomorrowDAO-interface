@@ -354,7 +354,9 @@ class TeamDetail extends PureComponent {
                     <LinkNetworkDao
                       href={{
                         pathname: '/vote/apply',
-                        search: `pubkey=${this.getTeamPubkey()}`,
+                        query: {
+                          pubkey: this.getTeamPubkey()
+                        }
                       }}
                     >
                       Edit

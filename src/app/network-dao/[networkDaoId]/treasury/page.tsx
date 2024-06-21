@@ -1,6 +1,8 @@
 'use client';
 import React from 'react';
 import { treasuryAccountAddress } from 'config';
+import { Result } from 'antd';
+import { useChainSelect } from 'hooks/useChainSelect';
 import dynamicReq from 'next/dynamic';
 import { SkeletonList } from 'components/Skeleton';
 const PageIndex = dynamicReq(() => import('pageComponents/treasury'), {
@@ -9,5 +11,10 @@ const PageIndex = dynamicReq(() => import('pageComponents/treasury'), {
 });
 
 export default function Page() {
-  return <PageIndex address={treasuryAccountAddress} title="Network DAO Treasury" isNetworkDao={true}/>;
+  const { isSideChain } = useChainSelect();
+  return isSideChain ? <Result
+  className="px-4 lg:px-8"
+  status="warning"
+  title="The current content is only displayed under MainChain AELF, please switch the chain"
+/> : <PageIndex address={treasuryAccountAddress} title="Network DAO Treasury" isNetworkDao={true}/>;
 }

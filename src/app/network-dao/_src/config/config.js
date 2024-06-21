@@ -3,14 +3,32 @@
  * @file config.js
  * @author huangzongzhe
  */
-import { explorerRPC } from "config";
-const config = require("./config.json");
+import { networkType } from "config";
+import { isSideChain } from "utils/chain";
+import getExplorerRPC from 'utils/getExplorerRPC';
+import getChainIdQuery from 'utils/url';
+const chainIdQuery = getChainIdQuery();
+const explorerRPC = getExplorerRPC();
+let config = require("./config-testnet-aelf.json");
+if (networkType === 'TESTNET') {
+  if (isSideChain(chainIdQuery.chainId)) {
+    config = require("./config-testnet-tdvw.json");
+  } else {
+    config = require("./config-testnet-aelf.json");
+  }
+} else if (networkType === 'MAINNET') {
+  if (isSideChain(chainIdQuery.chainId)) {
+    config = require("./config-mainnet-tdvv.json");
+  } else {
+    config = require("./config-mainnet-aelf.json");
+  }
+}
 
 // the block chain URL this explorer is serving
 
 const BUILD_ENDPOINT =
   process.argv[process.argv.indexOf("--CHAIN_ENDPOINT") + 1];
-const MAINCHAINID = "AELF";
+// const MAINCHAINID = "AELF";
 // MAIN TESTNET
 const NETWORK_TYPE = "TESTNET";
 // ChainId: AELF
@@ -30,7 +48,7 @@ const DEFAUTRPCSERVER = explorerRPC;
 module.exports = {
   DEFAUTRPCSERVER,
   commonPrivateKey,
-  MAINCHAINID,
+  // MAINCHAINID,
   NETWORK_TYPE,
   APPNAME,
   CHAINS_LINK,

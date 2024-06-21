@@ -6,7 +6,8 @@ import { omitString } from "@common/utils";
 import addressFormat from "@utils/addressFormat";
 import "./index.css";
 import CopyButton from "@components/CopyButton/CopyButton";
-import { mainExplorer } from "config";
+import { explorer, mainExplorer } from "config";
+import { useChainSelect } from "hooks/useChainSelect";
 
 const checkName = (name: string) => {
   if (name === "-1") {
@@ -15,6 +16,7 @@ const checkName = (name: string) => {
   return name;
 };
 const AddressNameVer = ({ address, name, ver }) => {
+  const { isSideChain } = useChainSelect()
   const handleCopy = () => {
     try {
       copy(address);
@@ -30,11 +32,11 @@ const AddressNameVer = ({ address, name, ver }) => {
         <div className="contract-address">
           <span className="label">Contract Address:</span>
           <span className="content">
-            <a href={`${mainExplorer}/address/${addressFormat(address)}`}>
+            <a href={`${isSideChain ? explorer : mainExplorer}/address/${addressFormat(address)}`}>
               {omitString(address, 10, 10)}
             </a>
             <CopyButton
-              value={`/address/${addressFormat(address)}` as any}
+              value={`${isSideChain ? explorer : mainExplorer}/address/${addressFormat(address)}` as any}
               onClick={handleCopy as any}
             />
           </span>

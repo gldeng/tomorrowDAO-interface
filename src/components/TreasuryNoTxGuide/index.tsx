@@ -120,16 +120,25 @@ const TreasuryNoTxGuide = forwardRef<ITreasuryNoTxGuideRef, ITreasuryNoTxGuidePr
             <p>Community development and operations require funding.</p>
             <p>Deposit the first assets to the treasury.</p>
           </p>
-          <div>
+          <div className="treasury-no-tx-button-wrap">
             <ButtonCheckLogin
               type="primary"
-              className="mt-6"
+              className="treasury-no-tx-button-item"
               onClick={() => {
                 setDepoistOpen(true);
               }}
             >
               Deposit
             </ButtonCheckLogin>
+            <Button className="treasury-no-tx-button-item">
+              <a
+                href="https://medium.com/@tmrwdao/how-to-enable-and-manage-a-dao-treasury-with-tmrwdao-ead8168d4c9a"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Learn More
+              </a>
+            </Button>
           </div>
         </div>
         <CommonModal

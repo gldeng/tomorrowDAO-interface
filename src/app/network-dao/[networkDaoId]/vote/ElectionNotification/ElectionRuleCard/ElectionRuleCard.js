@@ -11,6 +11,7 @@ import { Button } from "antd";
 // import { useNavigate } from "react-router";
 import { connect } from "react-redux";
 import Iconfont from "@components/IconFont";
+import getChainIdQuery from 'utils/url';
 // import { withRouter } from "../../../../routes/utils";
 import "./ElectionRuleCard.style.css";
 import Svg from "@components/Svg/Svg";
@@ -35,7 +36,8 @@ function ElectionRuleCard(props) {
     }
 
     if (isCandidate) {
-      router.push(`/vote/apply?pubkey=${currentWallet?.publicKey}`, 'vote');
+      const chainIdQuery = getChainIdQuery();
+      router.push(`/vote/apply?pubkey=${currentWallet?.publicKey}&${chainIdQuery.chainIdQueryString}`, 'vote');
     } else {
       displayApplyModal();
     }

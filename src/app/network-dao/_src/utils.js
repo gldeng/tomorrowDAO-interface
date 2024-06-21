@@ -5,29 +5,33 @@
 import {
   notification,
 } from 'antd';
+import { isSideChain } from 'utils/chain';
+import getChainIdQuery from 'utils/url';
+import getExplorerRPC from 'utils/getExplorerRPC';
 import {
   create,
 } from 'apisauce';
 import AElf from 'aelf-sdk';
 import dayjs from 'dayjs';
-import { explorerRPC } from "config";
 import Cookies from 'js-cookie';
 
-import {
-  RPCSERVER,
-} from './constants';
 
 // import apisauce from './utils/apisauce';
-
+const explorerRPC = getExplorerRPC()
 const api = create({
-  baseURL: '/explorer-api',
+  baseURL: '',
 });
 
 const httpErrorHandler = (message, des) => notification.open({
   message,
   description: des,
 });
-
+api.addRequestTransform(request => {
+  const chainIdQuery = getChainIdQuery();
+  const isSide = isSideChain(chainIdQuery.chainId);
+  const prefix = isSide ? '/side-explorer-api' : '/explorer-api';
+  request.url = prefix + request.url;
+})
 api.addResponseTransform((res) => {
   if (res.ok) {
     if (res.data.code === /^2\d{2}$/) return res.data;
