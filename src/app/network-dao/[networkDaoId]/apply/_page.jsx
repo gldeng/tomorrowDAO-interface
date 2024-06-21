@@ -725,7 +725,7 @@ const CreateProposal = () => {
             </span>
           </div>
           <div className="proposal-result-list-item gap-bottom">
-            <span className="sub-title gap-right">Organisation Address:</span>
+            <span className="sub-title gap-right">Organization Address:</span>
             <span className="proposal-result-list-item-value text-ellipsis">
               {normalResult.organizationAddress}
             </span>

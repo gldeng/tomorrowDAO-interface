@@ -106,11 +106,11 @@ const LIST_TABS = {
     rowKey: "proposalId",
   },
   [MENU_PATH.ORGANIZATION_PROPOSER]: {
-    placeholder: "Organisation Address",
+    placeholder: "Organization Address",
     api: API_PATH.GET_AUDIT_ORG_BY_PAGE,
     columns: [
       {
-        title: "Organisation Address",
+        title: "Organization Address",
         dataIndex: "orgAddress",
         key: "orgAddress",
         ellipsis: true,
@@ -155,11 +155,11 @@ const LIST_TABS = {
     rowKey: "orgAddress",
   },
   [MENU_PATH.ORGANIZATION_MEMBERS]: {
-    placeholder: "Organisation Address",
+    placeholder: "Organization Address",
     api: API_PATH.GET_ORG_OF_OWNER,
     columns: [
       {
-        title: "Organisation Address",
+        title: "Organization Address",
         dataIndex: "orgAddress",
         key: "orgAddress",
         ellipsis: true,

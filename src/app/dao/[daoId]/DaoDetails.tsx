@@ -228,7 +228,7 @@ export default function DeoDetails(props: IProps) {
         children: (
           <div className={`tab-all-proposals `}>
             <div className={`tab-all-proposals-header `}>
-              <h3 className="dao-title">Proposals</h3>
+              <h3 className="title">Proposals</h3>
               {CreateButton}
             </div>
             {!isNetworkDAO && (

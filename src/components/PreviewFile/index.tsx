@@ -21,9 +21,11 @@ export default function PreviewFile(props: TPropsType) {
       ...item,
       key: `${index}`,
       label: (
-        <Link href={item.file.url} target="_blank">
-          <div className="min-w-36">{item.file.name}</div>
-        </Link>
+        <div className="min-w-36">
+          <Link href={item.file.url} target="_blank">
+            {item.file.name}
+          </Link>
+        </div>
       ),
     };
   });

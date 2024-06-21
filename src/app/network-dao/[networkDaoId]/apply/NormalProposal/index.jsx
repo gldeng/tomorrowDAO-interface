@@ -84,22 +84,22 @@ const FIELDS_MAP = {
     name: "formOrgAddress",
     label: (
       <span>
-        Organisation&nbsp;
+        Organization&nbsp;
         <Tooltip
-          title="Choose an organisation you trust.
-          The organisation will vote for your proposal.
-          You also need to follow the rules of the organisation.
+          title="Choose an organization you trust.
+          The organization will vote for your proposal.
+          You also need to follow the rules of the organization.
           For the specific rules, see 'Organizations Tab'"
         >
           <QuestionCircleOutlined className="main-color" />
         </Tooltip>
       </span>
     ),
-    placeholder: "Please select an organisation",
+    placeholder: "Please select an organization",
     rules: [
       {
         required: true,
-        message: "Please select an organisation!",
+        message: "Please select an organization!",
       },
     ],
   },
