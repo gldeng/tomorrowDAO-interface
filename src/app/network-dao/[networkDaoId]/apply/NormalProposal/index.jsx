@@ -89,7 +89,7 @@ const FIELDS_MAP = {
           title="Choose an organisation you trust.
           The organisation will vote for your proposal.
           You also need to follow the rules of the organisation.
-          For the specific rules, see 'Organizations Tab'"
+          For the specific rules, see 'Organisations Tab'"
         >
           <QuestionCircleOutlined className="main-color" />
         </Tooltip>

@@ -244,8 +244,9 @@ export const sendTransactionWith = async (
     }
     return result;
   } catch (e) {
+    console.log('sendTransactionWith error', e)
     message.error(
-      (e.errorMessage || {}).message || e.message || "Send Transaction failed"
+      (e?.errorMessage || {})?.message?.Message || e.message || "Send Transaction failed"
     );
   }
 };

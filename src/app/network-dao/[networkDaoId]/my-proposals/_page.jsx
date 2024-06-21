@@ -466,7 +466,7 @@ const MyProposal = () => {
               <SubMenu
                 disabled={params.loading}
                 key={MENU_PATH.ORGANIZATION}
-                title="My Organizations"
+                title="My Organisations"
               >
                 <MenuItem
                   disabled={params.loading}
