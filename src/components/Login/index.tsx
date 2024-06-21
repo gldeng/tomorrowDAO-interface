@@ -15,6 +15,8 @@ import { Popover } from 'antd';
 import Link from 'next/link';
 import './index.css';
 import { explorer } from 'config';
+import { useChainSelect } from 'hooks/useChainSelect';
+import getChainIdQuery from 'utils/url';
 export const LoginAuth = () => {
   const { isLG } = useResponsive();
   const { loginState, login } = useWebLogin();
@@ -33,10 +35,15 @@ export const LoginAuth = () => {
     </Button>
   );
 };
-export default function Login() {
+interface ILoginProps {
+  isNetWorkDao?: boolean;
+}
+export default function Login(props: ILoginProps) {
+  const { isNetWorkDao } = props;
   const { isLG } = useResponsive();
   const { logout, loginState } = useWebLogin();
   const [hovered, setHovered] = useState(false);
+  const chainIdQuery = getChainIdQuery();
   const hide = () => {
     setHovered(false);
   };
@@ -84,7 +91,7 @@ export default function Login() {
                   </span>
                   <HashAddress
                     size="small"
-                    chain={info.curChain}
+                    chain={isNetWorkDao ? chainIdQuery.chainId : info.curChain}
                     address={walletInfo.address}
                     preLen={8}
                     endLen={9}

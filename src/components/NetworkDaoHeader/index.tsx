@@ -125,7 +125,7 @@ export default function Header() {
                 className="chain-id-select"
               />
             </div>
-            <Login />
+            <Login isNetWorkDao={true} />
           </div>
         </div>
         {isLG && (
