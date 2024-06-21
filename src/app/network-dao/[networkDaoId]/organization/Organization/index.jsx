@@ -32,7 +32,7 @@ const Title = (props) => {
   const { proposalType } = props;
   return (
     <div className="organization-list-item-title">
-      <span className="gap-right-small">{proposalType} Organization</span>
+      <span className="gap-right-small">{proposalType} Organisation</span>
     </div>
   );
 };

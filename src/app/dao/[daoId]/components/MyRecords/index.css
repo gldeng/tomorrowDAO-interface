@@ -1,0 +1,39 @@
+.dao-my-record {
+  @apply flex flex-col gap-[32px];
+
+  .time {
+    @apply text-[12px] leading-[20px] text-Neutral-Secondary-Text;
+  }
+
+
+
+  .dao-my-record-item-title {
+    @apply basis-[60%] truncate;
+
+
+  }
+
+  .dao-my-record-item-content {
+    @apply flex items-center justify-between mt-[4px] text-[14px] leading-[22px] font-[500];
+
+    .title-text {
+      @apply text-neutralPrimaryText;
+
+      &:hover {
+        @apply link;
+      }
+    }
+  }
+
+  .vote-0 {
+    @apply text-approve;
+  }
+
+  .vote-1 {
+    @apply text-rejection;
+  }
+
+  .vote-2 {
+    @apply text-abstention;
+  }
+}

@@ -1,0 +1,11 @@
+.view-more-wrap {
+  @apply text-[12px] leading-[22px] text-neutralTitle cursor-pointer;
+
+  &:hover {
+    @apply text-[#5b8ef4];
+  }
+
+  .text {
+    @apply text-[14px];
+  }
+}

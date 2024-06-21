@@ -23,11 +23,6 @@
 
     .tab-all-proposals-header {
       @apply flex justify-between items-center mb-4;
-
-      .title {
-        @apply text-[20px] font-medium leading-[28px] text-neutralTitle;
-
-      }
     }
 
     .tab-all-proposals-select {

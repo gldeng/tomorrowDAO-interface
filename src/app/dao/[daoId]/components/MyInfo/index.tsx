@@ -194,30 +194,12 @@ export default function MyInfo(props: TInfoTypes) {
 
   return (
     <div
-      className={`${clssName} border-0 lg:border border-Neutral-Divider border-solid rounded-lg bg-white px-4 pt-2 pb-6 lg:px-8  lg:py-6`}
+      className={`${clssName} border-0 lg:border border-Neutral-Divider border-solid rounded-lg bg-white px-4 lg:px-8 py-6`}
       style={{
         height: height || 'auto',
       }}
     >
-      <Typography.Title fontWeight={FontWeightEnum.Medium} level={6} className="pb-6">
-        My Info
-        {/* <button
-          onClick={async () => {
-            if (!isSyncQuery()) {
-              return;
-            }
-            const contractParams = {
-              votingItemId: 'f101135317f49c9670182f94be9161843d67d9d14b25f03ac697a7283b9423f2',
-              voteOption: 0,
-              voteAmount: 1,
-            };
-            const result = await callContract('Vote', contractParams, voteAddress);
-            console.log('result', result);
-          }}
-        >
-          local env test vote 
-        </button> */}
-      </Typography.Title>
+      <h3 className="dao-title mb-[24px]">My Info</h3>
       {isLogin ? (
         <div>
           <Descriptions colon={false} title="" items={myInfoItems} column={1} />
