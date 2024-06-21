@@ -11,6 +11,18 @@
   .page-content-padding {
     @apply px-4 lg:px-8 pb-4 lg:pb-8;
   }
+
+  .page-content-padding-top {
+    @apply pt-4 lg:pt-8;
+  }
+
+  .dao-title {
+    @apply text-[20px] leading-[28px] text-neutralTitle font-medium;
+  }
+
+  .link {
+    @apply text-[#5b8ef4];
+  }
 }
 
 
@@ -21,6 +33,7 @@ body {
 }
 
 body {
+  font-family: Roboto;
   background-color: #fafafa;
   margin: 0;
   font-size: 16px;
@@ -41,9 +54,6 @@ input[type='number'] {
   appearance: textfield;
 }
 
-* {
-  font-family: Roboto-regular;
-}
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;

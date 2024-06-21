@@ -10,7 +10,7 @@
   }
 
   .assets-title {
-    @apply font-[500] text-[20px] leading-[28px] mt-6;
+    @apply dao-title mt-6;
   }
 
   .text-14-22-500 {
@@ -26,7 +26,7 @@
   }
 
   .card-title {
-    @apply font-[500] text-[20px] leading-[28px];
+    @apply dao-title;
   }
 
   .usd-value {

@@ -28,6 +28,7 @@ import { numberFormatter } from 'utils/numberFormatter';
 import { SkeletonLine } from 'components/Skeleton';
 import { getExploreLink } from 'utils/common';
 import TreasuryNoTxGuide, { ITreasuryNoTxGuideRef } from 'components/TreasuryNoTxGuide';
+import ViewMoreButton from 'components/ViewMoreButton';
 const formSymbol = 'symbol';
 const formAmount = 'amount';
 interface IProps {
@@ -196,7 +197,7 @@ const Treasury: React.FC<IProps> = (props) => {
                 <div className={existTransaction ? 'block' : 'hidden'}>
                   <h2 className="card-title">Treasury Assets</h2>
                   <div className="flex items-center mt-6 mb-12">
-                    <p className="usd-value">${totalValueUSD}</p>
+                    <p className="usd-value">$ {totalValueUSD}</p>
                     <ButtonCheckLogin
                       type="primary"
                       onClick={() => {
@@ -213,7 +214,7 @@ const Treasury: React.FC<IProps> = (props) => {
                       <span className="card-title mb-6">Transactions</span>
                       {showLoadMore && (
                         <Link href={`/dao/${daoData?.id}/treasury`}>
-                          <span>Load More</span>
+                          <ViewMoreButton />
                         </Link>
                       )}
                     </p>
