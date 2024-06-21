@@ -116,9 +116,9 @@ const OrganizationList = () => {
     const org = list.filter((item) => item.orgAddress === orgAddress)[0];
     Modal.confirm({
       className: "organization-list-modal",
-      title: "Modify Organisation?",
+      title: "Modify Organization?",
       content:
-        "Modifying the organisation requires initiating a proposal to modify. Are you sure you want to modify?",
+        "Modifying the organization requires initiating a proposal to modify. Are you sure you want to modify?",
       onOk() {
         dispatch(setCurrentOrg(org));
         const chainIdQuery = getChainIdQuery();
@@ -138,7 +138,7 @@ const OrganizationList = () => {
         tabBarExtraContent={
           logStatus === LOG_STATUS.LOGGED ? (
             <LinkNetworkDao href="/create-organization">
-              Create Organisation&gt;
+              Create Organization&gt;
             </LinkNetworkDao>
           ) : null
         }
@@ -164,7 +164,7 @@ const OrganizationList = () => {
           <Col sm={6} xs={24}>
             <Search
               className="organization-list-search-input"
-              placeholder="Organisation Address"
+              placeholder="Organization Address"
               defaultValue={params.search}
               allowClear
               value={searchValue}

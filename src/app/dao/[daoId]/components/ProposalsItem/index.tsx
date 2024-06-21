@@ -68,7 +68,9 @@ export default function ProposalsItem(props: { data: IProposalsItem }) {
         </div>
         <div className="proposal-item-title">
           {data.proposalTitle ? (
-            <h3 className="dao-title">{data.proposalTitle}</h3>
+            <Typography.Title fontWeight={FontWeightEnum.Medium} level={7}>
+              {data.proposalTitle}
+            </Typography.Title>
           ) : (
             <>
               <Typography.Title fontWeight={FontWeightEnum.Medium} level={7}>
