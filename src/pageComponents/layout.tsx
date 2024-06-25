@@ -9,6 +9,7 @@ import DynamicBreadCrumb from 'components/DynamicBreadCrumb';
 import PageLoading from 'components/Loading';
 import { usePathname } from 'next/navigation';
 import ResultModal from 'components/ResultModal';
+import './layout.css';
 
 const Layout = dynamicReq(
   async () => {

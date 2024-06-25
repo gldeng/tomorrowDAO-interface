@@ -25,6 +25,7 @@ export interface IHighCouncilConfig {
 export interface IHighCouncilInput {
   highCouncilConfig: IHighCouncilConfig;
   governanceSchemeThreshold: IGovernanceSchemeThreshold;
+  members: IAddressList;
 }
 export interface IMetadata {
   name: string;
@@ -56,9 +57,18 @@ export enum StepEnum {
   step2 = '2',
   step3 = '3',
 }
+export enum EDaoGovernanceMechanism {
+  'Token' = 0,
+  'Multisig' = 2,
+}
+interface IAddressList {
+  value: string[];
+}
 export interface BasicInfoSubmitedRes {
   metadata: IMetadata;
   governanceToken: string;
+  governanceMechanism: EDaoGovernanceMechanism;
+  members: IAddressList;
 }
 export interface FilesSubmitedRes {
   files: UploadFile[];
@@ -90,9 +100,12 @@ export const defaultStepsFormMap = {
     [StepEnum.step3]: {},
   },
   onRegister: () => undefined,
+  isShowHighCouncil: false,
 };
 export interface IStepsContext {
   stepForm: StepsFormMap;
   onRegister: (ins: FormInstance) => void;
+  isShowHighCouncil: boolean;
 }
+
 export const StepsContext = createContext<IStepsContext>(defaultStepsFormMap);
