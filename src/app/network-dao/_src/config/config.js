@@ -30,7 +30,7 @@ const BUILD_ENDPOINT =
   process.argv[process.argv.indexOf("--CHAIN_ENDPOINT") + 1];
 // const MAINCHAINID = "AELF";
 // MAIN TESTNET
-const NETWORK_TYPE = "TESTNET";
+const NETWORK_TYPE = networkType === 'TESTNET' ? "TESTNET" : "MAIN";
 // ChainId: AELF
 // ChainId: tDVV(AElf public chain)
 const CHAINS_LINK = {
