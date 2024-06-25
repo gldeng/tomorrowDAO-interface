@@ -293,7 +293,11 @@ const HighCouncil = () => {
               placeholder={'The suggested percentage is no greater than 20%.'}
             />
           </Form.Item>
-          <FormMembersItem name={['members', 'value']} initialValue={[wallet.address]} />
+          <FormMembersItem
+            name={['members', 'value']}
+            initialValue={[wallet.address]}
+            form={form}
+          />
         </Form>
       )}
     </div>

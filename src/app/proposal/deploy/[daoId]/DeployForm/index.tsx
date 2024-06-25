@@ -1,6 +1,6 @@
 'use client';
 
-import { Form, message as antdMessage } from 'antd';
+import { Form, message as antdMessage, message } from 'antd';
 import { memo, useState } from 'react';
 import useNetworkDaoRouter from 'hooks/useNetworkDaoRouter';
 import ProposalType from './ProposalType';
@@ -23,7 +23,7 @@ import { useRequest } from 'ahooks';
 import formValidateScrollFirstError from 'utils/formValidateScrollFirstError';
 import { EProposalActionTabs } from '../type';
 import { callContract, callViewContract, GetTokenInfo } from 'contract/callContract';
-import { fetchAddressTokenList, fetchTreasuryAssets } from 'api/request';
+import { fetchAddressTokenList, fetchDaoInfo, fetchTreasuryAssets } from 'api/request';
 import { timesDecimals } from 'utils/calculate';
 // import { useWalletSyncCompleted } from 'hooks/useWalletSyncCompleted';
 
@@ -54,6 +54,17 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
   const { isSyncQuery } = useAelfWebLoginSync();
   // const { getAccountInfoSync } = useWalletSyncCompleted();
   const { daoId } = props;
+  const {
+    data: daoData,
+    error: daoError,
+    loading: daoLoading,
+  } = useRequest(async () => {
+    if (!daoId) {
+      message.error('daoId is required');
+      return null;
+    }
+    return fetchDaoInfo({ daoId, chainId: curChain });
+  });
   const openErrorModal = (
     primaryContent = 'Failed to Create the proposal',
     secondaryContent = 'Failed to Create the proposal',
@@ -237,6 +248,7 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
         <ProposalType className={clsx({ hidden: isNext })} next={handleNext} />
         <ProposalInfo
           className={clsx({ hidden: !isNext })}
+          daoData={daoData?.data}
           daoId={daoId}
           onSubmit={handleSubmit}
           onTabChange={(key: string) => {

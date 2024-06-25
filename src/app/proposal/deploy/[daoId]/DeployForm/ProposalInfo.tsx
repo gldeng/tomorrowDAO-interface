@@ -24,6 +24,7 @@ interface ProposalInfoProps {
   next?: () => void;
   className?: string;
   daoId: string;
+  daoData?: IDaoInfoData;
   onSubmit: () => void;
   onTabChange?: (activeKey: string) => void;
   activeTab?: string;
@@ -35,7 +36,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
   const [voteScheme, setVoteScheme] = useState<IVoteSchemeListData>();
   const [timePeriod, setTimePeriod] = useState<ITimePeriod | null>(null);
 
-  const { className, daoId, onSubmit, onTabChange, activeTab, treasuryAssetsData } = props;
+  const { className, daoId, onSubmit, onTabChange, activeTab, treasuryAssetsData, daoData } = props;
 
   const form = Form.useFormInstance();
 
@@ -228,6 +229,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
           daoId={daoId}
           activeTab={activeTab}
           treasuryAssetsData={treasuryAssetsData}
+          daoData={daoData}
         />
       )}
 

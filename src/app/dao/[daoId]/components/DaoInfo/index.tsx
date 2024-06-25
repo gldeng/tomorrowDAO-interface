@@ -17,6 +17,7 @@ import { useWebLogin } from 'aelf-web-login';
 import { useAsyncEffect } from 'ahooks';
 import { callViewContract } from 'contract/callContract';
 import { useState } from 'react';
+import { EDaoGovernanceMechanism } from 'app/(createADao)/create/type';
 
 const firstLetterToLowerCase = (str: string) => {
   return str.charAt(0).toLowerCase() + str.slice(1);
@@ -163,7 +164,13 @@ export default function DaoInfo(props: IParams) {
       : {
           key: '6',
           label: <span className="dao-collapse-panel-label">Voting mechanism</span>,
-          children: <span className="dao-collapse-panel-child">Token-based Wallet-bsed</span>,
+          children: (
+            <span className="dao-collapse-panel-child">
+              {data?.governanceMechanism === EDaoGovernanceMechanism.Token
+                ? 'Token-based'
+                : 'Wallet-bsed'}
+            </span>
+          ),
         },
     // {
     //   key: '6',
