@@ -1,28 +1,42 @@
 .dao-steps-wrap {
 
-  .TMRWDAO-steps-item-wait .TMRWDAO-steps-item-icon {
-    @apply !border-Neutral-Border !bg-transparent;
+  @apply mb-6;
+
+  .title-wrap {
+    @apply flex justify-between items-center;
   }
 
-  &.dao-steps-wrap-mobile {
-    .TMRWDAO-steps-item-title {
-      @apply text-xs leading-4;
-    }
-
-    &.TMRWDAO-steps-label-vertical .TMRWDAO-steps-item-tail {
-      @apply ms-[50px]
-    }
-
-    &.TMRWDAO-steps-label-vertical .TMRWDAO-steps-item-icon {
-      @apply ms-[30px]
-    }
-
-    &.TMRWDAO-steps-label-vertical .TMRWDAO-steps-item-content {
-      @apply w-[92px]
-    }
+  .current-step-number {
+    @apply font-medium text-[14px] leading-[22px] text-Neutral-Disable-Text;
   }
 
+  .current-step-desc {
+    @apply flex flex-col gap-[8px];
+  }
 
+  .step-progress {
+    @apply my-[16px];
+  }
+
+  .title {
+    @apply font-medium text-[16px] leading-[24px] text-colorPrimary;
+  }
+
+  .step-title {
+    @apply font-medium text-[24px] leading-[32px] text-neutralTitle;
+  }
+
+  .step-subtitle {
+    @apply font-medium text-[16px] leading-[24px] text-neutralPrimaryText;
+  }
+
+  .step-subtext {
+    @apply text-[16px] leading-[24px] text-Neutral-Disable-Text;
+  }
+
+  .current-text {
+    @apply text-colorPrimary;
+  }
 }
 
 .create-dao-rigth-btn+.create-dao-rigth-btn {
@@ -34,5 +48,35 @@
 
   .label-icon {
     @apply text-[#B8B8B8] ml-[8px];
+  }
+}
+
+.dao-create-first-screen {
+  .dao-create-first-screen-title {
+    @apply font-medium text-[24px] leading-[32px] text-neutralTitle;
+  }
+
+  .icon {
+    @apply w-[64px] h-[64px];
+  }
+
+  .icon-wrap {
+    @apply bg-Neutral-Hover-BG flex items-center justify-center;
+  }
+
+  .dao-create-preview {
+    @apply flex justify-between gap-[18px];
+  }
+
+  .dao-create-preview-item {
+    @apply flex-1 p-[16px] dao-border-round;
+
+    p {
+      @apply font-medium text-[14px] leading-[22px] text-Neutral-Disable-Text mt-[10px] mb-[8px];
+    }
+
+    h3 {
+      @apply font-medium text-[16px] leading-[24px] text-neutralTitle;
+    }
   }
 }

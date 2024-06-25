@@ -8,11 +8,17 @@
   }
 
   .symbol-radio {
-    @apply flex items-center mb-2;
+    @apply flex flex-col gap-[4px];
   }
 
-  .token-title {
-    @apply text-base font-medium text-Neutral-Primary-Text ml-4 mr-1;
+
+
+  .dao-type-tip {
+    @apply text-[12px] leading-[20px] text-Neutral-Secondary-Text mb-[8px];
+  }
+
+  .dao-type-select {
+    @apply h-[24px] py-[16px] mb-[32px];
   }
 
   .Description-textArea {

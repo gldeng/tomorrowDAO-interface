@@ -111,7 +111,7 @@ export default function CreatePreviewModal({ open, onClose, onConfirm }: ICreate
         return item === false;
       } else {
         // highCouncil form, must be true(if highCouncil exist)
-        return highCouncil && item === false;
+        return Object.keys(highCouncil ?? {}).length > 0 && item === false;
       }
     }) > -1;
 
@@ -182,7 +182,7 @@ export default function CreatePreviewModal({ open, onClose, onConfirm }: ICreate
               : null,
           ]}
         />
-        {highCouncil && (
+        {Object.keys(highCouncil ?? {}).length > 0 && (
           <CheckboxItem
             label="High Council"
             checked={state[1]}

@@ -2,9 +2,9 @@
 
 import { useMachine } from '@xstate/react';
 import { formMachine } from './xstate';
-import { Button, Typography, FontWeightEnum } from 'aelf-design';
+import { Button, Progress } from 'aelf-design';
 import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
-import { Steps, message as antdMessage, FormInstance, Result, StepsProps, StepProps } from 'antd';
+import { message as antdMessage, FormInstance, Result, Switch } from 'antd';
 import { useWebLoginEvent, WebLoginEvents, useWebLogin, WebLoginState } from 'aelf-web-login';
 import { useRouter } from 'next/navigation';
 import clsx from 'clsx';
@@ -15,10 +15,15 @@ import { useSelector } from 'redux/store';
 import { timesDecimals } from 'utils/calculate';
 import { ReactComponent as ArrowRight } from 'assets/imgs/arrow-right.svg';
 import { ReactComponent as ArrowLeft } from 'assets/imgs/arrow-left.svg';
-import { ReactComponent as Skip } from 'assets/imgs/skip.svg';
 import { CommonOperationResultModalType } from 'components/CommonOperationResultModal';
-import './index.css';
-import { IFile, IStepsContext, StepEnum, StepsContext, defaultStepsFormMap } from './type';
+import {
+  EDaoGovernanceMechanism,
+  IFile,
+  IStepsContext,
+  StepEnum,
+  StepsContext,
+  defaultStepsFormMap,
+} from './type';
 import { emitLoading } from 'utils/myEvent';
 import Link from 'next/link';
 import { IFormValidateError, IContractError } from 'types';
@@ -27,21 +32,8 @@ import { NetworkName } from 'config';
 import formValidateScrollFirstError from 'utils/formValidateScrollFirstError';
 import useAelfWebLoginSync from 'hooks/useAelfWebLoginSync';
 import breadCrumb from 'utils/breadCrumb';
-
-const initItems: StepsProps['items'] = [
-  {
-    title: 'Basic Information',
-  },
-  {
-    title: 'Referendum',
-  },
-  {
-    title: 'High Council (optional)',
-  },
-  {
-    title: 'Documentation',
-  },
-];
+import { FirstScreen } from './FirstScreen';
+import './index.css';
 
 const CreateDaoPage = () => {
   const [snapshot, send] = useMachine(formMachine);
@@ -57,15 +49,10 @@ const CreateDaoPage = () => {
   const router = useRouter();
   const { loginState } = useWebLogin();
   const isNotFirstStep = currentStep > 0;
-  const { isMD, isLG } = useResponsive();
-  const [items, setItems] = useState(initItems);
   const [nextLoading, setNextLoading] = useState(false);
 
-  const updateStep = (step: StepProps) => {
-    const itemsCopy = [...items];
-    itemsCopy[2] = step;
-    setItems(itemsCopy);
-  };
+  const [isShowHighCouncil, setIsShowHighCouncil] = useState(false);
+  const [isShowSecondScreen, setIsShowSecondScreen] = useState(false);
 
   const stepsFormMapRef = useRef<IStepsContext>(cloneDeepWith(defaultStepsFormMap));
 
@@ -76,14 +63,12 @@ const CreateDaoPage = () => {
       form
         ?.validateFields()
         .then((res) => {
+          console.log('res', res);
+          if (isHighCouncilStep) {
+            isSkipHighCouncil.current = !Object.keys(res ?? {}).length;
+          }
           setNextLoading(false);
           stepsFormMapRef.current.stepForm[currentStepString].submitedRes = res;
-          if (isHighCouncilStep) {
-            isSkipHighCouncil.current = false;
-            updateStep({
-              title: 'High Council',
-            });
-          }
           send({ type: 'NEXT' });
         })
         .catch((err: IFormValidateError) => {
@@ -97,15 +82,11 @@ const CreateDaoPage = () => {
       });
     }
   };
-  const handleSkip = () => {
-    isSkipHighCouncil.current = true;
-    updateStep({
-      icon: <Skip />,
-      title: 'High Council (Skipped)',
-    });
-    stepsFormMapRef.current.stepForm[StepEnum.step2].submitedRes = undefined;
-    send({ type: 'NEXT' });
-  };
+  // const handleSkip = () => {
+  //   isSkipHighCouncil.current = true;
+  //   stepsFormMapRef.current.stepForm[StepEnum.step2].submitedRes = undefined;
+  //   send({ type: 'NEXT' });
+  // };
 
   const onRegisterHandler = useCallback(
     (ins: FormInstance) => {
@@ -116,6 +97,9 @@ const CreateDaoPage = () => {
   useEffect(() => {
     breadCrumb.clearBreadCrumb();
   }, []);
+  const isMultisig =
+    stepsFormMapRef.current?.stepForm[StepEnum.step0]?.submitedRes?.governanceMechanism ===
+    EDaoGovernanceMechanism.Multisig;
   const handleCreateDao = async () => {
     if (!isSyncQuery()) {
       return;
@@ -136,13 +120,14 @@ const CreateDaoPage = () => {
         return acc;
       }, {} as Record<string, string>);
       const metadata = {
+        ...originMetadata,
         metadata: {
           ...originMetadata?.metadata,
           logoUrl: originMetadata?.metadata?.logoUrl?.[0]?.response?.url,
           socialMedia,
         },
-        governanceToken: originMetadata?.governanceToken,
       };
+
       try {
         const files: IFile[] =
           stepForm[StepEnum.step3].submitedRes?.files?.map((file) => {
@@ -174,6 +159,11 @@ const CreateDaoPage = () => {
             maximalRejectionThreshold: governanceConfig.maximalRejectionThreshold * 100,
             maximalAbstentionThreshold: governanceConfig.maximalAbstentionThreshold * 100,
           };
+          // isMultisig, it is a percentage
+          if (isMultisig) {
+            governanceConfig.minimalRequiredThreshold =
+              governanceConfig.minimalRequiredThreshold * 100;
+          }
         }
         const params: any = {
           ...metadata,
@@ -186,7 +176,7 @@ const CreateDaoPage = () => {
             : metadata.metadata.name === NetworkName,
         };
         // highCouncil not skip
-        if (!isSkipHighCouncil.current) {
+        if (!isSkipHighCouncil.current || !isMultisig) {
           let highCouncilForm = stepForm[StepEnum.step2].submitedRes;
           if (highCouncilForm && daoCreateToken?.decimals) {
             const stakingAmount = highCouncilForm.highCouncilConfig.stakingAmount;
@@ -214,6 +204,7 @@ const CreateDaoPage = () => {
                 maximalAbstentionThreshold:
                   highCouncilForm.governanceSchemeThreshold.maximalAbstentionThreshold * 100,
               },
+              members: highCouncilForm.members,
             };
           }
 
@@ -303,96 +294,156 @@ const CreateDaoPage = () => {
   });
 
   const isLogin = loginState === WebLoginState.logined;
-  const isFillGovernanceToken =
-    stepsFormMapRef.current?.stepForm[StepEnum.step0]?.submitedRes?.governanceToken;
 
-  return isLogin ? (
-    <div className="px-4 lg:px-8">
-      <Typography.Title className="py-6" level={5} fontWeight={FontWeightEnum.Medium}>
-        Create a DAO
-      </Typography.Title>
-      <div className="font-medium pt-6 lg:pt-8 pb-10 lg:pb-12 border-0 border-t border-solid border-Neutral-Divider px-0 lg:px-[34px]">
-        <Steps
-          responsive={false}
-          className={clsx('dao-steps-wrap', isMD && 'dao-steps-wrap-mobile')}
-          current={currentStep}
-          items={items}
-          labelPlacement={'vertical'}
-          direction={isLG ? 'vertical' : 'horizontal'}
-        />
-      </div>
-      {contextHolder}
-      <StepsContext.Provider
-        value={{
-          ...stepsFormMapRef.current,
-          onRegister: onRegisterHandler,
-        }}
-      >
-        <div className="dao-steps-content-wrap">{snapshot.context.currentView.Component}</div>
+  useEffect(() => {
+    if (isMultisig && isShowHighCouncil) {
+      setIsShowHighCouncil(false);
+    }
+  }, [isMultisig, isShowHighCouncil]);
 
-        <div
-          className={clsx(
-            'flex py-6 lg:py-8 border-0 border-t border-solid border-Neutral-Divider',
-            isNotFirstStep ? 'gap-3 justify-between' : 'justify-end',
-          )}
-        >
-          {isNotFirstStep && (
-            <Button
-              type="primary"
-              ghost
-              className="flex-quarter lg:w-40 lg:flex-none gap-2 !p-[0px]"
-              onClick={() => send({ type: 'PREVIOUS' })}
+  return isShowSecondScreen ? (
+    isLogin ? (
+      <>
+        <div className="page-content-bg-border  dao-steps-wrap">
+          <p className="title-wrap">
+            <h3 className="title">Create your DAO</h3>
+            <span className="current-step-number">
+              <span className="current-text">Step {currentStep + 1}</span> / 4
+            </span>
+          </p>
+          <Progress
+            percent={((currentStep + 1) / 4) * 100}
+            showInfo={false}
+            size={['100%', 6]}
+            className="step-progress"
+            strokeColor="#FA9D2B"
+          />
+          <div className="current-step-desc">
+            {currentStep == 0 && (
+              <>
+                <h2 className="step-title">Basic Information</h2>
+                <p className="step-subtext">Basic Details.</p>
+              </>
+            )}
+            {currentStep == 1 && (
+              <>
+                <h2 className="step-title">Referendum</h2>
+                <p className="step-subtitle">the primary governance mechamism</p>
+              </>
+            )}
+            {currentStep == 2 && (
+              <>
+                <div className="flex justify-between">
+                  <h2 className="step-title">High Council</h2>
+                  <Switch
+                    disabled={isMultisig}
+                    onChange={(check) => {
+                      setIsShowHighCouncil(check);
+                    }}
+                    value={isShowHighCouncil}
+                  />
+                </div>
+                <p className="step-subtitle">a supplementary governance mechanism</p>
+                <p className="step-subtext">
+                  As an optional governance choice that supplements referendum, High Council
+                  consists of top-ranked addresses who stake governance tokens in the Election
+                  contract and receive votes. High Council members have the authority and
+                  responsibility in DAO governance.
+                </p>
+              </>
+            )}
+            {currentStep == 3 && (
+              <>
+                <h2 className="step-title">Documentation</h2>
+                <p className="step-subtext">
+                  It is recommended to upload at least a white paper and a roadmap.
+                </p>
+              </>
+            )}
+          </div>
+        </div>
+        <div className="page-content-bg-border">
+          {contextHolder}
+          <StepsContext.Provider
+            value={{
+              ...stepsFormMapRef.current,
+              onRegister: onRegisterHandler,
+              isShowHighCouncil,
+            }}
+          >
+            <div className="dao-steps-content-wrap">{snapshot.context.currentView.Component}</div>
+
+            <div
+              className={clsx(
+                'flex py-6 lg:py-8 border-0 border-t border-solid border-Neutral-Divider',
+                isNotFirstStep ? 'gap-3 justify-between' : 'justify-end',
+              )}
             >
-              <ArrowLeft />
-              <span>Back</span>
-            </Button>
-          )}
-
-          {currentStep === 3 ? (
-            <SubmitButton
-              buttonProps={{
-                type: 'primary',
-                className: 'flex-1 lg:w-40 lg:flex-none gap-2',
-              }}
-              onConfirm={handleCreateDao}
-              ref={submitButtonRef}
-            >
-              <span>Submit</span>
-              <ArrowRight />
-            </SubmitButton>
-          ) : (
-            <div className="flex justify-end flex-half">
-              {isHighCouncilStep && (
+              {isNotFirstStep && (
                 <Button
                   type="primary"
-                  className="flex-1 lg:w-40 lg:flex-none gap-2 create-dao-rigth-btn  !p-[0px]"
-                  onClick={handleSkip}
+                  ghost
+                  className="flex-quarter lg:w-40 lg:flex-none gap-2 !p-[0px]"
+                  onClick={() => send({ type: 'PREVIOUS' })}
                 >
-                  <span>Skip</span>
-                  <ArrowRight />
+                  <ArrowLeft />
+                  <span>Back</span>
                 </Button>
               )}
-              {!(isHighCouncilStep && !isFillGovernanceToken) && (
-                <Button
-                  type="primary"
-                  className="flex-1 lg:w-40 lg:flex-none gap-2 create-dao-rigth-btn  !p-[0px]"
-                  onClick={handleNextStep}
-                  loading={nextLoading}
+
+              {currentStep === 3 ? (
+                <SubmitButton
+                  buttonProps={{
+                    type: 'primary',
+                    className: 'flex-1 lg:w-40 lg:flex-none gap-2',
+                  }}
+                  onConfirm={handleCreateDao}
+                  ref={submitButtonRef}
                 >
-                  <span>Next</span>
+                  <span>Submit</span>
                   <ArrowRight />
-                </Button>
+                </SubmitButton>
+              ) : (
+                <div className="flex justify-end flex-half">
+                  {/* {isHighCouncilStep && (
+                  <Button
+                    type="primary"
+                    className="flex-1 lg:w-40 lg:flex-none gap-2 create-dao-rigth-btn  !p-[0px]"
+                    onClick={handleSkip}
+                  >
+                    <span>Skip</span>
+                    <ArrowRight />
+                  </Button>
+                )} */}
+                  {
+                    <Button
+                      type="primary"
+                      className="flex-1 lg:w-40 lg:flex-none gap-2 create-dao-rigth-btn  !p-[0px]"
+                      onClick={handleNextStep}
+                      loading={nextLoading}
+                    >
+                      <span>Next</span>
+                      <ArrowRight />
+                    </Button>
+                  }
+                </div>
               )}
             </div>
-          )}
+          </StepsContext.Provider>
         </div>
-      </StepsContext.Provider>
-    </div>
+      </>
+    ) : (
+      <Result
+        className="px-4 lg:px-8"
+        status="warning"
+        title="Please Login first before creating a DAO"
+      />
+    )
   ) : (
-    <Result
-      className="px-4 lg:px-8"
-      status="warning"
-      title="Please Login first before creating a DAO"
+    <FirstScreen
+      onClick={() => {
+        setIsShowSecondScreen(true);
+      }}
     />
   );
 };

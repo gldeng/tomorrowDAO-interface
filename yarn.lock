@@ -24,26 +24,10 @@
   dependencies:
     just-compare "^2.3.0"
 
-"@aelf-design/common@1.1.0":
-  version "1.1.0"
-  resolved "https://registry.npmjs.org/@aelf-design/common/-/common-1.1.0.tgz#2f8c2cf1facb9dbe5f60b29baaf8ec922f55278e"
-  integrity sha512-a9QdvCco1EBuSvsGsTbFXGHdlqJm9VXqmkkftfHZRPIIUTWS4jLwpfyScG8f8mYV3tJOixW3Mk7AOk24/p92XQ==
-  dependencies:
-    "@ant-design/cssinjs" "^1.18.2"
-
-"@aelf-design/icons@1.1.0":
-  version "1.1.0"
-  resolved "https://registry.npmjs.org/@aelf-design/icons/-/icons-1.1.0.tgz#ac6b06130ae367b285dacbebfe553afd75bce728"
-  integrity sha512-3M5uyAkVeduDXbzmFcj56ohbR0hJQn8SLSFxurycDUmX6VRtO3Tb0huuUn7RZo1tGv8f4fMg0to9ZMNEB7+4Fg==
-  dependencies:
-    "@ant-design/cssinjs" "^1.18.2"
-    antd-style "^3.5.2"
-    classnames "^2.3.2"
-
-"@aelf-design/icons@^1.0.0-alpha.13":
-  version "1.0.0-alpha.13"
-  resolved "https://registry.npmjs.org/@aelf-design/icons/-/icons-1.0.0-alpha.13.tgz#96b25c3ffe774bcda799f0b6f7fc6d85def2816d"
-  integrity sha512-aw/6EzYYG2lGhe9ikMNXJIbo/EPF6Mdj351ALJKKd4VfNEKc/efwpREAwI3wsHod19lp1++Mnbf6IydhmDXGpQ==
+"@aelf-design/icons@1.1.1":
+  version "1.1.1"
+  resolved "https://registry.npmjs.org/@aelf-design/icons/-/icons-1.1.1.tgz#0b33eec3284db84810cf67c5ba5f40d50807010c"
+  integrity sha512-RoWQDDS7VGRT8sXBMsnrq8vkjgPx7C4BPdrLbVT2NPEovUUJHNUL1jOGNznNaVLGj5J+6WVFEc8rs/g46YLkuw==
   dependencies:
     "@ant-design/cssinjs" "^1.18.2"
     antd-style "^3.5.2"
@@ -4706,13 +4690,12 @@ aelf-bridge@^0.0.10:
     socket.io-client "^2.3.0"
     uuid "^3.3.3"
 
-aelf-design@^1.0.0-alpha.16:
-  version "1.1.0"
-  resolved "https://registry.npmjs.org/aelf-design/-/aelf-design-1.1.0.tgz#59a1504946752721fb13f0c5d78e280e0ab7216e"
-  integrity sha512-ktKcRHRxtcI574w406QgLmsLy74KO+b737p3vGqf6FwfIAkWdtTs78v0OIswBIgAqI18hbJ6wOulIVpQ5UvQ7A==
+aelf-design@1.1.1:
+  version "1.1.1"
+  resolved "https://registry.npmjs.org/aelf-design/-/aelf-design-1.1.1.tgz#c8af3438f7a4b53b6989871650ed4c15fd6c2d70"
+  integrity sha512-3nlPo1PxQ/jZr7P0S5tMeJRboPbJBSZ2kcj8ehlANAj1CqBI+NDy+/FoW0EAMCHK5JkCMqjxVC+rxBrV7GMMtg==
   dependencies:
-    "@aelf-design/common" "1.1.0"
-    "@aelf-design/icons" "1.1.0"
+    "@aelf-design/icons" "1.1.1"
     "@ant-design/cssinjs" "^1.18.2"
     "@aws-sdk/client-cognito-identity" "^3.410.0"
     "@aws-sdk/client-s3" "^3.410.0"

@@ -158,6 +158,13 @@ export default function DaoInfo(props: IParams) {
             </span>
           ),
         },
+    isNetworkDAO
+      ? null
+      : {
+          key: '6',
+          label: <span className="dao-collapse-panel-label">Voting mechanism</span>,
+          children: <span className="dao-collapse-panel-child">Token-based Wallet-bsed</span>,
+        },
     // {
     //   key: '6',
     //   label: 'High Council Candidates',

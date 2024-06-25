@@ -53,7 +53,7 @@ const GuidePage = () => {
   }, []);
 
   return (
-    <div className="px-4 lg:px-8">
+    <div className="page-content-bg-border">
       <div className="py-6 flex flex-col gap-3 border-0 border-b border-solid border-Neutral-Divider">
         <Typography.Title level={5} fontWeight={FontWeightEnum.Medium}>
           Governance Framework on TMRWDAO
