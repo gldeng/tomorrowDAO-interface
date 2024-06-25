@@ -25,6 +25,13 @@ export const fetchDaoInfo = async (params: IDaoInfoReq): Promise<IDaoInfoRes> =>
     params,
   });
 };
+export const fetchDaoMembers = async (
+  params: IDaoMembersRequestParams,
+): Promise<IDaoMembersResponse> => {
+  return apiServer.get('/dao/member-list', {
+    params,
+  });
+};
 
 export const fetchProposalList = async (params: IProposalListReq): Promise<IProposalListRes> => {
   return apiServer.post('/proposal/list', {

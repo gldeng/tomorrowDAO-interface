@@ -1,0 +1,16 @@
+.dao-members-nor-text {
+  @apply text-[14px] leading-[22px];
+}
+
+.dao-members-manage {
+  @apply w-[154px] lg:mt-0 mt-[16px];
+}
+
+.dao-members-wrap {
+  @apply flex flex-col;
+}
+
+.dao-members-item {
+  @apply h-[62px] flex items-center;
+  border-bottom: 1px solid #EDEDED;
+}

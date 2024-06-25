@@ -23,6 +23,18 @@
   .form-item-title {
     @apply text-[16px] leading-[24px] text-neutralPrimaryText font-medium;
   }
+
+  .card {
+    @apply border-0 lg:border lg:mb-[10px] border-Neutral-Divider border-solid rounded-lg bg-white px-4 lg:px-8 lg:py-6;
+  }
+
+  .card-title {
+    @apply text-[20px] leading-[28px] text-neutralTitle font-medium;
+  }
+
+  .card-title-lg {
+    @apply text-[24px] leading-[32px] text-neutralTitle font-medium;
+  }
 }
 
 

@@ -12,11 +12,10 @@ const useUpdateHeaderDaoInfo = (daoId: string) => {
       treasuryContractAddress,
     );
     if (!res) return;
-    console.log('useUpdateHeaderDaoInfo ', 1);
+
     eventBus.emit(HeaderUpdateTreasury, daoId);
   }, [daoId]);
   useUnmount(() => {
-    console.log('useUpdateHeaderDaoInfo ', 2);
     eventBus.emit(HeaderUpdateTreasury, null);
   });
 };

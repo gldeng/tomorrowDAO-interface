@@ -1,4 +1,4 @@
-import { Form, Switch, Radio } from 'antd';
+import { Form, Switch, Radio, FormInstance } from 'antd';
 import { Input, Typography, Tooltip, Button } from 'aelf-design';
 import { AddCircleOutlined, DeleteOutlined, MinusCircleOutlined } from '@aelf-design/icons';
 import { ReactComponent as QuestionIcon } from 'assets/imgs/question-icon.svg';
@@ -7,10 +7,11 @@ import './index.css';
 interface IFormMembersProps {
   name: string | string[];
   initialValue: string[];
+  form: FormInstance;
 }
 function FormMembersItem(props: IFormMembersProps) {
-  const [form] = Form.useForm();
-  const { name, initialValue } = props;
+  const { name, initialValue, form } = props;
+  const fields = Form.useWatch(name, form);
   return (
     <>
       <div>
@@ -108,11 +109,13 @@ function FormMembersItem(props: IFormMembersProps) {
         )}
       </Form.List>
       <div className="mt-[32px]">
-        <div className="flex">
+        <div className="flex justify-between">
           <span className="flex items-center form-item-title pb-[8px] justify-between">
             Total Addresses
           </span>
-          <span>2</span>
+          <span className="text-[16px] leading-[24px] font-medium text-neutralPrimaryText">
+            {fields?.length ?? initialValue.length}
+          </span>
         </div>
         <p className="text-[12px] leading-[20px] text-Neutral-Secondary-Text mb-[32px]">
           Your connected wallet was automatically added to the list. You can remove it if you like.

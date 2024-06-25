@@ -35,9 +35,10 @@ import useUpdateHeaderDaoInfo from 'hooks/useUpdateHeaderDaoInfo';
 import ExplorerProposalList, {
   ExplorerProposalListFilter,
 } from '../../network-dao/ExplorerProposalList';
-import './page.css';
 import { useChainSelect } from 'hooks/useChainSelect';
 import getChainIdQuery from 'utils/url';
+import DaoMembers from './components/Members';
+import './page.css';
 
 interface IProps {
   daoId: string;
@@ -269,6 +270,11 @@ export default function DeoDetails(props: IProps) {
               <span></span>
             ),
           },
+          {
+            key: TabKey.DAOMEMBERS,
+            label: 'Members',
+            children: daoData?.data ? <DaoMembers daoData={daoData.data} /> : <span></span>,
+          },
         );
       }
       return finalItems;
@@ -421,6 +427,7 @@ export default function DeoDetails(props: IProps) {
               {daoData?.data && !isNetworkDAO && (
                 <Treasury daoData={daoData.data} createProposalCheck={handleCreateProposal} />
               )}
+              {daoData?.data && !isNetworkDAO && <DaoMembers daoData={daoData.data} />}
               {rightContent}
               {walletInfo.address && (
                 <ExecutdProposals daoId={daoId} address={walletInfo.address} />

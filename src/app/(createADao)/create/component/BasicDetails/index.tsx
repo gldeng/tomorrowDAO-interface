@@ -333,7 +333,11 @@ export default function BasicDetails() {
           )}
           {daoType === EDaoGovernanceMechanism.Multisig && (
             <>
-              <FormMembersItem name={formMembersListNamePath} initialValue={[wallet.address]} />
+              <FormMembersItem
+                name={formMembersListNamePath}
+                initialValue={[wallet.address]}
+                form={form}
+              />
             </>
           )}
         </Form>
