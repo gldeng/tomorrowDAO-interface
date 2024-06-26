@@ -433,6 +433,7 @@ interface IContractInfoListRes {
 
 interface IVoteSchemeListReq {
   chainId: string;
+  daoId: string;
 }
 
 interface IVoteScheme {

@@ -226,7 +226,7 @@ export default function TabsCom(props: IActionTabsProps) {
               </span>
             ),
             key: EProposalActionTabs.DeleteMultisigMembers,
-            children: <DeleteMultisigMembers />,
+            children: <DeleteMultisigMembers daoId={daoId} form={form} />,
           }
         : {},
       {
@@ -295,7 +295,15 @@ export default function TabsCom(props: IActionTabsProps) {
       },
     ];
     return initItems.filter((item) => item.label) as TabsProps['items'];
-  }, [daoData]);
+  }, [
+    contractInfoOptions,
+    contractMethodOptions,
+    daoData?.governanceMechanism,
+    daoId,
+    form,
+    selectOptions,
+    treasuryAssetsData,
+  ]);
   return (
     <Tabs
       defaultActiveKey={activeTab}

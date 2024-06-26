@@ -19,6 +19,9 @@
   .dao-border-round {
     @apply button-border-normal rounded-lg;
   }
+  .normal-text {
+    @apply text-[16px] leading-[24px] text-neutralTitle;
+  }
 
   .form-item-title {
     @apply text-[16px] leading-[24px] text-neutralPrimaryText font-medium;
@@ -34,6 +37,13 @@
 
   .card-title-lg {
     @apply text-[24px] leading-[32px] text-neutralTitle font-medium;
+  }
+  .error-text {
+    @apply text-error h-[32px] flex items-center;
+  }
+  .table-title-text {
+    @apply text-[14px] leading-[20px] text-Neutral-Secondary-Text font-medium;
+
   }
 }
 
@@ -92,4 +102,7 @@ code {
 
 .hash-link-color>span {
   @apply !text-inherit;
+}
+.TMRWDAO-message .TMRWDAO-message-notice-wrapper .TMRWDAO-message-custom-content>.anticon {
+  vertical-align: -0.125em;
 }

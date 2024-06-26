@@ -16,6 +16,7 @@ import Link from 'next/link';
 import { AddCircleOutlined, DeleteOutlined, MinusCircleOutlined } from '@aelf-design/icons';
 import FormMembersItem from 'components/FormMembersItem';
 import { useWebLogin } from 'aelf-web-login';
+import { curChain } from 'config';
 
 export const mediaList = [
   ['metadata', 'socialMedia', 'Twitter'],
@@ -335,7 +336,7 @@ export default function BasicDetails() {
             <>
               <FormMembersItem
                 name={formMembersListNamePath}
-                initialValue={[wallet.address]}
+                initialValue={[`ELF_${wallet.address}_${curChain}`]}
                 form={form}
               />
             </>

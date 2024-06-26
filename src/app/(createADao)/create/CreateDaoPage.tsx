@@ -72,6 +72,10 @@ const CreateDaoPage = () => {
           send({ type: 'NEXT' });
         })
         .catch((err: IFormValidateError) => {
+          messageApi.open({
+            type: 'warning',
+            content: 'Some form fields cannot pass validation, please check.',
+          });
           setNextLoading(false);
           formValidateScrollFirstError(form, err);
         });
@@ -383,7 +387,7 @@ const CreateDaoPage = () => {
                 <Button
                   type="primary"
                   ghost
-                  className="flex-quarter lg:w-40 lg:flex-none gap-2 !p-[0px]"
+                  className="flex-1 lg:w-40 lg:flex-none gap-2"
                   onClick={() => send({ type: 'PREVIOUS' })}
                 >
                   <ArrowLeft />
@@ -404,29 +408,15 @@ const CreateDaoPage = () => {
                   <ArrowRight />
                 </SubmitButton>
               ) : (
-                <div className="flex justify-end flex-half">
-                  {/* {isHighCouncilStep && (
-                  <Button
-                    type="primary"
-                    className="flex-1 lg:w-40 lg:flex-none gap-2 create-dao-rigth-btn  !p-[0px]"
-                    onClick={handleSkip}
-                  >
-                    <span>Skip</span>
-                    <ArrowRight />
-                  </Button>
-                )} */}
-                  {
-                    <Button
-                      type="primary"
-                      className="flex-1 lg:w-40 lg:flex-none gap-2 create-dao-rigth-btn  !p-[0px]"
-                      onClick={handleNextStep}
-                      loading={nextLoading}
-                    >
-                      <span>Next</span>
-                      <ArrowRight />
-                    </Button>
-                  }
-                </div>
+                <Button
+                  type="primary"
+                  className="flex-1 lg:w-40 lg:flex-none gap-2"
+                  onClick={handleNextStep}
+                  loading={nextLoading}
+                >
+                  <span>Next</span>
+                  <ArrowRight />
+                </Button>
               )}
             </div>
           </StepsContext.Provider>

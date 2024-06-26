@@ -8,7 +8,7 @@
   }
 
   .user-name {
-    @apply text-sm leading-[22px] text-Primary-Text font-medium;
+    @apply text-sm leading-[22px] text-Primary-Text font-medium whitespace-nowrap;
   }
 }
 

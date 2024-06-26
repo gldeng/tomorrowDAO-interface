@@ -1,5 +1,5 @@
 import React from 'react';
-import { List, Skeleton as AntdSkeleton } from 'antd';
+import { List, Skeleton as AntdSkeleton, Space } from 'antd';
 import './index.css';
 
 const mockContent =
@@ -73,4 +73,19 @@ const SkeletonLine: React.FC = () => {
 const Skeleton: React.FC = () => {
   return <AntdSkeleton paragraph={{ rows: 4 }} className="skeleton-wrap" active />;
 };
-export { SkeletonList, Skeleton, SkeletonDaoItemList, SkeletonLine };
+const SkeletonTab: React.FC = () => {
+  return (
+    <>
+      <Space>
+        <AntdSkeleton.Button active size={'default'} shape={'default'} />
+        <AntdSkeleton.Button active size={'default'} shape={'default'} />
+        <AntdSkeleton.Button active size={'default'} shape={'default'} />
+      </Space>
+      <br />
+      <AntdSkeleton.Input active size={'default'} block={true} className="mt-[10px]" />
+      <AntdSkeleton.Input active size={'default'} block={true} className="mt-[10px]" />
+      <AntdSkeleton.Input active size={'default'} block={true} className="my-[10px]" />
+    </>
+  );
+};
+export { SkeletonList, Skeleton, SkeletonDaoItemList, SkeletonLine, SkeletonTab };
