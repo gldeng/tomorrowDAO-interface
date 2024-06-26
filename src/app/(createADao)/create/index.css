@@ -39,9 +39,6 @@
   }
 }
 
-.create-dao-rigth-btn+.create-dao-rigth-btn {
-  margin-left: 16px;
-}
 
 .form-item-label {
   @apply font-medium leading-[24px] flex items-center;

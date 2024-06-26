@@ -2,8 +2,9 @@
 
 import { Input, Tooltip } from 'aelf-design';
 import { Form, InputNumber } from 'antd';
-import { memo, useContext } from 'react';
+import { memo, useContext, useEffect } from 'react';
 import { InfoCircleOutlined } from '@aelf-design/icons';
+import { ReactComponent as QuestionIcon } from 'assets/imgs/question-icon.svg';
 import InputSlideBind from 'components/InputSlideBind';
 import { integerRule, min2maxIntegerRule, validatorCreate, useRegisterForm } from '../utils';
 import FormMembersItem from 'components/FormMembersItem';
@@ -12,7 +13,8 @@ import { useSelector } from 'redux/store';
 import { curChain, electionContractAddress } from 'config/index';
 import { useWebLogin } from 'aelf-web-login';
 import './index.css';
-
+const highCouncilMembersFieldName = ['highCouncilConfig', 'maxHighCouncilMemberCount'];
+const highCouncilMembersList = ['members', 'value'];
 const HighCouncil = () => {
   const [form] = Form.useForm();
   const daoCreateToken = useSelector((store) => store.daoCreate.token);
@@ -21,6 +23,10 @@ const HighCouncil = () => {
   const { wallet } = useWebLogin();
   const metaData = stepForm[StepEnum.step0].submitedRes;
   const disabled = !metaData?.governanceToken;
+  const highCouncilMembers = Form.useWatch(highCouncilMembersFieldName, form);
+  useEffect(() => {
+    form.validateFields([highCouncilMembersList]).then(console.log).catch(console.log);
+  }, [highCouncilMembers]);
   return (
     <div className="high-council-form">
       {isShowHighCouncil && (
@@ -56,7 +62,7 @@ const HighCouncil = () => {
           </Form.Item>
 
           <Form.Item
-            name={['highCouncilConfig', 'maxHighCouncilMemberCount']}
+            name={highCouncilMembersFieldName}
             label={
               <Tooltip
                 title={`Users interested in becoming High Council members must stake a specified number of governance tokens to become eligible for election and receive votes from other addresses, with those accumulating more votes being elected as High Council members. The number of High Council members can be changed through proposals.`}
@@ -294,9 +300,39 @@ const HighCouncil = () => {
             />
           </Form.Item>
           <FormMembersItem
-            name={['members', 'value']}
-            initialValue={[wallet.address]}
+            name={highCouncilMembersList}
+            initialValue={[`ELF_${wallet.address}_${curChain}`]}
             form={form}
+            rules={[
+              {
+                validator: async (_, lists) => {
+                  const highCouncilMembers = form.getFieldValue(highCouncilMembersFieldName);
+                  if (lists.length > highCouncilMembers) {
+                    return Promise.reject(
+                      new Error(
+                        'Initial high council members should not exceed  number of high council members',
+                      ),
+                    );
+                  }
+                },
+              },
+            ]}
+            titleNode={
+              <Tooltip
+                title={
+                  <div>
+                    There is no limit on the number of addresses on your multisig. Addresses can
+                    create proposals, create and approve transactions, and suggest changes to the
+                    DAO settings after creation.
+                  </div>
+                }
+              >
+                <span className="flex items-center form-item-title gap-[8px] pb-[8px]  w-[max-content]">
+                  High Council Members Address
+                  <QuestionIcon className="cursor-pointer " width={16} height={16} />
+                </span>
+              </Tooltip>
+            }
           />
         </Form>
       )}

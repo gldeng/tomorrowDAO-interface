@@ -102,6 +102,6 @@ export interface IProposalSearchParams {
 export enum EProposalActionTabs {
   TREASURY = 'treasury',
   CUSTOM_ACTION = 'customAction',
-  AddMultisigMembers = 'AddMultisigMembers',
-  DeleteMultisigMembers = 'DeleteMultisigMembers',
+  AddMultisigMembers = 'addMultisigMembers',
+  DeleteMultisigMembers = 'deleteMultisigMembers',
 }

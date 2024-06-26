@@ -9,6 +9,7 @@ import { Button, HashAddress } from 'aelf-design';
 import { EDaoGovernanceMechanism } from 'app/(createADao)/create/type';
 import Link from 'next/link';
 import './index.css';
+import { EProposalActionTabs } from 'app/proposal/deploy/[daoId]/type';
 
 interface IProps {
   daoData: IDaoInfoData;
@@ -50,15 +51,19 @@ const DaoMembers: React.FC<IProps> = (props) => {
           <div className="flex justify-between items-center lg:flex-row flex-col mb-[24px]">
             <p>
               <h2 className="card-title-lg mb-[4px]">{daoMembersData?.data?.totalCount} Members</h2>
-              <span className="dao-members-nor-text text-Neutral-Secondary-Text">
+              <span className="dao-members-normal-text text-Neutral-Secondary-Text">
                 {daoData?.governanceMechanism === EDaoGovernanceMechanism.Token
                   ? 'Token-based'
                   : 'Wallet-bsed'}
               </span>
             </p>
-            <Button type="primary" size="medium" className="dao-members-manage">
-              Manage members
-            </Button>
+            <Link
+              href={`/proposal/deploy/${daoData?.id}?tab=${EProposalActionTabs.AddMultisigMembers}`}
+            >
+              <Button type="primary" size="medium" className="dao-members-manage">
+                Manage members
+              </Button>
+            </Link>
           </div>
           <ul className="dao-members-wrap">
             {daoMembersData?.data.data.map((item) => {
@@ -70,7 +75,7 @@ const DaoMembers: React.FC<IProps> = (props) => {
                 >
                   <li className="dao-members-item">
                     <HashAddress
-                      className="dao-members-nor-text"
+                      className="dao-members-normal-text"
                       preLen={8}
                       endLen={11}
                       address={item.address}
@@ -85,7 +90,7 @@ const DaoMembers: React.FC<IProps> = (props) => {
             {daoMembersData?.data?.totalCount && daoMembersData?.data?.totalCount > 5 && (
               <Link href={`${daoData.id}/members`}>
                 <Button size="medium" className="dao-members-manage">
-                  <span className="dao-members-nor-text font-medium">Load More</span>
+                  <span className="dao-members-normal-text font-medium">Load More</span>
                 </Button>
               </Link>
             )}
