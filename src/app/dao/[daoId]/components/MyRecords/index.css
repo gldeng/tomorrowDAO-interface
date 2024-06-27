@@ -1,0 +1,11 @@
+.my-votes-wrap {
+  .vote-0 {
+    @apply text-approve;
+  }
+  .vote-1 {
+    @apply text-rejection;
+  }
+  .vote-2 {
+    @apply text-abstention;
+  }
+}

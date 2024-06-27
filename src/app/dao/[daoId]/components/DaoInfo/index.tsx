@@ -168,7 +168,7 @@ export default function DaoInfo(props: IParams) {
             <span className="dao-collapse-panel-child">
               {data?.governanceMechanism === EDaoGovernanceMechanism.Token
                 ? 'Token-based'
-                : 'Wallet-bsed'}
+                : 'Wallet-based'}
             </span>
           ),
         },

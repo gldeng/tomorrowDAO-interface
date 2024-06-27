@@ -34,6 +34,15 @@
   .card-title {
     @apply text-[20px] leading-[28px] text-neutralTitle font-medium;
   }
+  .card-sm-text {
+    @apply text-[14px] leading-[22px];
+  }
+  .card-xsm-text {
+    @apply text-[12px] leading-[20px];
+  }
+  .card-sm-text-bold {
+    @apply text-[14px] leading-[22px] font-medium;
+  }
 
   .card-title-lg {
     @apply text-[24px] leading-[32px] text-neutralTitle font-medium;

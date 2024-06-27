@@ -72,6 +72,15 @@ function DeleteMultisigMembers(props: IDeleteMultisigMembersProps) {
         form={form}
         hiddenExtraWhenEmpty={true}
         disableInput={true}
+        rules={[
+          {
+            validator: async (_, deleteLists) => {
+              if (deleteLists.length >= lists.length) {
+                return Promise.reject(new Error('A multisig requires members '));
+              }
+            },
+          },
+        ]}
         titleNode={
           <Tooltip
             title={

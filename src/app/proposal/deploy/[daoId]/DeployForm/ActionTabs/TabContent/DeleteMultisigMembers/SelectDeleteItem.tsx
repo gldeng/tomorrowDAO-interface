@@ -23,7 +23,9 @@ function FormDeleteItem(props: IFormDeleteItemProps) {
   return (
     <>
       <div className="flex justify-between items-center">
-        <p className="form-item-title text-Neutral-Secondary-Text">1 address selected</p>
+        <p className="form-item-title text-Neutral-Secondary-Text">
+          {value.length} address selected
+        </p>
         <div>
           <span className="form-item-title pr-[16px]">Select All</span>
           <Checkbox
