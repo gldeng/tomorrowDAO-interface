@@ -30,6 +30,7 @@ module.exports = {
         'Active-Text': '#F8B042',
         'Reject-Reject': '#F55D6E',
         'Light-Mode-Brand-Brand': '#127FFF',
+        link: '#5b8ef4',
       },
       flex: {
         quarter: '1 1 25%',

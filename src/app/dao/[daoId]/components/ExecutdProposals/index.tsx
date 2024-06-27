@@ -106,14 +106,8 @@ export default function ExecutdProposals(props: IExecutdProposals) {
   };
 
   return (
-    <div className="border border-Neutral-Divider border-solid rounded-lg bg-white my-6">
-      <Typography.Title
-        className="px-4 lg:px-8 py-6 lg:py-4"
-        fontWeight={FontWeightEnum.Medium}
-        level={6}
-      >
-        To be executed proposals
-      </Typography.Title>
+    <div className="page-content-bg-border mt-[24px]">
+      <div className="card-title mb-[24px]">To be executed proposals</div>
       <div className="max-h-96 overflow-scroll">
         {!executableListData?.data?.items?.length && <NoData />}
         {executableListData?.data?.items.map((item, index) => {

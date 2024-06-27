@@ -48,13 +48,13 @@ const DaoMembers: React.FC<IProps> = (props) => {
       ) : (
         <div>
           <h3 className="card-title mb-[24px]">Members</h3>
-          <div className="flex justify-between items-center lg:flex-row flex-col mb-[24px]">
+          <div className="flex justify-between items-center lg:flex-row flex-col ">
             <p>
               <h2 className="card-title-lg mb-[4px]">{daoMembersData?.data?.totalCount} Members</h2>
               <span className="dao-members-normal-text text-Neutral-Secondary-Text">
                 {daoData?.governanceMechanism === EDaoGovernanceMechanism.Token
                   ? 'Token-based'
-                  : 'Wallet-bsed'}
+                  : 'Wallet-based'}
               </span>
             </p>
             <Link
@@ -65,36 +65,38 @@ const DaoMembers: React.FC<IProps> = (props) => {
               </Button>
             </Link>
           </div>
-          <ul className="dao-members-wrap">
-            {daoMembersData?.data.data.map((item) => {
-              return (
-                <Link
-                  key={item.address}
-                  href={`${explorer}/address/${item.address}`}
-                  target="_blank"
-                >
-                  <li className="dao-members-item">
-                    <HashAddress
-                      className="dao-members-normal-text"
-                      preLen={8}
-                      endLen={11}
-                      address={item.address}
-                      chain={curChain}
-                    ></HashAddress>
-                  </li>
-                </Link>
-              );
-            })}
-          </ul>
-          <div className="flex justify-center mt-[20px]">
-            {daoMembersData?.data?.totalCount && daoMembersData?.data?.totalCount > 5 && (
+          {!!daoMembersData?.data?.data?.length && (
+            <ul className="dao-members-wrap mt-[24px]">
+              {daoMembersData?.data?.data?.slice(0, 5)?.map((item) => {
+                return (
+                  <Link
+                    key={item.address}
+                    href={`${explorer}/address/${item.address}`}
+                    target="_blank"
+                  >
+                    <li className="dao-members-item">
+                      <HashAddress
+                        className="dao-members-normal-text"
+                        preLen={8}
+                        endLen={11}
+                        address={item.address}
+                        chain={curChain}
+                      ></HashAddress>
+                    </li>
+                  </Link>
+                );
+              })}
+            </ul>
+          )}
+          {(daoMembersData?.data?.totalCount ?? 0) > 5 && (
+            <div className="flex justify-center mt-[20px]">
               <Link href={`${daoData.id}/members`}>
                 <Button size="medium" className="dao-members-manage">
                   <span className="dao-members-normal-text font-medium">Load More</span>
                 </Button>
               </Link>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       )}
     </div>

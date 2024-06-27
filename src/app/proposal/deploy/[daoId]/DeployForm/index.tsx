@@ -30,6 +30,7 @@ import {
   fetchVoteSchemeList,
 } from 'api/request';
 import { timesDecimals } from 'utils/calculate';
+import { trimAddress } from 'utils/address';
 // import { useWalletSyncCompleted } from 'hooks/useWalletSyncCompleted';
 
 const convertParams = async (address: string, methodName: string, originParams: any) => {
@@ -197,7 +198,9 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
           if (activeTab === EProposalActionTabs.AddMultisigMembers) {
             const params = {
               daoId: daoId,
-              addMembers,
+              addMembers: {
+                value: addMembers.value.map((address: string) => trimAddress(address)),
+              },
             };
 
             const finalParams = await convertParams(daoAddress, 'AddMember', params);
@@ -210,7 +213,9 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
           if (activeTab === EProposalActionTabs.DeleteMultisigMembers) {
             const params = {
               daoId: daoId,
-              removeMembers,
+              removeMembers: {
+                value: removeMembers.value.map((address: string) => trimAddress(address)),
+              },
             };
             const finalParams = await convertParams(daoAddress, 'RemoveMember', params);
             contractParams.transaction = {

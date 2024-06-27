@@ -39,6 +39,7 @@ import { useChainSelect } from 'hooks/useChainSelect';
 import getChainIdQuery from 'utils/url';
 import DaoMembers from './components/Members';
 import './page.css';
+import { EDaoGovernanceMechanism } from 'app/(createADao)/create/type';
 
 interface IProps {
   daoId: string;
@@ -270,12 +271,14 @@ export default function DeoDetails(props: IProps) {
               <span></span>
             ),
           },
-          {
+        );
+        if (daoData?.data?.governanceMechanism === EDaoGovernanceMechanism.Multisig) {
+          finalItems.push({
             key: TabKey.DAOMEMBERS,
             label: 'Members',
             children: daoData?.data ? <DaoMembers daoData={daoData.data} /> : <span></span>,
-          },
-        );
+          });
+        }
       }
       return finalItems;
     }
@@ -427,7 +430,11 @@ export default function DeoDetails(props: IProps) {
               {daoData?.data && !isNetworkDAO && (
                 <Treasury daoData={daoData.data} createProposalCheck={handleCreateProposal} />
               )}
-              {daoData?.data && !isNetworkDAO && <DaoMembers daoData={daoData.data} />}
+              {daoData?.data &&
+                !isNetworkDAO &&
+                daoData.data.governanceMechanism === EDaoGovernanceMechanism.Multisig && (
+                  <DaoMembers daoData={daoData.data} />
+                )}
               {rightContent}
               {walletInfo.address && (
                 <ExecutdProposals daoId={daoId} address={walletInfo.address} />

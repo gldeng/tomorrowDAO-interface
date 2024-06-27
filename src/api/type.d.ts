@@ -538,7 +538,7 @@ interface IVoteHistoryReq {
 interface IVoteHistoryItem {
   timeStamp: number;
   proposalId: string;
-  ProposalTitle: string;
+  proposalTitle: string;
   myOption: number;
   votesNum: number;
   transactionId: string;

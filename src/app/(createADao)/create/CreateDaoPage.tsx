@@ -34,6 +34,7 @@ import useAelfWebLoginSync from 'hooks/useAelfWebLoginSync';
 import breadCrumb from 'utils/breadCrumb';
 import { FirstScreen } from './FirstScreen';
 import './index.css';
+import { trimAddress } from 'utils/address';
 
 const CreateDaoPage = () => {
   const [snapshot, send] = useMachine(formMachine);
@@ -118,6 +119,9 @@ const CreateDaoPage = () => {
       }, {} as Record<string, string>);
       const metadata = {
         ...originMetadata,
+        members: {
+          value: originMetadata?.members?.value?.map((item) => trimAddress(item)) ?? [],
+        },
         metadata: {
           ...originMetadata?.metadata,
           logoUrl: originMetadata?.metadata?.logoUrl?.[0]?.response?.url,
@@ -201,7 +205,9 @@ const CreateDaoPage = () => {
                 maximalAbstentionThreshold:
                   highCouncilForm.governanceSchemeThreshold.maximalAbstentionThreshold * 100,
               },
-              members: highCouncilForm.members,
+              members: {
+                value: highCouncilForm?.members?.value?.map((item) => trimAddress(item)) ?? [],
+              },
             };
           }
 

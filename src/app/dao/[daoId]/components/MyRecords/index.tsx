@@ -1,6 +1,6 @@
 import { Typography, FontWeightEnum, Button, HashAddress } from 'aelf-design';
 import Image from 'next/image';
-import arrowRightIcon from 'assets/imgs/arrow-right.svg';
+import { RightOutlined } from '@aelf-design/icons';
 import Link from 'next/link';
 import { fetchVoteHistory } from 'api/request';
 import { useSelector } from 'react-redux';
@@ -11,6 +11,10 @@ import dayjs from 'dayjs';
 import LinkNetworkDao from 'components/LinkNetworkDao';
 import { useEffect } from 'react';
 import { useWalletService } from 'hooks/useWallet';
+import './index.css';
+import { SkeletonLine } from 'components/Skeleton';
+import { Empty } from 'antd';
+import NoData from '../NoData';
 
 interface IProps {
   daoId: string;
@@ -24,7 +28,7 @@ export default function MyRecords(props: IProps) {
     data: voteHistoryData,
     run,
     // error: voteHistoryError,
-    // loading: voteHistoryLoading,
+    loading: voteHistoryLoading,
   } = useRequest(
     () => {
       return fetchVoteHistory({
@@ -59,83 +63,54 @@ export default function MyRecords(props: IProps) {
   // };
 
   const LoadMoreButton = (
-    <Button type="link" size="medium" className="!p-0 text-[#1A1A1A]">
-      View More
-      <Image width={12} height={12} src={arrowRightIcon} alt=""></Image>
-    </Button>
+    <span className="text-[12px] flex items-center text-neutralTitle hover:text-link">
+      <span className="card-sm-text pr-[8px]">View More</span>
+      <RightOutlined />
+    </span>
   );
+  const dataLen = voteHistoryData?.data?.items?.length ?? 0;
   return (
-    <div className="border border-Neutral-Divider border-solid rounded-lg bg-white mb-4 lg:my-4">
-      <div className="px-4 lg:px-8 py-6 lg:py-4 flex justify-between items-center">
-        <Typography.Title fontWeight={FontWeightEnum.Medium} level={6}>
-          My Votes
-        </Typography.Title>
-        <div className="records-header-morebtn">
-          {isNetworkDAO ? (
-            <LinkNetworkDao href={`/my-votes`}>{LoadMoreButton}</LinkNetworkDao>
-          ) : (
-            <Link href={`/my-votes?daoId=${daoId}`}>{LoadMoreButton}</Link>
-          )}
-        </div>
+    <div className="page-content-bg-border mt-[24px] my-votes-wrap">
+      <div className="flex justify-between items-center mb-[24px]">
+        <div className="card-title ">My Votes</div>
+        {dataLen > 5 && (
+          <div className="records-header-morebtn">
+            {isNetworkDAO ? (
+              <LinkNetworkDao href={`/my-votes`}>{LoadMoreButton}</LinkNetworkDao>
+            ) : (
+              <Link href={`/my-votes?daoId=${daoId}`}>{LoadMoreButton}</Link>
+            )}
+          </div>
+        )}
       </div>
-
-      <div className="max-h-96 overflow-scroll">
-        {voteHistoryData?.data?.items?.map((item, i) => {
-          return (
-            <div className="flex justify-between items-center px-4 lg:px-8 max-h-80 mb-8" key={i}>
-              <div>
-                <div className="time">
-                  <span className="text-Neutral-Secondary-Text mr-2">
+      {voteHistoryLoading ? (
+        <SkeletonLine />
+      ) : (
+        <>
+          {!dataLen && <NoData />}
+          <div className="flex flex-col gap-[32px]">
+            {voteHistoryData?.data?.items?.slice(0, 5)?.map((item, i) => {
+              return (
+                <div className="flex flex-col" key={i}>
+                  <div className="card-xsm-text mb-[4px] text-Neutral-Secondary-Text">
                     {dayjs(item.timeStamp).format('YYYY-MM-DD HH:mm:ss')}
-                    <span className="pl-[4px]">{EVoteOption[item.myOption]}</span>
-                  </span>
-                </div>
-                <div>
-                  <span className="block lg:flex items-center">
-                    <Typography.Text fontWeight={FontWeightEnum.Medium}>
-                      transactionId:
-                    </Typography.Text>
-
-                    <Link href={`${explorer}/tx/${item.transactionId}`}>
-                      <HashAddress
-                        className="pl-[4px]"
-                        ignorePrefixSuffix={true}
-                        preLen={8}
-                        endLen={11}
-                        address={item.transactionId}
-                      ></HashAddress>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <Link href={`/proposal/${item.proposalId}`} className="basis-3/4 truncate">
+                      <span className="card-sm-text-bold text-neutralPrimaryText hover:link">
+                        {item.proposalTitle}
+                      </span>
                     </Link>
-                  </span>
+                    <span className={`pl-[4px] vote-${item.myOption}`}>
+                      {EVoteOption[item.myOption]}
+                    </span>
+                  </div>
                 </div>
-                <div className="block lg:flex items-center">
-                  <Typography.Text fontWeight={FontWeightEnum.Medium}>Proposal ID:</Typography.Text>
-                  {isNetworkDAO ? (
-                    <LinkNetworkDao href={`/proposal-detail-tmrw/${item.proposalId}`}>
-                      <HashAddress
-                        className="pl-[4px]"
-                        ignorePrefixSuffix={true}
-                        preLen={8}
-                        endLen={11}
-                        address={item.proposalId}
-                      ></HashAddress>
-                    </LinkNetworkDao>
-                  ) : (
-                    <Link href={`/proposal/${item.proposalId}`}>
-                      <HashAddress
-                        className="pl-[4px]"
-                        ignorePrefixSuffix={true}
-                        preLen={8}
-                        endLen={11}
-                        address={item.proposalId}
-                      ></HashAddress>
-                    </Link>
-                  )}
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
+              );
+            })}
+          </div>
+        </>
+      )}
     </div>
   );
 }
