@@ -101,7 +101,7 @@ const MyDaosPage = () => {
       <div className="flex flex-col gap-[2rem]">
         <div className="flex items-center justify-between">
           <p className="text-Primary-Text text-[28px] leading-[36px]">My DAOs</p>
-          <Link href="/guide">
+          <Link href="/create">
             <Button type="primary" size="medium">
               Create a DAO
             </Button>

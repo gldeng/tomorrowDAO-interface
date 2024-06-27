@@ -19,7 +19,7 @@ export default function Page() {
           <Link href="/explore">
             <Button className="w-[152px]">Explore</Button>
           </Link>
-          <Link href="/guide">
+          <Link href="/create">
             <Button type="primary" className="ml-[24px] w-[152px]">
               Create a DAO
             </Button>

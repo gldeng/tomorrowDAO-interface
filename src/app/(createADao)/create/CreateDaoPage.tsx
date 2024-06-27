@@ -72,10 +72,6 @@ const CreateDaoPage = () => {
           send({ type: 'NEXT' });
         })
         .catch((err: IFormValidateError) => {
-          messageApi.open({
-            type: 'warning',
-            content: 'Some form fields cannot pass validation, please check.',
-          });
           setNextLoading(false);
           formValidateScrollFirstError(form, err);
         });
@@ -98,9 +94,6 @@ const CreateDaoPage = () => {
     },
     [currentStepString],
   );
-  useEffect(() => {
-    breadCrumb.clearBreadCrumb();
-  }, []);
   const isMultisig =
     stepsFormMapRef.current?.stepForm[StepEnum.step0]?.submitedRes?.governanceMechanism ===
     EDaoGovernanceMechanism.Multisig;
@@ -294,7 +287,7 @@ const CreateDaoPage = () => {
   };
 
   useWebLoginEvent(WebLoginEvents.LOGOUT, () => {
-    router.push('/guide');
+    router.push('/create');
   });
 
   const isLogin = loginState === WebLoginState.logined;
@@ -304,6 +297,10 @@ const CreateDaoPage = () => {
       setIsShowHighCouncil(false);
     }
   }, [isMultisig, isShowHighCouncil]);
+
+  useEffect(() => {
+    breadCrumb.updateCreateDaoPage();
+  }, []);
 
   return isShowSecondScreen ? (
     isLogin ? (

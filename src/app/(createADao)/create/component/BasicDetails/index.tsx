@@ -3,7 +3,7 @@ import './index.css';
 import { Form, Switch, Radio } from 'antd';
 import ChainAddress from 'components/Address';
 import { ReactComponent as QuestionIcon } from 'assets/imgs/question-icon.svg';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { cx } from 'antd-style';
 import { mediaValidatorMap, useRegisterForm } from '../utils';
 import IPFSUpload from 'components/IPFSUpload';
@@ -28,6 +28,7 @@ export const mediaList = [
 
 const governanceMechanismNamePath = 'governanceMechanism';
 const formMembersListNamePath = ['members', 'value'];
+const governanceTokenNamePath = 'governanceToken';
 
 export default function BasicDetails() {
   const [form] = Form.useForm();
@@ -37,6 +38,14 @@ export default function BasicDetails() {
   const { wallet } = useWebLogin();
   const daoType = Form.useWatch(governanceMechanismNamePath, form) ?? EDaoGovernanceMechanism.Token;
   useRegisterForm(form, StepEnum.step0);
+  useEffect(() => {
+    if (daoType === EDaoGovernanceMechanism.Token) {
+      form.setFieldValue(governanceTokenNamePath, '');
+    }
+    if (daoType === EDaoGovernanceMechanism.Multisig) {
+      form.setFieldValue(formMembersListNamePath, [`ELF_${wallet.address}_${curChain}`]);
+    }
+  }, [daoType]);
   return (
     <div className="basic-detail">
       <div>
@@ -214,7 +223,7 @@ export default function BasicDetails() {
             <Input placeholder={`Enter the DAO's subreddit link`} />
           </Form.Item>
           <div className="mb-6 pt-8">
-            <Typography.Title level={6}>DAO&apos;s Metadata Admin</Typography.Title>
+            <span className="card-title">DAO&apos;s Metadata Admin</span>
           </div>
           <div className="mb-8">
             <ChainAddress
@@ -308,7 +317,7 @@ export default function BasicDetails() {
                   },
                 ]}
                 validateTrigger="onBlur"
-                name="governanceToken"
+                name={governanceTokenNamePath}
                 label=""
                 className="governance-token-item"
               >

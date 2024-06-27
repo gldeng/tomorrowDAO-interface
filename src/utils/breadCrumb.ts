@@ -16,6 +16,12 @@ const explorePage: TBreadcrumbItems = [
     href: '/explore',
   },
 ];
+const createDaoPage: TBreadcrumbItems = [
+  ...homePage,
+  {
+    title: 'Create a DAO',
+  },
+];
 export const defaultDaoName = 'DAO Information';
 type TBreadcrumbFn = (id: string, daoName: string) => TBreadcrumbItems;
 // ------- href: /dao/:id
@@ -111,6 +117,9 @@ class BreadCrumb {
       daoName = this.cacheDaoInfo[id]?.name ?? defaultDaoName;
     }
     this.updateBreadCrumb(daoDetailPage(id, daoName));
+  }
+  public async updateCreateDaoPage() {
+    this.updateBreadCrumb(createDaoPage);
   }
   public async updateCreateProposalPage(id: string) {
     const daoName = await this.getDaoName(id);

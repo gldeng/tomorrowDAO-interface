@@ -50,7 +50,7 @@
 
 .dao-create-first-screen {
   .dao-create-first-screen-title {
-    @apply font-medium text-[24px] leading-[32px] text-neutralTitle;
+    @apply font-medium lg:text-[24px] lg:leading-[32px] text-neutralTitle text-[20px] leading-[28px];
   }
 
   .icon {
@@ -58,7 +58,7 @@
   }
 
   .icon-wrap {
-    @apply bg-Neutral-Hover-BG flex items-center justify-center;
+    @apply bg-Neutral-Hover-BG flex items-center justify-center py-[50px];
   }
 
   .dao-create-preview {
@@ -66,7 +66,7 @@
   }
 
   .dao-create-preview-item {
-    @apply flex-1 p-[16px] dao-border-round;
+    @apply flex-1 p-[16px] dao-border-round bg-white;
 
     p {
       @apply font-medium text-[14px] leading-[22px] text-Neutral-Disable-Text mt-[10px] mb-[8px];
