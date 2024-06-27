@@ -12,9 +12,12 @@ const DynamicBreadCrumb = () => {
   const { isLG } = useResponsive();
   const router = useRouter();
 
+  if (denyList.includes(pathname)) {
+    return null;
+  }
   return (
     <div className="pb-6 ">
-      {denyList.includes(pathname) ? null : isLG ? (
+      {isLG ? (
         <span
           className="breadcrumb-back-button flex items-center"
           onClick={() => {
