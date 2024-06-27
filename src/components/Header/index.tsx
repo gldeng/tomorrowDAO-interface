@@ -30,7 +30,7 @@ export default function Header() {
   const items: MenuProps['items'] = useMemo(() => {
     return [
       {
-        label: <Link href={'/guide'}>Create a DAO</Link>,
+        label: <Link href={'/create'}>Create a DAO</Link>,
         key: ENavKeys.CreateDAO,
       },
       {
@@ -122,7 +122,7 @@ export default function Header() {
 
   useEffect(() => {
     // refresh from path map to nav active
-    if (pathname === '/guide' || pathname === '/create') {
+    if (pathname === '/create') {
       setCurrent(ENavKeys.CreateDAO);
     } else if (pathname.includes('/treasury')) {
       setCurrent(ENavKeys.Treasury);

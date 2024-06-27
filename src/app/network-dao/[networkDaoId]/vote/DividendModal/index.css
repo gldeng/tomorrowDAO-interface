@@ -16,11 +16,6 @@
   border-radius: 8px;
 }
 
-.dividend-modal.antExplorer-modal .antExplorer-modal-close-icon {
-  position: absolute;
-  top: 17px;
-  right: 16px;
-}
 
 .dividend-modal.antExplorer-modal .antExplorer-modal-content .antExplorer-modal-header {
   border-bottom: 1px solid #e6e6e6;

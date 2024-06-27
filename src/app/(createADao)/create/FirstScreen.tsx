@@ -14,14 +14,14 @@ export const FirstScreen = (props: IFirstScreenProps) => {
   const { onClick } = props;
   return (
     <>
-      <div className="page-content-bg-border dao-create-first-screen mb-[24px] flex items-center justify-between">
+      <div className="page-content-bg-border dao-create-first-screen mb-[24px] flex items-start lg:items-center justify-between flex-col lg:flex-row">
         <h2 className="dao-create-first-screen-title">Create your DAO to TMRW DAO</h2>
-        <ButtonCheckLogin onClick={onClick} type="primary">
+        <ButtonCheckLogin onClick={onClick} type="primary" className="lg:mt-0 mt-[24px]">
           Build your DAO
         </ButtonCheckLogin>
       </div>
-      <div className="page-content-bg-border dao-create-first-screen">
-        <ul className="flex dao-create-preview">
+      <div className="dao-create-first-screen">
+        <ul className="flex dao-create-preview flex-col lg:flex-row">
           <li className="dao-create-preview-item">
             <div className="icon-wrap">
               <img className="icon" src={createDaoIconSrc1} alt="" />

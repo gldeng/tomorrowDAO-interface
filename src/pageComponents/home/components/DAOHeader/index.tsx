@@ -7,7 +7,7 @@ export default function DAOHeader() {
   const router = useRouter();
 
   const toGuidePage = () => {
-    router.push('/guide');
+    router.push('/create');
   };
 
   const { isLG } = useResponsive();

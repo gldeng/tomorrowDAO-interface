@@ -87,7 +87,7 @@ function FormMembersItem(props: IFormMembersProps) {
                       rules={[
                         {
                           required: true,
-                          message: 'Please enter address',
+                          message: 'Address is required',
                         },
                         {
                           validator: (_, value) => {
