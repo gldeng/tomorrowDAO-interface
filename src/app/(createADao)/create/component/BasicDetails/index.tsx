@@ -17,6 +17,7 @@ import { AddCircleOutlined, DeleteOutlined, MinusCircleOutlined } from '@aelf-de
 import FormMembersItem from 'components/FormMembersItem';
 import { useWebLogin } from 'aelf-web-login';
 import { curChain } from 'config';
+import { usePrevious } from 'ahooks';
 
 export const mediaList = [
   ['metadata', 'socialMedia', 'Twitter'],
@@ -38,14 +39,6 @@ export default function BasicDetails() {
   const { wallet } = useWebLogin();
   const daoType = Form.useWatch(governanceMechanismNamePath, form) ?? EDaoGovernanceMechanism.Token;
   useRegisterForm(form, StepEnum.step0);
-  useEffect(() => {
-    if (daoType === EDaoGovernanceMechanism.Token) {
-      form.setFieldValue(governanceTokenNamePath, '');
-    }
-    if (daoType === EDaoGovernanceMechanism.Multisig) {
-      form.setFieldValue(formMembersListNamePath, [`ELF_${wallet.address}_${curChain}`]);
-    }
-  }, [daoType]);
   return (
     <div className="basic-detail">
       <div>
@@ -243,10 +236,28 @@ export default function BasicDetails() {
             initialValue={EDaoGovernanceMechanism.Token}
           >
             <Radio.Group className="dao-type-select">
-              <Radio value={EDaoGovernanceMechanism.Token}>
+              <Radio
+                value={EDaoGovernanceMechanism.Token}
+                onClick={() => {
+                  if (daoType === EDaoGovernanceMechanism.Token) {
+                    return;
+                  }
+                  form.setFieldValue(governanceTokenNamePath, '');
+                }}
+              >
                 <span className="text-[16px] leading-[24px]">Token holders</span>
               </Radio>
-              <Radio value={EDaoGovernanceMechanism.Multisig}>
+              <Radio
+                value={EDaoGovernanceMechanism.Multisig}
+                onClick={() => {
+                  if (daoType === EDaoGovernanceMechanism.Multisig) {
+                    return;
+                  }
+                  form.setFieldValue(formMembersListNamePath, [
+                    `ELF_${wallet.address}_${curChain}`,
+                  ]);
+                }}
+              >
                 <span className="text-[16px] leading-[24px]">Multisig Members </span>
               </Radio>
             </Radio.Group>

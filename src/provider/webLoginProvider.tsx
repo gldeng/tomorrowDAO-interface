@@ -1,9 +1,10 @@
 'use client';
 import { NetworkType } from '@portkey/did-ui-react';
-import { aelfWebLoginNetworkType, curChain } from 'config';
+import { NetworkDaoHomePathName, aelfWebLoginNetworkType, curChain } from 'config';
 import dynamicReq from 'next/dynamic';
 
 import { store } from 'redux/store';
+import getChainIdQuery from 'utils/url';
 
 const APP_NAME = 'TMRWDAO';
 
@@ -29,10 +30,22 @@ const WebLoginProviderDynamic = dynamicReq(
     const networkType = (info.networkType || 'TESTNET') as NetworkType;
 
     const webLogin = await import('aelf-web-login').then((module) => module);
+    const pathName = window.location.pathname;
+    const isNetWorkDao = pathName.startsWith(NetworkDaoHomePathName);
 
+    const getChainId = () => {
+      if (isNetWorkDao) {
+        const chain = getChainIdQuery();
+        return chain.chainId ?? 'AELF';
+      }
+      return curChain;
+    };
+    const chainId = getChainId();
+
+    console.log('login with', chainId);
     webLogin.setGlobalConfig({
       appName: APP_NAME,
-      chainId: curChain,
+      chainId: getChainId(),
       onlyShowV2: true,
       portkey: {},
       portkeyV2: {
