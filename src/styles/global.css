@@ -78,7 +78,6 @@ body {
 }
 * {
   font-family: Roboto, sans-serif;
-  transition: background 0.3s, fill 0.3s, stork 0.3s, box-shadow 0.3s;
 }
 
 @font-face {
@@ -141,4 +140,7 @@ input[type='number'] {
 }
 .TMRWDAO-pagination-container .TMRWDAO-select-selector {
   @apply !border-Neutral-Disable-Text;
+}
+.TMRWDAO-tabs-nav {
+  overflow-x: hidden!important;
 }

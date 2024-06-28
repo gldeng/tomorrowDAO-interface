@@ -74,7 +74,7 @@ export default function TreasuryDetails(props: ITreasuryDetailsProps) {
           : {};
         return (
           <span>
-            <HashAddress address={address} {...mobileProps} />
+            <HashAddress address={address} {...mobileProps} chain={curChain} />
           </span>
         );
       },
