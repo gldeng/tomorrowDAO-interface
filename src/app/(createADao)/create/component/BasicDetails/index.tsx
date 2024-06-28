@@ -1,18 +1,23 @@
-import { Input, Typography, Tooltip } from 'aelf-design';
+import { Input, Typography, Tooltip, Button } from 'aelf-design';
 import './index.css';
-import { Form, Switch } from 'antd';
+import { Form, Switch, Radio } from 'antd';
 import ChainAddress from 'components/Address';
 import { ReactComponent as QuestionIcon } from 'assets/imgs/question-icon.svg';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { cx } from 'antd-style';
 import { mediaValidatorMap, useRegisterForm } from '../utils';
 import IPFSUpload from 'components/IPFSUpload';
-import { StepEnum } from '../../type';
+import { EDaoGovernanceMechanism, StepEnum } from '../../type';
 import { useSelector } from 'react-redux';
 import { dispatch } from 'redux/store';
 import { fetchTokenInfo } from 'api/request';
 import { setToken } from 'redux/reducer/daoCreate';
 import Link from 'next/link';
+import { AddCircleOutlined, DeleteOutlined, MinusCircleOutlined } from '@aelf-design/icons';
+import FormMembersItem from 'components/FormMembersItem';
+import { useWebLogin } from 'aelf-web-login';
+import { curChain } from 'config';
+import { usePrevious } from 'ahooks';
 
 export const mediaList = [
   ['metadata', 'socialMedia', 'Twitter'],
@@ -22,18 +27,20 @@ export const mediaList = [
   ['metadata', 'socialMedia', 'Reddit'],
 ];
 
+const governanceMechanismNamePath = 'governanceMechanism';
+const formMembersListNamePath = ['members', 'value'];
+const governanceTokenNamePath = 'governanceToken';
+
 export default function BasicDetails() {
   const [form] = Form.useForm();
-  const [showSymbol, setShowSymbol] = useState<boolean>(true);
   const [mediaError, setMediaError] = useState<boolean>(false);
   const { walletInfo } = useSelector((store: any) => store.userInfo);
   const elfInfo = useSelector((store: any) => store.elfInfo.elfInfo);
+  const { wallet } = useWebLogin();
+  const daoType = Form.useWatch(governanceMechanismNamePath, form) ?? EDaoGovernanceMechanism.Token;
   useRegisterForm(form, StepEnum.step0);
   return (
     <div className="basic-detail">
-      <div className="mb-6">
-        <Typography.Title level={6}>Basic Information</Typography.Title>
-      </div>
       <div>
         <Form
           layout="vertical"
@@ -209,7 +216,7 @@ export default function BasicDetails() {
             <Input placeholder={`Enter the DAO's subreddit link`} />
           </Form.Item>
           <div className="mb-6 pt-8">
-            <Typography.Title level={6}>DAO&apos;s Metadata Admin</Typography.Title>
+            <span className="card-title">DAO&apos;s Metadata Admin</span>
           </div>
           <div className="mb-8">
             <ChainAddress
@@ -219,40 +226,71 @@ export default function BasicDetails() {
               info="The DAO's metadata admin can modify certain info about the DAO, such as its description, logo, social media, documents, etc."
             />
           </div>
-          <div className={cx('symbol-radio', !showSymbol && '!mb-8')}>
-            <Switch
-              checked={showSymbol}
-              onChange={(checked) => {
-                setShowSymbol(checked);
-              }}
-            />
-            <span className="token-title">Governance Token</span>
-            <Tooltip
-              placement="top"
-              title={
-                <div>
-                  <div>
-                    Using a governance token is essential for enabling the High Council and
-                    facilitating additional voting mechanisms.
-                  </div>
-                  <div>
-                    1. If the High Council is to be enabled, its members are elected from top-ranked
-                    addresses who stake governance tokens and receive votes.
-                  </div>
-                  <div>
-                    2. If a governance token is not used, only one type of proposal voting mechanism
-                    is supported: &quot;1 address = 1 vote&quot;. With the governance token enabled,
-                    DAOs can support an additional mechanism: &quot;1 token = 1 vote&quot;. You can
-                    choose the voting mechanism when you create proposals.
-                  </div>
-                </div>
-              }
-            >
-              <QuestionIcon className="cursor-pointer" width={16} height={16} />
-            </Tooltip>
+          <div className={cx('symbol-radio')}>
+            <span className="form-item-title">Governance Participants</span>
+            <div className="dao-type-tip">Who can participate in governance ?</div>
           </div>
-          {showSymbol && (
+          <Form.Item
+            name={governanceMechanismNamePath}
+            required
+            initialValue={EDaoGovernanceMechanism.Token}
+          >
+            <Radio.Group className="dao-type-select">
+              <Radio
+                value={EDaoGovernanceMechanism.Token}
+                onClick={() => {
+                  if (daoType === EDaoGovernanceMechanism.Token) {
+                    return;
+                  }
+                  form.setFieldValue(governanceTokenNamePath, '');
+                }}
+              >
+                <span className="text-[16px] leading-[24px]">Token holders</span>
+              </Radio>
+              <Radio
+                value={EDaoGovernanceMechanism.Multisig}
+                onClick={() => {
+                  if (daoType === EDaoGovernanceMechanism.Multisig) {
+                    return;
+                  }
+                  form.setFieldValue(formMembersListNamePath, [
+                    `ELF_${wallet.address}_${curChain}`,
+                  ]);
+                }}
+              >
+                <span className="text-[16px] leading-[24px]">Multisig Members </span>
+              </Radio>
+            </Radio.Group>
+          </Form.Item>
+          {daoType === EDaoGovernanceMechanism.Token && (
             <>
+              <div>
+                <Tooltip
+                  title={
+                    <div>
+                      <div>
+                        Using a governance token is essential for enabling the High Council and
+                        facilitating additional voting mechanisms.
+                      </div>
+                      <div>
+                        1. If the High Council is to be enabled, its members are elected from
+                        top-ranked addresses who stake governance tokens and receive votes.
+                      </div>
+                      <div>
+                        2. If a governance token is not used, only one type of proposal voting
+                        mechanism is supported: &quot;1 address = 1 vote&quot;. With the governance
+                        token enabled, DAOs can support an additional mechanism: &quot;1 token = 1
+                        vote&quot;. You can choose the voting mechanism when you create proposals.
+                      </div>
+                    </div>
+                  }
+                >
+                  <span className="flex items-center form-item-title gap-[8px] pb-[8px] w-[max-content]">
+                    Governance Token
+                    <QuestionIcon className="cursor-pointer " width={16} height={16} />
+                  </span>
+                </Tooltip>
+              </div>
               <Form.Item
                 validateFirst
                 rules={[
@@ -290,7 +328,7 @@ export default function BasicDetails() {
                   },
                 ]}
                 validateTrigger="onBlur"
-                name="governanceToken"
+                name={governanceTokenNamePath}
                 label=""
                 className="governance-token-item"
               >
@@ -302,14 +340,25 @@ export default function BasicDetails() {
                   }}
                 />
               </Form.Item>
-              <div className="mb-[20px]">
+              <div className="mb-[20px] ">
                 <Link
                   href="https://medium.com/@NFT_Forest_NFT/tutorial-how-to-buy-seeds-and-create-tokens-on-symbol-market-de3aa948bcb4"
                   target="_blank"
                 >
-                  How to create a token?
+                  <span className="text-[14px] leading-[20px] text-colorPrimary">
+                    How to create a token?
+                  </span>
                 </Link>
               </div>
+            </>
+          )}
+          {daoType === EDaoGovernanceMechanism.Multisig && (
+            <>
+              <FormMembersItem
+                name={formMembersListNamePath}
+                initialValue={[`ELF_${wallet.address}_${curChain}`]}
+                form={form}
+              />
             </>
           )}
         </Form>

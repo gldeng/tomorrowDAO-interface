@@ -1,7 +1,10 @@
 .my-daos {
+  .fix-bottom-button {
+    @apply fixed bottom-0 left-0 right-0 px-[16px] py-[24px] bg-white flex items-center justify-center;
+  }
 
   .list-header {
-    @apply bg-white border-Neutral-Divider border-solid border rounded-t-lg text-[20px] leading-[28px] font-bold px-[24px] py-[16px];
+    @apply bg-white border-Neutral-Divider border-solid border rounded-t-lg  px-[24px] py-[32px];
   }
 
   .list-body {
@@ -10,15 +13,15 @@
   }
 
   .sub-title {
-    @apply px-[24px] py-[12px] text-[14px] leading-[20px];
+    @apply px-[32px] py-[14px] text-[14px] leading-[20px] text-Neutral-Secondary-Text;
   }
 
 
   .list-body-content-item {
-    @apply border-Neutral-Divider border-solid border border-l-0 border-b-0 border-r-0 px-[24px] py-[16px] flex gap-[1rem] items-center;
+    @apply border-Neutral-Divider border-solid border border-l-0 border-b-0 border-r-0 px-[32px] py-[16px] flex gap-[8px] items-center;
 
     img {
-      @apply w-[40px] h-[40px] rounded-full;
+      @apply w-[32px] h-[32px] rounded-full;
     }
   }
 

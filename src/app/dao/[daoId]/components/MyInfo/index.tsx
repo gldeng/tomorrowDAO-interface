@@ -128,33 +128,41 @@ export default function MyInfo(props: TInfoTypes) {
           preLen={8}
           endLen={11}
           address={walletInfo.address}
-          className="address"
+          className="form-item-title"
           chain={sideChainSuffix}
         ></HashAddress>
       ),
     },
     {
       key: '1',
-      label: `${info?.symbol || 'ELF'} Balance`,
+      label: (
+        <span className="card-sm-text text-Neutral-Secondary-Text">
+          {info?.symbol || 'ELF'} Balance
+        </span>
+      ),
       children: (
-        <div className="w-full text-right">
+        <div className="w-full text-right card-sm-text-bold">
           {elfBalance} {info?.symbol || 'ELF'}
         </div>
       ),
     },
     {
       key: '2',
-      label: `${info?.symbol} Staked`,
+      label: (
+        <span className="card-sm-text text-Neutral-Secondary-Text">{info?.symbol} Staked</span>
+      ),
       children: (
-        <div className="w-full text-right">
+        <div className="w-full text-right card-sm-text-bold">
           {info?.stakeAmount} {info?.symbol}
         </div>
       ),
     },
     {
       key: '3',
-      label: 'Votes',
-      children: <div className="w-full text-right">{info?.votesAmount} Votes</div>,
+      label: <span className="card-sm-text text-Neutral-Secondary-Text">Votes</span>,
+      children: (
+        <div className="w-full text-right card-sm-text-bold">{info?.votesAmount} Votes</div>
+      ),
     },
   ];
 
@@ -199,25 +207,7 @@ export default function MyInfo(props: TInfoTypes) {
         height: height || 'auto',
       }}
     >
-      <Typography.Title fontWeight={FontWeightEnum.Medium} level={6} className="pb-6">
-        My Info
-        {/* <button
-          onClick={async () => {
-            if (!isSyncQuery()) {
-              return;
-            }
-            const contractParams = {
-              votingItemId: 'f101135317f49c9670182f94be9161843d67d9d14b25f03ac697a7283b9423f2',
-              voteOption: 0,
-              voteAmount: 1,
-            };
-            const result = await callContract('Vote', contractParams, voteAddress);
-            console.log('result', result);
-          }}
-        >
-          local env test vote 
-        </button> */}
-      </Typography.Title>
+      <div className="card-title mb-[24px]">My Info</div>
       {isLogin ? (
         <div>
           <Descriptions colon={false} title="" items={myInfoItems} column={1} />
@@ -225,10 +215,10 @@ export default function MyInfo(props: TInfoTypes) {
           <Divider className="mt-0 mb-4" />
           <div className="flex justify-between items-start">
             <div>
-              <div className="text-Neutral-Secondary-Text text-sm mb-1">
+              <div className="card-sm-text text-Neutral-Secondary-Text mb-1">
                 Available for Unstaking
               </div>
-              <div className="text-Primary-Text font-medium">
+              <div className="text-Primary-Text  card-sm-text-bold">
                 {info?.availableUnStakeAmount} {info?.symbol}
               </div>
             </div>
@@ -271,7 +261,9 @@ export default function MyInfo(props: TInfoTypes) {
               <span className="text-[32px] mr-1">{info?.availableUnStakeAmount}</span>
               <span>{info.symbol}</span>
             </div>
-            <div className="text-center text-Neutral-Secondary-Text">Available for Unstaking</div>
+            <div className="text-center card-sm-text text-Neutral-Secondary-Text">
+              Available for Unstaking
+            </div>
             <Form form={form} layout="vertical" variant="filled" onFinish={handleClaim}>
               <Form.Item<TFieldType>
                 label="Unstake Amount"

@@ -8,6 +8,7 @@ import './index.css';
 export type TCommonModalProps = ICommonExtensionProps &
   Omit<IModalProps, 'onCancel'> & {
     onCancel: Required<IModalProps>['onCancel'];
+    isShowHeader?: boolean;
   };
 
 export default function CommonModal({
@@ -15,13 +16,14 @@ export default function CommonModal({
   title,
   footerConfig,
   children,
+  isShowHeader = true,
   ...props
 }: TCommonModalProps) {
   return (
     <Modal
       {...props}
       className={clsx('common-modal', className)}
-      title={<CommonHeader title={title} onClose={props.onCancel} />}
+      title={isShowHeader ? <CommonHeader title={title} onClose={props.onCancel} /> : null}
       footer={null}
       maskClosable={false}
       centered

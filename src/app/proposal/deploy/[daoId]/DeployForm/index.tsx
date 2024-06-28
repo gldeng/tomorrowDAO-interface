@@ -1,6 +1,6 @@
 'use client';
 
-import { Form, message as antdMessage } from 'antd';
+import { Form, message as antdMessage, message } from 'antd';
 import { memo, useState } from 'react';
 import useNetworkDaoRouter from 'hooks/useNetworkDaoRouter';
 import ProposalType from './ProposalType';
@@ -16,16 +16,37 @@ import useAelfWebLoginSync from 'hooks/useAelfWebLoginSync';
 import { emitLoading } from 'utils/myEvent';
 import { parseJSON, uint8ToBase64 } from 'utils/parseJSON';
 import { getContract } from '../util';
-import { curChain, NetworkDaoProposalOnChain, treasuryContractAddress } from 'config';
+import { curChain, daoAddress, NetworkDaoProposalOnChain, treasuryContractAddress } from 'config';
 import { useRouter, useSearchParams } from 'next/navigation';
 import useIsNetworkDao from 'hooks/useIsNetworkDao';
 import { useRequest } from 'ahooks';
 import formValidateScrollFirstError from 'utils/formValidateScrollFirstError';
 import { EProposalActionTabs } from '../type';
 import { callContract, callViewContract, GetTokenInfo } from 'contract/callContract';
-import { fetchAddressTokenList, fetchTreasuryAssets } from 'api/request';
+import {
+  fetchAddressTokenList,
+  fetchDaoInfo,
+  fetchTreasuryAssets,
+  fetchVoteSchemeList,
+} from 'api/request';
 import { timesDecimals } from 'utils/calculate';
+import { trimAddress } from 'utils/address';
 // import { useWalletSyncCompleted } from 'hooks/useWalletSyncCompleted';
+
+const convertParams = async (address: string, methodName: string, originParams: any) => {
+  const contractInfo = await getContract(address);
+  const method = contractInfo[methodName];
+  let decoded;
+  if (Array.isArray(originParams)) {
+    decoded = method.packInput([...originParams]);
+  } else if (typeof originParams === 'object' && originParams !== null) {
+    decoded = method.packInput(JSON.parse(JSON.stringify(originParams)));
+  } else {
+    decoded = method.packInput(originParams);
+  }
+  const finalParams = uint8ToBase64(decoded || []) || [];
+  return finalParams;
+};
 
 interface IGovernanceModelProps {
   daoId: string;
@@ -54,6 +75,17 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
   const { isSyncQuery } = useAelfWebLoginSync();
   // const { getAccountInfoSync } = useWalletSyncCompleted();
   const { daoId } = props;
+  const {
+    data: daoData,
+    error: daoError,
+    loading: daoLoading,
+  } = useRequest(async () => {
+    if (!daoId) {
+      message.error('daoId is required');
+      return null;
+    }
+    return fetchDaoInfo({ daoId, chainId: curChain });
+  });
   const openErrorModal = (
     primaryContent = 'Failed to Create the proposal',
     secondaryContent = 'Failed to Create the proposal',
@@ -111,11 +143,19 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
       }
       const res = await form.validateFields();
 
+      emitLoading(true, 'Publishing the proposal...');
+      const voteSchemeList = await fetchVoteSchemeList({ chainId: curChain, daoId: daoId });
+      const voteSchemeId = voteSchemeList?.data?.voteSchemeList?.[0]?.voteSchemeId;
+      if (!voteSchemeId) {
+        message.error('The voting scheme for this DAO cannot be found');
+        emitLoading(false);
+        return;
+      }
       const basicInfo = {
         ...res.proposalBasicInfo,
         daoId,
+        voteSchemeId,
       };
-      emitLoading(true, 'Publishing the proposal...');
       if (
         activeTab === EProposalActionTabs.TREASURY &&
         res.proposalType === ProposalTypeEnum.GOVERNANCE
@@ -132,32 +172,58 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
           symbol: res.treasury.amountInfo.symbol,
           amount: timesDecimals(res.treasury.amountInfo.amount, tokenInfo.decimals).toNumber(),
         };
-        console.log('contractParams', contractParams);
-        // CreateTransferProposal
         await proposalCreateContractRequest('CreateTransferProposal', contractParams);
       } else {
+        const { removeMembers, addMembers, ...restRes } = res;
         const contractParams = {
-          ...res,
-          proposalBasicInfo: basicInfo,
+          ...restRes,
+          proposalBasicInfo: {
+            ...basicInfo,
+          },
         };
         if (res.proposalType === ProposalTypeEnum.GOVERNANCE) {
-          const params = res.transaction.params;
-          const parsedParams = parseJSON(params);
-          const contractInfo = await getContract(res.transaction.toAddress);
-          const method = contractInfo[res.transaction.contractMethodName];
-          let decoded;
-          if (Array.isArray(parsedParams)) {
-            decoded = method.packInput([...parsedParams]);
-          } else if (typeof parsedParams === 'object' && parsedParams !== null) {
-            decoded = method.packInput(JSON.parse(JSON.stringify(parsedParams)));
-          } else {
-            decoded = method.packInput(parsedParams);
+          if (activeTab === EProposalActionTabs.CUSTOM_ACTION) {
+            const params = res.transaction.params;
+            const parsedParams = parseJSON(params);
+            const finalParams = await convertParams(
+              res.transaction.toAddress,
+              res.transaction.contractMethodName,
+              parsedParams,
+            );
+            contractParams.transaction = {
+              ...res.transaction,
+              params: finalParams,
+            };
           }
-          const finalParams = uint8ToBase64(decoded || []) || [];
-          contractParams.transaction = {
-            ...res.transaction,
-            params: finalParams,
-          };
+          if (activeTab === EProposalActionTabs.AddMultisigMembers) {
+            const params = {
+              daoId: daoId,
+              addMembers: {
+                value: addMembers.value.map((address: string) => trimAddress(address)),
+              },
+            };
+
+            const finalParams = await convertParams(daoAddress, 'AddMember', params);
+            contractParams.transaction = {
+              toAddress: daoAddress,
+              contractMethodName: 'AddMember',
+              params: finalParams,
+            };
+          }
+          if (activeTab === EProposalActionTabs.DeleteMultisigMembers) {
+            const params = {
+              daoId: daoId,
+              removeMembers: {
+                value: removeMembers.value.map((address: string) => trimAddress(address)),
+              },
+            };
+            const finalParams = await convertParams(daoAddress, 'RemoveMember', params);
+            contractParams.transaction = {
+              toAddress: daoAddress,
+              contractMethodName: 'RemoveMember',
+              params: finalParams,
+            };
+          }
         }
         const methodName =
           res.proposalType === ProposalTypeEnum.VETO ? 'CreateVetoProposal' : 'CreateProposal';
@@ -237,14 +303,15 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
         <ProposalType className={clsx({ hidden: isNext })} next={handleNext} />
         <ProposalInfo
           className={clsx({ hidden: !isNext })}
+          daoData={daoData?.data}
           daoId={daoId}
           onSubmit={handleSubmit}
           onTabChange={(key: string) => {
-            console.log('key', key);
             setActiveTab(key);
           }}
           activeTab={activeTab}
           treasuryAssetsData={treasuryAssetsData}
+          daoDataLoading={daoLoading}
         />
       </Form>
       <CommonOperationResultModal

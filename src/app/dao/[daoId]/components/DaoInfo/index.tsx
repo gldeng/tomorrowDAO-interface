@@ -17,6 +17,7 @@ import { useWebLogin } from 'aelf-web-login';
 import { useAsyncEffect } from 'ahooks';
 import { callViewContract } from 'contract/callContract';
 import { useState } from 'react';
+import { EDaoGovernanceMechanism } from 'app/(createADao)/create/type';
 
 const firstLetterToLowerCase = (str: string) => {
   return str.charAt(0).toLowerCase() + str.slice(1);
@@ -64,7 +65,6 @@ export default function DaoInfo(props: IParams) {
     daoId,
   } = props;
   const { wallet } = useWebLogin();
-  const [contractFiles, setContractFiles] = useState<IFileInfo[]>([]);
 
   const { isLG, isSM } = useResponsive();
   const { isSideChain } = useChainSelect();
@@ -158,6 +158,19 @@ export default function DaoInfo(props: IParams) {
             </span>
           ),
         },
+    isNetworkDAO
+      ? null
+      : {
+          key: '6',
+          label: <span className="dao-collapse-panel-label">Voting mechanism</span>,
+          children: (
+            <span className="dao-collapse-panel-child">
+              {data?.governanceMechanism === EDaoGovernanceMechanism.Token
+                ? 'Token-based'
+                : 'Wallet-based'}
+            </span>
+          ),
+        },
     // {
     //   key: '6',
     //   label: 'High Council Candidates',
@@ -175,19 +188,6 @@ export default function DaoInfo(props: IParams) {
     //   ),
     // },
   ].filter(Boolean) as DescriptionsProps['items'];
-
-  useAsyncEffect(async () => {
-    if (!daoId) return;
-    const res = await callViewContract<string, IViewFileContract>(
-      'GetFileInfos',
-      daoId,
-      daoAddress,
-    );
-    if (res) {
-      const contractFiles = Object.values(res.data);
-      setContractFiles(contractFiles);
-    }
-  }, [daoId]);
 
   return (
     <div className="dao-detail-dis">
@@ -225,7 +225,7 @@ export default function DaoInfo(props: IParams) {
                   </Link>
                 )}
 
-                <PreviewFile list={fileInfoList?.length ? fileInfoList : contractFiles} />
+                <PreviewFile list={fileInfoList} />
               </div>
             </div>
             <div className="dao-detail-desc px-4 lg:px-8">

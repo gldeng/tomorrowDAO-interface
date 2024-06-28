@@ -1,0 +1,15 @@
+.dynamic-form-buttons {
+  @apply mt-[8px];
+}
+
+.dynamic-form-input {
+  @apply flex-1;
+}
+
+.dynamic-form-item-wrap .TMRWDAO-form-item-control-input-content {
+  @apply flex items-center gap-[24px] justify-between;
+}
+
+.dynamic-form-buttons-item {
+  @apply w-[143px];
+}

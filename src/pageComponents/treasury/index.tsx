@@ -15,6 +15,7 @@ import { explorer, mainExplorer } from 'config';
 import { isSideChain } from 'utils/chain';
 import { numberFormatter } from 'utils/numberFormatter';
 import TreasuryNoTxGuide from 'components/TreasuryNoTxGuide';
+import { sortIcon } from 'components/TableIcon';
 interface ITransparentProps {
   address: string;
   isNetworkDao: boolean;
@@ -58,6 +59,7 @@ export default function Transparent(props: ITransparentProps) {
       title: 'value',
       dataIndex: 'valueUSD',
       defaultSortOrder: 'descend',
+      sortIcon,
       sorter: (a, b) => Number(a.valueUSD) - Number(b.valueUSD),
       render(value) {
         return (
@@ -99,10 +101,10 @@ export default function Transparent(props: ITransparentProps) {
         ) : (
           <>
             <div>
-              <div className="text-Neutral-Secondary-Text text-[14px] font-not-italic font-500 h-[22px]">
+              <div className="text-Neutral-Secondary-Text text-[14px] flex items-center font-500 h-[22px]">
                 Treasury Balance
               </div>
-              <div className="self-stretch text-neutralTitle text-[24px] font-not-italic font-500 h-[32px] mt-[8px]">
+              <div className=" text-neutralTitle text-[24px] flex items-center font-500 h-[32px] mt-[8px]">
                 $ {totalValueUSD}
               </div>
             </div>

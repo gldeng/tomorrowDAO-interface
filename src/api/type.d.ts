@@ -129,6 +129,7 @@ interface IDaoInfoData {
       Reddit?: string;
     };
   };
+  governanceMechanism: number;
   governanceToken: string;
   isHighCouncilEnabled: boolean;
   highCouncilAddress: null | string;
@@ -174,6 +175,32 @@ interface IDaoInfoReq {
 interface IDaoInfoRes {
   code: string;
   data: IDaoInfoData;
+  message: string;
+}
+// -------------------------------------dao-members-----------------------------
+interface IDaoMembersRequestParams {
+  SkipCount: number;
+  MaxResultCount: number;
+  ChainId: string;
+  DAOId: string;
+}
+interface IDaoMembersItem {
+  id: string;
+  chainId: string;
+  blockHeight: number;
+  daoId: string;
+  address: string;
+  createTime: string;
+}
+
+interface IDaoMembersData {
+  data: IDaoMembersItem[];
+  totalCount: number;
+}
+
+interface IDaoMembersResponse {
+  code: string;
+  data: IDaoMembersData;
   message: string;
 }
 // -------------------------------------propal-list-----------------------------
@@ -406,6 +433,7 @@ interface IContractInfoListRes {
 
 interface IVoteSchemeListReq {
   chainId: string;
+  daoId: string;
 }
 
 interface IVoteScheme {
@@ -510,7 +538,7 @@ interface IVoteHistoryReq {
 interface IVoteHistoryItem {
   timeStamp: number;
   proposalId: string;
-  ProposalTitle: string;
+  proposalTitle: string;
   myOption: number;
   votesNum: number;
   transactionId: string;

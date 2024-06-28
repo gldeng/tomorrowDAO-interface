@@ -2,12 +2,8 @@
 
 export default function CreateLayout({ children }: { children: React.ReactNode }) {
   return (
-    <section className="bg-white rounded-lg border border-solid border-Neutral-Divider">
-      <div>
-        {/* <Typography.Title level={1} fontWeight={FontWeightEnum.Bold}> */}
-        {/* <h1 className="py-6">Create your DAO to TMRW DAO</h1> */}
-        {/* </Typography.Title> */}
-      </div>
+    <section>
+      <div></div>
       {children}
     </section>
   );

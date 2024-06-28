@@ -16,6 +16,12 @@ const explorePage: TBreadcrumbItems = [
     href: '/explore',
   },
 ];
+const createDaoPage: TBreadcrumbItems = [
+  ...homePage,
+  {
+    title: 'Create a DAO',
+  },
+];
 export const defaultDaoName = 'DAO Information';
 type TBreadcrumbFn = (id: string, daoName: string) => TBreadcrumbItems;
 // ------- href: /dao/:id
@@ -41,6 +47,14 @@ const treasuryPage: TBreadcrumbFn = (id, daoName) => {
     ...(daoDetailPage(id, daoName) ?? []),
     {
       title: 'Treasury',
+    },
+  ];
+};
+const membersPage: TBreadcrumbFn = (id, daoName) => {
+  return [
+    ...(daoDetailPage(id, daoName) ?? []),
+    {
+      title: 'Members',
     },
   ];
 };
@@ -104,6 +118,9 @@ class BreadCrumb {
     }
     this.updateBreadCrumb(daoDetailPage(id, daoName));
   }
+  public async updateCreateDaoPage() {
+    this.updateBreadCrumb(createDaoPage);
+  }
   public async updateCreateProposalPage(id: string) {
     const daoName = await this.getDaoName(id);
     this.updateBreadCrumb(createProposalPage(id, daoName));
@@ -111,6 +128,10 @@ class BreadCrumb {
   public async updateTreasuryPage(id: string) {
     const daoName = await this.getDaoName(id);
     this.updateBreadCrumb(treasuryPage(id, daoName));
+  }
+  public async updateMembersPage(id: string) {
+    const daoName = await this.getDaoName(id);
+    this.updateBreadCrumb(membersPage(id, daoName));
   }
   public async updateMyVotesPage(id: string) {
     const daoName = await this.getDaoName(id);

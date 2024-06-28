@@ -63,6 +63,7 @@ export const useGetToken = () => {
     return accountInfo;
   }, [loginState, wallet]);
 
+  // getToken
   const getToken: (params?: {
     needLoading?: boolean;
   }) => Promise<null | ITokenRes> = async (params?: { needLoading?: boolean }) => {

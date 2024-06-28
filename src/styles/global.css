@@ -11,6 +11,52 @@
   .page-content-padding {
     @apply px-4 lg:px-8 pb-4 lg:pb-8;
   }
+
+  .page-content-bg-border {
+    @apply bg-white rounded-lg border border-solid border-Neutral-Divider px-4 lg:px-8 py-4 lg:py-8;
+  }
+
+  .dao-border-round {
+    @apply button-border-normal rounded-lg;
+  }
+  .normal-text {
+    @apply text-[16px] leading-[24px] text-neutralTitle;
+  }
+  .normal-text-bold {
+    @apply text-[16px] leading-[24px] text-neutralTitle font-medium;
+  }
+
+  .form-item-title {
+    @apply text-[16px] leading-[24px] text-neutralPrimaryText font-medium;
+  }
+
+  .card {
+    @apply border-0 lg:border lg:mb-[10px] border-Neutral-Divider border-solid rounded-lg bg-white px-4 lg:px-8 lg:py-6;
+  }
+
+  .card-title {
+    @apply text-[20px] leading-[28px] text-neutralTitle font-medium;
+  }
+  .card-sm-text {
+    @apply text-[14px] leading-[22px];
+  }
+  .card-xsm-text {
+    @apply text-[12px] leading-[20px];
+  }
+  .card-sm-text-bold {
+    @apply text-[14px] leading-[22px] font-medium;
+  }
+
+  .card-title-lg {
+    @apply text-[24px] leading-[32px] text-neutralTitle font-medium;
+  }
+  .error-text {
+    @apply text-error h-[32px] flex items-center;
+  }
+  .table-title-text {
+    @apply text-[14px] leading-[20px] text-Neutral-Secondary-Text font-medium;
+
+  }
 }
 
 
@@ -30,6 +76,18 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+* {
+  font-family: Roboto, sans-serif;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('/font/Roboto-Regular.ttf');
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
 
 input[type='number']::-webkit-inner-spin-button,
 input[type='number']::-webkit-outer-spin-button {
@@ -41,13 +99,6 @@ input[type='number'] {
   appearance: textfield;
 }
 
-* {
-  font-family: Roboto-regular;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
-}
 
 /* Upload */
 .TMRWDAO-upload {
@@ -68,4 +119,28 @@ code {
 
 .hash-link-color>span {
   @apply !text-inherit;
+}
+.TMRWDAO-message .TMRWDAO-message-notice-wrapper .TMRWDAO-message-custom-content>.anticon {
+  vertical-align: -0.125em;
+}
+.TMRWDAO-table-wrapper td.TMRWDAO-table-column-sort {
+  @apply bg-white;
+}
+.TMRWDAO-table-wrapper .TMRWDAO-table-column-sorters {
+  @apply justify-start;
+  
+}
+.TMRWDAO-table-wrapper .TMRWDAO-table-column-title {
+  @apply flex-grow-0;
+}
+.dao-tx-hash {
+  &>span {
+    @apply truncate max-w-[120px];
+  }
+}
+.TMRWDAO-pagination-container .TMRWDAO-select-selector {
+  @apply !border-Neutral-Disable-Text;
+}
+.TMRWDAO-tabs-nav {
+  overflow-x: hidden!important;
 }

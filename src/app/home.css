@@ -1,15 +1,14 @@
 .dao-home-container {
-  @apply mb-[172px];
 
   .dao-home-intro {
-    @apply flex justify-center my-[80px] flex-col items-center;
+    @apply flex justify-center lg:mt-[56px] lg:mb-[104px] mt-[16px] mb-[56px]  flex-col items-center;
 
     h2 {
-      @apply text-colorPrimary font-bold text-[48px] leading-[56px];
+      @apply text-colorPrimary font-bold lg:text-[48px] lg:leading-[56px] text-[32px] leading-[40px] text-center;
     }
 
     p {
-      @apply text-Neutral-Secondary-Text font-bold text-[24px] leading-[32px] mt-[24px] mb-[48px];
+      @apply text-neutralTitle font-medium lg:text-[24px] lg:leading-[32px] text-[20px] leading-[28px] mt-[24px] mb-[48px];
     }
   }
 }
@@ -19,16 +18,19 @@
 }
 
 .dao-desc-items-card {
-  @apply p-[48px] bg-white flex-half cursor-pointer;
+  @apply lg:px-[48px] px-[16px] lg:py-[48px] py-[24px] bg-white flex-half cursor-pointer;
+  border-radius: 8px;
+  background: var(--Neutral-White-BG, #FFF);
+  border: 1px solid var(--Neutral-Divider, #EDEDED);
   box-shadow: 0px 2px 12px 0px #F4E4D3;
-  border: 1px solid #EDEDED;
+
 
   h3 {
-    @apply text-neutralTitle font-bold text-[24px] leading-[32px] mb-[16px];
+    @apply text-neutralTitle font-medium lg:text-[24px] lg:leading-[32px] text-[20px] leading-[28px] mb-[16px];
   }
 
   p {
-    @apply text-neutralPrimaryText font-[400] text-[14px] leading-[22px];
+    @apply text-neutralPrimaryText text-[14px] leading-[22px];
   }
 }
 

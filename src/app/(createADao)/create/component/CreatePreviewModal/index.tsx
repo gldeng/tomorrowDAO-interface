@@ -111,7 +111,7 @@ export default function CreatePreviewModal({ open, onClose, onConfirm }: ICreate
         return item === false;
       } else {
         // highCouncil form, must be true(if highCouncil exist)
-        return highCouncil && item === false;
+        return Object.keys(highCouncil ?? {}).length > 0 && item === false;
       }
     }) > -1;
 
@@ -158,10 +158,12 @@ export default function CreatePreviewModal({ open, onClose, onConfirm }: ICreate
         </Flex>
         <Flex vertical gap={16}>
           <AddressItem isBoldLabel label="Metadata admin" address={walletInfo.address} />
-          <Flex gap={8} align="center">
-            <Title fontWeight={FontWeightEnum.Medium}>Governance token:</Title>
-            <Text>{metaData?.governanceToken}</Text>
-          </Flex>
+          {metaData?.governanceToken && (
+            <Flex gap={8} align="center">
+              <Title fontWeight={FontWeightEnum.Medium}>Governance token:</Title>
+              <Text>{metaData?.governanceToken}</Text>
+            </Flex>
+          )}
         </Flex>
         <div className="divider" />
         <CheckboxItem
@@ -182,7 +184,7 @@ export default function CreatePreviewModal({ open, onClose, onConfirm }: ICreate
               : null,
           ]}
         />
-        {highCouncil && (
+        {Object.keys(highCouncil ?? {}).length > 0 && (
           <CheckboxItem
             label="High Council"
             checked={state[1]}

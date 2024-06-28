@@ -60,7 +60,7 @@ export default function RecordTable(props: IRecordTableProps) {
       title: 'Txn Hash',
       dataIndex: 'txId',
       width: 168,
-      className: 'treasury-table-column-clear-pl',
+      className: 'treasury-table-column-clear-pl ',
       render(hash) {
         return (
           <span className="txn-hash">
@@ -68,7 +68,13 @@ export default function RecordTable(props: IRecordTableProps) {
               href={`${isSideChain(currentChain) ? explorer : mainExplorer}/tx/${hash}`}
               target="_blank"
             >
-              {hash.slice(0, 15)}...
+              <HashAddress
+                className="card-xsm-text text-neutralTitle dao-tx-hash "
+                address={hash}
+                ignorePrefixSuffix
+                hasCopy={true}
+              />
+              {/* <span>{hash.slice(0, 15)}...</span> */}
             </Link>
           </span>
         );

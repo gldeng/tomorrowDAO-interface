@@ -11,6 +11,7 @@ import { SkeletonDaoItemList } from 'components/Skeleton';
 import './index.css';
 import { EMyDAOType } from 'types/dao';
 import NoData from 'app/dao/[daoId]/components/NoData';
+import useResponsive from 'hooks/useResponsive';
 
 const MaxResultCount = 5;
 interface IFetchResult {
@@ -86,6 +87,7 @@ const MyDaosPage = () => {
       participatedReload();
     }
   }, [ownReload, participatedReload, wallet.address]);
+  const { isLG } = useResponsive();
   const EmptyNode = (
     <div className="flex flex-col items-center">
       <NoData></NoData>
@@ -98,17 +100,15 @@ const MyDaosPage = () => {
   );
   return (
     <div className="my-daos">
-      <div className="flex flex-col gap-[2rem]">
-        <div className="flex items-center justify-between">
-          <p className="text-Primary-Text text-[28px] leading-[36px]">My DAOs</p>
-          <Link href="/guide">
-            <Button type="primary" size="medium">
-              Create a DAO
-            </Button>
-          </Link>
-        </div>
-        <div className="flex flex-col gap-[0.75rem]">
-          <p className="list-header">My own DAOs</p>
+      <div className="page-content-bg-border flex items-center justify-between py-[16px] lg:py-[24px]">
+        <p className="text-Primary-Text text-[32px] leading-[40px] font-medium">My DAOs</p>
+        <Link href="/create" className={isLG ? 'fix-bottom-button' : ''}>
+          <Button type="primary">Create a DAO</Button>
+        </Link>
+      </div>
+      <div className="flex flex-col mt-[24px]">
+        <div className="flex flex-col ">
+          <p className="list-header card-title-lg">My own DAOs</p>
           <div className="list-body">
             {ownLoading ? (
               <SkeletonDaoItemList />
@@ -129,7 +129,7 @@ const MyDaosPage = () => {
                       >
                         <li className="list-body-content-item" key={item.daoId}>
                           <img src={item.logo} alt="" />
-                          <span className="text-Primary-Text">{item.name}</span>
+                          <span className="normal-text-bold">{item.name}</span>
                         </li>
                       </Link>
                     );
@@ -149,8 +149,8 @@ const MyDaosPage = () => {
             )}
           </div>
         </div>
-        <div className="flex flex-col gap-[0.75rem]">
-          <p className="list-header">participated DAOs</p>
+        <div className="flex flex-col mt-[24px]">
+          <p className="list-header card-title-lg">participated DAOs</p>
           <div className="list-body">
             {participatedLoading ? (
               <SkeletonDaoItemList />

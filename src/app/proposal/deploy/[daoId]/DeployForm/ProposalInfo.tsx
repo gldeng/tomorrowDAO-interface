@@ -16,6 +16,7 @@ import dayjs from 'dayjs';
 import { HighCouncilName, ReferendumName, VoteMechanismNameLabel } from 'constants/proposal';
 import ActionTabs from './ActionTabs/index';
 import { EProposalActionTabs, EVoteMechanismNameType } from '../type';
+import { SkeletonTab } from 'components/Skeleton';
 
 const voterAndExecuteNamePath = ['proposalBasicInfo', 'schemeAddress'];
 const voteSchemeName = ['proposalBasicInfo', 'voteSchemeId'];
@@ -24,18 +25,29 @@ interface ProposalInfoProps {
   next?: () => void;
   className?: string;
   daoId: string;
+  daoData?: IDaoInfoData;
   onSubmit: () => void;
   onTabChange?: (activeKey: string) => void;
   activeTab?: string;
   treasuryAssetsData?: IAddressTokenListDataItem[];
+  daoDataLoading?: boolean;
 }
 
 const ProposalInfo = (props: ProposalInfoProps) => {
   const [governanceMechanismList, setGovernanceMechanismList] = useState<TGovernanceSchemeList>();
-  const [voteScheme, setVoteScheme] = useState<IVoteSchemeListData>();
+  // const [voteScheme, setVoteScheme] = useState<IVoteSchemeListData>();
   const [timePeriod, setTimePeriod] = useState<ITimePeriod | null>(null);
 
-  const { className, daoId, onSubmit, onTabChange, activeTab, treasuryAssetsData } = props;
+  const {
+    className,
+    daoId,
+    onSubmit,
+    onTabChange,
+    activeTab,
+    treasuryAssetsData,
+    daoData,
+    daoDataLoading,
+  } = props;
 
   const form = Form.useFormInstance();
 
@@ -60,12 +72,12 @@ const ProposalInfo = (props: ProposalInfoProps) => {
   }, [governanceMechanismList, proposalType]);
 
   useAsyncEffect(async () => {
-    const [governanceMechanismListRes, voteSchemeListRes] = await Promise.all([
-      fetchGovernanceMechanismList({ chainId: curChain, daoId: daoId }),
-      fetchVoteSchemeList({ chainId: curChain }),
-    ]);
+    const governanceMechanismListRes = await fetchGovernanceMechanismList({
+      chainId: curChain,
+      daoId: daoId,
+    });
     setGovernanceMechanismList(governanceMechanismListRes.data.data);
-    setVoteScheme(voteSchemeListRes.data);
+    // setVoteScheme(voteSchemeListRes.data);
   }, [daoId]);
   const proposalDetailDesc = useMemo(() => {
     return proposalTypeList.find((item) => item.value === proposalType)?.desc ?? '';
@@ -78,18 +90,6 @@ const ProposalInfo = (props: ProposalInfoProps) => {
     });
     setTimePeriod(timePeriod);
   }, [daoId]);
-  useEffect(() => {
-    // if active treasury, 1a 1v will disable,
-    if (activeTab && activeTab === EProposalActionTabs.TREASURY) {
-      const val = form.getFieldValue(voteSchemeName);
-      const item = voteScheme?.voteSchemeList.find(
-        (item) => item.voteMechanismName === 'UNIQUE_VOTE',
-      );
-      if (val === item?.voteSchemeId) {
-        form.setFieldValue(voteSchemeName, '');
-      }
-    }
-  }, [activeTab, form, voteScheme]);
   return (
     <div className={className}>
       <h2 className="text-[20px] leading-[28px] font-weight">Create a Proposal</h2>
@@ -196,7 +196,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
         ></ResponsiveSelect>
       </Form.Item>
       {/* 1a1v/1t1v */}
-      <Form.Item
+      {/* <Form.Item
         name={voteSchemeName}
         label={<span className="form-item-label">Voting mechanism</span>}
         initialValue={voteScheme?.voteSchemeList?.[0]?.voteSchemeId}
@@ -220,16 +220,20 @@ const ProposalInfo = (props: ProposalInfoProps) => {
             );
           })}
         </Radio.Group>
-      </Form.Item>
+      </Form.Item> */}
       {/* transaction: */}
-      {proposalType === ProposalType.GOVERNANCE && (
-        <ActionTabs
-          onTabChange={onTabChange}
-          daoId={daoId}
-          activeTab={activeTab}
-          treasuryAssetsData={treasuryAssetsData}
-        />
-      )}
+      {proposalType === ProposalType.GOVERNANCE &&
+        (daoDataLoading ? (
+          <SkeletonTab />
+        ) : (
+          <ActionTabs
+            onTabChange={onTabChange}
+            daoId={daoId}
+            activeTab={activeTab}
+            treasuryAssetsData={treasuryAssetsData}
+            daoData={daoData}
+          />
+        ))}
 
       <Form.Item
         label={
