@@ -44,6 +44,13 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
             gtag('config', 'G-Z5LV4SE2RX');
           `}
         </Script>
+        {/* <Script
+          async
+          src="https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js"
+          onReady={() => {
+            new VConsole();
+          }}
+        ></Script> */}
       </head>
       <body>
         <StyleRegistry>

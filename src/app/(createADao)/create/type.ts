@@ -25,7 +25,7 @@ export interface IHighCouncilConfig {
 export interface IHighCouncilInput {
   highCouncilConfig: IHighCouncilConfig;
   governanceSchemeThreshold: IGovernanceSchemeThreshold;
-  members: IAddressList;
+  highCouncilMembers: IAddressList;
 }
 export interface IMetadata {
   name: string;

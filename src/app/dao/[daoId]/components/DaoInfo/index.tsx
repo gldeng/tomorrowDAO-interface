@@ -65,7 +65,6 @@ export default function DaoInfo(props: IParams) {
     daoId,
   } = props;
   const { wallet } = useWebLogin();
-  const [contractFiles, setContractFiles] = useState<IFileInfo[]>([]);
 
   const { isLG, isSM } = useResponsive();
   const { isSideChain } = useChainSelect();
@@ -190,19 +189,6 @@ export default function DaoInfo(props: IParams) {
     // },
   ].filter(Boolean) as DescriptionsProps['items'];
 
-  useAsyncEffect(async () => {
-    if (!daoId) return;
-    const res = await callViewContract<string, IViewFileContract>(
-      'GetFileInfos',
-      daoId,
-      daoAddress,
-    );
-    if (res) {
-      const contractFiles = Object.values(res.data);
-      setContractFiles(contractFiles);
-    }
-  }, [daoId]);
-
   return (
     <div className="dao-detail-dis">
       {isLoading ? (
@@ -239,7 +225,7 @@ export default function DaoInfo(props: IParams) {
                   </Link>
                 )}
 
-                <PreviewFile list={fileInfoList?.length ? fileInfoList : contractFiles} />
+                <PreviewFile list={fileInfoList} />
               </div>
             </div>
             <div className="dao-detail-desc px-4 lg:px-8">

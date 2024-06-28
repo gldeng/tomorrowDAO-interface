@@ -14,7 +14,7 @@ import { curChain, electionContractAddress } from 'config/index';
 import { useWebLogin } from 'aelf-web-login';
 import './index.css';
 const highCouncilMembersFieldName = ['highCouncilConfig', 'maxHighCouncilMemberCount'];
-const highCouncilMembersList = ['members', 'value'];
+const highCouncilMembersList = ['highCouncilMembers', 'value'];
 const HighCouncil = () => {
   const [form] = Form.useForm();
   const daoCreateToken = useSelector((store) => store.daoCreate.token);

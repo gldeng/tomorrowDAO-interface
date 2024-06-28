@@ -22,6 +22,9 @@
   .normal-text {
     @apply text-[16px] leading-[24px] text-neutralTitle;
   }
+  .normal-text-bold {
+    @apply text-[16px] leading-[24px] text-neutralTitle font-medium;
+  }
 
   .form-item-title {
     @apply text-[16px] leading-[24px] text-neutralPrimaryText font-medium;
@@ -114,4 +117,19 @@ code {
 }
 .TMRWDAO-message .TMRWDAO-message-notice-wrapper .TMRWDAO-message-custom-content>.anticon {
   vertical-align: -0.125em;
+}
+.TMRWDAO-table-wrapper td.TMRWDAO-table-column-sort {
+  @apply bg-white;
+}
+.TMRWDAO-table-wrapper .TMRWDAO-table-column-sorters {
+  @apply justify-start;
+  
+}
+.TMRWDAO-table-wrapper .TMRWDAO-table-column-title {
+  @apply flex-grow-0;
+}
+.dao-tx-hash {
+  &>span {
+    @apply truncate max-w-[120px];
+  }
 }

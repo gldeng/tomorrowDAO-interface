@@ -205,8 +205,10 @@ const CreateDaoPage = () => {
                 maximalAbstentionThreshold:
                   highCouncilForm.governanceSchemeThreshold.maximalAbstentionThreshold * 100,
               },
-              members: {
-                value: highCouncilForm?.members?.value?.map((item) => trimAddress(item)) ?? [],
+              highCouncilMembers: {
+                value:
+                  highCouncilForm?.highCouncilMembers?.value?.map((item) => trimAddress(item)) ??
+                  [],
               },
             };
           }
