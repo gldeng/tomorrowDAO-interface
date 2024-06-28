@@ -95,7 +95,11 @@ export default function Header() {
   }, []);
   const handleChange: SelectProps['onChange'] = (obj) => {
     console.log('obj', obj);
-    const url = new URL(window.location.href);
+    const url = new URL(
+      window.location.protocol +
+        window.location.host +
+        `/network-dao/${networkDaoId}/proposal-list`,
+    );
     url.searchParams.set('chainId', obj);
     window.history.replaceState({}, '', url.toString());
     window.location.reload();

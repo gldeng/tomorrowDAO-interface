@@ -93,7 +93,7 @@ export default function ProposalsItem(props: { data: IProposalsItem }) {
           <div className="h-[22px] vote-top-title normal-text-bold">
             {is1t1v ? data.votesAmount : data.voterCount} {capitalizeFirstLetter(voteText)} in Total
           </div>
-          <div className="vote-dis">
+          <div className="vote-dis text-[14px]">
             {is1t1v
               ? renderVoteInfo(data.votesAmount, data.minimalVoteThreshold)
               : renderVoteInfo(data.voterCount, data.minimalRequiredThreshold)}
@@ -117,18 +117,18 @@ function CustomProgress(props: { data: IProposalsItem }) {
     data.votesAmount === 0 ? 0 : Math.floor((data.rejectionCount / data.votesAmount) * 100);
   return (
     <>
-      <div className="flex">
+      <div className="flex leading-[18px] text-[12px]">
         <div className="flex-1 text-approve">
-          <div className="font-medium leading-10">Approved</div>
-          <div className="leading-4">{approvePercent}%</div>
+          <div className="font-medium">Approved</div>
+          <div>{approvePercent}%</div>
         </div>
         <div className="flex-1 text-abstention">
-          <div className="font-medium leading-10">Asbtained</div>
-          <div className="leading-4">{abstainPercent}%</div>
+          <div className="font-medium">Asbtained</div>
+          <div>{abstainPercent}%</div>
         </div>
         <div className="justify-self-end text-rejection">
-          <div className="font-medium leading-10">Rejected</div>
-          <div className="leading-4">{rejectPercent}%</div>
+          <div className="font-medium">Rejected</div>
+          <div>{rejectPercent}%</div>
         </div>
       </div>
       <Progress

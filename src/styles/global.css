@@ -76,6 +76,19 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+* {
+  font-family: Roboto, sans-serif;
+  transition: background 0.3s, fill 0.3s, stork 0.3s, box-shadow 0.3s;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('/font/Roboto-Regular.ttf');
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
 
 input[type='number']::-webkit-inner-spin-button,
 input[type='number']::-webkit-outer-spin-button {
@@ -87,13 +100,6 @@ input[type='number'] {
   appearance: textfield;
 }
 
-* {
-  font-family: Roboto-regular;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
-}
 
 /* Upload */
 .TMRWDAO-upload {
@@ -132,4 +138,7 @@ code {
   &>span {
     @apply truncate max-w-[120px];
   }
+}
+.TMRWDAO-pagination-container .TMRWDAO-select-selector {
+  @apply !border-Neutral-Disable-Text;
 }

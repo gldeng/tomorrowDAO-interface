@@ -17,20 +17,20 @@ export default function Page() {
         <p>Build your DAO with TMRWDAO.</p>
         <div className="flex">
           <Link href="/explore">
-            <Button className="w-[152px]">Explore</Button>
+            <Button type="primary" className="w-[152px]">
+              Explore
+            </Button>
           </Link>
           <Link href="/create">
-            <Button type="primary" className="ml-[24px] w-[152px]">
-              Create a DAO
-            </Button>
+            <Button className="ml-[24px] w-[152px]">Create a DAO</Button>
           </Link>
         </div>
         <Link
           target="_blank"
           href={'https://medium.com/@tmrwdao/how-to-create-a-dao-on-tmrwdao-platform-cc54fed69259'}
         >
-          <div className="text-Neutral-Secondary-Text flex items-center mt-12 text-[14px]">
-            <span className="pr-[6px]">Learn More</span> <RightOutlined />
+          <div className="text-Neutral-Secondary-Text flex items-center mt-[16px] text-[16px] font-medium leading-[22px]">
+            <span className="pr-[8px] text-[14px]">Learn More</span> <RightOutlined />
           </div>
         </Link>
       </div>

@@ -133,7 +133,7 @@ export default function Filter(props: TPropsType) {
             <Col span={4}>
               <Button
                 size="medium"
-                icon={<CommonDaoLogo src={SwitchBtn}></CommonDaoLogo>}
+                icon={<CommonDaoLogo className="w-[20px] h-[20px]" src={SwitchBtn}></CommonDaoLogo>}
                 onClick={handleShowModal}
               ></Button>
             </Col>
@@ -232,7 +232,7 @@ export default function Filter(props: TPropsType) {
 function TagCom(props: { label: string; onCloseTag: () => void }) {
   const { label, onCloseTag } = props;
   return (
-    <Tag bordered={false} className="bg-Brand-Brand-BG text-colorPrimary px-4 py-1 flex">
+    <Tag bordered={false} className="bg-[#FFF5EA] text-colorPrimary px-4 py-1 flex">
       <span className="mr-1.5 font-medium">{label}</span>
       <Image
         src={CloseTag}
