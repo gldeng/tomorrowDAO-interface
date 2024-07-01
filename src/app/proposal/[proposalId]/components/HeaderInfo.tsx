@@ -83,34 +83,15 @@ const HeaderInfo = (props: IHeaderInfoProps) => {
             <Typography.Text className="text-Neutral-Secondary-Text">
               Veto Proposal:
             </Typography.Text>
-            {isNetWorkDao ? (
-              <LinkNetworkDao
-                href={{
-                  pathname: `/proposal-detail`,
-                  query: {
-                    proposalId: proposalDetailData.vetoProposalId,
-                  },
-                }}
-              >
-                <HashAddress
-                  preLen={8}
-                  endLen={9}
-                  ignorePrefixSuffix={true}
-                  address={proposalDetailData.vetoProposalId ?? '-'}
-                  className="hash-link-color"
-                ></HashAddress>
-              </LinkNetworkDao>
-            ) : (
-              <Link href={`/proposal/${proposalDetailData.vetoProposalId}`}>
-                <HashAddress
-                  preLen={8}
-                  endLen={9}
-                  ignorePrefixSuffix={true}
-                  className="hash-link-color"
-                  address={proposalDetailData.vetoProposalId ?? '-'}
-                ></HashAddress>
-              </Link>
-            )}
+            <Link href={`/proposal/${proposalDetailData.vetoProposalId}`}>
+              <HashAddress
+                preLen={8}
+                endLen={9}
+                ignorePrefixSuffix={true}
+                className="hash-link-color"
+                address={proposalDetailData.vetoProposalId ?? '-'}
+              ></HashAddress>
+            </Link>
           </div>
         )}
         <div className="flex items-center gap-4">

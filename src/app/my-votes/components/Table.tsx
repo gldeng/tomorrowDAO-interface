@@ -7,12 +7,12 @@ import { useSelector } from 'react-redux';
 import { fetchVoteHistory } from 'api/request';
 import { EVoteOption } from 'types/vote';
 import NoData from './NoData';
-import { curChain, explorer, NetworkDaoHomePathName } from 'config';
+import { curChain, explorer } from 'config';
 import { useRequest } from 'ahooks';
-import { useParams, usePathname, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import dayjs from 'dayjs';
 import Link from 'next/link';
-import LinkNetworkDao from 'components/LinkNetworkDao';
+// import LinkNetworkDao from 'components/LinkNetworkDao';
 import { useWalletService } from 'hooks/useWallet';
 import breadCrumb from 'utils/breadCrumb';
 
@@ -21,10 +21,7 @@ const allValue = 'All';
 export default function RecordTable() {
   const searchParams = useSearchParams();
   const { walletInfo } = useSelector((store: any) => store.userInfo);
-  const pathName = usePathname();
-  const { networkDaoId } = useParams();
-  const isNetWorkDao = pathName.includes(NetworkDaoHomePathName);
-  const daoId = (isNetWorkDao ? networkDaoId : searchParams.get('daoId') ?? '') as string;
+  const daoId = searchParams.get('daoId') ?? '';
   const runFetchVoteHistoryRef = useRef<() => void>();
   const { isLogin } = useWalletService();
 
@@ -75,13 +72,6 @@ export default function RecordTable() {
       width: 250,
       render: (text, record) => {
         const renderProposalNode = <div className="text-neutralPrimaryText">{text}</div>;
-        if (isNetWorkDao) {
-          return (
-            <LinkNetworkDao href={`/proposal-detail-tmrw/${record.proposalId}`}>
-              {renderProposalNode}
-            </LinkNetworkDao>
-          );
-        }
         return <Link href={`/proposal/${record.proposalId}`}>{renderProposalNode}</Link>;
       },
     },
@@ -102,13 +92,7 @@ export default function RecordTable() {
         return (
           <div>
             <div>
-              {isNetWorkDao ? (
-                <LinkNetworkDao href={`/proposal-detail-tmrw/${record.proposalId}`}>
-                  {renderId}
-                </LinkNetworkDao>
-              ) : (
-                <Link href={`/proposal/${record.proposalId}`}>{renderId}</Link>
-              )}
+              <Link href={`/proposal/${record.proposalId}`}>{renderId}</Link>
             </div>
             <div>{record.executer === walletInfo.address ? <span>Executed by me</span> : ''}</div>
           </div>

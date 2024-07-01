@@ -121,11 +121,7 @@ const MyDaosPage = () => {
                     return (
                       <Link
                         key={item.daoId}
-                        href={
-                          item.isNetworkDAO
-                            ? `/network-dao/${item.daoId}/proposal-list`
-                            : `/dao/${item.daoId}`
-                        }
+                        href={item.isNetworkDAO ? `/network-dao` : `/dao/${item.daoId}`}
                       >
                         <li className="list-body-content-item" key={item.daoId}>
                           <img src={item.logo} alt="" />

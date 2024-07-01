@@ -53,3 +53,6 @@ export const chainIdSelect = [
     label: 'SideChain tDVW',
   },
 ];
+
+// network-dao
+export const networkDaoId = 'b2dcb3684b00e857983f7b75917682a1d3b2f175d668e77de22743e08f6c3fed';

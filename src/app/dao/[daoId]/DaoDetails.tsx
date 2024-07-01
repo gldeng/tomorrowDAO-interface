@@ -391,10 +391,7 @@ export default function DeoDetails(props: IProps) {
                       <LinkNetworkDao
                         key={item.proposalId}
                         href={{
-                          pathname: `/proposal-detail`,
-                          query: {
-                            proposalId: item.proposalId,
-                          },
+                          pathname: `/proposal/${item.proposalId}`,
                         }}
                       >
                         <ProposalsItem data={item} />

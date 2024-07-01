@@ -142,5 +142,5 @@ input[type='number'] {
   @apply !border-Neutral-Disable-Text;
 }
 .TMRWDAO-tabs-nav {
-  overflow-x: hidden!important;
+  overflow: hidden!important;
 }
