@@ -248,9 +248,7 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
                   type: 'success',
                   content: 'created successfully, it will appear in the list in a few minutes',
                 });
-                nextRouter.push(
-                  isNetWorkDao ? `/network-dao/${networkDaoId}/proposal-list` : `/dao/${daoId}`,
-                );
+                nextRouter.push(isNetWorkDao ? `/network-dao` : `/dao/${daoId}`);
               },
             },
           ],

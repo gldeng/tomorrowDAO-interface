@@ -11,7 +11,7 @@ import { MobileMenu } from 'components/Menu';
 import { ReactComponent as MenuArrow } from 'assets/imgs/menu-arrow.svg';
 import { MenuProps } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
-import { useParams, usePathname } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { chainIdSelect } from 'config';
 import LinkNetworkDao from 'components/LinkNetworkDao';
 import { useChainSelect } from 'hooks/useChainSelect';
@@ -24,7 +24,6 @@ export default function Header() {
 
   const pathname = usePathname();
   const { isMainChain } = useChainSelect();
-  const { networkDaoId } = useParams();
 
   const items: MenuProps['items'] = useMemo(() => {
     return [
@@ -45,7 +44,7 @@ export default function Header() {
         key: 'Governance',
         children: [
           {
-            label: <LinkNetworkDao href={`/proposal-list`}>Proposals</LinkNetworkDao>,
+            label: <LinkNetworkDao href={`/`}>Proposals</LinkNetworkDao>,
             key: 'Proposals',
           },
           {
@@ -95,11 +94,7 @@ export default function Header() {
   }, []);
   const handleChange: SelectProps['onChange'] = (obj) => {
     console.log('obj', obj);
-    const url = new URL(
-      window.location.protocol +
-        window.location.host +
-        `/network-dao/${networkDaoId}/proposal-list`,
-    );
+    const url = new URL(window.location.protocol + window.location.host + `/network-dao`);
     url.searchParams.set('chainId', obj);
     window.history.replaceState({}, '', url.toString());
     window.location.reload();

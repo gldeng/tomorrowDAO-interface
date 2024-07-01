@@ -81,13 +81,7 @@ const EditDao: React.FC<IEditDaoProps> = (props) => {
                 eventBus.emit(ResultModal, INIT_RESULT_MODAL_CONFIG);
               },
               children: (
-                <Link
-                  href={
-                    isNetworkDAO
-                      ? `${NetworkDaoHomePathName}/${daoId}/proposal-list`
-                      : `/dao/${daoId}`
-                  }
-                >
+                <Link href={isNetworkDAO ? `${NetworkDaoHomePathName}` : `/dao/${daoId}`}>
                   <span className="text-white">View The DAO</span>
                 </Link>
               ),

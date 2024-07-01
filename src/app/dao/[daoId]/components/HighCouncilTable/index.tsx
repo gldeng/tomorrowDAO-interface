@@ -12,7 +12,7 @@ import { explorerServer } from 'api/axios';
 import dayjs from 'dayjs';
 import { useAsyncEffect } from 'ahooks';
 import LinkNetworkDao from 'components/LinkNetworkDao';
-import { ELF_DECIMAL } from 'app/network-dao/[networkDaoId]/vote/constants';
+import { ELF_DECIMAL } from 'app/network-dao/vote/constants';
 
 import './index.css';
 const TableItemCount = 20;

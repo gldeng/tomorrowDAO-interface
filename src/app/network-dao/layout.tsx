@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { useEffect, Suspense } from 'react';
 import { Provider } from "react-redux";
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'redux/store';
@@ -15,6 +15,11 @@ import { WebLoginInstance } from "@utils/webLogin";
 import { LOG_OUT_ACTIONS, LOG_IN_ACTIONS } from 'app/network-dao/_src/redux/actions/proposalCommon';
 import store from "./_src/redux/store";
 import dynamicReq from 'next/dynamic';
+import Footer from 'components/Footer';
+import NetworkDaoHeader from 'components/NetworkDaoHeader';
+import PageLoading from 'components/Loading';
+import ResultModal from 'components/ResultModal';
+import './layout.css';
 import './_src/common/index.css';
 
 const Layout = dynamicReq(
@@ -50,7 +55,27 @@ const Layout = dynamicReq(
       }, [loginState])
       return (
         <div>
-            {props.children}
+            <div className="flex w-[100vw] h-[100vh] flex-col relative box-border min-h-screen bg-global-grey">
+              <Suspense>
+                <NetworkDaoHeader />
+              </Suspense>
+              <div className="flex flex-1 flex-col overflow-y-auto">
+                <Suspense>
+                  <div>
+                    <div
+                      className={`flex-1 max-w-[1440px] mx-auto py-6 mb-6 px-4 lg:px-8 page-content-wrap`}
+                      >
+                      {props.children}
+                    </div>
+                    </div>
+                </Suspense>
+                <Suspense>
+                  <Footer />
+                </Suspense>
+              </div>
+              <PageLoading />
+              <ResultModal />
+            </div>
           </div>
       );
     };
