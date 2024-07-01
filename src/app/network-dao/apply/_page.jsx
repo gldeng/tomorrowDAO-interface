@@ -65,7 +65,6 @@ const GET_CONTRACT_VERSION_TIMEOUT = 1000 * 60 * 10;
 const CreateProposal = () => {
   // const { orgAddress = "" } = useSearchParams();
   const { isSideChain } = useChainSelect()
-  const { networkDaoId } = useParams();
   const searchParams = useSearchParams()
   const orgAddress = searchParams.get('orgAddress');
   const modifyData = useSelector((state) => state.proposalModify);

@@ -1,29 +1,39 @@
 import React, { useRef } from 'react';
 import { useEffect, useState } from 'react';
 import { Table, HashAddress } from 'aelf-design';
-import { ConfigProvider } from 'antd';
+import { ConfigProvider, message } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { useSelector } from 'react-redux';
-import { fetchVoteHistory } from 'api/request';
+import { fetchDaoInfo, fetchVoteHistory } from 'api/request';
 import { EVoteOption } from 'types/vote';
 import NoData from './NoData';
 import { curChain, explorer } from 'config';
 import { useRequest } from 'ahooks';
-import { useSearchParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import dayjs from 'dayjs';
 import Link from 'next/link';
-// import LinkNetworkDao from 'components/LinkNetworkDao';
 import { useWalletService } from 'hooks/useWallet';
 import breadCrumb from 'utils/breadCrumb';
 
 const defaultPageSize = 20;
 const allValue = 'All';
 export default function RecordTable() {
-  const searchParams = useSearchParams();
   const { walletInfo } = useSelector((store: any) => store.userInfo);
-  const daoId = searchParams.get('daoId') ?? '';
-  const runFetchVoteHistoryRef = useRef<() => void>();
+  const { aliasName } = useParams<{ aliasName: string }>();
+  const runFetchVoteHistoryRef = useRef<(daoId: string) => void>();
   const { isLogin } = useWalletService();
+  const {
+    data: daoData,
+    error: daoError,
+    loading: daoLoading,
+  } = useRequest(async () => {
+    if (!aliasName) {
+      message.error('aliasName is required');
+      return null;
+    }
+    return fetchDaoInfo({ chainId: curChain, alias: aliasName });
+  });
+  const daoId = daoData?.data?.id;
 
   const [tableParams, setTableParams] = useState<{ page: number; pageSize: number }>({
     page: 1,
@@ -35,7 +45,7 @@ export default function RecordTable() {
     loading: voteHistoryLoading,
     run,
   } = useRequest(
-    () => {
+    (daoId) => {
       return fetchVoteHistory({
         address: walletInfo.address,
         chainId: curChain,
@@ -51,8 +61,8 @@ export default function RecordTable() {
   runFetchVoteHistoryRef.current = run;
 
   useEffect(() => {
-    breadCrumb.updateMyVotesPage(daoId);
-  }, [daoId]);
+    breadCrumb.updateMyVotesPage(aliasName);
+  }, [aliasName]);
   const columns: ColumnsType<IVoteHistoryItem> = [
     {
       title: 'Time',
@@ -163,10 +173,10 @@ export default function RecordTable() {
     return 'customRow';
   };
   useEffect(() => {
-    if ((walletInfo.address, isLogin)) {
-      runFetchVoteHistoryRef.current?.();
+    if (walletInfo.address && daoId) {
+      runFetchVoteHistoryRef.current?.(daoId);
     }
-  }, [tableParams, walletInfo, isLogin]);
+  }, [tableParams, walletInfo, isLogin, daoId]);
 
   return (
     <ConfigProvider renderEmpty={() => <NoData></NoData>}>

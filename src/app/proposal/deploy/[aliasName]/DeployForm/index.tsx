@@ -1,7 +1,7 @@
 'use client';
 
 import { Form, message as antdMessage, message } from 'antd';
-import { memo, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import useNetworkDaoRouter from 'hooks/useNetworkDaoRouter';
 import ProposalType from './ProposalType';
 import ProposalInfo from './ProposalInfo';
@@ -49,7 +49,7 @@ const convertParams = async (address: string, methodName: string, originParams: 
 };
 
 interface IGovernanceModelProps {
-  daoId: string;
+  aliasName: string;
 }
 type TResultModalConfig = Pick<
   TCommonOperationResultModalProps,
@@ -69,23 +69,24 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
   const [activeTab, setActiveTab] = useState(tab ?? EProposalActionTabs.TREASURY);
 
   const [isNext, setNext] = useState(!!tab);
-  const { isNetWorkDao, networkDaoId } = useIsNetworkDao();
+  const { isNetWorkDao } = useIsNetworkDao();
   const nextRouter = useRouter();
   const [resultModalConfig, setResultModalConfig] = useState(INIT_RESULT_MODAL_CONFIG);
   const { isSyncQuery } = useAelfWebLoginSync();
   // const { getAccountInfoSync } = useWalletSyncCompleted();
-  const { daoId } = props;
+  const { aliasName } = props;
   const {
     data: daoData,
     error: daoError,
     loading: daoLoading,
   } = useRequest(async () => {
-    if (!daoId) {
-      message.error('daoId is required');
+    if (!aliasName) {
+      message.error('aliasName is required');
       return null;
     }
-    return fetchDaoInfo({ daoId, chainId: curChain });
+    return fetchDaoInfo({ chainId: curChain, alias: aliasName });
   });
+  const daoId = daoData?.data?.id;
   const openErrorModal = (
     primaryContent = 'Failed to Create the proposal',
     secondaryContent = 'Failed to Create the proposal',
@@ -116,7 +117,7 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
     }
   };
 
-  const { data: addressTokenList } = useRequest(async () => {
+  const { data: addressTokenList, run: fetchTokenList } = useRequest(async (daoId: string) => {
     const address = await callViewContract<string, string>(
       'GetTreasuryAccountAddress',
       daoId,
@@ -133,6 +134,11 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
     );
   });
   const treasuryAssetsData = addressTokenList?.data;
+  useEffect(() => {
+    if (daoId) {
+      fetchTokenList(daoId);
+    }
+  }, [daoId, fetchTokenList]);
   const handleSubmit = async () => {
     try {
       if (!isSyncQuery()) {
@@ -142,7 +148,6 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
         openErrorModal();
       }
       const res = await form.validateFields();
-
       emitLoading(true, 'Publishing the proposal...');
       const voteSchemeList = await fetchVoteSchemeList({ chainId: curChain, daoId: daoId });
       const voteSchemeId = voteSchemeList?.data?.voteSchemeList?.[0]?.voteSchemeId;
@@ -248,7 +253,7 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
                   type: 'success',
                   content: 'created successfully, it will appear in the list in a few minutes',
                 });
-                nextRouter.push(isNetWorkDao ? `/network-dao` : `/dao/${daoId}`);
+                nextRouter.push(isNetWorkDao ? `/network-dao` : `/dao/${aliasName}`);
               },
             },
           ],
@@ -299,18 +304,20 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
         }}
       >
         <ProposalType className={clsx({ hidden: isNext })} next={handleNext} />
-        <ProposalInfo
-          className={clsx({ hidden: !isNext })}
-          daoData={daoData?.data}
-          daoId={daoId}
-          onSubmit={handleSubmit}
-          onTabChange={(key: string) => {
-            setActiveTab(key);
-          }}
-          activeTab={activeTab}
-          treasuryAssetsData={treasuryAssetsData}
-          daoDataLoading={daoLoading}
-        />
+        {daoId && (
+          <ProposalInfo
+            className={clsx({ hidden: !isNext })}
+            daoData={daoData?.data}
+            daoId={daoId}
+            onSubmit={handleSubmit}
+            onTabChange={(key: string) => {
+              setActiveTab(key);
+            }}
+            activeTab={activeTab}
+            treasuryAssetsData={treasuryAssetsData}
+            daoDataLoading={daoLoading}
+          />
+        )}
       </Form>
       <CommonOperationResultModal
         {...resultModalConfig}

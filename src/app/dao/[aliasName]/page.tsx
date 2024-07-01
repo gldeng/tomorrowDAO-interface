@@ -6,6 +6,6 @@ const PageIndex = dynamicReq(() => import('./_page'), {
   ssr: false,
   loading: () => <SkeletonList />,
 });
-export default function Page(props: { params: { daoId: string } }) {
-  return <PageIndex daoId={props.params.daoId} />;
+export default function Page(props: { params: { aliasName: string } }) {
+  return <PageIndex aliasName={props.params.aliasName} />;
 }

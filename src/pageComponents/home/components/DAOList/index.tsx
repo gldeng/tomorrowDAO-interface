@@ -39,7 +39,7 @@ export default function DAOList() {
             return (
               <Link
                 key={item.daoId}
-                href={item.isNetworkDAO ? `/network-dao` : `/dao/${item.daoId}`}
+                href={item.isNetworkDAO ? `/network-dao` : `/dao/${item.alias}`}
               >
                 <DAOListItem item={item} />
               </Link>

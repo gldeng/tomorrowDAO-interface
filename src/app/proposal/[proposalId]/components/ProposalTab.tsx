@@ -1,6 +1,6 @@
 import { Typography, FontWeightEnum, HashAddress } from 'aelf-design';
 import { Tabs } from 'aelf-design';
-import { getContract } from 'app/proposal/deploy/[daoId]/util';
+import { getContract } from 'app/proposal/deploy/[aliasName]/util';
 import { MarkdownPreview } from 'components/MarkdownEditor';
 import { curChain } from 'config';
 import { useEffect, useState } from 'react';

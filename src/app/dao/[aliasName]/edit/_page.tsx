@@ -4,10 +4,10 @@ import { useParams } from 'next/navigation';
 import EditDao from 'pageComponents/edit-dao';
 
 export default function DeoDetails() {
-  const { daoId } = useParams();
+  const { aliasName } = useParams();
   return (
     <div>
-      <EditDao daoId={typeof daoId === 'string' ? daoId : ''} isNetworkDAO={false} />
+      <EditDao aliasName={aliasName as string} isNetworkDAO={false} />
     </div>
   );
 }

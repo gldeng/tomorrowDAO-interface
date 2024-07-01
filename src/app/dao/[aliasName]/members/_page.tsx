@@ -5,21 +5,34 @@ import { curChain } from 'config';
 import { useRequest } from 'ahooks';
 import useUpdateHeaderDaoInfo from 'hooks/useUpdateHeaderDaoInfo';
 import breadCrumb from 'utils/breadCrumb';
-import { fetchDaoMembers } from 'api/request';
+import { fetchDaoInfo, fetchDaoMembers } from 'api/request';
 import { Button } from 'aelf-design';
 import Link from 'next/link';
-import { EProposalActionTabs } from 'app/proposal/deploy/[daoId]/type';
+import { EProposalActionTabs } from 'app/proposal/deploy/[aliasName]/type';
 import { ColumnsType } from 'antd/es/table';
 import useResponsive from 'hooks/useResponsive';
+import { message } from 'antd';
 interface ITreasuryDetailsProps {
-  daoId: string;
+  aliasName: string;
 }
 const defaultPageSize = 20;
 export default function TreasuryDetails(props: ITreasuryDetailsProps) {
-  const { daoId } = props;
+  const { aliasName } = props;
   const [tableParams, setTableParams] = useState<{ page: number; pageSize: number }>({
     page: 1,
     pageSize: defaultPageSize,
+  });
+
+  const {
+    data: daoData,
+    error: daoError,
+    loading: daoLoading,
+  } = useRequest(async () => {
+    if (!aliasName) {
+      message.error('aliasName is required');
+      return null;
+    }
+    return fetchDaoInfo({ chainId: curChain, alias: aliasName });
   });
   const {
     data: daoMembersData,
@@ -27,7 +40,7 @@ export default function TreasuryDetails(props: ITreasuryDetailsProps) {
     loading: daoMembersDataLoading,
     run,
   } = useRequest(
-    () => {
+    async (daoId) => {
       return fetchDaoMembers({
         SkipCount: tableParams.pageSize * (tableParams.page - 1),
         MaxResultCount: tableParams.pageSize,
@@ -39,11 +52,12 @@ export default function TreasuryDetails(props: ITreasuryDetailsProps) {
       manual: true,
     },
   );
-  useUpdateHeaderDaoInfo(daoId);
+  const daoId = daoData?.data?.id;
+  useUpdateHeaderDaoInfo(daoId, aliasName);
 
   useEffect(() => {
-    breadCrumb.updateMembersPage(daoId);
-  }, [daoId]);
+    breadCrumb.updateMembersPage(aliasName);
+  }, [aliasName]);
   const pageChange = (page: number, pageSize?: number) => {
     setTableParams({
       page,
@@ -59,8 +73,9 @@ export default function TreasuryDetails(props: ITreasuryDetailsProps) {
     });
   };
   useEffect(() => {
-    run();
-  }, [tableParams]);
+    if (!daoId) return;
+    run(daoId);
+  }, [tableParams, daoId, run]);
   const columns: ColumnsType<IDaoMembersItem> = [
     {
       title: <span className="table-title-text">Address</span>,
@@ -80,14 +95,11 @@ export default function TreasuryDetails(props: ITreasuryDetailsProps) {
       },
     },
   ];
-  useEffect(() => {
-    run();
-  }, []);
   return (
     <>
       <div className="page-content-bg-border flex justify-between mb-[24px]">
         <h2 className="card-title-lg mb-[4px]">{daoMembersData?.data?.totalCount} Members</h2>
-        <Link href={`/proposal/deploy/${daoId}?tab=${EProposalActionTabs.AddMultisigMembers}`}>
+        <Link href={`/proposal/deploy/${'daoId'}?tab=${EProposalActionTabs.AddMultisigMembers}`}>
           <Button type="primary" size="medium">
             Manage members
           </Button>

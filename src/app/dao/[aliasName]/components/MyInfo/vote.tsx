@@ -3,7 +3,7 @@ import { Button } from 'aelf-design';
 import { useState, useCallback } from 'react';
 import CommonModal from 'components/CommonModal';
 import Image from 'next/image';
-import { EVoteMechanismNameType } from 'app/proposal/deploy/[daoId]/type';
+import { EVoteMechanismNameType } from 'app/proposal/deploy/[aliasName]/type';
 import { voteApproveMessage, voteRejectMessage, voteAbstainMessage } from 'utils/constant';
 import SuccessGreenIcon from 'assets/imgs/success-green.svg';
 import { getExploreLink } from 'utils/common';

@@ -9,7 +9,7 @@ import { Button, HashAddress } from 'aelf-design';
 import { EDaoGovernanceMechanism } from 'app/(createADao)/create/type';
 import Link from 'next/link';
 import './index.css';
-import { EProposalActionTabs } from 'app/proposal/deploy/[daoId]/type';
+import { EProposalActionTabs } from 'app/proposal/deploy/[aliasName]/type';
 
 interface IProps {
   daoData: IDaoInfoData;

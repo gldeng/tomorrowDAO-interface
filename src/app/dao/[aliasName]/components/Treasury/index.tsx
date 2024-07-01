@@ -20,7 +20,7 @@ import BigNumber from 'bignumber.js';
 import { divDecimals, timesDecimals } from 'utils/calculate';
 import './index.css';
 import { ButtonCheckLogin } from 'components/ButtonCheckLogin';
-import { EProposalActionTabs } from 'app/proposal/deploy/[daoId]/type';
+import { EProposalActionTabs } from 'app/proposal/deploy/[aliasName]/type';
 import { useAsyncEffect, useRequest } from 'ahooks';
 import useTokenListData from 'hooks/useTokenListData';
 import { checkIsOut } from 'utils/transaction';
@@ -212,7 +212,7 @@ const Treasury: React.FC<IProps> = (props) => {
                     <p className="flex justify-between">
                       <span className="card-title mb-6">Transactions</span>
                       {showLoadMore && (
-                        <Link href={`/dao/${daoData?.id}/treasury`}>
+                        <Link href={`/dao/${daoData?.alias}/treasury`}>
                           <span>Load More</span>
                         </Link>
                       )}
