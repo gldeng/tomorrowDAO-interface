@@ -1,8 +1,8 @@
 import { Typography, FontWeightEnum, Progress } from 'aelf-design';
-import MyInfo from 'app/dao/[daoId]/components/MyInfo';
+import MyInfo from 'app/dao/[aliasName]/components/MyInfo';
 import BoxWrapper from './BoxWrapper';
 import { memo } from 'react';
-import { EVoteMechanismNameType } from 'app/proposal/deploy/[daoId]/type';
+import { EVoteMechanismNameType } from 'app/proposal/deploy/[aliasName]/type';
 
 interface IHeaderInfoProps {
   proposalDetailData: IProposalDetailData;

@@ -11,33 +11,44 @@ import breadCrumb from 'utils/breadCrumb';
 import { callViewContract } from 'contract/callContract';
 import { fetchDaoInfo } from 'api/request';
 interface ITreasuryDetailsProps {
-  daoId: string;
+  aliasName: string;
 }
 export default function TreasuryDetails(props: ITreasuryDetailsProps) {
-  const { daoId } = props;
-  const { data: treasuryAddress, loading: treasuryAddressLoading } = useRequest(async () => {
-    // fetchTreasuryAssets({
-    //   daoId: id,
-    //   chainId: curChain,
-    // }),
-    const res = await callViewContract<string, string>(
-      'GetTreasuryAccountAddress',
-      daoId,
-      treasuryContractAddress,
-    );
-    return res;
-  });
+  const { aliasName } = props;
+  const {
+    data: treasuryAddress,
+    loading: treasuryAddressLoading,
+    run,
+  } = useRequest(
+    async (daoId: string) => {
+      const res = await callViewContract<string, string>(
+        'GetTreasuryAccountAddress',
+        daoId,
+        treasuryContractAddress,
+      );
+      return res;
+    },
+    {
+      manual: true,
+    },
+  );
   const { data: daoData } = useRequest(async () => {
-    if (!daoId) {
-      message.error('daoId is required');
+    if (!aliasName) {
+      message.error('aliasName is required');
       return null;
     }
-    return fetchDaoInfo({ daoId, chainId: curChain });
+    return fetchDaoInfo({ alias: aliasName, chainId: curChain });
   });
-  useUpdateHeaderDaoInfo(daoId);
+  const daoId = daoData?.data?.id;
+  useUpdateHeaderDaoInfo(daoId, aliasName);
   useEffect(() => {
-    breadCrumb.updateTreasuryPage(daoId);
-  }, [daoId]);
+    if (daoId) {
+      run(daoId);
+    }
+  }, [daoId, run]);
+  useEffect(() => {
+    breadCrumb.updateTreasuryPage(aliasName);
+  }, [aliasName]);
   return (
     <div>
       {treasuryAddressLoading || !treasuryAddress ? (

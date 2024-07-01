@@ -10,7 +10,7 @@ import LoadMoreButton from 'components/LoadMoreButton';
 import { SkeletonDaoItemList } from 'components/Skeleton';
 import './index.css';
 import { EMyDAOType } from 'types/dao';
-import NoData from 'app/dao/[daoId]/components/NoData';
+import NoData from 'app/dao/[aliasName]/components/NoData';
 import useResponsive from 'hooks/useResponsive';
 
 const MaxResultCount = 5;
@@ -121,7 +121,7 @@ const MyDaosPage = () => {
                     return (
                       <Link
                         key={item.daoId}
-                        href={item.isNetworkDAO ? `/network-dao` : `/dao/${item.daoId}`}
+                        href={item.isNetworkDAO ? `/network-dao` : `/dao/${item.alias}`}
                       >
                         <li className="list-body-content-item" key={item.daoId}>
                           <img src={item.logo} alt="" />
@@ -159,11 +159,7 @@ const MyDaosPage = () => {
                     return (
                       <Link
                         key={item.daoId}
-                        href={
-                          item.isNetworkDAO
-                            ? `/network-dao/${item.daoId}/proposal-list`
-                            : `/dao/${item.daoId}`
-                        }
+                        href={item.isNetworkDAO ? `/network-dao` : `/dao/${item.alias}`}
                       >
                         <li className="list-body-content-item" key={item.daoId}>
                           <img src={item.logo} alt="" />

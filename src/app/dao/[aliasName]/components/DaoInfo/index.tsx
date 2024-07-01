@@ -58,7 +58,7 @@ const contractMapList = [
 export default function DaoInfo(props: IParams) {
   const {
     data,
-    data: { metadata, fileInfoList = [], isNetworkDAO } = {},
+    data: { metadata, fileInfoList = [], isNetworkDAO, alias } = {},
     isLoading,
     isError,
     onChangeHCParams,
@@ -214,7 +214,7 @@ export default function DaoInfo(props: IParams) {
                     href={
                       isNetworkDAO
                         ? `${NetworkDaoHomePathName}/${daoId}/edit`
-                        : `/dao/${daoId}/edit`
+                        : `/dao/${alias}/edit`
                     }
                     className="mr-[10px]"
                   >
