@@ -34,11 +34,12 @@ interface IProps {
   clssName?: string;
   daoData: IDaoInfoData;
   createProposalCheck?: (customRouter?: boolean) => Promise<boolean>;
+  aliasName?: string;
   // Define your component's props here
 }
 const LoadCount = 5;
 const Treasury: React.FC<IProps> = (props) => {
-  const { clssName, daoData, createProposalCheck } = props;
+  const { clssName, daoData, createProposalCheck, aliasName } = props;
   const [form] = Form.useForm();
   const [choiceOpen, setChoiceOpen] = useState(false);
   // const [isValidatedSymbol, setIsValidatedSymbol] = useState(false);
@@ -94,7 +95,7 @@ const Treasury: React.FC<IProps> = (props) => {
     try {
       const checkRes = await createProposalCheck?.(true);
       if (checkRes) {
-        router.push(`/proposal/deploy/${daoData?.id}?tab=${EProposalActionTabs.TREASURY}`);
+        router.push(`/proposal/deploy/${aliasName}?tab=${EProposalActionTabs.TREASURY}`);
       }
     } catch (error) {
       console.log('handleCreateProposal', error);
@@ -212,7 +213,7 @@ const Treasury: React.FC<IProps> = (props) => {
                     <p className="flex justify-between">
                       <span className="card-title mb-6">Transactions</span>
                       {showLoadMore && (
-                        <Link href={`/dao/${daoData?.alias}/treasury`}>
+                        <Link href={`/dao/${aliasName}/treasury`}>
                           <span>Load More</span>
                         </Link>
                       )}

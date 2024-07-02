@@ -13,11 +13,12 @@ import { EProposalActionTabs } from 'app/proposal/deploy/[aliasName]/type';
 
 interface IProps {
   daoData: IDaoInfoData;
+  aliasName?: string;
 }
 const LoadCount = 5;
 
 const DaoMembers: React.FC<IProps> = (props) => {
-  const { daoData } = props;
+  const { daoData, aliasName } = props;
 
   const {
     data: daoMembersData,
@@ -58,7 +59,7 @@ const DaoMembers: React.FC<IProps> = (props) => {
               </span>
             </p>
             <Link
-              href={`/proposal/deploy/${daoData?.id}?tab=${EProposalActionTabs.AddMultisigMembers}`}
+              href={`/proposal/deploy/${aliasName}?tab=${EProposalActionTabs.AddMultisigMembers}`}
             >
               <Button type="primary" size="medium" className="dao-members-manage">
                 Manage members

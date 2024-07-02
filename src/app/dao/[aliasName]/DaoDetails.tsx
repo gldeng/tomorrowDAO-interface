@@ -79,9 +79,9 @@ export default function DeoDetails(props: IProps) {
     },
   });
   const daoId = daoData?.data?.id;
-  const daoAliasName = daoData?.data?.alias;
+  // const aliasName = aliasName;
   const previousTableParams = usePrevious(tableParams);
-  useUpdateHeaderDaoInfo(daoId, daoAliasName);
+  useUpdateHeaderDaoInfo(daoId, aliasName);
   const fetchProposalListWithParams = async (preData: IProposalListRes | null) => {
     const { proposalType, proposalStatus } = tableParams;
     const params: IProposalListReq = {
@@ -207,7 +207,7 @@ export default function DeoDetails(props: IProps) {
       const chainIdQuery = getChainIdQuery();
       networkDaoRouter.push(`/apply?${chainIdQuery.chainIdQueryString}`);
     } else {
-      router.push(`/proposal/deploy/${daoId}`);
+      router.push(`/proposal/deploy/${aliasName}`);
     }
     return true;
   };
@@ -270,6 +270,7 @@ export default function DeoDetails(props: IProps) {
             <Treasury
               daoData={daoData.data}
               createProposalCheck={handleCreateProposalRef.current}
+              aliasName={aliasName}
             />
           ) : (
             <span></span>
@@ -279,7 +280,11 @@ export default function DeoDetails(props: IProps) {
           finalItems.push({
             key: TabKey.DAOMEMBERS,
             label: 'Members',
-            children: daoData?.data ? <DaoMembers daoData={daoData.data} /> : <span></span>,
+            children: daoData?.data ? (
+              <DaoMembers daoData={daoData.data} aliasName={aliasName} />
+            ) : (
+              <span></span>
+            ),
           });
         }
       }
@@ -330,8 +335,8 @@ export default function DeoDetails(props: IProps) {
     setTabKey(TabKey.HC);
   }, []);
   useEffect(() => {
-    breadCrumb.updateDaoDetailPage(daoAliasName, daoData?.data?.metadata?.name);
-  }, [daoAliasName, daoData?.data?.metadata?.name]);
+    breadCrumb.updateDaoDetailPage(aliasName, daoData?.data?.metadata?.name);
+  }, [aliasName, daoData?.data?.metadata?.name]);
 
   const tabCom = useMemo(() => {
     return (
@@ -432,12 +437,16 @@ export default function DeoDetails(props: IProps) {
           {!isLG && !isNetworkDAO && (
             <div className="dao-detail-content-right">
               {daoData?.data && !isNetworkDAO && (
-                <Treasury daoData={daoData.data} createProposalCheck={handleCreateProposal} />
+                <Treasury
+                  daoData={daoData.data}
+                  createProposalCheck={handleCreateProposal}
+                  aliasName={aliasName}
+                />
               )}
               {daoData?.data &&
                 !isNetworkDAO &&
                 daoData.data.governanceMechanism === EDaoGovernanceMechanism.Multisig && (
-                  <DaoMembers daoData={daoData.data} />
+                  <DaoMembers daoData={daoData.data} aliasName={aliasName} />
                 )}
               {rightContent}
               {walletInfo.address && daoId && (
