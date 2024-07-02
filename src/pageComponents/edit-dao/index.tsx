@@ -67,7 +67,6 @@ const EditDao: React.FC<IEditDaoProps> = (props) => {
         socialMedia,
       },
     };
-    console.log('params', params);
     try {
       emitLoading(true, 'The changes is being processed...');
       const res = await callContract('UpdateMetadata', params, daoAddress);

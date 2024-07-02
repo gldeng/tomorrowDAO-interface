@@ -331,6 +331,7 @@ interface IProposalDetailDataVoteTopListItem {
   votingItemId: string;
 }
 interface IProposalDetailData {
+  alias: string;
   startTime: string;
   endTime: string;
   activeEndTime: string;

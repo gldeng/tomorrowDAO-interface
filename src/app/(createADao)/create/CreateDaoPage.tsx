@@ -45,7 +45,6 @@ const CreateDaoPage = () => {
   const [messageApi, contextHolder] = antdMessage.useMessage();
   const daoCreateToken = useSelector((store) => store.daoCreate.token);
   const { isSyncQuery } = useAelfWebLoginSync();
-  const isSkipHighCouncil = useRef<boolean>(false);
   const submitButtonRef = useRef<ISubmitRef>(null);
   const router = useRouter();
   const { loginState } = useWebLogin();
@@ -65,9 +64,6 @@ const CreateDaoPage = () => {
         ?.validateFields()
         .then((res) => {
           console.log('res', res);
-          if (isHighCouncilStep) {
-            isSkipHighCouncil.current = !Object.keys(res ?? {}).length;
-          }
           setNextLoading(false);
           stepsFormMapRef.current.stepForm[currentStepString].submitedRes = res;
           send({ type: 'NEXT' });
@@ -177,7 +173,7 @@ const CreateDaoPage = () => {
             : metadata.metadata.name === NetworkName,
         };
         // highCouncil not skip
-        if (!isSkipHighCouncil.current || !isMultisig) {
+        if (isShowHighCouncil && !isMultisig) {
           let highCouncilForm = stepForm[StepEnum.step2].submitedRes;
           if (highCouncilForm && daoCreateToken?.decimals) {
             const stakingAmount = highCouncilForm.highCouncilConfig.stakingAmount;

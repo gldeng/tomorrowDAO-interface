@@ -44,6 +44,7 @@ interface IParams {
   isLoading: boolean;
   isError?: Error;
   daoId?: string;
+  aliasName?: string;
 }
 const contractMapList = [
   {
@@ -58,11 +59,12 @@ const contractMapList = [
 export default function DaoInfo(props: IParams) {
   const {
     data,
-    data: { metadata, fileInfoList = [], isNetworkDAO, alias } = {},
+    data: { metadata, fileInfoList = [], isNetworkDAO } = {},
     isLoading,
     isError,
     onChangeHCParams,
     daoId,
+    aliasName,
   } = props;
   const { wallet } = useWebLogin();
 
@@ -76,6 +78,7 @@ export default function DaoInfo(props: IParams) {
       url: socialMedia[key as keyof typeof socialMedia],
     };
   });
+  const isTokenGovernanceMechanism = data?.governanceMechanism === EDaoGovernanceMechanism.Token;
 
   const contractItems = contractMapList
     .map((obj) => {
@@ -121,11 +124,15 @@ export default function DaoInfo(props: IParams) {
         }
       : null,
     ...(isNetworkDAO ? [] : contractItems ?? []),
-    {
-      key: '3',
-      label: <span className="dao-collapse-panel-label">Governance Token</span>,
-      children: <span className="dao-collapse-panel-child">{data?.governanceToken ?? '-'}</span>,
-    },
+    isTokenGovernanceMechanism
+      ? {
+          key: '3',
+          label: <span className="dao-collapse-panel-label">Governance Token</span>,
+          children: (
+            <span className="dao-collapse-panel-child">{data?.governanceToken ?? '-'}</span>
+          ),
+        }
+      : null,
     {
       key: '4',
       label: <span className="dao-collapse-panel-label">Governance Mechanism</span>,
@@ -135,7 +142,9 @@ export default function DaoInfo(props: IParams) {
         } `}</span>
       ),
     },
-    isNetworkDAO && isSideChain
+    (isNetworkDAO && isSideChain) ||
+    !isTokenGovernanceMechanism ||
+    (isTokenGovernanceMechanism && !data?.isHighCouncilEnabled)
       ? null
       : {
           key: '5',
@@ -165,9 +174,7 @@ export default function DaoInfo(props: IParams) {
           label: <span className="dao-collapse-panel-label">Voting mechanism</span>,
           children: (
             <span className="dao-collapse-panel-child">
-              {data?.governanceMechanism === EDaoGovernanceMechanism.Token
-                ? 'Token-based'
-                : 'Wallet-based'}
+              {isTokenGovernanceMechanism ? 'Token-based' : 'Wallet-based'}
             </span>
           ),
         },
@@ -212,9 +219,7 @@ export default function DaoInfo(props: IParams) {
                 {wallet.address === data?.creator && (
                   <Link
                     href={
-                      isNetworkDAO
-                        ? `${NetworkDaoHomePathName}/${daoId}/edit`
-                        : `/dao/${alias}/edit`
+                      isNetworkDAO ? `${NetworkDaoHomePathName}/edit` : `/dao/${aliasName}/edit`
                     }
                     className="mr-[10px]"
                   >

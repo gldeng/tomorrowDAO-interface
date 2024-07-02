@@ -28,6 +28,8 @@ type TVoteTypes = {
   fetchMyInfo: () => void;
   votesAmount: number;
   decimal: string;
+  canVote?: boolean;
+  className?: string;
 };
 
 type TFieldType = {
@@ -35,8 +37,17 @@ type TFieldType = {
 };
 
 function Vote(props: TVoteTypes) {
-  const { proposalId, voteMechanismName, elfBalance, symbol, fetchMyInfo, votesAmount, decimal } =
-    props;
+  const {
+    proposalId,
+    voteMechanismName,
+    elfBalance,
+    symbol,
+    fetchMyInfo,
+    votesAmount,
+    decimal,
+    canVote,
+    className,
+  } = props;
   const [form] = Form.useForm();
   const [currentVoteType, setCurrentVoteType] = useState<EVoteOption>(EVoteOption.APPROVED);
   const [currentTitle, setCurrentTitle] = useState('');
@@ -164,12 +175,13 @@ function Vote(props: TVoteTypes) {
   ]);
 
   return (
-    <div className="flex justify-between items-center mt-4">
+    <div className={`flex justify-between items-center mt-4 ${className}`}>
       <Button
         type="primary"
         size="medium"
         millisecondOfDebounce={1000}
         onClick={() => handlerModal(EVoteOption.APPROVED)}
+        disabled={!canVote}
       >
         Approve
       </Button>
@@ -179,6 +191,7 @@ function Vote(props: TVoteTypes) {
         className="bg-rejection"
         millisecondOfDebounce={1000}
         onClick={() => handlerModal(EVoteOption.REJECTED)}
+        disabled={!canVote}
       >
         Reject
       </Button>
@@ -188,6 +201,7 @@ function Vote(props: TVoteTypes) {
         millisecondOfDebounce={1000}
         className="bg-abstention"
         onClick={() => handlerModal(EVoteOption.ABSTAINED)}
+        disabled={!canVote}
       >
         Abstain
       </Button>

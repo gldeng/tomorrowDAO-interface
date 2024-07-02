@@ -13,7 +13,7 @@ import { ColumnsType } from 'antd/es/table';
 import useResponsive from 'hooks/useResponsive';
 import { message } from 'antd';
 interface ITreasuryDetailsProps {
-  aliasName: string;
+  aliasName?: string;
 }
 const defaultPageSize = 20;
 export default function TreasuryDetails(props: ITreasuryDetailsProps) {
@@ -99,7 +99,7 @@ export default function TreasuryDetails(props: ITreasuryDetailsProps) {
     <>
       <div className="page-content-bg-border flex justify-between mb-[24px]">
         <h2 className="card-title-lg mb-[4px]">{daoMembersData?.data?.totalCount} Members</h2>
-        <Link href={`/proposal/deploy/${'daoId'}?tab=${EProposalActionTabs.AddMultisigMembers}`}>
+        <Link href={`/proposal/deploy/${aliasName}?tab=${EProposalActionTabs.AddMultisigMembers}`}>
           <Button type="primary" size="medium">
             Manage members
           </Button>
