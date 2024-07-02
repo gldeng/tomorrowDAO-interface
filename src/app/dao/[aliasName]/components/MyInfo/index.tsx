@@ -21,7 +21,7 @@ import { TokenIconMap } from 'constants/token';
 import useAelfWebLoginSync from 'hooks/useAelfWebLoginSync';
 
 type TInfoTypes = {
-  height?: number;
+  height?: number | string;
   children?: ReactNode;
   clssName?: string;
   daoId: string;
@@ -31,6 +31,7 @@ type TInfoTypes = {
   isOnlyShowVoteOption?: boolean;
   isShowVote?: boolean;
   isExtraDataLoading?: boolean;
+  titleNode?: React.ReactNode;
 };
 
 type TFieldType = {
@@ -50,6 +51,7 @@ export default function MyInfo(props: TInfoTypes) {
     isOnlyShowVoteOption,
     isShowVote,
     isExtraDataLoading,
+    titleNode,
   } = props;
   const { login, isLogin } = useWalletService();
   const elfInfo = store.getState().elfInfo.elfInfo;
@@ -213,12 +215,12 @@ export default function MyInfo(props: TInfoTypes) {
 
   return (
     <div
-      className={`${clssName} flex flex-col border-0 lg:border border-Neutral-Divider border-solid rounded-lg bg-white px-4 pt-2 pb-6 lg:px-8  lg:py-6`}
+      className={`mb-[16px] lg:mb-0 flex flex-col border border-Neutral-Divider border-solid rounded-lg bg-white px-8 py-6 ${clssName}`}
       style={{
         height: height || 'auto',
       }}
     >
-      <div className="card-title mb-[24px]">My Info</div>
+      <div className="card-title mb-[24px]">{titleNode ?? 'My Info'}</div>
       {isLogin ? (
         isLoading || isExtraDataLoading ? (
           <SkeletonLine lines={6} />
@@ -228,8 +230,8 @@ export default function MyInfo(props: TInfoTypes) {
               <>
                 <Descriptions colon={false} title="" items={myInfoItems} column={1} />
                 {/* cliam */}
-                <Divider className="mt-0 mb-4" />
-                <div className="flex justify-between items-start">
+                <Divider className="my-0" />
+                <div className="flex justify-between items-start my-[16px]">
                   <div>
                     <div className="card-sm-text text-Neutral-Secondary-Text mb-1">
                       Available for Unstaking
@@ -264,7 +266,7 @@ export default function MyInfo(props: TInfoTypes) {
                 votesAmount={info?.votesAmount ?? 0}
                 decimal={info?.decimal}
                 canVote={info?.canVote}
-                className={isOnlyShowVoteOption ? 'flex-col flex-1' : ''}
+                className={isOnlyShowVoteOption ? 'py-[24px]' : 'mt-[24px]'}
               />
             )}
 

@@ -40,6 +40,8 @@ const VoteInfo = (props: IHeaderInfoProps) => {
     }
     return fetchDaoInfo({ daoId: props.daoId, chainId: curChain });
   });
+  const isOnlyShowVoteOption =
+    daoData?.data?.governanceMechanism === EDaoGovernanceMechanism.Multisig;
   return (
     <div className="flex justify-between flex-col lg:flex-row">
       <BoxWrapper className="flex-1 lg:mr-[24px] order-last lg:order-first">
@@ -119,11 +121,11 @@ const VoteInfo = (props: IHeaderInfoProps) => {
         </div>
       </BoxWrapper>
       <MyInfo
-        isOnlyShowVoteOption={
-          daoData?.data?.governanceMechanism === EDaoGovernanceMechanism.Multisig
-        }
+        isOnlyShowVoteOption={isOnlyShowVoteOption}
         isExtraDataLoading={daoLoading}
         isShowVote={true}
+        height={isOnlyShowVoteOption ? 'max-content' : 'auto'}
+        titleNode={isOnlyShowVoteOption ? 'Vote' : 'My Info'}
         clssName="flex-1 grow-0 lg:basis-[32%]"
         daoId={proposalDetailData.daoId || ''}
         proposalId={proposalDetailData.proposalId}

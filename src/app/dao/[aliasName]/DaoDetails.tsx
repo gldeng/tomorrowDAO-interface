@@ -46,6 +46,17 @@ interface IProps {
   aliasName?: string;
   isNetworkDAO?: boolean;
 }
+interface IMyInfoContentProps {
+  daoId?: string;
+  isTokenGovernanceMechanism?: boolean;
+  className?: string;
+}
+const MyInfoContent = (props: IMyInfoContentProps) => {
+  const { daoId, isTokenGovernanceMechanism, className } = props;
+  return daoId && isTokenGovernanceMechanism ? (
+    <MyInfo daoId={daoId} isShowVote={false} clssName={className} />
+  ) : null;
+};
 export default function DeoDetails(props: IProps) {
   const { aliasName, isNetworkDAO } = props;
   const { isLG } = useResponsive();
@@ -142,9 +153,7 @@ export default function DeoDetails(props: IProps) {
     daoData?.data?.governanceMechanism === EDaoGovernanceMechanism.Token;
   const networkDaoRouter = useNetworkDaoRouter();
   const router = useRouter();
-  const rightContent = useMemo(() => {
-    return daoId && isTokenGovernanceMechanism ? <MyInfo daoId={daoId} isShowVote={false} /> : null;
-  }, [daoId]);
+  const isShowMyInfo = daoId && isTokenGovernanceMechanism;
 
   const handleCreateProposal = async (customRouter?: boolean) => {
     setCreateProposalLoading(true);
@@ -258,11 +267,17 @@ export default function DeoDetails(props: IProps) {
     } else {
       const finalItems = [...items];
       if (!daoData?.data?.isNetworkDAO) {
-        if (rightContent) {
+        if (isShowMyInfo) {
           finalItems.push({
             key: TabKey.MYINFO,
             label: 'My Info',
-            children: rightContent,
+            children: (
+              <MyInfoContent
+                daoId={daoId}
+                isTokenGovernanceMechanism={isTokenGovernanceMechanism}
+                className="border-0  px-[16px] py-[24px]"
+              />
+            ),
           });
         }
         finalItems.push({
@@ -301,7 +316,10 @@ export default function DeoDetails(props: IProps) {
     daoData?.data,
     isMainChain,
     isLG,
-    rightContent,
+    isShowMyInfo,
+    aliasName,
+    daoId,
+    isTokenGovernanceMechanism,
   ]);
 
   const pageChange = useCallback((page: number) => {
@@ -451,7 +469,11 @@ export default function DeoDetails(props: IProps) {
                 daoData.data.governanceMechanism === EDaoGovernanceMechanism.Multisig && (
                   <DaoMembers daoData={daoData.data} aliasName={aliasName} />
                 )}
-              {rightContent}
+              <MyInfoContent
+                daoId={daoId}
+                isTokenGovernanceMechanism={isTokenGovernanceMechanism}
+                className="border"
+              />
               {walletInfo.address && daoId && (
                 <ExecutdProposals daoId={daoId} address={walletInfo.address} />
               )}

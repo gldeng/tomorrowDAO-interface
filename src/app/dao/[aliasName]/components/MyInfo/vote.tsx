@@ -175,7 +175,7 @@ function Vote(props: TVoteTypes) {
   ]);
 
   return (
-    <div className={`flex justify-between items-center mt-4 ${className}`}>
+    <div className={`flex justify-between items-center ${className}`}>
       <Button
         type="primary"
         size="medium"
