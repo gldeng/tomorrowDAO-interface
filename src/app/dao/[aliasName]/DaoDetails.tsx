@@ -138,10 +138,12 @@ export default function DeoDetails(props: IProps) {
   const handleCreateProposalRef = useRef<(customRouter?: boolean) => Promise<boolean>>();
   previousProposalDataRef.current = proposalData;
 
+  const isTokenGovernanceMechanism =
+    daoData?.data?.governanceMechanism === EDaoGovernanceMechanism.Token;
   const networkDaoRouter = useNetworkDaoRouter();
   const router = useRouter();
   const rightContent = useMemo(() => {
-    return daoId ? <MyInfo daoId={daoId} /> : null;
+    return daoId && isTokenGovernanceMechanism ? <MyInfo daoId={daoId} isShowVote={false} /> : null;
   }, [daoId]);
 
   const handleCreateProposal = async (customRouter?: boolean) => {
@@ -364,6 +366,7 @@ export default function DeoDetails(props: IProps) {
           isError={daoError}
           onChangeHCParams={handleChangeHCparams}
           daoId={daoId}
+          aliasName={aliasName}
         />
 
         <div className="dao-detail-content">

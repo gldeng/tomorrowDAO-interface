@@ -11,6 +11,7 @@ import { store } from 'redux/store';
 import { useSelector } from 'react-redux';
 import { callContract, GetBalanceByContract } from 'contract/callContract';
 import { curChain, sideChainSuffix, voteAddress } from 'config';
+import { SkeletonLine } from 'components/Skeleton';
 import { emitLoading } from 'utils/myEvent';
 import { getExploreLink } from 'utils/common';
 import Vote from './vote';
@@ -27,6 +28,9 @@ type TInfoTypes = {
   proposalId?: string;
   voteMechanismName?: string;
   notLoginTip?: React.ReactNode;
+  isOnlyShowVoteOption?: boolean;
+  isShowVote?: boolean;
+  isExtraDataLoading?: boolean;
 };
 
 type TFieldType = {
@@ -43,12 +47,16 @@ export default function MyInfo(props: TInfoTypes) {
     proposalId = '',
     voteMechanismName = '',
     notLoginTip = 'Log in to view your votes.',
+    isOnlyShowVoteOption,
+    isShowVote,
+    isExtraDataLoading,
   } = props;
   const { login, isLogin } = useWalletService();
   const elfInfo = store.getState().elfInfo.elfInfo;
   const { walletInfo } = useSelector((store: any) => store.userInfo);
   const [elfBalance, setElfBalance] = useState(0);
   const [txHash, setTxHash] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const [info, setInfo] = useState<IMyInfo>({
     symbol: 'ELF',
     decimal: '8',
@@ -80,7 +88,9 @@ export default function MyInfo(props: TInfoTypes) {
       reqMyInfoParams.proposalId = proposalId;
     }
 
+    setIsLoading(true);
     const res = await fetchProposalMyInfo(reqMyInfoParams);
+    setIsLoading(false);
     if (!res.data) {
       return;
     }
@@ -88,6 +98,7 @@ export default function MyInfo(props: TInfoTypes) {
     if (!data?.symbol) {
       data.symbol = 'ELF';
     }
+    console.log('data?.stakeAmount', data?.stakeAmount);
     const decimal = data?.decimal;
     data.availableUnStakeAmount = divDecimals(data?.availableUnStakeAmount, decimal).toNumber();
     data.stakeAmount = divDecimals(data?.stakeAmount, decimal).toNumber();
@@ -202,182 +213,199 @@ export default function MyInfo(props: TInfoTypes) {
 
   return (
     <div
-      className={`${clssName} border-0 lg:border border-Neutral-Divider border-solid rounded-lg bg-white px-4 pt-2 pb-6 lg:px-8  lg:py-6`}
+      className={`${clssName} flex flex-col border-0 lg:border border-Neutral-Divider border-solid rounded-lg bg-white px-4 pt-2 pb-6 lg:px-8  lg:py-6`}
       style={{
         height: height || 'auto',
       }}
     >
       <div className="card-title mb-[24px]">My Info</div>
       {isLogin ? (
-        <div>
-          <Descriptions colon={false} title="" items={myInfoItems} column={1} />
-          {/* cliam */}
-          <Divider className="mt-0 mb-4" />
-          <div className="flex justify-between items-start">
-            <div>
-              <div className="card-sm-text text-Neutral-Secondary-Text mb-1">
+        isLoading || isExtraDataLoading ? (
+          <SkeletonLine lines={6} />
+        ) : (
+          <>
+            {!isOnlyShowVoteOption && (
+              <>
+                <Descriptions colon={false} title="" items={myInfoItems} column={1} />
+                {/* cliam */}
+                <Divider className="mt-0 mb-4" />
+                <div className="flex justify-between items-start">
+                  <div>
+                    <div className="card-sm-text text-Neutral-Secondary-Text mb-1">
+                      Available for Unstaking
+                    </div>
+                    <div className="text-Primary-Text  card-sm-text-bold">
+                      {info?.availableUnStakeAmount} {info?.symbol}
+                    </div>
+                  </div>
+                  <Button
+                    type="primary"
+                    size="medium"
+                    onClick={() => {
+                      if (info?.availableUnStakeAmount === 0) {
+                        message.info('Available for Unstaking is 0');
+                      } else {
+                        setIsModalOpen(true);
+                      }
+                    }}
+                  >
+                    Unstake
+                  </Button>
+                </div>
+              </>
+            )}
+            {isShowVote && (
+              <Vote
+                proposalId={proposalId}
+                voteMechanismName={voteMechanismName}
+                elfBalance={elfBalance}
+                symbol={info?.symbol}
+                fetchMyInfo={fetchMyInfo}
+                votesAmount={info?.votesAmount ?? 0}
+                decimal={info?.decimal}
+                canVote={info?.canVote}
+                className={isOnlyShowVoteOption ? 'flex-col flex-1' : ''}
+              />
+            )}
+
+            {/* Claim Modal  */}
+            <CommonModal
+              open={isModalOpen}
+              title={<div className="text-center">Unstake {info?.symbol} on SideChain AELF</div>}
+              destroyOnClose
+              onCancel={() => {
+                form.setFieldValue('unStakeAmount', 0);
+                setIsModalOpen(false);
+              }}
+            >
+              <div className="text-center color-text-Primary-Text font-medium">
+                <span className="text-[32px] mr-1">{info?.availableUnStakeAmount}</span>
+                <span>{info.symbol}</span>
+              </div>
+              <div className="text-center card-sm-text text-Neutral-Secondary-Text">
                 Available for Unstaking
               </div>
-              <div className="text-Primary-Text  card-sm-text-bold">
-                {info?.availableUnStakeAmount} {info?.symbol}
-              </div>
-            </div>
-            <Button
-              type="primary"
-              size="medium"
-              onClick={() => {
-                if (info?.availableUnStakeAmount === 0) {
-                  message.info('Available for Unstaking is 0');
-                } else {
-                  setIsModalOpen(true);
-                }
-              }}
-            >
-              Unstake
-            </Button>
-          </div>
-          {info?.canVote && (
-            <Vote
-              proposalId={proposalId}
-              voteMechanismName={voteMechanismName}
-              elfBalance={elfBalance}
-              symbol={info?.symbol}
-              fetchMyInfo={fetchMyInfo}
-              votesAmount={info?.votesAmount ?? 0}
-              decimal={info?.decimal}
-            />
-          )}
-          {/* Claim Modal  */}
-          <CommonModal
-            open={isModalOpen}
-            title={<div className="text-center">Unstake {info?.symbol} on SideChain AELF</div>}
-            destroyOnClose
-            onCancel={() => {
-              form.setFieldValue('unStakeAmount', 0);
-              setIsModalOpen(false);
-            }}
-          >
-            <div className="text-center color-text-Primary-Text font-medium">
-              <span className="text-[32px] mr-1">{info?.availableUnStakeAmount}</span>
-              <span>{info.symbol}</span>
-            </div>
-            <div className="text-center card-sm-text text-Neutral-Secondary-Text">
-              Available for Unstaking
-            </div>
-            <Form form={form} layout="vertical" variant="filled" onFinish={handleClaim}>
-              <Form.Item<TFieldType>
-                label="Unstake Amount"
-                name="unstakeAmount"
-                tooltip={`Currently, the only supported method is to unstake all the available ${info.symbol} in one time.`}
-              >
-                <InputNumber
-                  className="w-full"
-                  placeholder="pleas input Unstake Amount"
-                  defaultValue={info?.availableUnStakeAmount}
-                  disabled
-                  prefix={
-                    <div className="flex items-center">
-                      {TokenIconMap[info.symbol] && (
-                        <Image width={24} height={24} src={TokenIconMap[info.symbol]} alt="" />
-                      )}
-                      <span className="text-Neutral-Secondary-Text ml-1">{info.symbol}</span>
-                      <Divider type="vertical" />
-                    </div>
-                  }
-                />
-              </Form.Item>
-              <Form.Item>
-                <Button className="mx-auto" type="primary" htmlType="submit">
-                  Unstake
-                </Button>
-              </Form.Item>
-            </Form>
-          </CommonModal>
-          {/* Unstake Amount  */}
-          <CommonModal
-            open={isUnstakeAmModalOpen}
-            title={<div className="text-center">Unstake Amount</div>}
-            onCancel={() => {
-              setIsUnstakeAmIsModalOpen(false);
-            }}
-            footer={null}
-          >
-            <p>
-              Currently, the only supported method is to unstake all the available {info.symbol} in
-              one time.
-            </p>
-            <Button
-              className="mx-auto"
-              type="primary"
-              onClick={() => {
+              <Form form={form} layout="vertical" variant="filled" onFinish={handleClaim}>
+                <Form.Item<TFieldType>
+                  label="Unstake Amount"
+                  name="unstakeAmount"
+                  tooltip={`Currently, the only supported method is to unstake all the available ${info.symbol} in one time.`}
+                >
+                  <InputNumber
+                    className="w-full"
+                    placeholder="pleas input Unstake Amount"
+                    defaultValue={info?.availableUnStakeAmount}
+                    disabled
+                    prefix={
+                      <div className="flex items-center">
+                        {TokenIconMap[info.symbol] && (
+                          <Image width={24} height={24} src={TokenIconMap[info.symbol]} alt="" />
+                        )}
+                        <span className="text-Neutral-Secondary-Text ml-1">{info.symbol}</span>
+                        <Divider type="vertical" />
+                      </div>
+                    }
+                  />
+                </Form.Item>
+                <Form.Item>
+                  <Button className="mx-auto" type="primary" htmlType="submit">
+                    Unstake
+                  </Button>
+                </Form.Item>
+              </Form>
+            </CommonModal>
+            {/* Unstake Amount  */}
+            <CommonModal
+              open={isUnstakeAmModalOpen}
+              title={<div className="text-center">Unstake Amount</div>}
+              onCancel={() => {
                 setIsUnstakeAmIsModalOpen(false);
               }}
+              footer={null}
             >
-              OK
-            </Button>
-          </CommonModal>
+              <p>
+                Currently, the only supported method is to unstake all the available {info.symbol}{' '}
+                in one time.
+              </p>
+              <Button
+                className="mx-auto"
+                type="primary"
+                onClick={() => {
+                  setIsUnstakeAmIsModalOpen(false);
+                }}
+              >
+                OK
+              </Button>
+            </CommonModal>
 
-          {/* success */}
-          <CommonModal
-            title="Transaction Initiated"
-            open={showSuccessModal}
-            onCancel={() => {
-              setShowSuccessModal(false);
-            }}
-          >
-            <Image className="mx-auto block" width={56} height={56} src={SuccessGreenIcon} alt="" />
-            <div className="text-center text-Primary-Text font-medium">
-              {/* <span className="text-[32px] mr-1">{form.getFieldValue('unstakeAmount')}</span>
-              <span>{info.symbol}</span> */}
-            </div>
-            {/* <p className="text-center text-Neutral-Secondary-Text font-medium">
-              Transaction Initiated
-            </p> */}
-            <Button
-              className="mx-auto mt-6 w-[206px]"
-              type="primary"
-              onClick={() => {
+            {/* success */}
+            <CommonModal
+              title="Transaction Initiated"
+              open={showSuccessModal}
+              onCancel={() => {
                 setShowSuccessModal(false);
               }}
             >
-              OK
-            </Button>
-            <Button
-              type="link"
-              className="mx-auto text-colorPrimary"
-              size="small"
-              onClick={() => {
-                window.open(getExploreLink(txHash, 'transaction'));
-              }}
-            >
-              View Transaction Details
-            </Button>
-          </CommonModal>
+              <Image
+                className="mx-auto block"
+                width={56}
+                height={56}
+                src={SuccessGreenIcon}
+                alt=""
+              />
+              <div className="text-center text-Primary-Text font-medium">
+                {/* <span className="text-[32px] mr-1">{form.getFieldValue('unstakeAmount')}</span>
+              <span>{info.symbol}</span> */}
+              </div>
+              {/* <p className="text-center text-Neutral-Secondary-Text font-medium">
+              Transaction Initiated
+            </p> */}
+              <Button
+                className="mx-auto mt-6 w-[206px]"
+                type="primary"
+                onClick={() => {
+                  setShowSuccessModal(false);
+                }}
+              >
+                OK
+              </Button>
+              <Button
+                type="link"
+                className="mx-auto text-colorPrimary"
+                size="small"
+                onClick={() => {
+                  window.open(getExploreLink(txHash, 'transaction'));
+                }}
+              >
+                View Transaction Details
+              </Button>
+            </CommonModal>
 
-          {/* failed */}
-          <CommonModal
-            open={modalInfo.isOpen}
-            onCancel={() => {
-              setShowFailedModal({
-                ...modalInfo,
-                isOpen: false,
-              });
-            }}
-          >
-            <Info
-              title="Transaction Failed!"
-              firstText={modalInfo.message}
-              btnText="Back"
-              type="failed"
-              onOk={() => {
+            {/* failed */}
+            <CommonModal
+              open={modalInfo.isOpen}
+              onCancel={() => {
                 setShowFailedModal({
                   ...modalInfo,
                   isOpen: false,
                 });
               }}
-            ></Info>
-          </CommonModal>
-        </div>
+            >
+              <Info
+                title="Transaction Failed!"
+                firstText={modalInfo.message}
+                btnText="Back"
+                type="failed"
+                onOk={() => {
+                  setShowFailedModal({
+                    ...modalInfo,
+                    isOpen: false,
+                  });
+                }}
+              ></Info>
+            </CommonModal>
+          </>
+        )
       ) : (
         <div>
           <Button className="w-full mb-4" type="primary" onClick={login}>

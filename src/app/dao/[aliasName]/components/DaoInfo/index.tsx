@@ -44,6 +44,7 @@ interface IParams {
   isLoading: boolean;
   isError?: Error;
   daoId?: string;
+  aliasName?: string;
 }
 const contractMapList = [
   {
@@ -58,11 +59,12 @@ const contractMapList = [
 export default function DaoInfo(props: IParams) {
   const {
     data,
-    data: { metadata, fileInfoList = [], isNetworkDAO, alias } = {},
+    data: { metadata, fileInfoList = [], isNetworkDAO } = {},
     isLoading,
     isError,
     onChangeHCParams,
     daoId,
+    aliasName,
   } = props;
   const { wallet } = useWebLogin();
 
@@ -217,9 +219,7 @@ export default function DaoInfo(props: IParams) {
                 {wallet.address === data?.creator && (
                   <Link
                     href={
-                      isNetworkDAO
-                        ? `${NetworkDaoHomePathName}/${daoId}/edit`
-                        : `/dao/${alias}/edit`
+                      isNetworkDAO ? `${NetworkDaoHomePathName}/edit` : `/dao/${aliasName}/edit`
                     }
                     className="mr-[10px]"
                   >

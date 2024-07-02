@@ -54,13 +54,19 @@ const SkeletonDaoItemList: React.FC = () => {
     </>
   );
 };
-const SkeletonLine: React.FC = () => {
+interface SkeletonLineProps {
+  lines?: number;
+}
+const SkeletonLine: React.FC = (props: SkeletonLineProps) => {
+  const { lines } = props;
+  const dataSource = [...listData, ...listData];
+  const renderList = dataSource.slice(0, lines);
   return (
     <>
       <List
         itemLayout="vertical"
         size="large"
-        dataSource={[...listData, ...listData]}
+        dataSource={renderList}
         renderItem={(item) => (
           <List.Item key={item.id} className="skeleton-line">
             <AntdSkeleton loading active avatar={false} paragraph={false}></AntdSkeleton>

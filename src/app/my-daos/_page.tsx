@@ -163,7 +163,7 @@ const MyDaosPage = () => {
                       >
                         <li className="list-body-content-item" key={item.daoId}>
                           <img src={item.logo} alt="" />
-                          <span className="text-Primary-Text">{item.name}</span>
+                          <span className="normal-text-bold">{item.name}</span>
                         </li>
                       </Link>
                     );
