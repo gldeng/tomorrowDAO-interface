@@ -81,7 +81,7 @@ export default function BasicDetails() {
             <IPFSUpload
               maxFileCount={1}
               needCheckImgSize
-              accept=".png,.jpg"
+              accept=".png,.jpg,.jpeg"
               uploadText="Click to Upload"
               uploadIconColor="#1A1A1A"
               tips="Formats supported: PNG and JPG. Ratio: 1:1 , less than 1 MB."
