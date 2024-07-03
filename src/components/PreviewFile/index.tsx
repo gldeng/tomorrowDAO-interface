@@ -16,19 +16,20 @@ export default function PreviewFile(props: TPropsType) {
 
   const [showDrawerModal, setShowDrawerModal] = useState(false);
 
-  const fileItems: MenuProps['items'] = list.map((item, index) => {
-    return {
-      ...item,
-      key: `${index}`,
-      label: (
-        <div className="min-w-36">
-          <Link href={item.file.url} target="_blank">
-            {item.file.name}
-          </Link>
-        </div>
-      ),
-    };
-  });
+  const fileItems: MenuProps['items'] =
+    list?.map((item, index) => {
+      return {
+        ...item,
+        key: `${index}`,
+        label: (
+          <div className="min-w-36">
+            <Link href={item.file.url} target="_blank">
+              {item.file.name}
+            </Link>
+          </div>
+        ),
+      };
+    }) ?? [];
 
   const handleClick = useCallback(() => {
     if (isSM) {

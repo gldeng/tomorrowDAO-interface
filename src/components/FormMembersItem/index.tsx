@@ -118,7 +118,7 @@ function FormMembersItem(props: IFormMembersProps) {
                   </Form.Item>
                 ))}
 
-            <div className="flex justify-between dynamic-form-buttons">
+            <div className="dynamic-form-buttons text-neutralTitle">
               {showNullWhenEmpty ? null : footNode ? (
                 footNode
               ) : (
@@ -127,13 +127,9 @@ function FormMembersItem(props: IFormMembersProps) {
                     className="dynamic-form-buttons-item"
                     type="default"
                     onClick={() => add()}
-                    icon={
-                      <span className="text-[14px] ">
-                        <AddCircleOutlined />
-                      </span>
-                    }
+                    icon={<AddCircleOutlined className="text-[14px] " />}
                   >
-                    Add address
+                    <span className="card-sm-text-bold ">Add address</span>
                   </Button>
                   <Button
                     type="default"
@@ -141,13 +137,9 @@ function FormMembersItem(props: IFormMembersProps) {
                       form.setFieldValue(name, []);
                     }}
                     className="dynamic-form-buttons-item"
-                    icon={
-                      <span className="text-[14px]">
-                        <DeleteOutlined />
-                      </span>
-                    }
+                    icon={<DeleteOutlined className="text-[14px]" />}
                   >
-                    Delete all
+                    <span className="card-sm-text-bold ">Delete all</span>
                   </Button>
                 </>
               )}

@@ -1,5 +1,5 @@
 .dynamic-form-buttons {
-  @apply mt-[8px];
+  @apply mt-[8px] flex justify-between lg:justify-start;
 }
 
 .dynamic-form-input {
@@ -12,4 +12,10 @@
 
 .dynamic-form-buttons-item {
   @apply w-[143px];
+}
+.dynamic-form-buttons-item + .dynamic-form-buttons-item {
+  @apply ml-[16px];
+}
+.dynamic-form-buttons-text {
+
 }

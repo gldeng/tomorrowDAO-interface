@@ -18,7 +18,7 @@
   }
 
   .dao-type-select {
-    @apply h-[24px] py-[16px] mb-[32px];
+    @apply my-[16px] flex lg:gap-[128px] gap-[16px] w-full lg:flex-row flex-col;
   }
 
   .Description-textArea {
@@ -35,4 +35,7 @@
   .governance-token-item {
     @apply mb-[8px];
   }
+  /* .dao-type-select-radio + .dao-type-select-radio {
+    @apply ml-[128px];
+  } */
 }
