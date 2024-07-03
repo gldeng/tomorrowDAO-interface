@@ -115,7 +115,7 @@ export default function TreasuryDetails(props: ITreasuryDetailsProps) {
           }}
           columns={columns as any}
           dataSource={daoMembersData?.data.data ?? []}
-          loading={daoMembersDataLoading}
+          loading={daoMembersDataLoading || daoLoading}
         ></Table>
       </div>
     </>

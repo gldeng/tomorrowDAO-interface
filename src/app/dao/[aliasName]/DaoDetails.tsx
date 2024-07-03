@@ -449,7 +449,7 @@ export default function DeoDetails(props: IProps) {
                   <ExecutdProposals daoId={daoId} address={walletInfo.address} />
                 )}
                 {walletInfo.address && daoId && (
-                  <MyRecords daoId={daoId} isNetworkDAO={isNetworkDAO} />
+                  <MyRecords daoId={daoId} isNetworkDAO={isNetworkDAO} aliasName={aliasName} />
                 )}
               </>
             )}
@@ -478,7 +478,7 @@ export default function DeoDetails(props: IProps) {
                 <ExecutdProposals daoId={daoId} address={walletInfo.address} />
               )}
               {walletInfo.address && daoId && (
-                <MyRecords daoId={daoId} isNetworkDAO={isNetworkDAO} />
+                <MyRecords daoId={daoId} isNetworkDAO={isNetworkDAO} aliasName={aliasName} />
               )}
             </div>
           )}

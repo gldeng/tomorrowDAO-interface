@@ -19,9 +19,10 @@ import NoData from '../NoData';
 interface IProps {
   daoId: string;
   isNetworkDAO?: boolean;
+  aliasName?: string;
 }
 export default function MyRecords(props: IProps) {
-  const { daoId, isNetworkDAO } = props;
+  const { daoId, isNetworkDAO, aliasName } = props;
   const { walletInfo } = useSelector((store: any) => store.userInfo);
   const { isLogin } = useWalletService();
   const {
@@ -75,11 +76,7 @@ export default function MyRecords(props: IProps) {
         <div className="card-title ">My Votes</div>
         {dataLen > 5 && (
           <div className="records-header-morebtn">
-            {isNetworkDAO ? (
-              <LinkNetworkDao href={`/my-votes`}>{LoadMoreButton}</LinkNetworkDao>
-            ) : (
-              <Link href={`/my-votes?daoId=${daoId}`}>{LoadMoreButton}</Link>
-            )}
+            <Link href={`/dao/${aliasName}/my-votes`}>{LoadMoreButton}</Link>
           </div>
         )}
       </div>

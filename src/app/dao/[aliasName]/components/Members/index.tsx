@@ -91,7 +91,7 @@ const DaoMembers: React.FC<IProps> = (props) => {
           )}
           {(daoMembersData?.data?.totalCount ?? 0) > 5 && (
             <div className="flex justify-center mt-[20px]">
-              <Link href={`${daoData.id}/members`}>
+              <Link href={`/dao/${aliasName}/members`}>
                 <Button size="medium" className="dao-members-manage">
                   <span className="dao-members-normal-text font-medium">Load More</span>
                 </Button>
