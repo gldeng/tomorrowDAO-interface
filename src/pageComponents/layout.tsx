@@ -32,7 +32,7 @@ const Layout = dynamicReq(
               <div className={isHome ? 'dao-home-background' : ''}>
                 {isLG && isExolore && <DAOHeader />}
                 <div
-                  className={`flex-1  mx-auto py-6 mb-6 px-4 lg:px-8 page-content-wrap ${
+                  className={`flex-1  mx-auto py-4 lg:py-6 mb-6 px-4 lg:px-8 page-content-wrap ${
                     isCreateDao ? 'max-w-[898px]' : 'max-w-[1440px]'
                   }`}
                 >

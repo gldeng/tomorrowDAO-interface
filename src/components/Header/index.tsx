@@ -26,7 +26,7 @@ export enum ENavKeys {
 export default function Header() {
   const { isLG } = useResponsive();
   const pathname = usePathname();
-  const [daoId, setDaoId] = useState<string | null>(null);
+  const [aliasName, setAliasName] = useState<string | null>(null);
   const items: MenuProps['items'] = useMemo(() => {
     return [
       {
@@ -97,17 +97,17 @@ export default function Header() {
           },
         ],
       },
-      daoId
+      aliasName
         ? {
-            label: <Link href={`/dao/${daoId}/treasury`}>Treasury</Link>,
+            label: <Link href={`/dao/${aliasName}/treasury`}>Treasury</Link>,
             key: ENavKeys.Treasury,
           }
         : null,
     ];
-  }, [daoId, isLG]);
+  }, [aliasName, isLG]);
   useEffect(() => {
-    const setDaoIdCallBack = (id: string | null) => {
-      setDaoId(id);
+    const setDaoIdCallBack = (aliasName: string | null) => {
+      setAliasName(aliasName);
     };
     eventBus.on(HeaderUpdateTreasury, setDaoIdCallBack);
     return () => {

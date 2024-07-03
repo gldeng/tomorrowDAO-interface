@@ -6,12 +6,12 @@ import Image from 'next/image';
 import { memo } from 'react';
 import dayjs from 'dayjs';
 import { sideChainSuffix } from 'config';
-import ProposalTag from 'app/dao/[daoId]/components/ProposalsItem/ProposalTag';
+import ProposalTag from 'app/dao/[aliasName]/components/ProposalsItem/ProposalTag';
 import { ProposalTypeString } from 'types';
 import useIsNetworkDao from 'hooks/useIsNetworkDao';
 import LinkNetworkDao from 'components/LinkNetworkDao';
 import Link from 'next/link';
-import ProposalStatusDesc from 'app/dao/[daoId]/components/ProposalsItem/ProposalStatusDesc';
+import ProposalStatusDesc from 'app/dao/[aliasName]/components/ProposalsItem/ProposalStatusDesc';
 import useResponsive from 'hooks/useResponsive';
 
 // import ProposalDetailFile from 'assets/imgs/proposal-detail-file.svg';
@@ -83,34 +83,15 @@ const HeaderInfo = (props: IHeaderInfoProps) => {
             <Typography.Text className="text-Neutral-Secondary-Text">
               Veto Proposal:
             </Typography.Text>
-            {isNetWorkDao ? (
-              <LinkNetworkDao
-                href={{
-                  pathname: `/proposal-detail`,
-                  query: {
-                    proposalId: proposalDetailData.vetoProposalId,
-                  },
-                }}
-              >
-                <HashAddress
-                  preLen={8}
-                  endLen={9}
-                  ignorePrefixSuffix={true}
-                  address={proposalDetailData.vetoProposalId ?? '-'}
-                  className="hash-link-color"
-                ></HashAddress>
-              </LinkNetworkDao>
-            ) : (
-              <Link href={`/proposal/${proposalDetailData.vetoProposalId}`}>
-                <HashAddress
-                  preLen={8}
-                  endLen={9}
-                  ignorePrefixSuffix={true}
-                  className="hash-link-color"
-                  address={proposalDetailData.vetoProposalId ?? '-'}
-                ></HashAddress>
-              </Link>
-            )}
+            <Link href={`/proposal/${proposalDetailData.vetoProposalId}`}>
+              <HashAddress
+                preLen={8}
+                endLen={9}
+                ignorePrefixSuffix={true}
+                className="hash-link-color"
+                address={proposalDetailData.vetoProposalId ?? '-'}
+              ></HashAddress>
+            </Link>
           </div>
         )}
         <div className="flex items-center gap-4">

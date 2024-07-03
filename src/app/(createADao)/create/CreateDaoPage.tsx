@@ -4,7 +4,7 @@ import { useMachine } from '@xstate/react';
 import { formMachine } from './xstate';
 import { Button, Progress } from 'aelf-design';
 import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
-import { message as antdMessage, FormInstance, Result, Switch } from 'antd';
+import { message as antdMessage, FormInstance, Result, Switch, Tag } from 'antd';
 import { useWebLoginEvent, WebLoginEvents, useWebLogin, WebLoginState } from 'aelf-web-login';
 import { useRouter } from 'next/navigation';
 import clsx from 'clsx';
@@ -45,7 +45,6 @@ const CreateDaoPage = () => {
   const [messageApi, contextHolder] = antdMessage.useMessage();
   const daoCreateToken = useSelector((store) => store.daoCreate.token);
   const { isSyncQuery } = useAelfWebLoginSync();
-  const isSkipHighCouncil = useRef<boolean>(false);
   const submitButtonRef = useRef<ISubmitRef>(null);
   const router = useRouter();
   const { loginState } = useWebLogin();
@@ -65,9 +64,6 @@ const CreateDaoPage = () => {
         ?.validateFields()
         .then((res) => {
           console.log('res', res);
-          if (isHighCouncilStep) {
-            isSkipHighCouncil.current = !Object.keys(res ?? {}).length;
-          }
           setNextLoading(false);
           stepsFormMapRef.current.stepForm[currentStepString].submitedRes = res;
           send({ type: 'NEXT' });
@@ -177,7 +173,7 @@ const CreateDaoPage = () => {
             : metadata.metadata.name === NetworkName,
         };
         // highCouncil not skip
-        if (!isSkipHighCouncil.current || !isMultisig) {
+        if (isShowHighCouncil && !isMultisig) {
           let highCouncilForm = stepForm[StepEnum.step2].submitedRes;
           if (highCouncilForm && daoCreateToken?.decimals) {
             const stakingAmount = highCouncilForm.highCouncilConfig.stakingAmount;
@@ -343,7 +339,12 @@ const CreateDaoPage = () => {
             {currentStep == 2 && (
               <>
                 <div className="flex justify-between">
-                  <h2 className="step-title">High Council</h2>
+                  <h2 className="step-title flex items-center">
+                    High Council{' '}
+                    {/* <Tag color="#F6F6F6" className="h-[30px] ml-2 flex-center">
+                      <span className="normal-text-bold text-Neutral-Secondary-Text">Optional</span>
+                    </Tag> */}
+                  </h2>
                   <Switch
                     disabled={isMultisig}
                     onChange={(check) => {
@@ -363,7 +364,7 @@ const CreateDaoPage = () => {
             )}
             {currentStep == 3 && (
               <>
-                <h2 className="step-title">Documentation</h2>
+                <h2 className="step-title">Docs</h2>
                 <p className="step-subtext">
                   It is recommended to upload at least a white paper and a roadmap.
                 </p>
@@ -386,6 +387,7 @@ const CreateDaoPage = () => {
               className={clsx(
                 'flex py-6 lg:py-8 border-0 border-t border-solid border-Neutral-Divider',
                 isNotFirstStep ? 'gap-3 justify-between' : 'justify-end',
+                isHighCouncilStep && !isShowHighCouncil ? 'border-t-0' : '',
               )}
             >
               {isNotFirstStep && (

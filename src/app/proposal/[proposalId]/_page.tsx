@@ -27,13 +27,14 @@ const ProposalDetails = () => {
   } = useRequest(async () => {
     return fetchProposalDetail({ proposalId, chainId: info.curChain });
   });
-  const daoId = proposalDetailRes?.data?.daoId;
+  const daoId = proposalDetailRes?.data?.daoId ?? '';
+  const aliasName = proposalDetailRes?.data?.alias;
 
   useEffect(() => {
-    if (daoId) {
-      breadCrumb.updateProposalInformationPage(daoId);
+    if (aliasName) {
+      breadCrumb.updateProposalInformationPage(aliasName);
     }
-  }, [daoId]);
+  }, [aliasName]);
 
   return (
     <div className="proposal-details-wrapper">
@@ -46,7 +47,9 @@ const ProposalDetails = () => {
       ) : (
         <>
           {proposalDetailRes?.data && <HeaderInfo proposalDetailData={proposalDetailRes?.data} />}
-          {proposalDetailRes?.data && <VoteInfo proposalDetailData={proposalDetailRes?.data} />}
+          {proposalDetailRes?.data && (
+            <VoteInfo proposalDetailData={proposalDetailRes?.data} daoId={daoId} />
+          )}
 
           <div className="border border-Neutral-Divider border-solid rounded-lg bg-white">
             <ProposalTab proposalDetailData={proposalDetailRes?.data} />

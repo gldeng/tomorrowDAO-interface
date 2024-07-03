@@ -57,6 +57,9 @@
     @apply text-[14px] leading-[20px] text-Neutral-Secondary-Text font-medium;
 
   }
+  .flex-center {
+    @apply flex items-center justify-center;
+  }
 }
 
 
@@ -142,5 +145,5 @@ input[type='number'] {
   @apply !border-Neutral-Disable-Text;
 }
 .TMRWDAO-tabs-nav {
-  overflow-x: hidden!important;
+  overflow: hidden!important;
 }

@@ -66,7 +66,6 @@ const ProposalList = () => {
     visible: false,
   });
   const { bpCount, params, total, list, status: loadingStatus } = proposalList;
-  console.log('params', params)
   const { aelf, logStatus, isALLSettle, wallet, currentWallet } = common;
   const dispatch = useDispatch();
   const handleStatusChangeRef = useRef()

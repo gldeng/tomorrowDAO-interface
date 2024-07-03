@@ -37,6 +37,7 @@ interface IDaoItem {
   votersNum: number;
   isNetworkDAO?: boolean;
   highCouncilMemberCount: number;
+  alias: string;
 }
 
 interface IDaoData {
@@ -64,6 +65,7 @@ interface IMyDaoListDataItem {
   isNetworkDAO: boolean;
   logo: string;
   highCouncilMemberCount: number;
+  alias?: string;
 }
 
 interface IMyDaoListData {
@@ -165,11 +167,13 @@ interface IDaoInfoData {
   isNetworkDAO: boolean;
   treasuryAddress?: string;
   highCouncilMemberCount?: number;
+  alias?: string;
 }
 
 interface IDaoInfoReq {
-  daoId: string;
+  daoId?: string;
   chainId: string;
+  alias?: string;
 }
 
 interface IDaoInfoRes {
@@ -327,6 +331,7 @@ interface IProposalDetailDataVoteTopListItem {
   votingItemId: string;
 }
 interface IProposalDetailData {
+  alias: string;
   startTime: string;
   endTime: string;
   activeEndTime: string;

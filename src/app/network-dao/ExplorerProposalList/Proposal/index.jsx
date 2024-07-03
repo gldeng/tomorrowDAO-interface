@@ -131,10 +131,7 @@ const Proposal = (props) => {
           <LinkNetworkDao
               className="text-ellipsis"
               href={{
-                pathname: `/proposal-detail`,
-                query: {
-                  proposalId: proposalId
-                }
+                pathname: `/proposal/${proposalId}`,
               }}
               
             >

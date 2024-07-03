@@ -1,14 +1,20 @@
 import { Typography, FontWeightEnum, Progress } from 'aelf-design';
-import MyInfo from 'app/dao/[daoId]/components/MyInfo';
+import MyInfo from 'app/dao/[aliasName]/components/MyInfo';
 import BoxWrapper from './BoxWrapper';
 import { memo } from 'react';
-import { EVoteMechanismNameType } from 'app/proposal/deploy/[daoId]/type';
+import { EVoteMechanismNameType } from 'app/proposal/deploy/[aliasName]/type';
+import { fetchDaoInfo } from 'api/request';
+import { curChain } from 'config';
+import { message } from 'antd';
+import { useRequest } from 'ahooks';
+import { EDaoGovernanceMechanism } from 'app/(createADao)/create/type';
 
 interface IHeaderInfoProps {
   proposalDetailData: IProposalDetailData;
+  daoId?: string;
 }
 const VoteInfo = (props: IHeaderInfoProps) => {
-  const { proposalDetailData } = props;
+  const { proposalDetailData, daoId } = props;
   const approvePercent =
     proposalDetailData.votesAmount === 0
       ? 0
@@ -23,6 +29,19 @@ const VoteInfo = (props: IHeaderInfoProps) => {
       : Math.floor((proposalDetailData.rejectionCount / proposalDetailData.votesAmount) * 100);
 
   const is1t1v = proposalDetailData.voteMechanismName === EVoteMechanismNameType.TokenBallot;
+  const {
+    data: daoData,
+    error: daoError,
+    loading: daoLoading,
+  } = useRequest(async () => {
+    if (!daoId) {
+      message.error('daoId is required');
+      return null;
+    }
+    return fetchDaoInfo({ daoId: props.daoId, chainId: curChain });
+  });
+  const isOnlyShowVoteOption =
+    daoData?.data?.governanceMechanism === EDaoGovernanceMechanism.Multisig;
   return (
     <div className="flex justify-between flex-col lg:flex-row">
       <BoxWrapper className="flex-1 lg:mr-[24px] order-last lg:order-first">
@@ -102,6 +121,11 @@ const VoteInfo = (props: IHeaderInfoProps) => {
         </div>
       </BoxWrapper>
       <MyInfo
+        isOnlyShowVoteOption={isOnlyShowVoteOption}
+        isExtraDataLoading={daoLoading}
+        isShowVote={true}
+        height={isOnlyShowVoteOption ? 'max-content' : 'auto'}
+        titleNode={isOnlyShowVoteOption ? 'Vote' : 'My Info'}
         clssName="flex-1 grow-0 lg:basis-[32%]"
         daoId={proposalDetailData.daoId || ''}
         proposalId={proposalDetailData.proposalId}

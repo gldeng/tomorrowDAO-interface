@@ -48,6 +48,7 @@ export default function BasicDetails() {
           scrollToFirstError={true}
           autoComplete="off"
           form={form}
+          requiredMark={false}
         >
           <Form.Item
             name={['metadata', 'name']}
@@ -81,7 +82,7 @@ export default function BasicDetails() {
             <IPFSUpload
               maxFileCount={1}
               needCheckImgSize
-              accept=".png,.jpg"
+              accept=".png,.jpg,.jpeg"
               uploadText="Click to Upload"
               uploadIconColor="#1A1A1A"
               tips="Formats supported: PNG and JPG. Ratio: 1:1 , less than 1 MB."
@@ -236,30 +237,36 @@ export default function BasicDetails() {
             initialValue={EDaoGovernanceMechanism.Token}
           >
             <Radio.Group className="dao-type-select">
-              <Radio
-                value={EDaoGovernanceMechanism.Token}
-                onClick={() => {
-                  if (daoType === EDaoGovernanceMechanism.Token) {
-                    return;
-                  }
-                  form.setFieldValue(governanceTokenNamePath, '');
-                }}
-              >
-                <span className="text-[16px] leading-[24px]">Token holders</span>
-              </Radio>
-              <Radio
-                value={EDaoGovernanceMechanism.Multisig}
-                onClick={() => {
-                  if (daoType === EDaoGovernanceMechanism.Multisig) {
-                    return;
-                  }
-                  form.setFieldValue(formMembersListNamePath, [
-                    `ELF_${wallet.address}_${curChain}`,
-                  ]);
-                }}
-              >
-                <span className="text-[16px] leading-[24px]">Multisig Members </span>
-              </Radio>
+              <div className="dao-type-select-item">
+                <Radio
+                  value={EDaoGovernanceMechanism.Token}
+                  onClick={() => {
+                    if (daoType === EDaoGovernanceMechanism.Token) {
+                      return;
+                    }
+                    form.setFieldValue(governanceTokenNamePath, '');
+                  }}
+                  className="dao-type-select-radio"
+                >
+                  <span className="text-[16px] leading-[24px]">Token holders</span>
+                </Radio>
+              </div>
+              <div className="dao-type-select-item">
+                <Radio
+                  value={EDaoGovernanceMechanism.Multisig}
+                  className="dao-type-select-radio"
+                  onClick={() => {
+                    if (daoType === EDaoGovernanceMechanism.Multisig) {
+                      return;
+                    }
+                    form.setFieldValue(formMembersListNamePath, [
+                      `ELF_${wallet.address}_${curChain}`,
+                    ]);
+                  }}
+                >
+                  <span className="text-[16px] leading-[24px]">Multisig Members </span>
+                </Radio>
+              </div>
             </Radio.Group>
           </Form.Item>
           {daoType === EDaoGovernanceMechanism.Token && (

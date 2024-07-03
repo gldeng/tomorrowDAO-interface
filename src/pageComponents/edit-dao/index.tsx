@@ -22,12 +22,14 @@ import formValidateScrollFirstError from 'utils/formValidateScrollFirstError';
 import breadCrumb from 'utils/breadCrumb';
 
 interface IEditDaoProps {
-  daoId: string;
+  daoId?: string;
+  aliasName?: string;
   isNetworkDAO?: boolean;
 }
 
 const EditDao: React.FC<IEditDaoProps> = (props) => {
-  const { daoId, isNetworkDAO } = props;
+  const { isNetworkDAO, aliasName } = props;
+  console.log('aliasName', aliasName);
   const [mediaError, setMediaError] = useState<boolean>(false);
   const [form] = Form.useForm();
   const {
@@ -35,12 +37,13 @@ const EditDao: React.FC<IEditDaoProps> = (props) => {
     error: daoError,
     loading: daoLoading,
   } = useRequest(async () => {
-    if (!daoId) {
-      message.error('daoId is required');
+    if (!aliasName && !props.daoId) {
+      message.error('aliasName or daoId is required');
       return null;
     }
-    return fetchDaoInfo({ daoId, chainId: curChain });
+    return fetchDaoInfo({ daoId: props.daoId, chainId: curChain, alias: aliasName });
   });
+  const daoId = daoData?.data?.id;
   const handleSave = async () => {
     const res = await form?.validateFields().catch((err) => {
       formValidateScrollFirstError(form, err);
@@ -57,14 +60,13 @@ const EditDao: React.FC<IEditDaoProps> = (props) => {
       {},
     );
     const params = {
-      daoId: daoId,
+      daoId,
       metadata: {
         logoUrl: res.metadata.logoUrl[0].url,
         description: res.metadata.description,
         socialMedia,
       },
     };
-    console.log('params', params);
     try {
       emitLoading(true, 'The changes is being processed...');
       const res = await callContract('UpdateMetadata', params, daoAddress);
@@ -81,13 +83,7 @@ const EditDao: React.FC<IEditDaoProps> = (props) => {
                 eventBus.emit(ResultModal, INIT_RESULT_MODAL_CONFIG);
               },
               children: (
-                <Link
-                  href={
-                    isNetworkDAO
-                      ? `${NetworkDaoHomePathName}/${daoId}/proposal-list`
-                      : `/dao/${daoId}`
-                  }
-                >
+                <Link href={isNetworkDAO ? `${NetworkDaoHomePathName}` : `/dao/${aliasName}`}>
                   <span className="text-white">View The DAO</span>
                 </Link>
               ),
@@ -117,8 +113,8 @@ const EditDao: React.FC<IEditDaoProps> = (props) => {
     }
   };
   useEffect(() => {
-    breadCrumb.updateSettingPage(daoId);
-  }, [daoId]);
+    breadCrumb.updateSettingPage(aliasName);
+  }, [aliasName]);
   // recover from api response
   useEffect(() => {
     if (!daoData?.data) return;
