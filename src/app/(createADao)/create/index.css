@@ -58,7 +58,7 @@
   }
 
   .icon-wrap {
-    @apply bg-Neutral-Hover-BG flex items-center justify-center py-[50px];
+    @apply bg-Neutral-Hover-BG flex items-center justify-center py-[50px] rounded-md;
   }
 
   .dao-create-preview {

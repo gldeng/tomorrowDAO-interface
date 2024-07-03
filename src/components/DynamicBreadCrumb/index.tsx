@@ -3,6 +3,7 @@ import Breadcrumb from 'components/Breadcrumb';
 import { usePathname, useRouter } from 'next/navigation';
 import { LeftOutlined } from '@aelf-design/icons';
 import useResponsive from 'hooks/useResponsive';
+import './index.css';
 
 const denyList = ['/', '/explore', '/assets', '/my-daos'];
 
@@ -16,10 +17,10 @@ const DynamicBreadCrumb = () => {
     return null;
   }
   return (
-    <div className="pb-6 ">
+    <div className="lg:pb-6 pb-4">
       {isLG ? (
         <span
-          className="breadcrumb-back-button flex items-center"
+          className="breadcrumb-back-button"
           onClick={() => {
             router.back();
           }}

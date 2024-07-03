@@ -5,3 +5,4 @@ export const VoteMechanismNameLabel: Record<string, string> = {
 
 export const HighCouncilName = 'HighCouncil';
 export const ReferendumName = 'Referendum';
+export const Organization = 'Organization';
