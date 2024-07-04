@@ -86,9 +86,12 @@ export default function TreasuryDetails(props: ITreasuryDetailsProps) {
     : {};
   return (
     <>
-      <div className="page-content-bg-border flex justify-between mb-[24px]">
+      <div className="page-content-bg-border flex justify-between mb-[24px] lg:flex-row flex-col">
         <h2 className="card-title-lg mb-[4px]">{daoMembersData?.data?.totalCount} Members</h2>
-        <Link href={`/proposal/deploy/${aliasName}?tab=${EProposalActionTabs.AddMultisigMembers}`}>
+        <Link
+          href={`/proposal/deploy/${aliasName}?tab=${EProposalActionTabs.AddMultisigMembers}`}
+          className="lg:mt-0 mt-[24px]"
+        >
           <Button type="primary" size="medium">
             Manage members
           </Button>

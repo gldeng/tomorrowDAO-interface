@@ -60,6 +60,9 @@
   .flex-center {
     @apply flex items-center justify-center;
   }
+  .max-content {
+    width: max-content;
+  }
 }
 
 
