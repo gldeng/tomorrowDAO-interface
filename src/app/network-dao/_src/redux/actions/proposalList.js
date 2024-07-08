@@ -18,6 +18,7 @@ export const getProposals = (params) => async (dispatch) => {
     payload: params,
   });
   try {
+    // todo 1. get proposal list
     const result = await request(API_PATH.GET_PROPOSAL_LIST, params, {
       method: 'GET',
     });

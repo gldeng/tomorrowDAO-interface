@@ -12,7 +12,7 @@ import {
   CloseCircleOutlined,
   MinusCircleOutlined,
 } from "@ant-design/icons";
-import { Button, Card, Tag, Divider } from "antd";
+import { Button, Card, Tag, Divider, Tooltip } from "antd";
 import constants, {
   LOG_STATUS,
   ACTIONS_COLOR_MAP,
@@ -128,12 +128,21 @@ const Proposal = (props) => {
       >
         <div className="proposal-list-item-id">
           <div className="gap-right-large">
+          {
+            Math.random() > 0.5 && (
+              <>
+              <h2>title</h2>
+              <Tooltip placement="topLeft" title={"Artificial intelligence (AI), in its broadest sense, is intelligence exhibited by machines, particularly computer systems. It is a field of research in computer science that develops and studies methods and software that enable machines to perceive their environment and use learning and intelligence to take actions that maximize their chances of achieving defined goals.[1] Such machines may be called AIs."}>
+                <p className="truncate">Artificial intelligence (AI), in its broadest sense, is intelligence exhibited by machines, particularly computer systems. It is a field of research in computer science that develops and studies methods and software that enable machines to perceive their environment and use learning and intelligence to take actions that maximize their chances of achieving defined goals.[1] Such machines may be called AIs.</p>
+              </Tooltip>
+              </>
+            )
+          }
           <LinkNetworkDao
               className="text-ellipsis"
               href={{
                 pathname: `/proposal/${proposalId}`,
-              }}
-              
+              }}            
             >
               {proposalId}
             </LinkNetworkDao>

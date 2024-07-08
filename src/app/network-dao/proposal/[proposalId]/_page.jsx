@@ -172,6 +172,7 @@ const ProposalDetail = () => {
     }
   }, [proposalId]);
   useEffect(() => {
+    // todo 2 get proposal detail
     getData(currentWallet, proposalId)
       .then((result) => {
         setInfo({
