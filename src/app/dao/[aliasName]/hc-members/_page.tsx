@@ -51,7 +51,7 @@ export default function TreasuryDetails(props: ITreasuryDetailsProps) {
   useUpdateHeaderDaoInfo(daoId, aliasName);
 
   useEffect(() => {
-    breadCrumb.updateHcMembersPage(aliasName);
+    breadCrumb.updateMembersPage(aliasName);
   }, [aliasName]);
 
   const pageChange = (page: number, pageSize: number) => {

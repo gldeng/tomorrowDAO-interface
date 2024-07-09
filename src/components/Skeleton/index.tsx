@@ -94,29 +94,4 @@ const SkeletonTab: React.FC = () => {
     </>
   );
 };
-const SkeletonForm: React.FC = () => {
-  return (
-    <>
-      <div className="mt-[20px]">
-        <AntdSkeleton.Input active={true} size="small" />
-        <AntdSkeleton.Input active size="small" block={true} className="mt-[5px]" />
-      </div>
-
-      <div className="mt-[20px]">
-        <AntdSkeleton.Input active={true} size="small" />
-        <AntdSkeleton.Input active size="small" block={true} className="mt-[5px]" />
-      </div>
-
-      <div className="mt-[20px]">
-        <AntdSkeleton.Input active={true} size="small" />
-        <AntdSkeleton.Input active size="small" block={true} className="mt-[5px]" />
-      </div>
-
-      <div className="mt-[20px]">
-        <AntdSkeleton.Input active={true} size="small" />
-        <AntdSkeleton.Input active size="small" block={true} className="mt-[5px]" />
-      </div>
-    </>
-  );
-};
-export { SkeletonList, Skeleton, SkeletonDaoItemList, SkeletonLine, SkeletonTab, SkeletonForm };
+export { SkeletonList, Skeleton, SkeletonDaoItemList, SkeletonLine, SkeletonTab };
