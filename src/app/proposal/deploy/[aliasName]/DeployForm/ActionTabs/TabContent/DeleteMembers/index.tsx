@@ -15,9 +15,10 @@ interface IDeleteMultisigMembersProps {
   lists: string[];
   removeNamePath: string[];
   isLoading: boolean;
+  overLimitErrorText: string;
 }
 function DeleteMultisigMembers(props: IDeleteMultisigMembersProps) {
-  const { form, removeNamePath, lists, isLoading } = props;
+  const { form, removeNamePath, lists, isLoading, overLimitErrorText } = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalSelectList, setModalSelectList] = useState<string[]>([]);
   const selectList = Form.useWatch(removeNamePath, form) ?? [];
@@ -58,7 +59,7 @@ function DeleteMultisigMembers(props: IDeleteMultisigMembersProps) {
           {
             validator: async (_, deleteLists) => {
               if (deleteLists.length >= lists.length) {
-                return Promise.reject(new Error('A multisig requires members '));
+                return Promise.reject(new Error(overLimitErrorText));
               }
             },
           },

@@ -21,7 +21,6 @@ const WalletInit = dynamicReq(
   },
   { ssr: false },
 );
-
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
   const isNetWorkDao = pathname.startsWith(NetworkDaoHomePathName);
@@ -32,6 +31,11 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
         <meta
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;"
           name="viewport"
+        />
+        <title>TMRWDAO: Revolutionise Decentralised Governance with AI</title>
+        <meta
+          name="description"
+          content="Launch & Manage Your DAO with AI: TMRWDAO, the leading AI DAO platform, empowers communities with secure, transparent & efficient decentralised governance."
         />
         {/* <link rel="shortcut icon" href="/aelfinscription/favicon.ico" /> */}
         <Script async src="https://www.googletagmanager.com/gtag/js?id=G-Z5LV4SE2RX"></Script>
