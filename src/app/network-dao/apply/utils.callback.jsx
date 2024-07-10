@@ -11,7 +11,7 @@ import CopylistItem from "../_proposal_root/components/CopylistItem/index.jsx";
 import { getDeserializeLog } from "./utils.js";
 import { get } from "../_src/utils.js";
 import { VIEWER_GET_CONTRACT_NAME } from "@api/url";
-import { mainExplorer } from "config";
+import { mainExplorer, explorer } from "config";
 import AddressNameVer from "../_proposal_root/components/AddressNameVer/index";
 
 export const useCallbackAssem = () => {
