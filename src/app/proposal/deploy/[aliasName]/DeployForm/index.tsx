@@ -227,14 +227,14 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
           if (activeTab === EProposalActionTabs.DeleteMultisigMembers) {
             const params = {
               daoId: daoId,
-              removeHighCouncils: {
-                value: removeHighCouncils.value.map((address: string) => trimAddress(address)),
+              removeMembers: {
+                value: removeMembers.value.map((address: string) => trimAddress(address)),
               },
             };
-            const finalParams = await convertParams(daoAddress, 'RemoveHighCouncilMembers', params);
+            const finalParams = await convertParams(daoAddress, 'RemoveMember', params);
             contractParams.transaction = {
               toAddress: daoAddress,
-              contractMethodName: 'RemoveHighCouncilMembers',
+              contractMethodName: 'RemoveMember',
               params: finalParams,
             };
           }
@@ -255,14 +255,14 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
           if (activeTab === EProposalActionTabs.DeleteHcMembers) {
             const params = {
               daoId: daoId,
-              removeMembers: {
-                value: removeMembers.value.map((address: string) => trimAddress(address)),
+              removeHighCouncils: {
+                value: removeHighCouncils.value.map((address: string) => trimAddress(address)),
               },
             };
-            const finalParams = await convertParams(daoAddress, 'RemoveMember', params);
+            const finalParams = await convertParams(daoAddress, 'RemoveHighCouncilMembers', params);
             contractParams.transaction = {
               toAddress: daoAddress,
-              contractMethodName: 'RemoveMember',
+              contractMethodName: 'RemoveHighCouncilMembers',
               params: finalParams,
             };
           }

@@ -112,7 +112,7 @@ export default function ExecutdProposals(props: IExecutdProposals) {
         {!executableListData?.data?.items?.length && <NoData />}
         {executableListData?.data?.items.map((item, index) => {
           return (
-            <div className="flex justify-between items-center px-8 max-h-80 mb-8" key={index}>
+            <div className="flex justify-between items-center max-h-80 mb-8" key={index}>
               <div>
                 <div className="block lg:flex items-center">
                   <Typography.Text fontWeight={FontWeightEnum.Medium}>Proposal ID:</Typography.Text>
