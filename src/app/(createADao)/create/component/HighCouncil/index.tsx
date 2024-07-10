@@ -23,7 +23,8 @@ const HighCouncil = () => {
   const { wallet } = useWebLogin();
   const metaData = stepForm[StepEnum.step0].submitedRes;
   const disabled = !metaData?.governanceToken;
-  const highCouncilMembers = Form.useWatch(highCouncilMembersFieldName, form);
+  // const highCouncilMembers = Form.useWatch(highCouncilMembersFieldName, form);
+  const highCouncilMembers = 10000;
   useEffect(() => {
     form.validateFields([highCouncilMembersList]).then(console.log).catch(console.log);
   }, [highCouncilMembers]);
@@ -306,7 +307,7 @@ const HighCouncil = () => {
             rules={[
               {
                 validator: async (_, lists) => {
-                  const highCouncilMembers = form.getFieldValue(highCouncilMembersFieldName);
+                  // const highCouncilMembers = form.getFieldValue(highCouncilMembersFieldName);
                   if (lists.length > highCouncilMembers) {
                     return Promise.reject(
                       new Error(
