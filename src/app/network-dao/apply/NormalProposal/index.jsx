@@ -66,7 +66,7 @@ const FIELDS_MAP = {
     rules: [
       {
         required: true,
-        message: "Please input the title of proposal!",
+        message: "You can only enter a maximum of 255 characters",
         max: 255
       },
     ],
@@ -78,7 +78,7 @@ const FIELDS_MAP = {
     rules: [
       {
         required: true,
-        message: "Please input the description of proposal!",
+        message: "You can only enter a maximum of 10200 characters",
         max: 10200
       },
     ],

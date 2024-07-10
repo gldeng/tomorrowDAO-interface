@@ -130,10 +130,7 @@ const Proposal = (props) => {
       >
         <div className="proposal-list-item-id">
           <div className="gap-right-large">
-          <h2>{title}</h2>
-          <Tooltip placement="topLeft" title={description}>
-            <p className="truncate">{description}</p>
-          </Tooltip>
+          <h2 className="truncate">{title}</h2>
           <LinkNetworkDao
               className="text-ellipsis"
               href={{
