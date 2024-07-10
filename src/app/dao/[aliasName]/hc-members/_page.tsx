@@ -9,6 +9,10 @@ import { EProposalActionTabs } from 'app/proposal/deploy/[aliasName]/type';
 import { message } from 'antd';
 import MembersPage from 'pageComponents/members';
 import './index.css';
+import { checkCreateProposal } from 'utils/proposal';
+import { wallet } from '@portkey/utils';
+import { useWebLogin } from 'aelf-web-login';
+import { useRouter } from 'next/navigation';
 interface ITreasuryDetailsProps {
   aliasName?: string;
 }
@@ -31,6 +35,8 @@ export default function TreasuryDetails(props: ITreasuryDetailsProps) {
     }
     return fetchDaoInfo({ chainId: curChain, alias: aliasName });
   });
+  const { wallet } = useWebLogin();
+  const [manageLoading, setManageLoading] = useState(false);
   const {
     data: daoMembersData,
     // error: transferListError,
@@ -49,6 +55,7 @@ export default function TreasuryDetails(props: ITreasuryDetailsProps) {
   );
   const daoId = daoData?.data?.id;
   useUpdateHeaderDaoInfo(daoId, aliasName);
+  const router = useRouter();
 
   useEffect(() => {
     breadCrumb.updateHcMembersPage(aliasName);
@@ -70,12 +77,23 @@ export default function TreasuryDetails(props: ITreasuryDetailsProps) {
     return allLists.slice((page - 1) * pageSize, page * pageSize) ?? [];
   }, [tableParams, daoMembersData]);
   const totalCount = (daoMembersData?.data ?? []).length;
+  const handleCreate = async () => {
+    if (daoData) {
+      setManageLoading(true);
+      const check = await checkCreateProposal(daoData, wallet.address);
+      setManageLoading(false);
+      if (check) {
+        router.push(`/proposal/deploy/${aliasName}?tab=${EProposalActionTabs.AddHcMembers}`);
+      }
+    }
+  };
   return (
     <MembersPage
       totalCount={totalCount}
       isLoading={daoLoading || daoMembersDataLoading}
-      managerUrl={`/proposal/deploy/${aliasName}?tab=${EProposalActionTabs.AddHcMembers}`}
+      onManageMembers={handleCreate}
       lists={lists}
+      manageLoading={manageLoading}
       pagination={{
         current: tableParams.page,
         pageSize: tableParams.pageSize,
