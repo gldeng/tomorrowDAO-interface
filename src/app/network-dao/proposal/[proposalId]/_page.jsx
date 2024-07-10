@@ -427,7 +427,9 @@ const ProposalDetail = () => {
                 {
                   networkDaoProposalDetail?.data?.description &&
                   <Card title='Description' className='mb-[10px]'>
-                    {networkDaoProposalDetail?.data?.description}
+                    <p className="break-words">
+                       {networkDaoProposalDetail?.data?.description}
+                    </p>
                   </Card>
                 }
                 <VoteData
