@@ -12,7 +12,7 @@ import {
   CloseCircleOutlined,
   MinusCircleOutlined,
 } from "@ant-design/icons";
-import { Button, Card, Tag, Divider, Tooltip } from "antd";
+import { Button, Card, Tag, Divider } from "antd";
 import constants, {
   LOG_STATUS,
   ACTIONS_COLOR_MAP,
@@ -100,8 +100,6 @@ const Proposal = (props) => {
     handleApprove,
     handleReject,
     handleAbstain,
-    title,
-    description,
   } = props;
 
   const bpCountNumber =
@@ -130,15 +128,12 @@ const Proposal = (props) => {
       >
         <div className="proposal-list-item-id">
           <div className="gap-right-large">
-          <h2>{title}</h2>
-          <Tooltip placement="topLeft" title={description}>
-            <p className="truncate">{description}</p>
-          </Tooltip>
           <LinkNetworkDao
               className="text-ellipsis"
               href={{
                 pathname: `/proposal/${proposalId}`,
-              }}            
+              }}
+              
             >
               {proposalId}
             </LinkNetworkDao>

@@ -110,7 +110,6 @@ const CreateProposal = () => {
     }
   };
 
-  // Ordinary Proposal
   function handleNormalSubmit(results) {
     setNormalResult({
       ...normalResult,
@@ -617,7 +616,7 @@ const CreateProposal = () => {
     });
   }
   async function submitNormalResult() {
-    console.log('normalResult', normalResult);
+    console.log(normalResult);
     setNormalResult({
       ...normalResult,
       confirming: true,
@@ -635,8 +634,6 @@ const CreateProposal = () => {
         proposalType,
         organizationAddress,
         proposalDescriptionUrl,
-        title,
-        description,
         params: { decoded },
       } = normalResult;
 
@@ -645,8 +642,6 @@ const CreateProposal = () => {
         contractAddress: getContractAddress(proposalType),
         methodName: "CreateProposal",
         args: {
-          title,
-          description,
           contractMethodName,
           toAddress,
           params: uint8ToBase64(decoded || []) || [],
@@ -722,18 +717,6 @@ const CreateProposal = () => {
         onCancel={handleCancel}
       >
         <div className="proposal-result-list">
-          <div className="proposal-result-list-item gap-bottom">
-            <span className="sub-title gap-right">title:</span>
-            <span className="proposal-result-list-item-value text-ellipsis">
-              {normalResult.title}
-            </span>
-          </div>
-          <div className="proposal-result-list-item gap-bottom">
-            <span className="sub-title gap-right">description:</span>
-            <span className="proposal-result-list-item-value text-ellipsis">
-              {normalResult.description}
-            </span>
-          </div>
           <div className="proposal-result-list-item gap-bottom">
             <span className="sub-title gap-right">Proposal Type:</span>
             <span className="proposal-result-list-item-value text-ellipsis">

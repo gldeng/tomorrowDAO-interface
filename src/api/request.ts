@@ -1,7 +1,6 @@
 import { stringify } from 'query-string';
 import { apiServer, explorerServer, tokenServer } from './axios';
 
-export * from './network-dao/api';
 export const fetchToken = async (data: ITokenParams) => {
   return tokenServer.post<string, ITokenRes>('/connect/token', stringify(data), {
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
