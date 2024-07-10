@@ -11,13 +11,16 @@ import { ButtonCheckLogin } from 'components/ButtonCheckLogin';
 
 interface ITreasuryDetailsProps {
   isLoading: boolean;
-  managerUrl: string;
   totalCount: number;
   lists: string[];
   pagination: IPaginationProps;
+  managerUrl?: string;
+  onManageMembers?: () => void;
+  manageLoading?: boolean;
 }
 export default function TreasuryDetails(props: ITreasuryDetailsProps) {
-  const { isLoading, managerUrl, totalCount, lists, pagination } = props;
+  const { isLoading, managerUrl, totalCount, lists, pagination, onManageMembers, manageLoading } =
+    props;
   const { isLG } = useResponsive();
   const mobileProps = isLG
     ? {
@@ -29,11 +32,22 @@ export default function TreasuryDetails(props: ITreasuryDetailsProps) {
     <>
       <div className="page-content-bg-border flex justify-between mb-[24px] lg:flex-row flex-col">
         <h2 className="card-title-lg mb-[4px]">{totalCount} Members</h2>
-        <Link href={managerUrl} className="lg:mt-0 mt-[24px]">
-          <ButtonCheckLogin type="primary" size="medium">
+        {managerUrl ? (
+          <Link href={managerUrl} className="lg:mt-0 mt-[24px]">
+            <ButtonCheckLogin type="primary" size="medium">
+              Manage members
+            </ButtonCheckLogin>
+          </Link>
+        ) : (
+          <ButtonCheckLogin
+            type="primary"
+            size="medium"
+            onClick={onManageMembers}
+            loading={manageLoading}
+          >
             Manage members
           </ButtonCheckLogin>
-        </Link>
+        )}
       </div>
       <div className="page-content-bg-border px-0 py-0 members-lists">
         <h3 className="table-title-text py-[24px] members-padding">Address</h3>

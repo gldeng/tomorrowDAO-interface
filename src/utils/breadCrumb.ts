@@ -105,7 +105,7 @@ class BreadCrumb {
       alias: daoAliasName,
       chainId: curChain,
     });
-    const name = res.data?.metadata?.name;
+    const name = res?.data?.metadata?.name;
     this.cacheDaoInfo[daoAliasName] = {
       name,
     };
