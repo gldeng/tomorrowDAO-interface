@@ -19,6 +19,7 @@ import { CommonOperationResultModalType } from 'components/CommonOperationResult
 import {
   EDaoGovernanceMechanism,
   IFile,
+  IHighCouncilInput,
   IStepsContext,
   StepEnum,
   StepsContext,
@@ -176,19 +177,19 @@ const CreateDaoPage = () => {
         if (isShowHighCouncil && !isMultisig) {
           let highCouncilForm = stepForm[StepEnum.step2].submitedRes;
           if (highCouncilForm && daoCreateToken?.decimals) {
-            const stakingAmount = 1;
+            // const stakingAmount = 1;
             const minimalVoteThreshold =
               highCouncilForm.governanceSchemeThreshold.minimalVoteThreshold;
-            const stakingAmountDecimals = Number(
-              timesDecimals(stakingAmount, daoCreateToken.decimals),
-            );
+            // const stakingAmountDecimals = Number(
+            //   timesDecimals(stakingAmount, daoCreateToken.decimals),
+            // );
             highCouncilForm = {
-              highCouncilConfig: {
-                maxHighCouncilMemberCount: 10000,
-                stakingAmount: stakingAmountDecimals,
-                electionPeriod: Number.MAX_SAFE_INTEGER,
-                maxHighCouncilCandidateCount: 10000,
-              },
+              // highCouncilConfig: {
+              //   maxHighCouncilMemberCount: 10000,
+              //   stakingAmount: stakingAmountDecimals,
+              //   electionPeriod: Number.MAX_SAFE_INTEGER,
+              //   maxHighCouncilCandidateCount: 10000,
+              // },
               governanceSchemeThreshold: {
                 ...highCouncilForm.governanceSchemeThreshold,
                 minimalRequiredThreshold:
@@ -208,10 +209,11 @@ const CreateDaoPage = () => {
                   highCouncilForm?.highCouncilMembers?.value?.map((item) => trimAddress(item)) ??
                   [],
               },
-            };
+            } as IHighCouncilInput;
           }
 
           params.highCouncilInput = {
+            isHighCouncilElectionClose: true,
             ...(highCouncilForm ?? {}),
           };
         }
