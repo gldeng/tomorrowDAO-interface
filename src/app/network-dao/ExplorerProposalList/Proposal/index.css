@@ -13,7 +13,6 @@
     min-height: 47px;
     > div {
       max-width: 80%;
-      height: 80px;
     }
     &-status {
       text-align: right;
