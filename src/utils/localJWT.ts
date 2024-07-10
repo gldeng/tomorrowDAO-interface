@@ -24,5 +24,6 @@ export const setLocalJWT = (key: string, data: LocalJWTData) => {
 };
 
 export const removeJWT = () => {
+  console.log('will removeJWT', localStorage.getItem(storages.daoAccessToken));
   localStorage.removeItem(storages.daoAccessToken);
 };
