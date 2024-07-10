@@ -176,7 +176,7 @@ const CreateDaoPage = () => {
         if (isShowHighCouncil && !isMultisig) {
           let highCouncilForm = stepForm[StepEnum.step2].submitedRes;
           if (highCouncilForm && daoCreateToken?.decimals) {
-            const stakingAmount = highCouncilForm.highCouncilConfig.stakingAmount;
+            const stakingAmount = 1;
             const minimalVoteThreshold =
               highCouncilForm.governanceSchemeThreshold.minimalVoteThreshold;
             const stakingAmountDecimals = Number(
@@ -184,8 +184,10 @@ const CreateDaoPage = () => {
             );
             highCouncilForm = {
               highCouncilConfig: {
-                ...highCouncilForm.highCouncilConfig,
+                maxHighCouncilMemberCount: 10000,
                 stakingAmount: stakingAmountDecimals,
+                electionPeriod: Number.MAX_SAFE_INTEGER,
+                maxHighCouncilCandidateCount: 10000,
               },
               governanceSchemeThreshold: {
                 ...highCouncilForm.governanceSchemeThreshold,
