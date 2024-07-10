@@ -38,7 +38,7 @@ const HighCouncil = () => {
           requiredMark={false}
           scrollToFirstError={true}
         >
-          <div>
+          {/* <div>
             <h2 className="form-title-primary cursor-pointer">
               High Council, a supplementary governance mechanism
             </h2>
@@ -47,7 +47,7 @@ const HighCouncil = () => {
               top-ranked addresses who stake governance tokens in the Election contract and receive
               votes. High Council members have the authority and responsibility in DAO governance.
             </p>
-          </div>
+          </div> */}
 
           {/* <Form.Item
             label={
