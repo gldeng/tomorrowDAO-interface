@@ -35,6 +35,7 @@ function DeleteMultisigMembers(props: IDeleteMultisigMembersProps) {
       form={form}
       removeNamePath={removeNamePath}
       isLoading={daoMembersDataLoading}
+      overLimitErrorText="A multisig requires members"
     />
   );
 }

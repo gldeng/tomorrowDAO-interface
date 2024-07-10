@@ -1,6 +1,7 @@
 import React from 'react';
 import { curChain, explorer } from 'config';
 import { SkeletonLine } from 'components/Skeleton';
+import { ButtonCheckLogin } from 'components/ButtonCheckLogin';
 import { Button, HashAddress } from 'aelf-design';
 import Link from 'next/link';
 import './index.css';
@@ -50,7 +51,19 @@ const Members: React.FC<IProps> = (props) => {
           <h3 className="card-title mb-[24px]">{cardTitle}</h3>
           <div className="flex justify-between items-start lg:items-center lg:flex-row flex-col">
             <p>{descriptionNode}</p>
-            {managerUrl ? <Link href={managerUrl}>{ManageButton}</Link> : ManageButton}
+            {managerUrl ? (
+              <Link href={managerUrl}>{ManageButton}</Link>
+            ) : (
+              <ButtonCheckLogin
+                type="primary"
+                size="medium"
+                className="dao-members-manage"
+                onClick={onCreatePoposal}
+                loading={createButtonLoading}
+              >
+                Manage members
+              </ButtonCheckLogin>
+            )}
           </div>
           {!!lists?.length && (
             <ul className="dao-members-wrap mt-[24px]">
