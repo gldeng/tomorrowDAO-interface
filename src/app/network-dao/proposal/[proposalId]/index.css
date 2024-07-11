@@ -1,6 +1,33 @@
 .proposal-detail .antExplorer-card-head {
   background-color: #EDEDED;
 }
+.proposal-detail {
+  .unset-bottom-border {
+    border-bottom: none;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  .unset-top-border {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+  .proposal-detail-tab {
+    background-color: #fff;
+  }
+  .description{
+    border-radius: 6px;
+    border: 1px solid var(--Neutral-Border, #E1E1E1);
+    background: var(--Neutral-Hover-BG, #FAFAFA);
+  }
+  .proposal-vote {
+    .title {
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 24px;
+      color: #1A1A1A;
+    }
+  }
+}
 
 .proposal-detail .antExplorer-btn-primary:disabled,
 .proposal-detail .antExplorer-btn-default.antExplorer-btn-dangerous:disabled {
