@@ -190,19 +190,19 @@ export default function CreatePreviewModal({ open, onClose, onConfirm }: ICreate
             checked={state[1]}
             onChange={(e) => setState([state[0], e.target.checked, state[2]])}
             descriptionList={[
-              {
-                content: `
-                ${highCouncil?.highCouncilConfig.maxHighCouncilMemberCount} members and ${highCouncil?.highCouncilConfig.maxHighCouncilCandidateCount} candidates at most, rotated every ${highCouncil?.highCouncilConfig.electionPeriod} days. Require a staking of at least ${highCouncil?.highCouncilConfig.stakingAmount} ${metaData?.governanceToken} tokens.
-                `,
-              },
-              {
-                content: (
-                  <AddressItem
-                    label="Election contract"
-                    address="ELF_2XDRhxzMbaYRCTe3NxRpARKBpjfQpyWdBkKscQpc3Tph3m6dqHG_AELF"
-                  />
-                ),
-              },
+              // {
+              //   content: `
+              //   ${highCouncil?.highCouncilConfig.maxHighCouncilMemberCount} members and ${highCouncil?.highCouncilConfig.maxHighCouncilCandidateCount} candidates at most, rotated every ${highCouncil?.highCouncilConfig.electionPeriod} days. Require a staking of at least ${highCouncil?.highCouncilConfig.stakingAmount} ${metaData?.governanceToken} tokens.
+              //   `,
+              // },
+              // {
+              //   content: (
+              //     <AddressItem
+              //       label="Election contract"
+              //       address="ELF_2XDRhxzMbaYRCTe3NxRpARKBpjfQpyWdBkKscQpc3Tph3m6dqHG_AELF"
+              //     />
+              //   ),
+              // },
               {
                 content: `
                 Each proposal requires a minimum participation of ${highCouncil?.governanceSchemeThreshold.minimalRequiredThreshold}% addresses and  ${highCouncil?.governanceSchemeThreshold.minimalVoteThreshold} votes to be finalised.`,

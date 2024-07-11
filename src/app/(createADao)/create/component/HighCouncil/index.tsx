@@ -23,7 +23,8 @@ const HighCouncil = () => {
   const { wallet } = useWebLogin();
   const metaData = stepForm[StepEnum.step0].submitedRes;
   const disabled = !metaData?.governanceToken;
-  const highCouncilMembers = Form.useWatch(highCouncilMembersFieldName, form);
+  // const highCouncilMembers = Form.useWatch(highCouncilMembersFieldName, form);
+  const highCouncilMembers = 10000;
   useEffect(() => {
     form.validateFields([highCouncilMembersList]).then(console.log).catch(console.log);
   }, [highCouncilMembers]);
@@ -37,7 +38,7 @@ const HighCouncil = () => {
           requiredMark={false}
           scrollToFirstError={true}
         >
-          <div>
+          {/* <div>
             <h2 className="form-title-primary cursor-pointer">
               High Council, a supplementary governance mechanism
             </h2>
@@ -46,9 +47,9 @@ const HighCouncil = () => {
               top-ranked addresses who stake governance tokens in the Election contract and receive
               votes. High Council members have the authority and responsibility in DAO governance.
             </p>
-          </div>
+          </div> */}
 
-          <Form.Item
+          {/* <Form.Item
             label={
               <Tooltip title="The Election contract facilitates the election of High Council members. Users interested in becoming High Council members must stake a specified number of governance tokens in the contract to become eligible for election and receive votes from other addresses, with those accumulating more votes being elected as High Council members. If no user stake tokens in this contract, the DAO creator will automatically become a High Council member.">
                 <span className="form-item-label">
@@ -59,9 +60,9 @@ const HighCouncil = () => {
             }
           >
             <Input disabled defaultValue={`ELF_${electionContractAddress}_${curChain}`} />
-          </Form.Item>
+          </Form.Item> */}
 
-          <Form.Item
+          {/* <Form.Item
             name={highCouncilMembersFieldName}
             label={
               <Tooltip
@@ -85,8 +86,8 @@ const HighCouncil = () => {
             ]}
           >
             <InputNumber disabled={disabled} placeholder="Enter 1 or more" controls={false} />
-          </Form.Item>
-          <Form.Item
+          </Form.Item> */}
+          {/* <Form.Item
             name={['highCouncilConfig', 'maxHighCouncilCandidateCount']}
             label={
               <Tooltip
@@ -110,8 +111,8 @@ const HighCouncil = () => {
             ]}
           >
             <InputNumber disabled={disabled} placeholder="Enter 10,000 or less" controls={false} />
-          </Form.Item>
-          <Form.Item
+          </Form.Item> */}
+          {/* <Form.Item
             name={['highCouncilConfig', 'stakingAmount']}
             label={
               <Tooltip
@@ -138,8 +139,8 @@ const HighCouncil = () => {
               placeholder="Enter a reasonable value based on the circulation of the governance token."
               controls={false}
             />
-          </Form.Item>
-          <Form.Item
+          </Form.Item> */}
+          {/* <Form.Item
             name={['highCouncilConfig', 'electionPeriod']}
             label={
               <Tooltip title="This is the duration, in days, for the rotation of High Council members. The countdown begins from the day when the DAO is created. Entering zero means that there is no rotation for High Council members.">
@@ -166,7 +167,7 @@ const HighCouncil = () => {
               controls={false}
               suffix="Days"
             />
-          </Form.Item>
+          </Form.Item> */}
           {/* governanceSchemeThreshold */}
           <Form.Item
             name={['governanceSchemeThreshold', 'minimalRequiredThreshold']}
@@ -306,7 +307,7 @@ const HighCouncil = () => {
             rules={[
               {
                 validator: async (_, lists) => {
-                  const highCouncilMembers = form.getFieldValue(highCouncilMembersFieldName);
+                  // const highCouncilMembers = form.getFieldValue(highCouncilMembersFieldName);
                   if (lists.length > highCouncilMembers) {
                     return Promise.reject(
                       new Error(

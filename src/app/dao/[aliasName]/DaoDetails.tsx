@@ -38,6 +38,7 @@ import ExplorerProposalList, {
 import { useChainSelect } from 'hooks/useChainSelect';
 import getChainIdQuery from 'utils/url';
 import DaoMembers from './components/Members';
+import HcMembers from './components/HCMembers';
 import './page.css';
 import { EDaoGovernanceMechanism } from 'app/(createADao)/create/type';
 
@@ -275,7 +276,7 @@ export default function DeoDetails(props: IProps) {
               <MyInfoContent
                 daoId={daoId}
                 isTokenGovernanceMechanism={isTokenGovernanceMechanism}
-                className="border-0  px-[16px] py-[24px]"
+                className="border-0  px-[16px] pt-[8px] pb-[24px] lg:mb-[16px] mb-0"
               />
             ),
           });
@@ -298,7 +299,26 @@ export default function DeoDetails(props: IProps) {
             key: TabKey.DAOMEMBERS,
             label: 'Members',
             children: daoData?.data ? (
-              <DaoMembers daoData={daoData.data} aliasName={aliasName} />
+              <DaoMembers
+                daoData={daoData.data}
+                aliasName={aliasName}
+                createProposalCheck={handleCreateProposalRef.current}
+              />
+            ) : (
+              <span></span>
+            ),
+          });
+        }
+        if (daoData?.data?.governanceMechanism === EDaoGovernanceMechanism.Token) {
+          finalItems.push({
+            key: TabKey.HCMEMBERS,
+            label: 'High Council Members',
+            children: daoData?.data ? (
+              <HcMembers
+                daoData={daoData.data}
+                aliasName={aliasName}
+                createProposalCheck={handleCreateProposalRef.current}
+              />
             ) : (
               <span></span>
             ),
@@ -467,12 +487,25 @@ export default function DeoDetails(props: IProps) {
               {daoData?.data &&
                 !isNetworkDAO &&
                 daoData.data.governanceMechanism === EDaoGovernanceMechanism.Multisig && (
-                  <DaoMembers daoData={daoData.data} aliasName={aliasName} />
+                  <DaoMembers
+                    createProposalCheck={handleCreateProposal}
+                    daoData={daoData.data}
+                    aliasName={aliasName}
+                  />
+                )}
+              {daoData?.data &&
+                !isNetworkDAO &&
+                daoData.data.governanceMechanism === EDaoGovernanceMechanism.Token && (
+                  <HcMembers
+                    createProposalCheck={handleCreateProposal}
+                    daoData={daoData.data}
+                    aliasName={aliasName}
+                  />
                 )}
               <MyInfoContent
                 daoId={daoId}
                 isTokenGovernanceMechanism={isTokenGovernanceMechanism}
-                className="border"
+                className="border lg:mb-[16px] mb-0"
               />
               {walletInfo.address && daoId && (
                 <ExecutdProposals daoId={daoId} address={walletInfo.address} />

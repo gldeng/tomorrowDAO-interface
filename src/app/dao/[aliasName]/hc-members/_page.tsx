@@ -1,14 +1,18 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { curChain } from 'config';
 import { useRequest } from 'ahooks';
 import useUpdateHeaderDaoInfo from 'hooks/useUpdateHeaderDaoInfo';
 import breadCrumb from 'utils/breadCrumb';
-import { fetchDaoInfo, fetchDaoMembers } from 'api/request';
+import { fetchDaoInfo, fetchHcMembers } from 'api/request';
 import { EProposalActionTabs } from 'app/proposal/deploy/[aliasName]/type';
 import { message } from 'antd';
 import MembersPage from 'pageComponents/members';
 import './index.css';
+import { checkCreateProposal } from 'utils/proposal';
+import { wallet } from '@portkey/utils';
+import { useWebLogin } from 'aelf-web-login';
+import { useRouter } from 'next/navigation';
 interface ITreasuryDetailsProps {
   aliasName?: string;
 }
@@ -31,6 +35,8 @@ export default function TreasuryDetails(props: ITreasuryDetailsProps) {
     }
     return fetchDaoInfo({ chainId: curChain, alias: aliasName });
   });
+  const { wallet } = useWebLogin();
+  const [manageLoading, setManageLoading] = useState(false);
   const {
     data: daoMembersData,
     // error: transferListError,
@@ -38,11 +44,9 @@ export default function TreasuryDetails(props: ITreasuryDetailsProps) {
     run,
   } = useRequest(
     async (daoId) => {
-      return fetchDaoMembers({
-        SkipCount: tableParams.pageSize * (tableParams.page - 1),
-        MaxResultCount: tableParams.pageSize,
-        ChainId: curChain,
-        DAOId: daoId,
+      return fetchHcMembers({
+        chainId: curChain,
+        daoId: daoId,
       });
     },
     {
@@ -51,9 +55,10 @@ export default function TreasuryDetails(props: ITreasuryDetailsProps) {
   );
   const daoId = daoData?.data?.id;
   useUpdateHeaderDaoInfo(daoId, aliasName);
+  const router = useRouter();
 
   useEffect(() => {
-    breadCrumb.updateMembersPage(aliasName);
+    breadCrumb.updateHcMembersPage(aliasName);
   }, [aliasName]);
 
   const pageChange = (page: number, pageSize: number) => {
@@ -65,18 +70,34 @@ export default function TreasuryDetails(props: ITreasuryDetailsProps) {
   useEffect(() => {
     if (!daoId) return;
     run(daoId);
-  }, [tableParams, daoId, run]);
-  const lists = (daoMembersData?.data?.data ?? []).map((item) => item.address);
+  }, [daoId, run]);
+  const lists = useMemo(() => {
+    const { page, pageSize } = tableParams;
+    const allLists = daoMembersData?.data ?? [];
+    return allLists.slice((page - 1) * pageSize, page * pageSize) ?? [];
+  }, [tableParams, daoMembersData]);
+  const totalCount = (daoMembersData?.data ?? []).length;
+  const handleCreate = async () => {
+    if (daoData) {
+      setManageLoading(true);
+      const check = await checkCreateProposal(daoData, wallet.address);
+      setManageLoading(false);
+      if (check) {
+        router.push(`/proposal/deploy/${aliasName}?tab=${EProposalActionTabs.AddHcMembers}`);
+      }
+    }
+  };
   return (
     <MembersPage
-      totalCount={daoMembersData?.data?.totalCount ?? 0}
+      totalCount={totalCount}
       isLoading={daoLoading || daoMembersDataLoading}
-      managerUrl={`/proposal/deploy/${aliasName}?tab=${EProposalActionTabs.AddMultisigMembers}`}
+      onManageMembers={handleCreate}
       lists={lists}
+      manageLoading={manageLoading}
       pagination={{
         current: tableParams.page,
         pageSize: tableParams.pageSize,
-        total: daoMembersData?.data?.totalCount ?? 0,
+        total: totalCount,
         onChange: pageChange,
       }}
     />

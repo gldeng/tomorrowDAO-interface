@@ -35,8 +35,8 @@
 }
 
 .contract-proposal .antExplorer-btn-primary:focus {
-  border-color: #266cd3;
-  background: #266cd3;
+  /* border-color: #266cd3;
+  background: #266cd3; */
 }
 
 .antExplorer-modal-footer {

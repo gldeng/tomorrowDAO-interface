@@ -9,21 +9,23 @@ import {
 import { ResponsiveSelect } from 'components/ResponsiveSelect';
 import { useEffect, useMemo, useState } from 'react';
 import Editor from '@monaco-editor/react';
-import { Alert, Form, TabsProps } from 'antd';
+import { Form, TabsProps } from 'antd';
 import { EProposalActionTabs } from '../../type';
 import { useAsyncEffect } from 'ahooks';
-import { fetchContractInfo, fetchTreasuryAssets } from 'api/request';
+import { fetchContractInfo } from 'api/request';
 import { curChain } from 'config';
 
 import AmountInput from './FormAmountInput';
 import './index.css';
-import { timesDecimals } from 'utils/calculate';
 import BigNumber from 'bignumber.js';
 import Symbol from 'components/Symbol';
 import { GetTokenInfo } from 'contract/callContract';
 import { EDaoGovernanceMechanism } from 'app/(createADao)/create/type';
 import DeleteMultisigMembers from './TabContent/DeleteMultisigMembers';
 import AddMultisigMembers from './TabContent/AddMultisigMembers';
+import DeleteHCMembers from './TabContent/DeleteHCMembers';
+import AddHCMembers from './TabContent/AddHCMembers';
+import ErrorBoundary from 'components/ErrorBoundary';
 
 const contractMethodNamePath = ['transaction', 'contractMethodName'];
 
@@ -93,7 +95,13 @@ export default function TabsCom(props: IActionTabsProps) {
         label: (
           <span className="proposal-action-tabs-label">
             <RightArrowOutlined />
-            <span className="proposal-action-tabs-text">Withdraw Assets</span>
+            <span
+              className={`proposal-action-tabs-text ${
+                activeTab === EProposalActionTabs.TREASURY ? 'active' : ''
+              }`}
+            >
+              Withdraw Assets
+            </span>
           </span>
         ),
         key: EProposalActionTabs.TREASURY,
@@ -210,7 +218,13 @@ export default function TabsCom(props: IActionTabsProps) {
             label: (
               <span className="proposal-action-tabs-label">
                 <AddCircleOutlined />
-                <span className="proposal-action-tabs-text">Add Multisig Members</span>
+                <span
+                  className={`proposal-action-tabs-text ${
+                    activeTab === EProposalActionTabs.AddMultisigMembers ? 'active' : ''
+                  }`}
+                >
+                  Add Multisig Members
+                </span>
               </span>
             ),
             key: EProposalActionTabs.AddMultisigMembers,
@@ -222,18 +236,66 @@ export default function TabsCom(props: IActionTabsProps) {
             label: (
               <span className="proposal-action-tabs-label">
                 <DeleteOutlined />
-                <span className="proposal-action-tabs-text">Delete Multisig Members</span>
+                <span
+                  className={`proposal-action-tabs-text ${
+                    activeTab === EProposalActionTabs.DeleteMultisigMembers ? 'active' : ''
+                  }`}
+                >
+                  Delete Multisig Members
+                </span>
               </span>
             ),
             key: EProposalActionTabs.DeleteMultisigMembers,
             children: <DeleteMultisigMembers daoId={daoId} form={form} />,
           }
         : {},
+      daoData?.governanceMechanism === EDaoGovernanceMechanism.Token && daoData.isHighCouncilEnabled
+        ? {
+            label: (
+              <span className="proposal-action-tabs-label">
+                <AddCircleOutlined />
+                <span
+                  className={`proposal-action-tabs-text ${
+                    activeTab === EProposalActionTabs.AddMultisigMembers ? 'active' : ''
+                  }`}
+                >
+                  Add HC Members
+                </span>
+              </span>
+            ),
+            key: EProposalActionTabs.AddHcMembers,
+            children: <AddHCMembers form={form} />,
+          }
+        : {},
+      daoData?.governanceMechanism === EDaoGovernanceMechanism.Token && daoData.isHighCouncilEnabled
+        ? {
+            label: (
+              <span className="proposal-action-tabs-label">
+                <DeleteOutlined />
+                <span
+                  className={`proposal-action-tabs-text ${
+                    activeTab === EProposalActionTabs.DeleteMultisigMembers ? 'active' : ''
+                  }`}
+                >
+                  Delete HC Members
+                </span>
+              </span>
+            ),
+            key: EProposalActionTabs.DeleteHcMembers,
+            children: <DeleteHCMembers daoId={daoId} form={form} />,
+          }
+        : {},
       {
         label: (
           <span className="proposal-action-tabs-label">
             <UserAddOutlined />
-            <span className="proposal-action-tabs-text">Custom Action</span>
+            <span
+              className={`proposal-action-tabs-text ${
+                activeTab === EProposalActionTabs.CUSTOM_ACTION ? 'active' : ''
+              }`}
+            >
+              Custom Action
+            </span>
           </span>
         ),
         key: EProposalActionTabs.CUSTOM_ACTION,
@@ -278,24 +340,34 @@ export default function TabsCom(props: IActionTabsProps) {
                 placeholder="Select a method name"
               ></ResponsiveSelect>
             </Form.Item>
-            <Form.Item
-              name={['transaction', 'params']}
-              label={<span className="form-item-label">Method Parameter</span>}
-              rules={[
-                {
-                  required: true,
-                  message: 'method params is required',
-                },
-              ]}
+            <ErrorBoundary
+              errorMsg={
+                <p className="text-error">
+                  An error occurred while loading the JSON editor. Please refresh the page and try
+                  again.
+                </p>
+              }
             >
-              <Editor defaultLanguage="json" height={176} />
-            </Form.Item>
+              <Form.Item
+                name={['transaction', 'params']}
+                label={<span className="form-item-label">Method Parameter</span>}
+                rules={[
+                  {
+                    required: true,
+                    message: 'method params is required',
+                  },
+                ]}
+              >
+                <Editor defaultLanguage="json" height={176} />
+              </Form.Item>
+            </ErrorBoundary>
           </>
         ),
       },
     ];
     return initItems.filter((item) => item.label) as TabsProps['items'];
   }, [
+    activeTab,
     contractInfoOptions,
     contractMethodOptions,
     daoData?.governanceMechanism,

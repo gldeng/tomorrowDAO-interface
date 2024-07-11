@@ -19,6 +19,7 @@ import { CommonOperationResultModalType } from 'components/CommonOperationResult
 import {
   EDaoGovernanceMechanism,
   IFile,
+  IHighCouncilInput,
   IStepsContext,
   StepEnum,
   StepsContext,
@@ -176,17 +177,19 @@ const CreateDaoPage = () => {
         if (isShowHighCouncil && !isMultisig) {
           let highCouncilForm = stepForm[StepEnum.step2].submitedRes;
           if (highCouncilForm && daoCreateToken?.decimals) {
-            const stakingAmount = highCouncilForm.highCouncilConfig.stakingAmount;
+            // const stakingAmount = 1;
             const minimalVoteThreshold =
               highCouncilForm.governanceSchemeThreshold.minimalVoteThreshold;
-            const stakingAmountDecimals = Number(
-              timesDecimals(stakingAmount, daoCreateToken.decimals),
-            );
+            // const stakingAmountDecimals = Number(
+            //   timesDecimals(stakingAmount, daoCreateToken.decimals),
+            // );
             highCouncilForm = {
-              highCouncilConfig: {
-                ...highCouncilForm.highCouncilConfig,
-                stakingAmount: stakingAmountDecimals,
-              },
+              // highCouncilConfig: {
+              //   maxHighCouncilMemberCount: 10000,
+              //   stakingAmount: stakingAmountDecimals,
+              //   electionPeriod: Number.MAX_SAFE_INTEGER,
+              //   maxHighCouncilCandidateCount: 10000,
+              // },
               governanceSchemeThreshold: {
                 ...highCouncilForm.governanceSchemeThreshold,
                 minimalRequiredThreshold:
@@ -206,10 +209,11 @@ const CreateDaoPage = () => {
                   highCouncilForm?.highCouncilMembers?.value?.map((item) => trimAddress(item)) ??
                   [],
               },
-            };
+            } as IHighCouncilInput;
           }
 
           params.highCouncilInput = {
+            isHighCouncilElectionClose: true,
             ...(highCouncilForm ?? {}),
           };
         }
@@ -355,10 +359,8 @@ const CreateDaoPage = () => {
                 </div>
                 <p className="step-subtitle">a supplementary governance mechanism</p>
                 <p className="step-subtext">
-                  As an optional governance choice that supplements referendum, High Council
-                  consists of top-ranked addresses who stake governance tokens in the Election
-                  contract and receive votes. High Council members have the authority and
-                  responsibility in DAO governance.
+                  High Council is an optional governance choice that supplements referendum. High
+                  Council members have the authority and responsibility in DAO governance.
                 </p>
               </>
             )}

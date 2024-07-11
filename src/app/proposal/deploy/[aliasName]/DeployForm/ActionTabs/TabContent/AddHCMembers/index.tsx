@@ -9,7 +9,7 @@ function AddMultisigMembers(props: IAddMultisigMembersProps) {
   const { form } = props;
   return (
     <FormMembersItem
-      name={['addMembers', 'value']}
+      name={['addHighCouncils', 'value']}
       initialValue={['']}
       form={form}
       titleNode={
@@ -23,7 +23,7 @@ function AddMultisigMembers(props: IAddMultisigMembersProps) {
           }
         >
           <span className="flex items-center form-item-title gap-[8px] pb-[8px]  w-[max-content]">
-            Address
+            Add Multisig Members Address
             <QuestionIcon className="cursor-pointer " width={16} height={16} />
           </span>
         </Tooltip>

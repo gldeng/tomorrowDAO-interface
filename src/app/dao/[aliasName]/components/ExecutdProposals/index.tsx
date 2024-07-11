@@ -106,13 +106,13 @@ export default function ExecutdProposals(props: IExecutdProposals) {
   };
 
   return (
-    <div className="page-content-bg-border mt-[24px]">
+    <div className="page-content-bg-border">
       <div className="card-title mb-[24px]">To be executed proposals</div>
       <div className="max-h-96 overflow-y-scroll">
         {!executableListData?.data?.items?.length && <NoData />}
         {executableListData?.data?.items.map((item, index) => {
           return (
-            <div className="flex justify-between items-center px-8 max-h-80 mb-8" key={index}>
+            <div className="flex justify-between items-center max-h-80 mb-8" key={index}>
               <div>
                 <div className="block lg:flex items-center">
                   <Typography.Text fontWeight={FontWeightEnum.Medium}>Proposal ID:</Typography.Text>

@@ -1,5 +1,5 @@
 // todo: Use the variable in less instead
-export const PRIMARY_COLOR = "#266CD3";
+export const PRIMARY_COLOR = "#FA9D2B";
 
 const TOKEN_ICON_URL =
   "https://raw.githubusercontent.com/AElf-devops/token-list/master/assets/";

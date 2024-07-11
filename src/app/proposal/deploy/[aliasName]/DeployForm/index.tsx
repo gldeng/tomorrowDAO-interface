@@ -31,6 +31,8 @@ import {
 } from 'api/request';
 import { timesDecimals } from 'utils/calculate';
 import { trimAddress } from 'utils/address';
+import { useWebLogin } from 'aelf-web-login';
+import { SkeletonForm } from 'components/Skeleton';
 // import { useWalletSyncCompleted } from 'hooks/useWalletSyncCompleted';
 
 const convertParams = async (address: string, methodName: string, originParams: any) => {
@@ -117,28 +119,34 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
     }
   };
 
-  const { data: addressTokenList, run: fetchTokenList } = useRequest(async (daoId: string) => {
-    const address = await callViewContract<string, string>(
-      'GetTreasuryAccountAddress',
-      daoId,
-      treasuryContractAddress,
-    );
-    if (!address) {
-      return null;
-    }
-    return fetchAddressTokenList(
-      {
-        address,
-      },
-      curChain,
-    );
-  });
+  const { data: addressTokenList, run: fetchTokenList } = useRequest(
+    async (daoId: string) => {
+      const address = await callViewContract<string, string>(
+        'GetTreasuryAccountAddress',
+        daoId,
+        treasuryContractAddress,
+      );
+      if (!address) {
+        return null;
+      }
+      return fetchAddressTokenList(
+        {
+          address,
+        },
+        curChain,
+      );
+    },
+    {
+      manual: true,
+    },
+  );
   const treasuryAssetsData = addressTokenList?.data;
+  const { wallet } = useWebLogin();
   useEffect(() => {
-    if (daoId) {
+    if (daoId && wallet.address) {
       fetchTokenList(daoId);
     }
-  }, [daoId, fetchTokenList]);
+  }, [daoId, fetchTokenList, wallet.address]);
   const handleSubmit = async () => {
     try {
       if (!isSyncQuery()) {
@@ -146,6 +154,7 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
       }
       if (!daoId) {
         openErrorModal();
+        return;
       }
       const res = await form.validateFields();
       emitLoading(true, 'Publishing the proposal...');
@@ -179,7 +188,7 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
         };
         await proposalCreateContractRequest('CreateTransferProposal', contractParams);
       } else {
-        const { removeMembers, addMembers, ...restRes } = res;
+        const { removeMembers, addMembers, removeHighCouncils, addHighCouncils, ...restRes } = res;
         const contractParams = {
           ...restRes,
           proposalBasicInfo: {
@@ -226,6 +235,34 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
             contractParams.transaction = {
               toAddress: daoAddress,
               contractMethodName: 'RemoveMember',
+              params: finalParams,
+            };
+          }
+          if (activeTab === EProposalActionTabs.AddHcMembers) {
+            const params = {
+              daoId: daoId,
+              addHighCouncils: {
+                value: addHighCouncils.value.map((address: string) => trimAddress(address)),
+              },
+            };
+            const finalParams = await convertParams(daoAddress, 'AddHighCouncilMembers', params);
+            contractParams.transaction = {
+              toAddress: daoAddress,
+              contractMethodName: 'AddHighCouncilMembers',
+              params: finalParams,
+            };
+          }
+          if (activeTab === EProposalActionTabs.DeleteHcMembers) {
+            const params = {
+              daoId: daoId,
+              removeHighCouncils: {
+                value: removeHighCouncils.value.map((address: string) => trimAddress(address)),
+              },
+            };
+            const finalParams = await convertParams(daoAddress, 'RemoveHighCouncilMembers', params);
+            contractParams.transaction = {
+              toAddress: daoAddress,
+              contractMethodName: 'RemoveHighCouncilMembers',
               params: finalParams,
             };
           }
@@ -304,19 +341,23 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
         }}
       >
         <ProposalType className={clsx({ hidden: isNext })} next={handleNext} />
-        {daoId && (
-          <ProposalInfo
-            className={clsx({ hidden: !isNext })}
-            daoData={daoData?.data}
-            daoId={daoId}
-            onSubmit={handleSubmit}
-            onTabChange={(key: string) => {
-              setActiveTab(key);
-            }}
-            activeTab={activeTab}
-            treasuryAssetsData={treasuryAssetsData}
-            daoDataLoading={daoLoading}
-          />
+        {daoLoading && isNext ? (
+          <SkeletonForm />
+        ) : (
+          daoId && (
+            <ProposalInfo
+              className={clsx({ hidden: !isNext })}
+              daoData={daoData?.data}
+              daoId={daoId}
+              onSubmit={handleSubmit}
+              onTabChange={(key: string) => {
+                setActiveTab(key);
+              }}
+              activeTab={activeTab}
+              treasuryAssetsData={treasuryAssetsData}
+              daoDataLoading={daoLoading}
+            />
+          )
         )}
       </Form>
       <CommonOperationResultModal
