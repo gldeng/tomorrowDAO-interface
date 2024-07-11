@@ -156,6 +156,7 @@ input[type='number'] {
 .TMRWDAO-pagination-container .TMRWDAO-select-selector {
   @apply !border-Neutral-Disable-Text;
 }
+.antExplorer-tabs-nav,
 .TMRWDAO-tabs-nav {
   overflow: hidden!important;
 }

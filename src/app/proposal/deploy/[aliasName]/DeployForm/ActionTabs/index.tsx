@@ -25,6 +25,7 @@ import DeleteMultisigMembers from './TabContent/DeleteMultisigMembers';
 import AddMultisigMembers from './TabContent/AddMultisigMembers';
 import DeleteHCMembers from './TabContent/DeleteHCMembers';
 import AddHCMembers from './TabContent/AddHCMembers';
+import ErrorBoundary from 'components/ErrorBoundary';
 
 const contractMethodNamePath = ['transaction', 'contractMethodName'];
 
@@ -339,18 +340,27 @@ export default function TabsCom(props: IActionTabsProps) {
                 placeholder="Select a method name"
               ></ResponsiveSelect>
             </Form.Item>
-            <Form.Item
-              name={['transaction', 'params']}
-              label={<span className="form-item-label">Method Parameter</span>}
-              rules={[
-                {
-                  required: true,
-                  message: 'method params is required',
-                },
-              ]}
+            <ErrorBoundary
+              errorMsg={
+                <p className="text-error">
+                  An error occurred while loading the JSON editor. Please refresh the page and try
+                  again.
+                </p>
+              }
             >
-              <Editor defaultLanguage="json" height={176} />
-            </Form.Item>
+              <Form.Item
+                name={['transaction', 'params']}
+                label={<span className="form-item-label">Method Parameter</span>}
+                rules={[
+                  {
+                    required: true,
+                    message: 'method params is required',
+                  },
+                ]}
+              >
+                <Editor defaultLanguage="json" height={176} />
+              </Form.Item>
+            </ErrorBoundary>
           </>
         ),
       },
