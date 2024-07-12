@@ -141,13 +141,10 @@ const CreateDaoPage = () => {
         let governanceConfig = stepForm[StepEnum.step1].submitedRes;
         // governanceToken is exist
         if (governanceConfig && daoCreateToken && metadata.governanceToken) {
-          const { minimalVoteThreshold, proposalThreshold } = governanceConfig;
+          const { minimalVoteThreshold } = governanceConfig;
           governanceConfig = cloneDeep(governanceConfig);
           governanceConfig.minimalVoteThreshold = Number(
             timesDecimals(minimalVoteThreshold, daoCreateToken.decimals),
-          );
-          governanceConfig.proposalThreshold = Number(
-            timesDecimals(proposalThreshold, daoCreateToken.decimals),
           );
         }
         if (governanceConfig) {
@@ -163,10 +160,16 @@ const CreateDaoPage = () => {
               governanceConfig.minimalRequiredThreshold * 100;
           }
         }
+        // eslint-disable-next-line prefer-const
+        let { proposalThreshold, ...restGovernanceConfig } = governanceConfig ?? {};
+        if (daoCreateToken && proposalThreshold) {
+          proposalThreshold = Number(timesDecimals(proposalThreshold, daoCreateToken.decimals));
+        }
         const params: any = {
           ...metadata,
+          proposalThreshold,
           governanceSchemeThreshold: {
-            ...(governanceConfig ?? {}),
+            ...(restGovernanceConfig ?? {}),
           },
           files,
           isNetworkDao: isNetworkDaoLocal

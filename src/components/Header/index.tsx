@@ -1,7 +1,6 @@
 'use client';
 import { HeaderLogo } from 'components/Logo';
 import './index.css';
-import Login from 'components/Login';
 import { PCMenu } from 'components/Menu';
 import Link from 'next/link';
 import useResponsive from 'hooks/useResponsive';
@@ -11,6 +10,7 @@ import { MenuProps } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { eventBus, HeaderUpdateTreasury } from 'utils/myEvent';
+import dynamicReq from 'next/dynamic';
 export enum ENavKeys {
   CreateDAO = 'CreateDAO',
   Resources = 'Resources',
@@ -23,6 +23,9 @@ export enum ENavKeys {
   Telegram = 'Telegram',
   Treasury = 'Treasury',
 }
+const DynamicLogin = dynamicReq(() => import('components/Login'), {
+  ssr: false,
+});
 export default function Header() {
   const { isLG } = useResponsive();
   const pathname = usePathname();
@@ -141,7 +144,7 @@ export default function Header() {
             </Link>
             {!isLG && <PCMenu selectedKeys={[current]} items={items} onClick={onClick} />}
           </div>
-          <Login />
+          <DynamicLogin />
         </div>
         {isLG && (
           <div className="header-menu-icon">
