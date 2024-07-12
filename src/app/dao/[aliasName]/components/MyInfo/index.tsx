@@ -92,6 +92,15 @@ export default function MyInfo(props: TInfoTypes) {
 
     setIsLoading(true);
     const res = await fetchProposalMyInfo(reqMyInfoParams);
+    const symbol = res?.data?.symbol ?? 'ELF';
+    const { balance } = await GetBalanceByContract(
+      {
+        symbol: symbol,
+        owner: walletInfo.address,
+      },
+      { chain: curChain },
+    );
+    setElfBalance(divDecimals(balance, res?.data?.decimal || '8').toNumber());
     setIsLoading(false);
     if (!res.data) {
       return;
@@ -112,25 +121,6 @@ export default function MyInfo(props: TInfoTypes) {
   useEffect(() => {
     fetchMyInfo();
   }, [fetchMyInfo]);
-
-  const getBalance = useCallback(async () => {
-    if (!isLogin || !walletInfo.address || !curChain) {
-      return;
-    }
-    const { balance } = await GetBalanceByContract(
-      {
-        symbol: info?.symbol || 'ELF',
-        owner: walletInfo.address,
-      },
-      { chain: curChain },
-    );
-    // aelf decimal 8
-    setElfBalance(divDecimals(balance, info?.decimal || '8').toNumber());
-  }, [isLogin, walletInfo.address, info?.symbol, info?.decimal]);
-
-  useEffect(() => {
-    getBalance();
-  }, [getBalance]);
 
   const myInfoItems = [
     {
