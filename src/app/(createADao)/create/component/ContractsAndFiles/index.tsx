@@ -72,7 +72,7 @@ export default function ContractsAndFiles() {
               type: 'array',
               min: 1,
               max: 20,
-              message: `You have reached the maximum limit of 20 files. Please consider removing some files before uploading a new one. If you need further assistance, you can join TMRWDAO's Telegram group.`,
+              message: `add at least one documentation, if you have reached the maximum limit of 20 files. Please consider removing some files before uploading a new one. If you need further assistance, you can join TMRWDAO's Telegram group.`,
             },
           ]}
           valuePropName="fileList"
