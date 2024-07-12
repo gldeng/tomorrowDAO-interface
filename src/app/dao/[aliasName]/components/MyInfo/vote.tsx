@@ -154,7 +154,7 @@ function Vote(props: TVoteTypes) {
       const message = error?.errorMessage?.message || error?.message;
       setShowFailedModal({
         isOpen: true,
-        message,
+        message: message?.toString?.(),
       });
       emitLoading(false);
     }

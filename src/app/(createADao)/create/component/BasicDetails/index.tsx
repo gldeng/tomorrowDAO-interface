@@ -318,13 +318,6 @@ export default function BasicDetails() {
                             if (!res.data.name) {
                               reject(new Error('The token has not yet been issued'));
                             }
-                            if (res.data.isNFT) {
-                              reject(
-                                new Error(
-                                  `${value} is an NFT and cannot be used as governance token.`,
-                                ),
-                              );
-                            }
                             resolve();
                           })
                           .catch(() => {
