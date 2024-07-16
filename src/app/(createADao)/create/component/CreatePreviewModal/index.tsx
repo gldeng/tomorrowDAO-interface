@@ -7,7 +7,7 @@ import CommonDaoLogo, { CommonDaoLogoSizeEnum } from 'components/CommonDaoLogo';
 import { colorfulSocialMediaIconMap } from 'assets/imgs/socialMediaIcon';
 import { useSelector } from 'redux/store';
 import './index.css';
-import { StepsContext, StepEnum } from '../../type';
+import { StepsContext, StepEnum, EDaoGovernanceMechanism } from '../../type';
 import { curChain } from 'config';
 
 const { Text, Title } = Typography;
@@ -104,6 +104,7 @@ export default function CreatePreviewModal({ open, onClose, onConfirm }: ICreate
   const highCouncil = stepForm[StepEnum.step2].submitedRes;
   const files = stepForm[StepEnum.step3].submitedRes;
 
+  const isMultisig = metaData?.governanceMechanism === EDaoGovernanceMechanism.Multisig;
   const disabled =
     state.findIndex((item, index) => {
       // not highCouncil form, must be true
@@ -172,7 +173,12 @@ export default function CreatePreviewModal({ open, onClose, onConfirm }: ICreate
           onChange={(e) => setState([e.target.checked, state[1], state[2]])}
           descriptionList={[
             {
-              content: `Each proposal requires a minimum participation of ${governance?.minimalRequiredThreshold} address and ${governance?.minimalVoteThreshold} votes to be finalised`,
+              content: isMultisig
+                ? `Each proposal requires a minimum participation of ${Math.ceil(
+                    metaData.members.value.length *
+                      ((governance?.minimalRequiredThreshold ?? 100) / 100),
+                  )} address to be finalised`
+                : `Each proposal requires a minimum participation of ${governance?.minimalRequiredThreshold} address and ${governance?.minimalVoteThreshold} votes to be finalised`,
             },
             {
               content: `Each proposal must receive at least ${governance?.minimalApproveThreshold}% of approve votes, less than ${governance?.maximalRejectionThreshold}% of reject votes, and less than ${governance?.maximalAbstentionThreshold}% of abstain votes to be approved.`,

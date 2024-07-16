@@ -92,7 +92,7 @@ export async function getTxResultRetry({
     if (txResult.Status.toLowerCase() === 'mined') {
       return { TransactionId, txResult };
     }
-    throw Error(`can not get transaction result, transaction id: ${TransactionId}`);
+    throw Error(`can not get transaction status, transaction id: ${TransactionId}`);
   } catch (error) {
     console.log('=====getTxResult error', error);
     if (reGetCount > 1) {
@@ -106,9 +106,7 @@ export async function getTxResultRetry({
         reGetCount,
       });
     }
-    throw Error(
-      'get transaction result error, Please check your internet connection and try again.',
-    );
+    throw Error('get transaction result error, Please try again later.');
   }
 }
 
