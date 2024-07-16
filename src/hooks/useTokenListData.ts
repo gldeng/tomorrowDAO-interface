@@ -1,18 +1,18 @@
 import { useRequest } from 'ahooks';
-import { fetchTokenPrice, fetchAddressTokenList } from 'api/request';
-// import { treasuryAccountAddress } from 'config';
+import { fetchAddressTokenList } from 'api/request';
 import { useEffect, useMemo } from 'react';
 import BigNumber from 'bignumber.js';
+import { curChain } from 'config';
 export interface ITokenListItem extends IAddressTokenListDataItem {
   price?: number;
   valueUSD?: BigNumber | number;
 }
 interface IParams {
-  address?: string;
+  daoId?: string;
   currentChain?: string;
 }
 export default function useTokenListData(params: IParams) {
-  const { address, currentChain } = params;
+  const { daoId, currentChain } = params;
   const {
     data: tokenListData,
     error: tokenListError,
@@ -20,80 +20,31 @@ export default function useTokenListData(params: IParams) {
     run,
   } = useRequest(
     () => {
-      return fetchAddressTokenList(
-        {
-          address: address ?? '',
-        },
-        currentChain,
-      );
+      return fetchAddressTokenList({
+        daoId: daoId ?? '',
+        chainId: currentChain ?? curChain,
+        maxResultCount: 1000,
+        skipCount: 0,
+      });
     },
     {
       manual: true,
     },
   );
   useEffect(() => {
-    if (params.address) {
+    if (daoId) {
       run();
     }
-  }, [params.address]);
-  const tokens = useMemo(() => {
-    return tokenListData?.data.map((item) => item.symbol);
-  }, [tokenListData]);
-  const { data: tokenPriceData, run: tokenPriceRun } = useRequest(
-    async () => {
-      const res: Record<string, number> = {};
-      if (!tokens) {
-        return res;
-      }
-      const reqArr = tokens.map((token) => {
-        return fetchTokenPrice(
-          {
-            fsym: token,
-          },
-          currentChain,
-        );
-      });
-      const resArr = await Promise.allSettled(reqArr);
-      for (const priceItem of resArr) {
-        if (priceItem.status === 'fulfilled') {
-          const data = priceItem.value;
-          if (data.USD) {
-            res[data.symbol] = data.USD;
-          }
-        }
-      }
-      return res;
-    },
-    { manual: true },
-  );
-  const tokenList: ITokenListItem[] = (tokenListData?.data ?? []).map((item) => {
-    return {
-      ...item,
-      price: tokenPriceData?.[item.symbol],
-      valueUSD: tokenPriceData?.[item.symbol]
-        ? new BigNumber(item.balance).multipliedBy(tokenPriceData[item.symbol])
-        : 0,
-    };
-  });
+  }, [daoId]);
   const totalValueUSD = useMemo(() => {
-    let sum = BigNumber(0);
-    for (const item of tokenList) {
-      if (item.valueUSD) {
-        sum = sum.plus(item.valueUSD);
-      }
-    }
-    return sum.decimalPlaces(2, BigNumber.ROUND_DOWN).toFormat();
-  }, [tokenList]);
-  useEffect(() => {
-    if (tokenListData) {
-      tokenPriceRun();
-    }
+    return tokenListData?.data?.data?.reduce((acc, item) => {
+      return acc.plus(item.usdValue ?? 0);
+    }, new BigNumber(0));
   }, [tokenListData]);
   return {
-    tokenPriceData,
-    tokenList: tokenList,
+    tokenList: tokenListData?.data?.data ?? [],
     tokenListLoading,
     tokenListError,
-    totalValueUSD,
+    totalValueUSD: totalValueUSD?.toFormat(),
   };
 }

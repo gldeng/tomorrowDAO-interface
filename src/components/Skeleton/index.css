@@ -10,4 +10,7 @@
 
 .skeleton-line {
   @apply !py-[10px] !px-[0];
+  &.border-none {
+    border-block-end: none;
+  }
 }

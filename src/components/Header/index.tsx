@@ -9,7 +9,6 @@ import { ReactComponent as MenuArrow } from 'assets/imgs/menu-arrow.svg';
 import { MenuProps } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { usePathname } from 'next/navigation';
-import { eventBus, HeaderUpdateTreasury } from 'utils/myEvent';
 import dynamicReq from 'next/dynamic';
 export enum ENavKeys {
   CreateDAO = 'CreateDAO',
@@ -29,7 +28,6 @@ const DynamicLogin = dynamicReq(() => import('components/Login'), {
 export default function Header() {
   const { isLG } = useResponsive();
   const pathname = usePathname();
-  const [aliasName, setAliasName] = useState<string | null>(null);
   const items: MenuProps['items'] = useMemo(() => {
     return [
       {
@@ -100,23 +98,8 @@ export default function Header() {
           },
         ],
       },
-      aliasName
-        ? {
-            label: <Link href={`/dao/${aliasName}/treasury`}>Treasury</Link>,
-            key: ENavKeys.Treasury,
-          }
-        : null,
     ];
-  }, [aliasName, isLG]);
-  useEffect(() => {
-    const setDaoIdCallBack = (aliasName: string | null) => {
-      setAliasName(aliasName);
-    };
-    eventBus.on(HeaderUpdateTreasury, setDaoIdCallBack);
-    return () => {
-      eventBus.off(HeaderUpdateTreasury, setDaoIdCallBack);
-    };
-  }, []);
+  }, [isLG]);
   const [current, setCurrent] = useState('');
 
   const onClick: MenuProps['onClick'] = (e) => {
