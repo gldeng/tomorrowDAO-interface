@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { treasuryAccountAddress } from 'config';
+import { treasuryAccountAddress, networkDaoId } from 'config';
 import { Result } from 'antd';
 import { useChainSelect } from 'hooks/useChainSelect';
 import dynamicReq from 'next/dynamic';
@@ -16,5 +16,5 @@ export default function Page() {
   className="px-4 lg:px-8"
   status="warning"
   title="The current content is only displayed under MainChain AELF, please switch the chain"
-/> : <PageIndex address={treasuryAccountAddress} title="Network DAO Treasury" isNetworkDao={true}/>;
+/> : <PageIndex address={treasuryAccountAddress} title="Network DAO Treasury" isNetworkDao={true} daoId={networkDaoId}/>;
 }

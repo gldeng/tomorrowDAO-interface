@@ -50,6 +50,31 @@ interface IListDaoRes {
   data: IDaoData;
   message: string;
 }
+// -------------------------------------dao-list-----------------------------
+interface ITreasuryAssetsReq {
+  maxResultCount: number;
+  skipCount: number;
+  daoId: string;
+  chainId: string;
+}
+interface ITreasuryAssetsResponseDataItem {
+  chainId: string;
+  symbol: string;
+  amount: number;
+  decimal: number;
+  usdValue: number;
+}
+interface ITreasuryAssetsResponseData {
+  daoId: string;
+  treasuryAddress: string;
+  data: ITreasuryAssetsResponseDataItem[];
+  totalCount: number;
+}
+interface ITreasuryAssetsResponse {
+  code: string;
+  data: ITreasuryAssetsResponseData;
+  message: string;
+}
 // -------------------------------------my-dao-list----------------------
 interface IMyDaoListDataItem {
   chainId: string;

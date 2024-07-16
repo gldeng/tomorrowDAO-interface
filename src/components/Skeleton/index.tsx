@@ -56,9 +56,10 @@ const SkeletonDaoItemList: React.FC = () => {
 };
 interface SkeletonLineProps {
   lines?: number;
+  splitBorder?: boolean;
 }
-const SkeletonLine: React.FC = (props: SkeletonLineProps) => {
-  const { lines } = props;
+const SkeletonLine: React.FC<SkeletonLineProps> = (props: SkeletonLineProps) => {
+  const { lines, splitBorder = true } = props;
   const dataSource = [...listData, ...listData];
   const renderList = dataSource.slice(0, lines);
   return (
@@ -68,7 +69,7 @@ const SkeletonLine: React.FC = (props: SkeletonLineProps) => {
         size="large"
         dataSource={renderList}
         renderItem={(item) => (
-          <List.Item key={item.id} className="skeleton-line">
+          <List.Item key={item.id} className={`skeleton-line ${!splitBorder ? 'border-none' : ''}`}>
             <AntdSkeleton loading active avatar={false} paragraph={false}></AntdSkeleton>
           </List.Item>
         )}

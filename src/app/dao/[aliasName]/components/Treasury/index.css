@@ -1,6 +1,56 @@
 .treasury-wrap {
   @apply min-h-[398px] mb-[16px];
 
+  .token img {
+    @apply pr-[4px];
+  }
+
+  .small-button {
+    @apply !h-[30px] w-[104px];
+  }
+  .token-list-table {
+    @apply mb-[32px];
+    .TMRWDAO-table-container {
+      border-end-start-radius:8px;
+      border-end-end-radius:8px;
+    }
+    .TMRWDAO-table-thead > tr > th {
+      @apply table-title-text h-[48px] lg:py-[14px];
+    }
+    .TMRWDAO-table-thead > tr > th:not(:last-child)  {
+      border-inline-end: none !important;
+    }
+    .TMRWDAO-table-thead > tr > th:last-child,
+    tbody>tr>td:last-child
+    {
+      @apply text-right pr-[32px];
+    }
+    .TMRWDAO-table-thead > tr > th:first-child,
+    tbody>tr>td:first-child
+    {
+      @apply pl-[32px];
+    }
+    tbody>tr:last-child > td:first-child {
+      border-radius: 0 0 0 8px;
+    }
+    tbody>tr:last-child > td:last-child {
+      border-radius: 0 0 8px 0;
+    }
+
+    tbody>tr>td {
+      @apply card-xsm-text h-[52px] lg:py-[16px];
+    }
+    tbody>tr:not(:last-child)>td {
+      @apply border-b-0;
+    }
+    tbody>tr>td:not(:last-child) {
+      border-inline-end: none !important;
+    }
+    thead th {
+      @apply bg-Neutral-Hover-BG ;
+    }
+  }
+
   .treasury-info-item+.treasury-info-item {
     @apply mt-6;
   }
