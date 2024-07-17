@@ -114,6 +114,9 @@ export default function Transparent(props: ITransparentProps) {
                   columns={columns as any}
                   dataSource={tokenList ?? []}
                   loading={tokenListLoading}
+                  scroll={{
+                    x: true,
+                  }}
                 ></Table>
               </ConfigProvider>
             </div>
