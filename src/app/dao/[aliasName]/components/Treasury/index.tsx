@@ -237,13 +237,15 @@ const Treasury: React.FC<IProps> = (props) => {
                   {tokenListLoading ? (
                     <SkeletonLine lines={3} splitBorder={false} />
                   ) : (
-                    <Table
-                      className="token-list-table"
-                      columns={tokenListColumns}
-                      bordered
-                      dataSource={tokenList}
-                      pagination={false}
-                    />
+                    tokenList.length > 0 && (
+                      <Table
+                        className="token-list-table"
+                        columns={tokenListColumns}
+                        bordered
+                        dataSource={tokenList}
+                        pagination={false}
+                      />
+                    )
                   )}
                   <div>
                     <p className="flex justify-between">
