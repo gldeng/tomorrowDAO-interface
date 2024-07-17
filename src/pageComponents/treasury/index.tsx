@@ -15,6 +15,7 @@ import { isSideChain } from 'utils/chain';
 import TreasuryNoTxGuide from 'components/TreasuryNoTxGuide';
 import { sortIcon } from 'components/TableIcon';
 import { divDecimals } from 'utils/calculate';
+import BigNumber from 'bignumber.js';
 interface ITransparentProps {
   address: string;
   isNetworkDao: boolean;
@@ -62,7 +63,9 @@ export default function Transparent(props: ITransparentProps) {
       sortIcon,
       sorter: (a, b) => Number(a.usdValue) - Number(b.usdValue),
       render(value) {
-        return <span>{value}</span>;
+        return (
+          <span>{value === 0 ? value : BigNumber(value).toFormat(2, BigNumber.ROUND_FLOOR)}</span>
+        );
       },
     },
   ];
