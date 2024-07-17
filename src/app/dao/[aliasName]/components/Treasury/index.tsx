@@ -48,7 +48,8 @@ const tokenListColumns: TableProps<ITreasuryAssetsResponseDataItem>['columns'] =
   {
     title: 'Value',
     dataIndex: 'usdValue',
-    render: (usdValue) => BigNumber(usdValue).toFormat(),
+    render: (usdValue) =>
+      usdValue === 0 ? 0 : BigNumber(usdValue).toFormat(2, BigNumber.ROUND_FLOOR),
   },
 ];
 const Treasury: React.FC<IProps> = (props) => {
@@ -82,20 +83,35 @@ const Treasury: React.FC<IProps> = (props) => {
     currentChain: curChain,
   });
   const {
-    data: transferListData,
+    data: transferList,
     // error: transferListError,
     loading: transferListLoading,
     run,
   } = useRequest(
-    () => {
-      return fetchAddressTransferList(
-        {
-          address: treasuryAddress ?? '',
-          pageSize: 6,
-          pageNum: 1,
-        },
-        curChain,
+    async () => {
+      const [tokenRes, nftRes] = await Promise.all([
+        fetchAddressTransferList(
+          {
+            address: treasuryAddress ?? '',
+            pageSize: 6,
+            pageNum: 1,
+          },
+          curChain,
+        ),
+        fetchAddressTransferList(
+          {
+            address: treasuryAddress ?? '',
+            pageSize: 6,
+            pageNum: 1,
+            isNft: true,
+          },
+          curChain,
+        ),
+      ]);
+      const list = [...(tokenRes?.data?.list ?? []), ...(nftRes?.data?.list ?? [])].sort(
+        (a, b) => dayjs(b.time).unix() - dayjs(a.time).unix(),
       );
+      return list;
     },
     {
       manual: true,
@@ -180,7 +196,7 @@ const Treasury: React.FC<IProps> = (props) => {
     }
   }, [treasuryAddress]);
   const cls = `${clssName} treasury-wrap border-0 lg:border lg:mb-[10px] border-Neutral-Divider border-solid rounded-lg bg-white px-4 lg:px-8  lg:py-6`;
-  const existTransaction = transferListData?.data?.total && transferListData?.data?.total > 0;
+  const existTransaction = Boolean(transferList?.length);
   return (
     <div className={cls}>
       {treasuryAddressLoading ? (
@@ -244,6 +260,7 @@ const Treasury: React.FC<IProps> = (props) => {
                         bordered
                         dataSource={tokenList}
                         pagination={false}
+                        scroll={{ x: true }}
                       />
                     )
                   )}
@@ -252,7 +269,7 @@ const Treasury: React.FC<IProps> = (props) => {
                       <span className="card-title mb-6">Transactions</span>
                     </p>
                     <ul>
-                      {transferListData?.data?.list?.slice(0, LoadCount).map((item) => {
+                      {transferList?.slice(0, LoadCount).map((item) => {
                         const isOut = checkIsOut(treasuryAddress, item);
                         return (
                           <li className="treasury-info-item" key={item.txId}>

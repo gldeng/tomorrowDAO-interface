@@ -45,6 +45,6 @@ export default function useTokenListData(params: IParams) {
     tokenList: tokenListData?.data?.data ?? [],
     tokenListLoading,
     tokenListError,
-    totalValueUSD: totalValueUSD?.toFormat(),
+    totalValueUSD: totalValueUSD?.toFormat(2, BigNumber.ROUND_FLOOR),
   };
 }
