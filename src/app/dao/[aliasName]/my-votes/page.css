@@ -19,4 +19,9 @@
   .vote-record-2 {
     @apply text-abstention;
   }
+  .vote-option-column {
+    .TMRWDAO-table-filter-column {
+      @apply flex justify-start;
+    }
+  }
 }

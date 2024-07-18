@@ -1,20 +1,16 @@
-import { Typography, FontWeightEnum, Button, HashAddress } from 'aelf-design';
-import Image from 'next/image';
 import { RightOutlined } from '@aelf-design/icons';
 import Link from 'next/link';
 import { fetchVoteHistory } from 'api/request';
 import { useSelector } from 'react-redux';
 import { useRequest } from 'ahooks';
-import { curChain, explorer } from 'config';
+import { curChain } from 'config';
 import { EVoteOption } from 'types/vote';
 import dayjs from 'dayjs';
-import LinkNetworkDao from 'components/LinkNetworkDao';
 import { useEffect } from 'react';
 import { useWalletService } from 'hooks/useWallet';
 import './index.css';
 import { SkeletonLine } from 'components/Skeleton';
-import { Empty } from 'antd';
-import NoData from '../NoData';
+import NoData from 'components/NoData';
 
 interface IProps {
   daoId: string;

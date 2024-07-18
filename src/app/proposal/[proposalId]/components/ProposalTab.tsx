@@ -1,4 +1,4 @@
-import { Typography, FontWeightEnum, HashAddress } from 'aelf-design';
+import { HashAddress } from 'aelf-design';
 import { Tabs } from 'aelf-design';
 import { getContract } from 'app/proposal/deploy/[aliasName]/util';
 import { MarkdownPreview } from 'components/MarkdownEditor';
@@ -40,7 +40,7 @@ const ProposalTab = (props: IProposalTabProps) => {
       key: '1',
       label: <span className="flex flex-col lg:flex-row">Description</span>,
       children: (
-        <div className="text-base px-8 py-4">
+        <div className="text-base tab-content-padding">
           <div className="custom-html-style">
             <MarkdownPreview text={proposalDetailData?.proposalDescription ?? ''} />
           </div>
@@ -58,34 +58,27 @@ const ProposalTab = (props: IProposalTabProps) => {
         </span>
       ),
       children: (
-        <div className="text-base	px-8 py-4">
+        <div className="text-base	tab-content-padding tab-contract-info">
           <div className="flex flex-col gap-2 pb-8">
-            <div>
-              <Typography.Text fontWeight={FontWeightEnum.Medium}>Call Method</Typography.Text>
-            </div>
-            <div>
-              <Typography.Text className="text-Neutral-Secondary-Text">
-                {proposalDetailData?.transaction?.contractMethodName ?? '-'}
-              </Typography.Text>
+            <div className="card-sm-text-bold">Call Method</div>
+            <div className="card-sm-text text-[#808080]">
+              {proposalDetailData?.transaction?.contractMethodName ?? '-'}
             </div>
           </div>
 
           <div className="flex flex-col gap-2 pb-8">
-            <div>
-              <Typography.Text fontWeight={FontWeightEnum.Medium}>Call Contract</Typography.Text>
-            </div>
+            <div className="card-sm-text-bold">Call Contract</div>
             <div>
               <HashAddress
+                className="card-sm-text "
                 address={proposalDetailData?.transaction?.toAddress ?? '-'}
                 chain={curChain}
               />
             </div>
           </div>
           <div className="flex flex-col gap-2">
-            <div>
-              <Typography.Text fontWeight={FontWeightEnum.Medium}>Contract Params</Typography.Text>
-            </div>
-            <div className="p-4 rounded-md bg-[#F8F8F8]">
+            <div className="card-sm-text-bold">Contract Params</div>
+            <div className="p-4 rounded-md bg-[#F8F8F8] card-sm-text text-[#808080]">
               <ContractParams
                 address={proposalDetailData?.transaction?.toAddress}
                 methodName={proposalDetailData?.transaction?.contractMethodName}

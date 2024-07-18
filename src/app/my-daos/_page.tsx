@@ -10,7 +10,7 @@ import LoadMoreButton from 'components/LoadMoreButton';
 import { SkeletonDaoItemList } from 'components/Skeleton';
 import './index.css';
 import { EMyDAOType } from 'types/dao';
-import NoData from 'app/dao/[aliasName]/components/NoData';
+import NoData from 'components/NoData';
 import useResponsive from 'hooks/useResponsive';
 
 const MaxResultCount = 5;

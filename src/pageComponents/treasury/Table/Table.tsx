@@ -11,7 +11,7 @@ import { fetchAddressTransferList } from 'api/request';
 import { getFormattedDate } from 'utils/time';
 import { numberFormatter } from 'utils/numberFormatter';
 import { TokenIconMap } from 'constants/token';
-import NoData from './NoData';
+import NoData from 'components/NoData';
 import { checkIsOut } from 'utils/transaction';
 import { isSideChain } from 'utils/chain';
 

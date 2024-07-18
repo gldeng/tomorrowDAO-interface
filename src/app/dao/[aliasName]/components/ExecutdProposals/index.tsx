@@ -10,7 +10,7 @@ import './index.css';
 import { emitLoading } from 'utils/myEvent';
 import { proposalCreateContractRequest } from 'contract/proposalCreateContract';
 import Link from 'next/link';
-import NoData from '../NoData';
+import NoData from 'components/NoData';
 import useIsNetworkDao from 'hooks/useIsNetworkDao';
 import LinkNetworkDao from 'components/LinkNetworkDao';
 import useAelfWebLoginSync from 'hooks/useAelfWebLoginSync';

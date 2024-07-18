@@ -6,14 +6,15 @@ import { ColumnsType } from 'antd/es/table';
 import { useSelector } from 'react-redux';
 import { fetchDaoInfo, fetchVoteHistory } from 'api/request';
 import { EVoteOption } from 'types/vote';
-import NoData from './NoData';
+import NoData from 'components/NoData';
 import { curChain, explorer } from 'config';
 import { useRequest } from 'ahooks';
-import { useParams, useSearchParams } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import dayjs from 'dayjs';
 import Link from 'next/link';
 import { useWalletService } from 'hooks/useWallet';
 import breadCrumb from 'utils/breadCrumb';
+import { DownOutlined, UpOutlined } from '@aelf-design/icons';
 
 const defaultPageSize = 20;
 const allValue = 'All';
@@ -67,7 +68,7 @@ export default function RecordTable() {
     {
       title: 'Time',
       dataIndex: 'timeStamp',
-      width: 147,
+      width: 199,
       sorter: (a, b) => {
         return dayjs(a.timeStamp).unix() - dayjs(b.timeStamp).unix();
       },
@@ -79,40 +80,17 @@ export default function RecordTable() {
     {
       title: 'Proposal Name',
       dataIndex: 'proposalTitle',
-      width: 250,
+      width: 576,
       render: (text, record) => {
         const renderProposalNode = <div className="text-neutralPrimaryText">{text}</div>;
         return <Link href={`/proposal/${record.proposalId}`}>{renderProposalNode}</Link>;
       },
     },
     {
-      title: 'Proposal ID',
-      width: 220,
-      dataIndex: 'proposalId',
-      render(text, record) {
-        const renderId = (
-          <HashAddress
-            className="pl-[4px]"
-            ignorePrefixSuffix={true}
-            preLen={8}
-            endLen={11}
-            address={text}
-          ></HashAddress>
-        );
-        return (
-          <div>
-            <div>
-              <Link href={`/proposal/${record.proposalId}`}>{renderId}</Link>
-            </div>
-            <div>{record.executer === walletInfo.address ? <span>Executed by me</span> : ''}</div>
-          </div>
-        );
-      },
-    },
-    {
       title: 'Vote',
       dataIndex: 'myOption',
-      width: 100,
+      className: 'vote-option-column',
+      width: 116,
       filterMultiple: false,
       filters: [
         { text: 'All', value: allValue },
@@ -133,12 +111,11 @@ export default function RecordTable() {
     {
       title: 'Votes',
       dataIndex: 'voteNum',
-      width: 87,
+      width: 206,
     },
     {
       title: 'Txn Hash',
       dataIndex: 'transactionId',
-      width: 220,
       render(transactionId) {
         return (
           <Link href={`${explorer}/tx/${transactionId}`}>
