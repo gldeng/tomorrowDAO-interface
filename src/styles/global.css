@@ -16,6 +16,16 @@
     @apply bg-white rounded-lg border border-solid border-Neutral-Divider px-4 lg:px-8 py-4 lg:py-8;
   }
 
+  .card-shape {
+    @apply bg-white rounded-lg border border-solid border-Neutral-Divider;
+  }
+  .card-px {
+    @apply px-4 lg:px-8;
+  }
+  .tab-content-padding {
+    @apply px-4 lg:px-8 pb-4;
+  }
+
   .dao-border-round {
     @apply button-border-normal rounded-lg;
   }
@@ -99,6 +109,16 @@ body {
   font-family: 'Roboto';
   src: url('/font/Roboto-Regular.ttf');
 }
+@font-face {
+  font-family: 'Roboto';
+  font-weight: 500;
+  src: url('/font/Roboto-Medium.ttf');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-weight: 700;
+  src: url('/font/Roboto-Bold.ttf');
+}
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
@@ -165,4 +185,36 @@ input[type='number'] {
   .TMRWDAO-icon {
     @apply text-[20px];
   }
+}
+.TMRWDAO-table-column-sorter-up.active,
+.TMRWDAO-table-column-sorter-down.active {
+  @apply !text-neutralTitle;
+}
+.TMRWDAO-table-container {
+  .TMRWDAO-table-thead >tr>th {
+    @apply text-Neutral-Secondary-Text;
+  }
+  tbody {
+    @apply text-neutralPrimaryText;
+  }
+}
+.TMRWDAO-typography {
+  font-family: Roboto, sans-serif !important;
+}
+.full-table {
+  .TMRWDAO-table-thead>tr>th:first-child {
+    @apply lg:pl-[32px] pl-[16px];
+ }
+ .TMRWDAO-table-thead>tr>th:last-child {
+    @apply lg:pr-[32px] pr-[16px];
+ }
+ .TMRWDAO-table-tbody>tr>td:first-child {
+    @apply lg:pl-[32px] pl-[16px];
+ }
+ .TMRWDAO-table-tbody>tr>td:last-child {
+    @apply lg:pr-[32px] pr-[16px];
+ }
+ .TMRWDAO-pagination-container {
+  @apply lg:px-8 px-4;
+}
 }

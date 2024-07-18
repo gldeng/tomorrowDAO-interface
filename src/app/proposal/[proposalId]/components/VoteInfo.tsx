@@ -44,7 +44,7 @@ const VoteInfo = (props: IHeaderInfoProps) => {
     daoData?.data?.governanceMechanism === EDaoGovernanceMechanism.Multisig;
   return (
     <div className="flex justify-between flex-col lg:flex-row">
-      <BoxWrapper className="flex-1 lg:mr-[24px] order-last lg:order-first">
+      <BoxWrapper className="flex-1 lg:mr-[24px] order-last lg:order-first py-[16px] flex flex-col">
         <Typography.Title level={6} fontWeight={FontWeightEnum.Medium}>
           Current Votes
         </Typography.Title>
@@ -95,7 +95,7 @@ const VoteInfo = (props: IHeaderInfoProps) => {
           </div>
         </div>
 
-        <div className="border-0 border-solid border-Neutral-Divider flex flex-col py-8">
+        <div className="votes-total-count border-0 border-solid border-Neutral-Divider flex flex-col pt-8 pb-4 mt-auto">
           <div>
             <Typography.Text fontWeight={FontWeightEnum.Medium} className="text-Primary-Text">
               <span className="pr-[4px]">{proposalDetailData.votesAmount}</span>

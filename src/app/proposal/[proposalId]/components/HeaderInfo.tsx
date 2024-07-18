@@ -1,6 +1,6 @@
 import BoxWrapper from './BoxWrapper';
 import DetailTag from 'components/DetailTag';
-import { Typography, FontWeightEnum, HashAddress } from 'aelf-design';
+import { HashAddress } from 'aelf-design';
 import { colorfulSocialMediaIconMap } from 'assets/imgs/socialMediaIcon';
 import Image from 'next/image';
 import { memo } from 'react';
@@ -42,9 +42,9 @@ const HeaderInfo = (props: IHeaderInfoProps) => {
             }}
             className="max-content"
           />
-          <Typography.Text size="small" className="text-Neutral-Secondary-Text">
+          <span className="text-Neutral-Secondary-Text card-xsm-text">
             <ProposalStatusDesc proposalItem={proposalDetailData as unknown as IProposalsItem} />
-          </Typography.Text>
+          </span>
         </div>
         <div className="flex gap-6">
           <div
@@ -57,9 +57,7 @@ const HeaderInfo = (props: IHeaderInfoProps) => {
         </div>
       </div>
       <div className="pt-4 pb-3">
-        <Typography.Title level={5} fontWeight={FontWeightEnum.Medium}>
-          {proposalDetailData.proposalTitle}
-        </Typography.Title>
+        <span className="card-title-lg">{proposalDetailData.proposalTitle}</span>
       </div>
       <div className="flex gap-2 pb-6">
         <ProposalTag
@@ -68,48 +66,48 @@ const HeaderInfo = (props: IHeaderInfoProps) => {
           governanceMechanism={proposalDetailData.governanceMechanism}
         />
       </div>
-      <div className="border-0 border-t border-solid border-Neutral-Divider flex pt-6 gap-y-4 gap-x-0 lg:gap-x-16 lg:gap-y-0 lg:flex-row flex-col flex-wrap">
+      <div className="proposal-detail-key-value border-0 border-t border-solid border-Neutral-Divider flex pt-6 gap-y-4 gap-x-0 lg:gap-x-16 lg:gap-y-0 lg:flex-row flex-col flex-wrap">
         {proposalDetailData.proposalType === ProposalTypeString.Veto && (
           <div className="flex items-center gap-4">
-            <Typography.Text className="text-Neutral-Secondary-Text">
-              Veto Proposal:
-            </Typography.Text>
+            <span className="text-Neutral-Secondary-Text card-sm-text">Veto Proposal:</span>
             <Link href={`/proposal/${proposalDetailData.vetoProposalId}`}>
               <HashAddress
                 preLen={8}
                 endLen={9}
                 ignorePrefixSuffix={true}
-                className="hash-link-color"
+                className="hash-link-color card-sm-text-bold"
                 address={proposalDetailData.vetoProposalId ?? '-'}
               ></HashAddress>
             </Link>
           </div>
         )}
         <div className="flex items-center gap-4">
-          <Typography.Text className="text-Neutral-Secondary-Text">Poster:</Typography.Text>
+          <span className="text-Neutral-Secondary-Text card-sm-text">Poster:</span>
           <HashAddress
             preLen={8}
             endLen={9}
             address={proposalDetailData.proposer}
+            className="card-sm-text-bold"
             chain={sideChainSuffix}
           ></HashAddress>
         </div>
         <div className="flex items-center gap-4">
-          <Typography.Text className="text-Neutral-Secondary-Text">Proposal ID:</Typography.Text>
+          <span className="text-Neutral-Secondary-Text card-sm-text">Proposal ID:</span>
           <HashAddress
             preLen={8}
             endLen={9}
             ignorePrefixSuffix={true}
             address={proposalDetailData.proposalId ?? '-'}
+            className="card-sm-text-bold"
           ></HashAddress>
         </div>
         <div className="flex items-center gap-4">
-          <Typography.Text className="text-Neutral-Secondary-Text">Published:</Typography.Text>
-          <Typography.Text>
+          <span className="text-Neutral-Secondary-Text card-sm-text">Published:</span>
+          <span className="card-sm-text">
             {proposalDetailData.deployTime
               ? dayjs(proposalDetailData.deployTime).format('YYYY-MM-DD HH:mm:ss')
               : '-'}
-          </Typography.Text>
+          </span>
         </div>
       </div>
     </BoxWrapper>

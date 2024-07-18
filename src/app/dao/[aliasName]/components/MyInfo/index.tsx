@@ -40,6 +40,13 @@ type TFieldType = {
 interface IMyInfo extends IProposalMyInfo {
   votesAmount?: number;
 }
+interface ISymbolTextProps {
+  symbol: string;
+}
+const SymbolText = (props: ISymbolTextProps) => {
+  const { symbol } = props;
+  return <> {symbol.length > 13 ? '' : symbol}</>;
+};
 export default function MyInfo(props: TInfoTypes) {
   const {
     height,
@@ -145,7 +152,7 @@ export default function MyInfo(props: TInfoTypes) {
       ),
       children: (
         <div className="w-full text-right card-sm-text-bold">
-          {elfBalance} {info?.symbol || 'ELF'}
+          {elfBalance} <SymbolText symbol={info?.symbol || 'ELF'} />
         </div>
       ),
     },
@@ -156,7 +163,7 @@ export default function MyInfo(props: TInfoTypes) {
       ),
       children: (
         <div className="w-full text-right card-sm-text-bold">
-          {info?.stakeAmount} {info?.symbol}
+          {info?.stakeAmount} <SymbolText symbol={info?.symbol || 'ELF'} />
         </div>
       ),
     },

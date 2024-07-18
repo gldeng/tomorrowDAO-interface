@@ -1,6 +1,5 @@
 import { memo, useMemo, useState } from 'react';
-import BoxWrapper from './BoxWrapper';
-import { FontWeightEnum, HashAddress, Search, Table, Typography } from 'aelf-design';
+import { HashAddress, Table } from 'aelf-design';
 import { TVotingOption } from './type';
 import { ColumnsType } from 'antd/es/table';
 import thousandsNumber from 'utils/thousandsNumber';
@@ -11,36 +10,48 @@ import { explorer, sideChainSuffix } from 'config';
 
 const columns: ColumnsType<IProposalDetailDataVoteTopListItem> = [
   {
-    width: 320,
-    title: <Typography.Text className="text-Neutral-Secondary-Text">Voter</Typography.Text>,
+    width: 328,
+    title: 'Voter',
     dataIndex: 'voter',
     render: (text) => {
-      return <HashAddress address={text} preLen={8} endLen={9} chain={sideChainSuffix} />;
+      return (
+        <HashAddress
+          address={text}
+          preLen={8}
+          endLen={9}
+          chain={sideChainSuffix}
+          className="card-sm-text-bold"
+        />
+      );
     },
   },
   {
-    width: 320,
-    title: (
-      <Typography.Text className="text-Neutral-Secondary-Text">Transaction ID</Typography.Text>
-    ),
+    width: 344,
+    title: 'Transaction ID',
     dataIndex: 'transactionId',
     render: (text) => {
       return (
         <Link href={`${explorer}/tx/${text}`}>
-          <HashAddress ignorePrefixSuffix={true} preLen={8} endLen={9} address={text} />
+          <HashAddress
+            className="card-sm-text-bold"
+            ignorePrefixSuffix={true}
+            preLen={8}
+            endLen={9}
+            address={text}
+          />
         </Link>
       );
     },
   },
   {
-    width: 200,
-    title: <Typography.Text className="text-Neutral-Secondary-Text">Result</Typography.Text>,
+    width: 224,
+    title: 'Result',
     dataIndex: 'option',
     render: (text) => {
       return (
-        <Typography.Text
-          fontWeight={FontWeightEnum.Medium}
+        <span
           className={clsx(
+            'card-sm-text-bold',
             text === TVotingOption.Approved
               ? 'text-approve'
               : text === TVotingOption.Rejected
@@ -49,29 +60,28 @@ const columns: ColumnsType<IProposalDetailDataVoteTopListItem> = [
           )}
         >
           {text}
-        </Typography.Text>
+        </span>
       );
     },
   },
   {
-    width: 200,
-    title: <Typography.Text className="text-Neutral-Secondary-Text">Votes</Typography.Text>,
+    width: 224,
+    title: 'Votes',
     dataIndex: 'amount',
     render: (text) => {
-      return (
-        <Typography.Text fontWeight={FontWeightEnum.Medium}>
-          {thousandsNumber(text)}
-        </Typography.Text>
-      );
+      return <span className="card-sm-text-bold">{thousandsNumber(text)}</span>;
     },
   },
   {
-    title: <Typography.Text className="text-Neutral-Secondary-Text">Time</Typography.Text>,
+    title: 'Time',
     dataIndex: 'voteTime',
     align: 'right',
-    width: 200,
     render: (text) => {
-      return <Typography.Text>{dayjs(text).format('YYYY-MM-DD HH:mm:ss')}</Typography.Text>;
+      return (
+        <span className="card-sm-text font-normal">
+          {dayjs(text).format('YYYY-MM-DD HH:mm:ss')}
+        </span>
+      );
     },
   },
 ];
@@ -97,25 +107,9 @@ const VoteResultTable = (props: IVoteResultTableProps) => {
     return voteTopList?.slice((page - 1) * pageSize, page * pageSize) ?? [];
   }, [tableParams, voteTopList]);
   return (
-    <BoxWrapper>
-      <div className="flex justify-between pb-6">
-        <Typography.Title level={6} fontWeight={FontWeightEnum.Medium}>
-          Voting Results
-        </Typography.Title>
-        <div>
-          <Search
-            inputSize="small"
-            onClear={() => {
-              //
-            }}
-            onSelectChange={() => {
-              //
-            }}
-            onPressEnter={() => {
-              //
-            }}
-          />
-        </div>
+    <div className="card-shape vote-result-table-wrap">
+      <div className="flex justify-between px-8 py-6 title">
+        <h3 className="card-title">Voting Results</h3>
       </div>
       <Table
         rowKey={'transactionId'}
@@ -128,7 +122,7 @@ const VoteResultTable = (props: IVoteResultTableProps) => {
         }}
         dataSource={lists}
       ></Table>
-    </BoxWrapper>
+    </div>
   );
 };
 

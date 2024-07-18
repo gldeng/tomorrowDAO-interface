@@ -7,7 +7,7 @@ import { TableProps } from 'antd/es/table';
 import { TokenIconMap } from 'constants/token';
 import useTokenListData from 'hooks/useTokenListData';
 import BoxWrapper from 'app/proposal/[proposalId]/components/BoxWrapper';
-
+import Symbol from 'components/Symbol';
 import './index.css';
 import Link from 'next/link';
 import { explorer, mainExplorer } from 'config';
@@ -38,11 +38,8 @@ export default function Transparent(props: ITransparentProps) {
       className: 'treasury-table-column-clear-pl',
       render(token) {
         return (
-          <span className="flex items-center">
-            {TokenIconMap[token] && (
-              <img className="token-logo pr-[2px]" src={TokenIconMap[token]} alt="" />
-            )}
-            {token}
+          <span className="token-pair">
+            <Symbol symbol={token} />
           </span>
         );
       },
@@ -60,7 +57,7 @@ export default function Transparent(props: ITransparentProps) {
       title: 'value',
       dataIndex: 'usdValue',
       defaultSortOrder: 'descend',
-      sortIcon,
+      // sortIcon,
       sorter: (a, b) => Number(a.usdValue) - Number(b.usdValue),
       render(value) {
         return (
@@ -71,11 +68,10 @@ export default function Transparent(props: ITransparentProps) {
   ];
   console.log('tokenList', tokenList);
   const isShowGuide = tokenList.length === 0 && !tokenListLoading && !isNetworkDao;
-  console.log('isShowGuide', isShowGuide);
   return (
     <div>
-      <BoxWrapper>
-        <div className="flex justify-between lg:flex-row flex-col">
+      <div className="card-shape pt-6">
+        <div className="flex justify-between lg:flex-row flex-col card-px">
           <span className="text-Primary-Text leading-[32px] font-[500] text-[24px]">{title}</span>
           <span className="flex lg:flex-row flex-col">
             <span className="text-Neutral-Secondary-Text leading-[22px] text-[14px] flex pr-[4px]">
@@ -100,7 +96,7 @@ export default function Transparent(props: ITransparentProps) {
           <TreasuryNoTxGuide address={address} />
         ) : (
           <>
-            <div>
+            <div className="card-px">
               <div className="text-Neutral-Secondary-Text text-[14px] flex items-center font-500 h-[22px]">
                 Treasury Balance
               </div>
@@ -111,6 +107,7 @@ export default function Transparent(props: ITransparentProps) {
             <div>
               <ConfigProvider>
                 <Table
+                  className="full-table token-list-table"
                   columns={columns as any}
                   dataSource={tokenList ?? []}
                   loading={tokenListLoading}
@@ -124,13 +121,14 @@ export default function Transparent(props: ITransparentProps) {
         )}
 
         <div></div>
-      </BoxWrapper>
+      </div>
       {!isShowGuide && (
-        <BoxWrapper className="mt-[20px]">
-          <h2 className="pb-[20px]">All Income and Expenses</h2>
+        <div className="mt-[20px] card-shape pt-[20px]">
+          <h2 className="pb-[20px] card-px">All Income and Expenses</h2>
           <Tabs
             defaultActiveKey="1"
             size="small"
+            className="full-table"
             items={[
               {
                 key: '1',
@@ -148,7 +146,7 @@ export default function Transparent(props: ITransparentProps) {
               },
             ]}
           />
-        </BoxWrapper>
+        </div>
       )}
     </div>
   );

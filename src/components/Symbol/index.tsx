@@ -12,7 +12,7 @@ export default function Symbol(props: SymbolProps) {
       {TokenIconMap[symbol] && (
         <img src={TokenIconMap[symbol]} className="token-logo pr-[2px]" alt="" />
       )}
-      {symbol}
+      <span className="token-text">{symbol}</span>
     </div>
   );
 }

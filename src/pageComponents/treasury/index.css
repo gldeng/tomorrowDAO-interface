@@ -14,3 +14,16 @@
 .token-logo {
   @apply w-[16px] h-[16px];
 }
+.token-list-table {
+  .TMRWDAO-table-tbody>tr:last-child>td {
+    @apply border-b-0;
+ }
+ .token-pair {
+  .token-text {
+    @apply normal-text-bold;
+  }
+  .token-logo {
+    @apply w-[32px] h-[32px] pr-[8px];
+  }
+ }
+}
