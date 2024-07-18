@@ -4,7 +4,7 @@ import { Form } from 'antd';
 import IPFSUpload from 'components/IPFSUpload';
 import './index.css';
 import { StepEnum, StepsContext } from '../../type';
-import { useRegisterForm } from '../utils';
+import { useRegisterForm, validatorCreate } from '../utils';
 
 const { Title } = Typography;
 
@@ -70,10 +70,12 @@ export default function ContractsAndFiles() {
             {
               required: true,
               type: 'array',
-              min: 1,
-              max: 20,
-              message: `You have reached the maximum limit of 20 files. Please consider removing some files before uploading a new one. If you need further assistance, you can join TMRWDAO's Telegram group.`,
+              message: 'Add at least one documentation',
             },
+            validatorCreate(
+              (v) => v.length > 20,
+              `You have reached the maximum limit of 20 files. Please consider removing some files before uploading a new one. If you need further assistance, you can join TMRWDAO's Telegram group.`,
+            ),
           ]}
           valuePropName="fileList"
           initialValue={[]}

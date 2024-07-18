@@ -18,7 +18,7 @@
 }
 
 .dao-desc-items-card {
-  @apply lg:px-[48px] px-[16px] lg:py-[48px] py-[24px] bg-white flex-half cursor-pointer;
+  @apply lg:px-[48px] px-[16px] lg:py-[48px] py-[24px] bg-white flex-half;
   border-radius: 8px;
   background: var(--Neutral-White-BG, #FFF);
   border: 1px solid var(--Neutral-Divider, #EDEDED);

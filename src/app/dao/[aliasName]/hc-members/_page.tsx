@@ -2,7 +2,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { curChain } from 'config';
 import { useRequest } from 'ahooks';
-import useUpdateHeaderDaoInfo from 'hooks/useUpdateHeaderDaoInfo';
 import breadCrumb from 'utils/breadCrumb';
 import { fetchDaoInfo, fetchHcMembers } from 'api/request';
 import { EProposalActionTabs } from 'app/proposal/deploy/[aliasName]/type';
@@ -10,7 +9,6 @@ import { message } from 'antd';
 import MembersPage from 'pageComponents/members';
 import './index.css';
 import { checkCreateProposal } from 'utils/proposal';
-import { wallet } from '@portkey/utils';
 import { useWebLogin } from 'aelf-web-login';
 import { useRouter } from 'next/navigation';
 interface ITreasuryDetailsProps {
@@ -54,7 +52,6 @@ export default function TreasuryDetails(props: ITreasuryDetailsProps) {
     },
   );
   const daoId = daoData?.data?.id;
-  useUpdateHeaderDaoInfo(daoId, aliasName);
   const router = useRouter();
 
   useEffect(() => {

@@ -1,35 +1,31 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Form, InputNumber, Spin } from 'antd';
+import { Form, TableProps, Table, Skeleton } from 'antd';
 import { useWebLogin } from 'aelf-web-login';
 import treasuryIconSrc from 'assets/imgs/treasury-icon.svg';
-import { Button, FontWeightEnum, Typography, Input, HashAddress } from 'aelf-design';
-import { RightArrowOutlined } from '@aelf-design/icons';
+import { Button, HashAddress } from 'aelf-design';
 import { callContract, callViewContract } from 'contract/callContract';
 import CommonModal from 'components/CommonModal';
-import { GetBalanceByContract, GetTokenInfo } from 'contract/callContract';
 import { emitLoading, eventBus, ResultModal } from 'utils/myEvent';
-import { curChain, explorer, sideChainAddress, treasuryContractAddress } from 'config';
+import { curChain, explorer, treasuryContractAddress } from 'config';
 import { CommonOperationResultModalType } from 'components/CommonOperationResultModal';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { INIT_RESULT_MODAL_CONFIG } from 'components/ResultModal';
 import { IContractError } from 'types';
-import { fetchAddressTransferList, fetchTokenInfo, fetchTreasuryAssets } from 'api/request';
+import { fetchAddressTransferList } from 'api/request';
 import dayjs from 'dayjs';
-import BigNumber from 'bignumber.js';
-import { divDecimals, timesDecimals } from 'utils/calculate';
 import './index.css';
 import { ButtonCheckLogin } from 'components/ButtonCheckLogin';
 import { EProposalActionTabs } from 'app/proposal/deploy/[aliasName]/type';
-import { useAsyncEffect, useRequest } from 'ahooks';
+import { useRequest } from 'ahooks';
 import useTokenListData from 'hooks/useTokenListData';
 import { checkIsOut } from 'utils/transaction';
 import { numberFormatter } from 'utils/numberFormatter';
 import { SkeletonLine } from 'components/Skeleton';
-import { getExploreLink } from 'utils/common';
 import TreasuryNoTxGuide, { ITreasuryNoTxGuideRef } from 'components/TreasuryNoTxGuide';
-const formSymbol = 'symbol';
-const formAmount = 'amount';
+import { divDecimals } from 'utils/calculate';
+import BigNumber from 'bignumber.js';
+import Symbol from 'components/Symbol';
 interface IProps {
   clssName?: string;
   daoData: IDaoInfoData;
@@ -38,6 +34,24 @@ interface IProps {
   // Define your component's props here
 }
 const LoadCount = 5;
+const tokenListColumns: TableProps<ITreasuryAssetsResponseDataItem>['columns'] = [
+  {
+    title: 'Token',
+    dataIndex: 'symbol',
+    render: (symbol) => <Symbol symbol={symbol} />,
+  },
+  {
+    title: 'Blance',
+    dataIndex: 'amount',
+    render: (amount, record) => divDecimals(amount, record.decimal).toFormat(),
+  },
+  {
+    title: 'Value',
+    dataIndex: 'usdValue',
+    render: (usdValue) =>
+      usdValue === 0 ? 0 : BigNumber(usdValue).toFormat(2, BigNumber.ROUND_FLOOR),
+  },
+];
 const Treasury: React.FC<IProps> = (props) => {
   const { clssName, daoData, createProposalCheck, aliasName } = props;
   const [form] = Form.useForm();
@@ -64,25 +78,40 @@ const Treasury: React.FC<IProps> = (props) => {
     );
     return res;
   });
-  const { tokenList, totalValueUSD, tokenListLoading } = useTokenListData({
-    address: treasuryAddress,
+  const { totalValueUSD, tokenList, tokenListLoading } = useTokenListData({
+    daoId: id,
     currentChain: curChain,
   });
   const {
-    data: transferListData,
+    data: transferList,
     // error: transferListError,
     loading: transferListLoading,
     run,
   } = useRequest(
-    () => {
-      return fetchAddressTransferList(
-        {
-          address: treasuryAddress ?? '',
-          pageSize: 6,
-          pageNum: 1,
-        },
-        curChain,
+    async () => {
+      const [tokenRes, nftRes] = await Promise.all([
+        fetchAddressTransferList(
+          {
+            address: treasuryAddress ?? '',
+            pageSize: 6,
+            pageNum: 1,
+          },
+          curChain,
+        ),
+        fetchAddressTransferList(
+          {
+            address: treasuryAddress ?? '',
+            pageSize: 6,
+            pageNum: 1,
+            isNft: true,
+          },
+          curChain,
+        ),
+      ]);
+      const list = [...(tokenRes?.data?.list ?? []), ...(nftRes?.data?.list ?? [])].sort(
+        (a, b) => dayjs(b.time).unix() - dayjs(a.time).unix(),
       );
+      return list;
     },
     {
       manual: true,
@@ -167,8 +196,7 @@ const Treasury: React.FC<IProps> = (props) => {
     }
   }, [treasuryAddress]);
   const cls = `${clssName} treasury-wrap border-0 lg:border lg:mb-[10px] border-Neutral-Divider border-solid rounded-lg bg-white px-4 lg:px-8  lg:py-6`;
-  const existTransaction = transferListData?.data?.total && transferListData?.data?.total > 0;
-  const showLoadMore = (transferListData?.data?.total ?? 0) > LoadCount;
+  const existTransaction = Boolean(transferList?.length);
   return (
     <div className={cls}>
       {treasuryAddressLoading ? (
@@ -195,31 +223,53 @@ const Treasury: React.FC<IProps> = (props) => {
             ) : (
               <>
                 <div className={existTransaction ? 'block' : 'hidden'}>
-                  <h2 className="card-title">Treasury Assets</h2>
-                  <div className="flex items-center mt-6 mb-12">
-                    <p className="usd-value">${totalValueUSD}</p>
+                  <div className="flex items-center justify-between">
+                    <h2 className="card-title">Treasury Assets</h2>
+                    <Link href={`/dao/${aliasName}/treasury`}>
+                      <Button size="medium" type="primary" className="small-button">
+                        View all
+                      </Button>
+                    </Link>
+                  </div>
+                  <div className="flex items-center mt-6 mb-[32px]">
+                    <p className="usd-value">
+                      {tokenListLoading ? (
+                        <Skeleton.Button active size={'small'} block={false} />
+                      ) : (
+                        `$${totalValueUSD}`
+                      )}
+                    </p>
                     <ButtonCheckLogin
                       type="primary"
                       onClick={() => {
                         setChoiceOpen(true);
                       }}
-                      className="!h-[30px]"
+                      className="small-button"
                       size="medium"
                     >
                       New transfer
                     </ButtonCheckLogin>
                   </div>
+                  {tokenListLoading ? (
+                    <SkeletonLine lines={3} splitBorder={false} />
+                  ) : (
+                    tokenList.length > 0 && (
+                      <Table
+                        className="token-list-table"
+                        columns={tokenListColumns}
+                        bordered
+                        dataSource={tokenList}
+                        pagination={false}
+                        scroll={{ x: true }}
+                      />
+                    )
+                  )}
                   <div>
                     <p className="flex justify-between">
                       <span className="card-title mb-6">Transactions</span>
-                      {showLoadMore && (
-                        <Link href={`/dao/${aliasName}/treasury`}>
-                          <span>Load More</span>
-                        </Link>
-                      )}
                     </p>
                     <ul>
-                      {transferListData?.data?.list?.slice(0, LoadCount).map((item) => {
+                      {transferList?.slice(0, LoadCount).map((item) => {
                         const isOut = checkIsOut(treasuryAddress, item);
                         return (
                           <li className="treasury-info-item" key={item.txId}>

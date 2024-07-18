@@ -5,8 +5,6 @@ import Treasury from 'pageComponents/treasury';
 import { SkeletonList } from 'components/Skeleton';
 import { curChain, treasuryContractAddress } from 'config';
 import { useRequest } from 'ahooks';
-// import { fetchTreasuryAssets } from 'api/request';
-import useUpdateHeaderDaoInfo from 'hooks/useUpdateHeaderDaoInfo';
 import breadCrumb from 'utils/breadCrumb';
 import { callViewContract } from 'contract/callContract';
 import { fetchDaoInfo } from 'api/request';
@@ -40,7 +38,6 @@ export default function TreasuryDetails(props: ITreasuryDetailsProps) {
     return fetchDaoInfo({ alias: aliasName, chainId: curChain });
   });
   const daoId = daoData?.data?.id;
-  useUpdateHeaderDaoInfo(daoId, aliasName);
   useEffect(() => {
     if (daoId) {
       run(daoId);
@@ -55,6 +52,7 @@ export default function TreasuryDetails(props: ITreasuryDetailsProps) {
         <SkeletonList />
       ) : (
         <Treasury
+          daoId={daoId}
           address={treasuryAddress}
           currentChain={curChain}
           title={`${daoData?.data?.metadata?.name ?? 'DAO'} Treasury`}

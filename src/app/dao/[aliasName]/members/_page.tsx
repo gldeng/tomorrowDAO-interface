@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import { curChain } from 'config';
 import { useRequest } from 'ahooks';
-import useUpdateHeaderDaoInfo from 'hooks/useUpdateHeaderDaoInfo';
 import breadCrumb from 'utils/breadCrumb';
 import { fetchDaoInfo, fetchDaoMembers } from 'api/request';
 import { EProposalActionTabs } from 'app/proposal/deploy/[aliasName]/type';
@@ -50,7 +49,6 @@ export default function TreasuryDetails(props: ITreasuryDetailsProps) {
     },
   );
   const daoId = daoData?.data?.id;
-  useUpdateHeaderDaoInfo(daoId, aliasName);
 
   useEffect(() => {
     breadCrumb.updateMembersPage(aliasName);

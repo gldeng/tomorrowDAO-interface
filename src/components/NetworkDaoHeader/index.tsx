@@ -1,7 +1,6 @@
 'use client';
 import { HeaderLogo } from 'components/Logo';
 import './index.css';
-import Login from 'components/Login';
 import { PCMenu } from 'components/Menu';
 import { Select, SelectProps } from 'antd';
 import qs from 'query-string';
@@ -13,11 +12,15 @@ import { MenuProps } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { chainIdSelect } from 'config';
+import dynamicReq from 'next/dynamic';
 import LinkNetworkDao from 'components/LinkNetworkDao';
 import { useChainSelect } from 'hooks/useChainSelect';
 export enum ENetworkDaoNav {
   treasury = 'treasury',
 }
+const DynamicLogin = dynamicReq(() => import('components/Login'), {
+  ssr: false,
+});
 export default function Header() {
   const [selectedChain, setSelectedChain] = useState('');
   const { isLG } = useResponsive();
@@ -124,7 +127,7 @@ export default function Header() {
                 className="chain-id-select"
               />
             </div>
-            <Login isNetWorkDao={true} />
+            <DynamicLogin isNetWorkDao={true} />
           </div>
         </div>
         {isLG && (

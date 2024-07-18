@@ -1,35 +1,36 @@
 'use client';
-import React, { useMemo } from 'react';
-import BigNumber from 'bignumber.js';
+import React from 'react';
 import { Divider, ConfigProvider, Tabs } from 'antd';
 import { HashAddress, IHashAddressProps, Table } from 'aelf-design';
 import TransferTable from './Table/Table';
-import { ColumnsType } from 'antd/es/table';
+import { TableProps } from 'antd/es/table';
 import { TokenIconMap } from 'constants/token';
-import useTokenListData, { ITokenListItem } from 'hooks/useTokenListData';
+import useTokenListData from 'hooks/useTokenListData';
 import BoxWrapper from 'app/proposal/[proposalId]/components/BoxWrapper';
 
 import './index.css';
 import Link from 'next/link';
 import { explorer, mainExplorer } from 'config';
 import { isSideChain } from 'utils/chain';
-import { numberFormatter } from 'utils/numberFormatter';
 import TreasuryNoTxGuide from 'components/TreasuryNoTxGuide';
 import { sortIcon } from 'components/TableIcon';
+import { divDecimals } from 'utils/calculate';
+import BigNumber from 'bignumber.js';
 interface ITransparentProps {
   address: string;
   isNetworkDao: boolean;
+  daoId?: string;
   currentChain?: string;
   title: React.ReactNode;
 }
 export default function Transparent(props: ITransparentProps) {
-  const { address, currentChain, title, isNetworkDao } = props;
+  const { address, currentChain, title, isNetworkDao, daoId } = props;
   const { tokenList, totalValueUSD, tokenListLoading } = useTokenListData({
-    address,
+    daoId,
     currentChain,
   });
 
-  const columns: ColumnsType<ITokenListItem> = [
+  const columns: TableProps<ITreasuryAssetsResponseDataItem>['columns'] = [
     {
       title: 'token',
       dataIndex: 'symbol',
@@ -48,28 +49,27 @@ export default function Transparent(props: ITransparentProps) {
     },
     {
       title: 'balance',
-      dataIndex: 'balance',
+      dataIndex: 'amount',
       className: 'table-header-sorter-left',
       showSorterTooltip: false,
-      render(balance) {
-        return numberFormatter(balance);
+      render(amount, record) {
+        return divDecimals(amount, record.decimal).toFormat();
       },
     },
     {
       title: 'value',
-      dataIndex: 'valueUSD',
+      dataIndex: 'usdValue',
       defaultSortOrder: 'descend',
       sortIcon,
-      sorter: (a, b) => Number(a.valueUSD) - Number(b.valueUSD),
+      sorter: (a, b) => Number(a.usdValue) - Number(b.usdValue),
       render(value) {
         return (
-          <span>
-            {value === 0 ? '-' : value?.decimalPlaces?.(8, BigNumber.ROUND_DOWN)?.toFormat() ?? '-'}
-          </span>
+          <span>{value === 0 ? value : BigNumber(value).toFormat(2, BigNumber.ROUND_FLOOR)}</span>
         );
       },
     },
   ];
+  console.log('tokenList', tokenList);
   const isShowGuide = tokenList.length === 0 && !tokenListLoading && !isNetworkDao;
   console.log('isShowGuide', isShowGuide);
   return (
@@ -114,6 +114,9 @@ export default function Transparent(props: ITransparentProps) {
                   columns={columns as any}
                   dataSource={tokenList ?? []}
                   loading={tokenListLoading}
+                  scroll={{
+                    x: true,
+                  }}
                 ></Table>
               </ConfigProvider>
             </div>

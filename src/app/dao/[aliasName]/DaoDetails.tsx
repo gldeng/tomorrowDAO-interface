@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Tabs, Typography, FontWeightEnum, Pagination } from 'aelf-design';
+import { Tabs, Pagination } from 'aelf-design';
 import { Form, message, Empty } from 'antd';
 import { useSelector } from 'react-redux';
 import { SkeletonList } from 'components/Skeleton';
@@ -31,7 +31,6 @@ import breadCrumb from 'utils/breadCrumb';
 import { eventBus, ResultModal } from 'utils/myEvent';
 import { CommonOperationResultModalType } from 'components/CommonOperationResultModal';
 import { INIT_RESULT_MODAL_CONFIG } from 'components/ResultModal';
-import useUpdateHeaderDaoInfo from 'hooks/useUpdateHeaderDaoInfo';
 import ExplorerProposalList, {
   ExplorerProposalListFilter,
 } from '../../network-dao/ExplorerProposalList';
@@ -93,7 +92,6 @@ export default function DeoDetails(props: IProps) {
   const daoId = daoData?.data?.id;
   // const aliasName = aliasName;
   const previousTableParams = usePrevious(tableParams);
-  useUpdateHeaderDaoInfo(daoId, aliasName);
   const fetchProposalListWithParams = async (preData: IProposalListRes | null) => {
     const { proposalType, proposalStatus } = tableParams;
     const params: IProposalListReq = {

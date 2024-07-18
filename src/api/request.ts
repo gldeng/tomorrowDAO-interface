@@ -107,19 +107,15 @@ export const fetchExecutableList = async (
     params,
   });
 };
-
-// explore
 export const fetchAddressTokenList = async (
-  params: {
-    address: string;
-  },
-  currentChain?: string,
-): Promise<IAddressTokenListRes> => {
-  const prefix = currentChain ? '/side-explorer-api' : '/explorer-api';
-  return explorerServer.get(prefix + '/viewer/balances', {
-    params,
+  params: ITreasuryAssetsReq,
+): Promise<ITreasuryAssetsResponse> => {
+  return apiServer.post('/treasury/assets', {
+    ...params,
   });
 };
+
+// explore
 
 export const fetchAddressTransferList = async (
   params: IAddressTransferListReq,
