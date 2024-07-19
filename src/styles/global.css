@@ -201,6 +201,43 @@ input[type='number'] {
 .TMRWDAO-typography {
   font-family: Roboto, sans-serif !important;
 }
+.table-padding-large {
+  .TMRWDAO-table-thead>tr>th {
+    @apply pl-[24px];
+  }
+  .TMRWDAO-table-tbody>tr>td {
+    @apply pl-[24px];
+  }
+}
+.clear-table-padding {
+  .TMRWDAO-table-thead>tr>th {
+    @apply pr-0;
+  }
+  .TMRWDAO-table-tbody>tr>td {
+    @apply pr-0;
+  }
+}
+.normal-table {
+  .TMRWDAO-table-thead>tr>th {
+     @apply text-[14px] leading-[20px] font-medium text-Neutral-Secondary-Text py-[14px]; 
+  }
+  .TMRWDAO-table-tbody>tr>td, .TMRWDAO-hash-address > span{
+   @apply text-[12px] leading-[20px] font-normal text-neutralTitle; 
+  }
+ }
+ .table-header-normal {
+  .TMRWDAO-table-thead>tr>th {
+    @apply text-[14px] leading-[20px] font-medium text-Neutral-Secondary-Text py-[14px]; 
+ }
+ .TMRWDAO-table-column-sorter {
+  @apply h-[20px];
+ }
+ }
+ .table-td-sm {
+  .TMRWDAO-table-tbody>tr>td, .TMRWDAO-hash-address > span{
+   @apply text-[14px] leading-[22px] font-normal; 
+  }
+ }
 .full-table {
   .TMRWDAO-table-thead>tr>th:first-child {
     @apply lg:pl-[32px] pl-[16px];
@@ -214,7 +251,9 @@ input[type='number'] {
  .TMRWDAO-table-tbody>tr>td:last-child {
     @apply lg:pr-[32px] pr-[16px];
  }
- .TMRWDAO-pagination-container {
-  @apply lg:px-8 px-4;
 }
+.full-table-wrap {
+  .TMRWDAO-pagination-container {
+    @apply lg:px-8 px-4;
+  }
 }

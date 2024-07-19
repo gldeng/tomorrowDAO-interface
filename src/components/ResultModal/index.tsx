@@ -38,5 +38,12 @@ const ResultModalComponent = () => {
     />
   );
 };
+export const okButtonConfig: IButtonProps = {
+  onClick: () => {
+    eventBus.emit(ResultModal, INIT_RESULT_MODAL_CONFIG);
+  },
+  children: 'OK',
+  type: 'primary',
+};
 
 export default ResultModalComponent;

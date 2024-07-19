@@ -15,6 +15,7 @@ import Link from 'next/link';
 import { useWalletService } from 'hooks/useWallet';
 import breadCrumb from 'utils/breadCrumb';
 import { DownOutlined, UpOutlined } from '@aelf-design/icons';
+import BigNumber from 'bignumber.js';
 
 const defaultPageSize = 20;
 const allValue = 'All';
@@ -68,7 +69,7 @@ export default function RecordTable() {
     {
       title: 'Time',
       dataIndex: 'timeStamp',
-      width: 199,
+      width: 207,
       sorter: (a, b) => {
         return dayjs(a.timeStamp).unix() - dayjs(b.timeStamp).unix();
       },
@@ -82,7 +83,7 @@ export default function RecordTable() {
       dataIndex: 'proposalTitle',
       width: 576,
       render: (text, record) => {
-        const renderProposalNode = <div className="text-neutralPrimaryText">{text}</div>;
+        const renderProposalNode = <div className="text-neutralPrimaryText font-bold">{text}</div>;
         return <Link href={`/proposal/${record.proposalId}`}>{renderProposalNode}</Link>;
       },
     },
@@ -105,13 +106,16 @@ export default function RecordTable() {
         return record.myOption === value;
       },
       render(option) {
-        return <span className={`vote-record-${option}`}>{EVoteOption[option]}</span>;
+        return <span className={`vote-record-${option} font-bold`}>{EVoteOption[option]}</span>;
       },
     },
     {
       title: 'Votes',
       dataIndex: 'voteNum',
       width: 206,
+      render(voteNum) {
+        return <span>{BigNumber(voteNum).toFormat()}</span>;
+      },
     },
     {
       title: 'Txn Hash',
@@ -120,7 +124,7 @@ export default function RecordTable() {
         return (
           <Link href={`${explorer}/tx/${transactionId}`}>
             <HashAddress
-              className="pl-[4px]"
+              className="pl-[4px] my-record-tx-hash"
               ignorePrefixSuffix={true}
               preLen={8}
               endLen={11}
@@ -152,7 +156,7 @@ export default function RecordTable() {
     <ConfigProvider renderEmpty={() => <NoData></NoData>}>
       <Table
         scroll={{ x: 'max-content' }}
-        className="custom-table-style"
+        className="custom-table-style full-table table-header-normal table-td-sm clear-table-padding table-padding-large"
         columns={columns as any}
         loading={voteHistoryLoading}
         pagination={{

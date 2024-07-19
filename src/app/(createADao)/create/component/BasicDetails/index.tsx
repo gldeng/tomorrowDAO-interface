@@ -1,9 +1,9 @@
-import { Input, Typography, Tooltip, Button } from 'aelf-design';
+import { Input, Typography, Tooltip } from 'aelf-design';
 import './index.css';
-import { Form, Switch, Radio } from 'antd';
+import { Form, Radio } from 'antd';
 import ChainAddress from 'components/Address';
 import { ReactComponent as QuestionIcon } from 'assets/imgs/question-icon.svg';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { cx } from 'antd-style';
 import { mediaValidatorMap, useRegisterForm } from '../utils';
 import IPFSUpload from 'components/IPFSUpload';
@@ -13,11 +13,9 @@ import { dispatch } from 'redux/store';
 import { fetchTokenInfo } from 'api/request';
 import { setToken } from 'redux/reducer/daoCreate';
 import Link from 'next/link';
-import { AddCircleOutlined, DeleteOutlined, MinusCircleOutlined } from '@aelf-design/icons';
 import FormMembersItem from 'components/FormMembersItem';
 import { useWebLogin } from 'aelf-web-login';
 import { curChain } from 'config';
-import { usePrevious } from 'ahooks';
 
 export const mediaList = [
   ['metadata', 'socialMedia', 'Twitter'],
