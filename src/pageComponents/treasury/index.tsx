@@ -32,7 +32,7 @@ export default function Transparent(props: ITransparentProps) {
 
   const columns: TableProps<ITreasuryAssetsResponseDataItem>['columns'] = [
     {
-      title: 'token',
+      title: 'Token',
       dataIndex: 'symbol',
       align: 'left',
       className: 'treasury-table-column-clear-pl',
@@ -45,23 +45,27 @@ export default function Transparent(props: ITransparentProps) {
       },
     },
     {
-      title: 'balance',
+      title: 'Balance',
       dataIndex: 'amount',
       className: 'table-header-sorter-left',
       showSorterTooltip: false,
       render(amount, record) {
-        return divDecimals(amount, record.decimal).toFormat();
+        return (
+          <span>
+            {divDecimals(amount, record.decimal).toFormat()} {record.symbol}
+          </span>
+        );
       },
     },
     {
-      title: 'value',
+      title: 'Value',
       dataIndex: 'usdValue',
       defaultSortOrder: 'descend',
       // sortIcon,
       sorter: (a, b) => Number(a.usdValue) - Number(b.usdValue),
       render(value) {
         return (
-          <span>{value === 0 ? value : BigNumber(value).toFormat(2, BigNumber.ROUND_FLOOR)}</span>
+          <span>$ {value === 0 ? value : BigNumber(value).toFormat(2, BigNumber.ROUND_FLOOR)}</span>
         );
       },
     },
@@ -69,7 +73,7 @@ export default function Transparent(props: ITransparentProps) {
   console.log('tokenList', tokenList);
   const isShowGuide = tokenList.length === 0 && !tokenListLoading && !isNetworkDao;
   return (
-    <div>
+    <div className="treasury-page-content">
       <div className="card-shape pt-6">
         <div className="flex justify-between lg:flex-row flex-col card-px">
           <span className="text-Primary-Text leading-[32px] font-[500] text-[24px]">{title}</span>
@@ -104,10 +108,10 @@ export default function Transparent(props: ITransparentProps) {
                 $ {totalValueUSD}
               </div>
             </div>
-            <div>
+            <div className="mt-6">
               <ConfigProvider>
                 <Table
-                  className="full-table token-list-table"
+                  className="full-table treasury-token-list-table table-td-sm table-header-normal"
                   columns={columns as any}
                   dataSource={tokenList ?? []}
                   loading={tokenListLoading}
@@ -123,12 +127,12 @@ export default function Transparent(props: ITransparentProps) {
         <div></div>
       </div>
       {!isShowGuide && (
-        <div className="mt-[20px] card-shape pt-[20px]">
+        <div className="mt-[20px] card-shape pt-[20px] full-table-wrap">
           <h2 className="pb-[20px] card-px">All Income and Expenses</h2>
           <Tabs
             defaultActiveKey="1"
             size="small"
-            className="full-table"
+            className="treasury-tab"
             items={[
               {
                 key: '1',

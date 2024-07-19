@@ -26,4 +26,12 @@
     @apply !text-white !bg-[#5D6579] border-[#5D6579];
   }
 }
+.unstake-form-token {
+  img {
+    @apply w-[24px] h-[24px] mr-[8px];
+  }
+  .token-text {
+    @apply text-[16px] leading-[24px] text-Neutral-Disable-Text;
+  }
+}
 

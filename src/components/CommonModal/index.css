@@ -11,4 +11,7 @@
   .TMRWDAO-modal-body {
     @apply px-6 pb-6 flex-1 overflow-scroll;
   }
+  .view-transaction-id-link {
+    @apply pt-4 text-colorPrimary flex justify-center;
+  }
 }

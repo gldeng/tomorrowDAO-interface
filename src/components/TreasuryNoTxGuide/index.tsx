@@ -63,7 +63,6 @@ const TreasuryNoTxGuide = forwardRef<ITreasuryNoTxGuideRef, ITreasuryNoTxGuidePr
         emitLoading(true, 'The deposit is being processed...');
         const res = await callContract('Transfer', params, sideChainAddress);
         emitLoading(false);
-        console.log('eventBus.emit');
         eventBus.emit(ResultModal, {
           open: true,
           type: CommonOperationResultModalType.Success,
@@ -77,15 +76,9 @@ const TreasuryNoTxGuide = forwardRef<ITreasuryNoTxGuideRef, ITreasuryNoTxGuidePr
                 children: 'OK',
                 type: 'primary',
               },
-              {
-                onClick: () => {
-                  window.open(getExploreLink(res.TransactionId, 'transaction'));
-                },
-                children: 'View Transaction Details',
-                type: 'link',
-              },
             ],
           },
+          viewTransactionId: res.TransactionId,
         });
       } catch (error) {
         const err = error as IContractError;

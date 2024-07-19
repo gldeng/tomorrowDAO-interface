@@ -2,4 +2,5 @@ import { ICommonFooterProps } from 'components/CommonComponentsOfModalAndDrawer/
 
 export interface ICommonExtensionProps {
   footerConfig?: ICommonFooterProps;
+  viewTransactionId?: string;
 }
