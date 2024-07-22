@@ -172,20 +172,18 @@ export default function CreatePreviewModal({ open, onClose, onConfirm }: ICreate
           checked={state[0]}
           onChange={(e) => setState([e.target.checked, state[1], state[2]])}
           descriptionList={[
+            !isMultisig
+              ? {
+                  content: `Each proposal requires a minimum participation of ${governance?.minimalVoteThreshold} votes to be finalised.`,
+                }
+              : null,
             {
-              content: isMultisig
-                ? `Each proposal requires a minimum participation of ${Math.ceil(
-                    metaData.members.value.length *
-                      ((governance?.minimalRequiredThreshold ?? 100) / 100),
-                  )} address to be finalised`
-                : `Each proposal requires a minimum participation of ${governance?.minimalRequiredThreshold} address and ${governance?.minimalVoteThreshold} votes to be finalised`,
-            },
-            {
-              content: `Each proposal must receive at least ${governance?.minimalApproveThreshold}% of approve votes, less than ${governance?.maximalRejectionThreshold}% of reject votes, and less than ${governance?.maximalAbstentionThreshold}% of abstain votes to be approved.`,
+              content: `Each proposal must receive at least ${governance?.minimalApproveThreshold}% of approve votes to be approved.`,
             },
             metaData?.governanceToken
               ? {
-                  content: `The minimum ${governance?.proposalThreshold} of governance tokens a user must hold to initiate a proposal`,
+                  content: `
+                  A user must hold a minimum of ${governance?.proposalThreshold} governance token to initiate a proposal.`,
                 }
               : null,
           ]}
@@ -211,11 +209,11 @@ export default function CreatePreviewModal({ open, onClose, onConfirm }: ICreate
               // },
               {
                 content: `
-                Each proposal requires a minimum participation of ${highCouncil?.governanceSchemeThreshold.minimalRequiredThreshold}% addresses and  ${highCouncil?.governanceSchemeThreshold.minimalVoteThreshold} votes to be finalised.`,
+                Each proposal requires ${highCouncil?.governanceSchemeThreshold.minimalVoteThreshold} votes to be finalised.`,
               },
               {
                 content: `
-                Each proposal must receive at least ${highCouncil?.governanceSchemeThreshold.minimalApproveThreshold}% of approve votes, less than ${highCouncil?.governanceSchemeThreshold.maximalRejectionThreshold}% of reject votes, and less than ${highCouncil?.governanceSchemeThreshold.maximalAbstentionThreshold}% of abstain votes to be approved.
+                Each proposal must receive at least ${highCouncil?.governanceSchemeThreshold.minimalApproveThreshold}% of approve votes to beapproved.
                 `,
               },
             ]}

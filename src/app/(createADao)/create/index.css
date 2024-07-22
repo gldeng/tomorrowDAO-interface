@@ -14,7 +14,7 @@
     @apply flex flex-col gap-[8px];
   }
 
-  .step-progress {
+  .step-progress.TMRWDAO-progress-line {
     @apply my-[16px];
   }
 

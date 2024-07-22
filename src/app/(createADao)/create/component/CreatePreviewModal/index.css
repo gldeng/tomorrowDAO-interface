@@ -19,7 +19,7 @@
     @apply flex-none mt-2 size-[6px] rounded-full bg-[#434343];
   }
 
-  .TMRWDAO-checkbox-inner {
+  .TMRWDAO-checkbox {
     @apply scale-75 origin-center;
   }
 }
