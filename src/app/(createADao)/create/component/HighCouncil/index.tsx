@@ -1,33 +1,33 @@
 'use client';
 
-import { Input, Tooltip } from 'aelf-design';
+import { Tooltip } from 'aelf-design';
 import { Form, InputNumber } from 'antd';
 import { memo, useContext, useEffect } from 'react';
 import { InfoCircleOutlined } from '@aelf-design/icons';
 import { ReactComponent as QuestionIcon } from 'assets/imgs/question-icon.svg';
 import InputSlideBind from 'components/InputSlideBind';
-import { integerRule, min2maxIntegerRule, validatorCreate, useRegisterForm } from '../utils';
+import { min2maxIntegerRule, useRegisterForm, percentRule } from '../utils';
 import FormMembersItem from 'components/FormMembersItem';
 import { StepEnum, StepsContext } from '../../type';
-import { useSelector } from 'redux/store';
-import { curChain, electionContractAddress } from 'config/index';
+import { curChain } from 'config/index';
 import { useWebLogin } from 'aelf-web-login';
 import './index.css';
-const highCouncilMembersFieldName = ['highCouncilConfig', 'maxHighCouncilMemberCount'];
+// const highCouncilMembersFieldName = ['highCouncilConfig', 'maxHighCouncilMemberCount'];
 const highCouncilMembersList = ['highCouncilMembers', 'value'];
+const highCouncilMembers = 10000;
 const HighCouncil = () => {
   const [form] = Form.useForm();
-  const daoCreateToken = useSelector((store) => store.daoCreate.token);
+  // const daoCreateToken = useSelector((store) => store.daoCreate.token);
   const { stepForm, isShowHighCouncil } = useContext(StepsContext);
   useRegisterForm(form, StepEnum.step2);
   const { wallet } = useWebLogin();
   const metaData = stepForm[StepEnum.step0].submitedRes;
   const disabled = !metaData?.governanceToken;
   // const highCouncilMembers = Form.useWatch(highCouncilMembersFieldName, form);
-  const highCouncilMembers = 10000;
+
   useEffect(() => {
     form.validateFields([highCouncilMembersList]).then(console.log).catch(console.log);
-  }, [highCouncilMembers]);
+  }, [form]);
   return (
     <div className="high-council-form">
       {isShowHighCouncil && (
@@ -169,7 +169,7 @@ const HighCouncil = () => {
             />
           </Form.Item> */}
           {/* governanceSchemeThreshold */}
-          <Form.Item
+          {/* <Form.Item
             name={['governanceSchemeThreshold', 'minimalRequiredThreshold']}
             label={
               <Tooltip
@@ -194,7 +194,7 @@ const HighCouncil = () => {
               type="approve"
               placeholder={'The suggested percentage is no less than 75%.'}
             />
-          </Form.Item>
+          </Form.Item> */}
 
           <Form.Item
             name={['governanceSchemeThreshold', 'minimalVoteThreshold']}
@@ -232,13 +232,9 @@ const HighCouncil = () => {
                 </span>
               </Tooltip>
             }
-            initialValue={67}
+            initialValue={50}
             validateFirst={true}
-            rules={[
-              integerRule,
-              validatorCreate((v) => v < 67, 'Please input a number larger than 67'),
-              validatorCreate((v) => v > 100, 'Please input a number smaller than 100'),
-            ]}
+            rules={percentRule}
           >
             <InputSlideBind
               disabled={disabled}
@@ -246,7 +242,7 @@ const HighCouncil = () => {
               placeholder={'The suggested percentage is no less than 67%.'}
             />
           </Form.Item>
-          <Form.Item
+          {/* <Form.Item
             name={['governanceSchemeThreshold', 'maximalRejectionThreshold']}
             label={
               <Tooltip
@@ -272,8 +268,8 @@ const HighCouncil = () => {
               type="rejection"
               placeholder={'The suggested percentage is no greater than 20%.'}
             />
-          </Form.Item>
-          <Form.Item
+          </Form.Item> */}
+          {/* <Form.Item
             name={['governanceSchemeThreshold', 'maximalAbstentionThreshold']}
             label={
               <Tooltip
@@ -299,7 +295,7 @@ const HighCouncil = () => {
               type="abstention"
               placeholder={'The suggested percentage is no greater than 20%.'}
             />
-          </Form.Item>
+          </Form.Item> */}
           <FormMembersItem
             name={highCouncilMembersList}
             initialValue={[`ELF_${wallet.address}_${curChain}`]}
@@ -329,7 +325,7 @@ const HighCouncil = () => {
                 }
               >
                 <span className="flex items-center form-item-title gap-[8px] pb-[8px]  w-[max-content]">
-                  High Council Members Address
+                  High Council Members&apos; aelf Sidechain Address
                   <QuestionIcon className="cursor-pointer " width={16} height={16} />
                 </span>
               </Tooltip>
