@@ -102,30 +102,33 @@ export enum ProposalTypeString {
   Veto = 'Veto',
   'On-Chain' = 'OnChain',
 }
-// for filter ProposalStatusString
-export enum ProposalStatusString {
-  Approved = 'Approved',
-  Rejected = 'Rejected',
-  Abstained = 'Abstained',
-  Expired = 'Expired',
-  Executed = 'Executed',
-  PendingVote = 'PendingVote',
-  'BelowThreshold' = 'BelowThreshold',
-  'Vetoed' = 'Vetoed',
-  'Being Vetoed' = 'Challenged',
-}
+
 // all ProposalStatusString
 export enum AllProposalStatusString {
   Approved = 'Approved',
-  Rejected = 'Rejected',
-  Abstained = 'Abstained',
   Expired = 'Expired',
+  Defeated = 'Defeated',
   Executed = 'Executed',
   PendingVote = 'PendingVote',
   'BelowThreshold' = 'BelowThreshold',
   'Challenged' = 'Challenged',
   'Vetoed' = 'Vetoed',
 }
+// for filter
+export const ProposalStatusFilters = [
+  AllProposalStatusString.Approved,
+  AllProposalStatusString.Expired,
+  AllProposalStatusString.Defeated,
+  AllProposalStatusString.Executed,
+  AllProposalStatusString.Vetoed,
+  AllProposalStatusString.PendingVote,
+  AllProposalStatusString.Challenged,
+];
+export const ProposalStatusReplaceMap: Partial<Record<AllProposalStatusString, string>> = {
+  [AllProposalStatusString.PendingVote]: 'Pending Vote',
+  [AllProposalStatusString.Challenged]: 'Being Vetoed',
+};
+
 export enum AllProposalStageString {
   Default = 'Default',
   Active = 'Active',

@@ -32,6 +32,9 @@
       @apply !bg-transparent;
     }
   }
+  .TMRWDAO-slider {
+    @apply m-0;
+  }
 
   .slide.abstention {
     .TMRWDAO-slider-track {

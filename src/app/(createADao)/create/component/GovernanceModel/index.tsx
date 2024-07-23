@@ -5,6 +5,7 @@ import { Form, InputNumber } from 'antd';
 import { InfoCircleOutlined } from '@aelf-design/icons';
 import { memo, useContext } from 'react';
 import InputSlideBind from 'components/InputSlideBind';
+import { ApproveThresholdTip } from 'components/ApproveThresholdTip';
 import {
   integerRule,
   min2maxIntegerRule,
@@ -21,7 +22,7 @@ const GovernanceModel = () => {
   const daoInfo = stepForm[StepEnum.step0].submitedRes;
   useRegisterForm(form, StepEnum.step1);
   const isMultisig = daoInfo?.governanceMechanism === EDaoGovernanceMechanism.Multisig;
-  const minimalApproveThreshold = Form.useWatch(minimalApproveThresholdNamePath);
+  const minimalApproveThreshold = Form.useWatch(minimalApproveThresholdNamePath, form);
   return (
     <div className="governance-form">
       <Form
@@ -125,6 +126,7 @@ const GovernanceModel = () => {
               </span>
             </Tooltip>
           }
+          extra={<ApproveThresholdTip percent={minimalApproveThreshold} />}
           initialValue={50}
           validateFirst={true}
           rules={percentRule}
@@ -134,11 +136,7 @@ const GovernanceModel = () => {
             placeholder={'The suggested percentage is no less than 50%.'}
           />
         </Form.Item>
-        {minimalApproveThreshold >= 50 ? (
-          <p>Proposal will be approved by majority.</p>
-        ) : (
-          <p>Proposals could be approved by a minority rather than a majority.</p>
-        )}
+
         {/* <Form.Item
           name={'maximalRejectionThreshold'}
           label={

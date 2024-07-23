@@ -1,0 +1,9 @@
+.radio-buttons-wrap {
+  @apply flex gap-[24px];
+  button {
+    @apply w-[96px];
+  }
+  .radio-buttons-active {
+    @apply border-colorPrimary text-colorPrimary text-[16px] leading-[24px] font-medium;;
+  }
+}
