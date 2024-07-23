@@ -11,6 +11,7 @@ import capitalizeFirstLetter from 'utils/capitalizeFirstLetter';
 import ProposalTag from './ProposalTag';
 import ProposalStatusDesc from './ProposalStatusDesc';
 import './index.css';
+import { getProposalStatusText } from 'utils/proposal';
 
 export interface IProposalsItemProps {
   proposalStatus: string;
@@ -28,7 +29,7 @@ export default function ProposalsItem(props: { data: IProposalsItem }) {
 
   const is1t1v = data.voteMechanismName === EVoteMechanismNameType.TokenBallot;
 
-  const voteText = is1t1v ? 'votes' : 'voters';
+  const voteText = is1t1v ? (data.votesAmount > 1 ? 'votes' : 'vote') : 'voters';
 
   const renderVoteInfo = (currentVote: number, requiredVote: number) => {
     return currentVote < requiredVote ? (
@@ -51,7 +52,7 @@ export default function ProposalsItem(props: { data: IProposalsItem }) {
         <div>
           <DetailTag
             customStyle={{
-              text: proposalStatus,
+              text: getProposalStatusText(proposalStatus),
               height: 20,
               color: tagColorMap[proposalStatus]?.textColor,
               bgColor: tagColorMap[proposalStatus]?.bgColor,
@@ -99,44 +100,42 @@ export default function ProposalsItem(props: { data: IProposalsItem }) {
               : renderVoteInfo(data.voterCount, data.minimalRequiredThreshold)}
           </div>
         </div>
-        <div>
-          <CustomProgress data={data} />
-        </div>
+        <div>{/* <CustomProgress data={data} /> */}</div>
       </div>
     </div>
   );
 }
 
-function CustomProgress(props: { data: IProposalsItem }) {
-  const { data } = props;
-  const approvePercent =
-    data.votesAmount === 0 ? 0 : Math.floor((data.approvedCount / data.votesAmount) * 100);
-  const abstainPercent =
-    data.votesAmount === 0 ? 0 : Math.floor((data.abstentionCount / data.votesAmount) * 100);
-  const rejectPercent =
-    data.votesAmount === 0 ? 0 : Math.floor((data.rejectionCount / data.votesAmount) * 100);
-  return (
-    <>
-      <div className="flex leading-[18px] text-[12px]">
-        <div className="flex-1 text-approve">
-          <div className="font-medium">Approved</div>
-          <div>{approvePercent}%</div>
-        </div>
-        <div className="flex-1 text-abstention">
-          <div className="font-medium">Asbtained</div>
-          <div>{abstainPercent}%</div>
-        </div>
-        <div className="justify-self-end text-rejection">
-          <div className="font-medium">Rejected</div>
-          <div>{rejectPercent}%</div>
-        </div>
-      </div>
-      <Progress
-        trailColor="#F55D6E"
-        strokeColor="#687083"
-        percent={approvePercent + abstainPercent}
-        success={{ percent: approvePercent, strokeColor: '#3888FF' }}
-      />
-    </>
-  );
-}
+// function CustomProgress(props: { data: IProposalsItem }) {
+//   const { data } = props;
+//   const approvePercent =
+//     data.votesAmount === 0 ? 0 : Math.floor((data.approvedCount / data.votesAmount) * 100);
+//   const abstainPercent =
+//     data.votesAmount === 0 ? 0 : Math.floor((data.abstentionCount / data.votesAmount) * 100);
+//   const rejectPercent =
+//     data.votesAmount === 0 ? 0 : Math.floor((data.rejectionCount / data.votesAmount) * 100);
+//   return (
+//     <>
+//       <div className="flex leading-[18px] text-[12px]">
+//         <div className="flex-1 text-approve">
+//           <div className="font-medium">Approved</div>
+//           <div>{approvePercent}%</div>
+//         </div>
+//         <div className="flex-1 text-abstention">
+//           <div className="font-medium">Asbtained</div>
+//           <div>{abstainPercent}%</div>
+//         </div>
+//         <div className="justify-self-end text-rejection">
+//           <div className="font-medium">Rejected</div>
+//           <div>{rejectPercent}%</div>
+//         </div>
+//       </div>
+//       <Progress
+//         trailColor="#F55D6E"
+//         strokeColor="#687083"
+//         percent={approvePercent + abstainPercent}
+//         success={{ percent: approvePercent, strokeColor: '#3888FF' }}
+//       />
+//     </>
+//   );
+// }

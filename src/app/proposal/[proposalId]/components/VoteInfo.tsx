@@ -44,62 +44,64 @@ const VoteInfo = (props: IHeaderInfoProps) => {
     daoData?.data?.governanceMechanism === EDaoGovernanceMechanism.Multisig;
   return (
     <div className="flex justify-between flex-col lg:flex-row">
-      <BoxWrapper className="flex-1 lg:mr-[24px] order-last lg:order-first py-[16px] flex flex-col">
-        <Typography.Title level={6} fontWeight={FontWeightEnum.Medium}>
-          Current Votes
-        </Typography.Title>
+      <BoxWrapper className="lg:flex-1 lg:mr-[24px] order-last lg:order-first py-[16px] flex flex-col h-[402px] justify-between">
+        <div>
+          <Typography.Title level={6} fontWeight={FontWeightEnum.Medium}>
+            Current Votes
+          </Typography.Title>
 
-        <div className="flex flex-col gap-8 pt-6">
-          <div className="flex flex-col gap-2">
-            <div className="flex justify-between">
-              <Typography.Text
-                className="text-Light-Mode-Brand-Brand"
-                fontWeight={FontWeightEnum.Medium}
-              >
-                Approved
-              </Typography.Text>
-              <Typography.Text className="text-Neutral-Secondary-Text">
-                {proposalDetailData.approvedCount}
-                <span className="px-[4px]">Votes</span>
-                {approvePercent}%
-              </Typography.Text>
+          <div className="flex flex-col gap-8 pt-6">
+            <div className="flex flex-col gap-2">
+              <div className="flex justify-between">
+                <Typography.Text
+                  className="text-Light-Mode-Brand-Brand"
+                  fontWeight={FontWeightEnum.Medium}
+                >
+                  Approved
+                </Typography.Text>
+                <Typography.Text className="text-Neutral-Secondary-Text">
+                  {proposalDetailData.approvedCount}
+                  <span className="px-[4px]">Votes</span>
+                  {approvePercent}%
+                </Typography.Text>
+              </div>
+              <Progress percent={approvePercent} strokeColor="#3888FF" />
             </div>
-            <Progress percent={approvePercent} strokeColor="#3888FF" />
-          </div>
 
-          <div className="flex flex-col gap-2">
-            <div className="flex justify-between">
-              <Typography.Text className="text-rejection" fontWeight={FontWeightEnum.Medium}>
-                Rejected
-              </Typography.Text>
-              <Typography.Text className="text-Neutral-Secondary-Text">
-                {proposalDetailData.rejectionCount}
-                <span className="px-[4px]">Votes</span>
-                {rejectPercent}%
-              </Typography.Text>
+            <div className="flex flex-col gap-2">
+              <div className="flex justify-between">
+                <Typography.Text className="text-rejection" fontWeight={FontWeightEnum.Medium}>
+                  Rejected
+                </Typography.Text>
+                <Typography.Text className="text-Neutral-Secondary-Text">
+                  {proposalDetailData.rejectionCount}
+                  <span className="px-[4px]">Votes</span>
+                  {rejectPercent}%
+                </Typography.Text>
+              </div>
+              <Progress percent={rejectPercent} strokeColor="#F55D6E" />
             </div>
-            <Progress percent={rejectPercent} strokeColor="#F55D6E" />
-          </div>
 
-          <div className="flex flex-col gap-2">
-            <div className="flex justify-between">
-              <Typography.Text className="text-abstention" fontWeight={FontWeightEnum.Medium}>
-                Abstained
-              </Typography.Text>
-              <Typography.Text className="text-Neutral-Secondary-Text">
-                {proposalDetailData.abstentionCount}
-                <span className="px-[4px]">Votes</span> {abstainPercent}%
-              </Typography.Text>
+            <div className="flex flex-col gap-2">
+              <div className="flex justify-between">
+                <Typography.Text className="text-abstention" fontWeight={FontWeightEnum.Medium}>
+                  Abstained
+                </Typography.Text>
+                <Typography.Text className="text-Neutral-Secondary-Text">
+                  {proposalDetailData.abstentionCount}
+                  <span className="px-[4px]">Votes</span> {abstainPercent}%
+                </Typography.Text>
+              </div>
+              <Progress percent={abstainPercent} strokeColor="#687083" />
             </div>
-            <Progress percent={abstainPercent} strokeColor="#687083" />
           </div>
         </div>
 
-        <div className="votes-total-count border-0 border-solid border-Neutral-Divider flex flex-col pt-8 pb-4 mt-auto">
+        <div className="votes-total-count border-0 border-solid border-Neutral-Divider flex flex-col pt-8 pb-4">
           <div>
             <Typography.Text fontWeight={FontWeightEnum.Medium} className="text-Primary-Text">
               <span className="pr-[4px]">{proposalDetailData.votesAmount}</span>
-              Votes in Total
+              {proposalDetailData.votesAmount > 1 ? 'Votes' : 'Vote'} in Total
             </Typography.Text>
           </div>
           <div>

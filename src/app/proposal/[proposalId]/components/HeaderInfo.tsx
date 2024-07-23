@@ -13,6 +13,7 @@ import LinkNetworkDao from 'components/LinkNetworkDao';
 import Link from 'next/link';
 import ProposalStatusDesc from 'app/dao/[aliasName]/components/ProposalsItem/ProposalStatusDesc';
 import useResponsive from 'hooks/useResponsive';
+import { getProposalStatusText } from 'utils/proposal';
 
 // import ProposalDetailFile from 'assets/imgs/proposal-detail-file.svg';
 interface IHeaderInfoProps {
@@ -35,7 +36,7 @@ const HeaderInfo = (props: IHeaderInfoProps) => {
         <div className="flex gap-2 lg:flex-row flex-col">
           <DetailTag
             customStyle={{
-              text: proposalDetailData.proposalStatus,
+              text: getProposalStatusText(proposalDetailData.proposalStatus),
               height: 20,
               color: '#F8B042',
               bgColor: '#FEF7EC',

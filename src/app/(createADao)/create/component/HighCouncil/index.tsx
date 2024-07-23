@@ -12,8 +12,11 @@ import { StepEnum, StepsContext } from '../../type';
 import { curChain } from 'config/index';
 import { useWebLogin } from 'aelf-web-login';
 import './index.css';
+import { ApproveThresholdTip } from 'components/ApproveThresholdTip';
+
 // const highCouncilMembersFieldName = ['highCouncilConfig', 'maxHighCouncilMemberCount'];
 const highCouncilMembersList = ['highCouncilMembers', 'value'];
+const minimalApproveThresholdNamePath = ['governanceSchemeThreshold', 'minimalApproveThreshold'];
 const highCouncilMembers = 10000;
 const HighCouncil = () => {
   const [form] = Form.useForm();
@@ -23,6 +26,7 @@ const HighCouncil = () => {
   const { wallet } = useWebLogin();
   const metaData = stepForm[StepEnum.step0].submitedRes;
   const disabled = !metaData?.governanceToken;
+  const minimalApproveThreshold = Form.useWatch(minimalApproveThresholdNamePath, form);
   // const highCouncilMembers = Form.useWatch(highCouncilMembersFieldName, form);
 
   useEffect(() => {
@@ -232,6 +236,7 @@ const HighCouncil = () => {
                 </span>
               </Tooltip>
             }
+            extra={<ApproveThresholdTip percent={minimalApproveThreshold} />}
             initialValue={50}
             validateFirst={true}
             rules={percentRule}

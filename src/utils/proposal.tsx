@@ -4,6 +4,7 @@ import { curChain } from 'config';
 import { divDecimals } from './calculate';
 import { CommonOperationResultModalType } from 'components/CommonOperationResultModal';
 import { INIT_RESULT_MODAL_CONFIG } from 'components/ResultModal';
+import { AllProposalStatusString, ProposalStatusReplaceMap } from 'types';
 
 export const checkCreateProposal = async (daoData: IDaoInfoRes, address: string) => {
   // const daoData = await fetchDaoInfo({ chainId: curChain, alias: aliasName });
@@ -61,4 +62,9 @@ export const checkCreateProposal = async (daoData: IDaoInfoRes, address: string)
     return false;
   }
   return true;
+};
+
+export const getProposalStatusText = (status: string) => {
+  const proposalStatus = status as AllProposalStatusString;
+  return ProposalStatusReplaceMap[proposalStatus] ?? proposalStatus;
 };

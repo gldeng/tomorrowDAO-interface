@@ -3,6 +3,8 @@ import { Typography, FontWeightEnum } from 'aelf-design';
 import { Steps } from 'antd';
 import { memo } from 'react';
 import useResponsive from 'hooks/useResponsive';
+import { AllProposalStatusString } from 'types';
+import { getProposalStatusText } from 'utils/proposal';
 
 interface IStatusInfoProps {
   proposalDetailData?: IProposalDetailData;
@@ -12,6 +14,7 @@ const StatusInfo = (props: IStatusInfoProps) => {
   const { proposalDetailData } = props;
 
   const stepItmes = proposalDetailData?.proposalLifeList?.map((item) => {
+    const proposalStatus = item.proposalStatus as AllProposalStatusString;
     return {
       title: (
         <Typography.Title fontWeight={FontWeightEnum.Medium} level={7}>
@@ -20,7 +23,7 @@ const StatusInfo = (props: IStatusInfoProps) => {
       ),
       description: (
         <div>
-          <div>{item.proposalStatus}</div>
+          <div>{getProposalStatusText(proposalStatus)}</div>
         </div>
       ),
     };
