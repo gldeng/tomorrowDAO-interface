@@ -34,7 +34,7 @@ interface ProposalInfoProps {
   onSubmit: () => void;
   onTabChange?: (activeKey: string) => void;
   activeTab?: string;
-  treasuryAssetsData?: IAddressTokenListDataItem[];
+  treasuryAssetsData?: ITreasuryAssetsResponseDataItem[];
   daoDataLoading?: boolean;
 }
 
