@@ -26,6 +26,7 @@ import { callContract, callViewContract, GetTokenInfo } from 'contract/callContr
 import {
   fetchAddressTokenList,
   fetchDaoInfo,
+  fetchOldAddressTokenList,
   fetchTreasuryAssets,
   fetchVoteSchemeList,
 } from 'api/request';
@@ -129,7 +130,7 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
       if (!address) {
         return null;
       }
-      return fetchAddressTokenList(
+      return fetchOldAddressTokenList(
         {
           address,
         },
