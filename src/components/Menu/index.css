@@ -4,6 +4,8 @@
   .TMRWDAO-menu-overflow-item,
   .TMRWDAO-menu-item,
   .TMRWDAO-menu-submenu {
+    padding-inline-end: 0!important;
+    padding-inline-start: 48px!important;
     @apply p-0 pl-12 !mt-0;
     &::after {
       @apply !border-b-0;
@@ -29,7 +31,6 @@
       @apply mr-1;
     }
   }
-
   .TMRWDAO-menu-submenu-selected {
     .TMRWDAO-menu-submenu-title {
       @apply bg-transparent;

@@ -1,4 +1,10 @@
 .proposal-details-wrapper {
+   .title-tag-button-wrap {
+      @apply relative;
+   }
+   .execute-button {
+      @apply w-[113px] absolute right-0 top-[16px];
+   }
 
    @apply flex flex-col gap-6;
 

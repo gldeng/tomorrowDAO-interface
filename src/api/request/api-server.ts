@@ -21,7 +21,12 @@ class Request {
     this.instance.interceptors.request.use(
       async (config: AxiosRequestConfig) => {
         const token = this.token;
-        if (token && ['/proposal/my-info', '/proposal/vote-history'].includes(config.url || '')) {
+        if (
+          token &&
+          ['/proposal/my-info', '/proposal/vote-history', '/dao/my-dao-list'].includes(
+            config.url || '',
+          )
+        ) {
           config.headers = { ...config.headers, Authorization: `Bearer ${token}` };
         }
         return config;

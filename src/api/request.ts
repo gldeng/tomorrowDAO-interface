@@ -1,5 +1,6 @@
 import { stringify } from 'query-string';
 import { apiServer, explorerServer, tokenServer } from './axios';
+import { EDaoGovernanceMechanism } from 'app/(createADao)/create/type';
 
 export const fetchToken = async (data: ITokenParams) => {
   return tokenServer.post<string, ITokenRes>('/connect/token', stringify(data), {
@@ -73,8 +74,19 @@ export const fetchGovernanceMechanismList = async (params: {
 
 export const fetchContractInfo = async (params: {
   chainId: string;
+  daoId: string;
+  governanceMechanism?: EDaoGovernanceMechanism;
 }): Promise<IContractInfoListRes> => {
   return apiServer.get('/contract/contracts-info', {
+    params,
+  });
+};
+export const fetchDaoExistMembers = async (params: {
+  chainId: string;
+  daoId: string;
+  memberAddress: string;
+}): Promise<IDaoExistMembersRes> => {
+  return apiServer.get('/dao/is-member', {
     params,
   });
 };

@@ -6,12 +6,21 @@ import { CommonOperationResultModalType } from 'components/CommonOperationResult
 import { okButtonConfig } from 'components/ResultModal';
 import { AllProposalStatusString, ProposalStatusReplaceMap } from 'types';
 import { EDaoGovernanceMechanism } from 'app/(createADao)/create/type';
+import { fetchDaoExistMembers } from 'api/request';
 
 export const checkMultisigProposal = async (daoData: IDaoInfoRes, address: string) => {
-  console.log(daoData, address);
-  // return true;
-  const res = false;
-  if (!res) {
+  let isExist = true;
+  try {
+    const dataRes = await fetchDaoExistMembers({
+      chainId: curChain,
+      daoId: daoData.data.id,
+      memberAddress: address,
+    });
+    isExist = dataRes?.data;
+  } catch (error) {
+    //
+  }
+  if (!isExist) {
     eventBus.emit(ResultModal, {
       open: true,
       type: CommonOperationResultModalType.Warning,
@@ -28,7 +37,7 @@ export const checkMultisigProposal = async (daoData: IDaoInfoRes, address: strin
     });
     return false;
   }
-  return res;
+  return isExist;
 };
 export const checkTokenProposal = async (daoData: IDaoInfoRes, address: string) => {
   const [balanceInfo, tokenInfo] = await Promise.all([
