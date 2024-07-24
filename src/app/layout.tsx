@@ -12,6 +12,7 @@ import dynamicReq from 'next/dynamic';
 import { useWalletInit } from 'hooks/useWallet';
 import StyleRegistry from './StyleRegistry';
 import { NetworkDaoHomePathName } from 'config';
+import { useUrlPath } from 'hooks/useUrlPath';
 
 const WalletInit = dynamicReq(
   async () => {
@@ -25,6 +26,7 @@ const WalletInit = dynamicReq(
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
   const isNetWorkDao = pathname.startsWith(NetworkDaoHomePathName);
+  const { isHome } = useUrlPath();
   return (
     <html lang="en">
       {/* eslint-disable-next-line @next/next/no-head-element */}
@@ -83,7 +85,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </noscript>
         <StyleRegistry>
           <Provider>
-            <WalletInit />
+            {!isHome && <WalletInit />}
             {isNetWorkDao ? <div>{children}</div> : <Layout>{children}</Layout>}
           </Provider>
         </StyleRegistry>

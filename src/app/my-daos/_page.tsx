@@ -12,6 +12,7 @@ import './index.css';
 import { EMyDAOType } from 'types/dao';
 import NoData from 'components/NoData';
 import useResponsive from 'hooks/useResponsive';
+import { useWalletService } from 'hooks/useWallet';
 
 const MaxResultCount = 5;
 interface IFetchResult {
@@ -20,11 +21,11 @@ interface IFetchResult {
 }
 const MyDaosPage = () => {
   const { wallet, login } = useWebLogin();
+  const { isLogin } = useWalletService();
   const fetchOwnDao: (data?: IFetchResult) => Promise<IFetchResult> = async (data) => {
     const preList = data?.list ?? [];
     const res = await fetchMyDaoList({
       Type: EMyDAOType.Owned,
-      Address: wallet.address,
       ChainId: curChain,
       SkipCount: preList.length,
       MaxResultCount,
@@ -55,7 +56,6 @@ const MyDaosPage = () => {
     try {
       const res = await fetchMyDaoList({
         Type: EMyDAOType.Participated,
-        Address: wallet.address,
         ChainId: curChain,
         SkipCount: preList.length,
         MaxResultCount,
@@ -82,11 +82,11 @@ const MyDaosPage = () => {
     reload: participatedReload,
   } = useInfiniteScroll(fetchParticipatedDao, { manual: true });
   useEffect(() => {
-    if (wallet.address) {
+    if (wallet.address && isLogin) {
       ownReload();
       participatedReload();
     }
-  }, [ownReload, participatedReload, wallet.address]);
+  }, [ownReload, participatedReload, wallet.address, isLogin]);
   const { isLG } = useResponsive();
   const EmptyNode = (
     <div className="flex flex-col items-center">

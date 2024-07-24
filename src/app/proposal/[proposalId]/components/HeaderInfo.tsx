@@ -1,4 +1,5 @@
 import BoxWrapper from './BoxWrapper';
+import { ResultModal, emitLoading, eventBus } from 'utils/myEvent';
 import DetailTag from 'components/DetailTag';
 import { HashAddress } from 'aelf-design';
 import { colorfulSocialMediaIconMap } from 'assets/imgs/socialMediaIcon';
@@ -7,13 +8,17 @@ import { memo } from 'react';
 import dayjs from 'dayjs';
 import { sideChainSuffix } from 'config';
 import ProposalTag from 'app/dao/[aliasName]/components/ProposalsItem/ProposalTag';
-import { ProposalTypeString } from 'types';
+import { IContractError, ProposalTypeString } from 'types';
 import useIsNetworkDao from 'hooks/useIsNetworkDao';
-import LinkNetworkDao from 'components/LinkNetworkDao';
+import { CommonOperationResultModalType } from 'components/CommonOperationResultModal';
 import Link from 'next/link';
 import ProposalStatusDesc from 'app/dao/[aliasName]/components/ProposalsItem/ProposalStatusDesc';
 import useResponsive from 'hooks/useResponsive';
 import { getProposalStatusText } from 'utils/proposal';
+import useAelfWebLoginSync from 'hooks/useAelfWebLoginSync';
+import { proposalCreateContractRequest } from 'contract/proposalCreateContract';
+import { okButtonConfig } from 'components/ResultModal';
+import { ButtonCheckLogin } from 'components/ButtonCheckLogin';
 
 // import ProposalDetailFile from 'assets/imgs/proposal-detail-file.svg';
 interface IHeaderInfoProps {
@@ -29,6 +34,43 @@ const HeaderInfo = (props: IHeaderInfoProps) => {
     window.open(url);
   };
   const { isLG } = useResponsive();
+  const { isSyncQuery } = useAelfWebLoginSync();
+  const handleExecProposal = async () => {
+    try {
+      if (!isSyncQuery()) {
+        return;
+      }
+      emitLoading(true, 'The vote is being processed...');
+
+      const createRes = await proposalCreateContractRequest(
+        'ExecuteProposal',
+        proposalDetailData.proposalId,
+      );
+      emitLoading(false);
+      eventBus.emit(ResultModal, {
+        open: true,
+        type: CommonOperationResultModalType.Success,
+        secondaryContent: `Proposal Executed Successfully`,
+        footerConfig: {
+          buttonList: [okButtonConfig],
+        },
+        viewTransactionId: createRes?.TransactionId,
+      });
+    } catch (err) {
+      const error = err as IContractError;
+      const message = error?.errorMessage?.message || error?.message;
+      eventBus.emit(ResultModal, {
+        open: true,
+        type: CommonOperationResultModalType.Error,
+        primaryContent: 'Proposal Executed Failed',
+        secondaryContent: message?.toString?.(),
+        footerConfig: {
+          buttonList: [okButtonConfig],
+        },
+      });
+      emitLoading(false);
+    }
+  };
   const { isNetWorkDao } = useIsNetworkDao();
   return (
     <BoxWrapper>
@@ -49,23 +91,30 @@ const HeaderInfo = (props: IHeaderInfoProps) => {
         </div>
         <div className="flex gap-6">
           <div
-            className="h-8 cursor-pointer bg-Neutral-Default-BG rounded-md flex justify-center items-center px-[10px]"
+            className="h-8 cursor-pointer bg-Neutral-Default-BG rounded-md flex justify-center items-center px-[16px]"
             onClick={handleShare}
           >
-            <Image src={colorfulSocialMediaIconMap.Twitter} alt="x" width={11} height={10} />
-            <span className="pl-[4px] card-xsm-text">{isLG ? 'Share' : 'Share on X'}</span>
+            <Image src={colorfulSocialMediaIconMap.Twitter} alt="x" width={14} height={14} />
+            <span className="pl-[10px] card-xsm-text font-medium">
+              {isLG ? 'Share' : 'Share on X'}
+            </span>
           </div>
         </div>
       </div>
-      <div className="pt-4 pb-3">
-        <span className="card-title-lg">{proposalDetailData.proposalTitle}</span>
-      </div>
-      <div className="flex gap-2 pb-6">
-        <ProposalTag
-          proposalType={proposalDetailData.proposalType}
-          proposalSource={proposalDetailData.proposalSource}
-          governanceMechanism={proposalDetailData.governanceMechanism}
-        />
+      <div className="title-tag-button-wrap">
+        <div className="pt-4 pb-3">
+          <span className="card-title-lg">{proposalDetailData.proposalTitle}</span>
+        </div>
+        <div className="flex gap-2 pb-6">
+          <ProposalTag
+            proposalType={proposalDetailData.proposalType}
+            proposalSource={proposalDetailData.proposalSource}
+            governanceMechanism={proposalDetailData.governanceMechanism}
+          />
+        </div>
+        <ButtonCheckLogin type="primary" className="execute-button" onClick={handleExecProposal}>
+          Execute
+        </ButtonCheckLogin>
       </div>
       <div className="proposal-detail-key-value border-0 border-t border-solid border-Neutral-Divider flex pt-6 gap-y-4 gap-x-0 lg:gap-x-16 lg:gap-y-0 lg:flex-row flex-col flex-wrap">
         {proposalDetailData.proposalType === ProposalTypeString.Veto && (

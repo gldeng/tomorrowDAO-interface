@@ -75,6 +75,13 @@ interface ITreasuryAssetsResponse {
   data: ITreasuryAssetsResponseData;
   message: string;
 }
+// -------------------------------------dao-is exist some members-----------------------------
+interface IDaoExistMembersRes {
+  code: string;
+  data: boolean;
+  message: string;
+}
+
 // -------------------------------------my-dao-list----------------------
 interface IMyDaoListDataItem {
   chainId: string;
@@ -107,7 +114,6 @@ interface IMyDaoListResponse {
 
 interface IMyDaoListQueryParams {
   Type: number;
-  Address: string;
   ChainId: string;
   SkipCount: number;
   MaxResultCount: number;

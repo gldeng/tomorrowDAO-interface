@@ -78,7 +78,11 @@ export default function TabsCom(props: IActionTabsProps) {
     }
   }, [selectOptions, form]);
   useAsyncEffect(async () => {
-    const contractInfo = await fetchContractInfo({ chainId: curChain });
+    const contractInfo = await fetchContractInfo({
+      chainId: curChain,
+      daoId: daoId,
+      governanceMechanism: daoData?.governanceMechanism,
+    });
     setContractInfo(contractInfo.data);
   }, [daoId]);
   // reset Method Name if Contract Address change
@@ -356,6 +360,13 @@ export default function TabsCom(props: IActionTabsProps) {
                     message: 'method params is required',
                   },
                 ]}
+                initialValue={JSON.stringify(
+                  {
+                    'parameter name': 'Please enter the content of your parameter.',
+                  },
+                  null,
+                  2,
+                )}
               >
                 <Editor
                   defaultLanguage="json"

@@ -5,19 +5,23 @@ import { ConfigProvider } from 'antd';
 import StoreProvider from './store';
 import WebLoginProvider from './webLoginProvider';
 import en_US from 'antd/lib/locale/en_US';
-import { useDidMount } from 'hooks/useDidMount';
+import { useUrlPath } from 'hooks/useUrlPath';
 
 interface IProps {
   children: React.ReactNode;
 }
 function Provider(props: IProps) {
   const { children } = props;
-  const mount = useDidMount();
+  const { isHome } = useUrlPath();
   return (
     <StoreProvider>
       <AELFDProvider prefixCls={PREFIXCLS} theme={THEME_CONFIG} customToken={CUSTOM_TOKEN}>
         <ConfigProvider locale={en_US} prefixCls={PREFIXCLS} theme={THEME_CONFIG}>
-          <WebLoginProvider key={'webLoginProvider'}>{children}</WebLoginProvider>
+          {isHome ? (
+            children
+          ) : (
+            <WebLoginProvider key={'webLoginProvider'}>{children}</WebLoginProvider>
+          )}
         </ConfigProvider>
       </AELFDProvider>
     </StoreProvider>

@@ -10,6 +10,7 @@ import { MenuProps } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import dynamicReq from 'next/dynamic';
+import { useUrlPath } from 'hooks/useUrlPath';
 export enum ENavKeys {
   CreateDAO = 'CreateDAO',
   Resources = 'Resources',
@@ -105,6 +106,7 @@ export default function Header() {
   const onClick: MenuProps['onClick'] = (e) => {
     setCurrent(e.key);
   };
+  const { isHome } = useUrlPath();
 
   useEffect(() => {
     // refresh from path map to nav active
@@ -127,7 +129,7 @@ export default function Header() {
             </Link>
             {!isLG && <PCMenu selectedKeys={[current]} items={items} onClick={onClick} />}
           </div>
-          <DynamicLogin />
+          {!isHome && <DynamicLogin />}
         </div>
         {isLG && (
           <div className="header-menu-icon">
