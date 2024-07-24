@@ -14,7 +14,6 @@ import { EProposalActionTabs } from '../../type';
 import { useAsyncEffect } from 'ahooks';
 import { fetchContractInfo } from 'api/request';
 import { curChain } from 'config';
-
 import AmountInput from './FormAmountInput';
 import './index.css';
 import BigNumber from 'bignumber.js';
@@ -358,7 +357,16 @@ export default function TabsCom(props: IActionTabsProps) {
                   },
                 ]}
               >
-                <Editor defaultLanguage="json" height={176} />
+                <Editor
+                  defaultLanguage="json"
+                  className="proposal-custom-action-params-editor"
+                  height={176}
+                  options={{
+                    minimap: {
+                      enabled: false,
+                    },
+                  }}
+                />
               </Form.Item>
             </ErrorBoundary>
           </>
