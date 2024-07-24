@@ -7,13 +7,14 @@ import { EProposalActionTabs } from 'app/proposal/deploy/[aliasName]/type';
 import Members from 'components/Members';
 
 interface IProps {
-  daoData: IDaoInfoData;
+  daoRes: IDaoInfoRes;
   aliasName?: string;
   createProposalCheck?: (customRouter?: boolean) => Promise<boolean>;
 }
 
 const DaoMembers: React.FC<IProps> = (props) => {
-  const { daoData, aliasName, createProposalCheck } = props;
+  const { daoRes, aliasName } = props;
+  const daoData = daoRes?.data;
   const {
     data: daoMembersData,
     // error: transferListError,
