@@ -146,7 +146,7 @@ const MyDaosPage = () => {
           </div>
         </div>
         <div className="flex flex-col mt-[24px]">
-          <p className="list-header card-title-lg">participated DAOs</p>
+          <p className="list-header card-title-lg">Participated DAOs</p>
           <div className="list-body">
             {participatedLoading ? (
               <SkeletonDaoItemList />

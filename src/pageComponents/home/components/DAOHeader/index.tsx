@@ -24,7 +24,7 @@ export default function DAOHeader() {
           </Typography.Title>
           <div className="description">
             A DAO platform that empowers decentralised governance in the aelf network and ecosystem.
-            Creating, managing, and engaging with DAOs is as simple as a few clicks.
+            Creating, managing and engaging with DAOs is as simple as a few clicks.
           </div>
         </div>
         <div>

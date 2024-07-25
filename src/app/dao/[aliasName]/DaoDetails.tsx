@@ -66,6 +66,7 @@ export default function DeoDetails(props: IProps) {
   const [form] = Form.useForm();
   // todo
   const [tabKey, setTabKey] = useState(TabKey.PROPOSALS);
+  const networkDaoRouter = useNetworkDaoRouter();
 
   const {
     data: daoData,
@@ -162,7 +163,12 @@ export default function DeoDetails(props: IProps) {
     if (!checkRes) {
       return false;
     }
-    router.push(`/proposal/deploy/${aliasName}`);
+    if (isNetworkDAO) {
+      const chainIdQuery = getChainIdQuery();
+      networkDaoRouter.push(`/apply?${chainIdQuery.chainIdQueryString}`);
+    } else {
+      router.push(`/proposal/deploy/${aliasName}`);
+    }
     return true;
   };
   handleCreateProposalRef.current = handleCreateProposal;

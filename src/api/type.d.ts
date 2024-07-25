@@ -350,7 +350,7 @@ interface IProposalMyInfoRes {
 interface IProposalDetailReq {
   proposalId: string;
   chainId: string;
-  address: string;
+  address?: string;
 }
 
 interface IProposalLife {

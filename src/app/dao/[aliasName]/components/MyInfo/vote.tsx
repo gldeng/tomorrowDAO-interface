@@ -139,7 +139,7 @@ function Vote(props: TVoteTypes) {
       eventBus.emit(ResultModal, {
         open: true,
         type: CommonOperationResultModalType.Success,
-        secondaryContent: `${EVoteOptionLabel[currentVoteType]} votes are casted for the proposal.`,
+        secondaryContent: `${EVoteOptionLabel[currentVoteType]} votes has been casted for the proposal`,
         footerConfig: {
           buttonList: [okButtonConfig],
         },
@@ -235,7 +235,7 @@ function Vote(props: TVoteTypes) {
             label="Stake and Vote"
             name="stakeAmount"
             tooltip={`Currently, the only supported method is to unstake all the available ${symbol} in one time.`}
-            rules={[{ required: true, message: 'Please input stake Amount!' }]}
+            rules={[{ required: true, message: 'Please input stake amount' }]}
           >
             <InputNumber
               className="w-full"
