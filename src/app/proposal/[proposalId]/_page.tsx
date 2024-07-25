@@ -1,6 +1,7 @@
 'use client';
 import React, { useEffect } from 'react';
 import { memo } from 'react';
+import { Result } from 'antd';
 import './index.css';
 
 import HeaderInfo from './components/HeaderInfo';
@@ -15,18 +16,30 @@ import { SkeletonList } from 'components/Skeleton';
 import { useParams } from 'next/navigation';
 import ErrorResult from 'components/ErrorResult';
 import breadCrumb from 'utils/breadCrumb';
+import { useWebLogin } from 'aelf-web-login';
 
 const ProposalDetails = () => {
   const { proposalId } = useParams<{ proposalId: string }>();
   const info = store.getState().elfInfo.elfInfo;
+  const { wallet } = useWebLogin();
 
   const {
     data: proposalDetailRes,
     error,
     loading,
-  } = useRequest(async () => {
-    return fetchProposalDetail({ proposalId, chainId: info.curChain });
-  });
+    run,
+  } = useRequest(
+    async () => {
+      return fetchProposalDetail({
+        proposalId,
+        chainId: info.curChain,
+        address: wallet.address,
+      });
+    },
+    {
+      manual: true,
+    },
+  );
   const daoId = proposalDetailRes?.data?.daoId ?? '';
   const aliasName = proposalDetailRes?.data?.alias;
 
@@ -35,10 +48,21 @@ const ProposalDetails = () => {
       breadCrumb.updateProposalInformationPage(aliasName);
     }
   }, [aliasName]);
+  useEffect(() => {
+    if (wallet.address) {
+      run();
+    }
+  }, [run, wallet.address]);
 
   return (
     <div className="proposal-details-wrapper">
-      {loading ? (
+      {!wallet.address ? (
+        <Result
+          className="px-4 lg:px-8"
+          status="warning"
+          title="Please log in before viewing the proposal."
+        />
+      ) : loading ? (
         <>
           <SkeletonList />
         </>
@@ -59,6 +83,7 @@ const ProposalDetails = () => {
           <VoteResultTable voteTopList={proposalDetailRes?.data?.voteTopList ?? []} />
         </>
       )}
+      {/* {} */}
     </div>
   );
 };
