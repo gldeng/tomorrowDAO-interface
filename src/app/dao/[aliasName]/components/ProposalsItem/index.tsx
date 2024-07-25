@@ -29,7 +29,14 @@ export default function ProposalsItem(props: { data: IProposalsItem }) {
 
   const is1t1v = data.voteMechanismName === EVoteMechanismNameType.TokenBallot;
 
-  const voteText = is1t1v ? (data.votesAmount > 1 ? 'votes' : 'vote') : 'voters';
+  const voteText = is1t1v ? 'votes' : 'voters';
+  const voteTextPluralize = is1t1v
+    ? data.votesAmount > 1
+      ? 'votes'
+      : 'vote'
+    : data.voterCount > 1
+    ? 'voters'
+    : 'voter';
 
   const renderVoteInfo = (currentVote: number, requiredVote: number) => {
     return currentVote < requiredVote ? (
@@ -92,7 +99,8 @@ export default function ProposalsItem(props: { data: IProposalsItem }) {
       <div className="vote vote-data-analysis flex flex-col justify-between">
         <div className="vote-top">
           <div className="h-[22px] vote-top-title normal-text-bold">
-            {is1t1v ? data.votesAmount : data.voterCount} {capitalizeFirstLetter(voteText)} in Total
+            {is1t1v ? data.votesAmount : data.voterCount} {capitalizeFirstLetter(voteTextPluralize)}{' '}
+            in Total
           </div>
           <div className="vote-dis text-[14px]">
             {is1t1v

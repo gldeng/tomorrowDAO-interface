@@ -275,7 +275,7 @@ export default function MyInfo(props: TInfoTypes) {
             {/* Claim Modal  */}
             <CommonModal
               open={isModalOpen}
-              title={<div className="text-center">Unstake {info?.symbol} on SideChain AELF</div>}
+              title={<div className="text-center">Unstake {info?.symbol} on aelf SideChain</div>}
               destroyOnClose
               onCancel={() => {
                 form.setFieldValue('unStakeAmount', 0);

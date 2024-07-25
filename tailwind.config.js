@@ -44,6 +44,7 @@ module.exports = {
       lg: '1025px',
       xl: '1281px',
       '2xl': '1537',
+      homePc: '768px',
     },
   },
   plugins: [],

@@ -229,16 +229,15 @@ const CreateDaoPage = () => {
           primaryContent: `${originMetadata?.metadata.name} Created Successfully`,
           secondaryContent: (
             <>
-              Feel free to join TMRWDAO&lsquo;s
+              Feel free to join Tomorrow DAO&apos;s{' '}
               <Link
-                className="text-colorPrimary cursor-pointer px-[3px]"
+                className="text-colorPrimary cursor-pointer"
                 href={'https://t.me/tmrwdao'}
                 target="_blank"
               >
                 Telegram group
-              </Link>
-              to connect with the team and get assistance with tasks such as modifying the
-              DAO&lsquo;s information.
+              </Link>{' '}
+              to connect with the team and receive timely assistance
             </>
           ),
           footerConfig: {
@@ -372,7 +371,7 @@ const CreateDaoPage = () => {
               <>
                 <h2 className="step-title">Docs</h2>
                 <p className="step-subtext">
-                  It is recommended to upload at least a white paper and a roadmap.
+                  It is recommended to upload at least a project whitepaper and roadmap
                 </p>
               </>
             )}

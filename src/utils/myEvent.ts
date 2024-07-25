@@ -4,6 +4,7 @@ import { ReactNode } from 'react';
 export const UnAuth = 'unAuth';
 export const ResultModal = 'ResultModal';
 export const HeaderUpdateTreasury = 'HeaderUpdateTreasury';
+export const ShowHeaderExplore = 'showHeaderExplore';
 export const eventBus = new EventEmitter();
 
 const EventList = ['SetGlobalLoading'] as const;

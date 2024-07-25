@@ -3,7 +3,7 @@ import { HeaderLogo } from 'components/Logo';
 import './index.css';
 import { PCMenu } from 'components/Menu';
 import Link from 'next/link';
-import useResponsive from 'hooks/useResponsive';
+import useResponsive, { useLandingPageResponsive } from 'hooks/useResponsive';
 import { MobileMenu } from 'components/Menu';
 import { ReactComponent as MenuArrow } from 'assets/imgs/menu-arrow.svg';
 import { MenuProps } from 'antd';
@@ -11,6 +11,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import dynamicReq from 'next/dynamic';
 import { useUrlPath } from 'hooks/useUrlPath';
+import { Button } from 'aelf-design';
+import { eventBus, ShowHeaderExplore } from 'utils/myEvent';
 export enum ENavKeys {
   CreateDAO = 'CreateDAO',
   Resources = 'Resources',
@@ -28,7 +30,9 @@ const DynamicLogin = dynamicReq(() => import('components/Login'), {
 });
 export default function Header() {
   const { isLG } = useResponsive();
+  const { isPad } = useLandingPageResponsive();
   const pathname = usePathname();
+  const [isShowHeaderExplore, setIsShowHeaderExplore] = useState(false);
   const items: MenuProps['items'] = useMemo(() => {
     return [
       {
@@ -118,20 +122,38 @@ export default function Header() {
       setCurrent('');
     }
   }, [pathname]);
+  useEffect(() => {
+    const handleShowHeaderExplore = (data: boolean) => {
+      setIsShowHeaderExplore(data);
+    };
+    eventBus.addListener(ShowHeaderExplore, handleShowHeaderExplore);
+    return () => {
+      eventBus.removeListener(ShowHeaderExplore, handleShowHeaderExplore);
+    };
+  }, []);
 
+  const menuCondition = isHome ? isPad : isLG;
+  const showHeaderExplore = isHome && isShowHeaderExplore;
   return (
-    <header className="header-container">
+    <header className={`header-container ${isHome ? 'home' : ''}`}>
       <div className="header-banner">
         <div className="header-logo">
           <div className="header-menu">
             <Link href="/">
               <HeaderLogo />
             </Link>
-            {!isLG && <PCMenu selectedKeys={[current]} items={items} onClick={onClick} />}
+            {!menuCondition && <PCMenu selectedKeys={[current]} items={items} onClick={onClick} />}
           </div>
           {!isHome && <DynamicLogin />}
+          {showHeaderExplore && (
+            <Link href="/explore">
+              <Button type="primary" className="explore-button">
+                Explore
+              </Button>
+            </Link>
+          )}
         </div>
-        {isLG && (
+        {menuCondition && (
           <div className="header-menu-icon">
             <MobileMenu selectedKeys={[current]} items={items} onClick={onClick} />
           </div>

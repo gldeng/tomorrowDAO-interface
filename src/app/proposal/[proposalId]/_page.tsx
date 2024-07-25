@@ -30,11 +30,14 @@ const ProposalDetails = () => {
     run,
   } = useRequest(
     async () => {
-      return fetchProposalDetail({
+      const params: IProposalDetailReq = {
         proposalId,
         chainId: info.curChain,
-        address: wallet.address,
-      });
+      };
+      if (wallet.address) {
+        params.address = wallet.address;
+      }
+      return fetchProposalDetail(params);
     },
     {
       manual: true,
@@ -49,20 +52,12 @@ const ProposalDetails = () => {
     }
   }, [aliasName]);
   useEffect(() => {
-    if (wallet.address) {
-      run();
-    }
+    run();
   }, [run, wallet.address]);
 
   return (
     <div className="proposal-details-wrapper">
-      {!wallet.address ? (
-        <Result
-          className="px-4 lg:px-8"
-          status="warning"
-          title="Please log in before viewing the proposal."
-        />
-      ) : loading ? (
+      {loading ? (
         <>
           <SkeletonList />
         </>
@@ -83,7 +78,6 @@ const ProposalDetails = () => {
           <VoteResultTable voteTopList={proposalDetailRes?.data?.voteTopList ?? []} />
         </>
       )}
-      {/* {} */}
     </div>
   );
 };

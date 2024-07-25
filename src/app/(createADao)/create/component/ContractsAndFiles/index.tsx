@@ -51,7 +51,7 @@ export default function ContractsAndFiles() {
         Documentation
       </Title>
       <Title className="secondary-text">
-        It is recommended to upload at least a white paper and a roadmap.
+        It is recommended to upload at least a project whitepaper and roadmap
       </Title>
       <Form
         form={form}

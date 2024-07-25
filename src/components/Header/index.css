@@ -16,4 +16,7 @@
   .header-menu-icon {
     @apply ml-2;
   }
+  .explore-button {
+    @apply lg:h-12 h-10;
+  }
 }
