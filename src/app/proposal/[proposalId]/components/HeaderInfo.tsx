@@ -19,6 +19,7 @@ import useAelfWebLoginSync from 'hooks/useAelfWebLoginSync';
 import { proposalCreateContractRequest } from 'contract/proposalCreateContract';
 import { okButtonConfig } from 'components/ResultModal';
 import { ButtonCheckLogin } from 'components/ButtonCheckLogin';
+import { useWebLogin } from 'aelf-web-login';
 
 // import ProposalDetailFile from 'assets/imgs/proposal-detail-file.svg';
 interface IHeaderInfoProps {
@@ -34,6 +35,7 @@ const HeaderInfo = (props: IHeaderInfoProps) => {
     window.open(url);
   };
   const { isLG } = useResponsive();
+  const { wallet } = useWebLogin();
   const { isSyncQuery } = useAelfWebLoginSync();
   const handleExecProposal = async () => {
     try {
@@ -112,9 +114,11 @@ const HeaderInfo = (props: IHeaderInfoProps) => {
             governanceMechanism={proposalDetailData.governanceMechanism}
           />
         </div>
-        <ButtonCheckLogin type="primary" className="execute-button" onClick={handleExecProposal}>
-          Execute
-        </ButtonCheckLogin>
+        {proposalDetailData.canExecute && proposalDetailData.proposer === wallet.address && (
+          <ButtonCheckLogin type="primary" className="execute-button" onClick={handleExecProposal}>
+            Execute
+          </ButtonCheckLogin>
+        )}
       </div>
       <div className="proposal-detail-key-value border-0 border-t border-solid border-Neutral-Divider flex pt-6 gap-y-4 gap-x-0 lg:gap-x-16 lg:gap-y-0 lg:flex-row flex-col flex-wrap">
         {proposalDetailData.proposalType === ProposalTypeString.Veto && (

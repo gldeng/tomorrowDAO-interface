@@ -6,10 +6,38 @@
   width: 500px;
   height: 310px;
   position: relative;
+  .circle {
+    width: 13.611px;
+    height: 13.611px;
+    border-radius: 50%;
+    position: absolute;
+  }
+  .circle-1 {
+    background: linear-gradient(143deg, #E0EDFF 12.82%, #3888FF 81.81%);
+    left: 0;
+    top: 20px;
+  }
+  .circle-2 {
+    background: linear-gradient(143deg, #FFDBB0 12.82%, #FA9D2B 81.81%);
+    left: 437px;
+    top: 146px;
+  }
+  .circle-3 {
+    background: linear-gradient(143deg, #FFC0C7 12.82%, #F55D6E 81.81%);
+    left: 305px;
+    top: 257px;
+  }
+  .star {
+    position: absolute;
+    width: 55.27px;
+    height: 69.074px;
+    left: 192px;
+    top: 0;
+  }
 }
 .network-dao-feature-wrap {
-  width: 280px;
-  height: 138px;
+  width: 288px;
+  height: 146px;
   position: absolute;
   left: 38px;
   top: 40px;
@@ -126,8 +154,8 @@
   }
 }
 .future-mind-feature-wrap {
-  width: 280px;
-  height: 138px;
+  width: 288px;
+  height: 146px;
   position: absolute;
   right: 0;
   bottom: 0;
@@ -171,7 +199,8 @@
     left: 0;
     top: 0;
     border-radius: 8px;
-    background: linear-gradient(180deg, rgba(250, 157, 43, 0.10) 0%, rgba(250, 157, 43, 0.00) 100%);
+    background: url('/images/border.png') no-repeat 0 0;
+    background-size: contain;
   }
   .dao-title {
     @apply ml-[9px] text-[16px] leading-[19px] text-[#D17D16] font-[700];;

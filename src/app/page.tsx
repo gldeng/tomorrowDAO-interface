@@ -79,6 +79,31 @@ export default function Page() {
             </div>
             <div className="mask"></div>
           </div>
+          <div className="circle circle-1"></div>
+          <div className="circle circle-2"></div>
+          <div className="circle circle-3"></div>
+          <div className="star">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="56"
+              height="70"
+              viewBox="0 0 56 70"
+              fill="none"
+            >
+              <path
+                d="M9.60261 34.3672L10.4332 42.3963C10.6576 44.5656 12.3264 46.3054 14.4844 46.62L19.13 47.2972L14.4606 47.978C12.3137 48.2909 10.6494 50.0151 10.4126 52.1718L9.60261 59.5468L8.79262 52.1718C8.55576 50.0151 6.89153 48.2909 4.74459 47.978L0.0751953 47.2972L4.72077 46.62C6.87878 46.3054 8.54759 44.5656 8.772 42.3963L9.60261 34.3672Z"
+                fill="#FA9D2B"
+              />
+              <path
+                d="M32.0606 43.8945L32.8912 51.9237C33.1156 54.0929 34.7844 55.8327 36.9424 56.1473L41.588 56.8246L36.9186 57.5053C34.7717 57.8183 33.1075 59.5425 32.8706 61.6991L32.0606 69.0741L31.2506 61.6991C31.0138 59.5425 29.3495 57.8183 27.2026 57.5053L22.5332 56.8246L27.1788 56.1473C29.3368 55.8327 31.0056 54.0929 31.23 51.9237L32.0606 43.8945Z"
+                fill="#FA9D2B"
+              />
+              <path
+                d="M38.8651 0L40.3018 13.8882C40.69 17.6404 43.5766 20.6499 47.3093 21.1941L55.3449 22.3655L47.2681 23.543C43.5545 24.0843 40.6759 27.0667 40.2661 30.7971L38.8651 43.5539L37.4641 30.7971C37.0543 27.0667 34.1757 24.0843 30.462 23.543L22.3853 22.3655L30.4209 21.1941C34.1536 20.6499 37.0402 17.6404 37.4284 13.8882L38.8651 0Z"
+                fill="#FA9D2B"
+              />
+            </svg>
+          </div>
         </div>
       </div>
 
@@ -123,7 +148,7 @@ export default function Page() {
             <Link
               target="_blank"
               href={
-                'https://medium.com/@tmrwdao/how-to-create-a-dao-on-tmrwdao-platform-cc54fed69259'
+                'https://medium.com/@tmrwdao/how-to-enable-and-manage-a-dao-treasury-with-tmrwdao-ead8168d4c9a'
               }
             >
               <div className="text-colorPrimary flex items-center mt-[16px] text-[16px] font-medium leading-[22px]">

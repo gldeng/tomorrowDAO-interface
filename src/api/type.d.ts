@@ -350,6 +350,7 @@ interface IProposalMyInfoRes {
 interface IProposalDetailReq {
   proposalId: string;
   chainId: string;
+  address: string;
 }
 
 interface IProposalLife {
@@ -423,6 +424,7 @@ interface IProposalDetailData {
   rejectionCount: number;
   abstentionCount: number;
   proposalSource: number;
+  canExecute: boolean;
 }
 
 interface IProposalDetailRes {
