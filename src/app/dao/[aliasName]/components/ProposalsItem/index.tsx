@@ -12,17 +12,16 @@ import ProposalTag from './ProposalTag';
 import ProposalStatusDesc from './ProposalStatusDesc';
 import './index.css';
 import { getProposalStatusText } from 'utils/proposal';
+import { EDaoGovernanceMechanism } from 'app/(createADao)/create/type';
 
 export interface IProposalsItemProps {
-  proposalStatus: string;
-  title: string;
-  tagList: Array<string>;
-  votesAmount: string;
+  data: IProposalsItem;
+  governanceMechanism?: number;
 }
 type TagColorKey = keyof typeof tagColorMap;
 
-export default function ProposalsItem(props: { data: IProposalsItem }) {
-  const { data } = props;
+export default function ProposalsItem(props: IProposalsItemProps) {
+  const { data, governanceMechanism } = props;
   const { isLG } = useResponsive();
 
   const proposalStatus = data.proposalStatus as TagColorKey;
@@ -102,11 +101,13 @@ export default function ProposalsItem(props: { data: IProposalsItem }) {
             {is1t1v ? data.votesAmount : data.voterCount} {capitalizeFirstLetter(voteTextPluralize)}{' '}
             in Total
           </div>
-          <div className="vote-dis text-[14px]">
-            {is1t1v
-              ? renderVoteInfo(data.votesAmount, data.minimalVoteThreshold)
-              : renderVoteInfo(data.voterCount, data.minimalRequiredThreshold)}
-          </div>
+          {governanceMechanism === EDaoGovernanceMechanism.Token && (
+            <div className="vote-dis text-[14px]">
+              {is1t1v
+                ? renderVoteInfo(data.votesAmount, data.minimalVoteThreshold)
+                : renderVoteInfo(data.voterCount, data.minimalRequiredThreshold)}
+            </div>
+          )}
         </div>
         <div>{/* <CustomProgress data={data} /> */}</div>
       </div>

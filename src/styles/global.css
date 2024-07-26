@@ -257,3 +257,6 @@ input[type='number'] {
     @apply lg:px-8 px-4;
   }
 }
+.TMRWDAO-table-expanded-row-fixed {
+  @apply !w-full;
+}

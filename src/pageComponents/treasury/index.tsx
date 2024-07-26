@@ -16,6 +16,9 @@ import TreasuryNoTxGuide from 'components/TreasuryNoTxGuide';
 import { sortIcon } from 'components/TableIcon';
 import { divDecimals } from 'utils/calculate';
 import BigNumber from 'bignumber.js';
+import { fetchAddressTransferList } from 'api/request';
+import { useRequest } from 'ahooks';
+import NoData from 'components/NoData';
 interface ITransparentProps {
   address: string;
   isNetworkDao: boolean;
@@ -71,7 +74,28 @@ export default function Transparent(props: ITransparentProps) {
     },
   ];
   console.log('tokenList', tokenList);
-  const isShowGuide = tokenList.length === 0 && !tokenListLoading && !isNetworkDao;
+  const { data: transferList, loading: queryTransferListLoading } = useRequest(async () => {
+    const pageQuery = {
+      pageSize: 20,
+      pageNum: 1,
+    };
+    const params: IAddressTransferListReq = {
+      address,
+      ...pageQuery,
+    };
+    const [tokenTransfer, nftTransfer] = await Promise.all([
+      fetchAddressTransferList(params, currentChain),
+      fetchAddressTransferList(
+        {
+          ...params,
+          isNft: true,
+        },
+        currentChain,
+      ),
+    ]);
+    return tokenTransfer.data.total + nftTransfer.data.total > 0;
+  });
+  const isShowGuide = !transferList && !queryTransferListLoading && !isNetworkDao;
   return (
     <div className="treasury-page-content">
       <div className="card-shape pt-6">
@@ -97,7 +121,9 @@ export default function Transparent(props: ITransparentProps) {
         </div>
         <Divider className="mb-2 lg:mb-6" />
         {isShowGuide ? (
-          <TreasuryNoTxGuide address={address} />
+          <div className="pt-[16px] mb-[64px]">
+            <TreasuryNoTxGuide address={address} />
+          </div>
         ) : (
           <>
             <div className="card-px">
@@ -109,7 +135,7 @@ export default function Transparent(props: ITransparentProps) {
               </div>
             </div>
             <div className="mt-6">
-              <ConfigProvider>
+              <ConfigProvider renderEmpty={() => <NoData />}>
                 <Table
                   className="full-table treasury-token-list-table table-td-sm table-header-normal"
                   columns={columns as any}

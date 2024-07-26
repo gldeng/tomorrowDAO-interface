@@ -15,22 +15,16 @@ import MyInfo from './components/MyInfo';
 import Filter from './components/Filter';
 import Treasury from './components/Treasury';
 import { useRequest, usePrevious } from 'ahooks';
-import { GetBalanceByContract, GetTokenInfo } from 'contract/callContract';
 import { IProposalTableParams, TabKey } from './type';
-import LinkNetworkDao from 'components/LinkNetworkDao';
 import { fetchDaoInfo, fetchProposalList } from 'api/request';
 import { curChain } from 'config';
-import { ALL, TMRWCreateProposal } from './constants';
+import { ALL } from './constants';
 import Link from 'next/link';
 import ErrorResult from 'components/ErrorResult';
 import useNetworkDaoRouter from 'hooks/useNetworkDaoRouter';
 import { useRouter } from 'next/navigation';
-import { divDecimals } from 'utils/calculate';
 import { ButtonCheckLogin } from 'components/ButtonCheckLogin';
 import breadCrumb from 'utils/breadCrumb';
-import { eventBus, ResultModal } from 'utils/myEvent';
-import { CommonOperationResultModalType } from 'components/CommonOperationResultModal';
-import { INIT_RESULT_MODAL_CONFIG } from 'components/ResultModal';
 import ExplorerProposalList, {
   ExplorerProposalListFilter,
 } from '../../network-dao/ExplorerProposalList';
@@ -356,33 +350,18 @@ export default function DeoDetails(props: IProps) {
                   </div>
                 ) : proposalData?.data?.items?.length ? (
                   proposalData?.data?.items?.map((item) => {
-                    // tmrw
-                    if (item.proposalSource === TMRWCreateProposal) {
-                      if (isNetworkDAO) {
-                        return (
-                          <LinkNetworkDao
-                            key={item.proposalId}
-                            href={`/proposal-detail-tmrw/${item.proposalId}`}
-                          >
-                            <ProposalsItem data={item} />
-                          </LinkNetworkDao>
-                        );
-                      }
-                      return (
-                        <Link key={item.proposalId} href={`/proposal/${item.proposalId}`}>
-                          <ProposalsItem data={item} />
-                        </Link>
-                      );
-                    }
                     return (
-                      <LinkNetworkDao
+                      <Link
                         key={item.proposalId}
                         href={{
                           pathname: `/proposal/${item.proposalId}`,
                         }}
                       >
-                        <ProposalsItem data={item} />
-                      </LinkNetworkDao>
+                        <ProposalsItem
+                          data={item}
+                          governanceMechanism={daoData?.data.governanceMechanism}
+                        />
+                      </Link>
                     );
                   })
                 ) : (

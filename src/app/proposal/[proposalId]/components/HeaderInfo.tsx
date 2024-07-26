@@ -105,7 +105,7 @@ const HeaderInfo = (props: IHeaderInfoProps) => {
       </div>
       <div className="title-tag-button-wrap">
         <div className="pt-4 pb-3">
-          <span className="card-title-lg">{proposalDetailData.proposalTitle}</span>
+          <span className="card-title-lg break-words">{proposalDetailData.proposalTitle}</span>
         </div>
         <div className="flex gap-2 pb-6">
           <ProposalTag
