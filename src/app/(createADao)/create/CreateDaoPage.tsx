@@ -10,7 +10,6 @@ import { useRouter } from 'next/navigation';
 import clsx from 'clsx';
 import SubmitButton, { ISubmitRef } from './component/SubmitButton';
 import { daoCreateContractRequest } from 'contract/daoCreateContract';
-import useResponsive from 'hooks/useResponsive';
 import { useSelector } from 'redux/store';
 import { timesDecimals } from 'utils/calculate';
 import { ReactComponent as ArrowRight } from 'assets/imgs/arrow-right.svg';
