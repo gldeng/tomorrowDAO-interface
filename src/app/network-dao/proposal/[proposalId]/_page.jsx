@@ -14,7 +14,7 @@ import {
   Col,
   Tabs,
   Typography,
-  Modal,
+  Card
 } from "antd";
 import { useSelector } from "react-redux";
 import { useWebLogin } from "aelf-web-login";
@@ -54,6 +54,9 @@ import addressFormat from "@utils/addressFormat";
 import { NETWORK_TYPE } from '@config/config';
 import { explorer, mainExplorer } from "config";
 import { useChainSelect } from "hooks/useChainSelect";
+import { useRequest } from "ahooks";
+import getChainIdQuery from "utils/url";
+import { fetchNetworkDaoProposaDetail } from "api/request";
 
 const {
   proposalActions,
@@ -161,6 +164,13 @@ const ProposalDetail = () => {
     tab: "proposal",
     loadingStatus: LOADING_STATUS.LOADING,
   });
+  const { data: networkDaoProposalDetail } = useRequest(() => {
+    const chain = getChainIdQuery()
+    return fetchNetworkDaoProposaDetail({
+      chainId: chain.chainId,
+      proposalId
+    })
+  })
   if (!proposalId) {
     return <div>no data { proposalId}</div>;
   }
@@ -172,6 +182,7 @@ const ProposalDetail = () => {
     }
   }, [proposalId]);
   useEffect(() => {
+    // todo 2 get proposal detail
     getData(currentWallet, proposalId)
       .then((result) => {
         setInfo({
@@ -307,119 +318,123 @@ const ProposalDetail = () => {
 
   return (
     <div className="proposal-detail">
-      {info.loadingStatus === LOADING_STATUS.LOADING ? <Skeleton /> : null}
+      {info.loadingStatus === LOADING_STATUS.LOADING ? <Skeleton /> : null}      
       {info.loadingStatus === LOADING_STATUS.SUCCESS ? (
         <>
-          <div>
-            <div className="flex justify-between items-center mb-[6px]">
+          <div className="page-content-bg-border unset-bottom-border lg:py-6">
+            <div className="flex justify-between items-center">
               <div className="flex items-center">
                 <h2>Proposal Detail</h2>
                 <p className="ml-[4px]"><CountDown time={expiredTime} status={status} /></p>
                </div>
+               <div className="flex">
                   {
-                  votedStatus && votedStatus !== "none" ? (
-                    <Tag color={ACTIONS_COLOR_MAP[votedStatus]}>
-                      {ACTIONS_ICON_MAP[votedStatus]}
-                      {votedStatus}
-                    </Tag>
-                  ) : null
-              }
-                          <Extra
-                          {...info.proposal}
+                    votedStatus && votedStatus !== "none" ? (
+                      <Tag color={ACTIONS_COLOR_MAP[votedStatus]}>
+                        {ACTIONS_ICON_MAP[votedStatus]}
+                        {votedStatus}
+                      </Tag>
+                    ) : null
+                  }
+                  <Extra
+                    {...info.proposal}
                           currentWallet={currentWallet}
                           logStatus={logStatus}
-                          handleRelease={handleRelease}
-                        />
+                    handleRelease={handleRelease}
+                  />
+                  </div>
             </div>
           </div>
-          <Divider className="proposal-detail-header-divider" />
-          {isPhoneCheck() ? (
-            <Title level={4}>
-              Proposal ID:
-              {proposalId}
-            </Title>
-          ) : (
-            <Title level={3} ellipsis>
-              Proposal ID:
-              {proposalId}
-            </Title>
-          )}
-          <div className="proposal-detail-tag gap-bottom">
-            <Tag color={PRIMARY_COLOR} className="gap-right">
-              {proposalType}
-            </Tag>
-            {CONTRACT_TEXT_MAP[contractMethod] ? (
-              <Tag color={PRIMARY_COLOR}>
-                {CONTRACT_TEXT_MAP[contractMethod]}
+          <div className="page-content-bg-border unset-top-border lg:py-6 mb-[24px]">
+            <h3 className="card-title">{networkDaoProposalDetail?.data?.title}</h3>
+            <p className="card-title-lg truncate my-[12px]">
+            Proposal ID:{proposalId}
+            </p>
+            <div className="proposal-detail-tag gap-bottom">
+              <Tag color={PRIMARY_COLOR} className="gap-right">
+                {proposalType}
               </Tag>
-            ) : null}
-          </div>
-          <div className="proposal-detail-desc-list">
-            <Row gutter={48}>
-              <Col sm={12} xs={24} className="detail-flex items-center">
-                <span className="sub-title gap-right">
-                  Application Submitted:
-                </span>
-                <span className="text-ellipsis">
-                  {moment(createAt).format("YYYY/MM/DD HH:mm:ss")}
-                </span>
-              </Col>
-              <Col sm={12} xs={24} className="detail-flex items-center">
-                <span className="sub-title gap-right">Proposal Expires:</span>
-                <span className="text-ellipsis">
-                  {moment(expiredTime).format("YYYY/MM/DD HH:mm:ss")}
-                </span>
-              </Col>
-              <Col sm={12} xs={24} className="detail-flex items-center">
-                <span className="sub-title gap-right">Proposer:</span>
-                <span className="text-ellipsis">
-                  <a
-                    href={`${isSideChain ? explorer : mainExplorer}/address/${addressFormat(proposer)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title={`ELF_${proposer}_${viewer.chainId}`}
-                  >
-                    {`ELF_${proposer}_${viewer.chainId}`}
-                  </a>
-                </span>
-              </Col>
-              <Col sm={12} xs={24} className="detail-flex items-center">
-                <span className="sub-title gap-right">URL:</span>
-                <span className="text-ellipsis">
-                  {validateURL(leftInfo.proposalDescriptionUrl || "") ? (
-                    <a
-                      href={leftInfo.proposalDescriptionUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      title={leftInfo.proposalDescriptionUrl}
-                    >
-                      {leftInfo.proposalDescriptionUrl}
-                    </a>
-                  ) : (
-                    "-"
-                  )}
-                </span>
-              </Col>
-              {status === proposalStatus.RELEASED ? (
+              {CONTRACT_TEXT_MAP[contractMethod] ? (
+                <Tag color={PRIMARY_COLOR}>
+                  {CONTRACT_TEXT_MAP[contractMethod]}
+                </Tag>
+              ) : null}
+            </div>
+            <Divider />
+            <div className="proposal-detail-desc-list overflow-hidden">
+              <Row gutter={48}>
                 <Col sm={12} xs={24} className="detail-flex items-center">
-                  <span className="sub-title gap-right">
-                    Proposal Released:
+                  <span className="card-sm-text text-Neutral-Secondary-Text gap-right">
+                    Application Submitted:
                   </span>
                   <span className="text-ellipsis">
-                    {moment(releasedTime).format("YYYY/MM/DD HH:mm:ss")}
+                    {moment(createAt).format("YYYY/MM/DD HH:mm:ss")}
                   </span>
                 </Col>
-              ) : null}
-            </Row>
+                <Col sm={12} xs={24} className="detail-flex items-center">
+                  <span className="card-sm-text text-Neutral-Secondary-Text gap-right">Proposal Expires:</span>
+                  <span className="text-ellipsis">
+                    {moment(expiredTime).format("YYYY/MM/DD HH:mm:ss")}
+                  </span>
+                </Col>
+                <Col sm={12} xs={24} className="detail-flex items-center">
+                  <span className="card-sm-text text-Neutral-Secondary-Text gap-right">Proposer:</span>
+                  <span className="text-ellipsis truncate">
+                    <a
+                      href={`${isSideChain ? explorer : mainExplorer}/address/${addressFormat(proposer)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title={`ELF_${proposer}_${viewer.chainId}`}
+                    >
+                      {`ELF_${proposer}_${viewer.chainId}`}
+                    </a>
+                  </span>
+                </Col>
+                <Col sm={12} xs={24} className="detail-flex items-center">
+                  <span className="card-sm-text text-Neutral-Secondary-Text gap-right">URL:</span>
+                  <span className="text-ellipsis">
+                    {validateURL(leftInfo.proposalDescriptionUrl || "") ? (
+                      <a
+                        href={leftInfo.proposalDescriptionUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title={leftInfo.proposalDescriptionUrl}
+                      >
+                        {leftInfo.proposalDescriptionUrl}
+                      </a>
+                    ) : (
+                      "-"
+                    )}
+                  </span>
+                </Col>
+                {status === proposalStatus.RELEASED ? (
+                  <Col sm={12} xs={24} className="detail-flex items-center">
+                    <span className="sub-title gap-right">
+                      Proposal Released:
+                    </span>
+                    <span className="text-ellipsis">
+                      {moment(releasedTime).format("YYYY/MM/DD HH:mm:ss")}
+                    </span>
+                  </Col>
+                ) : null}
+              </Row>
+            </div>
           </div>
-          <Divider />
           <Tabs
-            type="card"
+            className="proposal-detail-tab"
             activeKey={activeKey}
             onTabClick={(key) => changeTab(key)}
           >
             <TabPane tab="Proposal Details" key="proposal">
-              <>
+              <div className="px-[0] lg:px-[32px] pb-[40px]">
+                {
+                  networkDaoProposalDetail?.data?.description &&
+                  <Card title='Description' className='mb-[10px]'>
+                    <p className="break-words">
+                       {networkDaoProposalDetail?.data?.description}
+                    </p>
+                  </Card>
+                }
                 <VoteData
                   className="gap-top-large"
                   proposalType={proposalType}
@@ -451,19 +466,21 @@ const ProposalDetail = () => {
                   contractParams={contractParams}
                   createdBy={createdBy}
                 />
-              </>
+              </div>
             </TabPane>
             <TabPane tab="Voting Details" key="vote">
-              <VoteDetail
-                proposalType={proposalType}
-                proposalId={proposalId}
-                logStatus={logStatus}
-                expiredTime={expiredTime}
-                status={status}
-                currentWallet={currentWallet}
-                wallet={wallet}
-                symbol={leftOrgInfo.tokenSymbol || "ELF"}
-              />
+              <div className="px-[16px] lg:px-[32px]">
+                <VoteDetail
+                  proposalType={proposalType}
+                  proposalId={proposalId}
+                  logStatus={logStatus}
+                  expiredTime={expiredTime}
+                  status={status}
+                  currentWallet={currentWallet}
+                  wallet={wallet}
+                  symbol={leftOrgInfo.tokenSymbol || "ELF"}
+                  />
+                </div>
             </TabPane>
           </Tabs>
           {visible ? (

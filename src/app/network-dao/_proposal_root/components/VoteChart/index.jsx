@@ -107,6 +107,7 @@ const VoteChart = (props) => {
     approvals,
     rejections,
     abstentions,
+    size = 'default'
   } = props;
   const votesData = useMemo(() => {
     return getCircleValues(
@@ -123,8 +124,8 @@ const VoteChart = (props) => {
 
   if (isPhoneCheck()) {
     return (
-      <div className='proposal-vote'>
-        <p>Voting Data: Votes (Votes / Minimum Votes)</p>
+      <div className={`${size} proposal-vote`}>
+        <p className="title">Voting Data: Votes <span className="explain">(Votes / Minimum Votes)</span></p>
         <Row gutter={16} className='proposal-vote-chart'>
           <Col span={8} offset={2}>
             <Circle
@@ -238,7 +239,7 @@ const VoteChart = (props) => {
 
   return (
     <div className='proposal-vote'>
-      <p>Voting Data: Votes (Votes / Minimum Votes)</p>
+      <p className="title">Voting Data: Votes <span className="explain">(Votes / Minimum Votes)</span></p>
       <Row gutter={16} className='proposal-vote-chart'>
         <Col span={4} offset={1}>
           <Circle
@@ -351,6 +352,7 @@ VoteChart.propTypes = {
     .isRequired,
   bpCount: PropTypes.number.isRequired,
   organizationInfo: PropTypes.shape(organizationInfoPropTypes).isRequired,
+  size: PropTypes.oneOf(["small", "default", "large"]),
 };
 
 export default VoteChart;

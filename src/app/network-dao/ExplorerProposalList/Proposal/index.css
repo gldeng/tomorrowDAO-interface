@@ -11,8 +11,9 @@
     justify-content: space-between;
     align-items: center;
     min-height: 47px;
-    > div {
+    .id-wrap {
       max-width: 80%;
+      height: 64px;
     }
     &-status {
       text-align: right;
