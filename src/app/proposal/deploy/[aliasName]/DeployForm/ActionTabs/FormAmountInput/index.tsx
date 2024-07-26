@@ -13,7 +13,7 @@ interface AmountInputProps {
   value?: IAmountInputValue;
   onChange?: (value: IAmountInputValue) => void;
   selectOptions: SelectProps['options'];
-  treasuryAssetsData?: IAddressTokenListDataItem[];
+  treasuryAssetsData?: ITreasuryAssetsResponseDataItem[];
 }
 export default function AmountInput(props: AmountInputProps) {
   const { value, onChange, treasuryAssetsData, selectOptions } = props;
@@ -34,7 +34,7 @@ export default function AmountInput(props: AmountInputProps) {
   const balance = useMemo(() => {
     const symbolInfo = treasuryAssetsData?.find((item) => item.symbol === value?.symbol);
     if (!symbolInfo) return '-';
-    return symbolInfo.balance;
+    return divDecimals(symbolInfo.amount, symbolInfo.decimal).toFormat();
   }, [treasuryAssetsData, value?.symbol]);
 
   return (

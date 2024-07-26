@@ -25,6 +25,7 @@ import AddMultisigMembers from './TabContent/AddMultisigMembers';
 import DeleteHCMembers from './TabContent/DeleteHCMembers';
 import AddHCMembers from './TabContent/AddHCMembers';
 import ErrorBoundary from 'components/ErrorBoundary';
+import { divDecimals } from 'utils/calculate';
 
 const contractMethodNamePath = ['transaction', 'contractMethodName'];
 
@@ -33,7 +34,7 @@ interface IActionTabsProps {
   onTabChange?: (activeKey: string) => void;
   activeTab?: string;
   daoData?: IDaoInfoData;
-  treasuryAssetsData?: IAddressTokenListDataItem[];
+  treasuryAssetsData?: ITreasuryAssetsResponseDataItem[];
 }
 // const emptyTabItem = (...([]));
 export default function TabsCom(props: IActionTabsProps) {
@@ -170,35 +171,30 @@ export default function TabsCom(props: IActionTabsProps) {
                         reject(new Error('The symbol is invalid'));
                         return;
                       }
-                      GetTokenInfo(
-                        {
-                          symbol: symbol,
-                        },
-                        { chain: curChain },
-                      ).then((tokenInfo) => {
-                        if (!tokenInfo) {
-                          reject(new Error('The symbol is invalid'));
-                          return;
-                        }
-                        const amountWithDecimals = BigNumber(amount);
-                        const decimalPlaces = amountWithDecimals.decimalPlaces();
-                        if (decimalPlaces && decimalPlaces > tokenInfo.decimals) {
-                          return reject(
-                            new Error(
-                              `The maximum number of decimal places is ${tokenInfo.decimals}`,
-                            ),
-                          );
-                        }
-                        if (amountWithDecimals.gt(BigNumber(symbolInfo.balance))) {
-                          reject(
-                            new Error(
-                              'The withdrawal amount should be less than the available treasury assets.',
-                            ),
-                          );
-                        } else {
-                          resolve();
-                        }
-                      });
+                      if (!symbolInfo) {
+                        reject(new Error('The symbol is invalid'));
+                        return;
+                      }
+                      const amountWithDecimals = BigNumber(amount);
+                      const decimalPlaces = amountWithDecimals.decimalPlaces();
+                      if (decimalPlaces && decimalPlaces > symbolInfo.decimal) {
+                        return reject(
+                          new Error(
+                            `The maximum number of decimal places is ${symbolInfo.decimal}`,
+                          ),
+                        );
+                      }
+                      if (
+                        amountWithDecimals.gt(divDecimals(symbolInfo.amount, symbolInfo.decimal))
+                      ) {
+                        reject(
+                          new Error(
+                            'The withdrawal amount should be less than the available treasury assets.',
+                          ),
+                        );
+                      } else {
+                        resolve();
+                      }
                     });
                   },
                 },
