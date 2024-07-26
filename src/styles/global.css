@@ -82,6 +82,9 @@
   .max-content {
     width: max-content;
   }
+  .proposal-item-left-width {
+    max-width: calc(100% - 266px - 48px);
+  }
 }
 
 
