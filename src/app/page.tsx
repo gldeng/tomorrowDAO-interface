@@ -6,6 +6,7 @@ import './home.css';
 import Link from 'next/link';
 import breadCrumb from 'utils/breadCrumb';
 import { eventBus, ShowHeaderExplore } from 'utils/myEvent';
+import useResponsive from 'hooks/useResponsive';
 
 interface LinkWithRightArrowProps {
   href: string;
@@ -25,8 +26,9 @@ export default function Page() {
   useEffect(() => {
     breadCrumb.clearBreadCrumb();
   }, []);
+  const { isLG } = useResponsive();
   useEffect(() => {
-    // 利用 observer 监听exploreButtonRef 往上滚动的时候时候是否消失 往下滚动是否出现
+    const top = isLG ? 64 : 82;
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
@@ -35,7 +37,7 @@ export default function Page() {
           eventBus.emit(ShowHeaderExplore, true);
         }
       },
-      { threshold: 0.5, rootMargin: '0px 0px 82px 0px' },
+      { threshold: 0.5, rootMargin: `0px 0px ${top}px 0px` },
     );
     observer.observe(exploreButtonRef.current as Element);
     return () => {

@@ -230,6 +230,7 @@ function Vote(props: TVoteTypes) {
           variant="filled"
           onFinish={() => handlerVote()}
           className="mt-[10px]"
+          requiredMark={false}
         >
           <Form.Item<TFieldType>
             label="Stake and Vote"
@@ -239,7 +240,7 @@ function Vote(props: TVoteTypes) {
           >
             <InputNumber
               className="w-full"
-              placeholder="pleas input stake amount"
+              placeholder="Please input stake amount"
               autoFocus
               min={0}
               max={elfBalance}
@@ -270,7 +271,9 @@ function Vote(props: TVoteTypes) {
         }}
         footer={null}
       >
-        <div className="text-xs text-Neutral-Primary-Text mb-4">{currentMessage}</div>
+        <div className="card-sm-text text-center text-Neutral-Primary-Text mb-6">
+          {currentMessage}
+        </div>
         <Button
           className="mx-auto"
           type="primary"

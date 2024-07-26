@@ -317,7 +317,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
                   isHighCouncil &&
                   dayjs()
                     .add(Number(activeTimePeriod), 'hours')
-                    .add(Number(timePeriod?.pendingTimePeriod), 'days')
+                    .add(Number(timePeriod?.pendingTimePeriod), 'hours')
                     .format('DD MMM, YYYY')}
               </span>
               <ArrowIcon className="color-[#B8B8B8]" />
@@ -325,14 +325,14 @@ const ProposalInfo = (props: ProposalInfoProps) => {
                 {(proposalType === ProposalType.VETO || (isGovernance && isReferendumLike)) &&
                   dayjs()
                     .add(Number(activeTimePeriod), 'hours')
-                    .add(Number(timePeriod?.executeTimePeriod), 'days')
+                    .add(Number(timePeriod?.executeTimePeriod), 'hours')
                     .format('DD MMM, YYYY')}
                 {isGovernance &&
                   isHighCouncil &&
                   dayjs()
                     .add(Number(activeTimePeriod), 'hours')
-                    .add(Number(timePeriod?.pendingTimePeriod), 'days')
-                    .add(Number(timePeriod?.executeTimePeriod), 'days')
+                    .add(Number(timePeriod?.pendingTimePeriod), 'hours')
+                    .add(Number(timePeriod?.executeTimePeriod), 'hours')
                     .format('DD MMM, YYYY')}
               </span>
             </div>
