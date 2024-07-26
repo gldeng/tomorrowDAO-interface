@@ -1,6 +1,9 @@
 .my-daos {
   .fix-bottom-button {
     @apply fixed bottom-0 left-0 right-0 px-[16px] py-[24px] bg-white flex items-center justify-center;
+    button {
+      @apply w-full;
+    }
   }
 
   .list-header {

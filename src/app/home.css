@@ -27,7 +27,7 @@
   }
 
   @media screen and (max-width: 579px) {
-    min-width: calc(375px + 40px);;
+    min-width: calc(375px);
   }
 }
 .dao-home-container {

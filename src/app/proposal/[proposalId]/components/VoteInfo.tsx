@@ -104,22 +104,25 @@ const VoteInfo = (props: IHeaderInfoProps) => {
               {proposalDetailData.votesAmount > 1 ? 'Votes' : 'Vote'} in Total
             </Typography.Text>
           </div>
-          <div>
-            <Typography.Text size="small" className="text-Neutral-Secondary-Text">
-              Minimum {is1t1v ? 'votes' : 'voter'} requirement met
-              <span className="px-[4px]">
-                {is1t1v ? (
-                  <span>
-                    {proposalDetailData.votesAmount} / {proposalDetailData.minimalVoteThreshold}
-                  </span>
-                ) : (
-                  <span>
-                    {proposalDetailData.voterCount} / {proposalDetailData.minimalRequiredThreshold}
-                  </span>
-                )}
-              </span>
-            </Typography.Text>
-          </div>
+          {daoData?.data.governanceMechanism === EDaoGovernanceMechanism.Token && (
+            <div>
+              <Typography.Text size="small" className="text-Neutral-Secondary-Text">
+                Minimum {is1t1v ? 'votes' : 'voter'} requirement met
+                <span className="px-[4px]">
+                  {is1t1v ? (
+                    <span>
+                      {proposalDetailData.votesAmount} / {proposalDetailData.minimalVoteThreshold}
+                    </span>
+                  ) : (
+                    <span>
+                      {proposalDetailData.voterCount} /{' '}
+                      {proposalDetailData.minimalRequiredThreshold}
+                    </span>
+                  )}
+                </span>
+              </Typography.Text>
+            </div>
+          )}
         </div>
       </BoxWrapper>
       <MyInfo
