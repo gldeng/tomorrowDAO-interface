@@ -73,12 +73,12 @@ export default function ProposalsItem(props: IProposalsItemProps) {
             {/* {getTimeDesc(proposalStatus, data)} */}
           </Typography.Text>
         </div>
-        <div className="proposal-item-title normal-text-bold">
+        <div className="proposal-item-title normal-text-bold break-words">
           {data.proposalTitle ? (
-            data.proposalTitle
+            <span className="max-w-full">{data.proposalTitle}</span>
           ) : (
             <>
-              Proposal ID：{data.proposalId}
+              Proposal ID: {data.proposalId}
               <HashAddress preLen={8} endLen={11} address={data.proposalId}></HashAddress>
             </>
           )}
