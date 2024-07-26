@@ -16,20 +16,14 @@ import useAelfWebLoginSync from 'hooks/useAelfWebLoginSync';
 import { emitLoading } from 'utils/myEvent';
 import { parseJSON, uint8ToBase64 } from 'utils/parseJSON';
 import { getContract } from '../util';
-import { curChain, daoAddress, NetworkDaoProposalOnChain, treasuryContractAddress } from 'config';
+import { curChain, daoAddress, NetworkDaoProposalOnChain } from 'config';
 import { useRouter, useSearchParams } from 'next/navigation';
 import useIsNetworkDao from 'hooks/useIsNetworkDao';
 import { useRequest } from 'ahooks';
 import formValidateScrollFirstError from 'utils/formValidateScrollFirstError';
 import { EProposalActionTabs } from '../type';
-import { callContract, callViewContract, GetTokenInfo } from 'contract/callContract';
-import {
-  fetchAddressTokenList,
-  fetchDaoInfo,
-  fetchOldAddressTokenList,
-  fetchTreasuryAssets,
-  fetchVoteSchemeList,
-} from 'api/request';
+import { GetTokenInfo } from 'contract/callContract';
+import { fetchAddressTokenList, fetchDaoInfo, fetchVoteSchemeList } from 'api/request';
 import { timesDecimals } from 'utils/calculate';
 import { trimAddress } from 'utils/address';
 import { useWebLogin } from 'aelf-web-login';
@@ -122,20 +116,12 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
 
   const { data: addressTokenList, run: fetchTokenList } = useRequest(
     async (daoId: string) => {
-      const address = await callViewContract<string, string>(
-        'GetTreasuryAccountAddress',
-        daoId,
-        treasuryContractAddress,
-      );
-      if (!address) {
-        return null;
-      }
-      return fetchOldAddressTokenList(
-        {
-          address,
-        },
-        curChain,
-      );
+      return fetchAddressTokenList({
+        daoId: daoId ?? '',
+        chainId: curChain,
+        maxResultCount: 1000,
+        skipCount: 0,
+      });
     },
     {
       manual: true,
@@ -144,7 +130,7 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
   const treasuryAssetsData = addressTokenList?.data;
   const { wallet } = useWebLogin();
   useEffect(() => {
-    if (daoId && wallet.address) {
+    if (daoId) {
       fetchTokenList(daoId);
     }
   }, [daoId, fetchTokenList, wallet.address]);
@@ -355,7 +341,7 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
                 setActiveTab(key);
               }}
               activeTab={activeTab}
-              treasuryAssetsData={treasuryAssetsData}
+              treasuryAssetsData={treasuryAssetsData?.data}
               daoDataLoading={daoLoading}
             />
           )
