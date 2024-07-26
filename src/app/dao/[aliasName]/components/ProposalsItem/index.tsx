@@ -54,7 +54,7 @@ export default function ProposalsItem(props: IProposalsItemProps) {
   };
   return (
     <div className="proposal-item">
-      <div>
+      <div className="proposal-item-left">
         <div>
           <DetailTag
             customStyle={{
