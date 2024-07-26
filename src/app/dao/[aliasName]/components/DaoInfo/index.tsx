@@ -1,6 +1,6 @@
-import { Collapse, HashAddress, Typography } from 'aelf-design';
+import { Collapse, HashAddress } from 'aelf-design';
 import Image from 'next/image';
-import { Divider, Descriptions, DescriptionsProps, Button } from 'antd';
+import { Divider, Descriptions, DescriptionsProps } from 'antd';
 import useResponsive from 'hooks/useResponsive';
 import PreviewFile from 'components/PreviewFile';
 import { Skeleton } from 'components/Skeleton';
@@ -12,11 +12,8 @@ import Link from 'next/link';
 import { getExploreLink } from 'utils/common';
 import { useChainSelect } from 'hooks/useChainSelect';
 import './index.css';
-import { curChain, daoAddress, NetworkDaoHomePathName } from 'config';
+import { curChain, NetworkDaoHomePathName } from 'config';
 import { useWebLogin } from 'aelf-web-login';
-import { useAsyncEffect } from 'ahooks';
-import { callViewContract } from 'contract/callContract';
-import { useState } from 'react';
 import { EDaoGovernanceMechanism } from 'app/(createADao)/create/type';
 
 const firstLetterToLowerCase = (str: string) => {
@@ -29,9 +26,6 @@ const colorfulSocialMediaIconMapKeys = Object.keys(colorfulSocialMediaIconMap).r
   }),
   {},
 );
-interface IViewFileContract {
-  data: Record<string, IFileInfo>;
-}
 const getSocialUrl = (key: string, val: string) => {
   if (key === 'twitter') {
     return `https://twitter.com/${val.includes('@') ? val.split('@')[1] : val}`;
@@ -63,7 +57,6 @@ export default function DaoInfo(props: IParams) {
     isLoading,
     isError,
     onChangeHCParams,
-    daoId,
     aliasName,
   } = props;
   const { wallet } = useWebLogin();

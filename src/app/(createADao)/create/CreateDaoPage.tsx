@@ -151,14 +151,14 @@ const CreateDaoPage = () => {
           governanceConfig = {
             ...governanceConfig,
             minimalApproveThreshold: governanceConfig.minimalApproveThreshold * 100,
-            maximalRejectionThreshold: governanceConfig.maximalRejectionThreshold * 100,
-            maximalAbstentionThreshold: governanceConfig.maximalAbstentionThreshold * 100,
+            // maximalRejectionThreshold: governanceConfig.maximalRejectionThreshold * 100,
+            // maximalAbstentionThreshold: governanceConfig.maximalAbstentionThreshold * 100,
           };
           // isMultisig, it is a percentage
-          if (isMultisig) {
-            governanceConfig.minimalRequiredThreshold =
-              governanceConfig.minimalRequiredThreshold * 100;
-          }
+          // if (isMultisig) {
+          //   governanceConfig.minimalRequiredThreshold =
+          //     governanceConfig.minimalRequiredThreshold * 100;
+          // }
         }
         // eslint-disable-next-line prefer-const
         let { proposalThreshold, ...restGovernanceConfig } = governanceConfig ?? {};
@@ -195,17 +195,17 @@ const CreateDaoPage = () => {
               // },
               governanceSchemeThreshold: {
                 ...highCouncilForm.governanceSchemeThreshold,
-                minimalRequiredThreshold:
-                  highCouncilForm.governanceSchemeThreshold.minimalRequiredThreshold * 100,
+                // minimalRequiredThreshold:
+                //   highCouncilForm.governanceSchemeThreshold.minimalRequiredThreshold * 100,
                 minimalVoteThreshold: Number(
                   timesDecimals(minimalVoteThreshold, daoCreateToken.decimals),
                 ),
                 minimalApproveThreshold:
                   highCouncilForm.governanceSchemeThreshold.minimalApproveThreshold * 100,
-                maximalRejectionThreshold:
-                  highCouncilForm.governanceSchemeThreshold.maximalRejectionThreshold * 100,
-                maximalAbstentionThreshold:
-                  highCouncilForm.governanceSchemeThreshold.maximalAbstentionThreshold * 100,
+                // maximalRejectionThreshold:
+                //   highCouncilForm.governanceSchemeThreshold.maximalRejectionThreshold * 100,
+                // maximalAbstentionThreshold:
+                //   highCouncilForm.governanceSchemeThreshold.maximalAbstentionThreshold * 100,
               },
               highCouncilMembers: {
                 value:
@@ -229,16 +229,15 @@ const CreateDaoPage = () => {
           primaryContent: `${originMetadata?.metadata.name} Created Successfully`,
           secondaryContent: (
             <>
-              Feel free to join TMRWDAO&lsquo;s
+              Feel free to join Tomorrow DAO&apos;s{' '}
               <Link
-                className="text-colorPrimary cursor-pointer px-[3px]"
+                className="text-colorPrimary cursor-pointer"
                 href={'https://t.me/tmrwdao'}
                 target="_blank"
               >
                 Telegram group
-              </Link>
-              to connect with the team and get assistance with tasks such as modifying the
-              DAO&lsquo;s information.
+              </Link>{' '}
+              to connect with the team and receive timely assistance
             </>
           ),
           footerConfig: {
@@ -340,7 +339,7 @@ const CreateDaoPage = () => {
             {currentStep == 1 && (
               <>
                 <h2 className="step-title">Referendum</h2>
-                <p className="step-subtitle">the primary governance mechamism</p>
+                <p className="step-subtitle">The primary governance mechanism</p>
               </>
             )}
             {currentStep == 2 && (
@@ -360,10 +359,11 @@ const CreateDaoPage = () => {
                     value={isShowHighCouncil}
                   />
                 </div>
-                <p className="step-subtitle">a supplementary governance mechanism</p>
+                <p className="step-subtitle">A supplementary governance mechanism</p>
                 <p className="step-subtext">
-                  High Council is an optional governance choice that supplements referendum. High
-                  Council members have the authority and responsibility in DAO governance.
+                  High Council is an optional governance mechanism that supplements Referendum. High
+                  Council members are granted authority and the responsibility to partake in DAO
+                  governance.
                 </p>
               </>
             )}
@@ -371,7 +371,7 @@ const CreateDaoPage = () => {
               <>
                 <h2 className="step-title">Docs</h2>
                 <p className="step-subtext">
-                  It is recommended to upload at least a white paper and a roadmap.
+                  It is recommended to upload at least a project whitepaper and roadmap
                 </p>
               </>
             )}

@@ -1,5 +1,5 @@
+import React from 'react';
 import Image from 'next/image';
-import { Typography } from 'aelf-design';
 import NoDataIcon from 'assets/imgs/no-data.svg';
 type TNoDataType = {
   imgW?: number;
@@ -10,7 +10,7 @@ export default function NoData(props: TNoDataType) {
   return (
     <div>
       <Image className="mx-auto block" width={imgW} height={imgH} src={NoDataIcon} alt="" />
-      <Typography.Text>No results found</Typography.Text>
+      <p className="card-sm-text text-neutralTitle mt-[16px] text-center">No results found</p>
     </div>
   );
 }

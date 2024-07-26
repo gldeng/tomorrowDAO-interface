@@ -15,7 +15,7 @@ export const FirstScreen = (props: IFirstScreenProps) => {
   return (
     <>
       <div className="page-content-bg-border dao-create-first-screen mb-[24px] flex items-start lg:items-center justify-between flex-col lg:flex-row">
-        <h2 className="dao-create-first-screen-title">Create your DAO to TMRW DAO</h2>
+        <h2 className="dao-create-first-screen-title">Create your DAO on Tomorrow DAO</h2>
         <ButtonCheckLogin onClick={onClick} type="primary" className="lg:mt-0 mt-[24px]">
           Build your DAO
         </ButtonCheckLogin>

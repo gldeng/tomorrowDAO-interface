@@ -1,25 +1,24 @@
 import { Descriptions, Divider, Form, InputNumber, message } from 'antd';
-import { HashAddress, Typography, FontWeightEnum, Button } from 'aelf-design';
+import { HashAddress, Button, Tooltip } from 'aelf-design';
+import { InfoCircleOutlined } from '@aelf-design/icons';
 import React, { ReactNode, useState, useEffect, useCallback } from 'react';
-import Image from 'next/image';
-import SuccessGreenIcon from 'assets/imgs/success-green.svg';
 import CommonModal from 'components/CommonModal';
 import { useWalletService } from 'hooks/useWallet';
-import Info from '../Info';
 import { fetchProposalMyInfo } from 'api/request';
 import { store } from 'redux/store';
 import { useSelector } from 'react-redux';
 import { callContract, GetBalanceByContract } from 'contract/callContract';
 import { curChain, sideChainSuffix, voteAddress } from 'config';
 import { SkeletonLine } from 'components/Skeleton';
-import { emitLoading } from 'utils/myEvent';
-import { getExploreLink } from 'utils/common';
+import { ResultModal, emitLoading, eventBus } from 'utils/myEvent';
 import Vote from './vote';
 import { timesDecimals, divDecimals } from 'utils/calculate';
 import { IContractError } from 'types';
-import { TokenIconMap } from 'constants/token';
 import useAelfWebLoginSync from 'hooks/useAelfWebLoginSync';
 import './index.css';
+import { CommonOperationResultModalType } from 'components/CommonOperationResultModal';
+import { okButtonConfig } from 'components/ResultModal';
+import Symbol from 'components/Symbol';
 type TInfoTypes = {
   height?: number | string;
   children?: ReactNode;
@@ -40,6 +39,13 @@ type TFieldType = {
 interface IMyInfo extends IProposalMyInfo {
   votesAmount?: number;
 }
+interface ISymbolTextProps {
+  symbol: string;
+}
+const SymbolText = (props: ISymbolTextProps) => {
+  const { symbol } = props;
+  return <> {symbol.length > 13 ? '' : symbol}</>;
+};
 export default function MyInfo(props: TInfoTypes) {
   const {
     height,
@@ -57,7 +63,6 @@ export default function MyInfo(props: TInfoTypes) {
   const elfInfo = store.getState().elfInfo.elfInfo;
   const { walletInfo } = useSelector((store: any) => store.userInfo);
   const [elfBalance, setElfBalance] = useState(0);
-  const [txHash, setTxHash] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [info, setInfo] = useState<IMyInfo>({
     symbol: 'ELF',
@@ -72,11 +77,6 @@ export default function MyInfo(props: TInfoTypes) {
   });
 
   const [form] = Form.useForm();
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [modalInfo, setShowFailedModal] = useState({
-    isOpen: false,
-    message: '',
-  });
   const fetchMyInfo = useCallback(async () => {
     if (!isLogin || !elfInfo.curChain || !daoId || !walletInfo.address) {
       return;
@@ -145,7 +145,7 @@ export default function MyInfo(props: TInfoTypes) {
       ),
       children: (
         <div className="w-full text-right card-sm-text-bold">
-          {elfBalance} {info?.symbol || 'ELF'}
+          {elfBalance} <SymbolText symbol={info?.symbol || 'ELF'} />
         </div>
       ),
     },
@@ -156,7 +156,7 @@ export default function MyInfo(props: TInfoTypes) {
       ),
       children: (
         <div className="w-full text-right card-sm-text-bold">
-          {info?.stakeAmount} {info?.symbol}
+          {info?.stakeAmount} <SymbolText symbol={info?.symbol || 'ELF'} />
         </div>
       ),
     },
@@ -190,14 +190,26 @@ export default function MyInfo(props: TInfoTypes) {
       emitLoading(true, 'The unstake is being processed...');
       const result = await callContract('Withdraw', contractParams, voteAddress);
       emitLoading(false);
-      setTxHash(result?.TransactionId);
-      setShowSuccessModal(true);
+      eventBus.emit(ResultModal, {
+        open: true,
+        type: CommonOperationResultModalType.Success,
+        primaryContent: `Transaction Initiated`,
+        footerConfig: {
+          buttonList: [okButtonConfig],
+        },
+        viewTransactionId: result?.TransactionId,
+      });
     } catch (err) {
       const error = err as IContractError;
       const message = error?.errorMessage?.message || error?.message;
-      setShowFailedModal({
-        isOpen: true,
-        message,
+      eventBus.emit(ResultModal, {
+        open: true,
+        type: CommonOperationResultModalType.Error,
+        primaryContent: 'Transaction Failed',
+        secondaryContent: message?.toString?.(),
+        footerConfig: {
+          buttonList: [okButtonConfig],
+        },
       });
       emitLoading(false);
     }
@@ -263,7 +275,7 @@ export default function MyInfo(props: TInfoTypes) {
             {/* Claim Modal  */}
             <CommonModal
               open={isModalOpen}
-              title={<div className="text-center">Unstake {info?.symbol} on SideChain AELF</div>}
+              title={<div className="text-center">Unstake {info?.symbol} on aelf SideChain</div>}
               destroyOnClose
               onCancel={() => {
                 form.setFieldValue('unStakeAmount', 0);
@@ -271,17 +283,33 @@ export default function MyInfo(props: TInfoTypes) {
               }}
             >
               <div className="text-center color-text-Primary-Text font-medium">
-                <span className="text-[32px] mr-1">{info?.availableUnStakeAmount}</span>
-                <span>{info.symbol}</span>
+                <span className="text-[32px] leading-[40px] font-medium">
+                  {info?.availableUnStakeAmount}
+                </span>
+                <span className="normal-text-bold pl-[8px]">{info.symbol}</span>
               </div>
-              <div className="text-center card-sm-text text-Neutral-Secondary-Text">
+              <div className="text-center card-sm-text text-Neutral-Secondary-Text mb-[24px]">
                 Available for Unstaking
               </div>
               <Form form={form} layout="vertical" variant="filled" onFinish={handleClaim}>
                 <Form.Item<TFieldType>
-                  label="Unstake Amount"
+                  label={
+                    <Tooltip
+                      title={
+                        <div>
+                          Currently, the only supported method is to unstake all the available{' '}
+                          {info.symbol} in one time.
+                        </div>
+                      }
+                    >
+                      <div className="flex items-center">
+                        <span className="form-item-title font-normal ">Unstake Amount</span>
+                        <InfoCircleOutlined className="cursor-pointer pl-[8px] text-Neutral-Disable-Text" />
+                      </div>
+                    </Tooltip>
+                  }
                   name="unstakeAmount"
-                  tooltip={`Currently, the only supported method is to unstake all the available ${info.symbol} in one time.`}
+                  className=""
                 >
                   <InputNumber
                     className="w-full"
@@ -290,20 +318,15 @@ export default function MyInfo(props: TInfoTypes) {
                     disabled
                     prefix={
                       <div className="flex items-center">
-                        {TokenIconMap[info.symbol] && (
-                          <Image width={24} height={24} src={TokenIconMap[info.symbol]} alt="" />
-                        )}
-                        <span className="text-Neutral-Secondary-Text ml-1">{info.symbol}</span>
+                        <Symbol symbol={info.symbol} className="unstake-form-token" />
                         <Divider type="vertical" />
                       </div>
                     }
                   />
                 </Form.Item>
-                <Form.Item>
-                  <Button className="mx-auto" type="primary" htmlType="submit">
-                    Unstake
-                  </Button>
-                </Form.Item>
+                <Button className="mx-auto" type="primary" htmlType="submit">
+                  Unstake
+                </Button>
               </Form>
             </CommonModal>
             {/* Unstake Amount  */}
@@ -328,73 +351,6 @@ export default function MyInfo(props: TInfoTypes) {
               >
                 OK
               </Button>
-            </CommonModal>
-
-            {/* success */}
-            <CommonModal
-              title="Transaction Initiated"
-              open={showSuccessModal}
-              onCancel={() => {
-                setShowSuccessModal(false);
-              }}
-            >
-              <Image
-                className="mx-auto block"
-                width={56}
-                height={56}
-                src={SuccessGreenIcon}
-                alt=""
-              />
-              <div className="text-center text-Primary-Text font-medium">
-                {/* <span className="text-[32px] mr-1">{form.getFieldValue('unstakeAmount')}</span>
-              <span>{info.symbol}</span> */}
-              </div>
-              {/* <p className="text-center text-Neutral-Secondary-Text font-medium">
-              Transaction Initiated
-            </p> */}
-              <Button
-                className="mx-auto mt-6 w-[206px]"
-                type="primary"
-                onClick={() => {
-                  setShowSuccessModal(false);
-                }}
-              >
-                OK
-              </Button>
-              <Button
-                type="link"
-                className="mx-auto text-colorPrimary"
-                size="small"
-                onClick={() => {
-                  window.open(getExploreLink(txHash, 'transaction'));
-                }}
-              >
-                View Transaction Details
-              </Button>
-            </CommonModal>
-
-            {/* failed */}
-            <CommonModal
-              open={modalInfo.isOpen}
-              onCancel={() => {
-                setShowFailedModal({
-                  ...modalInfo,
-                  isOpen: false,
-                });
-              }}
-            >
-              <Info
-                title="Transaction Failed!"
-                firstText={modalInfo.message}
-                btnText="Back"
-                type="failed"
-                onOk={() => {
-                  setShowFailedModal({
-                    ...modalInfo,
-                    isOpen: false,
-                  });
-                }}
-              ></Info>
             </CommonModal>
           </>
         )

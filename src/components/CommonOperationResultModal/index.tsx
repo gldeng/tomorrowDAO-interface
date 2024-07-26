@@ -22,7 +22,7 @@ const ICON_MAP = {
 
 export type TCommonOperationResultModalProps = Pick<
   TCommonModalProps,
-  'footerConfig' | 'open' | 'onCancel'
+  'footerConfig' | 'open' | 'onCancel' | 'viewTransactionId'
 > & {
   type: CommonOperationResultModalType;
   primaryContent: ReactNode;
@@ -38,7 +38,7 @@ export default function CommonOperationResultModal({
   return (
     <CommonModal {...modalProps}>
       <Flex vertical align="center" gap={16}>
-        <img src={ICON_MAP[type]} alt="icon" width={64} height={64} />
+        <img src={ICON_MAP[type]} alt="icon" width={56} height={56} />
         <Title className="text-center" level={6} fontWeight={FontWeightEnum.Medium}>
           {primaryContent}
         </Title>

@@ -24,7 +24,7 @@ import { apiServer } from 'api/axios';
 import { getCaHashAndOriginChainIdByWallet, getManagerAddressByWallet } from 'utils/wallet';
 import { removeJWT, setLocalJWT } from 'utils/localJWT';
 import { authManager } from 'utils/walletAndTokenInfo';
-import { curChain } from 'config';
+import { curChain, networkType } from 'config';
 
 export const useCheckLoginAndToken = () => {
   const { loginState, login, logout, wallet, walletType } = useWebLogin();
@@ -37,7 +37,7 @@ export const useCheckLoginAndToken = () => {
     });
     // const { caHash } = await getCaHashAndOriginChainIdByWallet(wallet, walletType);
     // const managerAddress = await getManagerAddressByWallet(wallet, walletType);
-    const key = `ELF_${wallet.address}_${curChain}`;
+    const key = `ELF_${wallet.address}_${curChain}_${networkType}`;
     // // emitLoading(false, 'Authorize account...');
     emitLoading(false);
     if (tokenRes?.access_token) {

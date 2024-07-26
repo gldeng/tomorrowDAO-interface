@@ -1,6 +1,9 @@
 .myRecord {
+  .TMRWDAO-card-head {
+    @apply lg:px-8 px-4; 
+  }
   .TMRWDAO-pagination-container {
-    @apply px-8;
+    @apply lg:px-8 px-4; 
   }
 
   .TMRWDAO-select-single {
@@ -18,5 +21,15 @@
 
   .vote-record-2 {
     @apply text-abstention;
+  }
+  .vote-option-column {
+    .TMRWDAO-table-filter-column {
+      @apply flex justify-start;
+    }
+  }
+  .my-record-tx-hash {
+    &.TMRWDAO-hash-address > span {
+      @apply font-bold;
+    }
   }
 }

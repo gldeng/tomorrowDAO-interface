@@ -10,10 +10,10 @@ import { fetchAddressTransferList } from 'api/request';
 // import useResponsive from 'hooks/useResponsive';
 import { getFormattedDate } from 'utils/time';
 import { numberFormatter } from 'utils/numberFormatter';
-import { TokenIconMap } from 'constants/token';
-import NoData from './NoData';
+import NoData from 'components/NoData';
 import { checkIsOut } from 'utils/transaction';
 import { isSideChain } from 'utils/chain';
+import Symbol from 'components/Symbol';
 
 const defaultPageSize = 20;
 interface IRecordTableProps {
@@ -51,15 +51,15 @@ export default function RecordTable(props: IRecordTableProps) {
       manual: true,
     },
   );
-  const handleFormatChange = () => {
-    setTimeFormat(timeFormat === 'Age' ? 'Date Time' : 'Age');
-  };
+  // const handleFormatChange = () => {
+  //   setTimeFormat(timeFormat === 'Age' ? 'Date Time' : 'Age');
+  // };
 
   const columns: ColumnsType<IAddressTransferListDataListItem> = [
     {
       title: 'Txn Hash',
       dataIndex: 'txId',
-      width: 168,
+      width: 184,
       className: 'treasury-table-column-clear-pl ',
       render(hash) {
         return (
@@ -83,11 +83,11 @@ export default function RecordTable(props: IRecordTableProps) {
     {
       dataIndex: 'action',
       title: 'Method',
-      width: 128,
+      width: 144,
       render: (text) => {
         return (
           <Tooltip title={text} overlayClassName="table-item-tooltip__white">
-            <div className="method">{text}</div>
+            <div className="method-tag">{text}</div>
           </Tooltip>
         );
       },
@@ -95,11 +95,7 @@ export default function RecordTable(props: IRecordTableProps) {
     {
       dataIndex: 'time',
       width: 144,
-      title: (
-        <div className="time" onClick={handleFormatChange}>
-          {timeFormat}
-        </div>
-      ),
+      title: <div className="time">{timeFormat}</div>,
       render: (text) => {
         return <div>{getFormattedDate(text, timeFormat)}</div>;
       },
@@ -107,7 +103,7 @@ export default function RecordTable(props: IRecordTableProps) {
     {
       title: 'From',
       dataIndex: 'from',
-      width: 228,
+      width: 198,
       render(from, record) {
         return (
           <div className="from">
@@ -122,16 +118,27 @@ export default function RecordTable(props: IRecordTableProps) {
       },
     },
     {
-      title: 'Interacted With (To )',
+      title: '',
       dataIndex: 'to',
-      width: 280,
+      width: 52,
       render(to, record) {
         const isOut = checkIsOut(address, record);
         return (
-          <div className="to flex">
-            <Tag color={isOut ? 'error' : 'success'} className="w-[36px] flex justify-center">
-              {isOut ? 'out' : 'in'}
-            </Tag>
+          <div className={`interactive-tag ${isOut ? 'out' : 'in'} w-[36px] flex justify-center`}>
+            {isOut ? 'out' : 'in'}
+          </div>
+        );
+      },
+    },
+    {
+      title: 'Interacted With (To )',
+      dataIndex: 'to',
+      width: 198,
+      className: 'interactive-withto',
+      render(to, record) {
+        const isOut = checkIsOut(address, record);
+        return (
+          <div className="to flex interactive-withto-address">
             <Link
               href={`${isSideChain(currentChain) ? explorer : mainExplorer}/address/${to}`}
               target="_blank"
@@ -145,7 +152,7 @@ export default function RecordTable(props: IRecordTableProps) {
     {
       title: 'Amount',
       dataIndex: 'amount',
-      width: 180,
+      width: 200,
       render(amount) {
         return `${numberFormatter(amount)}`;
       },
@@ -157,12 +164,7 @@ export default function RecordTable(props: IRecordTableProps) {
       render(symbol) {
         return (
           <Link href={`${isSideChain(currentChain) ? explorer : mainExplorer}/token/${symbol}`}>
-            <div className="token flex items-center">
-              {TokenIconMap[symbol] && (
-                <img src={TokenIconMap[symbol]} className="token-logo pr-[2px]" alt="" />
-              )}
-              {symbol}
-            </div>
+            <Symbol symbol={symbol} className="treasury-token" />
           </Link>
         );
       },
@@ -197,7 +199,7 @@ export default function RecordTable(props: IRecordTableProps) {
     <ConfigProvider renderEmpty={() => <NoData></NoData>}>
       <Table
         scroll={{ x: 'max-content' }}
-        className="custom-table-style"
+        className="custom-table-style full-table normal-table clear-table-padding"
         columns={columns as any}
         loading={transferListLoading}
         pagination={{

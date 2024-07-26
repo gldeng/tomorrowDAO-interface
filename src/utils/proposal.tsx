@@ -3,10 +3,43 @@ import { GetBalanceByContract, GetTokenInfo } from 'contract/callContract';
 import { curChain } from 'config';
 import { divDecimals } from './calculate';
 import { CommonOperationResultModalType } from 'components/CommonOperationResultModal';
-import { INIT_RESULT_MODAL_CONFIG } from 'components/ResultModal';
+import { okButtonConfig } from 'components/ResultModal';
+import { AllProposalStatusString, ProposalStatusReplaceMap } from 'types';
+import { EDaoGovernanceMechanism } from 'app/(createADao)/create/type';
+import { fetchDaoExistMembers } from 'api/request';
 
-export const checkCreateProposal = async (daoData: IDaoInfoRes, address: string) => {
-  // const daoData = await fetchDaoInfo({ chainId: curChain, alias: aliasName });
+export const checkMultisigProposal = async (daoData: IDaoInfoRes, address: string) => {
+  let isExist = true;
+  try {
+    const dataRes = await fetchDaoExistMembers({
+      chainId: curChain,
+      daoId: daoData.data.id,
+      memberAddress: address,
+    });
+    isExist = dataRes?.data;
+  } catch (error) {
+    //
+  }
+  if (!isExist) {
+    eventBus.emit(ResultModal, {
+      open: true,
+      type: CommonOperationResultModalType.Warning,
+      primaryContent: "You can't create a proposal",
+      secondaryContent: (
+        <div>
+          You are not a member. Creating proposals in {daoData.data.metadata.name} can only be done
+          by addresses that have been added to its member list.
+        </div>
+      ),
+      footerConfig: {
+        buttonList: [okButtonConfig],
+      },
+    });
+    return false;
+  }
+  return isExist;
+};
+export const checkTokenProposal = async (daoData: IDaoInfoRes, address: string) => {
   const [balanceInfo, tokenInfo] = await Promise.all([
     GetBalanceByContract(
       {
@@ -48,17 +81,25 @@ export const checkCreateProposal = async (daoData: IDaoInfoRes, address: string)
         </div>
       ),
       footerConfig: {
-        buttonList: [
-          {
-            children: <span>OK</span>,
-            onClick: () => {
-              eventBus.emit(ResultModal, INIT_RESULT_MODAL_CONFIG);
-            },
-          },
-        ],
+        buttonList: [okButtonConfig],
       },
     });
     return false;
   }
   return true;
+};
+export const checkCreateProposal = async (daoData: IDaoInfoRes, address: string) => {
+  let res = true;
+  if (daoData.data.governanceMechanism === EDaoGovernanceMechanism.Token) {
+    res = await checkTokenProposal(daoData, address);
+  }
+  if (daoData.data.governanceMechanism === EDaoGovernanceMechanism.Multisig) {
+    res = await checkMultisigProposal(daoData, address);
+  }
+  return res;
+};
+
+export const getProposalStatusText = (status: string) => {
+  const proposalStatus = status as AllProposalStatusString;
+  return ProposalStatusReplaceMap[proposalStatus] ?? proposalStatus;
 };

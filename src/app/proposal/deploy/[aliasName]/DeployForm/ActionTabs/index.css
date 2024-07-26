@@ -44,4 +44,12 @@
       @apply border-error
     }
   }
+  .proposal-custom-action-params-editor {
+    * {
+      font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+    }
+    .monaco-editor .overflow-guard {
+      @apply border-solid border-[#E1E1E1] border-[1px] rounded-[6px];
+    }
+  }
 }

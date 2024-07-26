@@ -7,7 +7,7 @@ import { TableProps } from 'antd/es/table';
 import { TokenIconMap } from 'constants/token';
 import useTokenListData from 'hooks/useTokenListData';
 import BoxWrapper from 'app/proposal/[proposalId]/components/BoxWrapper';
-
+import Symbol from 'components/Symbol';
 import './index.css';
 import Link from 'next/link';
 import { explorer, mainExplorer } from 'config';
@@ -16,6 +16,9 @@ import TreasuryNoTxGuide from 'components/TreasuryNoTxGuide';
 import { sortIcon } from 'components/TableIcon';
 import { divDecimals } from 'utils/calculate';
 import BigNumber from 'bignumber.js';
+import { fetchAddressTransferList } from 'api/request';
+import { useRequest } from 'ahooks';
+import NoData from 'components/NoData';
 interface ITransparentProps {
   address: string;
   isNetworkDao: boolean;
@@ -32,50 +35,71 @@ export default function Transparent(props: ITransparentProps) {
 
   const columns: TableProps<ITreasuryAssetsResponseDataItem>['columns'] = [
     {
-      title: 'token',
+      title: 'Token',
       dataIndex: 'symbol',
       align: 'left',
       className: 'treasury-table-column-clear-pl',
       render(token) {
         return (
-          <span className="flex items-center">
-            {TokenIconMap[token] && (
-              <img className="token-logo pr-[2px]" src={TokenIconMap[token]} alt="" />
-            )}
-            {token}
+          <span className="token-pair">
+            <Symbol symbol={token} />
           </span>
         );
       },
     },
     {
-      title: 'balance',
+      title: 'Balance',
       dataIndex: 'amount',
       className: 'table-header-sorter-left',
       showSorterTooltip: false,
       render(amount, record) {
-        return divDecimals(amount, record.decimal).toFormat();
+        return (
+          <span>
+            {divDecimals(amount, record.decimal).toFormat()} {record.symbol}
+          </span>
+        );
       },
     },
     {
-      title: 'value',
+      title: 'Value',
       dataIndex: 'usdValue',
       defaultSortOrder: 'descend',
-      sortIcon,
+      // sortIcon,
       sorter: (a, b) => Number(a.usdValue) - Number(b.usdValue),
       render(value) {
         return (
-          <span>{value === 0 ? value : BigNumber(value).toFormat(2, BigNumber.ROUND_FLOOR)}</span>
+          <span>$ {value === 0 ? value : BigNumber(value).toFormat(2, BigNumber.ROUND_FLOOR)}</span>
         );
       },
     },
   ];
   console.log('tokenList', tokenList);
-  const isShowGuide = tokenList.length === 0 && !tokenListLoading && !isNetworkDao;
-  console.log('isShowGuide', isShowGuide);
+  const { data: transferList, loading: queryTransferListLoading } = useRequest(async () => {
+    const pageQuery = {
+      pageSize: 20,
+      pageNum: 1,
+    };
+    const params: IAddressTransferListReq = {
+      address,
+      ...pageQuery,
+    };
+    const [tokenTransfer, nftTransfer] = await Promise.all([
+      fetchAddressTransferList(params, currentChain),
+      fetchAddressTransferList(
+        {
+          ...params,
+          isNft: true,
+        },
+        currentChain,
+      ),
+    ]);
+    return tokenTransfer.data.total + nftTransfer.data.total > 0;
+  });
+  const isShowGuide = !transferList && !queryTransferListLoading && !isNetworkDao;
   return (
-    <div>
-      <BoxWrapper>
-        <div className="flex justify-between lg:flex-row flex-col">
+    <div className="treasury-page-content">
+      <div className="card-shape pt-6">
+        <div className="flex justify-between lg:flex-row flex-col card-px">
           <span className="text-Primary-Text leading-[32px] font-[500] text-[24px]">{title}</span>
           <span className="flex lg:flex-row flex-col">
             <span className="text-Neutral-Secondary-Text leading-[22px] text-[14px] flex pr-[4px]">
@@ -97,10 +121,12 @@ export default function Transparent(props: ITransparentProps) {
         </div>
         <Divider className="mb-2 lg:mb-6" />
         {isShowGuide ? (
-          <TreasuryNoTxGuide address={address} />
+          <div className="pt-[16px] mb-[64px]">
+            <TreasuryNoTxGuide address={address} />
+          </div>
         ) : (
           <>
-            <div>
+            <div className="card-px">
               <div className="text-Neutral-Secondary-Text text-[14px] flex items-center font-500 h-[22px]">
                 Treasury Balance
               </div>
@@ -108,9 +134,10 @@ export default function Transparent(props: ITransparentProps) {
                 $ {totalValueUSD}
               </div>
             </div>
-            <div>
-              <ConfigProvider>
+            <div className="mt-6">
+              <ConfigProvider renderEmpty={() => <NoData />}>
                 <Table
+                  className="full-table treasury-token-list-table table-td-sm table-header-normal"
                   columns={columns as any}
                   dataSource={tokenList ?? []}
                   loading={tokenListLoading}
@@ -124,13 +151,14 @@ export default function Transparent(props: ITransparentProps) {
         )}
 
         <div></div>
-      </BoxWrapper>
+      </div>
       {!isShowGuide && (
-        <BoxWrapper className="mt-[20px]">
-          <h2 className="pb-[20px]">All Income and Expenses</h2>
+        <div className="mt-[20px] card-shape pt-[20px] full-table-wrap">
+          <h2 className="pb-[20px] card-px">All Income and Expenses</h2>
           <Tabs
             defaultActiveKey="1"
             size="small"
+            className="treasury-tab"
             items={[
               {
                 key: '1',
@@ -148,7 +176,7 @@ export default function Transparent(props: ITransparentProps) {
               },
             ]}
           />
-        </BoxWrapper>
+        </div>
       )}
     </div>
   );

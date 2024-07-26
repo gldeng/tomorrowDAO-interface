@@ -4,6 +4,8 @@ import CommonHeader from 'components/CommonComponentsOfModalAndDrawer/CommonHead
 import CommonFooter from 'components/CommonComponentsOfModalAndDrawer/CommonFooter';
 import { ICommonExtensionProps } from 'types/modalAndDrawer';
 import './index.css';
+import Link from 'next/link';
+import { explorer } from 'config';
 
 export type TCommonModalProps = ICommonExtensionProps &
   Omit<IModalProps, 'onCancel'> & {
@@ -15,6 +17,7 @@ export default function CommonModal({
   className,
   title,
   footerConfig,
+  viewTransactionId,
   children,
   isShowHeader = true,
   ...props
@@ -30,6 +33,15 @@ export default function CommonModal({
     >
       {children}
       {footerConfig && <CommonFooter {...footerConfig} />}
+      {viewTransactionId && (
+        <Link
+          className="view-transaction-id-link"
+          target="_blank"
+          href={`${explorer}/tx/${viewTransactionId}`}
+        >
+          View Transaction Details
+        </Link>
+      )}
     </Modal>
   );
 }

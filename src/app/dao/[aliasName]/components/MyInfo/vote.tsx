@@ -1,24 +1,22 @@
-import { ConfigProvider, Divider, Form, InputNumber, message } from 'antd';
+import { Divider, Form, InputNumber, message } from 'antd';
 import { Button } from 'aelf-design';
 import { useState, useCallback } from 'react';
 import CommonModal from 'components/CommonModal';
 import Image from 'next/image';
 import { EVoteMechanismNameType } from 'app/proposal/deploy/[aliasName]/type';
 import { voteApproveMessage, voteRejectMessage, voteAbstainMessage } from 'utils/constant';
-import SuccessGreenIcon from 'assets/imgs/success-green.svg';
-import { getExploreLink } from 'utils/common';
-import Info from '../Info';
 import { callContract, ApproveByContract, GetAllowanceByContract } from 'contract/callContract';
-import { emitLoading } from 'utils/myEvent';
+import { ResultModal, emitLoading, eventBus } from 'utils/myEvent';
 import { curChain, voteAddress } from 'config';
 import { timesDecimals } from 'utils/calculate';
 import { EVoteOption, EVoteOptionLabel } from 'types/vote';
 import { TokenIconMap } from 'constants/token';
-import { useSelector } from 'redux/store';
 import { IContractError } from 'types';
 import BigNumber from 'bignumber.js';
 import useAelfWebLoginSync from 'hooks/useAelfWebLoginSync';
 import { useWebLogin } from 'aelf-web-login';
+import { CommonOperationResultModalType } from 'components/CommonOperationResultModal';
+import { okButtonConfig } from 'components/ResultModal';
 
 type TVoteTypes = {
   proposalId: string;
@@ -54,14 +52,7 @@ function Vote(props: TVoteTypes) {
   const [currentMessage, setCurrentMessage] = useState('');
   const [showTokenBallotModal, setShowTokenBallotModal] = useState(false);
   const [showVoteModal, setShowVoteModal] = useState(false);
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [modalInfo, setShowFailedModal] = useState({
-    isOpen: false,
-    message: '',
-  });
-  const { walletInfo } = useSelector((store) => store.userInfo);
   const { wallet } = useWebLogin();
-  const [txHash, setTxHash] = useState('');
 
   const handlerModal = (voteType: number) => {
     // if have voted, can't vote again
@@ -145,16 +136,27 @@ function Vote(props: TVoteTypes) {
 
       const result = await callContract('Vote', contractParams, voteAddress);
       emitLoading(false);
-      setTxHash(result?.TransactionId);
-      setShowSuccessModal(true);
+      eventBus.emit(ResultModal, {
+        open: true,
+        type: CommonOperationResultModalType.Success,
+        secondaryContent: `${EVoteOptionLabel[currentVoteType]} votes has been casted for the proposal`,
+        footerConfig: {
+          buttonList: [okButtonConfig],
+        },
+        viewTransactionId: result?.TransactionId,
+      });
       fetchMyInfo();
     } catch (err) {
       const error = err as IContractError;
-      console.log('error', error);
       const message = error?.errorMessage?.message || error?.message;
-      setShowFailedModal({
-        isOpen: true,
-        message: message?.toString?.(),
+      eventBus.emit(ResultModal, {
+        open: true,
+        type: CommonOperationResultModalType.Error,
+        primaryContent: 'Transaction Failed',
+        secondaryContent: message?.toString?.(),
+        footerConfig: {
+          buttonList: [okButtonConfig],
+        },
       });
       emitLoading(false);
     }
@@ -228,16 +230,17 @@ function Vote(props: TVoteTypes) {
           variant="filled"
           onFinish={() => handlerVote()}
           className="mt-[10px]"
+          requiredMark={false}
         >
           <Form.Item<TFieldType>
             label="Stake and Vote"
             name="stakeAmount"
             tooltip={`Currently, the only supported method is to unstake all the available ${symbol} in one time.`}
-            rules={[{ required: true, message: 'Please input stake Amount!' }]}
+            rules={[{ required: true, message: 'Please input stake amount' }]}
           >
             <InputNumber
               className="w-full"
-              placeholder="pleas input stake amount"
+              placeholder="Please input stake amount"
               autoFocus
               min={0}
               max={elfBalance}
@@ -268,7 +271,9 @@ function Vote(props: TVoteTypes) {
         }}
         footer={null}
       >
-        <div className="text-xs text-Neutral-Primary-Text mb-4">{currentMessage}</div>
+        <div className="card-sm-text text-center text-Neutral-Primary-Text mb-6">
+          {currentMessage}
+        </div>
         <Button
           className="mx-auto"
           type="primary"
@@ -279,63 +284,6 @@ function Vote(props: TVoteTypes) {
         >
           Vote
         </Button>
-      </CommonModal>
-
-      {/* success */}
-      <CommonModal
-        title="Transaction submitted successfully"
-        open={showSuccessModal}
-        onCancel={() => {
-          setShowSuccessModal(false);
-        }}
-      >
-        <Image className="mx-auto block" width={56} height={56} src={SuccessGreenIcon} alt="" />
-        <p className="text-center text-Neutral-Secondary-Text font-medium">
-          {EVoteOptionLabel[currentVoteType]} votes are casted for the proposal.
-        </p>
-        <Button
-          className="mx-auto mt-6 w-[206px]"
-          type="primary"
-          onClick={() => {
-            setShowSuccessModal(false);
-          }}
-        >
-          OK
-        </Button>
-        <Button
-          type="link"
-          className="mx-auto text-colorPrimary"
-          size="small"
-          onClick={() => {
-            window.open(getExploreLink(txHash, 'transaction'));
-          }}
-        >
-          View Transaction Details
-        </Button>
-      </CommonModal>
-
-      {/* failed */}
-      <CommonModal
-        open={modalInfo.isOpen}
-        onCancel={() => {
-          setShowFailedModal({
-            ...modalInfo,
-            isOpen: false,
-          });
-        }}
-      >
-        <Info
-          title="Transaction Failed!"
-          firstText={modalInfo.message}
-          btnText="OK"
-          type="failed"
-          onOk={() => {
-            setShowFailedModal({
-              ...modalInfo,
-              isOpen: false,
-            });
-          }}
-        ></Info>
       </CommonModal>
     </div>
   );

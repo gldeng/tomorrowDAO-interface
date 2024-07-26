@@ -5,16 +5,20 @@ import { useRequest } from 'ahooks';
 import { EProposalActionTabs } from 'app/proposal/deploy/[aliasName]/type';
 import Members from 'components/Members';
 import { useRouter } from 'next/navigation';
+import { useWebLogin } from 'aelf-web-login';
+import { checkCreateProposal } from 'utils/proposal';
 
 interface IProps {
-  daoData: IDaoInfoData;
+  daoRes: IDaoInfoRes;
   aliasName?: string;
   createProposalCheck?: (customRouter?: boolean) => Promise<boolean>;
 }
 
 const DaoMembers: React.FC<IProps> = (props) => {
-  const { daoData, aliasName, createProposalCheck } = props;
+  const { daoRes, aliasName } = props;
+  const { wallet } = useWebLogin();
 
+  const daoData = daoRes.data;
   const {
     data: daoMembersData,
     // error: transferListError,
@@ -39,7 +43,7 @@ const DaoMembers: React.FC<IProps> = (props) => {
   const handleCreateProposal = async () => {
     setCreateProposalLoading(true);
     try {
-      const checkRes = await createProposalCheck?.(true);
+      const checkRes = await checkCreateProposal(daoRes, wallet.address);
       if (checkRes) {
         router.push(`/proposal/deploy/${aliasName}?tab=${EProposalActionTabs.AddHcMembers}`);
       }

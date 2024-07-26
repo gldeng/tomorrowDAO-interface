@@ -28,3 +28,13 @@ export default function useResponsive() {
     is2XL,
   };
 }
+
+export function useLandingPageResponsive() {
+  const { width } = useWindowSize();
+
+  const isPad = width < 992;
+
+  return {
+    isPad,
+  };
+}

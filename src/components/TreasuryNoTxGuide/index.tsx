@@ -63,7 +63,6 @@ const TreasuryNoTxGuide = forwardRef<ITreasuryNoTxGuideRef, ITreasuryNoTxGuidePr
         emitLoading(true, 'The deposit is being processed...');
         const res = await callContract('Transfer', params, sideChainAddress);
         emitLoading(false);
-        console.log('eventBus.emit');
         eventBus.emit(ResultModal, {
           open: true,
           type: CommonOperationResultModalType.Success,
@@ -77,15 +76,9 @@ const TreasuryNoTxGuide = forwardRef<ITreasuryNoTxGuideRef, ITreasuryNoTxGuidePr
                 children: 'OK',
                 type: 'primary',
               },
-              {
-                onClick: () => {
-                  window.open(getExploreLink(res.TransactionId, 'transaction'));
-                },
-                children: 'View Transaction Details',
-                type: 'link',
-              },
             ],
           },
+          viewTransactionId: res.TransactionId,
         });
       } catch (error) {
         const err = error as IContractError;
@@ -118,7 +111,7 @@ const TreasuryNoTxGuide = forwardRef<ITreasuryNoTxGuideRef, ITreasuryNoTxGuidePr
           <h3 className="treasury-no-tx-title">Treasury Assets</h3>
           <p className="treasury-no-tx-help-message">
             <p>Community development and operations require funding.</p>
-            <p>Deposit the first assets to the treasury.</p>
+            <p>Deposit assets to the treasury.</p>
           </p>
           <div className="treasury-no-tx-button-wrap">
             <ButtonCheckLogin

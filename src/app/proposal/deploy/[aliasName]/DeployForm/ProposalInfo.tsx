@@ -22,10 +22,11 @@ import {
 import ActionTabs from './ActionTabs/index';
 import { EProposalActionTabs, EVoteMechanismNameType } from '../type';
 import { SkeletonTab } from 'components/Skeleton';
+import RadioButtons from 'components/RadioButtons';
 
 const voterAndExecuteNamePath = ['proposalBasicInfo', 'schemeAddress'];
 const voteSchemeName = ['proposalBasicInfo', 'voteSchemeId'];
-
+const periodName = ['proposalBasicInfo', 'activeTimePeriod'];
 interface ProposalInfoProps {
   next?: () => void;
   className?: string;
@@ -34,7 +35,7 @@ interface ProposalInfoProps {
   onSubmit: () => void;
   onTabChange?: (activeKey: string) => void;
   activeTab?: string;
-  treasuryAssetsData?: IAddressTokenListDataItem[];
+  treasuryAssetsData?: ITreasuryAssetsResponseDataItem[];
   daoDataLoading?: boolean;
 }
 
@@ -58,6 +59,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
 
   const proposalType = Form.useWatch('proposalType', form);
   const voterAndExecute = Form.useWatch(voterAndExecuteNamePath, form);
+  const activeTimePeriod = Form.useWatch(periodName, form);
   const currentGovernanceMechanism = useMemo(() => {
     return governanceMechanismList?.find((item) => item.schemeAddress === voterAndExecute);
   }, [voterAndExecute, governanceMechanismList]);
@@ -251,19 +253,42 @@ const ProposalInfo = (props: ProposalInfoProps) => {
             </span>
           </Tooltip>
         }
+        initialValue={1}
+        name={periodName}
+        extra={
+          activeTimePeriod && (
+            <div className="flex h-[48px] px-[16px] py-[8px] items-center rounded-[6px] border-[1px] border-solid border-Neutral-Border bg-Neutral-Hover-BG mt-[16px]">
+              <span className="text-neutralTitle text-[14px] font-400 leading-[22px] pr-[16px]">
+                {dayjs().format('DD MMM, YYYY')}
+              </span>
+              <ArrowIcon className="color-[#B8B8B8]" />
+              <span className="text-neutralTitle text-[14px] font-400 leading-[22px] pl-[16px]">
+                {activeTimePeriod
+                  ? dayjs().add(Number(activeTimePeriod), 'hours').format('DD MMM, YYYY')
+                  : '-'}
+              </span>
+            </div>
+          )
+        }
       >
-        <div className="flex h-[48px] px-[16px] py-[8px] items-center rounded-[6px] border-[1px] border-solid border-Neutral-Border bg-Neutral-Hover-BG">
-          <span className="text-neutralTitle text-[14px] font-400 leading-[22px] pr-[16px]">
-            {dayjs().format('DD MMM, YYYY')}
-          </span>
-          <ArrowIcon className="color-[#B8B8B8]" />
-          <span className="text-neutralTitle text-[14px] font-400 leading-[22px] pl-[16px]">
-            {timePeriod?.activeTimePeriod
-              ? dayjs().add(Number(timePeriod?.activeTimePeriod), 'days').format('DD MMM, YYYY')
-              : '-'}
-          </span>
-        </div>
+        <RadioButtons
+          options={[
+            {
+              label: '1 Hour',
+              value: 1,
+            },
+            {
+              label: '1 Day',
+              value: 1 * 24,
+            },
+            {
+              label: '3 Days',
+              value: 1 * 24 * 3,
+            },
+          ]}
+        />
       </Form.Item>
+
       {/* 
   advisory -> null
   Vote -> [now + activeTimePeriod, now + activeTimePeriod + executeTimePeriod]
@@ -287,27 +312,27 @@ const ProposalInfo = (props: ProposalInfoProps) => {
             <div className="flex h-[48px] px-[16px] py-[8px] items-center rounded-[6px] border-[1px] border-solid border-Neutral-Border bg-Neutral-Hover-BG">
               <span className="text-neutralTitle text-[14px] font-400 leading-[22px] pr-[16px]">
                 {(proposalType === ProposalType.VETO || (isGovernance && isReferendumLike)) &&
-                  dayjs().add(Number(timePeriod?.activeTimePeriod), 'days').format('DD MMM, YYYY')}
+                  dayjs().add(Number(activeTimePeriod), 'hours').format('DD MMM, YYYY')}
                 {isGovernance &&
                   isHighCouncil &&
                   dayjs()
-                    .add(Number(timePeriod?.activeTimePeriod), 'days')
-                    .add(Number(timePeriod?.pendingTimePeriod), 'days')
+                    .add(Number(activeTimePeriod), 'hours')
+                    .add(Number(timePeriod?.pendingTimePeriod), 'hours')
                     .format('DD MMM, YYYY')}
               </span>
               <ArrowIcon className="color-[#B8B8B8]" />
               <span className="text-neutralTitle text-[14px] font-400 leading-[22px] pl-[16px]">
                 {(proposalType === ProposalType.VETO || (isGovernance && isReferendumLike)) &&
                   dayjs()
-                    .add(Number(timePeriod?.activeTimePeriod), 'days')
-                    .add(Number(timePeriod?.executeTimePeriod), 'days')
+                    .add(Number(activeTimePeriod), 'hours')
+                    .add(Number(timePeriod?.executeTimePeriod), 'hours')
                     .format('DD MMM, YYYY')}
                 {isGovernance &&
                   isHighCouncil &&
                   dayjs()
-                    .add(Number(timePeriod?.activeTimePeriod), 'days')
-                    .add(Number(timePeriod?.pendingTimePeriod), 'days')
-                    .add(Number(timePeriod?.executeTimePeriod), 'days')
+                    .add(Number(activeTimePeriod), 'hours')
+                    .add(Number(timePeriod?.pendingTimePeriod), 'hours')
+                    .add(Number(timePeriod?.executeTimePeriod), 'hours')
                     .format('DD MMM, YYYY')}
               </span>
             </div>

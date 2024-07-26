@@ -5,7 +5,7 @@ import publicKeyToAddress from 'app/network-dao/_src/utils/publicKeyToAddress';
 import addressFormat from 'app/network-dao/_src/utils/addressFormat';
 import { useSelector } from 'react-redux';
 import io from 'socket.io-client';
-import NoData from '../NoData';
+import NoData from 'components/NoData';
 import { consensusDPoSAddr, electionContractAddr, SOCKET_URL_NEW } from 'config';
 import { callMainNetViewContract } from 'contract/callContract';
 import { explorerServer } from 'api/axios';

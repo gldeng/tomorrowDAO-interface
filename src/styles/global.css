@@ -16,6 +16,16 @@
     @apply bg-white rounded-lg border border-solid border-Neutral-Divider px-4 lg:px-8 py-4 lg:py-8;
   }
 
+  .card-shape {
+    @apply bg-white rounded-lg border border-solid border-Neutral-Divider;
+  }
+  .card-px {
+    @apply px-4 lg:px-8;
+  }
+  .tab-content-padding {
+    @apply px-4 lg:px-8 pb-4;
+  }
+
   .dao-border-round {
     @apply button-border-normal rounded-lg;
   }
@@ -90,6 +100,16 @@ body {
   font-family: 'Roboto';
   src: url('/font/Roboto-Regular.ttf');
 }
+@font-face {
+  font-family: 'Roboto';
+  font-weight: 500;
+  src: url('/font/Roboto-Medium.ttf');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-weight: 700;
+  src: url('/font/Roboto-Bold.ttf');
+}
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
@@ -156,4 +176,78 @@ input[type='number'] {
   .TMRWDAO-icon {
     @apply text-[20px];
   }
+}
+.TMRWDAO-table-column-sorter-up.active,
+.TMRWDAO-table-column-sorter-down.active {
+  @apply !text-neutralTitle;
+}
+.TMRWDAO-table-container {
+  .TMRWDAO-table-thead >tr>th {
+    @apply text-Neutral-Secondary-Text;
+  }
+  tbody {
+    @apply text-neutralPrimaryText;
+  }
+}
+.TMRWDAO-typography {
+  font-family: Roboto, sans-serif !important;
+}
+.table-padding-large {
+  .TMRWDAO-table-thead>tr>th {
+    @apply pl-[24px];
+  }
+  .TMRWDAO-table-tbody>tr>td {
+    @apply pl-[24px];
+  }
+}
+.clear-table-padding {
+  .TMRWDAO-table-thead>tr>th {
+    @apply pr-0;
+  }
+  .TMRWDAO-table-tbody>tr>td {
+    @apply pr-0;
+  }
+}
+.normal-table {
+  .TMRWDAO-table-thead>tr>th {
+     @apply text-[14px] leading-[20px] font-medium text-Neutral-Secondary-Text py-[14px]; 
+  }
+  .TMRWDAO-table-tbody>tr>td, .TMRWDAO-hash-address > span{
+   @apply text-[12px] leading-[20px] font-normal text-neutralTitle; 
+  }
+ }
+ .table-header-normal {
+  .TMRWDAO-table-thead>tr>th {
+    @apply text-[14px] leading-[20px] font-medium text-Neutral-Secondary-Text py-[14px]; 
+ }
+ .TMRWDAO-table-column-sorter {
+  @apply h-[20px];
+ }
+ }
+ .table-td-sm {
+  .TMRWDAO-table-tbody>tr>td, .TMRWDAO-hash-address > span{
+   @apply text-[14px] leading-[22px] font-normal; 
+  }
+ }
+.full-table {
+  .TMRWDAO-table-thead>tr>th:first-child {
+    @apply lg:pl-[32px] pl-[16px];
+ }
+ .TMRWDAO-table-thead>tr>th:last-child {
+    @apply lg:pr-[32px] pr-[16px];
+ }
+ .TMRWDAO-table-tbody>tr>td:first-child {
+    @apply lg:pl-[32px] pl-[16px];
+ }
+ .TMRWDAO-table-tbody>tr>td:last-child {
+    @apply lg:pr-[32px] pr-[16px];
+ }
+}
+.full-table-wrap {
+  .TMRWDAO-pagination-container {
+    @apply lg:px-8 px-4;
+  }
+}
+.TMRWDAO-table-expanded-row-fixed {
+  @apply !w-full;
 }

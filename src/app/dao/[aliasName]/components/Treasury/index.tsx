@@ -26,9 +26,10 @@ import TreasuryNoTxGuide, { ITreasuryNoTxGuideRef } from 'components/TreasuryNoT
 import { divDecimals } from 'utils/calculate';
 import BigNumber from 'bignumber.js';
 import Symbol from 'components/Symbol';
+import { checkCreateProposal } from 'utils/proposal';
 interface IProps {
   clssName?: string;
-  daoData: IDaoInfoData;
+  daoRes: IDaoInfoRes;
   createProposalCheck?: (customRouter?: boolean) => Promise<boolean>;
   aliasName?: string;
   // Define your component's props here
@@ -53,7 +54,8 @@ const tokenListColumns: TableProps<ITreasuryAssetsResponseDataItem>['columns'] =
   },
 ];
 const Treasury: React.FC<IProps> = (props) => {
-  const { clssName, daoData, createProposalCheck, aliasName } = props;
+  const { clssName, daoRes, createProposalCheck, aliasName } = props;
+  const daoData = daoRes?.data;
   const [form] = Form.useForm();
   const [choiceOpen, setChoiceOpen] = useState(false);
   // const [isValidatedSymbol, setIsValidatedSymbol] = useState(false);
@@ -122,7 +124,7 @@ const Treasury: React.FC<IProps> = (props) => {
   const handleCreateProposal = async () => {
     setCreateProposalLoading(true);
     try {
-      const checkRes = await createProposalCheck?.(true);
+      const checkRes = await checkCreateProposal(daoRes, wallet.address);
       if (checkRes) {
         router.push(`/proposal/deploy/${aliasName}?tab=${EProposalActionTabs.TREASURY}`);
       }

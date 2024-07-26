@@ -1,6 +1,5 @@
 import { storages } from 'storages';
 
-const Day = 1 * 24 * 60 * 60 * 1000;
 export const getLocalJWT = (key: string) => {
   try {
     const localData = localStorage.getItem(storages.daoAccessToken);
@@ -18,7 +17,7 @@ export const getLocalJWT = (key: string) => {
 export const setLocalJWT = (key: string, data: LocalJWTData) => {
   const localData: LocalJWTData = {
     ...data,
-    expiresTime: Date.now() + (data.expires_in - 60) * 1000,
+    expiresTime: Date.now() + (data.expires_in - 1 * 24 * 60 * 60) * 1000,
   };
   return localStorage.setItem(storages.daoAccessToken, JSON.stringify({ [key]: localData }));
 };

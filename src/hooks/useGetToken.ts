@@ -9,7 +9,7 @@ import { formatErrorMsg, LoginFailed } from 'contract/util';
 import { emitLoading } from 'utils/myEvent';
 import { getCaHashAndOriginChainIdByWallet, getManagerAddressByWallet } from 'utils/wallet';
 import { getLocalJWT } from 'utils/localJWT';
-import { curChain } from 'config';
+import { curChain, networkType } from 'config';
 
 const AElf = require('aelf-sdk');
 
@@ -56,7 +56,7 @@ export const useGetToken = () => {
   const checkTokenValid = useCallback(async () => {
     // const { caHash } = await getCaHashAndOriginChainIdByWallet(wallet, walletType);
     // const managerAddress = await getManagerAddressByWallet(wallet, walletType);
-    const key = `ELF_${wallet.address}_${curChain}`;
+    const key = `ELF_${wallet.address}_${curChain}_${networkType}`;
     if (loginState !== WebLoginState.logined) return false;
     const accountInfo = getLocalJWT(key);
 

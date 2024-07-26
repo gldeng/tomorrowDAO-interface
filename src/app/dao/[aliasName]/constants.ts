@@ -1,4 +1,9 @@
-import { AllProposalStatusString, ProposalStatusString, ProposalTypeString } from 'types';
+import {
+  AllProposalStatusString,
+  ProposalStatusFilters,
+  ProposalStatusReplaceMap,
+  ProposalTypeString,
+} from 'types';
 export const ALL = 'All';
 export const proposalTypeList = [
   { value: ALL, label: ALL },
@@ -12,10 +17,10 @@ export const proposalTypeList = [
 
 export const proposalStatusList = [
   { value: ALL, label: ALL },
-  ...(Object.keys(ProposalStatusString) as Array<keyof typeof ProposalStatusString>).map((key) => {
+  ...ProposalStatusFilters.map((key) => {
     return {
-      value: ProposalStatusString[key],
-      label: key,
+      value: key,
+      label: ProposalStatusReplaceMap[key] ?? AllProposalStatusString[key],
     };
   }),
 ];
@@ -38,12 +43,7 @@ export const tagColorMap = {
     firstText: 'Availabe to be executed before',
     secondText: 'Approved on',
   },
-  [AllProposalStatusString.Rejected]: {
-    bgColor: '#FEEFF1',
-    textColor: '#F55D6E',
-    firstText: 'Rejected on',
-  },
-  [AllProposalStatusString.Abstained]: {
+  [AllProposalStatusString.Defeated]: {
     bgColor: '#FEEFF1',
     textColor: '#F55D6E',
     firstText: 'Rejected on',
@@ -61,10 +61,6 @@ export const tagColorMap = {
   [AllProposalStatusString.PendingVote]: {
     bgColor: '#F2EEFF',
     textColor: '#FA9D2B',
-  },
-  [AllProposalStatusString.BelowThreshold]: {
-    bgColor: '#FEF7EC',
-    textColor: '#F8B042',
   },
   [AllProposalStatusString.Challenged]: {
     bgColor: '#FEEFF1',

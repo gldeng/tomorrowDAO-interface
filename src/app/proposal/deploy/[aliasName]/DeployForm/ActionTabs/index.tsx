@@ -14,7 +14,6 @@ import { EProposalActionTabs } from '../../type';
 import { useAsyncEffect } from 'ahooks';
 import { fetchContractInfo } from 'api/request';
 import { curChain } from 'config';
-
 import AmountInput from './FormAmountInput';
 import './index.css';
 import BigNumber from 'bignumber.js';
@@ -26,6 +25,7 @@ import AddMultisigMembers from './TabContent/AddMultisigMembers';
 import DeleteHCMembers from './TabContent/DeleteHCMembers';
 import AddHCMembers from './TabContent/AddHCMembers';
 import ErrorBoundary from 'components/ErrorBoundary';
+import { divDecimals } from 'utils/calculate';
 
 const contractMethodNamePath = ['transaction', 'contractMethodName'];
 
@@ -34,7 +34,7 @@ interface IActionTabsProps {
   onTabChange?: (activeKey: string) => void;
   activeTab?: string;
   daoData?: IDaoInfoData;
-  treasuryAssetsData?: IAddressTokenListDataItem[];
+  treasuryAssetsData?: ITreasuryAssetsResponseDataItem[];
 }
 // const emptyTabItem = (...([]));
 export default function TabsCom(props: IActionTabsProps) {
@@ -79,7 +79,11 @@ export default function TabsCom(props: IActionTabsProps) {
     }
   }, [selectOptions, form]);
   useAsyncEffect(async () => {
-    const contractInfo = await fetchContractInfo({ chainId: curChain });
+    const contractInfo = await fetchContractInfo({
+      chainId: curChain,
+      daoId: daoId,
+      governanceMechanism: daoData?.governanceMechanism,
+    });
     setContractInfo(contractInfo.data);
   }, [daoId]);
   // reset Method Name if Contract Address change
@@ -167,35 +171,30 @@ export default function TabsCom(props: IActionTabsProps) {
                         reject(new Error('The symbol is invalid'));
                         return;
                       }
-                      GetTokenInfo(
-                        {
-                          symbol: symbol,
-                        },
-                        { chain: curChain },
-                      ).then((tokenInfo) => {
-                        if (!tokenInfo) {
-                          reject(new Error('The symbol is invalid'));
-                          return;
-                        }
-                        const amountWithDecimals = BigNumber(amount);
-                        const decimalPlaces = amountWithDecimals.decimalPlaces();
-                        if (decimalPlaces && decimalPlaces > tokenInfo.decimals) {
-                          return reject(
-                            new Error(
-                              `The maximum number of decimal places is ${tokenInfo.decimals}`,
-                            ),
-                          );
-                        }
-                        if (amountWithDecimals.gt(BigNumber(symbolInfo.balance))) {
-                          reject(
-                            new Error(
-                              'The withdrawal amount should be less than the available treasury assets.',
-                            ),
-                          );
-                        } else {
-                          resolve();
-                        }
-                      });
+                      if (!symbolInfo) {
+                        reject(new Error('The symbol is invalid'));
+                        return;
+                      }
+                      const amountWithDecimals = BigNumber(amount);
+                      const decimalPlaces = amountWithDecimals.decimalPlaces();
+                      if (decimalPlaces && decimalPlaces > symbolInfo.decimal) {
+                        return reject(
+                          new Error(
+                            `The maximum number of decimal places is ${symbolInfo.decimal}`,
+                          ),
+                        );
+                      }
+                      if (
+                        amountWithDecimals.gt(divDecimals(symbolInfo.amount, symbolInfo.decimal))
+                      ) {
+                        reject(
+                          new Error(
+                            'The withdrawal amount should be less than the available treasury assets.',
+                          ),
+                        );
+                      } else {
+                        resolve();
+                      }
                     });
                   },
                 },
@@ -357,8 +356,24 @@ export default function TabsCom(props: IActionTabsProps) {
                     message: 'method params is required',
                   },
                 ]}
+                initialValue={JSON.stringify(
+                  {
+                    'parameter name': 'Please enter the content of your parameter.',
+                  },
+                  null,
+                  2,
+                )}
               >
-                <Editor defaultLanguage="json" height={176} />
+                <Editor
+                  defaultLanguage="json"
+                  className="proposal-custom-action-params-editor"
+                  height={176}
+                  options={{
+                    minimap: {
+                      enabled: false,
+                    },
+                  }}
+                />
               </Form.Item>
             </ErrorBoundary>
           </>

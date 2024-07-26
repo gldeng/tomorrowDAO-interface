@@ -5,6 +5,7 @@ import { Form, InputNumber } from 'antd';
 import { InfoCircleOutlined } from '@aelf-design/icons';
 import { memo, useContext } from 'react';
 import InputSlideBind from 'components/InputSlideBind';
+import { ApproveThresholdTip } from 'components/ApproveThresholdTip';
 import {
   integerRule,
   min2maxIntegerRule,
@@ -14,12 +15,14 @@ import {
 } from '../utils';
 import './index.css';
 import { EDaoGovernanceMechanism, StepEnum, StepsContext } from '../../type';
+const minimalApproveThresholdNamePath = 'minimalApproveThreshold';
 const GovernanceModel = () => {
   const [form] = Form.useForm();
   const { stepForm } = useContext(StepsContext);
   const daoInfo = stepForm[StepEnum.step0].submitedRes;
   useRegisterForm(form, StepEnum.step1);
   const isMultisig = daoInfo?.governanceMechanism === EDaoGovernanceMechanism.Multisig;
+  const minimalApproveThreshold = Form.useWatch(minimalApproveThresholdNamePath, form);
   return (
     <div className="governance-form">
       <Form
@@ -29,7 +32,7 @@ const GovernanceModel = () => {
         requiredMark={false}
         scrollToFirstError={true}
       >
-        {isMultisig ? (
+        {/* {isMultisig ? (
           <Form.Item
             name={'minimalRequiredThreshold'}
             label={
@@ -76,7 +79,7 @@ const GovernanceModel = () => {
           >
             <InputNumber placeholder="Enter 1 or more" controls={false} />
           </Form.Item>
-        )}
+        )} */}
 
         {!isMultisig && (
           <Form.Item
@@ -112,10 +115,10 @@ const GovernanceModel = () => {
 
         {/* approve rejection abstention */}
         <Form.Item
-          name={'minimalApproveThreshold'}
+          name={minimalApproveThresholdNamePath}
           label={
             <Tooltip
-              title={`The lowest percentage of approve votes required for a proposal to be approved. This is applicable to both voting mechanisms, where "1 token = 1 vote" or "1 address = 1 vote".`}
+              title={`The lowest percentage of approve votes required for a proposal to be approved.`}
             >
               <span className="form-item-label">
                 Minimum Approval Rate
@@ -123,6 +126,7 @@ const GovernanceModel = () => {
               </span>
             </Tooltip>
           }
+          extra={<ApproveThresholdTip percent={minimalApproveThreshold} />}
           initialValue={50}
           validateFirst={true}
           rules={percentRule}
@@ -132,7 +136,8 @@ const GovernanceModel = () => {
             placeholder={'The suggested percentage is no less than 50%.'}
           />
         </Form.Item>
-        <Form.Item
+
+        {/* <Form.Item
           name={'maximalRejectionThreshold'}
           label={
             <Tooltip
@@ -153,8 +158,8 @@ const GovernanceModel = () => {
             type="rejection"
             placeholder={'The suggested percentage is no greater than 20%.'}
           />
-        </Form.Item>
-        <Form.Item
+        </Form.Item> */}
+        {/* <Form.Item
           name={'maximalAbstentionThreshold'}
           label={
             <Tooltip
@@ -175,7 +180,7 @@ const GovernanceModel = () => {
             type="abstention"
             placeholder={'The suggested percentage is no greater than 20%.'}
           />
-        </Form.Item>
+        </Form.Item> */}
         {!isMultisig && (
           <Form.Item
             name={'proposalThreshold'}

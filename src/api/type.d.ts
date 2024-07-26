@@ -75,6 +75,13 @@ interface ITreasuryAssetsResponse {
   data: ITreasuryAssetsResponseData;
   message: string;
 }
+// -------------------------------------dao-is exist some members-----------------------------
+interface IDaoExistMembersRes {
+  code: string;
+  data: boolean;
+  message: string;
+}
+
 // -------------------------------------my-dao-list----------------------
 interface IMyDaoListDataItem {
   chainId: string;
@@ -107,7 +114,6 @@ interface IMyDaoListResponse {
 
 interface IMyDaoListQueryParams {
   Type: number;
-  Address: string;
   ChainId: string;
   SkipCount: number;
   MaxResultCount: number;
@@ -344,6 +350,7 @@ interface IProposalMyInfoRes {
 interface IProposalDetailReq {
   proposalId: string;
   chainId: string;
+  address?: string;
 }
 
 interface IProposalLife {
@@ -417,6 +424,7 @@ interface IProposalDetailData {
   rejectionCount: number;
   abstentionCount: number;
   proposalSource: number;
+  canExecute: boolean;
 }
 
 interface IProposalDetailRes {

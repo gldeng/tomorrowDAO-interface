@@ -15,22 +15,16 @@ import MyInfo from './components/MyInfo';
 import Filter from './components/Filter';
 import Treasury from './components/Treasury';
 import { useRequest, usePrevious } from 'ahooks';
-import { GetBalanceByContract, GetTokenInfo } from 'contract/callContract';
 import { IProposalTableParams, TabKey } from './type';
-import LinkNetworkDao from 'components/LinkNetworkDao';
 import { fetchDaoInfo, fetchProposalList } from 'api/request';
 import { curChain } from 'config';
-import { ALL, TMRWCreateProposal } from './constants';
+import { ALL } from './constants';
 import Link from 'next/link';
 import ErrorResult from 'components/ErrorResult';
 import useNetworkDaoRouter from 'hooks/useNetworkDaoRouter';
 import { useRouter } from 'next/navigation';
-import { divDecimals } from 'utils/calculate';
 import { ButtonCheckLogin } from 'components/ButtonCheckLogin';
 import breadCrumb from 'utils/breadCrumb';
-import { eventBus, ResultModal } from 'utils/myEvent';
-import { CommonOperationResultModalType } from 'components/CommonOperationResultModal';
-import { INIT_RESULT_MODAL_CONFIG } from 'components/ResultModal';
 import ExplorerProposalList, {
   ExplorerProposalListFilter,
 } from '../../network-dao/ExplorerProposalList';
@@ -40,6 +34,7 @@ import DaoMembers from './components/Members';
 import HcMembers from './components/HCMembers';
 import './page.css';
 import { EDaoGovernanceMechanism } from 'app/(createADao)/create/type';
+import { checkCreateProposal } from 'utils/proposal';
 
 interface IProps {
   daoId?: string;
@@ -65,6 +60,7 @@ export default function DeoDetails(props: IProps) {
   const [form] = Form.useForm();
   // todo
   const [tabKey, setTabKey] = useState(TabKey.PROPOSALS);
+  const networkDaoRouter = useNetworkDaoRouter();
 
   const {
     data: daoData,
@@ -150,68 +146,16 @@ export default function DeoDetails(props: IProps) {
 
   const isTokenGovernanceMechanism =
     daoData?.data?.governanceMechanism === EDaoGovernanceMechanism.Token;
-  const networkDaoRouter = useNetworkDaoRouter();
   const router = useRouter();
   const isShowMyInfo = daoId && isTokenGovernanceMechanism;
 
-  const handleCreateProposal = async (customRouter?: boolean) => {
+  const handleCreateProposal = async () => {
+    if (!daoData) return false;
     setCreateProposalLoading(true);
-    const [balanceInfo, tokenInfo] = await Promise.all([
-      GetBalanceByContract(
-        {
-          symbol: daoData?.data.governanceToken || 'ELF',
-          owner: walletInfo.address,
-        },
-        { chain: curChain },
-      ),
-      GetTokenInfo(
-        {
-          symbol: daoData?.data.governanceToken || 'ELF',
-        },
-        { chain: curChain },
-      ),
-    ]);
-    const proposalThreshold = daoData?.data?.governanceSchemeThreshold?.proposalThreshold;
-    const decimals = tokenInfo?.decimals;
+    const checkRes = await checkCreateProposal(daoData, walletInfo.address);
     setCreateProposalLoading(false);
-    if (
-      proposalThreshold &&
-      balanceInfo.balance < proposalThreshold &&
-      daoData?.data?.governanceToken
-    ) {
-      const requiredToken = divDecimals(proposalThreshold, decimals).toString();
-      eventBus.emit(ResultModal, {
-        open: true,
-        type: CommonOperationResultModalType.Warning,
-        primaryContent: 'Insufficient Governance Tokens',
-        secondaryContent: (
-          <div>
-            {/* <div>Minimum Token Proposal Requirement: {requiredToken}</div> */}
-            <div>
-              Your Governance Token:{' '}
-              {divDecimals(balanceInfo.balance, tokenInfo?.decimals || '8').toNumber()}
-            </div>
-            <div>
-              Can&apos;t create a proposal, you need hold at least {requiredToken}{' '}
-              {daoData?.data.governanceToken}. Transfer tokens to your wallet.
-            </div>
-          </div>
-        ),
-        footerConfig: {
-          buttonList: [
-            {
-              children: <span>OK</span>,
-              onClick: () => {
-                eventBus.emit(ResultModal, INIT_RESULT_MODAL_CONFIG);
-              },
-            },
-          ],
-        },
-      });
+    if (!checkRes) {
       return false;
-    }
-    if (customRouter) {
-      return true;
     }
     if (isNetworkDAO) {
       const chainIdQuery = getChainIdQuery();
@@ -283,11 +227,7 @@ export default function DeoDetails(props: IProps) {
           key: TabKey.TREASURY,
           label: 'Treasury',
           children: daoData?.data ? (
-            <Treasury
-              daoData={daoData.data}
-              createProposalCheck={handleCreateProposalRef.current}
-              aliasName={aliasName}
-            />
+            <Treasury daoRes={daoData} aliasName={aliasName} />
           ) : (
             <span></span>
           ),
@@ -297,11 +237,7 @@ export default function DeoDetails(props: IProps) {
             key: TabKey.DAOMEMBERS,
             label: 'Members',
             children: daoData?.data ? (
-              <DaoMembers
-                daoData={daoData.data}
-                aliasName={aliasName}
-                createProposalCheck={handleCreateProposalRef.current}
-              />
+              <DaoMembers daoRes={daoData} aliasName={aliasName} />
             ) : (
               <span></span>
             ),
@@ -312,11 +248,7 @@ export default function DeoDetails(props: IProps) {
             key: TabKey.HCMEMBERS,
             label: 'High Council Members',
             children: daoData?.data ? (
-              <HcMembers
-                daoData={daoData.data}
-                aliasName={aliasName}
-                createProposalCheck={handleCreateProposalRef.current}
-              />
+              <HcMembers daoRes={daoData} aliasName={aliasName} />
             ) : (
               <span></span>
             ),
@@ -418,33 +350,18 @@ export default function DeoDetails(props: IProps) {
                   </div>
                 ) : proposalData?.data?.items?.length ? (
                   proposalData?.data?.items?.map((item) => {
-                    // tmrw
-                    if (item.proposalSource === TMRWCreateProposal) {
-                      if (isNetworkDAO) {
-                        return (
-                          <LinkNetworkDao
-                            key={item.proposalId}
-                            href={`/proposal-detail-tmrw/${item.proposalId}`}
-                          >
-                            <ProposalsItem data={item} />
-                          </LinkNetworkDao>
-                        );
-                      }
-                      return (
-                        <Link key={item.proposalId} href={`/proposal/${item.proposalId}`}>
-                          <ProposalsItem data={item} />
-                        </Link>
-                      );
-                    }
                     return (
-                      <LinkNetworkDao
+                      <Link
                         key={item.proposalId}
                         href={{
                           pathname: `/proposal/${item.proposalId}`,
                         }}
                       >
-                        <ProposalsItem data={item} />
-                      </LinkNetworkDao>
+                        <ProposalsItem
+                          data={item}
+                          governanceMechanism={daoData?.data.governanceMechanism}
+                        />
+                      </Link>
                     );
                   })
                 ) : (
@@ -477,7 +394,7 @@ export default function DeoDetails(props: IProps) {
             <div className="dao-detail-content-right">
               {daoData?.data && !isNetworkDAO && (
                 <Treasury
-                  daoData={daoData.data}
+                  daoRes={daoData}
                   createProposalCheck={handleCreateProposal}
                   aliasName={aliasName}
                 />
@@ -487,7 +404,7 @@ export default function DeoDetails(props: IProps) {
                 daoData.data.governanceMechanism === EDaoGovernanceMechanism.Multisig && (
                   <DaoMembers
                     createProposalCheck={handleCreateProposal}
-                    daoData={daoData.data}
+                    daoRes={daoData}
                     aliasName={aliasName}
                   />
                 )}
@@ -496,7 +413,7 @@ export default function DeoDetails(props: IProps) {
                 daoData.data.governanceMechanism === EDaoGovernanceMechanism.Token && (
                   <HcMembers
                     createProposalCheck={handleCreateProposal}
-                    daoData={daoData.data}
+                    daoRes={daoData}
                     aliasName={aliasName}
                   />
                 )}
