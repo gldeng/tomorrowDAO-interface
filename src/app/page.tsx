@@ -170,23 +170,22 @@ export default function Page() {
         <ul className="feature-wrap-items">
           <li className="dao-desc-items-card">
             <h3 className="mb-[80px]">Al agents in DAO governance </h3>
-            <p>
-              Writing proposals, whitepapers, manifestos and posts
-              <br />
-              Summarizing governance decisions
-              <br />
-              Onboarding new members (on-chain reputation or storing of credentials)
-            </p>
+            <ul>
+              <li>Writing proposals, whitepapers, manifestos and posts</li>
+              <li>Summarizing governance decisions</li>
+              <li>Onboarding new members (on-chain reputation or storing of credentials)</li>
+            </ul>
           </li>
           <li className="dao-desc-items-card dao-desc-items-card-last">
             <h3>Al-assisted data analysis</h3>
-            <p>
-              Providing analysis and insights on proposals
-              <br />
-              Using data analytics to identify patterns of behavior or voting trends among members.
-              This helps the DAO to make informed decisions about proposals or changes to its
-              governance structure
-            </p>
+            <ul>
+              <li>Providing analysis and insights on proposals</li>
+              <li>
+                Using data analytics to identify patterns of behavior or voting trends among
+                members. This helps the DAO to make informed decisions about proposals or changes to
+                its governance structure
+              </li>
+            </ul>
           </li>
         </ul>
       </div>

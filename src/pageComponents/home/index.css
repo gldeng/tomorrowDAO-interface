@@ -1,6 +1,3 @@
 .home-container {
   @apply w-full;
-  .home-header-container {
-    @apply mb-12 lg:mb-16;
-  }
 }

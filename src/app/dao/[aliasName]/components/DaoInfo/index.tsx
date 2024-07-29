@@ -251,9 +251,10 @@ export default function DaoInfo(props: IParams) {
               </div>
             </div>
           </div>
-          <Divider className="mb-2 lg:mb-6" />
+          <Divider className="mb-0" />
           <Collapse defaultActiveKey={isNetworkDAO ? [] : ['1']} ghost>
             <Collapse.Panel
+              className="dao-info-collapse-panel"
               header={<h3 className="dao-collapse-panel">Dao Information</h3>}
               key="1"
             >
