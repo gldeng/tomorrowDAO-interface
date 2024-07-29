@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Tabs, Pagination } from 'aelf-design';
-import { Form, message, Empty } from 'antd';
+import { Form, message } from 'antd';
 import { useSelector } from 'react-redux';
 import { SkeletonList } from 'components/Skeleton';
 import useResponsive from 'hooks/useResponsive';
@@ -35,6 +35,7 @@ import HcMembers from './components/HCMembers';
 import './page.css';
 import { EDaoGovernanceMechanism } from 'app/(createADao)/create/type';
 import { checkCreateProposal } from 'utils/proposal';
+import NoData from 'components/NoData';
 
 interface IProps {
   daoId?: string;
@@ -365,7 +366,7 @@ export default function DeoDetails(props: IProps) {
                     );
                   })
                 ) : (
-                  <Empty description="No results found" />
+                  <NoData />
                 )}
                 <Pagination
                   {...tableParams.pagination}

@@ -63,7 +63,7 @@ const Layout = dynamicReq(
                 <Suspense>
                   <div>
                     <div
-                      className={`flex-1 max-w-[1440px] mx-auto py-4 lg:py-6 mb-6 px-4 lg:px-8 page-content-wrap`}
+                      className={`flex-1 max-w-[1440px] mx-auto pt-4 lg:pt-6 mb-6 lg:px-10 px-4 page-content-wrap`}
                       >
                       {props.children}
                     </div>

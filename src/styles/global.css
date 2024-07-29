@@ -261,5 +261,5 @@ input[type='number'] {
   }
 }
 .TMRWDAO-table-expanded-row-fixed {
-  @apply !w-full;
+  @apply !w-full !m-0;
 }

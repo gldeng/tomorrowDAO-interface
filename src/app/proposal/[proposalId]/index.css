@@ -20,6 +20,18 @@
    .votes-total-count {
       border-top: 1px solid var(--Neutral-Divider, #EDEDED);
    }
+   .proposal-detail-status-description {
+      @apply card-sm-text text-Neutral-Secondary-Text;
+   }
+   .proposal-status-title {
+      @apply pb-6 lg:border-0 border-t-0 border-l-0 border-r-0 border border-solid border-Neutral-Divider px-4 lg:px-8;
+   }
+   .proposal-status-content {
+      @apply px-4 lg:px-8 pt-6 lg:pb-10;
+   }
+   .TMRWDAO-steps-item:not(:last-child) {
+      @apply h-[132px];
+   }
 }
 .vote-result-table-wrap {
    .title {
