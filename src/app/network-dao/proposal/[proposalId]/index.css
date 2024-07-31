@@ -27,6 +27,36 @@
       color: #1A1A1A;
     }
   }
+  .tag-font {
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 18px; /* 180% */
+    color: var(--Neutral-Secondary-Text, #919191);
+  }
+  .proposal-key-value {
+    @apply grid lg:grid-cols-3 lg:gap-x-[24px] gap-y-[16px] grid-cols-1;
+  }
+  .link-preview {
+    @apply p-[24px];
+  }
+  .link-preview-content {
+    @apply flex;
+    .icon {
+      @apply w-[48px] h-[48px] rounded-full;
+      &.text {
+        @apply text-white flex items-center justify-center bg-colorPrimary;
+      }
+    }
+  }
+  .link-preview-info {
+    @apply ml-[16px] flex flex-col justify-between;
+    h3 {
+      @apply card-sm-text-bold text-neutralPrimaryText;
+    }
+    p {
+      @apply card-sm-text text-Neutral-Secondary-Text;
+    }
+  }
 }
 
 .proposal-detail .antExplorer-btn-primary:disabled,

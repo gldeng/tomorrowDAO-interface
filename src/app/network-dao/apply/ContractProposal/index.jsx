@@ -88,29 +88,7 @@ const noticeUpdateList = [
   "If the transaction pre-validation fails, fees will not be charged.",
   "If the update fails, fees charged will not be returned.",
 ];
-const formItemLayout = {
-  labelCol: {
-    sm: { span: 6 },
-  },
-  wrapperCol: {
-    sm: { span: 8 },
-  },
-};
 
-const radioButtonLayout = {
-  wrapperCol: {
-    sm: { span: 14, offset: 4 },
-  },
-};
-
-const tailFormItemLayout = {
-  wrapperCol: {
-    sm: {
-      span: 16,
-      offset: 6,
-    },
-  },
-};
 
 async function checkContractName(
   rule,
@@ -462,7 +440,7 @@ const ContractProposal = (props) => {
 
   const updateTypeFormItem = () => {
     return (
-      <FormItem label="" name="updateType" {...radioButtonLayout}>
+      <FormItem label="" name="updateType">
         <Radio.Group onChange={updateTypeHandler} buttonStyle="solid">
           <Radio.Button
             style={{ marginRight: "20px" }}
@@ -633,6 +611,7 @@ const ContractProposal = (props) => {
     <div className="contract-proposal">
       <Form
         form={form}
+        layout="vertical"
         initialValues={{
           approvalMode: "withoutApproval",
           action: "ProposeNewContract",
@@ -671,7 +650,6 @@ const ContractProposal = (props) => {
             setContractMethod(contractMethodType.ProposeNewContract);
           }
         }}
-        {...formItemLayout}
       >
         <FormItem label="Contract Action" name="action">
           <Radio.Group onChange={handleAction}>
@@ -710,8 +688,8 @@ const ContractProposal = (props) => {
             </div>
           </Form.Item>
         )}
-        <Form.Item {...tailFormItemLayout}>
-          <Button
+        <div className="proposal-apply-btn-wrap">
+        <Button
             className="apply-btn"
             style={{ width: "240px" }}
             type="primary"
@@ -722,7 +700,7 @@ const ContractProposal = (props) => {
           >
             Apply
           </Button>
-        </Form.Item>
+        </div>
       </Form>
     </div>
   );

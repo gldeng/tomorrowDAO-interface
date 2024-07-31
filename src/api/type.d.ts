@@ -17,6 +17,75 @@ interface ITokenRes {
 interface LocalJWTData extends ITokenRes {
   expiresTime?: number;
 }
+// -------------------------------------isDepositor-----------------------------
+interface IDepositorRes {
+  code: string;
+  data: boolean;
+}
+// -------------------------------------Add Comment-----------------------------
+interface IAddCommentReq {
+  proposalId: string;
+  chainId: string;
+  comment: string;
+  parentId?: string;
+}
+interface ICommentListsItem {
+  id: string;
+  chainId: string;
+  daoId: string;
+  proposalId: string;
+  commenter: string;
+  comment: string;
+  parentId: string;
+  commentStatus: string;
+  createTime: number;
+  modificationTime: number;
+}
+interface IAddCommentRes {
+  code: string;
+  data: {
+    success: string;
+    reason: string;
+    message: ICommentListsItem;
+  };
+  message: string;
+}
+// -------------------------------------Comment List-----------------------------
+interface ICommentListsReq {
+  chainId: string;
+  proposalId: string;
+  skip: number;
+  maxResultCount: number;
+}
+interface ICommentListsItem {
+  id: string;
+  chainId: string;
+  daoId: string;
+  proposalId: string;
+  commenter: string;
+  comment: string;
+  parentId: string;
+  commentStatus: string;
+  createTime: number;
+  modificationTime: number;
+}
+interface ICommentListsRes {
+  code: string;
+  data: {
+    totalCount: number;
+    items: Array<ICommentListsItem>;
+  };
+  message: string;
+}
+// -------------------------------------URL info -----------------------------
+interface IURLInfoRes {
+  code: number;
+  data?: {
+    Title: string;
+    Description: string;
+    Favicon: string;
+  };
+}
 // -------------------------------------dao-list-----------------------------
 interface IListDaoReq {
   skipCount: number; //  0

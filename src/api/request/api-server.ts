@@ -23,9 +23,12 @@ class Request {
         const token = this.token;
         if (
           token &&
-          ['/proposal/my-info', '/proposal/vote-history', '/dao/my-dao-list'].includes(
-            config.url || '',
-          )
+          [
+            '/proposal/my-info',
+            '/proposal/vote-history',
+            '/dao/my-dao-list',
+            '/discussion/new-comment',
+          ].includes(config.url || '')
         ) {
           config.headers = { ...config.headers, Authorization: `Bearer ${token}` };
         }
