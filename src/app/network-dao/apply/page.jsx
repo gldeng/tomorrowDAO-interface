@@ -8,7 +8,7 @@ export default function Page(props) {
   return <ConfigProvider prefixCls="antExplorer"
   theme={{
     token: {
-      controlHeight: 32
+      // controlHeight: 32
     },
     components: {
       Input: {

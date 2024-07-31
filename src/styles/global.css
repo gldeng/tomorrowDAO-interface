@@ -50,6 +50,9 @@
   .card-sm-text {
     @apply text-[14px] leading-[22px];
   }
+  .card-sm-text-black {
+    @apply text-[14px] leading-[22px] text-neutralTitle;
+  }
   .card-xsm-text {
     @apply text-[12px] leading-[20px];
   }

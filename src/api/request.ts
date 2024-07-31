@@ -97,6 +97,40 @@ export const fetchVoteSchemeList = async (
     params,
   });
 };
+// is Depositor
+export const isDepositor = async (params: {
+  chainId: string;
+  treasuryAddress: string;
+  address: string;
+  governanceToken: string;
+}): Promise<IDepositorRes> => {
+  return apiServer.post('/treasury/is-depositor', {
+    ...params,
+  });
+};
+// add comment
+export const addCommentReq = async (params: IAddCommentReq): Promise<IAddCommentRes> => {
+  return apiServer.get('/discussion/new-comment', {
+    params,
+  });
+};
+
+// get comment list
+export const getCommentLists = async (params: ICommentListsReq): Promise<ICommentListsRes> => {
+  return apiServer.get('/discussion/comment-list', {
+    params,
+  });
+};
+export const fetchURLDescription = async (params: {
+  chainId: string;
+  proposalId: string;
+  forumUrl: string;
+}): Promise<IURLInfoRes> => {
+  return apiServer.post('/forum/link-preview', {
+    ...params,
+  });
+};
+
 // need auth
 export const fetchVoteHistory = async (params: IVoteHistoryReq): Promise<IVoteHistoryRes> => {
   return apiServer.get('/proposal/vote-history', {

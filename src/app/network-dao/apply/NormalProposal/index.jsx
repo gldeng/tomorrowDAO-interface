@@ -48,21 +48,13 @@ const { proposalTypes } = constants;
 
 const { Item: FormItem } = Form;
 
-const formItemLayout = {
-  labelCol: {
-    sm: { span: 6 },
-  },
-  wrapperCol: {
-    sm: { span: 8 },
-  },
-};
 
 const FIELDS_MAP = {
   formProposalType: {
     name: "formProposalType",
     label: (
       <span>
-        Proposal Mode&nbsp;
+        <span className="pr-[8px]">Proposal Mode&nbsp;</span>
         <Tooltip
           title="There are currently three proposal models.
           After selecting one, you will need to operate according to its rules.
@@ -84,7 +76,9 @@ const FIELDS_MAP = {
     name: "formOrgAddress",
     label: (
       <span>
+        <span className="pr-[8px]">
         Organisation&nbsp;
+        </span>
         <Tooltip
           title="Choose an organisation you trust.
           The organisation will vote for your proposal.
@@ -132,7 +126,9 @@ const FIELDS_MAP = {
     name: "formExpiredTime",
     label: (
       <span>
+        <span className="pr-[8px]">
         Expiration Time&nbsp;
+        </span>
         <Tooltip title="Proposals must be voted on and released before the expiration time">
           <QuestionCircleOutlined className="main-color" />
         </Tooltip>
@@ -151,13 +147,15 @@ const FIELDS_MAP = {
     name: "formDescriptionURL",
     label: (
       <span>
-        URL&nbsp;
+        <span className="pr-[8px]">
+        Discussion on Forum
+        </span>
         <Tooltip title="Please provide a URL describing the proposal">
           <QuestionCircleOutlined className="main-color" />
         </Tooltip>
       </span>
     ),
-    placeholder: "Please input the description URL of proposal",
+    placeholder: "Please input the forum URL of proposal",
     validateTrigger: "onBlur",
     rules: [
       {
@@ -328,7 +326,8 @@ URLPrefix.propTypes = {
 
 const SuspenseJSONEditor = (props) => (
   <Suspense fallback={<Spin className="text-ellipsis" />}>
-    <JSONEditor className="params-input" {...props} />
+    <JSONEditor className="params-input" {...props} 
+    />
   </Suspense>
 );
 
@@ -517,7 +516,7 @@ const NormalProposal = (props) => {
     <div className="normal-proposal">
       <Form
         form={form}
-        {...formItemLayout}
+        layout="vertical"
         initialValues={{
           formProposalType: isModify ? proposalType : "",
           formOrgAddress: isModify ? orgAddress : "",
@@ -528,6 +527,7 @@ const NormalProposal = (props) => {
       >
         <FormItem
           label={FIELDS_MAP.formProposalType.label}
+          className="proposal-type-select"
           required
           {...FIELDS_MAP.formProposalType}
         >
@@ -633,6 +633,7 @@ const NormalProposal = (props) => {
         >
           <Input
             addonBefore={<URLPrefix formField="formPrefix" />}
+            className="url-input"
             placeholder={FIELDS_MAP.formDescriptionURL.placeholder}
           />
         </FormItem>
@@ -643,13 +644,14 @@ const NormalProposal = (props) => {
         >
           <DatePicker
             showTime
+            className="w-full"
             disabledDate={disabledDate}
             disabledTime={disabledDate}
             placeholder={FIELDS_MAP.formExpiredTime.placeholder}
           />
         </FormItem>
-        <Form.Item {...tailFormItemLayout}>
-          <Button
+        <div className="proposal-apply-btn-wrap">
+        <Button
             className="apply-btn"
             style={{ width: "240px" }}
             type="primary"
@@ -658,7 +660,7 @@ const NormalProposal = (props) => {
           >
             Apply
           </Button>
-        </Form.Item>
+        </div>
       </Form>
     </div>
   );
