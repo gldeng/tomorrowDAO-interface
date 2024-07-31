@@ -44,12 +44,37 @@ const JSONEditor = lazy(() =>
   import(/* webpackChunkName: "jsonEditor" */ "../../_proposal_root/components/JSONEditor")
 );
 
+const { TextArea } = Input;
 const { proposalTypes } = constants;
 
 const { Item: FormItem } = Form;
 
 
 const FIELDS_MAP = {
+  title: {
+    name: "title",
+    label: "Title",
+    placeholder: "Please input the title of proposal",
+    rules: [
+      {
+        required: true,
+        message: "You can only enter a maximum of 255 characters",
+        max: 255
+      },
+    ],
+  },
+  description: {
+    name: "description",
+    label: "Description",
+    placeholder: "Please input the description of proposal",
+    rules: [
+      {
+        required: true,
+        message: "You can only enter a maximum of 10200 characters",
+        max: 10200
+      },
+    ],
+  },
   formProposalType: {
     name: "formProposalType",
     label: (
@@ -330,7 +355,7 @@ const SuspenseJSONEditor = (props) => (
     />
   </Suspense>
 );
-
+// Ordinary Proposal
 const NormalProposal = (props) => {
   const {
     aelf,
@@ -473,6 +498,8 @@ const NormalProposal = (props) => {
         formExpiredTime,
         formDescriptionURL,
         formPrefix,
+        title,
+        description,
         ...leftParams
       } = result;
       const method =
@@ -493,6 +520,8 @@ const NormalProposal = (props) => {
         decoded = method.packInput(parsed);
       }
       submit({
+        title,
+        description,
         expiredTime: formExpiredTime,
         contractMethodName: formContractMethod,
         toAddress: formContractAddress,
@@ -525,6 +554,18 @@ const NormalProposal = (props) => {
           realSpecialPlain: "",
         }}
       >
+        <FormItem
+          required
+          {...FIELDS_MAP.title}
+        >
+          <Input/>
+        </FormItem>
+        <FormItem
+          required
+          {...FIELDS_MAP.description}
+        >
+          <TextArea />
+        </FormItem>
         <FormItem
           label={FIELDS_MAP.formProposalType.label}
           className="proposal-type-select"

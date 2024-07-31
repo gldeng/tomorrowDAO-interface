@@ -56,8 +56,17 @@
   .card-xsm-text {
     @apply text-[12px] leading-[20px];
   }
+  .card-xsm-text-bold {
+    @apply text-[12px] leading-[20px] font-medium ;
+  }
+  .card-xsm-text-bold-black {
+    @apply text-[12px] leading-[20px] font-medium text-neutralTitle;;
+  }
   .card-sm-text-bold {
     @apply text-[14px] leading-[22px] font-medium;
+  }
+  .card-sm-text-bold-black {
+    @apply text-[14px] leading-[22px] font-medium text-neutralTitle;
   }
 
   .card-title-lg {

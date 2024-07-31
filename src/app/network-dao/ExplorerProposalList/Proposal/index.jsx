@@ -12,7 +12,7 @@ import {
   CloseCircleOutlined,
   MinusCircleOutlined,
 } from "@ant-design/icons";
-import { Button, Card, Tag, Divider } from "antd";
+import { Button, Card, Tag, Divider, Tooltip } from "antd";
 import constants, {
   LOG_STATUS,
   ACTIONS_COLOR_MAP,
@@ -53,7 +53,7 @@ const Title = (props) => {
     momentExpired.isBefore(threshold);
   return (
     <div className="proposal-list-item-title">
-      <span className="gap-right-small">{proposalType}</span>
+      <span className="gap-right-small card-sm-text-bold-black">{proposalType}</span>
       {votedStatus !== "none" ? (
         <Tag color={ACTIONS_COLOR_MAP[votedStatus]}>
           {ACTIONS_ICON_MAP[votedStatus]}
@@ -100,6 +100,8 @@ const Proposal = (props) => {
     handleApprove,
     handleReject,
     handleAbstain,
+    title,
+    description,
   } = props;
 
   const bpCountNumber =
@@ -127,24 +129,24 @@ const Proposal = (props) => {
         }
       >
         <div className="proposal-list-item-id">
-          <div className="gap-right-large">
-          <LinkNetworkDao
-              className="text-ellipsis"
-              href={{
-                pathname: `/proposal/${proposalId}`,
-              }}
-              
-            >
-              {proposalId}
-            </LinkNetworkDao>
-            {CONTRACT_TEXT_MAP[contractMethod] ? (
-              <Tag color={PRIMARY_COLOR}>
-                {CONTRACT_TEXT_MAP[contractMethod]}
-              </Tag>
-            ) : null}
+          <div className="id-wrap gap-right-large flex flex-col justify-center">
+            <h2 className="truncate card-xsm-text-bold-black">{title}</h2>
+            <LinkNetworkDao
+                className="text-ellipsis card-xsm-text-bold"
+                href={{
+                  pathname: `/proposal/${proposalId}`,
+                }}            
+              >
+                {proposalId}
+              </LinkNetworkDao>
+              {CONTRACT_TEXT_MAP[contractMethod] ? (
+                <Tag color={PRIMARY_COLOR} className="max-content">
+                  {CONTRACT_TEXT_MAP[contractMethod]}
+                </Tag>
+              ) : null}
           </div>
-          <div className="proposal-list-item-id-status">
-            <Tag color={STATUS_COLOR_MAP[status]}>
+          <div className="proposal-list-item-id-status flex flex-col justify-center lg:items-center">
+            <Tag color={STATUS_COLOR_MAP[status]}  className="max-content">
               {PROPOSAL_STATUS_CAPITAL[status]}
             </Tag>
             {status === proposalStatus.APPROVED && canRelease ? (
@@ -161,26 +163,26 @@ const Proposal = (props) => {
             ) : null}
           </div>
         </div>
-        <Divider />
+        <Divider className="my-[16px]"/>
         <div className="proposal-list-item-info">
           <div className="proposal-list-item-info-item">
-            <span className="sub-title gap-right">Proposal Expires:</span>
-            <span className="text-ellipsis">
+            <span className="gap-right card-xsm-text text-[#858585] flex-shrink-0 w-[180px]">Proposal Expires:</span>
+            <span className="text-ellipsis card-xsm-text-bold-black">
               {moment(expiredTime).format("YYYY/MM/DD HH:mm:ss")}
             </span>
           </div>
           <div className="proposal-list-item-info-item">
-            <span className="sub-title gap-right">Contract:</span>
-            <span className="text-ellipsis">
+            <span className="gap-right card-xsm-text text-[#858585] flex-shrink-0 w-[180px]">Contract:</span>
+            <span className="text-ellipsis card-xsm-text-bold-black">
               {addressFormat(contractAddress)}
             </span>
           </div>
           <div className="proposal-list-item-info-item">
-            <span className="sub-title gap-right">Contract Method:</span>
-            <span className="text-ellipsis">{contractMethod}</span>
+            <span className="gap-right card-xsm-text text-[#858585] flex-shrink-0 w-[180px]">Contract Method:</span>
+            <span className="text-ellipsis card-xsm-text-bold-black">{contractMethod}</span>
           </div>
         </div>
-        <Divider />
+        <Divider className="my-[16px]"/>
         <VoteChart
           proposalType={proposalType}
           approvals={approvals}
@@ -189,7 +191,7 @@ const Proposal = (props) => {
           bpCount={bpCountNumber}
           organizationInfo={organizationInfo}
         />
-        <Divider />
+        <Divider className="my-[16px]"/>
         <div className="proposal-list-item-actions">
           <div className="proposal-list-item-buttons">
             <ButtonWithLoginCheck
