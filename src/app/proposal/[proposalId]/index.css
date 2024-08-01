@@ -50,7 +50,7 @@
       @apply pr-[32px];
    }
    .TMRWDAO-pagination-container {
-      @apply px-8;
+      @apply lg:px-8 px-4;
     }
     .TMRWDAO-table-wrapper .TMRWDAO-table-container table>thead>tr:first-child>*:first-child {
       border-bottom-left-radius: 0;

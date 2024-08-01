@@ -36,11 +36,8 @@
   .proposal-key-value {
     @apply grid lg:grid-cols-3 lg:gap-x-[24px] gap-y-[16px] grid-cols-1;
   }
-  .link-preview {
-    @apply p-[24px];
-  }
   .link-preview-content {
-    @apply flex;
+    @apply p-[24px] flex bg-white border rounded-lg border-solid border-Neutral-Border mt-[16px] cursor-pointer;
     .icon {
       @apply w-[48px] h-[48px] rounded-full;
       &.text {
@@ -84,7 +81,29 @@
 .proposal-detail-header-divider {
   margin-top: 0;
 }
-
+.vote-data {
+  .proposal-vote-title {
+    @apply form-item-title;
+    span {
+      @apply card-xsm-text text-[#858585];
+    }
+  }
+  .proposal-vote-chart-circle {
+    @apply w-[120px] h-[120px];
+  }
+  .proposal-vote-chart-text {
+    @apply mb-4;
+  }
+  .proposal-vote-chart {
+    @apply mb-4;
+  }
+  .vote-data-button-content {
+    @apply flex justify-between gap-[16px];
+    button {
+      @apply flex-1 h-[40px];
+    }
+  }
+}
 @media screen and (max-width: 576px) {
   .proposal-detail .detail-flex {
     display: block;

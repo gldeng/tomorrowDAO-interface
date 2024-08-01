@@ -54,7 +54,7 @@ interface IAddCommentRes {
 interface ICommentListsReq {
   chainId: string;
   proposalId: string;
-  skip: number;
+  skipCount: number;
   maxResultCount: number;
 }
 interface ICommentListsItem {
@@ -81,9 +81,9 @@ interface ICommentListsRes {
 interface IURLInfoRes {
   code: number;
   data?: {
-    Title: string;
-    Description: string;
-    Favicon: string;
+    description: string;
+    title: string;
+    favicon: string;
   };
 }
 // -------------------------------------dao-list-----------------------------
