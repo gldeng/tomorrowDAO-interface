@@ -468,15 +468,17 @@ const ProposalDetail = () => {
                   handleAbstain={handleAbstain}
                   organization={info.organization}
                 />
+                 <Divider />
                 <OrganizationCard
-                  className="gap-top-large"
+                  className="gap-top-large proposal-detail-org"
                   bpList={info.bpList}
                   bpCount={bpCountNumber}
                   parliamentProposerList={info.parliamentProposerList}
                   {...info.organization}
                 />
+                 <Divider />
                 <ContractDetail
-                  className="gap-top-large"
+                  className="gap-top-large contract-detail"
                   aelf={aelf}
                   contractAddress={contractAddress}
                   contractMethod={contractMethod}
@@ -484,23 +486,31 @@ const ProposalDetail = () => {
                   createdBy={createdBy}
                 />
                 {
-                  forumUrlDetail?.data && 
+                  leftInfo.proposalDescriptionUrl && 
+                  <>
+                  <Divider />
                   <div className="link-preview">
-                    <h2>Discussion</h2>
-                    <Link href={leftInfo.proposalDescriptionUrl ?? ''} target="_blank">
-                    <div className="link-preview-content">
-                      {
-                        forumUrlDetail?.data?.favicon ? 
-                        <img className="icon" src={forumUrlDetail.data.favicon} alt="" /> :
-                        <div className="icon text">{forumUrlDetail.data?.title?.[0] ?? "T"}</div>
-                      }
-                      <div className="link-preview-info">
-                        <h3>{forumUrlDetail.data?.title}</h3>
-                        <p>{forumUrlDetail.data?.description}</p>
+                    <h2 className="normal-text-bold">Discussion</h2>
+                    {
+                      !forumUrlDetail?.data?.title ? <Link href={leftInfo.proposalDescriptionUrl ?? ''} target="_blank">
+                        {leftInfo.proposalDescriptionUrl}
+                      </Link> : 
+                      <Link href={leftInfo.proposalDescriptionUrl ?? ''} target="_blank">
+                      <div className="link-preview-content">
+                        {
+                          forumUrlDetail?.data?.favicon ? 
+                          <img className="icon" src={forumUrlDetail.data.favicon} alt="" /> :
+                          <div className="icon text">{forumUrlDetail.data?.title?.[0] ?? "T"}</div>
+                        }
+                        <div className="link-preview-info">
+                          <h3 className="break-words">{forumUrlDetail.data?.title}</h3>
+                          <p className="break-words">{forumUrlDetail.data?.description}</p>
+                        </div>
                       </div>
-                    </div>
-                    </Link>
+                      </Link>
+                    }
                 </div>
+                </>
                 }
               </div>
             </TabPane>

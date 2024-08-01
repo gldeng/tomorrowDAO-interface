@@ -7,7 +7,7 @@ import React, { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { If, Then } from "react-if";
 import { QuestionCircleOutlined } from "@ant-design/icons";
-import { Card, Divider, Tooltip, Row, Col, Tag } from "antd";
+import { Tooltip, Row, Col, Tag } from "antd";
 import { API_PATH } from "@redux/common/constants";
 import { request } from "@common/request";
 import config from "@common/config";
@@ -99,35 +99,35 @@ const ContractDetail = (props) => {
   }, [params])
 
   return (
-    <Card
+    <div
       {...rest}
-      title={
+    >
+      <h2 className="title">
         <span>
           Contract Details
           <Tooltip title="Specific information about the contract invoked by the proposal">
-            <QuestionCircleOutlined className="gap-left main-color" />
+            <QuestionCircleOutlined className="icon" />
           </Tooltip>
         </span>
-      }
-    >
+      </h2>
       <If condition={!!name}>
         <Then>
           <>
             <Row>
               <Col sm={4} xs={24}>
-                <span className="sub-title">Contract Name</span>
+                <span className="network-dao-lable-key">Contract Name</span>
               </Col>
               <Col sm={20} xs={24}>
                 {name}
               </Col>
             </Row>
-            <Divider />
+            
           </>
         </Then>
       </If>
       <Row>
         <Col sm={4} xs={24}>
-          <span className="sub-title">Contract Address</span>
+          <span className="network-dao-lable-key">Contract Address</span>
         </Col>
         <Col sm={20} xs={24}>
           <a
@@ -140,25 +140,25 @@ const ContractDetail = (props) => {
           </a>
         </Col>
       </Row>
-      <Divider />
+      
       <Row>
         <Col sm={4} xs={24}>
-          <span className="sub-title">Contract Method Name</span>
+          <span className="network-dao-lable-key">Contract Method Name</span>
         </Col>
         <Col sm={20} xs={24}>
           <Tag color={PRIMARY_COLOR}>{contractMethod}</Tag>
         </Col>
       </Row>
-      <Divider />
+      
       <Row>
         <Col sm={4} xs={24}>
-          <span className="sub-title">Contract Params</span>
+          <span className="network-dao-lable-key">Contract Params</span>
         </Col>
         <Col sm={20} xs={24}>
           <pre className="view-params" ref={ref}>{params}</pre>
         </Col>
       </Row>
-    </Card>
+    </div>
   );
 };
 

@@ -40,11 +40,11 @@ export default function Footer() {
         <Divider />
         <div className="footer-media">
           <div className="footer-media-items">
-            {/* <div className="footer-media-item">
-              <a target="_blank" rel="noreferrer" href="https://discord.com/invite/Y73pZaWy">
+            <div className="footer-media-item">
+              <a target="_blank" rel="noreferrer" href="https://discord.com/invite/gTWkeR5pQB">
                 <img src={DiscordIcon} alt="discord" />
               </a>
-            </div> */}
+            </div>
             <div className="footer-media-item">
               <a target="_blank" rel="noreferrer" href="https://t.me/tmrwdao">
                 <img src={TGIcon} alt="telegram" />

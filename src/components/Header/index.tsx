@@ -49,10 +49,6 @@ export default function Header() {
         key: ENavKeys.Resources,
         popupClassName: 'pc-menu-popup',
         children: [
-          // {
-          //   label: 'Documentation',
-          //   key: ENavKeys.Documentation,
-          // },
           {
             label: (
               <Link href="https://github.com/TomorrowDAOProject" target="_blank">
@@ -60,6 +56,14 @@ export default function Header() {
               </Link>
             ),
             key: ENavKeys.GitHub,
+          },
+          {
+            label: (
+              <Link href="https://docs.tmrwdao.com/" target="_blank">
+                Documentation
+              </Link>
+            ),
+            key: ENavKeys.Documentation,
           },
           // {
           //   label: 'White Paper',
@@ -85,14 +89,14 @@ export default function Header() {
             ),
             key: ENavKeys.Twitter,
           },
-          // {
-          //   label: (
-          //     <Link href="https://discord.com/invite/Y73pZaWy" target="_blank">
-          //       Discord
-          //     </Link>
-          //   ),
-          //   key: ENavKeys.Discord,
-          // },
+          {
+            label: (
+              <Link href="https://discord.com/invite/gTWkeR5pQB" target="_blank">
+                Discord
+              </Link>
+            ),
+            key: ENavKeys.Discord,
+          },
           {
             label: (
               <Link href="https://t.me/tmrwdao" target="_blank">
@@ -108,7 +112,9 @@ export default function Header() {
   const [current, setCurrent] = useState('');
 
   const onClick: MenuProps['onClick'] = (e) => {
-    setCurrent(e.key);
+    if (e.key === ENavKeys.CreateDAO) {
+      setCurrent(e.key);
+    }
   };
   const { isHome } = useUrlPath();
 
@@ -116,8 +122,6 @@ export default function Header() {
     // refresh from path map to nav active
     if (pathname === '/create') {
       setCurrent(ENavKeys.CreateDAO);
-    } else if (pathname.includes('/treasury')) {
-      setCurrent(ENavKeys.Treasury);
     } else {
       setCurrent('');
     }

@@ -4,8 +4,7 @@
  */
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { Button } from "aelf-design";
-import { Row, Col, div } from "antd";
+import { Row, Col, div, Button } from "antd";
 import VoteChart from "../../../_proposal_root/components/VoteChart";
 import constants, {
   organizationInfoPropTypes,
@@ -60,15 +59,15 @@ const VoteData = (props) => {
             <Button
               type='primary'
               disabled={!canThisUserVote}
-              className='approve-color gap-right'
+              className='approve-button'
               onClick={handleApprove}
               size='meduim'
             >
               Approve
             </Button>
             <Button
-              className='gap-right-large'
-              danger
+            type="primary"
+              className='reject-button'
               disabled={!canThisUserVote}
               onClick={handleReject}
               size='meduim'
@@ -76,9 +75,10 @@ const VoteData = (props) => {
               &nbsp;Reject&nbsp;&nbsp;
             </Button>
             <Button
-              type='link'
+            type="primary"
               disabled={!canThisUserVote}
               onClick={handleAbstain}
+              className="abstention-button"
               size='meduim'
             >
               Abstain
