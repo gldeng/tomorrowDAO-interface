@@ -1,22 +1,5 @@
 .proposal-vote p {
-  margin-bottom: 1em;
-  .explain {
-    color: #858585;
-  }
-}
-.proposal-vote.small {
-  .title {
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 24px;
-  }
-}
-.proposal-vote.default {
-  .title {
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 24px;
-  }
+  margin-bottom: 16px;
 }
 
 .proposal-vote .proposal-vote-chart .antExplorer-col {
