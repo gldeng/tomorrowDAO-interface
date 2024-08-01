@@ -174,15 +174,15 @@ export function getOrganizationLeftInfo(
         <>
           <div className="gap-bottom-small card-list-desc-item">
             <span className="sub-title">Token:</span>
-            <span>{tokenSymbol}</span>
+            <span className="desc">{tokenSymbol}</span>
           </div>
           <div className="gap-bottom-small card-list-desc-item">
             <span className="sub-title">Members:</span>
-            <span>All Users</span>
+            <span className="desc">All Users</span>
           </div>
           <div className="card-list-desc-item">
             <span className="sub-title">Proposer White List:</span>
-            <span>{proposerList}</span>
+            <span className="desc select">{proposerList}</span>
           </div>
         </>
       </Case>
@@ -190,11 +190,11 @@ export function getOrganizationLeftInfo(
         <>
           <div className="gap-bottom-small card-list-desc-item">
             <span className="sub-title">Members:</span>
-            <span>{members}</span>
+            <span className="desc select">{members}</span>
           </div>
           <div className="card-list-desc-item">
             <span className="sub-title">Proposer White List:</span>
-            <span>
+            <span className="desc select">
               {proposerAuthorityRequired === false ? "All Users" : proposerList}
             </span>
           </div>
@@ -204,11 +204,11 @@ export function getOrganizationLeftInfo(
         <>
           <div className="gap-bottom-small card-list-desc-item">
             <span className="sub-title">Members:</span>
-            <span>{members}</span>
+            <span className="desc select">{members}</span>
           </div>
           <div className="card-list-desc-item">
             <span className="sub-title">Proposer White List:</span>
-            <span>{proposerList}</span>
+            <span className="desc select">{proposerList}</span>
           </div>
         </>
       </Case>

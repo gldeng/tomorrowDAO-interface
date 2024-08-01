@@ -19,7 +19,7 @@ const Layout = (props: React.PropsWithChildren<{}>) => {
   const isExolore = pathName === '/explore';
   const { isLG } = useResponsive();
   const notHomeClass = isHome
-    ? 'home-landing-page'
+    ? 'home-landing-page page-content-wrap'
     : `flex-1  mx-auto pt-4 lg:pt-6 lg:px-10 px-4 page-content-wrap mb-16 ${
         isCreateDao || isCreateProposal ? 'max-w-[978px]' : 'max-w-[1440px]'
       }`;

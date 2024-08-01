@@ -32,12 +32,13 @@
     font-weight: 400;
     line-height: 18px; /* 180% */
     color: var(--Neutral-Secondary-Text, #919191);
+    display: inline-flex;
   }
   .proposal-key-value {
     @apply grid lg:grid-cols-3 lg:gap-x-[24px] gap-y-[16px] grid-cols-1;
   }
   .link-preview-content {
-    @apply p-[24px] flex bg-white border rounded-lg border-solid border-Neutral-Border mt-[16px] cursor-pointer;
+    @apply lg:p-[24px] p-[4px] flex bg-white border rounded-lg border-solid border-Neutral-Border mt-[16px] cursor-pointer;
     .icon {
       @apply w-[48px] h-[48px] rounded-full;
       &.text {
@@ -47,12 +48,71 @@
   }
   .link-preview-info {
     @apply ml-[16px] flex flex-col justify-between;
+    word-break: break-word;
     h3 {
-      @apply card-sm-text-bold text-neutralPrimaryText;
+      @apply card-sm-text-bold text-neutralPrimaryText ;
     }
     p {
       @apply card-sm-text text-Neutral-Secondary-Text;
     }
+  }
+  .proposal-detail-org {
+    .title {
+      @apply normal-text-bold;
+    }
+    .threshold-values {
+      @apply flex lg:flex-row flex-col lg:justify-between lg:items-center mb-[16px];
+      .threshold-values-item {
+        @apply flex-1 h-[30px];
+      }
+    }
+    .org-info {
+      @apply flex lg:flex-row flex-col justify-between gap-[16px];
+      .card-list-desc-item {
+        @apply flex-1;
+      }
+    }
+    .org-info {
+      @apply lg:h-[74px];
+      .card-list-desc-item {
+        .sub-title {
+          @apply card-sm-text text-Neutral-Secondary-Text pr-[4px] inline-flex;
+        }
+        .desc {
+          @apply card-sm-text-bold text-neutralPrimaryText inline-flex;
+          &.select {
+            @apply block;
+          }
+          .antExplorer-select-single.antExplorer-select-sm {
+            @apply h-[48px] mt-[4px];
+          }
+        }
+      }
+      .gap-bottom-small {
+        @apply mb-0;
+      }
+    }
+    
+  }
+  .contract-detail {
+    .title {
+      @apply normal-text-bold;
+      .icon {
+        @apply text-[16px] text-Neutral-Disable-Text ml-[8px];
+      }
+    }
+    .antExplorer-row {
+      @apply mt-[24px];
+    }
+    .view-params {
+      @apply p-[8px];
+    }
+  }
+  .network-dao-lable-key {
+    @apply card-sm-text text-Neutral-Secondary-Text pr-[4px] inline-flex;
+  }
+  .network-dao-lable-value {
+    @apply card-sm-text-bold text-neutralPrimaryText inline-flex;
   }
 }
 
@@ -76,12 +136,14 @@
   display: flex;
   flex-flow: column nowrap;
   justify-content: space-evenly;
+  padding-top: 16px;
 }
 
 .proposal-detail-header-divider {
   margin-top: 0;
 }
 .vote-data {
+  @apply mt-[8px];
   .proposal-vote-title {
     @apply form-item-title;
     span {
@@ -89,7 +151,7 @@
     }
   }
   .proposal-vote-chart-circle {
-    @apply w-[120px] h-[120px];
+    @apply lg:w-[120px] lg:h-[120px] flex-shrink;
   }
   .proposal-vote-chart-text {
     @apply mb-4;
@@ -98,7 +160,7 @@
     @apply mb-4;
   }
   .vote-data-button-content {
-    @apply flex justify-between gap-[16px];
+    @apply flex justify-between gap-[16px] w-full;
     button {
       @apply flex-1 h-[40px];
     }

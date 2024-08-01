@@ -122,222 +122,117 @@ const VoteChart = (props) => {
     );
   }, [proposalType, organizationInfo, bpCount]);
 
-  if (isPhoneCheck()) {
-    return (
-      <div className='proposal-vote'>
-        <p className="proposal-vote-title">Voting Data: Votes <span>(Votes / Minimum Votes)</span></p>
-        <Row gutter={16} className='proposal-vote-chart'>
-          <Col span={8} offset={2}>
+  return (
+    <div className='proposal-vote pc'>
+      <p className="proposal-vote-title">Voting Data: Votes <span>(Votes / Minimum Votes)</span></p>
+      <Row  className='proposal-vote-chart'>
+        <Col>
+          <div className="proposal-vote-chart-wrap">
             <Circle
               className='proposal-vote-chart-circle'
               isInProgress
               type={proposalActions.APPROVE}
               {...votesData[proposalActions.APPROVE]}
             />
-          </Col>
-          <Col span={8} offset={4}>
+            <div
+              className='text-ellipsis proposal-vote-chart-count'
+              title={`${approvals}${votesData[proposalActions.APPROVE].rate}`}
+            >
+              <span className='sub-title'>{approvals}</span>
+              <span>{votesData[proposalActions.APPROVE].rate}</span>
+            </div>
+          </div>
+          <div className='proposal-vote-desc text-center'>
+            <div className='text-ellipsis' title='Approved Votes'>
+              Approved Votes
+            </div>
+          </div>
+        </Col>
+        <Col  >
+          <div className="proposal-vote-chart-wrap">
             <Circle
               className='proposal-vote-chart-circle'
               isInProgress
               type={proposalActions.REJECT}
               {...votesData[proposalActions.REJECT]}
             />
-          </Col>
-        </Row>
-        <Row gutter={16}>
-          <Col span={12}>
-            <div className='proposal-vote-desc text-center'>
-              <div className='text-ellipsis' title='Approved Votes'>
-                Approved Votes
-              </div>
-              <div
-                className='text-ellipsis'
-                title={`${approvals}(${
-                  votesData[proposalActions.APPROVE].rate
-                })`}
-              >
-                <span className='sub-title gap-right-small'>{approvals}</span>
-                <span>({votesData[proposalActions.APPROVE].rate})</span>
-              </div>
+            <div
+              className='text-ellipsis proposal-vote-chart-count'
+              title={`${rejections}(${votesData[proposalActions.REJECT].rate})`}
+            >
+              <span className='sub-title'>{rejections}</span>
+              <span>{votesData[proposalActions.REJECT].rate}</span>
             </div>
-          </Col>
-          <Col span={12}>
-            <div className='proposal-vote-desc text-center'>
-              <div className='text-ellipsis' title='Rejected Votes'>
-                Rejected Votes
-              </div>
-              <div
-                className='text-ellipsis'
-                title={`${rejections}(${
-                  votesData[proposalActions.REJECT].rate
-                })`}
-              >
-                <span className='sub-title gap-right-small'>{rejections}</span>
-                <span>({votesData[proposalActions.REJECT].rate})</span>
-              </div>
+          </div>
+          <div className='proposal-vote-desc text-center'>
+            <div className='text-ellipsis' title='Rejected Votes'>
+              Rejected Votes
             </div>
-          </Col>
-        </Row>
-
-        <Row gutter={16} className='proposal-vote-chart'>
-          <Col span={8} offset={2}>
+          </div>
+        </Col>
+        <Col >
+          <div className="proposal-vote-chart-wrap">
             <Circle
               className='proposal-vote-chart-circle'
               isInProgress
               type={proposalActions.ABSTAIN}
               {...votesData[proposalActions.ABSTAIN]}
             />
-          </Col>
-          <Col span={8} offset={4}>
+            <div
+              className='text-ellipsis proposal-vote-chart-count'
+              title={`${abstentions}(${votesData[proposalActions.ABSTAIN].rate
+                })`}
+            >
+              <span className='sub-title'>{abstentions}</span>
+              <span>{votesData[proposalActions.ABSTAIN].rate}</span>
+            </div>
+          </div>
+          <div className='proposal-vote-desc text-center'>
+            <div className='text-ellipsis' title='Abstained Votes'>
+              Abstained Votes
+            </div>
+          </div>
+        </Col>
+        <Col >
+          <div className="proposal-vote-chart-wrap">
             <Circle
               className='proposal-vote-chart-circle'
               isInProgress={proposalType !== proposalTypes.REFERENDUM}
               type='Total'
               {...votesData.Total}
             />
-          </Col>
-        </Row>
-        <Row gutter={16}>
-          <Col span={12}>
-            <div className='proposal-vote-desc text-center'>
-              <div className='text-ellipsis' title='Abstained Votes'>
-                Abstained Votes
-              </div>
-              <div
-                className='text-ellipsis'
-                title={`${abstentions}(${
-                  votesData[proposalActions.ABSTAIN].rate
+            <div
+              className='text-ellipsis proposal-vote-chart-count'
+              title={`${approvals + rejections + abstentions}(${votesData.Total.rate
                 })`}
-              >
-                <span className='sub-title gap-right-small'>{abstentions}</span>
-                <span>({votesData[proposalActions.ABSTAIN].rate})</span>
-              </div>
-            </div>
-          </Col>
-          <Col span={12}>
-            <div className='proposal-vote-desc text-center'>
-              <div className='text-ellipsis' title='Total Votes'>
-                Total Votes
-              </div>
-              <div
-                className='text-ellipsis'
-                title={`${approvals + rejections + abstentions}(${
-                  votesData.Total.rate
-                })`}
-              >
-                <span className='sub-title gap-right-small'>
-                  {approvals + rejections + abstentions}
-                </span>
-                <span>({votesData.Total.rate})</span>
-              </div>
-            </div>
-          </Col>
-        </Row>
-      </div>
-    );
-  }
-
-  return (
-    <div className='proposal-vote'>
-      <p className="proposal-vote-title">Voting Data: Votes <span>(Votes / Minimum Votes)</span></p>
-      <Row gutter={16} className='proposal-vote-chart'>
-        <Col span={4} offset={1}>
-          <Circle
-            className='proposal-vote-chart-circle'
-            isInProgress
-            type={proposalActions.APPROVE}
-            {...votesData[proposalActions.APPROVE]}
-          />
-        </Col>
-        <Col span={4} offset={2}>
-          <Circle
-            className='proposal-vote-chart-circle'
-            isInProgress
-            type={proposalActions.REJECT}
-            {...votesData[proposalActions.REJECT]}
-          />
-        </Col>
-        <Col span={4} offset={2}>
-          <Circle
-            className='proposal-vote-chart-circle'
-            isInProgress
-            type={proposalActions.ABSTAIN}
-            {...votesData[proposalActions.ABSTAIN]}
-          />
-        </Col>
-        <Col span={4} offset={2}>
-          <Circle
-            className='proposal-vote-chart-circle'
-            isInProgress={proposalType !== proposalTypes.REFERENDUM}
-            type='Total'
-            {...votesData.Total}
-          />
-        </Col>
-      </Row>
-      <Row gutter={16} className="proposal-vote-chart-text">
-        <Col span={6}>
-          <div className='proposal-vote-desc text-center'>
-            <div className='text-ellipsis' title='Approved Votes'>
-              Approved Votes
-            </div>
-            <div
-              className='text-ellipsis'
-              title={`${approvals}(${votesData[proposalActions.APPROVE].rate})`}
             >
-              <span className='sub-title gap-right-small'>{approvals}</span>
-              <span>({votesData[proposalActions.APPROVE].rate})</span>
+              <span className='sub-title'>
+                {approvals + rejections + abstentions}
+              </span>
+              <span>{votesData.Total.rate}</span>
             </div>
           </div>
-        </Col>
-        <Col span={6}>
-          <div className='proposal-vote-desc text-center'>
-            <div className='text-ellipsis' title='Rejected Votes'>
-              Rejected Votes
-            </div>
-            <div
-              className='text-ellipsis'
-              title={`${rejections}(${votesData[proposalActions.REJECT].rate})`}
-            >
-              <span className='sub-title gap-right-small'>{rejections}</span>
-              <span>({votesData[proposalActions.REJECT].rate})</span>
-            </div>
-          </div>
-        </Col>
-        <Col span={6}>
-          <div className='proposal-vote-desc text-center'>
-            <div className='text-ellipsis' title='Abstained Votes'>
-              Abstained Votes
-            </div>
-            <div
-              className='text-ellipsis'
-              title={`${abstentions}(${
-                votesData[proposalActions.ABSTAIN].rate
-              })`}
-            >
-              <span className='sub-title gap-right-small'>{abstentions}</span>
-              <span>({votesData[proposalActions.ABSTAIN].rate})</span>
-            </div>
-          </div>
-        </Col>
-        <Col span={6}>
           <div className='proposal-vote-desc text-center'>
             <div className='text-ellipsis' title='Total Votes'>
               Total Votes
             </div>
-            <div
-              className='text-ellipsis'
-              title={`${approvals + rejections + abstentions}(${
-                votesData.Total.rate
-              })`}
-            >
-              <span className='sub-title gap-right-small'>
-                {approvals + rejections + abstentions}
-              </span>
-              <span>({votesData.Total.rate})</span>
-            </div>
           </div>
         </Col>
       </Row>
+      {/* <Row gutter={16} className="proposal-vote-chart-text">
+        <Col span={6}>
+
+        </Col>
+        <Col span={6}>
+
+        </Col>
+        <Col span={6}>
+
+        </Col>
+        <Col span={6}>
+
+        </Col>
+      </Row> */}
     </div>
   );
 };

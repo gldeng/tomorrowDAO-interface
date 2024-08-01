@@ -4,6 +4,7 @@
 import { usePathname } from 'next/navigation';
 import 'aelf-web-login/dist/assets/index.css';
 import 'styles/global.css';
+import 'styles/button.css';
 import 'aelf-design/css';
 import Layout from 'pageComponents/layout';
 import Provider from 'provider/';
