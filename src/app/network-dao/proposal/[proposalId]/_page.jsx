@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import moment from "moment";
 import PropTypes from "prop-types";
+import Link from 'next/link';
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import {
   Tag,
@@ -176,7 +177,7 @@ const ProposalDetail = () => {
     return fetchURLDescription({
       chainId: chain.chainId,
       proposalId,
-      forumUrl: "https://blog.csdn.net/weixin_44717473/article/details/128656043"
+      forumUrl: forumUrl
     })
   }, {
     manual: true
@@ -203,7 +204,9 @@ const ProposalDetail = () => {
           parliamentProposerList: result.parliamentProposerList,
           loadingStatus: LOADING_STATUS.SUCCESS,
         });
-        getForumUrlDetail(result.proposal.leftInfo.proposalDescriptionUrl)
+        if (result.proposal.leftInfo.proposalDescriptionUrl) {
+          getForumUrlDetail(result.proposal.leftInfo.proposalDescriptionUrl)
+        }
         sendHeight(800);
       })
       .catch((e) => {
@@ -326,6 +329,7 @@ const ProposalDetail = () => {
       setActiveKey("proposal");
     }
   });
+  console.log('forumUrlDetail', forumUrlDetail);
 
   return (
     <div className="proposal-detail">
@@ -447,7 +451,7 @@ const ProposalDetail = () => {
             onTabClick={(key) => changeTab(key)}
           >
             <TabPane tab="Proposal Details" key="proposal">
-              <div className="px-[0] lg:px-[32px] pb-[40px]">
+              <div className="px-[16px] lg:px-[32px] pb-[40px]">
                 <VoteData
                   className="gap-top-large"
                   proposalType={proposalType}
@@ -483,17 +487,19 @@ const ProposalDetail = () => {
                   forumUrlDetail?.data && 
                   <div className="link-preview">
                     <h2>Discussion</h2>
+                    <Link href={leftInfo.proposalDescriptionUrl ?? ''} target="_blank">
                     <div className="link-preview-content">
                       {
-                        forumUrlDetail?.data?.Favicon ? 
-                        <img className="icon" src={forumUrlDetail.data.Favicon} alt="" /> :
-                        <div className="icon text">{forumUrlDetail.data?.Title?.[0] ?? "T"}</div>
+                        forumUrlDetail?.data?.favicon ? 
+                        <img className="icon" src={forumUrlDetail.data.favicon} alt="" /> :
+                        <div className="icon text">{forumUrlDetail.data?.title?.[0] ?? "T"}</div>
                       }
                       <div className="link-preview-info">
-                        <h3>{forumUrlDetail.data?.Title}</h3>
-                        <p>{forumUrlDetail.data?.Description}</p>
+                        <h3>{forumUrlDetail.data?.title}</h3>
+                        <p>{forumUrlDetail.data?.description}</p>
                       </div>
                     </div>
+                    </Link>
                 </div>
                 }
               </div>

@@ -124,7 +124,7 @@ const VoteChart = (props) => {
   if (isPhoneCheck()) {
     return (
       <div className='proposal-vote'>
-        <p>Voting Data: Votes (Votes / Minimum Votes)</p>
+        <p className="proposal-vote-title">Voting Data: Votes <span>(Votes / Minimum Votes)</span></p>
         <Row gutter={16} className='proposal-vote-chart'>
           <Col span={8} offset={2}>
             <Circle
@@ -238,7 +238,7 @@ const VoteChart = (props) => {
 
   return (
     <div className='proposal-vote'>
-      <p>Voting Data: Votes (Votes / Minimum Votes)</p>
+      <p className="proposal-vote-title">Voting Data: Votes <span>(Votes / Minimum Votes)</span></p>
       <Row gutter={16} className='proposal-vote-chart'>
         <Col span={4} offset={1}>
           <Circle
@@ -273,7 +273,7 @@ const VoteChart = (props) => {
           />
         </Col>
       </Row>
-      <Row gutter={16}>
+      <Row gutter={16} className="proposal-vote-chart-text">
         <Col span={6}>
           <div className='proposal-vote-desc text-center'>
             <div className='text-ellipsis' title='Approved Votes'>

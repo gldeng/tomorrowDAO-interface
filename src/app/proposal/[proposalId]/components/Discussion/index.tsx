@@ -18,6 +18,9 @@ import './index.css';
 import { EDaoGovernanceMechanism } from 'app/(createADao)/create/type';
 import { useWebLogin } from 'aelf-web-login';
 import { useEffectOnce } from 'react-use';
+import clsx from 'clsx';
+import useResponsive from 'hooks/useResponsive';
+import LoadMoreButton from 'components/LoadMoreButton';
 
 dayjs.extend(relativeTime);
 interface IDiscussionProps {
@@ -64,6 +67,7 @@ export default function Discussion(props: IDiscussionProps) {
   const [errorMessage, setErrorMessage] = useState('');
 
   const [renderCommentLists, setRenderCommentLists] = useState<ICommentListsItem[]>([]);
+  const { isLG } = useResponsive();
 
   const addToRenderQueueRef = useRef<AddToRenderQueueFn>();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,8 +82,8 @@ export default function Discussion(props: IDiscussionProps) {
   const fetchCommentListsAPI: (data?: IFetchResult) => Promise<IFetchResult> = async (data) => {
     const preList = renderCommentLists;
     const res = await getCommentLists({
-      skip: preList.length,
-      maxResultCount: 10,
+      skipCount: preList.length,
+      maxResultCount: 3,
       chainId: curChain,
       proposalId: proposalId,
     });
@@ -90,7 +94,12 @@ export default function Discussion(props: IDiscussionProps) {
       hasData: len < res.data.totalCount,
     };
   };
-  const { data, loading, loadMore, loadingMore } = useInfiniteScroll(fetchCommentListsAPI, {
+  const {
+    data: commentListsData,
+    loading,
+    loadMore,
+    loadingMore,
+  } = useInfiniteScroll(fetchCommentListsAPI, {
     manual: true,
   });
   const { data: canSendCheckRes, run: checkSendStatus } = useRequest(
@@ -147,10 +156,10 @@ export default function Discussion(props: IDiscussionProps) {
 
   useEffect(() => {
     // add to queue tail
-    if (data?.list) {
-      addToRenderQueueRef.current?.(data.list, EPosition.tail);
+    if (commentListsData?.list) {
+      addToRenderQueueRef.current?.(commentListsData.list, EPosition.tail);
     }
-  }, [data]);
+  }, [commentListsData]);
 
   const updateCommentAndApi = async (content: string, parentId?: string) => {
     // add to db
@@ -161,7 +170,7 @@ export default function Discussion(props: IDiscussionProps) {
       parentId: parentId,
     });
     const latestCommentRes = await getCommentLists({
-      skip: 0,
+      skipCount: 0,
       maxResultCount: 1,
       chainId: curChain,
       proposalId: proposalId,
@@ -176,10 +185,7 @@ export default function Discussion(props: IDiscussionProps) {
     console.log('EPosition loadMore');
     loadMore();
   });
-  const handleSendComment = () => {
-    addComment(content);
-    setContent('');
-  };
+
   const sendButtonStatus = useMemo(() => {
     if (!wallet.address) {
       return {
@@ -195,11 +201,19 @@ export default function Discussion(props: IDiscussionProps) {
     }
     return canSendCheckRes;
   }, [content, canSendCheckRes, wallet]);
+  const handleSendComment = () => {
+    if (!sendButtonStatus?.isEnable) {
+      return;
+    }
+    addComment(content);
+    setContent('');
+  };
   useEffect(() => {
     if (wallet.address) {
       checkSendStatus();
     }
   }, [wallet.address, checkSendStatus]);
+  console.log('sendButtonStatus', sendButtonStatus);
   return (
     <div className="discussion-wrap">
       <h2 className="card-title">
@@ -212,16 +226,26 @@ export default function Discussion(props: IDiscussionProps) {
           className="input-box"
           onChange={handleChange}
           status={errorMessage ? 'error' : ''}
+          value={content}
         />
-        <Tooltip title={sendButtonStatus?.message}>
-          <Button
-            type="primary"
-            onClick={handleSendComment}
-            disabled={!sendButtonStatus?.isEnable}
-            loading={addCommentLoading}
-          >
-            Send it
-          </Button>
+        <Tooltip
+          className="send-tool-tip"
+          title={sendButtonStatus?.message}
+          trigger={isLG ? 'click' : 'hover'}
+          overlayClassName="send-tool-tip"
+        >
+          <div>
+            <Button
+              type="primary"
+              onClick={handleSendComment}
+              className={clsx('send-button', {
+                disabled: !sendButtonStatus?.isEnable,
+              })}
+              loading={addCommentLoading}
+            >
+              Send it
+            </Button>
+          </div>
         </Tooltip>
       </div>
       {errorMessage && <div className="error-message">{errorMessage}</div>}
@@ -248,9 +272,11 @@ export default function Discussion(props: IDiscussionProps) {
           );
         })}
       </ul>
-      <Button type="primary" onClick={loadMore}>
-        loadMore
-      </Button>
+      {commentListsData?.hasData && (
+        <div className="loading-more-wrap">
+          <LoadMoreButton onClick={loadMore} loadingMore={loadingMore} />
+        </div>
+      )}
     </div>
   );
 }
