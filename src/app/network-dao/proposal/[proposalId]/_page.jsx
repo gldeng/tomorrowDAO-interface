@@ -329,7 +329,7 @@ const ProposalDetail = () => {
       setActiveKey("proposal");
     }
   });
-  console.log('forumUrlDetail', forumUrlDetail);
+  const existUrl = validateURL(leftInfo?.proposalDescriptionUrl || "");
 
   return (
     <div className="proposal-detail">
@@ -394,23 +394,6 @@ const ProposalDetail = () => {
                   <span className="card-sm-text text-Neutral-Secondary-Text gap-right">Proposal Expires:</span>
                   <span className="card-sm-text-black text-ellipsis">
                     {moment(expiredTime).format("YYYY/MM/DD HH:mm:ss")}
-                  </span>
-                </div>
-                <div  className="detail-flex items-center">
-                  <span className="card-sm-text text-Neutral-Secondary-Text gap-right">URL:</span>
-                  <span className="card-sm-text-black text-ellipsis">
-                    {validateURL(leftInfo.proposalDescriptionUrl || "") ? (
-                      <a
-                        href={leftInfo.proposalDescriptionUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        title={leftInfo.proposalDescriptionUrl}
-                      >
-                        {leftInfo.proposalDescriptionUrl}
-                      </a>
-                    ) : (
-                      "-"
-                    )}
                   </span>
                 </div>
                 <div  className="detail-flex items-center">
@@ -486,7 +469,7 @@ const ProposalDetail = () => {
                   createdBy={createdBy}
                 />
                 {
-                  leftInfo.proposalDescriptionUrl && 
+                  existUrl && 
                   <>
                   <Divider />
                   <div className="link-preview">
