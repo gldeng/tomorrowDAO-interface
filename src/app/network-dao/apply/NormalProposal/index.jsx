@@ -6,7 +6,7 @@
 import React, { useEffect, useState, Suspense, lazy } from "react";
 import moment from "moment";
 import dayjs from 'dayjs';
-import { QuestionCircleOutlined } from "@ant-design/icons";
+import { QuestionCircleOutlined } from "@aelf-design/icons";
 import {
   Form,
   Select,
@@ -78,14 +78,14 @@ const FIELDS_MAP = {
   formProposalType: {
     name: "formProposalType",
     label: (
-      <span>
+      <span className="form-item-label-content">
         <span className="pr-[8px]">Proposal Mode&nbsp;</span>
         <Tooltip
           title="There are currently three proposal models.
           After selecting one, you will need to operate according to its rules.
           For specific rules, see 'Proposal rules'"
         >
-          <QuestionCircleOutlined className="main-color" />
+          <QuestionCircleOutlined className="form-item-label-icon" />
         </Tooltip>
       </span>
     ),
@@ -100,7 +100,7 @@ const FIELDS_MAP = {
   formOrgAddress: {
     name: "formOrgAddress",
     label: (
-      <span>
+      <span className="form-item-label-content">
         <span className="pr-[8px]">
         Organisation&nbsp;
         </span>
@@ -110,7 +110,7 @@ const FIELDS_MAP = {
           You also need to follow the rules of the organisation.
           For the specific rules, see 'Organisations Tab'"
         >
-          <QuestionCircleOutlined className="main-color" />
+          <QuestionCircleOutlined className="form-item-label-icon" />
         </Tooltip>
       </span>
     ),
@@ -150,12 +150,12 @@ const FIELDS_MAP = {
   formExpiredTime: {
     name: "formExpiredTime",
     label: (
-      <span>
+      <span className="form-item-label-content">
         <span className="pr-[8px]">
         Expiration Time&nbsp;
         </span>
         <Tooltip title="Proposals must be voted on and released before the expiration time">
-          <QuestionCircleOutlined className="main-color" />
+          <QuestionCircleOutlined className="form-item-label-icon" />
         </Tooltip>
       </span>
     ),
@@ -171,12 +171,13 @@ const FIELDS_MAP = {
   formDescriptionURL: {
     name: "formDescriptionURL",
     label: (
-      <span>
+      <span className="form-item-label-content">
         <span className="pr-[8px]">
-        Discussion on Forum
+        Discussion on Forum:
         </span>
+        <span className="form-item-optional-text">(Optional)</span>
         <Tooltip title="Please provide a URL describing the proposal">
-          <QuestionCircleOutlined className="main-color" />
+          <QuestionCircleOutlined className="form-item-label-icon" />
         </Tooltip>
       </span>
     ),
@@ -546,6 +547,7 @@ const NormalProposal = (props) => {
       <Form
         form={form}
         layout="vertical"
+        requiredMark={false}
         initialValues={{
           formProposalType: isModify ? proposalType : "",
           formOrgAddress: isModify ? orgAddress : "",
