@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { memo } from 'react';
 import { Result } from 'antd';
 import './index.css';
-import Script from 'next/script';
+
 import HeaderInfo from './components/HeaderInfo';
 import VoteInfo from './components/VoteInfo';
 import StatusInfo from './components/StatusInfo';
@@ -82,8 +82,6 @@ const ProposalDetails = () => {
           )}
         </>
       )}
-      <Script defer src="https://cdn.commento.io/js/commento.js"></Script>
-      <div id="commento"></div>
     </div>
   );
 };
