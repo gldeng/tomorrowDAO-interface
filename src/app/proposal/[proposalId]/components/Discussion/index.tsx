@@ -217,8 +217,9 @@ export default function Discussion(props: IDiscussionProps) {
     }
     return canSendCheckRes;
   }, [content, canSendCheckRes]);
+  const disabled = !sendButtonStatus?.isEnable || errorMessage;
   const handleSendComment = () => {
-    if (!sendButtonStatus?.isEnable) {
+    if (disabled) {
       return;
     }
     addComment(content);
@@ -252,7 +253,7 @@ export default function Discussion(props: IDiscussionProps) {
               type="primary"
               onClick={handleSendComment}
               className={clsx('send-button', {
-                disabled: !sendButtonStatus?.isEnable,
+                disabled: disabled,
               })}
               loading={addCommentLoading}
             >
