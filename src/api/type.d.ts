@@ -54,7 +54,8 @@ interface IAddCommentRes {
 interface ICommentListsReq {
   chainId: string;
   proposalId: string;
-  skipCount: number;
+  skipCount?: number;
+  skipId?: string;
   maxResultCount: number;
 }
 interface ICommentListsItem {
@@ -74,6 +75,7 @@ interface ICommentListsRes {
   data: {
     totalCount: number;
     items: Array<ICommentListsItem>;
+    hasMore: boolean;
   };
   message: string;
 }

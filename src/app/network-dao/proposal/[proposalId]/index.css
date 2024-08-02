@@ -38,7 +38,7 @@
     @apply grid lg:grid-cols-3 lg:gap-x-[24px] gap-y-[16px] grid-cols-1;
   }
   .link-preview-content {
-    @apply lg:p-[24px] p-[4px] flex bg-white border rounded-lg border-solid border-Neutral-Border mt-[16px] cursor-pointer;
+    @apply lg:p-[24px] p-[16px] flex bg-white border rounded-lg border-solid border-Neutral-Border mt-[16px] cursor-pointer;
     .icon {
       @apply w-[48px] h-[48px] rounded-full;
       &.text {
@@ -54,6 +54,12 @@
     }
     p {
       @apply card-sm-text text-Neutral-Secondary-Text;
+    }
+    .link-preview-info-description {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+      @apply max-h-[66px] text-ellipsis overflow-hidden;
     }
   }
   .proposal-detail-org {

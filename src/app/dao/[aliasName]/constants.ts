@@ -58,17 +58,21 @@ export const tagColorMap = {
     bgColor: '#E4F8F5',
     textColor: '#05C4A2',
   },
+  [AllProposalStatusString.BelowThreshold]: {
+    bgColor: '#FEF7EC',
+    textColor: '#F8B042',
+  },
   [AllProposalStatusString.PendingVote]: {
-    bgColor: '#F2EEFF',
-    textColor: '#FA9D2B',
+    bgColor: '#FEF7EC',
+    textColor: '#F8B042',
   },
   [AllProposalStatusString.Challenged]: {
-    bgColor: '#FEEFF1',
-    textColor: '#F55D6E',
+    bgColor: '#F2EEFF',
+    textColor: '#764DF1',
   },
   [AllProposalStatusString.Vetoed]: {
-    bgColor: '#FEEFF1',
-    textColor: '#F55D6E',
+    bgColor: '#F0F1F3',
+    textColor: '#687083',
   },
 };
 // the proposal is created by network dao, not tmrw dao

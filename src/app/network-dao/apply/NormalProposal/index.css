@@ -17,6 +17,18 @@
     border-top: 1px solid var(--Neutral-Divider, #EDEDED);
     margin-bottom: 0;
   }
+  .form-item-label-icon {
+    @apply text-[16px] text-Neutral-Disable-Text;
+  }
+  .form-item-optional-text {
+    @apply text-[16px] leading-[24px] text-Neutral-Secondary-Text pr-[8px];
+  }
+  .antExplorer-form-item-label {
+    @apply text-[16px] leading-[24px] text-neutralTitle;
+  }
+  .form-item-label-content {
+    @apply flex items-center;
+  }
 }
 .normal-proposal-params {
   margin-bottom: 0;

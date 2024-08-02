@@ -31,26 +31,26 @@ const maxLen = 10000;
 const getShortTimeDesc = (time: number) => {
   return dayjs().to(dayjs(time));
 };
-const Avatar = () => {
-  return (
-    <svg
-      className="user-avatar"
-      width="28"
-      height="28"
-      viewBox="0 0 28 28"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <circle cx="14" cy="14" r="14" fill="#EDEDED" />
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M13.9999 15C16.7613 15 19 12.7618 19 10C19 7.23919 16.7613 5 13.9999 5C11.2385 5 9 7.23919 9 10C9 12.7618 11.2385 15 13.9999 15ZM13.9998 28C19.1727 28 23.6903 25.1945 26.1141 21.022C18.6199 16.977 9.39388 16.9927 1.91309 21.0692C4.34344 25.2156 8.84648 28 13.9998 28Z"
-        fill="#B8B8B8"
-      />
-    </svg>
-  );
-};
+// const Avatar = () => {
+//   return (
+//     <svg
+//       className="user-avatar"
+//       width="28"
+//       height="28"
+//       viewBox="0 0 28 28"
+//       fill="none"
+//       xmlns="http://www.w3.org/2000/svg"
+//     >
+//       <circle cx="14" cy="14" r="14" fill="#EDEDED" />
+//       <path
+//         fillRule="evenodd"
+//         clipRule="evenodd"
+//         d="M13.9999 15C16.7613 15 19 12.7618 19 10C19 7.23919 16.7613 5 13.9999 5C11.2385 5 9 7.23919 9 10C9 12.7618 11.2385 15 13.9999 15ZM13.9998 28C19.1727 28 23.6903 25.1945 26.1141 21.022C18.6199 16.977 9.39388 16.9927 1.91309 21.0692C4.34344 25.2156 8.84648 28 13.9998 28Z"
+//         fill="#B8B8B8"
+//       />
+//     </svg>
+//   );
+// };
 interface IFetchResult {
   list: ICommentListsItem[];
   hasData: boolean;
@@ -60,10 +60,12 @@ enum EPosition {
   tail = 'tail',
 }
 type AddToRenderQueueFn = (lists: ICommentListsItem[], position: EPosition) => void;
+const MultisigDAOTip = 'Only DAO members can submit comments';
 export default function Discussion(props: IDiscussionProps) {
   const { wallet } = useWebLogin();
   const { proposalId, daoId } = props;
   const [content, setContent] = useState('');
+  const [total, setTotal] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');
 
   const [renderCommentLists, setRenderCommentLists] = useState<ICommentListsItem[]>([]);
@@ -81,17 +83,22 @@ export default function Discussion(props: IDiscussionProps) {
   };
   const fetchCommentListsAPI: (data?: IFetchResult) => Promise<IFetchResult> = async (data) => {
     const preList = renderCommentLists;
-    const res = await getCommentLists({
-      skipCount: preList.length,
+    const lastComment = preList[preList.length - 1];
+    const reqParams: ICommentListsReq = {
       maxResultCount: 10,
       chainId: curChain,
       proposalId: proposalId,
-    });
-    const currenRestList = res.data.items ?? [];
-    const len = currenRestList.length + preList.length;
+    };
+    if (lastComment) {
+      reqParams.skipId = lastComment.id;
+    }
+    const res = await getCommentLists(reqParams);
+    if (res.data.totalCount) {
+      setTotal(res.data.totalCount);
+    }
     return {
       list: res.data.items,
-      hasData: len < res.data.totalCount,
+      hasData: res.data.hasMore,
     };
   };
   const {
@@ -106,6 +113,12 @@ export default function Discussion(props: IDiscussionProps) {
     async () => {
       const daoInfo = await fetchDaoInfo({ daoId, chainId: curChain });
       if (daoInfo.data.governanceMechanism === EDaoGovernanceMechanism.Multisig) {
+        if (!wallet.address) {
+          return {
+            isEnable: false,
+            message: MultisigDAOTip,
+          };
+        }
         const dataRes = await fetchDaoExistMembers({
           chainId: curChain,
           daoId: daoId,
@@ -113,16 +126,23 @@ export default function Discussion(props: IDiscussionProps) {
         });
         return {
           isEnable: dataRes?.data,
-          message: dataRes?.data ? '' : 'Only DAO members can submit comments',
+          message: dataRes?.data ? '' : MultisigDAOTip,
         };
       }
       if (daoInfo.data.governanceMechanism === EDaoGovernanceMechanism.Token) {
         const token = daoInfo.data.governanceToken;
+        const tip = `You need to have deposited some ${token}s to submit your comment`;
         const treasuryAddress = await callViewContract<string, string>(
           'GetTreasuryAccountAddress',
           daoId,
           treasuryContractAddress,
         );
+        if (!wallet.address || !treasuryAddress) {
+          return {
+            isEnable: false,
+            message: tip,
+          };
+        }
         const isDepositorRes = await isDepositor({
           chainId: curChain,
           treasuryAddress: treasuryAddress,
@@ -130,10 +150,8 @@ export default function Discussion(props: IDiscussionProps) {
           governanceToken: token,
         });
         return {
-          isEnable: isDepositorRes.data,
-          message: isDepositorRes.data
-            ? ''
-            : `You need to have deposited some ${token}s to submit your comment`,
+          isEnable: isDepositorRes?.data,
+          message: isDepositorRes?.data ? '' : tip,
         };
       }
       return {
@@ -169,6 +187,15 @@ export default function Discussion(props: IDiscussionProps) {
       comment: content,
       parentId: parentId,
     });
+    const reqParams: ICommentListsReq = {
+      maxResultCount: 1,
+      chainId: curChain,
+      proposalId: proposalId,
+    };
+    const res = await getCommentLists(reqParams);
+    if (res.data.totalCount) {
+      setTotal(res.data.totalCount);
+    }
     const latestComment = latestCommentRes?.data?.comment;
     if (latestComment) {
       addToRenderQueueRef.current?.([latestComment], EPosition.head);
@@ -178,17 +205,10 @@ export default function Discussion(props: IDiscussionProps) {
     manual: true,
   });
   useEffectOnce(() => {
-    console.log('EPosition loadMore');
     loadMore();
   });
 
   const sendButtonStatus = useMemo(() => {
-    if (!wallet.address) {
-      return {
-        isEnable: false,
-        message: 'Please log in first to submit your comment',
-      };
-    }
     if (content.trim().length === 0) {
       return {
         isEnable: false,
@@ -196,7 +216,7 @@ export default function Discussion(props: IDiscussionProps) {
       };
     }
     return canSendCheckRes;
-  }, [content, canSendCheckRes, wallet]);
+  }, [content, canSendCheckRes]);
   const handleSendComment = () => {
     if (!sendButtonStatus?.isEnable) {
       return;
@@ -205,15 +225,13 @@ export default function Discussion(props: IDiscussionProps) {
     setContent('');
   };
   useEffect(() => {
-    if (wallet.address) {
-      checkSendStatus();
-    }
+    checkSendStatus();
   }, [wallet.address, checkSendStatus]);
   return (
     <div className="discussion-wrap">
       <h2 className="card-title">
         Discussion
-        {renderCommentLists.length > 0 && <span> ({renderCommentLists.length})</span>}
+        {total > 0 && <span> ({total})</span>}
       </h2>
       <div className="input-wrap">
         <Input
@@ -247,9 +265,9 @@ export default function Discussion(props: IDiscussionProps) {
       <ul className="message-lists">
         {renderCommentLists.map((commentItem) => {
           return (
-            <li className="message-lists-item" key={commentItem.id}>
+            <li className="message-lists-item" key={commentItem.id} data-id={commentItem.id}>
               <div className="user">
-                <Avatar />
+                {/* <Avatar /> */}
                 <div className="user-info">
                   <Link href={`${explorer}/address/${commentItem.commenter}`}>
                     <HashAddress

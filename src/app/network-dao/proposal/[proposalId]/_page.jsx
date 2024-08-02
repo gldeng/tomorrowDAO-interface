@@ -487,7 +487,7 @@ const ProposalDetail = () => {
                         }
                         <div className="link-preview-info">
                           <h3 className="break-words">{forumUrlDetail.data?.title}</h3>
-                          <p className="break-words">{forumUrlDetail.data?.description}</p>
+                          <p className="break-words link-preview-info-description">{forumUrlDetail.data?.description}</p>
                         </div>
                       </div>
                       </Link>
