@@ -111,8 +111,8 @@ export const isDepositor = async (params: {
 };
 // add comment
 export const addCommentReq = async (params: IAddCommentReq): Promise<IAddCommentRes> => {
-  return apiServer.get('/discussion/new-comment', {
-    params,
+  return apiServer.post('/discussion/new-comment', {
+    ...params,
   });
 };
 

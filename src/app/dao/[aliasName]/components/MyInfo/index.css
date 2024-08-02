@@ -6,3 +6,8 @@
     @apply text-[16px] leading-[24px] text-Neutral-Disable-Text;
   }
 }
+.my-info-wrap {
+  .TMRWDAO-divider-horizontal {
+    @apply m-0;
+  }
+}
