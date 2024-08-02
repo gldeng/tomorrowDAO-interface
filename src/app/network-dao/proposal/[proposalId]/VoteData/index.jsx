@@ -4,7 +4,7 @@
  */
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { Row, Col, Button, Card } from "antd";
+import { Row, Col, div, Button } from "antd";
 import VoteChart from "../../../_proposal_root/components/VoteChart";
 import constants, {
   organizationInfoPropTypes,
@@ -39,9 +39,9 @@ const VoteData = (props) => {
     );
   }, [status, votedStatus, expiredTime, canVote]);
   return (
-    <Card title='Voting Data' className='vote-data'>
+    <div className='vote-data'>
       <Row type='flex'>
-        <Col sm={14} xs={24}>
+        <Col span={24}>
           <VoteChart
             proposalType={proposalType}
             approvals={approvals}
@@ -52,43 +52,41 @@ const VoteData = (props) => {
           />
         </Col>
         <Col
-          sm={8}
-          offset={2}
-          xs={{ span: 24, offset: 0 }}
+          span={24}
           className='vote-data-button'
         >
-          <div>
+          <div className="vote-data-button-content">
             <Button
               type='primary'
               disabled={!canThisUserVote}
-              className='approve-color gap-right'
-              shape='round'
+              className='approve-button'
               onClick={handleApprove}
+              size='meduim'
             >
               Approve
             </Button>
-          </div>
-          <div>
             <Button
-              className='gap-right-large'
-              danger
-              shape='round'
+            type="primary"
+              className='reject-button'
               disabled={!canThisUserVote}
               onClick={handleReject}
+              size='meduim'
             >
               &nbsp;Reject&nbsp;&nbsp;
             </Button>
             <Button
-              type='link'
+            type="primary"
               disabled={!canThisUserVote}
               onClick={handleAbstain}
+              className="abstention-button"
+              size='meduim'
             >
               Abstain
             </Button>
           </div>
         </Col>
       </Row>
-    </Card>
+    </div>
   );
 };
 

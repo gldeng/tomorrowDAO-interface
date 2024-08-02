@@ -5,3 +5,9 @@
     @apply lg:w-[45%];
   }
 }
+.proposal-execute-lists {
+  @apply max-h-96 overflow-hidden;
+  &:hover {
+    @apply overflow-y-scroll;
+  }
+}

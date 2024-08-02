@@ -11,6 +11,7 @@ import {
   WebLoginEvents,
   ERR_CODE,
 } from 'aelf-web-login';
+import clsx from 'clsx';
 import { WebLoginInstance } from "@utils/webLogin";
 import { LOG_OUT_ACTIONS, LOG_IN_ACTIONS } from 'app/network-dao/_src/redux/actions/proposalCommon';
 import store from "./_src/redux/store";
@@ -21,6 +22,7 @@ import PageLoading from 'components/Loading';
 import ResultModal from 'components/ResultModal';
 import './layout.css';
 import './_src/common/index.css';
+import { usePathname } from 'next/navigation';
 
 const Layout = dynamicReq(
   async () => {
@@ -53,6 +55,8 @@ const Layout = dynamicReq(
           });
         }
       }, [loginState])
+      const pathName = usePathname()
+      const isProposalApply = pathName.includes('/network-dao/apply')
       return (
         <div>
             <div className="flex w-[100vw] h-[100vh] flex-col relative box-border min-h-screen bg-global-grey">
@@ -63,7 +67,11 @@ const Layout = dynamicReq(
                 <Suspense>
                   <div>
                     <div
-                      className={`flex-1 max-w-[1440px] mx-auto py-4 lg:py-6 mb-6 px-4 lg:px-8 page-content-wrap`}
+                      className={
+                        clsx('flex-1 max-w-[1440px] mx-auto pt-4 lg:pt-6 mb-6 lg:px-10 px-4 page-content-wrap', {
+                          'max-w-[898px]': isProposalApply
+                        })
+                      }
                       >
                       {props.children}
                     </div>

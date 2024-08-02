@@ -27,6 +27,7 @@ import { divDecimals } from 'utils/calculate';
 import BigNumber from 'bignumber.js';
 import Symbol from 'components/Symbol';
 import { checkCreateProposal } from 'utils/proposal';
+import useAelfWebLoginSync from 'hooks/useAelfWebLoginSync';
 interface IProps {
   clssName?: string;
   daoRes: IDaoInfoRes;
@@ -134,7 +135,11 @@ const Treasury: React.FC<IProps> = (props) => {
       setCreateProposalLoading(false);
     }
   };
+  const { isSyncQuery } = useAelfWebLoginSync();
   const initTreasury = async () => {
+    if (!isSyncQuery()) {
+      return;
+    }
     try {
       const params = {
         daoId: daoData?.id,

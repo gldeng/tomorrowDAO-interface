@@ -1,5 +1,6 @@
 import { memo, useMemo, useState } from 'react';
 import { HashAddress, Table } from 'aelf-design';
+import { ConfigProvider } from 'antd';
 import { TVotingOption } from './type';
 import { ColumnsType } from 'antd/es/table';
 import thousandsNumber from 'utils/thousandsNumber';
@@ -7,6 +8,7 @@ import Link from 'next/link';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { explorer, sideChainSuffix } from 'config';
+import NoData from 'components/NoData';
 
 const columns: ColumnsType<IProposalDetailDataVoteTopListItem> = [
   {
@@ -111,17 +113,19 @@ const VoteResultTable = (props: IVoteResultTableProps) => {
       <div className="flex justify-between px-8 py-6 title">
         <h3 className="card-title">Voting Results</h3>
       </div>
-      <Table
-        rowKey={'transactionId'}
-        columns={columns as any}
-        scroll={{ x: 'max-content' }}
-        pagination={{
-          ...tableParams,
-          total: voteTopList?.length ?? 0,
-          onChange: pageChange,
-        }}
-        dataSource={lists}
-      ></Table>
+      <ConfigProvider renderEmpty={() => <NoData></NoData>}>
+        <Table
+          rowKey={'transactionId'}
+          columns={columns as any}
+          scroll={{ x: 'max-content' }}
+          pagination={{
+            ...tableParams,
+            total: voteTopList?.length ?? 0,
+            onChange: pageChange,
+          }}
+          dataSource={lists}
+        ></Table>
+      </ConfigProvider>
     </div>
   );
 };

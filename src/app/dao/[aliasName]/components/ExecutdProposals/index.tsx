@@ -108,7 +108,7 @@ export default function ExecutdProposals(props: IExecutdProposals) {
   return (
     <div className="page-content-bg-border">
       <div className="card-title mb-[24px]">To be executed proposals</div>
-      <div className="max-h-96 overflow-y-scroll">
+      <div className="proposal-execute-lists">
         {!executableListData?.data?.items?.length && <NoData />}
         {executableListData?.data?.items.map((item, index) => {
           return (

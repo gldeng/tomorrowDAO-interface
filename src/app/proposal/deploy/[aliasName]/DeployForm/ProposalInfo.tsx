@@ -146,7 +146,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
       <h2 className="title-primary mt-[64px]">
         {isGovernance ? 'Governance Information' : 'Proposal Information'}
       </h2>
-      <Form.Item
+      {/* <Form.Item
         name={['proposalBasicInfo', 'forumUrl']}
         label={
           <span className="form-item-label">
@@ -161,7 +161,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
         ]}
       >
         <Input type="text" placeholder="https://URL" />
-      </Form.Item>
+      </Form.Item> */}
       {/* veto proposal id */}
       {proposalType === ProposalType.VETO && (
         <Form.Item

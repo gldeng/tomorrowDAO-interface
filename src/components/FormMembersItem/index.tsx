@@ -126,18 +126,20 @@ function FormMembersItem(props: IFormMembersProps) {
                   <Button
                     className="dynamic-form-buttons-item"
                     type="default"
+                    size="medium"
                     onClick={() => add()}
-                    icon={<AddCircleOutlined className="text-[14px] " />}
+                    icon={<AddCircleOutlined className="text-[16px] " />}
                   >
                     <span className="card-sm-text-bold ">Add address</span>
                   </Button>
                   <Button
                     type="default"
+                    size="medium"
                     onClick={() => {
                       form.setFieldValue(name, []);
                     }}
                     className="dynamic-form-buttons-item"
-                    icon={<DeleteOutlined className="text-[14px]" />}
+                    icon={<DeleteOutlined className="text-[16px]" />}
                   >
                     <span className="card-sm-text-bold ">Delete all</span>
                   </Button>

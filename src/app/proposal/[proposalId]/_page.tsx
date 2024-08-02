@@ -17,6 +17,7 @@ import { useParams } from 'next/navigation';
 import ErrorResult from 'components/ErrorResult';
 import breadCrumb from 'utils/breadCrumb';
 import { useWebLogin } from 'aelf-web-login';
+import Discussion from './components/Discussion';
 
 const ProposalDetails = () => {
   const { proposalId } = useParams<{ proposalId: string }>();
@@ -76,6 +77,9 @@ const ProposalDetails = () => {
 
           <StatusInfo proposalDetailData={proposalDetailRes?.data} />
           <VoteResultTable voteTopList={proposalDetailRes?.data?.voteTopList ?? []} />
+          {proposalDetailRes?.data && (
+            <Discussion proposalId={proposalId} daoId={proposalDetailRes?.data?.daoId ?? ''} />
+          )}
         </>
       )}
     </div>

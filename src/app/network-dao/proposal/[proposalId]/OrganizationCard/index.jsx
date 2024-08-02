@@ -48,74 +48,75 @@ const OrganizationCard = (props) => {
     [proposalType, leftOrgInfo, bpList, parliamentProposerList]
   );
   return (
-    <Card className={className} title="Organisation Info">
+    <div className={className} title="Organisation Info">
+      <h3 className="pb-[24px] title">Organization Info</h3>
       <div className="gap-bottom-large">
-        <span className="sub-title">Address:</span>
-        <span className="break-all">{addressFormat(orgAddress)}</span>
+        <span className="network-dao-lable-key">Address:</span>
+        <span className="network-dao-lable-value break-all">{addressFormat(orgAddress)}</span>
       </div>
-      <Row gutter={16}>
-        <Col sm={12} xs={24}>
+      <Row>
+        <Col span={24} className="threshold-values">
           <>
             <div
-              className="gap-bottom-small text-ellipsis"
+              className=" text-ellipsis threshold-values-item"
               title={`${thresholdValue[proposalActions.APPROVE].num}(${
                 thresholdValue[proposalActions.APPROVE].rate
               })`}
             >
-              <span className="sub-title gap-right-small">
+              <span className="network-dao-lable-key">
                 Minimal Approval Threshold:
               </span>
-              <span className="text-ell">
+              <span className="network-dao-lable-value text-ell">
                 {thresholdValue[proposalActions.APPROVE].num}(
                 {thresholdValue[proposalActions.APPROVE].rate})
               </span>
             </div>
             <div
-              className="gap-bottom-small text-ellipsis"
+              className=" text-ellipsis threshold-values-item"
               title={`${thresholdValue[proposalActions.REJECT].num}(${
                 thresholdValue[proposalActions.REJECT].rate
               })`}
             >
-              <span className="sub-title gap-right-small">
+              <span className="network-dao-lable-key">
                 Maximal Rejection Threshold:
               </span>
-              <span>
+              <span className="network-dao-lable-value">
                 {thresholdValue[proposalActions.REJECT].num}(
                 {thresholdValue[proposalActions.REJECT].rate})
               </span>
             </div>
             <div
-              className="gap-bottom-small text-ellipsis"
+              className=" text-ellipsis threshold-values-item"
               title={`${thresholdValue[proposalActions.ABSTAIN].num}(${
                 thresholdValue[proposalActions.ABSTAIN].rate
               })`}
             >
-              <span className="sub-title gap-right-small">
+              <span className="network-dao-lable-key">
                 Maximal Abstention Threshold:
               </span>
-              <span>
+              <span className="network-dao-lable-value">
                 {thresholdValue[proposalActions.ABSTAIN].num}(
                 {thresholdValue[proposalActions.ABSTAIN].rate})
               </span>
             </div>
             <div
-              className="gap-bottom-small text-ellipsis"
+              className=" text-ellipsis threshold-values-item"
               title={`${thresholdValue.Total.num}(${thresholdValue.Total.rate})`}
             >
-              <span className="sub-title gap-right-small">
+              <span className="network-dao-lable-key">
                 Minimal Vote Threshold:
               </span>
-              <span>
+              <span className="network-dao-lable-value">
                 {thresholdValue.Total.num}({thresholdValue.Total.rate})
               </span>
             </div>
           </>
         </Col>
-        <Col sm={12} xs={24}>
+        <Col span={24} className="org-info">
           {leftInfo}
         </Col>
       </Row>
-    </Card>
+    </div>
   );
 };
 

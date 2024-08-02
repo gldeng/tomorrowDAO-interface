@@ -17,6 +17,77 @@ interface ITokenRes {
 interface LocalJWTData extends ITokenRes {
   expiresTime?: number;
 }
+// -------------------------------------isDepositor-----------------------------
+interface IDepositorRes {
+  code: string;
+  data: boolean;
+}
+// -------------------------------------Add Comment-----------------------------
+interface IAddCommentReq {
+  proposalId: string;
+  chainId: string;
+  comment: string;
+  parentId?: string;
+}
+interface ICommentListsItem {
+  id: string;
+  chainId: string;
+  daoId: string;
+  proposalId: string;
+  commenter: string;
+  comment: string;
+  parentId: string;
+  commentStatus: string;
+  createTime: number;
+  modificationTime: number;
+}
+interface IAddCommentRes {
+  code: string;
+  data: {
+    success: string;
+    reason: string;
+    comment: ICommentListsItem;
+  };
+  message: string;
+}
+// -------------------------------------Comment List-----------------------------
+interface ICommentListsReq {
+  chainId: string;
+  proposalId: string;
+  skipCount?: number;
+  skipId?: string;
+  maxResultCount: number;
+}
+interface ICommentListsItem {
+  id: string;
+  chainId: string;
+  daoId: string;
+  proposalId: string;
+  commenter: string;
+  comment: string;
+  parentId: string;
+  commentStatus: string;
+  createTime: number;
+  modificationTime: number;
+}
+interface ICommentListsRes {
+  code: string;
+  data: {
+    totalCount: number;
+    items: Array<ICommentListsItem>;
+    hasMore: boolean;
+  };
+  message: string;
+}
+// -------------------------------------URL info -----------------------------
+interface IURLInfoRes {
+  code: number;
+  data?: {
+    description: string;
+    title: string;
+    favicon: string;
+  };
+}
 // -------------------------------------dao-list-----------------------------
 interface IListDaoReq {
   skipCount: number; //  0

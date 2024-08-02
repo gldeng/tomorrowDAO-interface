@@ -22,7 +22,7 @@ const StatusInfo = (props: IStatusInfoProps) => {
         </Typography.Title>
       ),
       description: (
-        <div>
+        <div className="proposal-detail-status-description">
           <div>{getProposalStatusText(proposalStatus)}</div>
         </div>
       ),
@@ -30,18 +30,22 @@ const StatusInfo = (props: IStatusInfoProps) => {
   });
 
   return (
-    <BoxWrapper>
-      <Typography.Title level={6} fontWeight={FontWeightEnum.Medium}>
+    <div className="card-shape py-6">
+      <Typography.Title
+        className="proposal-status-title"
+        level={6}
+        fontWeight={FontWeightEnum.Medium}
+      >
         Status
       </Typography.Title>
-      <div className="pt-12 pb-10">
+      <div className="proposal-status-content">
         <Steps
           current={stepItmes?.length ? stepItmes?.length - 1 : 0}
           items={stepItmes}
           labelPlacement={isLG ? 'vertical' : 'horizontal'}
         />
       </div>
-    </BoxWrapper>
+    </div>
   );
 };
 export default memo(StatusInfo);

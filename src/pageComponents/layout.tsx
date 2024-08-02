@@ -15,12 +15,13 @@ const Layout = (props: React.PropsWithChildren<{}>) => {
   const pathName = usePathname();
   const isHome = pathName === '/';
   const isCreateDao = pathName === '/create';
+  const isCreateProposal = pathName.startsWith('/proposal/deploy');
   const isExolore = pathName === '/explore';
   const { isLG } = useResponsive();
   const notHomeClass = isHome
-    ? 'home-landing-page'
-    : `flex-1  mx-auto py-4 lg:py-6 px-4 lg:px-8 page-content-wrap ${
-        isCreateDao ? 'max-w-[898px]' : 'max-w-[1440px]'
+    ? 'home-landing-page page-content-wrap'
+    : `flex-1  mx-auto pt-4 lg:pt-6 lg:px-10 px-4 page-content-wrap mb-16 ${
+        isCreateDao || isCreateProposal ? 'max-w-[978px]' : 'max-w-[1440px]'
       }`;
   return (
     <div className="flex w-[100vw] h-[100vh] flex-col relative box-border min-h-screen bg-global-grey">

@@ -12,6 +12,7 @@
 .dao-home-container {
   padding-left: 20px;
   padding-right: 20px;
+  min-height: calc(100vh - 82px - 219px);
   @media screen and (min-width: 992px) {
     max-width: calc(1080px + 40px);
   }
@@ -135,7 +136,11 @@
     @apply text-neutralTitle font-medium homePc:text-[24px] homePc:leading-[32px] text-[20px] leading-[28px] mb-[16px];
   }
 
-  p {
+  ul li {
+    list-style: disc;
+    margin-left: 18px;
+  }
+  p, ul {
     @apply text-neutralPrimaryText homePc:text-[16px] homePc:leading-[24px] text-[14px] leading-[22px];
   }
 }
