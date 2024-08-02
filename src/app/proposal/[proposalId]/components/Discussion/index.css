@@ -22,7 +22,7 @@
     }
   }
   .body {
-    @apply normal-text mt-[16px];
+    @apply normal-text mt-[16px] break-words;
   }
   .message-lists {
     @apply mb-[24px];
