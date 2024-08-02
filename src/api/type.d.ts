@@ -46,7 +46,7 @@ interface IAddCommentRes {
   data: {
     success: string;
     reason: string;
-    message: ICommentListsItem;
+    comment: ICommentListsItem;
   };
   message: string;
 }

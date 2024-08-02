@@ -83,7 +83,7 @@ export default function Discussion(props: IDiscussionProps) {
     const preList = renderCommentLists;
     const res = await getCommentLists({
       skipCount: preList.length,
-      maxResultCount: 3,
+      maxResultCount: 10,
       chainId: curChain,
       proposalId: proposalId,
     });
@@ -163,20 +163,16 @@ export default function Discussion(props: IDiscussionProps) {
 
   const updateCommentAndApi = async (content: string, parentId?: string) => {
     // add to db
-    await addCommentReq({
+    const latestCommentRes = await addCommentReq({
       chainId: curChain,
       proposalId: proposalId,
       comment: content,
       parentId: parentId,
     });
-    const latestCommentRes = await getCommentLists({
-      skipCount: 0,
-      maxResultCount: 1,
-      chainId: curChain,
-      proposalId: proposalId,
-    });
-    const latestComment = latestCommentRes.data.items[0];
-    addToRenderQueueRef.current?.([latestComment], EPosition.head);
+    const latestComment = latestCommentRes?.data?.comment;
+    if (latestComment) {
+      addToRenderQueueRef.current?.([latestComment], EPosition.head);
+    }
   };
   const { run: addComment, loading: addCommentLoading } = useRequest(updateCommentAndApi, {
     manual: true,
@@ -213,7 +209,6 @@ export default function Discussion(props: IDiscussionProps) {
       checkSendStatus();
     }
   }, [wallet.address, checkSendStatus]);
-  console.log('sendButtonStatus', sendButtonStatus);
   return (
     <div className="discussion-wrap">
       <h2 className="card-title">
