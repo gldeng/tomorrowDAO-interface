@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Form, TableProps, Table, Skeleton } from 'antd';
+import { Form, TableProps, Table, Skeleton, message } from 'antd';
 import { useWebLogin } from 'aelf-web-login';
 import treasuryIconSrc from 'assets/imgs/treasury-icon.svg';
 import { Button, HashAddress } from 'aelf-design';
-import { callContract, callViewContract } from 'contract/callContract';
+import { callContract } from 'contract/callContract';
 import CommonModal from 'components/CommonModal';
 import { emitLoading, eventBus, ResultModal } from 'utils/myEvent';
 import { curChain, explorer, treasuryContractAddress } from 'config';
@@ -12,7 +12,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { INIT_RESULT_MODAL_CONFIG } from 'components/ResultModal';
 import { IContractError } from 'types';
-import { fetchAddressTransferList } from 'api/request';
+import { fetchAddressTransferList, getDaoTreasury } from 'api/request';
 import dayjs from 'dayjs';
 import './index.css';
 import { ButtonCheckLogin } from 'components/ButtonCheckLogin';
@@ -30,7 +30,7 @@ import { checkCreateProposal } from 'utils/proposal';
 import useAelfWebLoginSync from 'hooks/useAelfWebLoginSync';
 interface IProps {
   clssName?: string;
-  daoRes: IDaoInfoRes;
+  daoRes?: IDaoInfoRes | null;
   createProposalCheck?: (customRouter?: boolean) => Promise<boolean>;
   aliasName?: string;
   // Define your component's props here
@@ -66,7 +66,7 @@ const Treasury: React.FC<IProps> = (props) => {
   const decimalsRef = useRef<number>(8);
   const router = useRouter();
 
-  const { creator, id } = daoData ?? {};
+  const { creator } = daoData ?? {};
 
   // treasuryAddress
   const { data: treasuryAddress, loading: treasuryAddressLoading } = useRequest(async () => {
@@ -74,16 +74,15 @@ const Treasury: React.FC<IProps> = (props) => {
     //   daoId: id,
     //   chainId: curChain,
     // }),
-    const res = await callViewContract<string, string>(
-      'GetTreasuryAccountAddress',
-      id,
-      treasuryContractAddress,
-    );
-    return res;
+    const res = await getDaoTreasury({
+      chainId: curChain,
+      alias: aliasName as string,
+    });
+    return res.data;
   });
   const { totalValueUSD, tokenList, tokenListLoading } = useTokenListData({
-    daoId: id,
     currentChain: curChain,
+    alias: aliasName,
   });
   const {
     data: transferList,
@@ -125,6 +124,11 @@ const Treasury: React.FC<IProps> = (props) => {
   const handleCreateProposal = async () => {
     setCreateProposalLoading(true);
     try {
+      if (!daoRes) {
+        message.error('The DAO information is not available.');
+        setCreateProposalLoading(false);
+        return;
+      }
       const checkRes = await checkCreateProposal(daoRes, wallet.address);
       if (checkRes) {
         router.push(`/proposal/deploy/${aliasName}?tab=${EProposalActionTabs.TREASURY}`);
@@ -183,30 +187,16 @@ const Treasury: React.FC<IProps> = (props) => {
       });
     }
   };
-  // const currentSymbol =
-  // useAsyncEffect(async () => {
-  //   if (isValidatedSymbol) {
-  //     const { balance } = await GetBalanceByContract(
-  //       {
-  //         symbol: info?.symbol || 'ELF',
-  //         owner: walletInfo.address,
-  //       },
-  //       { chain: curChain },
-  //     );
-  //     // aelf decimal 8
-  //     setElfBalance(divDecimals(balance, info?.decimal || '8').toNumber());
-  //   }
-  // }, [isValidatedSymbol, currentSymbol]);
   useEffect(() => {
     if (treasuryAddress) {
       run();
     }
-  }, [treasuryAddress]);
+  }, [run, treasuryAddress]);
   const cls = `${clssName} treasury-wrap border-0 lg:border lg:mb-[10px] border-Neutral-Divider border-solid rounded-lg bg-white px-4 lg:px-8  lg:py-6`;
   const existTransaction = Boolean(transferList?.length);
   return (
     <div className={cls}>
-      {treasuryAddressLoading ? (
+      {treasuryAddressLoading || transferListLoading ? (
         <SkeletonLine />
       ) : (
         <>
@@ -224,57 +214,57 @@ const Treasury: React.FC<IProps> = (props) => {
               )}
             </div>
           )}
-          {treasuryAddress &&
-            (transferListLoading ? (
-              <SkeletonLine />
-            ) : (
-              <>
-                <div className={existTransaction ? 'block' : 'hidden'}>
-                  <div className="flex items-center justify-between">
-                    <h2 className="card-title">Treasury Assets</h2>
-                    <Link href={`/dao/${aliasName}/treasury`}>
-                      <Button size="medium" type="primary" className="small-button">
-                        View all
-                      </Button>
-                    </Link>
-                  </div>
-                  <div className="flex items-center mt-6 mb-[32px]">
-                    <p className="usd-value">
-                      {tokenListLoading ? (
-                        <Skeleton.Button active size={'small'} block={false} />
-                      ) : (
-                        `$${totalValueUSD}`
-                      )}
-                    </p>
-                    <ButtonCheckLogin
-                      type="primary"
-                      onClick={() => {
-                        setChoiceOpen(true);
-                      }}
-                      className="small-button"
-                      size="medium"
-                    >
-                      New transfer
-                    </ButtonCheckLogin>
-                  </div>
-                  {tokenListLoading ? (
-                    <SkeletonLine lines={3} splitBorder={false} />
+          {treasuryAddress && (
+            <>
+              <div className={existTransaction ? 'block' : 'hidden'}>
+                <div className="flex items-center justify-between">
+                  <h2 className="card-title">Treasury Assets</h2>
+                  <Link href={`/dao/${aliasName}/treasury`}>
+                    <Button size="medium" type="primary" className="small-button">
+                      View all
+                    </Button>
+                  </Link>
+                </div>
+                <div className="flex items-center mt-6 mb-[32px]">
+                  <p className="usd-value">
+                    {tokenListLoading ? (
+                      <Skeleton.Button active size={'small'} block={false} />
+                    ) : (
+                      `$${totalValueUSD}`
+                    )}
+                  </p>
+                  <ButtonCheckLogin
+                    type="primary"
+                    onClick={() => {
+                      setChoiceOpen(true);
+                    }}
+                    className="small-button"
+                    size="medium"
+                  >
+                    New transfer
+                  </ButtonCheckLogin>
+                </div>
+                {tokenListLoading ? (
+                  <SkeletonLine lines={3} splitBorder={false} />
+                ) : (
+                  tokenList.length > 0 && (
+                    <Table
+                      className="token-list-table"
+                      columns={tokenListColumns}
+                      bordered
+                      dataSource={tokenList}
+                      pagination={false}
+                      scroll={{ x: true }}
+                    />
+                  )
+                )}
+                <div>
+                  <p className="flex justify-between">
+                    <span className="card-title mb-6">Transactions</span>
+                  </p>
+                  {transferListLoading ? (
+                    <SkeletonLine />
                   ) : (
-                    tokenList.length > 0 && (
-                      <Table
-                        className="token-list-table"
-                        columns={tokenListColumns}
-                        bordered
-                        dataSource={tokenList}
-                        pagination={false}
-                        scroll={{ x: true }}
-                      />
-                    )
-                  )}
-                  <div>
-                    <p className="flex justify-between">
-                      <span className="card-title mb-6">Transactions</span>
-                    </p>
                     <ul>
                       {transferList?.slice(0, LoadCount).map((item) => {
                         const isOut = checkIsOut(treasuryAddress, item);
@@ -320,16 +310,17 @@ const Treasury: React.FC<IProps> = (props) => {
                         );
                       })}
                     </ul>
-                  </div>
+                  )}
                 </div>
+              </div>
 
-                <TreasuryNoTxGuide
-                  ref={treasuryNoTxGuideref}
-                  address={treasuryAddress}
-                  className={existTransaction ? 'hidden' : 'block'}
-                />
-              </>
-            ))}
+              <TreasuryNoTxGuide
+                ref={treasuryNoTxGuideref}
+                address={treasuryAddress}
+                className={existTransaction ? 'hidden' : 'block'}
+              />
+            </>
+          )}
         </>
       )}
       {/* choice: Deposit /  WithDraw*/}

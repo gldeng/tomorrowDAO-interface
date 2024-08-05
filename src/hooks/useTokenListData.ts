@@ -9,10 +9,11 @@ export interface ITokenListItem extends IAddressTokenListDataItem {
 }
 interface IParams {
   daoId?: string;
+  alias?: string;
   currentChain?: string;
 }
 export default function useTokenListData(params: IParams) {
-  const { daoId, currentChain } = params;
+  const { daoId, currentChain, alias } = params;
   const {
     data: tokenListData,
     error: tokenListError,
@@ -20,22 +21,28 @@ export default function useTokenListData(params: IParams) {
     run,
   } = useRequest(
     () => {
-      return fetchAddressTokenList({
-        daoId: daoId ?? '',
+      const params: ITreasuryAssetsReq = {
         chainId: currentChain ?? curChain,
         maxResultCount: 1000,
         skipCount: 0,
-      });
+      };
+      if (daoId) {
+        params.daoId = daoId;
+      }
+      if (alias) {
+        params.alias = alias;
+      }
+      return fetchAddressTokenList(params);
     },
     {
       manual: true,
     },
   );
   useEffect(() => {
-    if (daoId) {
+    if (daoId || alias) {
       run();
     }
-  }, [daoId]);
+  }, [daoId, alias, run]);
   const totalValueUSD = useMemo(() => {
     return tokenListData?.data?.data?.reduce((acc, item) => {
       return acc.plus(item.usdValue ?? 0);

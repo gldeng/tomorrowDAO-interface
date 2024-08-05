@@ -4,12 +4,11 @@ import DetailTag from 'components/DetailTag';
 import { HashAddress } from 'aelf-design';
 import { colorfulSocialMediaIconMap } from 'assets/imgs/socialMediaIcon';
 import Image from 'next/image';
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import dayjs from 'dayjs';
-import { sideChainSuffix } from 'config';
+import { curChain, sideChainSuffix } from 'config';
 import ProposalTag from 'app/dao/[aliasName]/components/ProposalsItem/ProposalTag';
 import { IContractError, ProposalTypeString } from 'types';
-import useIsNetworkDao from 'hooks/useIsNetworkDao';
 import { CommonOperationResultModalType } from 'components/CommonOperationResultModal';
 import Link from 'next/link';
 import ProposalStatusDesc from 'app/dao/[aliasName]/components/ProposalsItem/ProposalStatusDesc';
@@ -20,13 +19,19 @@ import { proposalCreateContractRequest } from 'contract/proposalCreateContract';
 import { okButtonConfig } from 'components/ResultModal';
 import { ButtonCheckLogin } from 'components/ButtonCheckLogin';
 import { useWebLogin } from 'aelf-web-login';
+import { fetchProposalDetail } from 'api/request';
+import { useAsyncEffect } from 'ahooks';
+import { useParams } from 'next/navigation';
 
 // import ProposalDetailFile from 'assets/imgs/proposal-detail-file.svg';
 interface IHeaderInfoProps {
   proposalDetailData: IProposalDetailData;
+  proposalId: string;
 }
 const HeaderInfo = (props: IHeaderInfoProps) => {
-  const { proposalDetailData } = props;
+  const [canExecute, setCanExecute] = useState(false);
+  const { proposalDetailData, proposalId } = props;
+  const { aliasName } = useParams();
   const handleShare = () => {
     const twTitle = `${proposalDetailData.proposalTitle} @tmrwdao`;
     const twUrl = window.location.href;
@@ -73,7 +78,20 @@ const HeaderInfo = (props: IHeaderInfoProps) => {
       emitLoading(false);
     }
   };
-  const { isNetWorkDao } = useIsNetworkDao();
+  useAsyncEffect(async () => {
+    if (!wallet.address) {
+      return;
+    }
+    const params: IProposalDetailReq = {
+      proposalId,
+      chainId: curChain,
+    };
+    if (wallet.address) {
+      params.address = wallet.address;
+    }
+    const res = await fetchProposalDetail(params);
+    setCanExecute(res?.data?.canExecute);
+  }, [wallet.address]);
   return (
     <BoxWrapper>
       <div className="flex justify-between items-start">
@@ -114,7 +132,7 @@ const HeaderInfo = (props: IHeaderInfoProps) => {
             governanceMechanism={proposalDetailData.governanceMechanism}
           />
         </div>
-        {proposalDetailData.canExecute && proposalDetailData.proposer === wallet.address && (
+        {canExecute && proposalDetailData.proposer === wallet.address && (
           <ButtonCheckLogin type="primary" className="execute-button" onClick={handleExecProposal}>
             Execute
           </ButtonCheckLogin>
@@ -124,7 +142,7 @@ const HeaderInfo = (props: IHeaderInfoProps) => {
         {proposalDetailData.proposalType === ProposalTypeString.Veto && (
           <div className="flex items-center gap-4">
             <span className="text-Neutral-Secondary-Text card-sm-text">Veto Proposal:</span>
-            <Link href={`/proposal/${proposalDetailData.vetoProposalId}`}>
+            <Link href={`/dao/${aliasName}/proposal/${proposalDetailData.vetoProposalId}`}>
               <HashAddress
                 preLen={8}
                 endLen={9}

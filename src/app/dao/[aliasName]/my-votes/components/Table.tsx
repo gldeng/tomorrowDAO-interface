@@ -84,7 +84,9 @@ export default function RecordTable() {
       width: 576,
       render: (text, record) => {
         const renderProposalNode = <div className="text-neutralPrimaryText font-bold">{text}</div>;
-        return <Link href={`/proposal/${record.proposalId}`}>{renderProposalNode}</Link>;
+        return (
+          <Link href={`/dao/${aliasName}/proposal/${record.proposalId}`}>{renderProposalNode}</Link>
+        );
       },
     },
     {

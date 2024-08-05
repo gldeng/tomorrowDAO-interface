@@ -7,10 +7,12 @@ import Members from 'components/Members';
 import { useRouter } from 'next/navigation';
 import { useWebLogin } from 'aelf-web-login';
 import { checkCreateProposal } from 'utils/proposal';
+import { EDaoGovernanceMechanism } from 'app/(createADao)/create/type';
+import { message } from 'antd';
 
 interface IProps {
-  daoRes: IDaoInfoRes;
-  aliasName?: string;
+  daoRes?: IDaoInfoRes | null;
+  aliasName: string;
   createProposalCheck?: (customRouter?: boolean) => Promise<boolean>;
 }
 
@@ -18,7 +20,7 @@ const DaoMembers: React.FC<IProps> = (props) => {
   const { daoRes, aliasName } = props;
   const { wallet } = useWebLogin();
 
-  const daoData = daoRes.data;
+  const daoData = daoRes?.data;
   const {
     data: daoMembersData,
     // error: transferListError,
@@ -28,7 +30,7 @@ const DaoMembers: React.FC<IProps> = (props) => {
     () => {
       return fetchHcMembers({
         chainId: curChain,
-        daoId: daoData?.id,
+        alias: aliasName,
       });
     },
     {
@@ -43,6 +45,11 @@ const DaoMembers: React.FC<IProps> = (props) => {
   const handleCreateProposal = async () => {
     setCreateProposalLoading(true);
     try {
+      if (!daoRes) {
+        message.error('The DAO information is not available.');
+        setCreateProposalLoading(false);
+        return;
+      }
       const checkRes = await checkCreateProposal(daoRes, wallet.address);
       if (checkRes) {
         router.push(`/proposal/deploy/${aliasName}?tab=${EProposalActionTabs.AddHcMembers}`);
@@ -54,6 +61,9 @@ const DaoMembers: React.FC<IProps> = (props) => {
     }
   };
   const totalCount = daoMembersData?.data?.length ?? 0;
+  if (daoRes?.data?.governanceMechanism === EDaoGovernanceMechanism.Multisig) {
+    return null;
+  }
   return (
     <Members
       lists={daoMembersData?.data ?? []}
