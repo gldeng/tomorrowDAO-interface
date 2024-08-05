@@ -20,7 +20,7 @@ import { okButtonConfig } from 'components/ResultModal';
 
 type TVoteTypes = {
   proposalId: string;
-  voteMechanismName: string;
+  voteMechanismName?: string;
   elfBalance: number;
   symbol: string;
   fetchMyInfo: () => void;

@@ -29,15 +29,13 @@ const Layout = (props: React.PropsWithChildren<{}>) => {
         <Header />
       </Suspense>
       <div className="flex flex-1 flex-col overflow-y-auto">
-        <Suspense>
-          <div className={isHome ? 'dao-home-background' : ''}>
-            {isLG && isExolore && <DAOHeader />}
-            <div className={notHomeClass}>
-              <DynamicBreadCrumb />
-              {children}
-            </div>
+        <div className={isHome ? 'dao-home-background' : ''}>
+          {isLG && isExolore && <DAOHeader />}
+          <div className={notHomeClass}>
+            <DynamicBreadCrumb />
+            {children}
           </div>
-        </Suspense>
+        </div>
         <Suspense>
           <Footer />
         </Suspense>

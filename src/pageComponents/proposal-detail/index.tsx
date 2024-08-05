@@ -54,7 +54,7 @@ const ProposalDetails = () => {
   }, [aliasName]);
   useEffect(() => {
     run();
-  }, [run, wallet.address]);
+  }, [run]);
 
   return (
     <div className="proposal-details-wrapper">
@@ -66,10 +66,11 @@ const ProposalDetails = () => {
         <ErrorResult />
       ) : (
         <>
-          {proposalDetailRes?.data && <HeaderInfo proposalDetailData={proposalDetailRes?.data} />}
           {proposalDetailRes?.data && (
-            <VoteInfo proposalDetailData={proposalDetailRes?.data} daoId={daoId} />
+            <HeaderInfo proposalDetailData={proposalDetailRes?.data} proposalId={proposalId} />
           )}
+
+          <VoteInfo proposalDetailData={proposalDetailRes?.data} daoId={daoId} />
 
           <div className="border border-Neutral-Divider border-solid rounded-lg bg-white">
             <ProposalTab proposalDetailData={proposalDetailRes?.data} />

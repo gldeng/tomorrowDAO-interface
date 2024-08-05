@@ -89,7 +89,10 @@ export default function MyRecords(props: IProps) {
                     {dayjs(item.timeStamp).format('YYYY-MM-DD HH:mm:ss')}
                   </div>
                   <div className="flex justify-between items-center">
-                    <Link href={`/proposal/${item.proposalId}`} className="basis-3/4 truncate">
+                    <Link
+                      href={`dao/${aliasName}/proposal/${item.proposalId}`}
+                      className="basis-3/4 truncate"
+                    >
                       <span className="card-sm-text-bold text-neutralPrimaryText hover:link">
                         {item.proposalTitle}
                       </span>

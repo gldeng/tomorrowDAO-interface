@@ -1,12 +1,10 @@
 import { Descriptions, Divider, Form, InputNumber, message } from 'antd';
 import { HashAddress, Button, Tooltip } from 'aelf-design';
 import { InfoCircleOutlined } from '@aelf-design/icons';
-import React, { ReactNode, useState, useEffect, useCallback } from 'react';
+import React, { ReactNode, useState, useEffect, useCallback, useRef } from 'react';
 import CommonModal from 'components/CommonModal';
 import { useWalletService } from 'hooks/useWallet';
 import { fetchProposalMyInfo } from 'api/request';
-import { store } from 'redux/store';
-import { useSelector } from 'react-redux';
 import { callContract, GetBalanceByContract } from 'contract/callContract';
 import { curChain, sideChainSuffix, voteAddress } from 'config';
 import { SkeletonLine } from 'components/Skeleton';
@@ -19,11 +17,14 @@ import './index.css';
 import { CommonOperationResultModalType } from 'components/CommonOperationResultModal';
 import { okButtonConfig } from 'components/ResultModal';
 import Symbol from 'components/Symbol';
+import { useParams } from 'next/navigation';
+import { useWebLogin } from 'aelf-web-login';
+
 type TInfoTypes = {
   height?: number | string;
   children?: ReactNode;
   clssName?: string;
-  daoId: string;
+  daoId?: string;
   proposalId?: string;
   voteMechanismName?: string;
   notLoginTip?: React.ReactNode;
@@ -60,8 +61,7 @@ export default function MyInfo(props: TInfoTypes) {
     titleNode,
   } = props;
   const { login, isLogin } = useWalletService();
-  const elfInfo = store.getState().elfInfo.elfInfo;
-  const { walletInfo } = useSelector((store: any) => store.userInfo);
+  const { wallet } = useWebLogin();
   const [elfBalance, setElfBalance] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [info, setInfo] = useState<IMyInfo>({
@@ -76,15 +76,14 @@ export default function MyInfo(props: TInfoTypes) {
     votesAmountUniqueVote: 0,
   });
 
+  const { aliasName } = useParams<{ aliasName: string }>();
   const [form] = Form.useForm();
+  const fetchMyInfoRef = useRef<() => void>();
   const fetchMyInfo = useCallback(async () => {
-    if (!isLogin || !elfInfo.curChain || !daoId || !walletInfo.address) {
-      return;
-    }
     const reqMyInfoParams: IProposalMyInfoReq = {
-      chainId: elfInfo.curChain,
-      daoId: daoId,
-      address: walletInfo.address,
+      chainId: curChain,
+      alias: aliasName,
+      address: wallet.address,
     };
     if (proposalId) {
       reqMyInfoParams.proposalId = proposalId;
@@ -96,7 +95,7 @@ export default function MyInfo(props: TInfoTypes) {
     const { balance } = await GetBalanceByContract(
       {
         symbol: symbol,
-        owner: walletInfo.address,
+        owner: wallet.address,
       },
       { chain: curChain },
     );
@@ -109,18 +108,21 @@ export default function MyInfo(props: TInfoTypes) {
     if (!data?.symbol) {
       data.symbol = 'ELF';
     }
-    console.log('data?.stakeAmount', data?.stakeAmount);
     const decimal = data?.decimal;
     data.availableUnStakeAmount = divDecimals(data?.availableUnStakeAmount, decimal).toNumber();
     data.stakeAmount = divDecimals(data?.stakeAmount, decimal).toNumber();
     const votesAmountTokenBallot = divDecimals(data.votesAmountTokenBallot, decimal).toNumber();
     data.votesAmount = votesAmountTokenBallot + data.votesAmountUniqueVote;
     setInfo(data);
-  }, [daoId, proposalId, elfInfo.curChain, walletInfo.address, isLogin]);
+  }, [wallet.address, aliasName, proposalId]);
+  fetchMyInfoRef.current = fetchMyInfo;
 
   useEffect(() => {
-    fetchMyInfo();
-  }, [fetchMyInfo]);
+    if (wallet.address) {
+      console.log('wallet.address', wallet.address);
+      fetchMyInfoRef.current?.();
+    }
+  }, [wallet.address]);
 
   const myInfoItems = [
     {
@@ -130,7 +132,7 @@ export default function MyInfo(props: TInfoTypes) {
         <HashAddress
           preLen={8}
           endLen={11}
-          address={walletInfo.address}
+          address={wallet.address}
           className="form-item-title"
           chain={sideChainSuffix}
         ></HashAddress>
@@ -175,6 +177,10 @@ export default function MyInfo(props: TInfoTypes) {
 
   const handleClaim = useCallback(async () => {
     // call contract
+    if (!daoId) {
+      message.error('daoId is required');
+      return;
+    }
     const contractParams = {
       daoId,
       withdrawAmount: timesDecimals(info?.availableUnStakeAmount, info?.decimal).toNumber(),

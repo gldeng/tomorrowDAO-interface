@@ -109,6 +109,16 @@ export const isDepositor = async (params: {
     ...params,
   });
 };
+// get dao treasury
+export const getDaoTreasury = async (params: {
+  chainId: string;
+  alias: string;
+}): Promise<IDAOTreasuryRes> => {
+  return apiServer.get('/treasury/address', {
+    params,
+  });
+};
+
 // add comment
 export const addCommentReq = async (params: IAddCommentReq): Promise<IAddCommentRes> => {
   return apiServer.post('/discussion/new-comment', {

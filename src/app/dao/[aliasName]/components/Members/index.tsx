@@ -7,8 +7,8 @@ import { EProposalActionTabs } from 'app/proposal/deploy/[aliasName]/type';
 import Members from 'components/Members';
 
 interface IProps {
-  daoRes: IDaoInfoRes;
-  aliasName?: string;
+  daoRes?: IDaoInfoRes | null;
+  aliasName: string;
   createProposalCheck?: (customRouter?: boolean) => Promise<boolean>;
 }
 
@@ -26,7 +26,7 @@ const DaoMembers: React.FC<IProps> = (props) => {
         SkipCount: 0,
         MaxResultCount: 6,
         ChainId: curChain,
-        DAOId: daoData?.id,
+        alias: aliasName,
       });
     },
     {
@@ -37,6 +37,9 @@ const DaoMembers: React.FC<IProps> = (props) => {
     run();
   }, []);
   const lists = (daoMembersData?.data?.data ?? []).map((item) => item.address);
+  if (daoRes?.data?.governanceMechanism === EDaoGovernanceMechanism.Token) {
+    return null;
+  }
   return (
     <Members
       lists={lists}

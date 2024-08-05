@@ -72,7 +72,7 @@ export default function DeoDetails(props: IProps) {
       message.error('aliasName or daoId is required');
       return null;
     }
-    return fetchDaoInfo({ daoId: props.daoId, chainId: curChain, alias: aliasName });
+    return fetchDaoInfo({ chainId: curChain, alias: aliasName });
   });
   const { walletInfo } = useSelector((store: any) => store.userInfo);
   // const [daoDetail, setDaoDetail] = useState<IDaoDetail>(data);
@@ -91,8 +91,12 @@ export default function DeoDetails(props: IProps) {
   const previousTableParams = usePrevious(tableParams);
   const fetchProposalListWithParams = async (preData: IProposalListRes | null) => {
     const { proposalType, proposalStatus } = tableParams;
+    if (!aliasName) {
+      message.error('aliasName or daoId is required');
+      return null;
+    }
     const params: IProposalListReq = {
-      daoId: daoId ?? '',
+      alias: aliasName,
       chainId: curChain,
       skipCount:
         ((tableParams.pagination.current ?? 1) - 1) * (tableParams.pagination.pageSize ?? 20),
@@ -141,7 +145,7 @@ export default function DeoDetails(props: IProps) {
   } = useRequest(fetchProposalListWithParams, {
     manual: true,
   });
-  const previousProposalDataRef = useRef<IProposalListRes | undefined>();
+  const previousProposalDataRef = useRef<IProposalListRes | null>();
   const handleCreateProposalRef = useRef<(customRouter?: boolean) => Promise<boolean>>();
   previousProposalDataRef.current = proposalData;
 
@@ -227,13 +231,9 @@ export default function DeoDetails(props: IProps) {
         finalItems.push({
           key: TabKey.TREASURY,
           label: 'Treasury',
-          children: daoData?.data ? (
-            <Treasury daoRes={daoData} aliasName={aliasName} />
-          ) : (
-            <span></span>
-          ),
+          children: <Treasury daoRes={daoData} aliasName={aliasName} />,
         });
-        if (daoData?.data?.governanceMechanism === EDaoGovernanceMechanism.Multisig) {
+        if (daoData?.data?.governanceMechanism === EDaoGovernanceMechanism.Multisig && aliasName) {
           finalItems.push({
             key: TabKey.DAOMEMBERS,
             label: 'Members',
@@ -244,7 +244,7 @@ export default function DeoDetails(props: IProps) {
             ),
           });
         }
-        if (daoData?.data?.governanceMechanism === EDaoGovernanceMechanism.Token) {
+        if (daoData?.data?.governanceMechanism === EDaoGovernanceMechanism.Token && aliasName) {
           finalItems.push({
             key: TabKey.HCMEMBERS,
             label: 'High Council Members',
@@ -264,7 +264,7 @@ export default function DeoDetails(props: IProps) {
     isNetworkDAO,
     form,
     tableParams,
-    daoData?.data,
+    daoData,
     isMainChain,
     isLG,
     isShowMyInfo,
@@ -321,10 +321,8 @@ export default function DeoDetails(props: IProps) {
   }, [isLG, tabItems, tabKey]);
 
   useEffect(() => {
-    if (daoId) {
-      run(previousProposalDataRef.current ?? null);
-    }
-  }, [tableParams, run, daoId]);
+    run(previousProposalDataRef.current ?? null);
+  }, [tableParams, run]);
 
   return (
     <div className="dao-detail">
@@ -355,7 +353,7 @@ export default function DeoDetails(props: IProps) {
                       <Link
                         key={item.proposalId}
                         href={{
-                          pathname: `/proposal/${item.proposalId}`,
+                          pathname: `/dao/${aliasName}/proposal/${item.proposalId}`,
                         }}
                       >
                         <ProposalsItem
@@ -381,8 +379,12 @@ export default function DeoDetails(props: IProps) {
             {/* < 1024 */}
             {isLG && tabKey === TabKey.MYINFO && (
               <>
-                {walletInfo.address && daoId && (
-                  <ExecutdProposals daoId={daoId} address={walletInfo.address} />
+                {walletInfo.address && daoId && aliasName && (
+                  <ExecutdProposals
+                    daoId={daoId}
+                    address={walletInfo.address}
+                    aliasName={aliasName}
+                  />
                 )}
                 {walletInfo.address && daoId && (
                   <MyRecords daoId={daoId} isNetworkDAO={isNetworkDAO} aliasName={aliasName} />
@@ -393,40 +395,40 @@ export default function DeoDetails(props: IProps) {
 
           {!isLG && !isNetworkDAO && (
             <div className="dao-detail-content-right">
-              {daoData?.data && !isNetworkDAO && (
+              {!isNetworkDAO && (
                 <Treasury
                   daoRes={daoData}
                   createProposalCheck={handleCreateProposal}
                   aliasName={aliasName}
                 />
               )}
-              {daoData?.data &&
-                !isNetworkDAO &&
-                daoData.data.governanceMechanism === EDaoGovernanceMechanism.Multisig && (
-                  <DaoMembers
-                    createProposalCheck={handleCreateProposal}
-                    daoRes={daoData}
-                    aliasName={aliasName}
-                  />
-                )}
-              {daoData?.data &&
-                !isNetworkDAO &&
-                daoData.data.governanceMechanism === EDaoGovernanceMechanism.Token && (
-                  <HcMembers
-                    createProposalCheck={handleCreateProposal}
-                    daoRes={daoData}
-                    aliasName={aliasName}
-                  />
-                )}
+              {aliasName && !isNetworkDAO && (
+                <DaoMembers
+                  createProposalCheck={handleCreateProposal}
+                  daoRes={daoData}
+                  aliasName={aliasName}
+                />
+              )}
+              {aliasName && !isNetworkDAO && (
+                <HcMembers
+                  createProposalCheck={handleCreateProposal}
+                  daoRes={daoData}
+                  aliasName={aliasName}
+                />
+              )}
               <MyInfoContent
                 daoId={daoId}
                 isTokenGovernanceMechanism={isTokenGovernanceMechanism}
                 className="border lg:mb-[16px] mb-0"
               />
-              {walletInfo.address && daoId && (
-                <ExecutdProposals daoId={daoId} address={walletInfo.address} />
+              {walletInfo.address && daoId && aliasName && (
+                <ExecutdProposals
+                  daoId={daoId}
+                  address={walletInfo.address}
+                  aliasName={aliasName}
+                />
               )}
-              {walletInfo.address && daoId && (
+              {walletInfo.address && daoId && aliasName && (
                 <MyRecords daoId={daoId} isNetworkDAO={isNetworkDAO} aliasName={aliasName} />
               )}
             </div>
