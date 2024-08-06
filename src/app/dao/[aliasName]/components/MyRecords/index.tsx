@@ -90,7 +90,7 @@ export default function MyRecords(props: IProps) {
                   </div>
                   <div className="flex justify-between items-center">
                     <Link
-                      href={`dao/${aliasName}/proposal/${item.proposalId}`}
+                      href={`/dao/${aliasName}/proposal/${item.proposalId}`}
                       className="basis-3/4 truncate"
                     >
                       <span className="card-sm-text-bold text-neutralPrimaryText hover:link">
