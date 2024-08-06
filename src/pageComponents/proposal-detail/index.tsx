@@ -28,22 +28,16 @@ const ProposalDetails = () => {
     data: proposalDetailRes,
     error,
     loading,
-    run,
-  } = useRequest(
-    async () => {
-      const params: IProposalDetailReq = {
-        proposalId,
-        chainId: info.curChain,
-      };
-      if (wallet.address) {
-        params.address = wallet.address;
-      }
-      return fetchProposalDetail(params);
-    },
-    {
-      manual: true,
-    },
-  );
+  } = useRequest(async () => {
+    const params: IProposalDetailReq = {
+      proposalId,
+      chainId: info.curChain,
+    };
+    if (wallet.address) {
+      params.address = wallet.address;
+    }
+    return fetchProposalDetail(params);
+  });
   const daoId = proposalDetailRes?.data?.daoId ?? '';
   const aliasName = proposalDetailRes?.data?.alias;
 
@@ -52,34 +46,41 @@ const ProposalDetails = () => {
       breadCrumb.updateProposalInformationPage(aliasName);
     }
   }, [aliasName]);
-  useEffect(() => {
-    run();
-  }, [run]);
 
+  console.log('loading', loading);
   return (
     <div className="proposal-details-wrapper">
-      {loading ? (
-        <>
-          <SkeletonList />
-        </>
-      ) : error ? (
+      {error ? (
         <ErrorResult />
       ) : (
         <>
-          {proposalDetailRes?.data && (
-            <HeaderInfo proposalDetailData={proposalDetailRes?.data} proposalId={proposalId} />
+          {loading ? (
+            <SkeletonList line={1} />
+          ) : (
+            proposalDetailRes?.data && (
+              <HeaderInfo proposalDetailData={proposalDetailRes?.data} proposalId={proposalId} />
+            )
           )}
+          <VoteInfo
+            proposalDetailData={proposalDetailRes?.data}
+            daoId={daoId}
+            isDetailLoading={loading}
+          />
 
-          <VoteInfo proposalDetailData={proposalDetailRes?.data} daoId={daoId} />
+          {loading ? (
+            <SkeletonList line={3} />
+          ) : (
+            <>
+              <div className="border border-Neutral-Divider border-solid rounded-lg bg-white">
+                <ProposalTab proposalDetailData={proposalDetailRes?.data} />
+              </div>
 
-          <div className="border border-Neutral-Divider border-solid rounded-lg bg-white">
-            <ProposalTab proposalDetailData={proposalDetailRes?.data} />
-          </div>
-
-          <StatusInfo proposalDetailData={proposalDetailRes?.data} />
-          <VoteResultTable voteTopList={proposalDetailRes?.data?.voteTopList ?? []} />
-          {proposalDetailRes?.data && (
-            <Discussion proposalId={proposalId} daoId={proposalDetailRes?.data?.daoId ?? ''} />
+              <StatusInfo proposalDetailData={proposalDetailRes?.data} />
+              <VoteResultTable voteTopList={proposalDetailRes?.data?.voteTopList ?? []} />
+              {proposalDetailRes?.data && (
+                <Discussion proposalId={proposalId} daoId={proposalDetailRes?.data?.daoId ?? ''} />
+              )}
+            </>
           )}
         </>
       )}

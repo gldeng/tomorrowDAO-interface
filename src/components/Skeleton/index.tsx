@@ -4,19 +4,24 @@ import './index.css';
 
 const mockContent =
   'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.';
-const listData = Array.from({ length: 4 }).map((_, i) => ({
+const maxLen = 4;
+const listData = Array.from({ length: maxLen }).map((_, i) => ({
   id: i,
   content: mockContent,
   title: mockContent,
 }));
 
-const SkeletonList: React.FC = () => {
+interface ISkeletonListProps {
+  line?: number;
+}
+const SkeletonList: React.FC<ISkeletonListProps> = (props: ISkeletonListProps) => {
+  const { line = maxLen } = props;
   return (
     <>
       <List
         itemLayout="vertical"
         size="large"
-        dataSource={listData}
+        dataSource={listData.slice(0, line)}
         renderItem={(item) => (
           <List.Item key={item.id}>
             <AntdSkeleton loading={true} active>
