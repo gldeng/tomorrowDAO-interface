@@ -53,7 +53,9 @@ const VoteStaticData = (props: VoteStaticDataProps) => {
   return (
     <BoxWrapper className="lg:flex-1 lg:mr-[24px] order-last lg:order-first py-[16px] flex flex-col h-[402px] justify-between">
       {!proposalDetailData ? (
-        <SkeletonLine />
+        <div className="w-full h-full items-center flex">
+          <SkeletonLine className="w-full" />
+        </div>
       ) : (
         <>
           <div>

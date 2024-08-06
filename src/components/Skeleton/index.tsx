@@ -62,14 +62,16 @@ const SkeletonDaoItemList: React.FC = () => {
 interface SkeletonLineProps {
   lines?: number;
   splitBorder?: boolean;
+  className?: string;
 }
 const SkeletonLine: React.FC<SkeletonLineProps> = (props: SkeletonLineProps) => {
-  const { lines, splitBorder = true } = props;
+  const { lines, splitBorder = true, className } = props;
   const dataSource = [...listData, ...listData];
   const renderList = dataSource.slice(0, lines);
   return (
     <>
       <List
+        className={className}
         itemLayout="vertical"
         size="large"
         dataSource={renderList}

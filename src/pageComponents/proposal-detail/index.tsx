@@ -55,7 +55,9 @@ const ProposalDetails = () => {
       ) : (
         <>
           {loading ? (
-            <SkeletonList line={1} />
+            <div className="card-shape py-4 px-2">
+              <SkeletonList line={1} />
+            </div>
           ) : (
             proposalDetailRes?.data && (
               <HeaderInfo proposalDetailData={proposalDetailRes?.data} proposalId={proposalId} />
@@ -68,7 +70,9 @@ const ProposalDetails = () => {
           />
 
           {loading ? (
-            <SkeletonList line={3} />
+            <div className="card-shape py-4 px-2">
+              <SkeletonList line={3} />
+            </div>
           ) : (
             <>
               <div className="border border-Neutral-Divider border-solid rounded-lg bg-white">
