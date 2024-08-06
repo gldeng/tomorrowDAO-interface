@@ -22,6 +22,11 @@ interface IDepositorRes {
   code: string;
   data: boolean;
 }
+// -------------------------------------get dao treasury address-----------------------------
+interface IDAOTreasuryRes {
+  code: string;
+  data: string;
+}
 // -------------------------------------Add Comment-----------------------------
 interface IAddCommentReq {
   proposalId: string;
@@ -125,7 +130,8 @@ interface IListDaoRes {
 interface ITreasuryAssetsReq {
   maxResultCount: number;
   skipCount: number;
-  daoId: string;
+  daoId?: string;
+  alias?: string;
   chainId: string;
 }
 interface ITreasuryAssetsResponseDataItem {
@@ -288,7 +294,7 @@ interface IDaoMembersRequestParams {
   SkipCount: number;
   MaxResultCount: number;
   ChainId: string;
-  DAOId: string;
+  alias: string;
 }
 interface IDaoMembersItem {
   id: string;
@@ -312,7 +318,7 @@ interface IDaoMembersResponse {
 // -------------------------------------dao-HC-members-----------------------------
 interface IDaoHCMembersRequestParams {
   chainId: string;
-  daoId: string;
+  alias: string;
 }
 type IDaoHCMembersData = string[];
 interface IDaoHCMembersResponse {
@@ -326,7 +332,7 @@ interface IProposalListReq {
   skipCount?: number;
   maxResultCount?: number;
   chainId: string;
-  daoId: string;
+  alias: string;
   // governanceMechanism: string;
   proposalType?: string;
   proposalStatus?: string;
@@ -340,7 +346,7 @@ interface IProposalListReq {
 
 interface IProposalMyInfoReq {
   chainId: string;
-  daoId: string;
+  alias: string;
   proposalId?: string;
   address: string;
 }
@@ -458,7 +464,7 @@ interface IProposalDetailData {
   chainId: string;
   blockHeight: number;
   id: string;
-  daoId: null | string;
+  daoId: string;
   proposalId: string;
   proposalTitle: string;
   proposalDescription: string;

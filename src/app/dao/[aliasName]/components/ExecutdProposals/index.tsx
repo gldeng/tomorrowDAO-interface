@@ -36,10 +36,11 @@ const failedModalInfo: TmodalInfoType = {
 interface IExecutdProposals {
   daoId: string;
   address: string;
+  aliasName: string;
 }
 
 export default function ExecutdProposals(props: IExecutdProposals) {
-  const { daoId, address } = props;
+  const { daoId, address, aliasName } = props;
   // confirm modal: boolean
   const [showModal, setShowModal] = useState(false);
   // success or fail modal: boolean
@@ -116,25 +117,14 @@ export default function ExecutdProposals(props: IExecutdProposals) {
               <div>
                 <div className="block lg:flex items-center">
                   <Typography.Text fontWeight={FontWeightEnum.Medium}>Proposal ID:</Typography.Text>
-                  {isNetWorkDao ? (
-                    <LinkNetworkDao href={`/proposal-detail-tmrw/${item.proposalId}`}>
-                      <HashAddress
-                        ignorePrefixSuffix
-                        preLen={8}
-                        endLen={11}
-                        address={item.proposalId}
-                      ></HashAddress>
-                    </LinkNetworkDao>
-                  ) : (
-                    <Link href={`/proposal/${item.proposalId}`}>
-                      <HashAddress
-                        ignorePrefixSuffix
-                        preLen={8}
-                        endLen={11}
-                        address={item.proposalId}
-                      ></HashAddress>
-                    </Link>
-                  )}
+                  <Link href={`/dao/${aliasName}/proposal/${item.proposalId}`}>
+                    <HashAddress
+                      ignorePrefixSuffix
+                      preLen={8}
+                      endLen={11}
+                      address={item.proposalId}
+                    ></HashAddress>
+                  </Link>
                 </div>
                 <Typography.Text className="text-Neutral-Secondary-Text">
                   Expires On {dayjs(item.executeEndTime).format('YYYY-MM-DD HH:mm:ss')}

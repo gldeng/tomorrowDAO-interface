@@ -156,7 +156,7 @@ export default function Discussion(props: IDiscussionProps) {
       }
       return {
         isEnable: false,
-        message: '',
+        message: 'unknown governance mechanism',
       };
     },
     { manual: true },
