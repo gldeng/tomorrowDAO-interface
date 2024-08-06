@@ -72,7 +72,7 @@ export default function DeoDetails(props: IProps) {
       message.error('aliasName or daoId is required');
       return null;
     }
-    return fetchDaoInfo({ chainId: curChain, alias: aliasName });
+    return fetchDaoInfo({ chainId: curChain, alias: aliasName, daoId: props.daoId });
   });
   const { walletInfo } = useSelector((store: any) => store.userInfo);
   // const [daoDetail, setDaoDetail] = useState<IDaoDetail>(data);
@@ -92,7 +92,8 @@ export default function DeoDetails(props: IProps) {
   const fetchProposalListWithParams = async (preData: IProposalListRes | null) => {
     const { proposalType, proposalStatus } = tableParams;
     if (!aliasName) {
-      message.error('aliasName or daoId is required');
+      console.log(1);
+      message.error('aliasName is required');
       return null;
     }
     const params: IProposalListReq = {
@@ -321,8 +322,11 @@ export default function DeoDetails(props: IProps) {
   }, [isLG, tabItems, tabKey]);
 
   useEffect(() => {
+    if (isNetworkDAO) {
+      return;
+    }
     run(previousProposalDataRef.current ?? null);
-  }, [tableParams, run]);
+  }, [tableParams, run, isNetworkDAO]);
 
   return (
     <div className="dao-detail">
