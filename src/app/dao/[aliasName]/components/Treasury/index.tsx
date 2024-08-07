@@ -12,14 +12,13 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { INIT_RESULT_MODAL_CONFIG } from 'components/ResultModal';
 import { IContractError } from 'types';
-import { fetchAddressTransferList, getDaoTreasury } from 'api/request';
+import { fetchTreasuryRecords, getDaoTreasury } from 'api/request';
 import dayjs from 'dayjs';
 import './index.css';
 import { ButtonCheckLogin } from 'components/ButtonCheckLogin';
 import { EProposalActionTabs } from 'app/proposal/deploy/[aliasName]/type';
 import { useRequest } from 'ahooks';
 import useTokenListData from 'hooks/useTokenListData';
-import { checkIsOut } from 'utils/transaction';
 import { numberFormatter } from 'utils/numberFormatter';
 import { SkeletonLine } from 'components/Skeleton';
 import TreasuryNoTxGuide, { ITreasuryNoTxGuideRef } from 'components/TreasuryNoTxGuide';
@@ -91,28 +90,11 @@ const Treasury: React.FC<IProps> = (props) => {
     run,
   } = useRequest(
     async () => {
-      const [tokenRes, nftRes] = await Promise.all([
-        fetchAddressTransferList(
-          {
-            address: treasuryAddress ?? '',
-            pageSize: 6,
-            pageNum: 1,
-          },
-          curChain,
-        ),
-        fetchAddressTransferList(
-          {
-            address: treasuryAddress ?? '',
-            pageSize: 6,
-            pageNum: 1,
-            isNft: true,
-          },
-          curChain,
-        ),
-      ]);
-      const list = [...(tokenRes?.data?.list ?? []), ...(nftRes?.data?.list ?? [])].sort(
-        (a, b) => dayjs(b.time).unix() - dayjs(a.time).unix(),
-      );
+      const treasuryRecordsRes = await fetchTreasuryRecords({
+        ChainId: curChain,
+        TreasuryAddress: treasuryAddress ?? '',
+      });
+      const list = treasuryRecordsRes?.data?.data ?? [];
       return list;
     },
     {
@@ -267,12 +249,12 @@ const Treasury: React.FC<IProps> = (props) => {
                   ) : (
                     <ul>
                       {transferList?.slice(0, LoadCount).map((item) => {
-                        const isOut = checkIsOut(treasuryAddress, item);
+                        const isOut = treasuryAddress === item.fromAddress;
                         return (
-                          <li className="treasury-info-item" key={item.txId}>
+                          <li className="treasury-info-item" key={item.transactionId}>
                             <div className="flex justify-between treasury-info-item-line-1 ">
                               <span className="">
-                                {dayjs(item.time).format('YYYY-MM-DD HH:mm:ss')}{' '}
+                                {dayjs(item.createTime).format('YYYY-MM-DD HH:mm:ss')}{' '}
                                 {isOut ? 'Withdraw' : 'Deposit'}
                               </span>
                               <span>
@@ -281,27 +263,29 @@ const Treasury: React.FC<IProps> = (props) => {
                             </div>
                             <div className="treasury-info-item-line-2 text-14-22-500">
                               <span>Transaction ID:</span>
-                              <Link href={`${explorer}/tx/${item.txId}`} target="_blank">
+                              <Link href={`${explorer}/tx/${item.transactionId}`} target="_blank">
                                 <HashAddress
                                   className="pl-[4px]"
                                   ignorePrefixSuffix={true}
                                   preLen={8}
                                   endLen={11}
-                                  address={item.txId}
+                                  address={item.transactionId}
                                 ></HashAddress>
                               </Link>
                             </div>
                             <div className="treasury-info-item-line-3 text-14-22-500">
                               <span>Address:</span>
                               <Link
-                                href={`${explorer}/address/${isOut ? item.to : item.from}`}
+                                href={`${explorer}/address/${
+                                  isOut ? item.toAddress : item.fromAddress
+                                }`}
                                 target="_blank"
                               >
                                 <HashAddress
                                   className="pl-[4px]"
                                   preLen={8}
                                   endLen={11}
-                                  address={isOut ? item.to : item.from}
+                                  address={isOut ? item.toAddress : item.fromAddress}
                                   chain={curChain}
                                 ></HashAddress>
                               </Link>
