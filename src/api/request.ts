@@ -217,3 +217,11 @@ export const fetchTreasuryAssets = async (
     ...params,
   });
 };
+export const fetchTreasuryRecords = async (params: {
+  ChainId: string;
+  TreasuryAddress: string;
+}): Promise<ITreasuryRecordRes> => {
+  return apiServer.get('/treasury/records', {
+    params,
+  });
+};

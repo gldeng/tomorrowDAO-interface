@@ -119,7 +119,7 @@ export default function MyInfo(props: TInfoTypes) {
 
   useEffect(() => {
     if (wallet.address && isLogin) {
-      console.log('wallet.address', wallet.address);
+      console.log('fetchMyInfo wallet.address', wallet.address);
       fetchMyInfoRef.current?.();
     }
   }, [wallet.address, isLogin]);
