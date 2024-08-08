@@ -748,3 +748,30 @@ interface ITreasuryRecordsReq {
   skipCount: number;
   maxResultCount: number;
 }
+// ------------------- new api treasury-records ---------------------------------
+interface ITreasuryRecord {
+  id: string;
+  chainId: string;
+  blockHeight: number;
+  daoId: string;
+  treasuryAddress: string;
+  amount: number;
+  symbol: string;
+  amountAfterDecimals: number;
+  executor: string;
+  fromAddress: string;
+  toAddress: string;
+  memo: null | string;
+  treasuryRecordType: number;
+  createTime: string;
+  proposalId: null | string;
+  transactionId: string;
+}
+interface ITreasuryRecordRes {
+  code: string;
+  data: {
+    data: ITreasuryRecord[];
+    totalCount: number;
+  };
+  message: string;
+}
