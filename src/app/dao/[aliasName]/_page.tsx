@@ -1,7 +1,15 @@
 'use client';
 import React from 'react';
-import DaoDetail from './DaoDetails';
+import DaoDetail from './TmrwDaoDetails';
 
-export default function DaoDetailPage(props: { aliasName: string }) {
-  return <DaoDetail aliasName={props.aliasName} />;
+interface Props {
+  ssrData: {
+    daoInfo: IDaoInfoRes;
+    ProposalListResData: IProposalListResData;
+  };
+  aliasName: string;
+}
+export default function DaoDetailPage(props: Props) {
+  const { ssrData } = props;
+  return <DaoDetail aliasName={props.aliasName} ssrData={ssrData} />;
 }

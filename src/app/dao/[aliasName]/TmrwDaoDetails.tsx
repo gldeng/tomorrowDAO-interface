@@ -1,5 +1,4 @@
 'use client';
-
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Tabs, Pagination } from 'aelf-design';
 import { Form, message } from 'antd';
@@ -7,29 +6,22 @@ import { useSelector } from 'react-redux';
 import { SkeletonList } from 'components/Skeleton';
 import useResponsive from 'hooks/useResponsive';
 import ProposalsItem from './components/ProposalsItem';
-import HighCounCilTable from './components/HighCouncilTable';
 import DaoInfo from './components/DaoInfo';
 import ExecutdProposals from './components/ExecutdProposals';
 import MyRecords from './components/MyRecords';
 import MyInfo from './components/MyInfo';
 import Filter from './components/Filter';
 import Treasury from './components/Treasury';
-import { useRequest, usePrevious } from 'ahooks';
+import { useRequest } from 'ahooks';
 import { IProposalTableParams, TabKey } from './type';
-import { fetchDaoInfo, fetchProposalList } from 'api/request';
+import { fetchProposalList } from 'api/request';
 import { curChain } from 'config';
-import { ALL } from './constants';
+import { ALL, DEFAULT_PAGESIZE } from './constants';
 import Link from 'next/link';
 import ErrorResult from 'components/ErrorResult';
-import useNetworkDaoRouter from 'hooks/useNetworkDaoRouter';
 import { useRouter } from 'next/navigation';
 import { ButtonCheckLogin } from 'components/ButtonCheckLogin';
 import breadCrumb from 'utils/breadCrumb';
-import ExplorerProposalList, {
-  ExplorerProposalListFilter,
-} from '../../network-dao/ExplorerProposalList';
-import { useChainSelect } from 'hooks/useChainSelect';
-import getChainIdQuery from 'utils/url';
 import DaoMembers from './components/Members';
 import HcMembers from './components/HCMembers';
 import './page.css';
@@ -38,6 +30,10 @@ import { checkCreateProposal } from 'utils/proposal';
 import NoData from 'components/NoData';
 
 interface IProps {
+  ssrData: {
+    daoInfo: IDaoInfoRes;
+    ProposalListResData: IProposalListResData;
+  };
   daoId?: string;
   aliasName?: string;
   isNetworkDAO?: boolean;
@@ -53,27 +49,14 @@ const MyInfoContent = (props: IMyInfoContentProps) => {
     <MyInfo daoId={daoId} isShowVote={false} clssName={className} />
   ) : null;
 };
+
 export default function DeoDetails(props: IProps) {
-  const { aliasName, isNetworkDAO } = props;
+  const { aliasName, ssrData } = props;
+  const { daoInfo: daoData, ProposalListResData } = ssrData;
   const { isLG } = useResponsive();
 
-  const { isMainChain } = useChainSelect();
   const [form] = Form.useForm();
-  // todo
   const [tabKey, setTabKey] = useState(TabKey.PROPOSALS);
-  const networkDaoRouter = useNetworkDaoRouter();
-
-  const {
-    data: daoData,
-    error: daoError,
-    loading: daoLoading,
-  } = useRequest(async () => {
-    if (!aliasName && !props.daoId) {
-      message.error('aliasName or daoId is required');
-      return null;
-    }
-    return fetchDaoInfo({ chainId: curChain, alias: aliasName, daoId: props.daoId });
-  });
   const { walletInfo } = useSelector((store: any) => store.userInfo);
   // const [daoDetail, setDaoDetail] = useState<IDaoDetail>(data);
   // const [proposalList, setProposalList] = useState<IProposalsItem[]>(list);
@@ -82,17 +65,14 @@ export default function DeoDetails(props: IProps) {
     content: '',
     pagination: {
       current: 1,
-      pageSize: 20,
+      pageSize: DEFAULT_PAGESIZE,
       total: 0,
     },
   });
   const daoId = daoData?.data?.id;
-  // const aliasName = aliasName;
-  const previousTableParams = usePrevious(tableParams);
-  const fetchProposalListWithParams = async (preData: IProposalListRes | null) => {
-    const { proposalType, proposalStatus } = tableParams;
+  const fetchProposalListWithParams = async (newTableParams: IProposalTableParams) => {
+    const { proposalType, proposalStatus } = newTableParams;
     if (!aliasName) {
-      console.log(1);
       message.error('aliasName is required');
       return null;
     }
@@ -100,9 +80,8 @@ export default function DeoDetails(props: IProps) {
       alias: aliasName,
       chainId: curChain,
       skipCount:
-        ((tableParams.pagination.current ?? 1) - 1) * (tableParams.pagination.pageSize ?? 20),
-      maxResultCount: tableParams.pagination.pageSize,
-      isNetworkDAO,
+        ((newTableParams.pagination.current ?? 1) - 1) * (newTableParams.pagination.pageSize ?? 20),
+      maxResultCount: newTableParams.pagination.pageSize,
     };
     // skip ALL
     if (proposalType !== ALL && proposalType) {
@@ -113,40 +92,25 @@ export default function DeoDetails(props: IProps) {
       params.proposalStatus = proposalStatus;
     }
     // search content
-    if (tableParams.content) {
-      params.content = tableParams.content;
-    }
-    // when pagesize change pagination.current will be 1
-    if (tableParams.pagination.current !== 1 && preData?.data) {
-      const prePageNo = previousTableParams?.pagination.current;
-      const currentPageNo = tableParams.pagination.current;
-      if (
-        typeof prePageNo === 'number' &&
-        typeof currentPageNo === 'number' &&
-        prePageNo > currentPageNo
-      ) {
-        params.pageInfo = {
-          ...(preData.data.previousPageInfo ?? {}),
-        };
-      } else {
-        params.pageInfo = {
-          ...(preData.data.nextPageInfo ?? {}),
-        };
-      }
+    if (newTableParams.content) {
+      params.content = newTableParams.content;
     }
     const listRes = await fetchProposalList(params);
     return listRes;
   };
   const [createProposalLoading, setCreateProposalLoading] = useState(false);
+  const [proposalData, setProposalData] = useState<IProposalListResData | null>(
+    ProposalListResData,
+  );
   const {
-    data: proposalData,
+    data: newProposalData,
     error: proposalError,
     loading: proposalLoading,
     run,
   } = useRequest(fetchProposalListWithParams, {
     manual: true,
   });
-  const previousProposalDataRef = useRef<IProposalListRes | null>();
+  const previousProposalDataRef = useRef<IProposalListResData | null>();
   const handleCreateProposalRef = useRef<(customRouter?: boolean) => Promise<boolean>>();
   previousProposalDataRef.current = proposalData;
 
@@ -163,15 +127,17 @@ export default function DeoDetails(props: IProps) {
     if (!checkRes) {
       return false;
     }
-    if (isNetworkDAO) {
-      const chainIdQuery = getChainIdQuery();
-      networkDaoRouter.push(`/apply?${chainIdQuery.chainIdQueryString}`);
-    } else {
-      router.push(`/proposal/deploy/${aliasName}`);
-    }
+    router.push(`/proposal/deploy/${aliasName}`);
     return true;
   };
   handleCreateProposalRef.current = handleCreateProposal;
+  const handleTableParamsChange = useCallback(
+    (newTableParams: IProposalTableParams) => {
+      setTableParams(newTableParams);
+      run(newTableParams);
+    },
+    [run, setTableParams],
+  );
   const tabItems = useMemo(() => {
     const CreateButton = (
       <ButtonCheckLogin
@@ -181,7 +147,7 @@ export default function DeoDetails(props: IProps) {
         onClick={() => {
           handleCreateProposalRef.current?.();
         }}
-        disabled={daoLoading}
+        disabled={!daoData.data.id}
       >
         Create a Proposal
       </ButtonCheckLogin>
@@ -196,108 +162,99 @@ export default function DeoDetails(props: IProps) {
               <h3 className="title">Proposals</h3>
               {CreateButton}
             </div>
-            {!isNetworkDAO && (
-              <Filter form={form} tableParams={tableParams} onChangeTableParams={setTableParams} />
-            )}
-            {isNetworkDAO && <ExplorerProposalListFilter />}
+            <Filter
+              form={form}
+              tableParams={tableParams}
+              onChangeTableParams={handleTableParamsChange}
+            />
           </div>
         ),
       },
     ];
-    if (daoData?.data?.isNetworkDAO && isMainChain) {
-      items.push({
-        key: TabKey.HC,
-        label: 'High Council',
-        children: <HighCounCilTable />,
-      });
-    }
     if (!isLG) {
       return items;
     } else {
       const finalItems = [...items];
-      if (!daoData?.data?.isNetworkDAO) {
-        if (isShowMyInfo) {
-          finalItems.push({
-            key: TabKey.MYINFO,
-            label: 'My Info',
-            children: (
-              <MyInfoContent
-                daoId={daoId}
-                isTokenGovernanceMechanism={isTokenGovernanceMechanism}
-                className="border-0  px-[16px] pt-[8px] pb-[24px] lg:mb-[16px] mb-0"
-              />
-            ),
-          });
-        }
+      if (isShowMyInfo) {
         finalItems.push({
-          key: TabKey.TREASURY,
-          label: 'Treasury',
-          children: <Treasury daoRes={daoData} aliasName={aliasName} />,
+          key: TabKey.MYINFO,
+          label: 'My Info',
+          children: (
+            <MyInfoContent
+              daoId={daoId}
+              isTokenGovernanceMechanism={isTokenGovernanceMechanism}
+              className="border-0  px-[16px] pt-[8px] pb-[24px] lg:mb-[16px] mb-0"
+            />
+          ),
         });
-        if (daoData?.data?.governanceMechanism === EDaoGovernanceMechanism.Multisig && aliasName) {
-          finalItems.push({
-            key: TabKey.DAOMEMBERS,
-            label: 'Members',
-            children: daoData?.data ? (
-              <DaoMembers daoRes={daoData} aliasName={aliasName} />
-            ) : (
-              <span></span>
-            ),
-          });
-        }
-        if (daoData?.data?.governanceMechanism === EDaoGovernanceMechanism.Token && aliasName) {
-          finalItems.push({
-            key: TabKey.HCMEMBERS,
-            label: 'High Council Members',
-            children: daoData?.data ? (
-              <HcMembers daoRes={daoData} aliasName={aliasName} />
-            ) : (
-              <span></span>
-            ),
-          });
-        }
       }
+      finalItems.push({
+        key: TabKey.TREASURY,
+        label: 'Treasury',
+        children: <Treasury daoRes={daoData} aliasName={aliasName} />,
+      });
+      if (daoData?.data?.governanceMechanism === EDaoGovernanceMechanism.Multisig && aliasName) {
+        finalItems.push({
+          key: TabKey.DAOMEMBERS,
+          label: 'Members',
+          children: daoData?.data ? (
+            <DaoMembers daoRes={daoData} aliasName={aliasName} />
+          ) : (
+            <span></span>
+          ),
+        });
+      }
+      if (daoData?.data?.governanceMechanism === EDaoGovernanceMechanism.Token && aliasName) {
+        finalItems.push({
+          key: TabKey.HCMEMBERS,
+          label: 'High Council Members',
+          children: daoData?.data ? (
+            <HcMembers daoRes={daoData} aliasName={aliasName} />
+          ) : (
+            <span></span>
+          ),
+        });
+      }
+
       return finalItems;
     }
   }, [
     createProposalLoading,
-    daoLoading,
-    isNetworkDAO,
+    daoData,
     form,
     tableParams,
-    daoData,
-    isMainChain,
     isLG,
+    handleTableParamsChange,
     isShowMyInfo,
     aliasName,
     daoId,
     isTokenGovernanceMechanism,
   ]);
 
-  const pageChange = useCallback((page: number) => {
-    setTableParams((state) => {
-      return {
-        ...state,
-        pagination: {
-          ...state.pagination,
-          current: page,
-        },
-      };
-    });
-  }, []);
+  const pageChange = (page: number) => {
+    console.log('page', page);
+    const newTableParams: IProposalTableParams = {
+      ...tableParams,
+      pagination: {
+        ...tableParams.pagination,
+        current: page,
+      },
+    };
+    handleTableParamsChange(newTableParams);
+  };
 
-  const pageSizeChange = useCallback((page: number, pageSize: number) => {
-    setTableParams((state) => {
-      return {
-        ...state,
-        pagination: {
-          ...state.pagination,
-          current: page,
-          pageSize,
-        },
-      };
-    });
-  }, []);
+  const pageSizeChange = (page: number, pageSize: number) => {
+    console.log('pageSizeChange', page, pageSize);
+    const newTableParams: IProposalTableParams = {
+      ...tableParams,
+      pagination: {
+        ...tableParams.pagination,
+        current: page,
+        pageSize,
+      },
+    };
+    handleTableParamsChange(newTableParams);
+  };
 
   const handleTabChange = (key: string) => {
     setTabKey(key as TabKey);
@@ -322,19 +279,18 @@ export default function DeoDetails(props: IProps) {
   }, [isLG, tabItems, tabKey]);
 
   useEffect(() => {
-    if (isNetworkDAO) {
-      return;
+    if (newProposalData) {
+      setProposalData(newProposalData.data);
     }
-    run(previousProposalDataRef.current ?? null);
-  }, [tableParams, run, isNetworkDAO]);
+  }, [newProposalData]);
 
   return (
     <div className="dao-detail">
       <div>
         <DaoInfo
           data={(daoData?.data ?? {}) as IDaoInfoData}
-          isLoading={daoLoading}
-          isError={daoError}
+          isLoading={false}
+          isError={!daoData.data.id}
           onChangeHCParams={handleChangeHCparams}
           daoId={daoId}
           aliasName={aliasName}
@@ -343,7 +299,7 @@ export default function DeoDetails(props: IProps) {
         <div className="dao-detail-content">
           <div className={`dao-detail-content-left`}>
             <div className={`dao-detail-content-left-tab`}>{tabCom}</div>
-            {tabKey === TabKey.PROPOSALS && !isNetworkDAO && (
+            {tabKey === TabKey.PROPOSALS && (
               <div>
                 {proposalLoading ? (
                   <SkeletonList />
@@ -351,8 +307,8 @@ export default function DeoDetails(props: IProps) {
                   <div>
                     <ErrorResult />
                   </div>
-                ) : proposalData?.data?.items?.length ? (
-                  proposalData?.data?.items?.map((item) => {
+                ) : proposalData?.items?.length ? (
+                  proposalData?.items?.map((item) => {
                     return (
                       <Link
                         key={item.proposalId}
@@ -372,14 +328,13 @@ export default function DeoDetails(props: IProps) {
                 )}
                 <Pagination
                   {...tableParams.pagination}
-                  total={proposalData?.data?.totalCount ?? 0}
+                  total={proposalData?.totalCount ?? 0}
                   pageChange={pageChange}
                   pageSizeChange={pageSizeChange}
-                  showLast={!isNetworkDAO}
+                  defaultPageSize={DEFAULT_PAGESIZE}
                 />
               </div>
             )}
-            {tabKey === TabKey.PROPOSALS && isNetworkDAO && <ExplorerProposalList />}
             {/* < 1024 */}
             {isLG && tabKey === TabKey.MYINFO && (
               <>
@@ -390,30 +345,27 @@ export default function DeoDetails(props: IProps) {
                     aliasName={aliasName}
                   />
                 )}
-                {walletInfo.address && daoId && (
-                  <MyRecords daoId={daoId} isNetworkDAO={isNetworkDAO} aliasName={aliasName} />
-                )}
+                {walletInfo.address && daoId && <MyRecords daoId={daoId} aliasName={aliasName} />}
               </>
             )}
           </div>
 
-          {!isLG && !isNetworkDAO && (
+          {!isLG && (
             <div className="dao-detail-content-right">
-              {!isNetworkDAO && (
-                <Treasury
-                  daoRes={daoData}
-                  createProposalCheck={handleCreateProposal}
-                  aliasName={aliasName}
-                />
-              )}
-              {aliasName && !isNetworkDAO && (
+              <Treasury
+                daoRes={daoData}
+                createProposalCheck={handleCreateProposal}
+                aliasName={aliasName}
+              />
+
+              {aliasName && (
                 <DaoMembers
                   createProposalCheck={handleCreateProposal}
                   daoRes={daoData}
                   aliasName={aliasName}
                 />
               )}
-              {aliasName && !isNetworkDAO && (
+              {aliasName && (
                 <HcMembers
                   createProposalCheck={handleCreateProposal}
                   daoRes={daoData}
@@ -433,7 +385,7 @@ export default function DeoDetails(props: IProps) {
                 />
               )}
               {walletInfo.address && daoId && aliasName && (
-                <MyRecords daoId={daoId} isNetworkDAO={isNetworkDAO} aliasName={aliasName} />
+                <MyRecords daoId={daoId} aliasName={aliasName} />
               )}
             </div>
           )}

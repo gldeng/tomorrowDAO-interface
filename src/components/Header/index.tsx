@@ -116,7 +116,7 @@ export default function Header() {
       setCurrent(e.key);
     }
   };
-  const { isHome } = useUrlPath();
+  const { isHome, isExplorer } = useUrlPath();
 
   useEffect(() => {
     // refresh from path map to nav active

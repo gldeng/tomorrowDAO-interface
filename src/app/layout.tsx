@@ -27,7 +27,7 @@ const WalletInit = dynamicReq(
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
   const isNetWorkDao = pathname.startsWith(NetworkDaoHomePathName);
-  const { isHome } = useUrlPath();
+  const { isHome, isExplorer } = useUrlPath();
   return (
     <html lang="en">
       {/* eslint-disable-next-line @next/next/no-head-element */}
@@ -90,6 +90,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             {isNetWorkDao ? <div>{children}</div> : <Layout>{children}</Layout>}
           </Provider>
         </StyleRegistry>
+        {/* <Script src="https://telegram.org/js/telegram-web-app.js"></Script> */}
       </body>
     </html>
   );

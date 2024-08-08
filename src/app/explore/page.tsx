@@ -1,11 +1,21 @@
-'use client';
 import React from 'react';
-import dynamicReq from 'next/dynamic';
-import { SkeletonList } from 'components/Skeleton';
-const PageIndex = dynamicReq(() => import('pageComponents/home'), {
-  ssr: false,
-  loading: () => <SkeletonList />,
-});
-export default function Page() {
-  return <PageIndex />;
+import PageIndex from 'pageComponents/home';
+import { fetchDaoList } from 'api/request';
+import { curChain } from 'config';
+
+async function getInitDaoList() {
+  const res = await fetchDaoList({
+    skipCount: 0,
+    maxResultCount: 6,
+    chainId: curChain,
+  });
+  return {
+    daoList: res.data.items,
+    daoHasData: res.data.items.length < res.data.totalCount,
+  };
+}
+
+export default async function Page() {
+  const initData = await getInitDaoList();
+  return <PageIndex ssrData={initData} />;
 }

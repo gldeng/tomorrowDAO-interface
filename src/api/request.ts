@@ -9,7 +9,7 @@ export const fetchToken = async (data: ITokenParams) => {
 };
 export const fetchDaoList = async (params: IListDaoReq): Promise<IListDaoRes> => {
   return apiServer.get('/dao/dao-list', {
-    params,
+    ...params,
   });
 };
 
@@ -17,20 +17,20 @@ export const fetchMyDaoList = async (
   params: IMyDaoListQueryParams,
 ): Promise<IMyDaoListResponse> => {
   return apiServer.get('/dao/my-dao-list', {
-    params,
+    ...params,
   });
 };
 
 export const fetchDaoInfo = async (params: IDaoInfoReq): Promise<IDaoInfoRes> => {
   return apiServer.get('/dao/dao-info', {
-    params,
+    ...params,
   });
 };
 export const fetchDaoMembers = async (
   params: IDaoMembersRequestParams,
 ): Promise<IDaoMembersResponse> => {
   return apiServer.get('/dao/member-list', {
-    params,
+    ...params,
   });
 };
 export const fetchHcMembers = async (
@@ -51,7 +51,7 @@ export const fetchProposalMyInfo = async (
   params: IProposalMyInfoReq,
 ): Promise<IProposalMyInfoRes> => {
   return apiServer.get('/proposal/my-info', {
-    params,
+    ...params,
   });
 };
 
@@ -59,7 +59,7 @@ export const fetchProposalDetail = async (
   params: IProposalDetailReq,
 ): Promise<IProposalDetailRes> => {
   return apiServer.get('/proposal/detail', {
-    params,
+    ...params,
   });
 };
 
@@ -68,7 +68,7 @@ export const fetchGovernanceMechanismList = async (params: {
   daoId: string;
 }): Promise<IGovernanceModelListRes> => {
   return apiServer.get('/governance/list', {
-    params,
+    ...params,
   });
 };
 
@@ -78,7 +78,7 @@ export const fetchContractInfo = async (params: {
   governanceMechanism?: EDaoGovernanceMechanism;
 }): Promise<IContractInfoListRes> => {
   return apiServer.get('/contract/contracts-info', {
-    params,
+    ...params,
   });
 };
 export const fetchDaoExistMembers = async (params: {
@@ -87,14 +87,14 @@ export const fetchDaoExistMembers = async (params: {
   memberAddress: string;
 }): Promise<IDaoExistMembersRes> => {
   return apiServer.get('/dao/is-member', {
-    params,
+    ...params,
   });
 };
 export const fetchVoteSchemeList = async (
   params: IVoteSchemeListReq,
 ): Promise<IVoteSchemeListRes> => {
   return apiServer.get('/vote/vote-scheme-list', {
-    params,
+    ...params,
   });
 };
 // is Depositor
@@ -114,7 +114,7 @@ export const getDaoTreasury = async (params: {
   alias: string;
 }): Promise<IDAOTreasuryRes> => {
   return apiServer.get('/treasury/address', {
-    params,
+    ...params,
   });
 };
 
@@ -128,7 +128,7 @@ export const addCommentReq = async (params: IAddCommentReq): Promise<IAddComment
 // get comment list
 export const getCommentLists = async (params: ICommentListsReq): Promise<ICommentListsRes> => {
   return apiServer.get('/discussion/comment-list', {
-    params,
+    ...params,
   });
 };
 export const fetchURLDescription = async (params: {
@@ -144,7 +144,7 @@ export const fetchURLDescription = async (params: {
 // need auth
 export const fetchVoteHistory = async (params: IVoteHistoryReq): Promise<IVoteHistoryRes> => {
   return apiServer.get('/proposal/vote-history', {
-    params,
+    ...params,
   });
 };
 
@@ -153,14 +153,14 @@ export const fetchTokenInfo = async (params: {
   chainId: string;
 }): Promise<ITokenInfoRes> => {
   return apiServer.get('/token', {
-    params,
+    ...params,
   });
 };
 export const fetchExecutableList = async (
   params: IExecutableListReq,
 ): Promise<IExecutableListRes> => {
   return apiServer.get('/proposal/executable-list', {
-    params,
+    ...params,
   });
 };
 export const fetchAddressTokenList = async (
@@ -214,6 +214,6 @@ export const fetchTreasuryAssets = async (
   params: ITreasuryAssetsReq,
 ): Promise<ITreasuryAssetsRes> => {
   return apiServer.get('/treasury/assets', {
-    params,
+    ...params,
   });
 };

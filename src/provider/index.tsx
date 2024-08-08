@@ -12,16 +12,11 @@ interface IProps {
 }
 function Provider(props: IProps) {
   const { children } = props;
-  const { isHome } = useUrlPath();
   return (
     <StoreProvider>
       <AELFDProvider prefixCls={PREFIXCLS} theme={THEME_CONFIG} customToken={CUSTOM_TOKEN}>
         <ConfigProvider locale={en_US} prefixCls={PREFIXCLS} theme={THEME_CONFIG}>
-          {isHome ? (
-            children
-          ) : (
-            <WebLoginProvider key={'webLoginProvider'}>{children}</WebLoginProvider>
-          )}
+          <WebLoginProvider>{children}</WebLoginProvider>
         </ConfigProvider>
       </AELFDProvider>
     </StoreProvider>

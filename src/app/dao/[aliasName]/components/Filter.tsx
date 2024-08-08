@@ -68,34 +68,31 @@ export default function Filter(props: TPropsType) {
 
   const handleApply = () => {
     const values = modalForm.getFieldsValue();
-    onChangeTableParams((state: IProposalTableParams) => {
-      return {
-        ...state,
-        ...values,
-      };
-    });
+    const newTableParams: IProposalTableParams = {
+      ...tableParams,
+      ...values,
+    };
+    onChangeTableParams(newTableParams);
     setIsShowDrawer(false);
     form.setFieldsValue(tableParams);
   };
 
   const handleCloseTag = (key: TTableParamsKey) => {
     form.setFieldValue(key, '');
-    onChangeTableParams((state: IProposalTableParams) => {
-      return {
-        ...state,
-        [key]: '',
-      };
-    });
+    const newTableParams: IProposalTableParams = {
+      ...tableParams,
+      [key]: '',
+    };
+    onChangeTableParams(newTableParams);
   };
 
   // form function
   const handleValuesChange = (changesValues: any, allValues: any) => {
-    onChangeTableParams((state: IProposalTableParams) => {
-      return {
-        ...state,
-        ...allValues,
-      };
-    });
+    const newTableParams: IProposalTableParams = {
+      ...tableParams,
+      ...allValues,
+    };
+    onChangeTableParams(newTableParams);
   };
 
   const handleCloseAll = () => {
@@ -104,12 +101,11 @@ export default function Filter(props: TPropsType) {
       proposalStatus: '',
     };
     form.setFieldsValue(values);
-    onChangeTableParams((state: IProposalTableParams) => {
-      return {
-        ...state,
-        ...values,
-      };
-    });
+    const newTableParams: IProposalTableParams = {
+      ...tableParams,
+      ...values,
+    };
+    onChangeTableParams(newTableParams);
   };
 
   useEffect(() => {
