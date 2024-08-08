@@ -757,6 +757,7 @@ interface ITreasuryRecord {
   treasuryAddress: string;
   amount: number;
   symbol: string;
+  amountAfterDecimals: number;
   executor: string;
   fromAddress: string;
   toAddress: string;
