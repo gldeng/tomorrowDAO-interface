@@ -5,8 +5,19 @@
     /* @apply page-content-padding; */
   }
 
+  &-segmented {
+    @apply mb-[16px];
+  }
   &-filter {
     /* @apply page-content-padding; */
+    @apply mb-[16px];
+  }
+  .antExplorer-segmented .antExplorer-segmented-item-label {
+    min-height: 36px;
+    line-height: 36px;
+  }
+  .antExplorer-card .antExplorer-card-body {
+    padding: 16px;
   }
 
   .antExplorer-btn-primary:disabled,
