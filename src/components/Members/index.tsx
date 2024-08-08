@@ -50,7 +50,7 @@ const Members: React.FC<IProps> = (props) => {
         <div>
           <h3 className="card-title mb-[24px]">{cardTitle}</h3>
           <div className="flex justify-between items-start lg:items-center lg:flex-row flex-col">
-            <p>{descriptionNode}</p>
+            <div>{descriptionNode}</div>
             {managerUrl ? (
               <Link href={managerUrl}>{ManageButton}</Link>
             ) : (

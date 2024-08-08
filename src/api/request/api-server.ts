@@ -1,126 +1,158 @@
-import axios from 'axios';
-import { message } from 'antd';
-import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import queryString from 'query-string';
 import { eventBus, UnAuth } from 'utils/myEvent';
+import { message } from 'antd';
+import { getHost } from 'utils/request';
 export const apiServerBaseURL = '/api/app';
 
 export const LoginExpiredTip = 'Login expired, please log in again';
-interface ResponseType<T> {
-  code: string;
-  message: string;
-  data: T;
+const host = getHost();
+const authList = [
+  '/proposal/my-info',
+  '/proposal/vote-history',
+  '/dao/my-dao-list',
+  '/discussion/new-comment',
+];
+type Method = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+
+type Params = Record<string, any>;
+
+interface Props extends Params {
+  url: string;
+  method: Method;
 }
-class Request {
-  instance: AxiosInstance;
-  baseConfig: AxiosRequestConfig = { baseURL: '/api', timeout: 60000 };
+class RequestFetch {
   token: string | null = null;
+  baseURL: string;
 
-  constructor(config: AxiosRequestConfig) {
-    this.instance = axios.create(Object.assign({}, this.baseConfig, config));
-
-    this.instance.interceptors.request.use(
-      async (config: AxiosRequestConfig) => {
-        const token = this.token;
-        if (
-          token &&
-          [
-            '/proposal/my-info',
-            '/proposal/vote-history',
-            '/dao/my-dao-list',
-            '/discussion/new-comment',
-          ].includes(config.url || '')
-        ) {
-          config.headers = { ...config.headers, Authorization: `Bearer ${token}` };
-        }
-        return config;
-      },
-      (error) => {
-        console.error(`something were wrong when fetch ${config?.url}`, error);
-        return Promise.reject(error);
-      },
-    );
-
-    this.instance.interceptors.response.use(
-      <T>(response: AxiosResponse<ResponseType<T>>) => {
-        const res = response.data;
-        const { code, message: errorMessage } = res;
-        switch (code) {
-          case '20000':
-            return res;
-          case '20001':
-            return {};
-          case '50000':
-            return null;
-          default:
-            message.error(errorMessage);
-            return res;
-        }
-      },
-      (error) => {
-        let errMessage = '';
-        switch (error?.response?.status) {
-          case 400:
-            errMessage = 'Bad Request';
-            break;
-
-          case 401:
-            eventBus.emit(UnAuth);
-            errMessage = 'The signature has expired. Please Login again.';
-            break;
-
-          case 404:
-            errMessage = 'Not Found';
-            break;
-
-          case 500:
-          case 501:
-          case 502:
-          case 503:
-          case 504:
-            errMessage = `${error?.response?.status}: something is wrong in server`;
-            break;
-
-          default:
-            errMessage = `${error?.response?.status}: something is wrong, please try again later`;
-            break;
-        }
-
-        message.error(errMessage);
-        return Promise.reject(errMessage);
-      },
-    );
+  constructor(baseURL: string) {
+    this.baseURL = baseURL;
   }
 
-  public async request(config: AxiosRequestConfig): Promise<AxiosResponse> {
-    return this.instance.request(config);
-  }
-
-  public get<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
-    return this.instance.get(url, config);
-  }
-
-  public post<T, R>(url: string, data?: T, config?: AxiosRequestConfig): Promise<R> {
-    return this.instance.post(url, data, config);
-  }
-
-  public put<T = any, R = AxiosResponse<T>, D = any>(
-    url: string,
-    data?: D,
-    config?: AxiosRequestConfig,
-  ): Promise<R> {
-    return this.instance.put(url, data, config);
-  }
-
-  public delete<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
-    return this.instance.delete(url, config);
-  }
   public setToken(token: string) {
+    console.log('setToken', token);
     this.token = token;
   }
+  interceptorsRequest({ url, method, params }: Props) {
+    let queryParams = '';
+    let requestPayload = '';
+    const token = this.token;
+    let headers = {};
+    if (token && authList.find((item) => url.includes(item))) {
+      headers = { ...headers, Authorization: `Bearer ${token}` };
+    }
+    url = `${host}${url}`;
+
+    if (method === 'GET') {
+      if (params) {
+        queryParams = queryString.stringify(params);
+        // eslint-disable-next-line prettier/prettier
+        url = `${url}?${queryParams}`;
+      }
+    } else {
+      headers = {
+        ...headers,
+        'Content-Type': 'application/json',
+      };
+      requestPayload = JSON.stringify(params);
+    }
+    console.log('requestPayload', requestPayload, params);
+    const cacheString: RequestCache = 'no-store';
+    return {
+      url,
+      options: {
+        method,
+        headers,
+        body: method === 'POST' ? requestPayload : undefined,
+        cache: cacheString,
+      },
+    };
+  }
+
+  interceptorsResponse = async <T>(res: Response): Promise<T> => {
+    if (res.ok) {
+      const json = await res.json();
+      const { code, message: errorMessage } = json;
+      if (code === '20000') {
+        return json as T;
+      }
+      if (typeof window !== 'undefined') {
+        message.error(errorMessage);
+      }
+      return Promise.reject(errorMessage);
+    } else {
+      let errMessage = '';
+      switch (res.status) {
+        case 400:
+          errMessage = 'Bad Request';
+          break;
+
+        case 401:
+          eventBus.emit(UnAuth);
+          errMessage = 'The signature has expired. Please Login again.';
+          break;
+
+        case 404:
+          errMessage = 'Not Found';
+          break;
+
+        case 500:
+        case 501:
+        case 502:
+        case 503:
+        case 504:
+          errMessage = `${res.status}: something is wrong in server`;
+          break;
+
+        default:
+          errMessage = `${res.status}: something is wrong, please try again later`;
+          break;
+      }
+
+      if (typeof window !== 'undefined') {
+        message.error(errMessage);
+      }
+      return Promise.reject(errMessage);
+    }
+  };
+
+  async httpFactory<T>({ url = '', params = {}, method }: Props): Promise<T> {
+    const req = this.interceptorsRequest({
+      url: this.baseURL + url,
+      method,
+      params: params,
+    });
+    const logString = `${method} ${req.url}`;
+    console.time(logString);
+    const res = await fetch(req.url, req.options);
+    console.timeEnd(logString);
+    return this.interceptorsResponse<T>(res);
+  }
+
+  async request<T>(method: Method, url: string, params?: Params): Promise<T> {
+    return this.httpFactory<T>({ url, params, method });
+  }
+
+  get<T>(url: string, params?: Params): Promise<T> {
+    return this.request('GET', url, params);
+  }
+
+  post<T>(url: string, params?: Params): Promise<T> {
+    return this.request('POST', url, params);
+  }
+
+  put<T>(url: string, params?: Params): Promise<T> {
+    return this.request('PUT', url, params);
+  }
+
+  delete<T>(url: string, params?: Params): Promise<T> {
+    return this.request('DELETE', url, params);
+  }
+
+  patch<T>(url: string, params?: Params): Promise<T> {
+    return this.request('PATCH', url, params);
+  }
 }
 
-const apiServer = new Request({
-  baseURL: apiServerBaseURL,
-});
+const apiServer = new RequestFetch(apiServerBaseURL);
 
 export { apiServer };

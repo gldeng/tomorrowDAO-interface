@@ -1,3 +1,4 @@
+'use client';
 import { useEffect } from 'react';
 import DAOHeader from './components/DAOHeader';
 import DAOList from './components/DAOList';
@@ -5,7 +6,14 @@ import breadCrumb from 'utils/breadCrumb';
 import './index.css';
 import useResponsive from 'hooks/useResponsive';
 
-export default function Home() {
+interface IProps {
+  ssrData: {
+    daoList: IDaoItem[];
+    daoHasData: boolean;
+  };
+}
+export default function Home(props: IProps) {
+  const { ssrData } = props;
   useEffect(() => {
     breadCrumb.clearBreadCrumb();
   }, []);
@@ -15,7 +23,7 @@ export default function Home() {
       <div className="home-header-container">
         {!isLG && <DAOHeader />}
         {/* <DAOHeader /> */}
-        <DAOList />
+        <DAOList ssrData={ssrData} />
       </div>
     </div>
   );

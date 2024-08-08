@@ -36,7 +36,7 @@ interface IParams {
   data?: IDaoInfoData;
   onChangeHCParams: any;
   isLoading: boolean;
-  isError?: Error;
+  isError?: boolean;
   daoId?: string;
   aliasName?: string;
 }

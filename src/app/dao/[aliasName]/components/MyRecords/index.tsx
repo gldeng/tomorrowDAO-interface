@@ -18,7 +18,7 @@ interface IProps {
   aliasName?: string;
 }
 export default function MyRecords(props: IProps) {
-  const { daoId, isNetworkDAO, aliasName } = props;
+  const { daoId, aliasName } = props;
   const { walletInfo } = useSelector((store: any) => store.userInfo);
   const { isLogin } = useWalletService();
   const {

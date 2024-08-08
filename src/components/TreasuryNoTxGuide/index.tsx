@@ -109,10 +109,10 @@ const TreasuryNoTxGuide = forwardRef<ITreasuryNoTxGuideRef, ITreasuryNoTxGuidePr
         <div className={`flex flex-col items-center ${className}`}>
           <img src={treasuryIconSrc} alt="" className="treasury-no-tx-icon" />
           <h3 className="treasury-no-tx-title">Treasury Assets</h3>
-          <p className="treasury-no-tx-help-message">
+          <div className="treasury-no-tx-help-message">
             <p>Community development and operations require funding.</p>
             <p>Deposit assets to the treasury.</p>
-          </p>
+          </div>
           <div className="treasury-no-tx-button-wrap">
             <ButtonCheckLogin
               type="primary"

@@ -77,3 +77,5 @@ export const tagColorMap = {
 };
 // the proposal is created by network dao, not tmrw dao
 export const TMRWCreateProposal = 0;
+
+export const DEFAULT_PAGESIZE = 20;
