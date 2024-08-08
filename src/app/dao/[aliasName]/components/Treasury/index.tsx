@@ -258,7 +258,7 @@ const Treasury: React.FC<IProps> = (props) => {
                                 {isOut ? 'Withdraw' : 'Deposit'}
                               </span>
                               <span>
-                                {numberFormatter(item.amount)} {item.symbol}
+                                {numberFormatter(item.amountAfterDecimals)} {item.symbol}
                               </span>
                             </div>
                             <div className="treasury-info-item-line-2 text-14-22-500">
