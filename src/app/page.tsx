@@ -51,12 +51,12 @@ export default function Page() {
           <h2>Unleash the power of smart collective action</h2>
           <p>Build your DAO with Tomorrow DAO and AI</p>
           <div className="flex" ref={exploreButtonRef}>
-            <Link href="/explore">
+            <Link href="/explore" prefetch={true}>
               <Button type="primary" className="w-[152px]">
                 Explore
               </Button>
             </Link>
-            <Link href="/create">
+            <Link href="/create" prefetch={true}>
               <Button className="ml-[24px] w-[152px]">Create a DAO</Button>
             </Link>
           </div>

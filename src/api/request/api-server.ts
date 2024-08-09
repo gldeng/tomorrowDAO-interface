@@ -1,7 +1,10 @@
 import queryString from 'query-string';
+import * as Sentry from '@sentry/nextjs';
 import { eventBus, UnAuth } from 'utils/myEvent';
 import { message } from 'antd';
 import { getHost } from 'utils/request';
+import { networkType } from 'config';
+import { runTimeEnv } from 'utils/env';
 export const apiServerBaseURL = '/api/app';
 
 export const LoginExpiredTip = 'Login expired, please log in again';
@@ -55,7 +58,6 @@ class RequestFetch {
       };
       requestPayload = JSON.stringify(params);
     }
-    console.log('requestPayload', requestPayload, params);
     const cacheString: RequestCache = 'no-store';
     return {
       url,
@@ -121,10 +123,10 @@ class RequestFetch {
       method,
       params: params,
     });
-    const logString = `${method} ${req.url}`;
-    console.time(logString);
+    const reqStart = new Date().getTime();
     const res = await fetch(req.url, req.options);
-    console.timeEnd(logString);
+    const reqEnd = new Date().getTime();
+    const logString = `${runTimeEnv} ${method} ${req.url} ${reqEnd - reqStart}ms`;
     return this.interceptorsResponse<T>(res);
   }
 

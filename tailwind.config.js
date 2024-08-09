@@ -72,8 +72,8 @@ module.exports = {
         '.card-px': {
           '@apply px-4 lg:px-8': {},
         },
-        '.tab-content-padding': {
-          ' @apply px-4 lg:px-8 pb-4': {},
+        '.tabpanel-content-padding': {
+          '@apply px-4 lg:px-8 pb-4': {},
         },
 
         '.dao-border-round': {

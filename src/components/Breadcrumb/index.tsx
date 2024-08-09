@@ -19,7 +19,9 @@ const NavForPC = () => {
         title: isLast ? (
           item.title
         ) : item.href ? (
-          <Link href={item.href}>{item.title}</Link>
+          <Link href={item.href} prefetch={true}>
+            {item.title}
+          </Link>
         ) : (
           item.title
         ),

@@ -3,7 +3,9 @@
   .title-primary {
     @apply text-[20px] leading-[28px] text-neutralTitle font-medium;
   }
-
+  .proposal-type-desc {
+    @apply mb-[64px];
+  }
 }
 
 .proposal-type-select {

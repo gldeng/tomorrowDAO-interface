@@ -315,6 +315,7 @@ export default function DeoDetails(props: IProps) {
                         href={{
                           pathname: `/dao/${aliasName}/proposal/${item.proposalId}`,
                         }}
+                        prefetch={true}
                       >
                         <ProposalsItem
                           data={item}
