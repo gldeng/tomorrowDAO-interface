@@ -123,7 +123,6 @@ class RequestFetch {
       method,
       params: params,
     });
-    
     const reqStart = new Date().getTime();
     const res = await fetch(req.url, req.options);
     const reqEnd = new Date().getTime();
