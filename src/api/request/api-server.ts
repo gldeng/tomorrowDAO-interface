@@ -127,6 +127,7 @@ class RequestFetch {
     const res = await fetch(req.url, req.options);
     const reqEnd = new Date().getTime();
     const logString = `${runTimeEnv} ${method} ${req.url} ${reqEnd - reqStart}ms`;
+    console.log(logString);
     return this.interceptorsResponse<T>(res);
   }
 
