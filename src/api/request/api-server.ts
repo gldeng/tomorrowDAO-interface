@@ -126,8 +126,14 @@ class RequestFetch {
     const reqStart = new Date().getTime();
     const res = await fetch(req.url, req.options);
     const reqEnd = new Date().getTime();
-    const logString = `${runTimeEnv} ${method} ${req.url} ${reqEnd - reqStart}ms`;
+    const logString = `${reqEnd - reqStart}ms ${runTimeEnv} ${req.url}  ${method}  ${reqEnd}`;
     console.log(logString);
+    Sentry.captureMessage(logString, {
+      level: 'info',
+      extra: {
+        networkType,
+      },
+    });
     return this.interceptorsResponse<T>(res);
   }
 
