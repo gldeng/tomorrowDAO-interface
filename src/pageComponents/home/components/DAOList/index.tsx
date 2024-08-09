@@ -47,6 +47,7 @@ export default function DAOList(props: IDAOListProps) {
               <Link
                 key={item.daoId}
                 href={item.isNetworkDAO ? `/network-dao` : `/dao/${item.alias}`}
+                prefetch={true}
               >
                 <DAOListItem item={item} />
               </Link>

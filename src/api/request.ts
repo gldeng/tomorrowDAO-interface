@@ -222,6 +222,6 @@ export const fetchTreasuryRecords = async (params: {
   TreasuryAddress: string;
 }): Promise<ITreasuryRecordRes> => {
   return apiServer.get('/treasury/records', {
-    params,
+    ...params,
   });
 };
