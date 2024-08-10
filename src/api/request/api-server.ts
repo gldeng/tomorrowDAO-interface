@@ -5,6 +5,7 @@ import { message } from 'antd';
 import { getHost } from 'utils/request';
 import { networkType } from 'config';
 import { runTimeEnv } from 'utils/env';
+import { SentryEvents } from 'types/sentry';
 export const apiServerBaseURL = '/api/app';
 
 export const LoginExpiredTip = 'Login expired, please log in again';
@@ -126,14 +127,19 @@ class RequestFetch {
     const reqStart = new Date().getTime();
     const res = await fetch(req.url, req.options);
     const reqEnd = new Date().getTime();
-    const logString = `${reqEnd - reqStart}ms ${runTimeEnv} ${req.url}  ${method}  ${reqEnd}`;
-    console.log(logString);
-    Sentry.captureMessage(logString, {
-      level: 'info',
-      extra: {
-        networkType,
-      },
-    });
+    // const logString = `${reqEnd - reqStart}ms ${runTimeEnv} ${req.url}  ${method}  ${reqEnd}`;
+    if (runTimeEnv === 'server') {
+      Sentry.captureMessage(SentryEvents.SERVER_API_REQUEST_TIMING, {
+        level: 'info',
+        extra: {
+          networkType,
+          url: req.url,
+          method,
+          runtime: runTimeEnv,
+          timing: reqEnd - reqStart,
+        },
+      });
+    }
     return this.interceptorsResponse<T>(res);
   }
 
