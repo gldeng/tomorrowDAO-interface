@@ -24,6 +24,7 @@ export enum ENavKeys {
   Discord = 'Discord',
   Telegram = 'Telegram',
   Treasury = 'Treasury',
+  Blog = 'Blog',
 }
 const DynamicLogin = dynamicReq(() => import('components/Login'), {
   ssr: false,
@@ -106,6 +107,14 @@ export default function Header() {
             key: ENavKeys.Telegram,
           },
         ],
+      },
+      {
+        label: (
+          <Link href={'https://blog.tmrwdao.com'} target="_blank">
+            Blog
+          </Link>
+        ),
+        key: ENavKeys.Blog,
       },
     ];
   }, [isLG]);

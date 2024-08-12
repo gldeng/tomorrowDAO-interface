@@ -133,16 +133,16 @@ export default function DeoDetails(props: IProps) {
   return (
     <div className="dao-detail">
       <div>
-        <DaoInfo
+        {/* <DaoInfo
           data={(daoData?.data ?? {}) as IDaoInfoData}
           isLoading={daoLoading}
           isError={!daoData?.data.id}
           onChangeHCParams={handleChangeHCparams}
           daoId={daoId}
           aliasName={aliasName}
-        />
+        /> */}
 
-        <div className="dao-detail-content">
+        <div className="dao-detail-content network-dao">
           <div className={`dao-detail-content-left`}>
             <div className={`dao-detail-content-left-tab`}>{tabCom}</div>
             {tabKey === TabKey.PROPOSALS && <ExplorerProposalList />}

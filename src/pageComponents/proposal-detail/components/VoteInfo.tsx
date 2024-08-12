@@ -2,7 +2,7 @@ import { Typography, FontWeightEnum, Progress } from 'aelf-design';
 import MyInfo from 'app/dao/[aliasName]/components/MyInfo';
 import BoxWrapper from './BoxWrapper';
 import { memo, useEffect, useMemo } from 'react';
-import { EVoteMechanismNameType } from 'app/proposal/deploy/[aliasName]/type';
+import { EVoteMechanismNameType } from 'pageComponents/proposal-create/type';
 import { fetchDaoInfo } from 'api/request';
 import { curChain } from 'config';
 import { message } from 'antd';

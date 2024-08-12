@@ -56,7 +56,7 @@ export default function Footer() {
               </a>
             </div>
           </div>
-          <div className="footer-time">{`TMRW DAO@${dayjs().year()}`}</div>
+          <div className="footer-time">{`Copyright © ${dayjs().year()} Tomorrow DAO`}</div>
         </div>
       </div>
     </div>

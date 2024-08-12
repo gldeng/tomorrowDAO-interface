@@ -38,17 +38,16 @@ const ProposalDetails = (props: IProposalDetailsProps) => {
             <HeaderInfo proposalDetailData={proposalDetailData} proposalId={proposalId} />
           )}
           <VoteInfo proposalDetailData={proposalDetailData} daoId={daoId} />
-          <>
-            <div className="border border-Neutral-Divider border-solid rounded-lg bg-white">
-              <ProposalTab proposalDetailData={proposalDetailData} />
-            </div>
 
-            <StatusInfo proposalDetailData={proposalDetailData} />
-            <VoteResultTable voteTopList={proposalDetailData?.voteTopList ?? []} />
-            {proposalDetailData && (
-              <Discussion proposalId={proposalId} daoId={proposalDetailData?.daoId ?? ''} />
-            )}
-          </>
+          <div className="border border-Neutral-Divider border-solid rounded-lg bg-white">
+            <ProposalTab proposalDetailData={proposalDetailData} />
+          </div>
+
+          <StatusInfo proposalDetailData={proposalDetailData} />
+          <VoteResultTable daoId={proposalDetailData.daoId} proposalId={proposalId} />
+          {proposalDetailData && (
+            <Discussion proposalId={proposalId} daoId={proposalDetailData?.daoId ?? ''} />
+          )}
         </>
       )}
     </div>

@@ -4,7 +4,7 @@ import { curChain } from 'config';
 import { useRequest } from 'ahooks';
 import breadCrumb from 'utils/breadCrumb';
 import { fetchDaoInfo, fetchHcMembers } from 'api/request';
-import { EProposalActionTabs } from 'app/proposal/deploy/[aliasName]/type';
+import { EProposalActionTabs } from 'pageComponents/proposal-create/type';
 import { message } from 'antd';
 import MembersPage from 'pageComponents/members';
 import './index.css';
@@ -80,7 +80,7 @@ export default function TreasuryDetails(props: ITreasuryDetailsProps) {
       const check = await checkCreateProposal(daoData, wallet.address);
       setManageLoading(false);
       if (check) {
-        router.push(`/proposal/deploy/${aliasName}?tab=${EProposalActionTabs.AddHcMembers}`);
+        router.push(`/dao/${aliasName}/proposal/create?tab=${EProposalActionTabs.AddHcMembers}`);
       }
     }
   };

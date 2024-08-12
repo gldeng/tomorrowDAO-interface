@@ -1,9 +1,8 @@
 import React, { useRef } from 'react';
 import { useEffect, useState } from 'react';
 import { Table, HashAddress } from 'aelf-design';
-import { ConfigProvider, message } from 'antd';
+import { ConfigProvider } from 'antd';
 import { ColumnsType } from 'antd/es/table';
-import { useSelector } from 'react-redux';
 import { fetchDaoInfo, fetchVoteHistory } from 'api/request';
 import { EVoteOption } from 'types/vote';
 import NoData from 'components/NoData';
@@ -12,30 +11,16 @@ import { useRequest } from 'ahooks';
 import { useParams } from 'next/navigation';
 import dayjs from 'dayjs';
 import Link from 'next/link';
-import { useWalletService } from 'hooks/useWallet';
 import breadCrumb from 'utils/breadCrumb';
-import { DownOutlined, UpOutlined } from '@aelf-design/icons';
 import BigNumber from 'bignumber.js';
+import { useWebLogin } from 'aelf-web-login';
 
 const defaultPageSize = 20;
 const allValue = 'All';
 export default function RecordTable() {
-  const { walletInfo } = useSelector((store: any) => store.userInfo);
+  const { wallet } = useWebLogin();
   const { aliasName } = useParams<{ aliasName: string }>();
-  const runFetchVoteHistoryRef = useRef<(daoId: string) => void>();
-  const { isLogin } = useWalletService();
-  const {
-    data: daoData,
-    error: daoError,
-    loading: daoLoading,
-  } = useRequest(async () => {
-    if (!aliasName) {
-      message.error('aliasName is required');
-      return null;
-    }
-    return fetchDaoInfo({ chainId: curChain, alias: aliasName });
-  });
-  const daoId = daoData?.data?.id;
+  const runFetchVoteHistoryRef = useRef<() => void>();
 
   const [tableParams, setTableParams] = useState<{ page: number; pageSize: number }>({
     page: 1,
@@ -47,9 +32,11 @@ export default function RecordTable() {
     loading: voteHistoryLoading,
     run,
   } = useRequest(
-    (daoId) => {
+    async () => {
+      const daoInfoRes = await fetchDaoInfo({ chainId: curChain, alias: aliasName });
+      const daoId = daoInfoRes?.data?.id;
       return fetchVoteHistory({
-        address: walletInfo.address,
+        address: wallet.address,
         chainId: curChain,
         skipCount: (tableParams.page - 1) * tableParams.pageSize,
         maxResultCount: tableParams.pageSize,
@@ -149,10 +136,10 @@ export default function RecordTable() {
     return 'customRow';
   };
   useEffect(() => {
-    if (walletInfo.address && daoId) {
-      runFetchVoteHistoryRef.current?.(daoId);
+    if (wallet.address) {
+      runFetchVoteHistoryRef?.current?.();
     }
-  }, [tableParams, walletInfo, isLogin, daoId]);
+  }, [tableParams, wallet.address]);
 
   return (
     <ConfigProvider renderEmpty={() => <NoData></NoData>}>

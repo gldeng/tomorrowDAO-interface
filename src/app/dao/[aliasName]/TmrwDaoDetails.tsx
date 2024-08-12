@@ -127,7 +127,7 @@ export default function DeoDetails(props: IProps) {
     if (!checkRes) {
       return false;
     }
-    router.push(`/proposal/deploy/${aliasName}`);
+    router.push(`/dao/${aliasName}/proposal/create`);
     return true;
   };
   handleCreateProposalRef.current = handleCreateProposal;

@@ -74,7 +74,7 @@ export default function Page() {
               Create your DAO, where you can initiate proposals and let other members vote to
               co-build your community.
             </p>
-            <LinkWithRightArrow href="https://medium.com/@tmrwdao/how-to-create-a-dao-on-tmrwdao-platform-cc54fed69259">
+            <LinkWithRightArrow href="https://docs.tmrwdao.com/wiki/introduction//create-a-dao-on-tomorrow-dao/">
               Learn More
             </LinkWithRightArrow>
           </li>
@@ -101,7 +101,7 @@ export default function Page() {
               requires creating a proposal. Treasury funds will aid in the governance of the
               community.
             </p>
-            <LinkWithRightArrow href="https://medium.com/@tmrwdao/how-to-enable-and-manage-a-dao-treasury-with-tmrwdao-ead8168d4c9a">
+            <LinkWithRightArrow href="https://docs.tmrwdao.com/wiki/introduction/how-to-enable-and-manage-a-dao-treasury-with-tomorrow-dao/">
               Learn More
             </LinkWithRightArrow>
           </li>

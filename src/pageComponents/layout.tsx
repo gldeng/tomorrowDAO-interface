@@ -15,7 +15,7 @@ const Layout = (props: React.PropsWithChildren<{}>) => {
   const pathName = usePathname();
   const isHome = pathName === '/';
   const isCreateDao = pathName === '/create';
-  const isCreateProposal = pathName.startsWith('/proposal/deploy');
+  const isCreateProposal = pathName.includes('/proposal/create');
   const isExolore = pathName === '/explore';
   const { isLG } = useResponsive();
   const notHomeClass = isHome
