@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Input, Tabs } from 'aelf-design';
 import {
   AddCircleOutlined,
@@ -39,6 +39,8 @@ interface IActionTabsProps {
 // const emptyTabItem = (...([]));
 export default function TabsCom(props: IActionTabsProps) {
   const { daoId, onTabChange, activeTab, treasuryAssetsData, daoData } = props;
+  const onTabChangeRef = useRef<(activeKey: string) => void>();
+  onTabChangeRef.current = onTabChange;
   const form = Form.useFormInstance();
   const contractAddress = Form.useWatch(['transaction', 'toAddress'], form);
   const [contractInfo, setContractInfo] = useState<IContractInfoListData>();
@@ -95,123 +97,129 @@ export default function TabsCom(props: IActionTabsProps) {
   }, [contractAddress, form, contractInfo]);
   const tabItems = useMemo(() => {
     const initItems = [
-      {
-        label: (
-          <span className="proposal-action-tabs-label">
-            <RightArrowOutlined />
-            <span
-              className={`proposal-action-tabs-text ${
-                activeTab === EProposalActionTabs.TREASURY ? 'active' : ''
-              }`}
-            >
-              Withdraw Assets
-            </span>
-          </span>
-        ),
-        key: EProposalActionTabs.TREASURY,
-        children: (
-          <>
-            <Form.Item
-              name={['treasury', 'recipient']}
-              label={<span className="form-item-label">Recipient</span>}
-              validateFirst
-              extra={'The wallet that receives the tokens.'}
-              rules={[
-                {
-                  required: true,
-                  message: 'The recipient is required',
-                },
-                {
-                  validator: (_, value) => {
-                    return new Promise<void>((resolve, reject) => {
-                      if (value.endsWith(`AELF`)) {
-                        reject(new Error('Must be a SideChain address'));
-                      }
-                      if (!value.startsWith(`ELF`) || !value.endsWith(curChain)) {
-                        reject(new Error('Must be a valid address'));
-                      }
-                      resolve();
-                    });
-                  },
-                },
-              ]}
-            >
-              <Input type="text" placeholder={`Enter ELF_..._${curChain}`} />
-            </Form.Item>
-            <Form.Item
-              name={['treasury', 'amountInfo']}
-              label={<span className="form-item-label">Amount</span>}
-              validateFirst
-              rules={[
-                {
-                  validator: (_, value) => {
-                    return new Promise<void>((resolve, reject) => {
-                      if (!value) {
-                        reject(new Error('The amount is required'));
-                      }
-                      if (typeof value.amount !== 'number') {
-                        reject(new Error('The amount is required'));
-                      }
-                      if (value.amount <= 0) {
-                        reject(new Error('The amount must be greater than 0'));
-                      }
-                      if (typeof value.symbol !== 'string') {
-                        reject(new Error('The symbol is required'));
-                      }
-                      resolve();
-                    });
-                  },
-                },
-                {
-                  validator: (_, value) => {
-                    return new Promise<void>((resolve, reject) => {
-                      const { amount, symbol } = value;
-                      const symbolInfo = treasuryAssetsData?.find((item) => item.symbol === symbol);
-                      if (!symbolInfo) {
-                        reject(new Error('The symbol is invalid'));
-                        return;
-                      }
-                      if (!symbolInfo) {
-                        reject(new Error('The symbol is invalid'));
-                        return;
-                      }
-                      const amountWithDecimals = BigNumber(amount);
-                      const decimalPlaces = amountWithDecimals.decimalPlaces();
-                      if (decimalPlaces && decimalPlaces > symbolInfo.decimal) {
-                        return reject(
-                          new Error(
-                            `The maximum number of decimal places is ${symbolInfo.decimal}`,
-                          ),
-                        );
-                      }
-                      if (
-                        amountWithDecimals.gt(divDecimals(symbolInfo.amount, symbolInfo.decimal))
-                      ) {
-                        reject(
-                          new Error(
-                            'The withdrawal amount should be less than the available treasury assets.',
-                          ),
-                        );
-                      } else {
-                        resolve();
-                      }
-                    });
-                  },
-                },
-              ]}
-              initialValue={{
-                symbol: selectOptions?.[0]?.value,
-              }}
-            >
-              <AmountInput
-                daoId={daoId}
-                selectOptions={selectOptions}
-                treasuryAssetsData={treasuryAssetsData}
-              />
-            </Form.Item>
-          </>
-        ),
-      },
+      treasuryAssetsData?.length
+        ? {
+            label: (
+              <span className="proposal-action-tabs-label">
+                <RightArrowOutlined />
+                <span
+                  className={`proposal-action-tabs-text ${
+                    activeTab === EProposalActionTabs.TREASURY ? 'active' : ''
+                  }`}
+                >
+                  Withdraw Assets
+                </span>
+              </span>
+            ),
+            key: EProposalActionTabs.TREASURY,
+            children: (
+              <>
+                <Form.Item
+                  name={['treasury', 'recipient']}
+                  label={<span className="form-item-label">Recipient</span>}
+                  validateFirst
+                  extra={'The wallet that receives the tokens.'}
+                  rules={[
+                    {
+                      required: true,
+                      message: 'The recipient is required',
+                    },
+                    {
+                      validator: (_, value) => {
+                        return new Promise<void>((resolve, reject) => {
+                          if (value.endsWith(`AELF`)) {
+                            reject(new Error('Must be a SideChain address'));
+                          }
+                          if (!value.startsWith(`ELF`) || !value.endsWith(curChain)) {
+                            reject(new Error('Must be a valid address'));
+                          }
+                          resolve();
+                        });
+                      },
+                    },
+                  ]}
+                >
+                  <Input type="text" placeholder={`Enter ELF_..._${curChain}`} />
+                </Form.Item>
+                <Form.Item
+                  name={['treasury', 'amountInfo']}
+                  label={<span className="form-item-label">Amount</span>}
+                  validateFirst
+                  rules={[
+                    {
+                      validator: (_, value) => {
+                        return new Promise<void>((resolve, reject) => {
+                          if (!value) {
+                            reject(new Error('The amount is required'));
+                          }
+                          if (typeof value.amount !== 'number') {
+                            reject(new Error('The amount is required'));
+                          }
+                          if (value.amount <= 0) {
+                            reject(new Error('The amount must be greater than 0'));
+                          }
+                          if (typeof value.symbol !== 'string') {
+                            reject(new Error('The symbol is required'));
+                          }
+                          resolve();
+                        });
+                      },
+                    },
+                    {
+                      validator: (_, value) => {
+                        return new Promise<void>((resolve, reject) => {
+                          const { amount, symbol } = value;
+                          const symbolInfo = treasuryAssetsData?.find(
+                            (item) => item.symbol === symbol,
+                          );
+                          if (!symbolInfo) {
+                            reject(new Error('The symbol is invalid'));
+                            return;
+                          }
+                          if (!symbolInfo) {
+                            reject(new Error('The symbol is invalid'));
+                            return;
+                          }
+                          const amountWithDecimals = BigNumber(amount);
+                          const decimalPlaces = amountWithDecimals.decimalPlaces();
+                          if (decimalPlaces && decimalPlaces > symbolInfo.decimal) {
+                            return reject(
+                              new Error(
+                                `The maximum number of decimal places is ${symbolInfo.decimal}`,
+                              ),
+                            );
+                          }
+                          if (
+                            amountWithDecimals.gt(
+                              divDecimals(symbolInfo.amount, symbolInfo.decimal),
+                            )
+                          ) {
+                            reject(
+                              new Error(
+                                'The withdrawal amount should be less than the available treasury assets.',
+                              ),
+                            );
+                          } else {
+                            resolve();
+                          }
+                        });
+                      },
+                    },
+                  ]}
+                  initialValue={{
+                    symbol: selectOptions?.[0]?.value,
+                  }}
+                >
+                  <AmountInput
+                    daoId={daoId}
+                    selectOptions={selectOptions}
+                    treasuryAssetsData={treasuryAssetsData}
+                  />
+                </Form.Item>
+              </>
+            ),
+          }
+        : {},
       daoData?.governanceMechanism === EDaoGovernanceMechanism.Multisig
         ? {
             label: (
@@ -386,11 +394,19 @@ export default function TabsCom(props: IActionTabsProps) {
     contractInfoOptions,
     contractMethodOptions,
     daoData?.governanceMechanism,
+    daoData?.isHighCouncilEnabled,
     daoId,
     form,
     selectOptions,
     treasuryAssetsData,
   ]);
+
+  useEffect(() => {
+    const keys = tabItems?.map((item) => item.key);
+    if (activeTab && !keys?.includes(activeTab) && tabItems?.[0]?.key) {
+      onTabChangeRef?.current?.(tabItems?.[0]?.key);
+    }
+  }, [tabItems, activeTab]);
   return (
     <Tabs
       defaultActiveKey={activeTab}

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { curChain } from 'config';
 import { fetchHcMembers } from 'api/request';
 import { useRequest } from 'ahooks';
-import { EProposalActionTabs } from 'app/proposal/deploy/[aliasName]/type';
+import { EProposalActionTabs } from 'pageComponents/proposal-create/type';
 import Members from 'components/Members';
 import { useRouter } from 'next/navigation';
 import { useWebLogin } from 'aelf-web-login';
@@ -52,7 +52,7 @@ const DaoMembers: React.FC<IProps> = (props) => {
       }
       const checkRes = await checkCreateProposal(daoRes, wallet.address);
       if (checkRes) {
-        router.push(`/proposal/deploy/${aliasName}?tab=${EProposalActionTabs.AddHcMembers}`);
+        router.push(`/dao/${aliasName}/proposal/create?tab=${EProposalActionTabs.AddHcMembers}`);
       }
     } catch (error) {
       console.log('handleCreateProposal', error);

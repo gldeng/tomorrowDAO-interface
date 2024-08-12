@@ -1,16 +1,15 @@
 import { RightOutlined } from '@aelf-design/icons';
 import Link from 'next/link';
 import { fetchVoteHistory } from 'api/request';
-import { useSelector } from 'react-redux';
 import { useRequest } from 'ahooks';
 import { curChain } from 'config';
 import { EVoteOption } from 'types/vote';
 import dayjs from 'dayjs';
 import { useEffect } from 'react';
-import { useWalletService } from 'hooks/useWallet';
 import './index.css';
 import { SkeletonLine } from 'components/Skeleton';
 import NoData from 'components/NoData';
+import { useWebLogin } from 'aelf-web-login';
 
 interface IProps {
   daoId: string;
@@ -19,8 +18,7 @@ interface IProps {
 }
 export default function MyRecords(props: IProps) {
   const { daoId, aliasName } = props;
-  const { walletInfo } = useSelector((store: any) => store.userInfo);
-  const { isLogin } = useWalletService();
+  const { wallet } = useWebLogin();
   const {
     data: voteHistoryData,
     run,
@@ -29,7 +27,7 @@ export default function MyRecords(props: IProps) {
   } = useRequest(
     () => {
       return fetchVoteHistory({
-        address: walletInfo.address,
+        address: wallet.address,
         chainId: curChain,
         skipCount: 0,
         maxResultCount: 10,
@@ -41,23 +39,10 @@ export default function MyRecords(props: IProps) {
     },
   );
   useEffect(() => {
-    if (isLogin) {
+    if (wallet.address) {
       run();
     }
-  }, [isLogin]);
-
-  // const statusCom = (text: keyof IStatus, size = 500) => {
-  //   return (
-  //     <span
-  //       style={{
-  //         color: colorMap[text],
-  //         fontWeight: size,
-  //       }}
-  //     >
-  //       {text}
-  //     </span>
-  //   );
-  // };
+  }, [run, wallet.address]);
 
   const LoadMoreButton = (
     <span className="text-[12px] flex items-center text-neutralTitle hover:text-link">

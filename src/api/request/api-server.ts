@@ -10,12 +10,7 @@ export const apiServerBaseURL = '/api/app';
 
 export const LoginExpiredTip = 'Login expired, please log in again';
 const host = getHost();
-const authList = [
-  '/proposal/my-info',
-  '/proposal/vote-history',
-  '/dao/my-dao-list',
-  '/discussion/new-comment',
-];
+const authList = ['/proposal/my-info', '/dao/my-dao-list', '/discussion/new-comment'];
 type Method = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
 
 type Params = Record<string, any>;

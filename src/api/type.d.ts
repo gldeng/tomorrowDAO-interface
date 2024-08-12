@@ -658,7 +658,8 @@ interface IVoteHistoryReq {
   chainId: string;
   skipCount: number;
   maxResultCount: number;
-  address: string;
+  address?: string;
+  proposalId?: string;
   voteOption?: string;
 }
 interface IVoteHistoryItem {

@@ -6,7 +6,7 @@ import CheckedIcon from 'assets/imgs/checked.svg';
 import useResponsive from 'hooks/useResponsive';
 import { tagColorMap } from '../../constants';
 import DetailTag from 'components/DetailTag';
-import { EVoteMechanismNameType } from 'app/proposal/deploy/[aliasName]/type';
+import { EVoteMechanismNameType } from 'pageComponents/proposal-create/type';
 import capitalizeFirstLetter from 'utils/capitalizeFirstLetter';
 import ProposalTag from './ProposalTag';
 import ProposalStatusDesc from './ProposalStatusDesc';

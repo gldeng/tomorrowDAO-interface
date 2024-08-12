@@ -1,4 +1,4 @@
-import { memo, useMemo, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { HashAddress, Table } from 'aelf-design';
 import { ConfigProvider } from 'antd';
 import { TVotingOption } from './type';
@@ -7,8 +7,11 @@ import thousandsNumber from 'utils/thousandsNumber';
 import Link from 'next/link';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
-import { explorer, sideChainSuffix } from 'config';
+import { curChain, explorer, sideChainSuffix } from 'config';
 import NoData from 'components/NoData';
+import { fetchVoteHistory } from 'api/request';
+import { useRequest } from 'ahooks';
+import { useWebLogin } from 'aelf-web-login';
 
 const columns: ColumnsType<IProposalDetailDataVoteTopListItem> = [
   {
@@ -88,15 +91,36 @@ const columns: ColumnsType<IProposalDetailDataVoteTopListItem> = [
   },
 ];
 interface IVoteResultTableProps {
-  voteTopList: IProposalDetailDataVoteTopListItem[];
+  daoId: string;
+  proposalId: string;
 }
 const defaultPageSize = 20;
 const VoteResultTable = (props: IVoteResultTableProps) => {
-  const { voteTopList } = props;
+  const { daoId, proposalId } = props;
+  const { wallet } = useWebLogin();
   const [tableParams, setTableParams] = useState<{ page: number; pageSize: number }>({
     page: 1,
     pageSize: defaultPageSize,
   });
+  const {
+    data: voteHistoryData,
+    error: voteHistoryError,
+    loading: voteHistoryLoading,
+    run,
+  } = useRequest(
+    async () => {
+      return fetchVoteHistory({
+        proposalId: proposalId,
+        chainId: curChain,
+        skipCount: (tableParams.page - 1) * tableParams.pageSize,
+        maxResultCount: tableParams.pageSize,
+        daoId: daoId,
+      });
+    },
+    {
+      manual: true,
+    },
+  );
 
   const pageChange = (page: number, pageSize: number) => {
     setTableParams({
@@ -104,10 +128,11 @@ const VoteResultTable = (props: IVoteResultTableProps) => {
       pageSize,
     });
   };
-  const lists = useMemo(() => {
-    const { page, pageSize } = tableParams;
-    return voteTopList?.slice((page - 1) * pageSize, page * pageSize) ?? [];
-  }, [tableParams, voteTopList]);
+  useEffect(() => {
+    if (wallet.address) {
+      run();
+    }
+  }, [run, tableParams, wallet.address]);
   return (
     <div className="card-shape vote-result-table-wrap">
       <div className="flex justify-between px-8 py-6 title">
@@ -120,10 +145,11 @@ const VoteResultTable = (props: IVoteResultTableProps) => {
           scroll={{ x: 'max-content' }}
           pagination={{
             ...tableParams,
-            total: voteTopList?.length ?? 0,
+            total: voteHistoryData?.data?.total ?? 0,
             onChange: pageChange,
           }}
-          dataSource={lists}
+          loading={voteHistoryLoading}
+          dataSource={voteHistoryData?.data?.items}
         ></Table>
       </ConfigProvider>
     </div>

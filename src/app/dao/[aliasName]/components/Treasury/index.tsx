@@ -16,7 +16,7 @@ import { fetchTreasuryRecords, getDaoTreasury } from 'api/request';
 import dayjs from 'dayjs';
 import './index.css';
 import { ButtonCheckLogin } from 'components/ButtonCheckLogin';
-import { EProposalActionTabs } from 'app/proposal/deploy/[aliasName]/type';
+import { EProposalActionTabs } from 'pageComponents/proposal-create/type';
 import { useRequest } from 'ahooks';
 import useTokenListData from 'hooks/useTokenListData';
 import { numberFormatter } from 'utils/numberFormatter';
@@ -113,7 +113,7 @@ const Treasury: React.FC<IProps> = (props) => {
       }
       const checkRes = await checkCreateProposal(daoRes, wallet.address);
       if (checkRes) {
-        router.push(`/proposal/deploy/${aliasName}?tab=${EProposalActionTabs.TREASURY}`);
+        router.push(`/dao/${aliasName}/proposal/create?tab=${EProposalActionTabs.TREASURY}`);
       }
     } catch (error) {
       console.log('handleCreateProposal', error);

@@ -1,33 +1,21 @@
 /* eslint-disable no-inline-styles/no-inline-styles */
-'use client';
 
-import { usePathname } from 'next/navigation';
 import 'aelf-web-login/dist/assets/index.css';
 import 'styles/global.css';
 import 'styles/button.css';
 import 'aelf-design/css';
-import Layout from 'pageComponents/layout';
 import Provider from 'provider/';
 import Script from 'next/script';
-import dynamicReq from 'next/dynamic';
-import { useWalletInit } from 'hooks/useWallet';
 import StyleRegistry from './StyleRegistry';
-import { NetworkDaoHomePathName } from 'config';
-import { useUrlPath } from 'hooks/useUrlPath';
+import { LayoutContent } from './layout-content';
+import { Metadata } from 'next';
 
-const WalletInit = dynamicReq(
-  async () => {
-    return () => {
-      useWalletInit();
-      return <></>;
-    };
-  },
-  { ssr: false },
-);
+export const metadata: Metadata = {
+  title: 'TMRWDAO: Revolutionise Decentralised Governance with AI',
+  description:
+    'Launch & Manage Your DAO with AI: TMRWDAO, the leading AI DAO platform, empowers communities with secure, transparent & efficient decentralised governance.',
+};
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
-  const pathname = usePathname();
-  const isNetWorkDao = pathname.startsWith(NetworkDaoHomePathName);
-  const { isHome, isExplorer } = useUrlPath();
   return (
     <html lang="en">
       {/* eslint-disable-next-line @next/next/no-head-element */}
@@ -35,11 +23,6 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
         <meta
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;"
           name="viewport"
-        />
-        <title>TMRWDAO: Revolutionise Decentralised Governance with AI</title>
-        <meta
-          name="description"
-          content="Launch & Manage Your DAO with AI: TMRWDAO, the leading AI DAO platform, empowers communities with secure, transparent & efficient decentralised governance."
         />
         {/* Google Tag Manager  */}
         {/* eslint-disable-next-line @next/next/inline-script-id */}
@@ -86,8 +69,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </noscript>
         <StyleRegistry>
           <Provider>
-            {!isHome && <WalletInit />}
-            {isNetWorkDao ? <div>{children}</div> : <Layout>{children}</Layout>}
+            <LayoutContent>{children}</LayoutContent>
           </Provider>
         </StyleRegistry>
         {/* <Script src="https://telegram.org/js/telegram-web-app.js"></Script> */}

@@ -195,11 +195,13 @@ const FIELDS_MAP = {
     placeholder: "Input the address list of members, separated by commas",
     rules: [
       {
-        required: false,
+        required: true,
         type: "string",
-        // message: 'Please input the correct members list',
-        validator: validateAddressList,
+        message: 'Please input the correct members list',
       },
+      ({ getFieldValue }) => ({
+        validator: validateAddressList,
+      }),
     ],
   },
   proposers: {
@@ -481,7 +483,7 @@ const CreateOrganization = () => {
   );
 
   return (
-    <div className="create-organization">
+    <div className="create-organization page-content-bg-border">
       <div className="create-organization-header">
         <div className="create-organization-header-title">
           Create Organisation
