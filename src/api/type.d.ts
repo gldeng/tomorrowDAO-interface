@@ -667,7 +667,9 @@ interface IVoteHistoryItem {
   proposalId: string;
   proposalTitle: string;
   myOption: number;
-  votesNum: number;
+  voter: string;
+  voteNum: number;
+  voteNumAfterDecimals: number;
   transactionId: string;
   executer: string;
 }

@@ -5,7 +5,7 @@ import { message } from 'antd';
 import { useSelector } from 'react-redux';
 import useResponsive from 'hooks/useResponsive';
 import HighCounCilTable from './components/HighCouncilTable';
-import DaoInfo from './components/DaoInfo';
+// import DaoInfo from './components/DaoInfo';
 import { useRequest } from 'ahooks';
 import { TabKey } from './type';
 import { fetchDaoInfo } from 'api/request';

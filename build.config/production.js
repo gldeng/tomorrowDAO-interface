@@ -10,5 +10,6 @@ module.exports = {
       transform: 'lodash/{{member}}',
     },
   },
+  productionBrowserSourceMaps: false,
   resolve: {},
 };

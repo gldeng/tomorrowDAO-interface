@@ -100,7 +100,7 @@ export default function RecordTable() {
     },
     {
       title: 'Votes',
-      dataIndex: 'voteNum',
+      dataIndex: 'voteNumAfterDecimals',
       width: 206,
       render(voteNum) {
         return <span>{BigNumber(voteNum).toFormat()}</span>;
