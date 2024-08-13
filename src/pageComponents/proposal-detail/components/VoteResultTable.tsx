@@ -1,9 +1,7 @@
 import { memo, useEffect, useState } from 'react';
 import { HashAddress, Table } from 'aelf-design';
 import { ConfigProvider } from 'antd';
-import { TVotingOption } from './type';
 import { ColumnsType } from 'antd/es/table';
-import thousandsNumber from 'utils/thousandsNumber';
 import Link from 'next/link';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
@@ -12,8 +10,10 @@ import NoData from 'components/NoData';
 import { fetchVoteHistory } from 'api/request';
 import { useRequest } from 'ahooks';
 import { useWebLogin } from 'aelf-web-login';
+import { EVoteOption } from 'types/vote';
+import BigNumber from 'bignumber.js';
 
-const columns: ColumnsType<IProposalDetailDataVoteTopListItem> = [
+const columns: ColumnsType<IVoteHistoryItem> = [
   {
     width: 328,
     title: 'Voter',
@@ -51,20 +51,20 @@ const columns: ColumnsType<IProposalDetailDataVoteTopListItem> = [
   {
     width: 224,
     title: 'Result',
-    dataIndex: 'option',
+    dataIndex: 'myOption',
     render: (text) => {
       return (
         <span
           className={clsx(
             'card-sm-text-bold',
-            text === TVotingOption.Approved
+            text === EVoteOption.APPROVED
               ? 'text-approve'
-              : text === TVotingOption.Rejected
+              : text === EVoteOption.REJECTED
               ? 'text-rejection'
               : 'text-abstention',
           )}
         >
-          {text}
+          {EVoteOption[text]}
         </span>
       );
     },
@@ -73,8 +73,12 @@ const columns: ColumnsType<IProposalDetailDataVoteTopListItem> = [
     width: 224,
     title: 'Votes',
     dataIndex: 'amount',
-    render: (text) => {
-      return <span className="card-sm-text-bold">{thousandsNumber(text)}</span>;
+    render: (_, record) => {
+      return (
+        <span className="card-sm-text-bold">
+          {BigNumber(record.voteNumAfterDecimals).toFormat()}
+        </span>
+      );
     },
   },
   {
@@ -129,10 +133,8 @@ const VoteResultTable = (props: IVoteResultTableProps) => {
     });
   };
   useEffect(() => {
-    if (wallet.address) {
-      run();
-    }
-  }, [run, tableParams, wallet.address]);
+    run();
+  }, [run, tableParams]);
   return (
     <div className="card-shape vote-result-table-wrap">
       <div className="flex justify-between px-8 py-6 title">

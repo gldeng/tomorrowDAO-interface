@@ -33,7 +33,7 @@
   .error-message {
     @apply card-sm-text text-error;
   }
-  .send-button.disabled,  .send-button.disabled:hover{
+  .send-button.disabled,  .send-button.disabled:hover, .TMRWDAO-btn-primary.disabled:not(:disabled):not(.TMRWDAO-btn-disabled):hover{
     @apply cursor-not-allowed bg-Neutral-Hover-BG text-Neutral-Disable-Text shadow-none;
   }
   .loading-more-wrap {
