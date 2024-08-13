@@ -7,7 +7,7 @@ import { networkType } from 'config';
 import { runTimeEnv } from 'utils/env';
 import { SentryEvents } from 'types/sentry';
 export const apiServerBaseURL = '/api/app';
-
+const defaultServerError = 'The API has an error. Please refresh and retry.';
 export const LoginExpiredTip = 'Login expired, please log in again';
 const host = getHost();
 const authList = ['/proposal/my-info', '/dao/my-dao-list', '/discussion/new-comment'];
@@ -18,6 +18,10 @@ type Params = Record<string, any>;
 interface Props extends Params {
   url: string;
   method: Method;
+}
+interface ReqParams {
+  url: string;
+  options: RequestInit;
 }
 class RequestFetch {
   token: string | null = null;
@@ -31,7 +35,7 @@ class RequestFetch {
     console.log('setToken', token);
     this.token = token;
   }
-  interceptorsRequest({ url, method, params }: Props) {
+  interceptorsRequest({ url, method, params }: Props): ReqParams {
     let queryParams = '';
     let requestPayload = '';
     const token = this.token;
@@ -66,7 +70,7 @@ class RequestFetch {
     };
   }
 
-  interceptorsResponse = async <T>(res: Response): Promise<T> => {
+  interceptorsResponse = async <T>(res: Response, req: ReqParams): Promise<T> => {
     if (res.ok) {
       const json = await res.json();
       const { code, message: errorMessage } = json;
@@ -75,8 +79,20 @@ class RequestFetch {
       }
       if (typeof window !== 'undefined') {
         message.error(errorMessage);
+      } else {
+        Sentry.captureMessage(SentryEvents.SERVER_API_REQUEST_ERROR, {
+          level: 'info',
+          extra: {
+            networkType,
+            url: req.url,
+            method: req.options.method,
+            runtime: runTimeEnv,
+            code,
+            errorMessage,
+          },
+        });
       }
-      return Promise.reject(errorMessage);
+      return Promise.reject(errorMessage ? errorMessage : defaultServerError);
     } else {
       let errMessage = '';
       switch (res.status) {
@@ -108,8 +124,20 @@ class RequestFetch {
 
       if (typeof window !== 'undefined') {
         message.error(errMessage);
+      } else {
+        Sentry.captureMessage(SentryEvents.SERVER_API_REQUEST_ERROR, {
+          level: 'info',
+          extra: {
+            networkType,
+            url: req.url,
+            method: req.options.method,
+            runtime: runTimeEnv,
+            code: res.status,
+            errorMessage: errMessage,
+          },
+        });
       }
-      return Promise.reject(errMessage);
+      return Promise.reject(errMessage ? errMessage : defaultServerError);
     }
   };
 
@@ -135,7 +163,7 @@ class RequestFetch {
         },
       });
     }
-    return this.interceptorsResponse<T>(res);
+    return this.interceptorsResponse<T>(res, req);
   }
 
   async request<T>(method: Method, url: string, params?: Params): Promise<T> {

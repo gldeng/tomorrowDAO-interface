@@ -3,6 +3,8 @@ import PageIndex from 'pageComponents/home';
 import { fetchDaoList } from 'api/request';
 import { curChain } from 'config';
 import { Metadata } from 'next';
+import { serverGetSSRData } from 'utils/ssr';
+import { ServerError } from 'components/ServerError/index';
 
 async function getInitDaoList() {
   const res = await fetchDaoList({
@@ -17,8 +19,11 @@ async function getInitDaoList() {
 }
 
 export default async function Page() {
-  const initData = await getInitDaoList();
-  return <PageIndex ssrData={initData} />;
+  const initData = await serverGetSSRData(() => getInitDaoList());
+  if (initData.data) {
+    return <PageIndex ssrData={initData.data} />;
+  }
+  return <ServerError error={initData.error} />;
 }
 export const metadata: Metadata = {
   title: 'Explore TMRWDAO: Discover Decentralised Projects',
