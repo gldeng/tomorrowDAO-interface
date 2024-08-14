@@ -201,7 +201,7 @@ const Treasury: React.FC<IProps> = (props) => {
               <div className={existTransaction ? 'block' : 'hidden'}>
                 <div className="flex items-center justify-between">
                   <h2 className="card-title">Treasury Assets</h2>
-                  <Link href={`/dao/${aliasName}/treasury`}>
+                  <Link href={`/dao/${aliasName}/treasury`} prefetch={true}>
                     <Button size="medium" type="primary" className="small-button">
                       View all
                     </Button>
