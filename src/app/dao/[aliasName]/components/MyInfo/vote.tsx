@@ -229,7 +229,7 @@ function Vote(props: TVoteTypes) {
           layout="vertical"
           variant="filled"
           onFinish={() => handlerVote()}
-          className="mt-[10px]"
+          className="mt-[10px] my-info-form"
           requiredMark={false}
         >
           <Form.Item<TFieldType>
@@ -240,6 +240,10 @@ function Vote(props: TVoteTypes) {
             tooltip={`Currently, the only supported method is to unstake all the available ${symbol} in one time.`}
             rules={[
               { required: true, message: 'Please input stake amount' },
+              {
+                type: 'integer',
+                message: 'Please input an integer',
+              },
               {
                 validator: (_, value) => {
                   return new Promise<void>((resolve, reject) => {
@@ -270,11 +274,11 @@ function Vote(props: TVoteTypes) {
               }
             />
           </Form.Item>
-          <Form.Item>
-            <Button className="mx-auto" type="primary" htmlType="submit">
+          <div>
+            <Button className="mx-auto mt-[24px]" type="primary" htmlType="submit">
               Stake and Vote
             </Button>
-          </Form.Item>
+          </div>
         </Form>
       </CommonModal>
       {/* UniqueVote vote 1a1v 1 approve  2 Reject  3 Abstain  */}
