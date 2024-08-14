@@ -20,13 +20,15 @@ interface ITransparentProps {
   address: string;
   isNetworkDao: boolean;
   daoId?: string;
+  aliasName?: string;
   currentChain?: string;
   title: React.ReactNode;
 }
 export default function Transparent(props: ITransparentProps) {
-  const { address, currentChain, title, isNetworkDao, daoId } = props;
+  const { address, currentChain, title, isNetworkDao, daoId, aliasName } = props;
   const { tokenList, totalValueUSD, tokenListLoading } = useTokenListData({
     daoId,
+    alias: aliasName,
     currentChain,
   });
 

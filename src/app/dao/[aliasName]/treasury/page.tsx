@@ -1,13 +1,24 @@
-'use client';
 import React from 'react';
-import { SkeletonList } from 'components/Skeleton';
+import PageIndex from './_page';
+import { curChain } from 'config';
+import { getDaoTreasury } from 'api/request';
+import { serverGetSSRData } from 'utils/ssr';
+import { ServerError } from 'components/ServerError';
 
-import dynamicReq from 'next/dynamic';
-const PageIndex = dynamicReq(() => import('./_page'), {
-  ssr: false,
-  loading: () => <SkeletonList />,
-});
-
-export default function Page(props: { params: { aliasName: string } }) {
-  return <PageIndex aliasName={props.params.aliasName} />;
+async function getInitData(aliasName: string) {
+  const res = await getDaoTreasury({
+    chainId: curChain,
+    alias: aliasName as string,
+  });
+  return {
+    treasuryAddress: res.data,
+  };
+}
+export default async function Page(props: { params: { aliasName: string } }) {
+  const aliasName = props.params.aliasName;
+  const initData = await serverGetSSRData(() => getInitData(aliasName));
+  if (initData.data) {
+    return <PageIndex aliasName={aliasName} ssrData={initData.data} />;
+  }
+  return <ServerError error={initData.error} />;
 }
