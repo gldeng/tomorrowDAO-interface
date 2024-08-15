@@ -8,7 +8,7 @@ import { curChain } from 'config';
 
 import './index.css';
 import LoadMoreButton from 'components/LoadMoreButton';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { set } from 'js-cookie';
 
 interface IFetchResult {
@@ -38,6 +38,9 @@ export default function DAOList(props: IDAOListProps) {
     setHasData(renderList.length + res.data.items.length < res.data.totalCount);
     setLoading(false);
   };
+  useEffect(() => {
+    console.log('ssr daoList', ssrData);
+  }, []);
   return (
     <div className="dao-list">
       {renderList ? (
