@@ -83,7 +83,7 @@ const columns: ColumnsType<IVoteHistoryItem> = [
   },
   {
     title: 'Time',
-    dataIndex: 'voteTime',
+    dataIndex: 'timeStamp',
     align: 'right',
     render: (text) => {
       return (
