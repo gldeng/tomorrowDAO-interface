@@ -15,6 +15,7 @@ import './index.css';
 import { curChain, NetworkDaoHomePathName } from 'config';
 import { useWebLogin } from 'aelf-web-login';
 import { EDaoGovernanceMechanism } from 'app/(createADao)/create/type';
+import ImageWithPlaceHolder from 'components/ImageWithPlaceHolder';
 
 const firstLetterToLowerCase = (str: string) => {
   return str.charAt(0).toLowerCase() + str.slice(1);
@@ -203,13 +204,17 @@ export default function DaoInfo(props: IParams) {
         <>
           <div className="dao-basic-info">
             <div className="dao-detail-logo px-4 lg:px-8">
-              <Image
-                width={80}
-                height={80}
-                src={metadata?.logoUrl ?? DaoLogo}
-                alt=""
-                className="rounded-full logo-image"
-              ></Image>
+              <div className="dao-detail-logo-content">
+                <ImageWithPlaceHolder
+                  alias={aliasName ?? ''}
+                  text={metadata?.name ?? ''}
+                  src={metadata?.logoUrl ?? DaoLogo}
+                  imageProps={{
+                    width: 80,
+                    height: 80,
+                  }}
+                />
+              </div>
               <div className="flex">
                 {wallet.address === data?.creator && (
                   <Link

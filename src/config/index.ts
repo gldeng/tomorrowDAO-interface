@@ -17,3 +17,4 @@ export const ElectionContractName = 'Election';
 
 export const NetworkDaoHomePathName = '/network-dao';
 export const NetworkName = 'Network DAO';
+export const NetworkDaoAlias = 'network-dao';

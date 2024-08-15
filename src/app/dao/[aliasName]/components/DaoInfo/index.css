@@ -16,8 +16,8 @@
   .dao-detail-logo {
     @apply lg:order-2 order-1 flex flex-row lg:flex-col lg:items-end justify-between;
 
-    .logo-image {
-      @apply lg:w-[80px] lg:h-[80px] w-[48px] h-[48px];
+    .dao-detail-logo-content {
+      @apply lg:w-[80px] lg:h-[80px] w-[48px] h-[48px] rounded-full overflow-hidden;
     }
   }
 

@@ -455,11 +455,11 @@ const CreateOrganization = () => {
       navigate.push(`/organization?${chainIdQuery.chainIdQueryString}`);
     } catch (e) {
       console.error(e);
-      message.error(
-        (e?.errorMessage || {})?.message?.Message ||
-          e.message || e?.Error?.Message ||
-          "Please input the required form field"
-      );
+      const msg = (e?.errorMessage || {})?.message?.Message ||
+      e.message || e?.Error?.Message
+      if (msg) {
+        message.error(msg.toString());
+      }
     } finally {
       setIsLoading(false);
     }
