@@ -3,7 +3,7 @@ import { Button } from 'aelf-design';
 import { useState, useCallback } from 'react';
 import CommonModal from 'components/CommonModal';
 import Image from 'next/image';
-import { EVoteMechanismNameType } from 'app/proposal/deploy/[aliasName]/type';
+import { EVoteMechanismNameType } from 'pageComponents/proposal-create/type';
 import { voteApproveMessage, voteRejectMessage, voteAbstainMessage } from 'utils/constant';
 import { callContract, ApproveByContract, GetAllowanceByContract } from 'contract/callContract';
 import { ResultModal, emitLoading, eventBus } from 'utils/myEvent';
@@ -163,7 +163,7 @@ function Vote(props: TVoteTypes) {
     // handle vote done close Modal
     setShowTokenBallotModal(false);
     setShowVoteModal(false);
-    form.setFieldValue('stakeAmount', 0);
+    form.setFieldValue('stakeAmount', 1);
   }, [
     proposalId,
     currentVoteType,
@@ -215,7 +215,7 @@ function Vote(props: TVoteTypes) {
         destroyOnClose
         title={<div className="text-center">{currentTitle}</div>}
         onCancel={() => {
-          form.setFieldValue('stakeAmount', 0);
+          form.setFieldValue('stakeAmount', 1);
           setShowTokenBallotModal(false);
         }}
       >
@@ -229,21 +229,40 @@ function Vote(props: TVoteTypes) {
           layout="vertical"
           variant="filled"
           onFinish={() => handlerVote()}
-          className="mt-[10px]"
+          className="mt-[10px] my-info-form"
           requiredMark={false}
         >
           <Form.Item<TFieldType>
             label="Stake and Vote"
             name="stakeAmount"
+            validateFirst
+            initialValue={1}
             tooltip={`Currently, the only supported method is to unstake all the available ${symbol} in one time.`}
-            rules={[{ required: true, message: 'Please input stake amount' }]}
+            rules={[
+              { required: true, message: 'Please input stake amount' },
+              {
+                type: 'integer',
+                message: 'Please input an integer',
+              },
+              {
+                validator: (_, value) => {
+                  return new Promise<void>((resolve, reject) => {
+                    if (value < 1) {
+                      reject('The quantity must be greater than or equal to 1');
+                    }
+                    if (value > elfBalance) {
+                      reject('Insufficient balance');
+                    }
+                    resolve();
+                  });
+                },
+              },
+            ]}
           >
             <InputNumber
               className="w-full"
               placeholder="Please input stake amount"
               autoFocus
-              min={0}
-              max={elfBalance}
               prefix={
                 <div className="flex items-center">
                   {TokenIconMap[symbol] && (
@@ -255,11 +274,11 @@ function Vote(props: TVoteTypes) {
               }
             />
           </Form.Item>
-          <Form.Item>
-            <Button className="mx-auto" type="primary" htmlType="submit">
+          <div>
+            <Button className="mx-auto mt-[24px]" type="primary" htmlType="submit">
               Stake and Vote
             </Button>
-          </Form.Item>
+          </div>
         </Form>
       </CommonModal>
       {/* UniqueVote vote 1a1v 1 approve  2 Reject  3 Abstain  */}

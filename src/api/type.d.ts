@@ -658,7 +658,8 @@ interface IVoteHistoryReq {
   chainId: string;
   skipCount: number;
   maxResultCount: number;
-  address: string;
+  address?: string;
+  proposalId?: string;
   voteOption?: string;
 }
 interface IVoteHistoryItem {
@@ -666,7 +667,9 @@ interface IVoteHistoryItem {
   proposalId: string;
   proposalTitle: string;
   myOption: number;
-  votesNum: number;
+  voter: string;
+  voteNum: number;
+  voteNumAfterDecimals: number;
   transactionId: string;
   executer: string;
 }

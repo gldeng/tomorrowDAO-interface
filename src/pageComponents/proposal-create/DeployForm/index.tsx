@@ -28,6 +28,7 @@ import { timesDecimals } from 'utils/calculate';
 import { trimAddress } from 'utils/address';
 import { useWebLogin } from 'aelf-web-login';
 import { SkeletonForm } from 'components/Skeleton';
+import { replaceUrlParams } from 'utils/url';
 // import { useWalletSyncCompleted } from 'hooks/useWalletSyncCompleted';
 
 const convertParams = async (address: string, methodName: string, originParams: any) => {
@@ -338,6 +339,8 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
               daoId={daoId}
               onSubmit={handleSubmit}
               onTabChange={(key: string) => {
+                console.log('key---->', key);
+                replaceUrlParams('tab', key);
                 setActiveTab(key);
               }}
               activeTab={activeTab}

@@ -1,7 +1,6 @@
 'use client';
 import React from 'react';
-import { useParams } from 'next/navigation';
-import DaoDetail from '../../dao/[aliasName]/DaoDetails';
+import DaoDetail from '../../dao/[aliasName]/NetworkDaoDetails';
 import { networkDaoId } from 'config';
 
 export default function DeoDetails() {

@@ -4,8 +4,6 @@ import { Button, Form } from 'antd';
 import { memo } from 'react';
 import { ResponsiveSelect } from 'components/ResponsiveSelect';
 import { proposalTypeList } from 'types';
-import useIsNetworkDao from 'hooks/useIsNetworkDao';
-import { NetworkDaoProposalOnChain } from 'config/net-work-dao';
 
 interface ProposalTypeProps {
   next?: () => void;
@@ -13,11 +11,10 @@ interface ProposalTypeProps {
 }
 const ProposalType = (props: ProposalTypeProps) => {
   const { next, className } = props;
-  const { isNetWorkDao } = useIsNetworkDao();
   return (
     <div className={className}>
       <h2 className="title-primary">Choose Proposal Type</h2>
-      <p className=" text-[16px] leading-[24px] text-Neutral-Secondary-Text font-normal mt-[8px] mb-[64px]">
+      <p className="proposal-type-desc text-[16px] leading-[24px] text-Neutral-Secondary-Text font-normal mt-[8px]">
         When creating a proposal, please choose the appropriate type based on its purpose and
         impact.
       </p>
@@ -33,15 +30,7 @@ const ProposalType = (props: ProposalTypeProps) => {
             title: 'Proposal Type',
             className: 'proposal-type-draw',
           }}
-          options={
-            isNetWorkDao
-              ? proposalTypeList.concat({
-                  label: NetworkDaoProposalOnChain.label,
-                  desc: NetworkDaoProposalOnChain.desc,
-                  value: NetworkDaoProposalOnChain.label,
-                })
-              : proposalTypeList
-          }
+          options={proposalTypeList}
           optionLabelProp="label"
           optionRender={(option, info) => (
             <ProposalTypeItem label={option.data.label} desc={option.data.desc} key={info.index} />

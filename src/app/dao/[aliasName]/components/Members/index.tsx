@@ -3,7 +3,7 @@ import { curChain } from 'config';
 import { fetchDaoMembers } from 'api/request';
 import { useRequest } from 'ahooks';
 import { EDaoGovernanceMechanism } from 'app/(createADao)/create/type';
-import { EProposalActionTabs } from 'app/proposal/deploy/[aliasName]/type';
+import { EProposalActionTabs } from 'pageComponents/proposal-create/type';
 import Members from 'components/Members';
 
 interface IProps {
@@ -46,7 +46,7 @@ const DaoMembers: React.FC<IProps> = (props) => {
       isLoading={daoMembersDataLoading}
       totalCount={daoMembersData?.data?.totalCount ?? 0}
       loadMoreUrl={`/dao/${aliasName}/members`}
-      managerUrl={`/proposal/deploy/${aliasName}?tab=${EProposalActionTabs.AddMultisigMembers}`}
+      managerUrl={`/dao/${aliasName}/proposal/create?tab=${EProposalActionTabs.AddMultisigMembers}`}
       descriptionNode={
         <>
           <h2 className="card-title-lg mb-[4px]">{daoMembersData?.data?.totalCount} Members</h2>

@@ -15,7 +15,7 @@ const Layout = (props: React.PropsWithChildren<{}>) => {
   const pathName = usePathname();
   const isHome = pathName === '/';
   const isCreateDao = pathName === '/create';
-  const isCreateProposal = pathName.startsWith('/proposal/deploy');
+  const isCreateProposal = pathName.includes('/proposal/create');
   const isExolore = pathName === '/explore';
   const { isLG } = useResponsive();
   const notHomeClass = isHome
@@ -25,9 +25,7 @@ const Layout = (props: React.PropsWithChildren<{}>) => {
       }`;
   return (
     <div className="flex w-[100vw] h-[100vh] flex-col relative box-border min-h-screen bg-global-grey">
-      <Suspense>
-        <Header />
-      </Suspense>
+      <Header />
       <div className="flex flex-1 flex-col overflow-y-auto">
         <div className={isHome ? 'dao-home-background' : ''}>
           {isLG && isExolore && <DAOHeader />}
@@ -36,9 +34,7 @@ const Layout = (props: React.PropsWithChildren<{}>) => {
             {children}
           </div>
         </div>
-        <Suspense>
-          <Footer />
-        </Suspense>
+        <Footer />
       </div>
       <PageLoading />
       <ResultModal />

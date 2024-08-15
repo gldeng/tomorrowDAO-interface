@@ -4,9 +4,10 @@ import { useWebLogin } from 'aelf-web-login';
 import { Result } from 'antd';
 import { useParams } from 'next/navigation';
 import DeployForm from './DeployForm';
-import './index.css';
 import { WebLoginState } from 'aelf-web-login';
 import breadCrumb from 'utils/breadCrumb';
+import './index.css';
+
 const ProposalDeploy = () => {
   const { loginState } = useWebLogin();
   const isLogin = loginState === WebLoginState.logined;

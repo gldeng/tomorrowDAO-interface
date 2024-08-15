@@ -1,6 +1,6 @@
 import { HashAddress } from 'aelf-design';
 import { Tabs } from 'aelf-design';
-import { getContract } from 'app/proposal/deploy/[aliasName]/util';
+import { getContract } from 'pageComponents/proposal-create/util';
 import { MarkdownPreview } from 'components/MarkdownEditor';
 import { curChain } from 'config';
 import { useEffect, useState } from 'react';
@@ -40,7 +40,7 @@ const ProposalTab = (props: IProposalTabProps) => {
       key: '1',
       label: <span className="flex flex-col lg:flex-row">Description</span>,
       children: (
-        <div className="text-base tab-content-padding">
+        <div className="text-base tabpanel-content-padding">
           <div className="custom-html-style">
             <MarkdownPreview text={proposalDetailData?.proposalDescription ?? ''} />
           </div>
@@ -58,7 +58,7 @@ const ProposalTab = (props: IProposalTabProps) => {
         </span>
       ),
       children: (
-        <div className="text-base	tab-content-padding tab-contract-info">
+        <div className="text-base	tabpanel-content-padding tab-contract-info">
           <div className="flex flex-col gap-2 pb-8">
             <div className="card-sm-text-bold">Call Method</div>
             <div className="card-sm-text text-[#808080]">

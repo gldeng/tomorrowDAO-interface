@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+const plugin = require('tailwindcss/plugin');
+
 module.exports = {
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx,css}'],
   theme: {
@@ -47,7 +49,89 @@ module.exports = {
       homePc: '768px',
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(function ({ addUtilities, addComponents, e, config }) {
+      // Add your custom styles here
+      addComponents({
+        '.button-border-normal': {
+          '@apply border-solid border border-Neutral-Divider': {},
+        },
+
+        '.page-content-padding': {
+          '@apply px-4 lg:px-8 pb-4 lg:pb-8': {},
+        },
+
+        '.page-content-bg-border': {
+          '@apply bg-white rounded-lg border border-solid border-Neutral-Divider px-4 lg:px-8 py-4 lg:py-8':
+            {},
+        },
+
+        '.card-shape': {
+          '@apply bg-white rounded-lg border border-solid border-Neutral-Divider': {},
+        },
+        '.card-px': {
+          '@apply px-4 lg:px-8': {},
+        },
+        '.tabpanel-content-padding': {
+          '@apply px-4 lg:px-8 pb-4': {},
+        },
+
+        '.dao-border-round': {
+          '@apply button-border-normal rounded-lg': {},
+        },
+        '.normal-text': {
+          '@apply text-[16px] leading-[24px] text-neutralTitle': {},
+        },
+        '.normal-text-bold': {
+          '@apply text-[16px] leading-[24px] text-neutralTitle font-medium': {},
+        },
+
+        '.form-item-title': {
+          '@apply text-[16px] leading-[24px] text-neutralPrimaryText font-medium': {},
+        },
+
+        '.dao-detail-card': {
+          '@apply border-0 lg:border lg:mb-[10px] border-Neutral-Divider border-solid rounded-lg bg-white px-4 lg:px-8 lg:py-6 pt-[8px] pb-[24px]':
+            {},
+        },
+
+        '.card-title': {
+          '@apply text-[20px] leading-[28px] text-neutralTitle font-medium': {},
+        },
+        '.card-sm-text': {
+          '@apply text-[14px] leading-[22px]': {},
+        },
+        '.card-sm-text-black': {
+          '@apply text-[14px] leading-[22px] text-neutralTitle': {},
+        },
+        '.card-xsm-text': {
+          '@apply text-[12px] leading-[20px]': {},
+        },
+        '.card-sm-text-bold': {
+          '@apply text-[14px] leading-[22px] font-medium': {},
+        },
+
+        '.card-title-lg': {
+          '@apply text-[24px] leading-[32px] text-neutralTitle font-medium': {},
+        },
+        '.error-text': {
+          '@apply text-error h-[32px] flex items-center': {},
+        },
+        '.table-title-text': {
+          '@apply text-[14px] leading-[20px] text-Neutral-Secondary-Text font-medium': {},
+        },
+        '.flex-center': {
+          '@apply flex items-center justify-center': {},
+        },
+        '.max-content': {
+          width: ' max-content',
+        },
+        '.proposal-item-left-width': {
+          'max-width': 'calc(100% - 266px - 48px)',
+        },
+      });
+    }),
+  ],
   corePlugins: {
     preflight: false,
   },

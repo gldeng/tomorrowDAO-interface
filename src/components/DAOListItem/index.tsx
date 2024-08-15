@@ -3,6 +3,7 @@ import './index.css';
 const { Paragraph } = Typography;
 import { Typography as DesignTypography } from 'aelf-design';
 import useResponsive from 'hooks/useResponsive';
+import ImageWithPlaceHolder from 'components/ImageWithPlaceHolder';
 interface IDAOListItemProps {
   item: IDaoItem;
 }
@@ -13,7 +14,15 @@ export default function DAOListItem(props: IDAOListItemProps) {
     <div className="dao-list-item">
       <div className="dao-list-item-title">
         <div className="dao-logo">
-          <img src={item.logo} alt="" />
+          <ImageWithPlaceHolder
+            src={item.logo}
+            text={item.name}
+            alias={item.alias}
+            imageProps={{
+              width: 40,
+              height: 40,
+            }}
+          />
         </div>
         <div className="dao-title">
           <DesignTypography.Title level={isSM ? 6 : 5}>{item.name}</DesignTypography.Title>

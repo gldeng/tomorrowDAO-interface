@@ -9,7 +9,7 @@ export interface IProposalStatusDescProps {
 /**
  * 
 proposalStage: "Active" ：activeEndTime
-proposalStage-> Pending & Challenged ? Veto : !veto.  proposalStatus=   executeStartTime. 暂无跳转id
+proposalStage-> Pending & Challenged ? Veto : !veto.  proposalStatus=   executeStartTime. 
 statge=Execute. ：Availabe to be executed before {executeEndTime}.
 
 stage Finish

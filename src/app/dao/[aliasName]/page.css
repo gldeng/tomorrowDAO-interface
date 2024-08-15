@@ -7,6 +7,9 @@
 
   .dao-detail-content {
     @apply flex my-6;
+    &.network-dao {
+      @apply mt-0;
+    }
 
     .dao-detail-content-left {
       @apply flex-1;

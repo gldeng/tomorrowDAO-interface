@@ -4,7 +4,7 @@ import { curChain } from 'config';
 import { useRequest } from 'ahooks';
 import breadCrumb from 'utils/breadCrumb';
 import { fetchDaoInfo, fetchDaoMembers } from 'api/request';
-import { EProposalActionTabs } from 'app/proposal/deploy/[aliasName]/type';
+import { EProposalActionTabs } from 'pageComponents/proposal-create/type';
 import { message } from 'antd';
 import MembersPage from 'pageComponents/members';
 import './index.css';
@@ -69,7 +69,7 @@ export default function TreasuryDetails(props: ITreasuryDetailsProps) {
     <MembersPage
       totalCount={daoMembersData?.data?.totalCount ?? 0}
       isLoading={daoLoading || daoMembersDataLoading}
-      managerUrl={`/proposal/deploy/${aliasName}?tab=${EProposalActionTabs.AddMultisigMembers}`}
+      managerUrl={`/dao/${aliasName}/proposal/create?tab=${EProposalActionTabs.AddMultisigMembers}`}
       lists={lists}
       pagination={{
         current: tableParams.page,

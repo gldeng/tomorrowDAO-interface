@@ -24,6 +24,7 @@ export enum ENavKeys {
   Discord = 'Discord',
   Telegram = 'Telegram',
   Treasury = 'Treasury',
+  Blog = 'Blog',
 }
 const DynamicLogin = dynamicReq(() => import('components/Login'), {
   ssr: false,
@@ -107,6 +108,14 @@ export default function Header() {
           },
         ],
       },
+      {
+        label: (
+          <Link href={'https://blog.tmrwdao.com'} target="_blank">
+            Blog
+          </Link>
+        ),
+        key: ENavKeys.Blog,
+      },
     ];
   }, [isLG]);
   const [current, setCurrent] = useState('');
@@ -116,7 +125,7 @@ export default function Header() {
       setCurrent(e.key);
     }
   };
-  const { isHome } = useUrlPath();
+  const { isHome, isExplorer } = useUrlPath();
 
   useEffect(() => {
     // refresh from path map to nav active
