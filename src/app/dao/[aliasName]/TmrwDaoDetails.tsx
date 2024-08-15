@@ -266,6 +266,9 @@ export default function DeoDetails(props: IProps) {
   useEffect(() => {
     breadCrumb.updateDaoDetailPage(aliasName, daoData?.data?.metadata?.name);
   }, [aliasName, daoData?.data?.metadata?.name]);
+  useEffect(() => {
+    console.log('ssrData', ssrData);
+  }, []);
 
   const tabCom = useMemo(() => {
     return (
