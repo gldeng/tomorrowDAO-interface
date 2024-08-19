@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "NEXT_PUBLIC_APP_ENV=development next dev",
+    "dev2": "next dev --experimental-https",
     "dev:mainnet": "APP_ENV=mainnet next dev",
     "build-todo": "NODE_OPTIONS=--max-old-space-size=4096 && next build",
     "next-compile": "next experimental-compile",
@@ -13,7 +14,8 @@
     "start": "next start",
     "lint": "next lint",
     "prettier": "prettier -c --write '**/*'",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "dev1": "lt --port 3000"
   },
   "dependencies": {
     "@aelf-design/icons": "1.1.1",
@@ -37,6 +39,7 @@
     "@xstate/react": "^4.1.0",
     "aelf-web-login": "2.1.5",
     "ahooks": "^3.7.11",
+    "alloyfinger": "^0.1.16",
     "antd": "^5.13.1",
     "apisauce": "^0.16.0",
     "axios": "^0.24.0",
@@ -115,6 +118,7 @@
     "hard-source-webpack-plugin": "^0.13.1",
     "husky": "^8.0.1",
     "lint-staged": "13.2.2",
+    "localtunnel": "^2.0.2",
     "next-with-less": "^3.0.1",
     "postcss": "^8.4.23",
     "postcss-nested": "^6.0.1",

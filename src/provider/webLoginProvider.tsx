@@ -1,6 +1,6 @@
 'use client';
 import { NetworkType } from '@portkey/did-ui-react';
-import { NetworkDaoHomePathName, aelfWebLoginNetworkType, curChain } from 'config';
+import { NetworkDaoHomePathName, TELEGRAM_BOT_ID, aelfWebLoginNetworkType, curChain } from 'config';
 import dynamicReq from 'next/dynamic';
 import { PortkeyProvider, WebLoginProvider, setGlobalConfig } from 'aelf-web-login';
 
@@ -103,6 +103,11 @@ export default function LoginSDKProvider({ children }: { children: React.ReactNo
         baseURL: addBasePath(server || ''),
       },
       serviceUrl: server,
+      socialLogin: {
+        Telegram: {
+          botId: TELEGRAM_BOT_ID,
+        },
+      },
     },
     aelfReact: {
       appName: APP_NAME,

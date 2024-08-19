@@ -19,17 +19,19 @@ import { useRegisterContractServiceMethod } from 'contract/baseContract';
 import { useGetToken } from './useGetToken';
 import { setLoginStatus, resetLoginStatus } from 'redux/reducer/loginStatus';
 import { useAsyncEffect } from 'ahooks';
-import { emitLoading, eventBus, UnAuth } from 'utils/myEvent';
+import { emitLoading, eventBus, UnAuth, GetTokenLogin } from 'utils/myEvent';
 import { apiServer } from 'api/axios';
 import { getCaHashAndOriginChainIdByWallet, getManagerAddressByWallet } from 'utils/wallet';
 import { removeJWT, setLocalJWT } from 'utils/localJWT';
 import { authManager } from 'utils/walletAndTokenInfo';
 import { curChain, networkType } from 'config';
+import { useUrlPath } from './useUrlPath';
 
 export const useCheckLoginAndToken = () => {
   const { loginState, login, logout, wallet, walletType } = useWebLogin();
   const isConnectWallet = useMemo(() => loginState === WebLoginState.logined, [loginState]);
   const { getToken, checkTokenValid } = useGetToken();
+  const { isTelegram } = useUrlPath();
 
   const getTokenUpdate = async () => {
     const tokenRes = await getToken({
@@ -61,21 +63,24 @@ export const useCheckLoginAndToken = () => {
       if (authManager.isAuthing) return;
       authManager.isAuthing = true;
       emitLoading(true, 'Authorize account...');
-      const checkRes = await checkTokenValid();
-      if (checkRes) {
-        apiServer.setToken(checkRes?.access_token);
-        dispatch(
-          setLoginStatus({
-            hasToken: true,
-            isLogin: true,
-          }),
-        );
-        emitLoading(false);
-        authManager.isAuthing = false;
-        message.success('log in');
-        return;
+      if (!isTelegram) {
+        const checkRes = await checkTokenValid();
+        if (checkRes) {
+          apiServer.setToken(checkRes?.access_token);
+          dispatch(
+            setLoginStatus({
+              hasToken: true,
+              isLogin: true,
+            }),
+          );
+          emitLoading(false);
+          authManager.isAuthing = false;
+          message.success('log in');
+          return;
+        }
       }
       await getTokenUpdate();
+      eventBus.emit(GetTokenLogin);
       authManager.isAuthing = false;
       // emitLoading(true, 'Authorize account...');
     }
@@ -96,6 +101,7 @@ export const useWalletInit = () => {
   useCheckLoginAndToken();
   const callBack = useCallback(
     (state: WebLoginState) => {
+      console.log('web-login-state ->>>>>>>>>>>>>>>>>>>', state);
       if (state === WebLoginState.lock) {
         // backToHomeByRoute();
       }
