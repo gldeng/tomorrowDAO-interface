@@ -21,7 +21,8 @@ import {
   Empty,
   Result,
   Modal,
-  ConfigProvider
+  ConfigProvider,
+  Segmented
 } from "antd";
 import { useEffectOnce } from "react-use";
 import { useWebLogin } from "aelf-web-login";
@@ -339,7 +340,15 @@ const ProposalList = () => {
     }}
     >
     <div className="proposal-list">
-      <Tabs
+      <Segmented
+        className="proposal-list-segmented"
+        value={activeKey}
+        options={[
+          proposalTypes.PARLIAMENT, proposalTypes.ASSOCIATION, proposalTypes.REFERENDUM
+        ]}
+        onChange={handleTabChange}
+      />
+      {/* <Tabs
         className="proposal-list-tab"
         activeKey={activeKey}
         onChange={handleTabChange}
@@ -358,13 +367,12 @@ const ProposalList = () => {
           tab={proposalTypes.REFERENDUM}
           key={proposalTypes.REFERENDUM}
         />
-      </Tabs>
-      <div className="proposal-list-filter gap-bottom">
+      </Tabs> */}
+      <div className="proposal-list-filter">
         <If condition={params.proposalType === proposalTypes.PARLIAMENT}>
           <Then>
             <Checkbox
               onChange={handleContractFilter}
-              className="gap-bottom-large"
             >
               Deploy/Update Contract Proposal
             </Checkbox>
