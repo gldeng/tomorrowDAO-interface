@@ -2,6 +2,7 @@ import EventEmitter from 'events';
 import { ReactNode } from 'react';
 
 export const UnAuth = 'unAuth';
+export const GetTokenLogin = 'getTokenLogin';
 export const ResultModal = 'ResultModal';
 export const HeaderUpdateTreasury = 'HeaderUpdateTreasury';
 export const ShowHeaderExplore = 'showHeaderExplore';

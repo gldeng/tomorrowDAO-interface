@@ -9,6 +9,7 @@ import Script from 'next/script';
 import StyleRegistry from './StyleRegistry';
 import { LayoutContent } from './layout-content';
 import { Metadata } from 'next';
+import VconsoleScript from './VconsoleScript';
 
 export const metadata: Metadata = {
   title: 'TMRWDAO: Revolutionise Decentralised Governance with AI',
@@ -21,9 +22,12 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
       {/* eslint-disable-next-line @next/next/no-head-element */}
       <head>
         <meta
-          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;"
           name="viewport"
-        />
+          content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1"
+        ></meta>
+        {/* eslint-disable-next-line @next/next/no-sync-scripts */}
+        <script src="https://telegram.org/js/telegram-web-app.js"></script>
+        <VconsoleScript />
         {/* Google Tag Manager  */}
         {/* eslint-disable-next-line @next/next/inline-script-id */}
         <Script>
@@ -47,13 +51,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             gtag('config', 'G-Z5LV4SE2RX');
           `}
         </Script>
-        {/* <Script
-          async
-          src="https://unpkg.com/vconsole@3.15.1/dist/vconsole.min.js"
-          onReady={() => {
-            new VConsole();
-          }}
-        ></Script> */}
       </head>
       <body>
         <noscript>
@@ -72,7 +69,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <LayoutContent>{children}</LayoutContent>
           </Provider>
         </StyleRegistry>
-        {/* <Script src="https://telegram.org/js/telegram-web-app.js"></Script> */}
       </body>
     </html>
   );

@@ -1,0 +1,12 @@
+.foot-tabbar {
+    @apply fixed bottom-[34px] flex w-[18.3125rem] px-[0.5rem] py-[16px] flex-row rounded-[4.875rem] bg-[#141327] left-[50%] translate-x-[-50%];
+    .foot-tabbar-item {
+      @apply flex flex-col justify-center items-center gap-[0.125rem] flex-[1_0_0] text-[#787A86] text-center text-[0.875rem] leading-[1.125rem];
+      .TMRWDAO-icon {
+        @apply text-[24px];
+      }
+      &.active {
+        @apply text-[#ACA6FF];
+      }
+    }
+  }

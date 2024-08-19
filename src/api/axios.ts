@@ -2,6 +2,7 @@ import axios from 'axios';
 import { message } from 'antd';
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { apiServer } from './request/api-server';
+import { tokenServer } from './request/token-server';
 
 const explorerUrlList = ['explorer-api', 'side-explorer-api', 'token-price-api'];
 interface ResponseType<T> {
@@ -124,9 +125,6 @@ class Request {
 }
 
 const explorerServer = new Request({
-  baseURL: '',
-});
-const tokenServer = new Request({
   baseURL: '',
 });
 const req = new Request({});

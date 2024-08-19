@@ -14,13 +14,15 @@ export const graphqlServer =
   'https://dapp-aa-portkey.portkey.finance/Portkey_V2_DID/PortKeyIndexerCASchema/graphql';
 export const portkeyServer = 'https://aa-portkey.portkey.finance';
 export const connectUrl = 'https://auth-aa-portkey.portkey.finance';
+
+export const TELEGRAM_BOT_ID = '7225715915';
 // ------------------aelf-web-login-end------------------------
 
 export const curChain = 'tDVV';
 // system contract：token contract address
 export const mainChainAddress = 'JRmBduh4nXWi1aXgdUsj5gJrzeZb2LxmrAbf7W99faZSvoAaE';
 export const sideChainAddress = '7RzVGiuVWkvL4VfVHdZfQF2Tri3sgLe9U991bohHFfSRZXuGX';
-
+export const sideChainCAContractAddress = '2cLA9kJW3gdHuGoYNY16Qir69J3Nkn6MSsuYxRkUHbz4SG2hZr';
 // tmrw contract: biz contract todo...
 export const daoAddress = '2izSidAeMiZ6tmD7FKmnoWbygjFSmH5nko3cGJ9EtbfC44BycC';
 export const propalAddress = '2tCM3oV6dTCmwFxSiFGPEVhGngdMwBV741wi156vj8kmqfp6da';
