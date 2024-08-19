@@ -62,7 +62,7 @@ export default function VoteList() {
         chainId: curChain,
       });
       if (rawTransaction) {
-        let voteRes = await rankingVote({
+        const voteRes = await rankingVote({
           chainId: curChain,
           rawTransaction: rawTransaction,
         });

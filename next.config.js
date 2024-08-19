@@ -11,18 +11,18 @@ module.exports = withPlugins(pluginConfig, config);
 
 // Injected content via Sentry wizard below
 
-const { withSentryConfig } = require('@sentry/nextjs');
+// const { withSentryConfig } = require('@sentry/nextjs');
 
-module.exports = withSentryConfig(module.exports, {
-  // For all available options, see:
-  // https://github.com/getsentry/sentry-webpack-plugin#options
+// module.exports = withSentryConfig(module.exports, {
+//   // For all available options, see:
+//   // https://github.com/getsentry/sentry-webpack-plugin#options
 
-  include: [],
-  dryRun: true,
-  sourcemaps: {
-    disable: true,
-  },
-  org: 'dao-3l',
-  project: 'tmrw',
-  autoInstrumentServerFunctions: true,
-});
+//   include: [],
+//   dryRun: true,
+//   sourcemaps: {
+//     disable: true,
+//   },
+//   org: 'dao-3l',
+//   project: 'tmrw',
+//   autoInstrumentServerFunctions: true,
+// });
