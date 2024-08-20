@@ -6,11 +6,17 @@ import { getHost } from 'utils/request';
 import { networkType } from 'config';
 import { runTimeEnv } from 'utils/env';
 import { SentryEvents } from 'types/sentry';
+import { telegramNeedAuthList } from '../api-wrap/telegram';
 export const apiServerBaseURL = '/api/app';
 const defaultServerError = 'The API has an error. Please refresh and retry.';
 export const LoginExpiredTip = 'Login expired, please log in again';
 const host = getHost();
-const authList = ['/proposal/my-info', '/dao/my-dao-list', '/discussion/new-comment'];
+const authList = [
+  '/proposal/my-info',
+  '/dao/my-dao-list',
+  '/discussion/new-comment',
+  ...telegramNeedAuthList,
+];
 type Method = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
 
 type Params = Record<string, any>;

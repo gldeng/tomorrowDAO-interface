@@ -23,17 +23,6 @@
     @apply flex h-full pt-[0.375rem] pb-[8px] px-[16px] justify-center items-center gap-[0.625rem] rounded-[1.625rem] bg-[rgba(244,172,51,0.08)];
   }
 }
-.circular-progress {
-  animation: spin 1s linear infinite;
-}
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
 
 .vote-item-icon {
   @apply rounded-lg;

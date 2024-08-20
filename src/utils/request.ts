@@ -12,27 +12,27 @@ export const retryWrap = async <T>(
   fn: () => Promise<T>,
   cancelStrategy?: (data: T) => boolean,
   time = 1000 * 60,
-  interval = 1000,
+  interval = 2000,
 ) => {
-  let timer: NodeJS.Timeout;
   const now = Date.now();
   const retry = async () => {
-    console.log('retry', new Date());
     try {
-      const res = await fn();
-      if (cancelStrategy && cancelStrategy(res)) {
-        clearTimeout(timer);
-        return res;
-      }
       const cur = Date.now();
       const diff = cur - now;
+      console.log('retry', cur);
+      console.log('diff', diff);
       if (diff > time) {
-        clearTimeout(timer);
         return null;
+      }
+      const res = await fn();
+      if (cancelStrategy && cancelStrategy(res)) {
+        return res;
       }
       await sleep(interval);
       return retry();
     } catch (error) {
+      console.log('retry error', error);
+      await sleep(interval);
       return retry();
     }
   };

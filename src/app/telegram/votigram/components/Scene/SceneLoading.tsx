@@ -3,17 +3,18 @@ import Scene from './index';
 import { ImageLoveNode } from './ImageLoveNode';
 import { useEffect, useRef, useState } from 'react';
 import { eventBus, GetTokenLogin } from 'utils/myEvent';
+import { TransferStatus } from 'types/telegram';
 import CommonDrawer, { ICommonDrawerRef } from '../CommonDrawer';
 import { nftTokenTransfer, nftTokenTransferStatus } from 'api/request';
 import { curChain } from 'config';
 import { sleep } from 'utils/common';
 import { retryWrap } from 'utils/request';
 import { useWebLogin } from 'aelf-web-login';
+import { TelegramGameNFTSymbol } from '../../const';
 
 interface ISceneLoadingProps {
   onFinish?: () => void;
 }
-const TelegramGameNFTSymbol = 'TomorrowPass-1';
 function SceneLoading(props: ISceneLoadingProps) {
   const { onFinish } = props;
   const [processText, setProcessText] = useState('Creating on-chain wallet...');
@@ -42,10 +43,12 @@ function SceneLoading(props: ISceneLoadingProps) {
             address: wallet.address,
             symbol: TelegramGameNFTSymbol,
           }),
-        (loopRes) => loopRes.data.status === TransferStatus.AlreadyClaimed,
+        (loopRes) => loopRes?.data?.status === TransferStatus.AlreadyClaimed,
       );
       if (res) {
         enterNextScene();
+      } else {
+        transferStatusError();
       }
     } catch (error) {
       transferStatusError();
@@ -93,7 +96,7 @@ function SceneLoading(props: ISceneLoadingProps) {
   return (
     <>
       <CommonDrawer
-        title="Vote Registration Failed"
+        title="Minting Failed"
         ref={retryDrawerRef}
         body={
           <div className="flex flex-col items-center">
@@ -112,7 +115,7 @@ function SceneLoading(props: ISceneLoadingProps) {
               </svg>
             </div>
             <p className="font-14-18 mt-[24px] text-center">
-              Something went wrong while registering your vote on chain. Please try again.
+              Something went wrong while minting your TomorrowPass NFT. Please try again.
             </p>
             <Button
               type="primary"

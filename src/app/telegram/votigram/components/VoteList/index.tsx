@@ -1,20 +1,18 @@
-import Image from 'next/image';
 import CommonDrawer, { ICommonDrawerRef } from '../CommonDrawer';
 import VoteItem from '../VoteItem';
 import './index.css';
 import { Button } from 'antd';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Empty from '../Empty';
-import { getRankingList, rankingVote } from 'api/request';
+import { fetchRankingVoteStatus, getRankingList, rankingVote } from 'api/request';
 import { curChain, rpcUrlTDVW, sideChainCAContractAddress, voteAddress } from 'config';
 import { useRequest } from 'ahooks';
 import { getRawTransaction } from 'utils/transaction';
 import { useWebLogin } from 'aelf-web-login';
 import { EVoteOption } from 'types/vote';
-const arr = new Array(1).fill(0);
-const noop = async () => {
-  //
-};
+import { retryWrap } from 'utils/request';
+import Loading from '../Loading';
+
 export default function VoteList() {
   const confirmDrawerRef = useRef<ICommonDrawerRef>(null);
   const loadingDrawerRef = useRef<ICommonDrawerRef>(null);
@@ -26,15 +24,40 @@ export default function VoteList() {
     data: rankList,
     error: rankListError,
     loading: rankListLoading,
-  } = useRequest(async () => {
-    return getRankingList({ chainId: curChain });
-  });
+    run: getRankingListFn,
+  } = useRequest(
+    async () => {
+      return getRankingList({ chainId: curChain });
+    },
+    {
+      manual: true,
+    },
+  );
   const { wallet, walletType } = useWebLogin();
   const requestVoteStatus = async () => {
-    // setIsLoading(true);
-    retryFn.current = requestVoteStatus;
-    // setIsLoading(false);
-    retryFn.current = noop;
+    retryDrawerRef.current?.close();
+    loadingDrawerRef.current?.open();
+    const handleError = () => {
+      retryFn.current = requestVoteStatus;
+      loadingDrawerRef.current?.close();
+      retryDrawerRef.current?.open();
+    };
+    try {
+      const res = await retryWrap<IRankingVoteStatusRes>(
+        async () =>
+          fetchRankingVoteStatus({
+            chainId: curChain,
+            address: wallet.address,
+            proposalId: currentVoteItem?.proposalId ?? '',
+          }),
+        (loopRes) =>
+          loopRes?.data?.status === VoteStatus.Voted || loopRes?.data?.status === VoteStatus.Failed,
+      );
+      loadingDrawerRef.current?.close();
+      getRankingListFn();
+    } catch (error) {
+      handleError();
+    }
   };
   const sendRawTransaction = async () => {
     confirmDrawerRef.current?.close();
@@ -61,18 +84,27 @@ export default function VoteList() {
         rpcUrl: rpcUrlTDVW,
         chainId: curChain,
       });
+      console.log('rawTransaction', rawTransaction);
       if (rawTransaction) {
         const voteRes = await rankingVote({
           chainId: curChain,
           rawTransaction: rawTransaction,
         });
+        if (voteRes?.data?.status === VoteStatus.Voting) {
+          requestVoteStatus();
+        } else {
+          getRankingListFn();
+        }
       }
     } catch (error) {
       handleError();
     }
-    // setIsLoading(true);
   };
+  useEffect(() => {
+    getRankingListFn();
+  }, []);
 
+  const canVote = (rankList?.data?.canVoteAmount ?? 0) > 0;
   return (
     <div className="votigram-main">
       <div className="banner">
@@ -80,8 +112,11 @@ export default function VoteList() {
       </div>
       <div className="votigram-activity-title">
         <h3>Vote your favorite game</h3>
-        <div className="votigram-activity-rest font-14-18">Reset in: 12:34:57</div>
+        <div className="votigram-activity-rest font-14-18">
+          Reset in: {rankList?.data.canVoteAmount}
+        </div>
       </div>
+      {rankListLoading && <Loading />}
       <div className="vote-lists">
         {rankList?.data?.rankingList.map((item, index) => {
           return (
@@ -89,6 +124,7 @@ export default function VoteList() {
               key={index}
               index={index}
               item={item}
+              canVote={canVote}
               onVote={(item: IRankingListResItem) => {
                 console.log('vote item clicked');
                 setCurrentVoteItem(item);
@@ -173,15 +209,7 @@ export default function VoteList() {
         ref={loadingDrawerRef}
         body={
           <div className="flex flex-col items-center">
-            <div className="circular-progress">
-              <Image
-                src="/images/tg/circular-progress.png"
-                alt="vote-confirm"
-                width={56}
-                height={56}
-              />
-            </div>
-
+            <Loading />
             <p className="font-14-18 mt-[24px] text-center">
               Please wait while your vote is securely registered on chain.
             </p>
