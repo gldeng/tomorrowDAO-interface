@@ -3,13 +3,14 @@ import './index.css';
 
 interface IVoteItemProps {
   index: number;
+  canVote: boolean;
   onVote?: (item: IRankingListResItem) => void;
   item: IRankingListResItem;
 }
 
 const rankIndex = [0, 1, 2];
 export default function VoteItem(props: IVoteItemProps) {
-  const { index, onVote, item } = props;
+  const { index, onVote, item, canVote } = props;
   const isRankIcon = rankIndex.includes(index);
   return (
     <div className="telegram-vote-item-wrap">
@@ -39,14 +40,16 @@ export default function VoteItem(props: IVoteItemProps) {
           ></p>
         </div>
       </div>
-      <div
-        className="vote-button"
-        onClick={() => {
-          onVote?.(item);
-        }}
-      >
-        Vote
-      </div>
+      {canVote && (
+        <div
+          className="vote-button"
+          onClick={() => {
+            onVote?.(item);
+          }}
+        >
+          Vote
+        </div>
+      )}
     </div>
   );
 }

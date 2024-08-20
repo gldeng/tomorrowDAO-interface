@@ -3,30 +3,29 @@
 import { Radio, Input, Tooltip, Button } from 'aelf-design';
 import { InfoCircleOutlined } from '@aelf-design/icons';
 import { Form } from 'antd';
-import { memo, useEffect, useMemo, useState } from 'react';
+import { memo, useMemo, useState } from 'react';
 import { ResponsiveSelect } from 'components/ResponsiveSelect';
 import MarkdownEditor from 'components/MarkdownEditor';
 import { ReactComponent as ArrowIcon } from 'assets/imgs/arrow-icon.svg';
 import { ContractMethodType, ProposalType, proposalTypeList } from 'types';
-import { fetchGovernanceMechanismList, fetchVoteSchemeList } from 'api/request';
+import { fetchGovernanceMechanismList } from 'api/request';
 import { curChain } from 'config';
 import { useAsyncEffect } from 'ahooks';
 import { GetDaoProposalTimePeriodContract } from 'contract/callContract';
 import dayjs from 'dayjs';
-import {
-  HighCouncilName,
-  ReferendumName,
-  VoteMechanismNameLabel,
-  Organization,
-} from 'constants/proposal';
+import { HighCouncilName, ReferendumName, Organization } from 'constants/proposal';
 import ActionTabs from './ActionTabs/index';
-import { EProposalActionTabs, EVoteMechanismNameType } from '../type';
+import { ActiveStartTimeEnum } from '../type';
 import { SkeletonTab } from 'components/Skeleton';
 import RadioButtons from 'components/RadioButtons';
-
+import { NOW } from '../const';
+import ActiveStartTime from './ActiveStartTime';
+import ActiveEndTime, { defaultActiveEndTimeDuration } from './ActiveEndTime';
+import { reject } from 'lodash-es';
 const voterAndExecuteNamePath = ['proposalBasicInfo', 'schemeAddress'];
-const voteSchemeName = ['proposalBasicInfo', 'voteSchemeId'];
 const periodName = ['proposalBasicInfo', 'activeTimePeriod'];
+const activeStartTimeName = ['proposalBasicInfo', 'activeStartTime'];
+const activeEndTime = ['proposalBasicInfo', 'activeEndTime'];
 interface ProposalInfoProps {
   next?: () => void;
   className?: string;
@@ -60,6 +59,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
   const proposalType = Form.useWatch('proposalType', form);
   const voterAndExecute = Form.useWatch(voterAndExecuteNamePath, form);
   const activeTimePeriod = Form.useWatch(periodName, form);
+  console.log('data', Form.useWatch(activeStartTimeName, form), Form.useWatch(activeEndTime, form));
   const currentGovernanceMechanism = useMemo(() => {
     return governanceMechanismList?.find((item) => item.schemeAddress === voterAndExecute);
   }, [voterAndExecute, governanceMechanismList]);
@@ -143,7 +143,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
       </Form.Item>
 
       {/* Discussion on forum */}
-      <h2 className="title-primary mt-[64px]">
+      <h2 className="title-primary mb-[24px]">
         {isGovernance ? 'Governance Information' : 'Proposal Information'}
       </h2>
       {/* <Form.Item
@@ -245,6 +245,64 @@ const ProposalInfo = (props: ProposalInfoProps) => {
         ))}
 
       <Form.Item
+        className="voting-start-time-form-label"
+        label={
+          <Tooltip title="Define when a proposal should be active to receive approvals. If now is selected, the proposal is immediately active after publishing.">
+            <span className="form-item-label">
+              Voting start time
+              <InfoCircleOutlined className="cursor-pointer label-icon" />
+            </span>
+          </Tooltip>
+        }
+        initialValue={ActiveStartTimeEnum.now}
+        name={activeStartTimeName}
+        rules={[
+          {
+            required: true,
+            message: 'The voting start time is required',
+          },
+        ]}
+      >
+        <ActiveStartTime />
+      </Form.Item>
+      <Form.Item
+        label={
+          <Tooltip title="Define how long the voting should last in days, or add an exact date and time for it to conclude.">
+            <span className="form-item-label">
+              Voting end date
+              <InfoCircleOutlined className="cursor-pointer label-icon" />
+            </span>
+          </Tooltip>
+        }
+        initialValue={defaultActiveEndTimeDuration}
+        name={activeEndTime}
+        rules={[
+          {
+            required: true,
+            message: 'The voting end time is required',
+          },
+          {
+            validator: (_, value) => {
+              return new Promise<void>((resolve, reject) => {
+                if (Array.isArray(value)) {
+                  if (value.every((item) => item === 0)) {
+                    reject('The voting end time is required');
+                  }
+                  const [minutes, hours, days] = value;
+                  const totalDays = days + hours / 24 + minutes / 1440;
+                  if (totalDays > 365) {
+                    reject('The maximum duration is 365 days');
+                  }
+                }
+                resolve();
+              });
+            },
+          },
+        ]}
+      >
+        <ActiveEndTime />
+      </Form.Item>
+      {/* <Form.Item
         label={
           <Tooltip title="If the proposal is initiated around or at UTC 00:00 and is created after 00:00, the creation date will be the second day. As a result, the voting period will be extended by one day.">
             <span className="form-item-label">
@@ -287,7 +345,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
             },
           ]}
         />
-      </Form.Item>
+      </Form.Item> */}
 
       {/* 
   advisory -> null
@@ -297,7 +355,8 @@ const ProposalInfo = (props: ProposalInfoProps) => {
     H: [now + activeTimePeriod + pendingTimePeriod
   , now + activeTimePeriod + executeTimePeriod + pendingTimePeriod]
       */}
-      {[ProposalType.VETO, ProposalType.GOVERNANCE].includes(proposalType) &&
+
+      {/* {[ProposalType.VETO, ProposalType.GOVERNANCE].includes(proposalType) &&
         currentGovernanceMechanism && (
           <Form.Item
             label={
@@ -337,7 +396,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
               </span>
             </div>
           </Form.Item>
-        )}
+        )} */}
 
       <div className="flex justify-end mt-[100px]">
         <Button

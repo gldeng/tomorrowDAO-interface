@@ -37,10 +37,6 @@ export default function Header() {
   const items: MenuProps['items'] = useMemo(() => {
     return [
       {
-        label: <Link href={'/telegram/votigram'}>telegram</Link>,
-        key: 'ENavKeys.CreateDAO',
-      },
-      {
         label: <Link href={'/create'}>Create a DAO</Link>,
         key: ENavKeys.CreateDAO,
       },

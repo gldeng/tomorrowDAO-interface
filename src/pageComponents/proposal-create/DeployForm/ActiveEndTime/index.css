@@ -1,0 +1,26 @@
+.active-start-time-date-picker {
+  @apply mt-[10px];
+  .TMRWDAO-picker {
+    @apply w-full;
+  }
+}
+.active-time-end-wrap {
+  @apply select-none;
+  .TMRWDAO-input-number-group-addon {
+    @apply p-0;
+  }
+  .active-time-end-addon {
+    cursor: pointer;
+    width: 40px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .active-time-end-input {
+    @apply flex justify-between lg:flex-row flex-col;
+    p {
+      @apply mb-2;
+    }
+  }
+}

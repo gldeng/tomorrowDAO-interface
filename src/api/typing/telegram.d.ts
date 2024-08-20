@@ -77,6 +77,13 @@ interface IRankingListRes {
 }
 
 // ------------------- RankingVote -------------------
+
+enum VoteStatus {
+  NotVoted = 0,
+  Voting = 1,
+  Voted = 2,
+  Failed = 9,
+}
 interface IRankingVoteReq {
   rawTransaction: string;
   chainId: string;
@@ -84,20 +91,20 @@ interface IRankingVoteReq {
 interface IRankingVoteRes {
   code: number;
   data: {
-    success: boolean;
-    transactionId: string;
-    voteId: string;
+    status: VoteStatus;
   };
 }
 
 // ------------------- RankingVote status -------------------
 interface IRankingVoteStatusReq {
-  voteId: string;
+  chainId: string;
+  address: string;
+  proposalId: string;
 }
 interface IRankingVoteStatusRes {
   code: number;
   data: {
-    voteStatus: string;
+    status: VoteStatus;
   };
 }
 

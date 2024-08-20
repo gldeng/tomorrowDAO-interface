@@ -4,11 +4,12 @@ const transferUrl = '/token/transfer';
 const rankingVoteListsUrl = '/ranking/vote-list';
 const rankingVoteUrl = '/ranking/vote';
 const rankingVoteStatusUrl = '/ranking/vote-status';
+const rankListUrl = '/ranking/default-proposal';
 
 export const nftTokenTransfer = async (
   params: INftTokenTransfer,
 ): Promise<INftTokenTransferRes> => {
-  return apiServer.get(transferUrl, {
+  return apiServer.post(transferUrl, {
     ...params,
   });
 };
@@ -16,19 +17,19 @@ export const nftTokenTransfer = async (
 export const nftTokenTransferStatus = async (
   params: INftTokenTransferStatusReq,
 ): Promise<INftTokenTransferStatusRes> => {
-  return apiServer.get('/transfer/status', {
+  return apiServer.post('/token/transfer/status', {
     ...params,
   });
 };
 
 export const getRankingList = async (params: IRankingListReq): Promise<IRankingListRes> => {
-  return apiServer.get('/ranking/default-proposal', {
+  return apiServer.get(rankListUrl, {
     ...params,
   });
 };
 
 export const rankingVote = async (params: IRankingVoteReq): Promise<IRankingVoteRes> => {
-  return apiServer.get(rankingVoteUrl, {
+  return apiServer.post(rankingVoteUrl, {
     ...params,
   });
 };
@@ -36,7 +37,7 @@ export const rankingVote = async (params: IRankingVoteReq): Promise<IRankingVote
 export const fetchRankingVoteStatus = async (
   params: IRankingVoteStatusReq,
 ): Promise<IRankingVoteStatusRes> => {
-  return apiServer.get(rankingVoteStatusUrl, {
+  return apiServer.post(rankingVoteStatusUrl, {
     ...params,
   });
 };
@@ -54,4 +55,5 @@ export const telegramNeedAuthList = [
   rankingVoteListsUrl,
   rankingVoteUrl,
   rankingVoteStatusUrl,
+  rankListUrl,
 ];
