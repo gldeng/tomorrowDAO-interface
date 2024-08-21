@@ -65,6 +65,7 @@ export default function VoteItem(props: IVoteItemProps) {
         )}
       </div>
       {!canVote && <Percent percent={item.votePercent} />}
+      <div className="background"></div>
     </div>
   );
 }
