@@ -72,7 +72,7 @@ export default function MyPoints() {
                       <CheckCircleOutlined />
                       <div className="body truncate">
                         <h3 className="font-17-22 truncate">Voted for: {item.voteFor}</h3>
-                        <p className="font-15-20 truncate">Event Name</p>
+                        <p className="font-15-20 truncate">{item.proposalTitle}</p>
                       </div>
                     </div>
                     <p className="amount font-18-22-weight">{item.points}</p>

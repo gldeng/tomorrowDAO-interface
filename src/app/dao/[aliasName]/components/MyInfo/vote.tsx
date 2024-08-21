@@ -93,7 +93,7 @@ function Vote(props: TVoteTypes) {
       // elf decimals 8
       voteAmount:
         voteMechanismName === EVoteMechanismNameType.TokenBallot
-          ? timesDecimals(form.getFieldValue('stakeAmount'), decimal || '8').toNumber()
+          ? timesDecimals(form.getFieldValue('stakeAmount'), decimal ?? '8').toNumber()
           : 1,
     };
     try {

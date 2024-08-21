@@ -1,22 +1,25 @@
 import CommonDrawer, { ICommonDrawerRef } from '../CommonDrawer';
 import VoteItem from '../VoteItem';
-import './index.css';
 import { Button } from 'antd';
 import { useEffect, useRef, useState } from 'react';
+import { Carousel } from 'antd';
 import Empty from '../Empty';
 import { fetchRankingVoteStatus, getRankingList, rankingVote } from 'api/request';
 import { curChain, rpcUrlTDVW, sideChainCAContractAddress, voteAddress } from 'config';
 import { useRequest } from 'ahooks';
+import { InfoCircleOutlined } from '@aelf-design/icons';
 import { getRawTransaction } from 'utils/transaction';
 import { useWebLogin } from 'aelf-web-login';
 import { EVoteOption } from 'types/vote';
 import { retryWrap } from 'utils/request';
 import { VoteStatus } from 'types/telegram';
 import Loading from '../Loading';
+import './index.css';
 
 export default function VoteList() {
   const confirmDrawerRef = useRef<ICommonDrawerRef>(null);
   const loadingDrawerRef = useRef<ICommonDrawerRef>(null);
+  const ruleDrawerRef = useRef<ICommonDrawerRef>(null);
   const retryDrawerRef = useRef<ICommonDrawerRef>(null);
   // const [isLoading, setIsLoading] = useState(true);
   const [currentVoteItem, setCurrentVoteItem] = useState<IRankingListResItem | null>(null);
@@ -112,8 +115,24 @@ export default function VoteList() {
   const canVote = (rankList?.data?.canVoteAmount ?? 0) > 0;
   return (
     <div className="votigram-main">
+      <div
+        className="rules-wrap"
+        onClick={() => {
+          ruleDrawerRef.current?.open();
+        }}
+      >
+        <InfoCircleOutlined />
+        <span className="rule-text">Rules</span>
+      </div>
       <div className="banner">
-        <img src={'/images/tg/vote-list-top-banner.png'} height={'100%'} width={'100%'} alt={''} />
+        <Carousel>
+          <div>
+            <img src={'/images/tg/vote-list-top-banner-1.png'} className="banner-img" alt={''} />
+          </div>
+          <div>
+            <img src={'/images/tg/vote-list-top-banner-2.png'} className="banner-img" alt={''} />
+          </div>
+        </Carousel>
       </div>
       <div className="votigram-activity-title">
         <h3>Vote your favorite game</h3>
@@ -224,6 +243,29 @@ export default function VoteList() {
             <p className="font-14-18 mt-[24px] text-center">
               Please wait while your vote is securely registered on chain.
             </p>
+          </div>
+        }
+      />
+      <CommonDrawer
+        title="How to Participate"
+        ref={ruleDrawerRef}
+        body={
+          <div className="flex flex-col items-center">
+            <ul className="votigram-rules-text-list">
+              <li>To vote in Tomorrow Ranking, you’ll need a TomorrowPass NFT.</li>
+              <li>You can cast one vote per day and can choose only one option.</li>
+              <li>
+                After voting, you’ll earn points that can be redeemed for exciting rewards later.
+              </li>
+            </ul>
+            <Button
+              type="primary"
+              onClick={() => {
+                ruleDrawerRef.current?.close();
+              }}
+            >
+              Got it
+            </Button>
           </div>
         }
       />
