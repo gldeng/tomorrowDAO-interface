@@ -1,4 +1,5 @@
 .circular-progress {
+  @apply w-[56px] h-[56px];
   animation: spin 1s linear infinite;
 }
 @keyframes spin {

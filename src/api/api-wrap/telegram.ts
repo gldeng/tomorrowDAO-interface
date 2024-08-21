@@ -1,9 +1,9 @@
 import { apiServer } from '../axios';
 
 const transferUrl = '/token/transfer';
-const rankingVoteListsUrl = '/ranking/vote-list';
+// const rankingVoteListsUrl = '/ranking/vote-list';
 const rankingVoteUrl = '/ranking/vote';
-const rankingVoteStatusUrl = '/ranking/vote-status';
+const rankingVoteStatusUrl = '/ranking/vote/status';
 const rankListUrl = '/ranking/default-proposal';
 
 export const nftTokenTransfer = async (
@@ -42,17 +42,16 @@ export const fetchRankingVoteStatus = async (
   });
 };
 
-export const fetchRankingVoteLists = async (
-  params: IRankingVoteListsReq,
-): Promise<IRankingVoteListsRes> => {
-  return apiServer.get(rankingVoteListsUrl, {
-    ...params,
-  });
-};
+// export const fetchRankingVoteLists = async (
+//   params: IRankingVoteListsReq,
+// ): Promise<IRankingVoteListsRes> => {
+//   return apiServer.get(rankingVoteListsUrl, {
+//     ...params,
+//   });
+// };
 
 export const telegramNeedAuthList = [
   transferUrl,
-  rankingVoteListsUrl,
   rankingVoteUrl,
   rankingVoteStatusUrl,
   rankListUrl,

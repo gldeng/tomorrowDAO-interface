@@ -11,6 +11,7 @@ import { getRawTransaction } from 'utils/transaction';
 import { useWebLogin } from 'aelf-web-login';
 import { EVoteOption } from 'types/vote';
 import { retryWrap } from 'utils/request';
+import { VoteStatus } from 'types/telegram';
 import Loading from '../Loading';
 
 export default function VoteList() {
@@ -52,10 +53,12 @@ export default function VoteList() {
           }),
         (loopRes) =>
           loopRes?.data?.status === VoteStatus.Voted || loopRes?.data?.status === VoteStatus.Failed,
+        1000 * 60 * 2,
       );
       loadingDrawerRef.current?.close();
       getRankingListFn();
     } catch (error) {
+      console.log('requestVoteStatus, error', error);
       handleError();
     }
   };
@@ -66,6 +69,7 @@ export default function VoteList() {
     const handleError = () => {
       retryFn.current = sendRawTransaction;
       retryDrawerRef.current?.open();
+      loadingDrawerRef.current?.close();
     };
 
     try {
@@ -84,7 +88,6 @@ export default function VoteList() {
         rpcUrl: rpcUrlTDVW,
         chainId: curChain,
       });
-      console.log('rawTransaction', rawTransaction);
       if (rawTransaction) {
         const voteRes = await rankingVote({
           chainId: curChain,
@@ -93,10 +96,12 @@ export default function VoteList() {
         if (voteRes?.data?.status === VoteStatus.Voting) {
           requestVoteStatus();
         } else {
+          loadingDrawerRef.current?.close();
           getRankingListFn();
         }
       }
     } catch (error) {
+      console.log('sendRawTransaction, error', error);
       handleError();
     }
   };
@@ -113,27 +118,33 @@ export default function VoteList() {
       <div className="votigram-activity-title">
         <h3>Vote your favorite game</h3>
         <div className="votigram-activity-rest font-14-18">
-          Reset in: {rankList?.data.canVoteAmount}
+          Remaining vote: {rankList?.data?.canVoteAmount ?? 0}
         </div>
       </div>
-      {rankListLoading && <Loading />}
-      <div className="vote-lists">
-        {rankList?.data?.rankingList.map((item, index) => {
-          return (
-            <VoteItem
-              key={index}
-              index={index}
-              item={item}
-              canVote={canVote}
-              onVote={(item: IRankingListResItem) => {
-                console.log('vote item clicked');
-                setCurrentVoteItem(item);
-                confirmDrawerRef.current?.open();
-              }}
-            />
-          );
-        })}
-      </div>
+
+      {rankListLoading ? (
+        <div className="votigram-loading-wrap">
+          <Loading />
+        </div>
+      ) : (
+        <div className="vote-lists">
+          {rankList?.data?.rankingList.map((item, index) => {
+            return (
+              <VoteItem
+                key={index}
+                index={index}
+                item={item}
+                canVote={canVote}
+                onVote={(item: IRankingListResItem) => {
+                  setCurrentVoteItem(item);
+                  confirmDrawerRef.current?.open();
+                }}
+              />
+            );
+          })}
+        </div>
+      )}
+
       {rankList && rankList?.data?.rankingList?.length === 0 && (
         <Empty
           style={{

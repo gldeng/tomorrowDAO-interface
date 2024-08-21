@@ -60,3 +60,6 @@ export const networkDaoId = 'e9e131724d50de8fce13629043dc8a58a6692be574179859724
 
 // website
 export const host = 'https://tmrwdao.com';
+
+// telegram
+export const nftSymbol = 'TOMORROWPASS-1';
