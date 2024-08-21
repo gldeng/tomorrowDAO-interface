@@ -654,7 +654,7 @@ interface ITokenPriceRes {
 
 // -------------------------------------vote-history-----------------------------
 interface IVoteHistoryReq {
-  daoId: string;
+  daoId?: string;
   chainId: string;
   skipCount: number;
   maxResultCount: number;
@@ -672,10 +672,13 @@ interface IVoteHistoryItem {
   voteNumAfterDecimals: number;
   transactionId: string;
   executer: string;
+  points?: number;
+  voteFor?: string;
 }
 
 interface IVoteHistoryResData {
-  total: number;
+  totalCount: number;
+  totalPoints: number;
   items: IVoteHistoryItem[];
 }
 interface IVoteHistoryRes {

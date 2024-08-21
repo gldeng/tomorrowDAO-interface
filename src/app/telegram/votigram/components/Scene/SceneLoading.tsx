@@ -6,11 +6,10 @@ import { eventBus, GetTokenLogin } from 'utils/myEvent';
 import { TransferStatus } from 'types/telegram';
 import CommonDrawer, { ICommonDrawerRef } from '../CommonDrawer';
 import { nftTokenTransfer, nftTokenTransferStatus } from 'api/request';
-import { curChain } from 'config';
+import { curChain, nftSymbol } from 'config';
 import { sleep } from 'utils/common';
 import { retryWrap } from 'utils/request';
 import { useWebLogin } from 'aelf-web-login';
-import { TelegramGameNFTSymbol } from '../../const';
 
 interface ISceneLoadingProps {
   onFinish?: () => void;
@@ -41,7 +40,7 @@ function SceneLoading(props: ISceneLoadingProps) {
           nftTokenTransferStatus({
             chainId: curChain,
             address: wallet.address,
-            symbol: TelegramGameNFTSymbol,
+            symbol: nftSymbol,
           }),
         (loopRes) => loopRes?.data?.status === TransferStatus.AlreadyClaimed,
       );
@@ -63,7 +62,7 @@ function SceneLoading(props: ISceneLoadingProps) {
     try {
       const res = await nftTokenTransfer({
         chainId: curChain,
-        symbol: TelegramGameNFTSymbol,
+        symbol: nftSymbol,
       });
       if (res.data.status === TransferStatus.AlreadyClaimed) {
         enterNextScene();
