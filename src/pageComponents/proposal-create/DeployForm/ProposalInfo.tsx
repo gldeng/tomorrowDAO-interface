@@ -1,6 +1,6 @@
 'use client';
 
-import { Radio, Input, Tooltip, Button } from 'aelf-design';
+import { Input, Tooltip, Button } from 'aelf-design';
 import { InfoCircleOutlined } from '@aelf-design/icons';
 import { Form } from 'antd';
 import { memo, useMemo, useState } from 'react';
@@ -17,15 +17,13 @@ import { HighCouncilName, ReferendumName, Organization } from 'constants/proposa
 import ActionTabs from './ActionTabs/index';
 import { ActiveStartTimeEnum } from '../type';
 import { SkeletonTab } from 'components/Skeleton';
-import RadioButtons from 'components/RadioButtons';
-import { NOW } from '../const';
 import ActiveStartTime from './ActiveStartTime';
 import ActiveEndTime, { defaultActiveEndTimeDuration } from './ActiveEndTime';
-import { reject } from 'lodash-es';
+import { getTimeMilliseconds } from '../util/time';
 const voterAndExecuteNamePath = ['proposalBasicInfo', 'schemeAddress'];
 const periodName = ['proposalBasicInfo', 'activeTimePeriod'];
 const activeStartTimeName = ['proposalBasicInfo', 'activeStartTime'];
-const activeEndTime = ['proposalBasicInfo', 'activeEndTime'];
+const activeEndTimeName = ['proposalBasicInfo', 'activeEndTime'];
 interface ProposalInfoProps {
   next?: () => void;
   className?: string;
@@ -59,7 +57,12 @@ const ProposalInfo = (props: ProposalInfoProps) => {
   const proposalType = Form.useWatch('proposalType', form);
   const voterAndExecute = Form.useWatch(voterAndExecuteNamePath, form);
   const activeTimePeriod = Form.useWatch(periodName, form);
-  console.log('data', Form.useWatch(activeStartTimeName, form), Form.useWatch(activeEndTime, form));
+  const activeEndTime = Form.useWatch(activeEndTimeName, form);
+  const activeStartTime = Form.useWatch(activeStartTimeName, form);
+  const timeMilliseconds = useMemo(() => {
+    return getTimeMilliseconds(activeStartTime, activeEndTime);
+    return null;
+  }, [activeEndTime, activeStartTime]);
   const currentGovernanceMechanism = useMemo(() => {
     return governanceMechanismList?.find((item) => item.schemeAddress === voterAndExecute);
   }, [voterAndExecute, governanceMechanismList]);
@@ -275,7 +278,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
           </Tooltip>
         }
         initialValue={defaultActiveEndTimeDuration}
-        name={activeEndTime}
+        name={activeEndTimeName}
         rules={[
           {
             required: true,
@@ -356,7 +359,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
   , now + activeTimePeriod + executeTimePeriod + pendingTimePeriod]
       */}
 
-      {/* {[ProposalType.VETO, ProposalType.GOVERNANCE].includes(proposalType) &&
+      {[ProposalType.VETO, ProposalType.GOVERNANCE].includes(proposalType) &&
         currentGovernanceMechanism && (
           <Form.Item
             label={
@@ -371,32 +374,29 @@ const ProposalInfo = (props: ProposalInfoProps) => {
             <div className="flex h-[48px] px-[16px] py-[8px] items-center rounded-[6px] border-[1px] border-solid border-Neutral-Border bg-Neutral-Hover-BG">
               <span className="text-neutralTitle text-[14px] font-400 leading-[22px] pr-[16px]">
                 {(proposalType === ProposalType.VETO || (isGovernance && isReferendumLike)) &&
-                  dayjs().add(Number(activeTimePeriod), 'hours').format('DD MMM, YYYY')}
+                  dayjs(timeMilliseconds?.activeEndTime).format('DD MMM, YYYY')}
                 {isGovernance &&
                   isHighCouncil &&
-                  dayjs()
-                    .add(Number(activeTimePeriod), 'hours')
+                  dayjs(timeMilliseconds?.activeEndTime)
                     .add(Number(timePeriod?.pendingTimePeriod), 'hours')
                     .format('DD MMM, YYYY')}
               </span>
               <ArrowIcon className="color-[#B8B8B8]" />
               <span className="text-neutralTitle text-[14px] font-400 leading-[22px] pl-[16px]">
                 {(proposalType === ProposalType.VETO || (isGovernance && isReferendumLike)) &&
-                  dayjs()
-                    .add(Number(activeTimePeriod), 'hours')
+                  dayjs(timeMilliseconds?.activeEndTime)
                     .add(Number(timePeriod?.executeTimePeriod), 'hours')
                     .format('DD MMM, YYYY')}
                 {isGovernance &&
                   isHighCouncil &&
-                  dayjs()
-                    .add(Number(activeTimePeriod), 'hours')
+                  dayjs(timeMilliseconds?.activeEndTime)
                     .add(Number(timePeriod?.pendingTimePeriod), 'hours')
                     .add(Number(timePeriod?.executeTimePeriod), 'hours')
                     .format('DD MMM, YYYY')}
               </span>
             </div>
           </Form.Item>
-        )} */}
+        )}
 
       <div className="flex justify-end mt-[100px]">
         <Button
