@@ -38,7 +38,6 @@ class RequestFetch {
   }
 
   public setToken(token: string) {
-    console.log('setToken', token);
     this.token = token;
   }
   interceptorsRequest({ url, method, params }: Props): ReqParams {
