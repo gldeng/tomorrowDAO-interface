@@ -21,11 +21,11 @@ import { setLoginStatus, resetLoginStatus } from 'redux/reducer/loginStatus';
 import { useAsyncEffect } from 'ahooks';
 import { emitLoading, eventBus, UnAuth, GetTokenLogin } from 'utils/myEvent';
 import { apiServer } from 'api/axios';
-import { getCaHashAndOriginChainIdByWallet, getManagerAddressByWallet } from 'utils/wallet';
 import { removeJWT, setLocalJWT } from 'utils/localJWT';
 import { authManager } from 'utils/walletAndTokenInfo';
 import { curChain, networkType } from 'config';
 import { useUrlPath } from './useUrlPath';
+import { runTimeEnv } from 'utils/env';
 
 export const useCheckLoginAndToken = () => {
   const { loginState, login, logout, wallet, walletType } = useWebLogin();
@@ -152,10 +152,14 @@ export const useWalletInit = () => {
   useWebLoginEvent(WebLoginEvents.USER_CANCEL, () => {
     message.error('user cancel');
   });
+  const { isTelegram } = useUrlPath();
   const handleClear = () => {
     logout({ noModal: true });
     dispatch(resetLoginStatus());
     removeJWT();
+    if (runTimeEnv === 'client' && isTelegram) {
+      window.location.reload();
+    }
   };
   handleClearRef.current = handleClear;
   useEffect(() => {

@@ -156,11 +156,11 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
         return;
       }
       let proposalBasicInfo = res.proposalBasicInfo;
-      let activeStartTime =
+      let timeParams = {};
+      const activeStartTime =
         proposalBasicInfo.activeStartTime === ActiveStartTimeEnum.now
           ? Date.now()
           : proposalBasicInfo.activeStartTime;
-      activeStartTime += deferStartTime;
       const duration = proposalBasicInfo.activeEndTime;
       const activeEndTime = Array.isArray(duration)
         ? dayjs(activeStartTime)
@@ -169,10 +169,23 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
             .add(duration[2], 'days')
             .valueOf()
         : duration;
+      // if start time is now, convert to period
+      if (proposalBasicInfo.activeStartTime === ActiveStartTimeEnum.now) {
+        timeParams = {
+          activeTimePeriod: Math.floor((activeEndTime - activeStartTime) / 1000),
+          activeStartTime: 0,
+          activeEndTime: 0,
+        };
+      } else {
+        timeParams = {
+          activeTimePeriod: 0,
+          activeStartTime: Math.floor(activeStartTime / 1000),
+          activeEndTime: Math.floor(activeEndTime / 1000),
+        };
+      }
       proposalBasicInfo = {
         ...proposalBasicInfo,
-        activeStartTime: Math.floor(activeStartTime / 1000),
-        activeEndTime: Math.floor(activeEndTime / 1000),
+        ...timeParams,
       };
       const basicInfo = {
         ...proposalBasicInfo,
