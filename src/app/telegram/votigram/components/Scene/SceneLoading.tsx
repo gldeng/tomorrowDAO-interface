@@ -50,17 +50,21 @@ function SceneLoading(props: ISceneLoadingProps) {
   const { wallet } = useWebLogin();
   const enterNextScene = async () => {
     setPercent(100);
-    const balanceInfo = await GetBalanceByContract(
-      {
-        symbol: nftSymbol,
-        owner: wallet.address,
-      },
-      { chain: curChain },
-    );
-    const { balance } = balanceInfo;
-    if (balance === 0) {
-      missNftDrawerRef.current?.open();
-    } else {
+    try {
+      const balanceInfo = await GetBalanceByContract(
+        {
+          symbol: nftSymbol,
+          owner: wallet.address,
+        },
+        { chain: curChain },
+      );
+      const { balance } = balanceInfo;
+      if (balance === 0) {
+        missNftDrawerRef.current?.open();
+      } else {
+        onFinish?.();
+      }
+    } catch (error) {
       onFinish?.();
     }
   };

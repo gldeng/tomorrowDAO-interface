@@ -2,7 +2,10 @@
   @apply px-[16px] py-[15px] relative;
   min-height: 100vh;
   .vote-lists {
-    @apply flex flex-col gap-[8px] pb-[106px];
+    @apply flex flex-col gap-[8px] ;
+    &.padding-bottom-content {
+      @apply pb-[106px];
+    }
   }
 
   .rules-wrap {
