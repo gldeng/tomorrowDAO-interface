@@ -1,0 +1,82 @@
+.telegram-vote-item {
+  @apply relative overflow-hidden;
+  border-radius: 16px;
+  border: 1px solid var(--Border-1, #403493);
+  .vote-item-percent {
+    @apply absolute h-full w-0 opacity-25 bg-[#ACA6FF] left-0 top-0 z-20;
+  }
+  .background {
+    @apply absolute h-full w-full bg-[#4600C5] left-0 top-0 z-10;
+  }
+}
+.telegram-vote-item-wrap {
+  @apply flex items-center px-[16px] h-[60px] justify-between relative z-30;
+
+  .telegram-vote-item-content {
+    @apply flex;
+  }
+  .rank-index-wrap {
+    @apply w-[24px] h-[45px];
+    &.rank-icon {
+      @apply self-start;
+    }
+    &.rank-not-icon {
+      @apply flex flex-col justify-center items-center;
+    }
+  }
+  .rank-text {
+    @apply flex flex-col justify-center items-center;
+    .title {
+      color: var(--Text-Gray-2, #EDEEF0);
+      font-size: 18px;
+      font-weight: 590;
+      line-height: 18px;
+      letter-spacing: -0.4px;
+    }
+    .text {
+      color: var(--Text-Gray-1, #B1B3BC);
+      font-size: 8px;
+      font-weight: 590;
+      line-height: 14px;
+    }
+  }
+  .vote-game {
+    @apply ml-[16px] flex items-center;
+    .vote-game-content {
+      @apply flex flex-col ml-[8px];
+      .title {
+        color: #FFF;
+        font-size: 16px;
+        font-weight: 590;
+        line-height: 20px;
+      }
+      .desc {
+        color: var(--Text-1, #ACA6FF);
+        width: 100%;
+      }
+    }
+    .vote-item-icon {
+      @apply rounded-[0.5rem];
+    }
+  }
+  .vote-button {
+    cursor: pointer;
+    display: flex;
+    min-width: 55px;
+    margin-left: 8px;
+    padding: 8px 12px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    background: var(--Text-2, #DDDFFF);
+    color: var(--Solid-2, #4600C5);
+    text-align: center;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 590;
+    line-height: 18px;
+  }
+  .vote-amount {
+   @apply text-[#51FF00] font-[590] ml-[63px]; 
+  }
+}

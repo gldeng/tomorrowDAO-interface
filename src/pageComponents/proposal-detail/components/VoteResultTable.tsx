@@ -147,7 +147,7 @@ const VoteResultTable = (props: IVoteResultTableProps) => {
           scroll={{ x: 'max-content' }}
           pagination={{
             ...tableParams,
-            total: voteHistoryData?.data?.total ?? 0,
+            total: voteHistoryData?.data?.totalCount ?? 0,
             onChange: pageChange,
           }}
           loading={voteHistoryLoading}

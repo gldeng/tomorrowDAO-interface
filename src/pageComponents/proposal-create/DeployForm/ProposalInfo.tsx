@@ -1,32 +1,29 @@
 'use client';
 
-import { Radio, Input, Tooltip, Button } from 'aelf-design';
+import { Input, Tooltip, Button } from 'aelf-design';
 import { InfoCircleOutlined } from '@aelf-design/icons';
 import { Form } from 'antd';
-import { memo, useEffect, useMemo, useState } from 'react';
+import { memo, useMemo, useState } from 'react';
 import { ResponsiveSelect } from 'components/ResponsiveSelect';
 import MarkdownEditor from 'components/MarkdownEditor';
 import { ReactComponent as ArrowIcon } from 'assets/imgs/arrow-icon.svg';
 import { ContractMethodType, ProposalType, proposalTypeList } from 'types';
-import { fetchGovernanceMechanismList, fetchVoteSchemeList } from 'api/request';
+import { fetchGovernanceMechanismList } from 'api/request';
 import { curChain } from 'config';
 import { useAsyncEffect } from 'ahooks';
 import { GetDaoProposalTimePeriodContract } from 'contract/callContract';
 import dayjs from 'dayjs';
-import {
-  HighCouncilName,
-  ReferendumName,
-  VoteMechanismNameLabel,
-  Organization,
-} from 'constants/proposal';
+import { HighCouncilName, ReferendumName, Organization } from 'constants/proposal';
 import ActionTabs from './ActionTabs/index';
-import { EProposalActionTabs, EVoteMechanismNameType } from '../type';
+import { ActiveStartTimeEnum } from '../type';
 import { SkeletonTab } from 'components/Skeleton';
-import RadioButtons from 'components/RadioButtons';
-
+import ActiveStartTime from './ActiveStartTime';
+import ActiveEndTime, { defaultActiveEndTimeDuration } from './ActiveEndTime';
+import { getTimeMilliseconds } from '../util/time';
 const voterAndExecuteNamePath = ['proposalBasicInfo', 'schemeAddress'];
-const voteSchemeName = ['proposalBasicInfo', 'voteSchemeId'];
 const periodName = ['proposalBasicInfo', 'activeTimePeriod'];
+const activeStartTimeName = ['proposalBasicInfo', 'activeStartTime'];
+const activeEndTimeName = ['proposalBasicInfo', 'activeEndTime'];
 interface ProposalInfoProps {
   next?: () => void;
   className?: string;
@@ -60,6 +57,11 @@ const ProposalInfo = (props: ProposalInfoProps) => {
   const proposalType = Form.useWatch('proposalType', form);
   const voterAndExecute = Form.useWatch(voterAndExecuteNamePath, form);
   const activeTimePeriod = Form.useWatch(periodName, form);
+  const activeEndTime = Form.useWatch(activeEndTimeName, form);
+  const activeStartTime = Form.useWatch(activeStartTimeName, form);
+  const timeMilliseconds = useMemo(() => {
+    return getTimeMilliseconds(activeStartTime, activeEndTime);
+  }, [activeEndTime, activeStartTime]);
   const currentGovernanceMechanism = useMemo(() => {
     return governanceMechanismList?.find((item) => item.schemeAddress === voterAndExecute);
   }, [voterAndExecute, governanceMechanismList]);
@@ -143,7 +145,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
       </Form.Item>
 
       {/* Discussion on forum */}
-      <h2 className="title-primary mt-[64px]">
+      <h2 className="title-primary mb-[24px]">
         {isGovernance ? 'Governance Information' : 'Proposal Information'}
       </h2>
       {/* <Form.Item
@@ -245,6 +247,64 @@ const ProposalInfo = (props: ProposalInfoProps) => {
         ))}
 
       <Form.Item
+        className="voting-start-time-form-label"
+        label={
+          <Tooltip title="Define when a proposal should be active to receive approvals. If now is selected, the proposal is immediately active after publishing.">
+            <span className="form-item-label">
+              Voting start time
+              <InfoCircleOutlined className="cursor-pointer label-icon" />
+            </span>
+          </Tooltip>
+        }
+        initialValue={ActiveStartTimeEnum.now}
+        name={activeStartTimeName}
+        rules={[
+          {
+            required: true,
+            message: 'The voting start time is required',
+          },
+        ]}
+      >
+        <ActiveStartTime />
+      </Form.Item>
+      <Form.Item
+        label={
+          <Tooltip title="Define how long the voting should last in days, or add an exact date and time for it to conclude.">
+            <span className="form-item-label">
+              Voting end date
+              <InfoCircleOutlined className="cursor-pointer label-icon" />
+            </span>
+          </Tooltip>
+        }
+        initialValue={defaultActiveEndTimeDuration}
+        name={activeEndTimeName}
+        rules={[
+          {
+            required: true,
+            message: 'The voting end time is required',
+          },
+          {
+            validator: (_, value) => {
+              return new Promise<void>((resolve, reject) => {
+                if (Array.isArray(value)) {
+                  if (value.every((item) => item === 0)) {
+                    reject('The voting end time is required');
+                  }
+                  const [minutes, hours, days] = value;
+                  const totalDays = days + hours / 24 + minutes / 1440;
+                  if (totalDays > 365) {
+                    reject('The maximum duration is 365 days');
+                  }
+                }
+                resolve();
+              });
+            },
+          },
+        ]}
+      >
+        <ActiveEndTime />
+      </Form.Item>
+      {/* <Form.Item
         label={
           <Tooltip title="If the proposal is initiated around or at UTC 00:00 and is created after 00:00, the creation date will be the second day. As a result, the voting period will be extended by one day.">
             <span className="form-item-label">
@@ -287,7 +347,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
             },
           ]}
         />
-      </Form.Item>
+      </Form.Item> */}
 
       {/* 
   advisory -> null
@@ -297,6 +357,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
     H: [now + activeTimePeriod + pendingTimePeriod
   , now + activeTimePeriod + executeTimePeriod + pendingTimePeriod]
       */}
+
       {[ProposalType.VETO, ProposalType.GOVERNANCE].includes(proposalType) &&
         currentGovernanceMechanism && (
           <Form.Item
@@ -312,27 +373,24 @@ const ProposalInfo = (props: ProposalInfoProps) => {
             <div className="flex h-[48px] px-[16px] py-[8px] items-center rounded-[6px] border-[1px] border-solid border-Neutral-Border bg-Neutral-Hover-BG">
               <span className="text-neutralTitle text-[14px] font-400 leading-[22px] pr-[16px]">
                 {(proposalType === ProposalType.VETO || (isGovernance && isReferendumLike)) &&
-                  dayjs().add(Number(activeTimePeriod), 'hours').format('DD MMM, YYYY')}
+                  dayjs(timeMilliseconds?.activeEndTime).format('DD MMM, YYYY')}
                 {isGovernance &&
                   isHighCouncil &&
-                  dayjs()
-                    .add(Number(activeTimePeriod), 'hours')
-                    .add(Number(timePeriod?.pendingTimePeriod), 'hours')
+                  dayjs(timeMilliseconds?.activeEndTime)
+                    .add(Number(timePeriod?.pendingTimePeriod), 'seconds')
                     .format('DD MMM, YYYY')}
               </span>
               <ArrowIcon className="color-[#B8B8B8]" />
               <span className="text-neutralTitle text-[14px] font-400 leading-[22px] pl-[16px]">
                 {(proposalType === ProposalType.VETO || (isGovernance && isReferendumLike)) &&
-                  dayjs()
-                    .add(Number(activeTimePeriod), 'hours')
-                    .add(Number(timePeriod?.executeTimePeriod), 'hours')
+                  dayjs(timeMilliseconds?.activeEndTime)
+                    .add(Number(timePeriod?.executeTimePeriod), 'seconds')
                     .format('DD MMM, YYYY')}
                 {isGovernance &&
                   isHighCouncil &&
-                  dayjs()
-                    .add(Number(activeTimePeriod), 'hours')
-                    .add(Number(timePeriod?.pendingTimePeriod), 'hours')
-                    .add(Number(timePeriod?.executeTimePeriod), 'hours')
+                  dayjs(timeMilliseconds?.activeEndTime)
+                    .add(Number(timePeriod?.pendingTimePeriod), 'seconds')
+                    .add(Number(timePeriod?.executeTimePeriod), 'seconds')
                     .format('DD MMM, YYYY')}
               </span>
             </div>

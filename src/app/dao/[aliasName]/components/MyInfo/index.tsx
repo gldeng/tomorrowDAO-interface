@@ -99,7 +99,7 @@ export default function MyInfo(props: TInfoTypes) {
       },
       { chain: curChain },
     );
-    setElfBalance(divDecimals(balance, res?.data?.decimal || '8').toNumber());
+    setElfBalance(divDecimals(balance, res?.data?.decimal ?? '8').toNumber());
     setIsLoading(false);
     if (!res.data) {
       return;

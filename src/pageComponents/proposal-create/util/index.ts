@@ -22,3 +22,5 @@ export async function getContract(address: string) {
   }
   return CONTRACT_INSTANCE_MAP[address];
 }
+
+export const deferStartTime = 1000 * 60 * 5;

@@ -72,7 +72,7 @@ export const checkTokenProposal = async (daoData: IDaoInfoRes, address: string) 
           {/* <div>Minimum Token Proposal Requirement: {requiredToken}</div> */}
           <div>
             Your Governance Token:{' '}
-            {divDecimals(balanceInfo.balance, tokenInfo?.decimals || '8').toNumber()}
+            {divDecimals(balanceInfo.balance, tokenInfo?.decimals ?? '8').toNumber()}
           </div>
           <div>
             Can&apos;t create a proposal, you need hold at least {requiredToken}{' '}

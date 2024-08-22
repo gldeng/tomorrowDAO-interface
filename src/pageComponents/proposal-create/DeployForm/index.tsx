@@ -15,13 +15,13 @@ import { proposalCreateContractRequest } from 'contract/proposalCreateContract';
 import useAelfWebLoginSync from 'hooks/useAelfWebLoginSync';
 import { emitLoading } from 'utils/myEvent';
 import { parseJSON, uint8ToBase64 } from 'utils/parseJSON';
-import { getContract } from '../util';
+import { deferStartTime, getContract } from '../util';
 import { curChain, daoAddress, NetworkDaoProposalOnChain } from 'config';
 import { useRouter, useSearchParams } from 'next/navigation';
 import useIsNetworkDao from 'hooks/useIsNetworkDao';
 import { useRequest } from 'ahooks';
 import formValidateScrollFirstError from 'utils/formValidateScrollFirstError';
-import { EProposalActionTabs } from '../type';
+import { ActiveStartTimeEnum, EProposalActionTabs } from '../type';
 import { GetTokenInfo } from 'contract/callContract';
 import { fetchAddressTokenList, fetchDaoInfo, fetchVoteSchemeList } from 'api/request';
 import { timesDecimals } from 'utils/calculate';
@@ -29,6 +29,7 @@ import { trimAddress } from 'utils/address';
 import { useWebLogin } from 'aelf-web-login';
 import { SkeletonForm } from 'components/Skeleton';
 import { replaceUrlParams } from 'utils/url';
+import dayjs from 'dayjs';
 // import { useWalletSyncCompleted } from 'hooks/useWalletSyncCompleted';
 
 const convertParams = async (address: string, methodName: string, originParams: any) => {
@@ -145,6 +146,7 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
         return;
       }
       const res = await form.validateFields();
+      console.log('res', res);
       emitLoading(true, 'Publishing the proposal...');
       const voteSchemeList = await fetchVoteSchemeList({ chainId: curChain, daoId: daoId });
       const voteSchemeId = voteSchemeList?.data?.voteSchemeList?.[0]?.voteSchemeId;
@@ -153,8 +155,40 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
         emitLoading(false);
         return;
       }
+      let proposalBasicInfo = res.proposalBasicInfo;
+      let timeParams = {};
+      const activeStartTime =
+        proposalBasicInfo.activeStartTime === ActiveStartTimeEnum.now
+          ? Date.now()
+          : proposalBasicInfo.activeStartTime;
+      const duration = proposalBasicInfo.activeEndTime;
+      const activeEndTime = Array.isArray(duration)
+        ? dayjs(activeStartTime)
+            .add(duration[0], 'minutes')
+            .add(duration[1], 'hours')
+            .add(duration[2], 'days')
+            .valueOf()
+        : duration;
+      // if start time is now, convert to period
+      if (proposalBasicInfo.activeStartTime === ActiveStartTimeEnum.now) {
+        timeParams = {
+          activeTimePeriod: Math.floor((activeEndTime - activeStartTime) / 1000),
+          activeStartTime: 0,
+          activeEndTime: 0,
+        };
+      } else {
+        timeParams = {
+          activeTimePeriod: 0,
+          activeStartTime: Math.floor(activeStartTime / 1000),
+          activeEndTime: Math.floor(activeEndTime / 1000),
+        };
+      }
+      proposalBasicInfo = {
+        ...proposalBasicInfo,
+        ...timeParams,
+      };
       const basicInfo = {
-        ...res.proposalBasicInfo,
+        ...proposalBasicInfo,
         daoId,
         voteSchemeId,
       };
@@ -339,7 +373,6 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
               daoId={daoId}
               onSubmit={handleSubmit}
               onTabChange={(key: string) => {
-                console.log('key---->', key);
                 replaceUrlParams('tab', key);
                 setActiveTab(key);
               }}

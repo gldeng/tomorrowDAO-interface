@@ -1,0 +1,47 @@
+.votigram-main {
+  @apply px-[16px] py-[15px] relative;
+  min-height: 100vh;
+  .vote-lists {
+    @apply flex flex-col gap-[8px] pb-[106px];
+  }
+
+  .rules-wrap {
+    @apply text-[16px] text-[#DDDFFF] px-[0.375rem] py-[4px] rounded-[0.5rem] bg-[rgba(9,8,22,0.35)] absolute top-[23px] right-[24px] z-[1];
+    .rule-text {
+      @apply text-[#DDDFFF] text-[0.75rem] font-[700] leading-[0.75rem] pl-[2px];
+    }
+  }
+  .banner {
+    @apply rounded-[1rem] overflow-hidden;
+    .TMRWDAO-carousel {
+      @apply w-full h-[7.5rem];
+    }
+    .banner-img {
+      @apply w-full h-[7.5rem];
+    }
+  }
+  .votigram-activity-title {
+    @apply mt-[24px] mb-[16px] h-[32px] flex justify-between items-center;
+    h3 {
+      @apply text-[#FFF] text-[1.125rem] font-[590] leading-[1.375rem];
+    }
+  }
+  .votigram-activity-rest {
+    color: var(--Text-Gray-1, #b1b3bc);
+    @apply flex h-full pt-[0.375rem] pb-[8px] px-[16px] justify-center items-center gap-[0.625rem] rounded-[1.625rem] bg-[rgba(244,172,51,0.08)];
+  }
+
+}
+.votigram-loading-wrap {
+  @apply flex justify-center items-center mt-[155px];
+}
+.vote-item-icon {
+  @apply rounded-lg;
+}
+
+.votigram-rules-text-list {
+  @apply pl-[16px] list-decimal;
+  li + li {
+    @apply mt-[18px];
+  }
+}

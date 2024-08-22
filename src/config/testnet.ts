@@ -14,13 +14,15 @@ export const graphqlServer =
   'https://dapp-aa-portkey-test.portkey.finance/Portkey_V2_DID/PortKeyIndexerCASchema/graphql';
 export const portkeyServer = 'https://aa-portkey-test.portkey.finance';
 export const connectUrl = 'https://auth-aa-portkey-test.portkey.finance';
+
+export const TELEGRAM_BOT_ID = '6701447908';
 // ------------------aelf-web-login-end------------------------
 
 export const curChain = 'tDVW';
 // system contract： token contract address
 export const mainChainAddress = 'JRmBduh4nXWi1aXgdUsj5gJrzeZb2LxmrAbf7W99faZSvoAaE';
 export const sideChainAddress = 'ASh2Wt7nSEmYqnGxPPzp4pnVDU4uhj1XW9Se5VeZcX2UDdyjx';
-
+export const sideChainCAContractAddress = '238X6iw1j8YKcHvkDYVtYVbuYk2gJnK8UoNpVCtssynSpVC8hb';
 // tmrw contract: biz contract
 export const daoAddress = 'RRF7deQbmicUh6CZ1R2y7U9M8n2eHPyCgXVHwiSkmNETLbL4D';
 export const propalAddress = '2sJ8MDufVDR3V8fDhBPUKMdP84CUf1oJroi9p8Er1yRvMp3fq7';
@@ -59,3 +61,6 @@ export const networkDaoId = 'b2dcb3684b00e857983f7b75917682a1d3b2f175d668e77de22
 
 // website
 export const host = 'https://test.tmrwdao.com';
+
+// telegram
+export const nftSymbol = 'TOMORROWPASSTEST-1';

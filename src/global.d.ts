@@ -10,6 +10,7 @@ interface Window {
   web3?: {};
   plus?: any;
   NightElf?: {};
+  Hammer: any;
 }
 
 interface HTMLAttributes {
@@ -45,3 +46,4 @@ declare module '*.svg' {
   export default src;
 }
 declare module 'socket.io-client';
+declare module 'alloyfinger';

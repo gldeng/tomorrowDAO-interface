@@ -5,6 +5,8 @@ import { usePathname } from 'next/navigation';
 import { NetworkDaoHomePathName } from 'config';
 import { useUrlPath } from 'hooks/useUrlPath';
 import Layout from 'pageComponents/layout';
+import AELFDProviderWrap from 'provider/AELFDProviderWrap';
+import AELFDTelegramProviderWrap from 'provider/AELFDTelegramProviderWrap';
 const WalletInit = dynamicReq(
   async () => {
     return () => {
@@ -17,11 +19,18 @@ const WalletInit = dynamicReq(
 export const LayoutContent = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
   const isNetWorkDao = pathname.startsWith(NetworkDaoHomePathName);
-  const { isHome } = useUrlPath();
+  const { isHome, isTelegram } = useUrlPath();
+  // AELFDProviderWrap
   return (
     <>
       {!isHome && <WalletInit />}
-      {isNetWorkDao ? <div>{children}</div> : <Layout>{children}</Layout>}
+      {isTelegram ? (
+        <AELFDTelegramProviderWrap>{children}</AELFDTelegramProviderWrap>
+      ) : (
+        <AELFDProviderWrap>
+          {isNetWorkDao || isTelegram ? <div>{children}</div> : <Layout>{children}</Layout>}
+        </AELFDProviderWrap>
+      )}
     </>
   );
 };

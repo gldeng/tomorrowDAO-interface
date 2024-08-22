@@ -16,7 +16,12 @@ import { LeftOutlined } from '@ant-design/icons';
 
 import './index.css';
 
-export default function MyAsset() {
+interface IMyAssetProps {
+  redirect?: boolean;
+  onBack?: () => void;
+}
+export default function MyAsset(props: IMyAssetProps) {
+  const { redirect = true, onBack } = props;
   const router = useRouter();
   const { wallet, walletType, login, loginState } = useWebLogin();
   const isLogin = loginState === WebLoginState.logined;
@@ -24,7 +29,7 @@ export default function MyAsset() {
   const PortkeyAssetProvider = PortkeyAssetProviderV2;
 
   useEffect(() => {
-    if (!isLogin) {
+    if (!isLogin && redirect) {
       router.push('/');
     }
   }, [isLogin, router]);
@@ -41,7 +46,11 @@ export default function MyAsset() {
           isShowRampSell={true}
           backIcon={<LeftOutlined />}
           onOverviewBack={() => {
-            router.back();
+            if (onBack) {
+              onBack();
+            } else {
+              router.back();
+            }
           }}
         />
       </PortkeyAssetProvider>

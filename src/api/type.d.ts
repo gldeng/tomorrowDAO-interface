@@ -363,6 +363,7 @@ interface IProposalsItem {
   activeEndTime: string;
   executeStartTime: string;
   executeEndTime: string;
+  executeTime: string;
   chainId: string;
   proposalId: string;
   deployTime: string;
@@ -654,13 +655,14 @@ interface ITokenPriceRes {
 
 // -------------------------------------vote-history-----------------------------
 interface IVoteHistoryReq {
-  daoId: string;
+  daoId?: string;
   chainId: string;
   skipCount: number;
   maxResultCount: number;
   address?: string;
   proposalId?: string;
   voteOption?: string;
+  source?: string;
 }
 interface IVoteHistoryItem {
   timeStamp: number;
@@ -672,10 +674,13 @@ interface IVoteHistoryItem {
   voteNumAfterDecimals: number;
   transactionId: string;
   executer: string;
+  points?: number;
+  voteFor?: string;
 }
 
 interface IVoteHistoryResData {
-  total: number;
+  totalCount: number;
+  totalPoints: number;
   items: IVoteHistoryItem[];
 }
 interface IVoteHistoryRes {

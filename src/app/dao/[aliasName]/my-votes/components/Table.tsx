@@ -150,7 +150,7 @@ export default function RecordTable() {
         loading={voteHistoryLoading}
         pagination={{
           ...tableParams,
-          total: voteHistoryData?.data?.total ?? 0,
+          total: voteHistoryData?.data?.totalCount ?? 0,
           onChange: pageChange,
         }}
         dataSource={voteHistoryData?.data?.items ?? []}

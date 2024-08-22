@@ -107,3 +107,13 @@ export enum EProposalActionTabs {
   AddHcMembers = 'addHcMembers',
   DeleteHcMembers = 'deleteHcMembers',
 }
+
+export enum ActiveStartTimeEnum {
+  now = 1,
+  custom = 2,
+}
+
+export enum ActiveEndTimeEnum {
+  duration = 1,
+  custom = 2,
+}
