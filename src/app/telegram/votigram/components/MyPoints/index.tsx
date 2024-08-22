@@ -25,6 +25,7 @@ export default function MyPoints() {
       chainId: curChain,
       skipCount: preList.length,
       maxResultCount: MaxResultCount,
+      source: 'Telegram',
     });
     const currentList = res?.data?.items ?? [];
     const len = currentList.length + preList.length;

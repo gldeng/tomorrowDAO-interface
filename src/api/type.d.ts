@@ -661,6 +661,7 @@ interface IVoteHistoryReq {
   address?: string;
   proposalId?: string;
   voteOption?: string;
+  source?: string;
 }
 interface IVoteHistoryItem {
   timeStamp: number;
