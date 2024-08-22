@@ -7,6 +7,7 @@ import './index.css';
 interface ICommonDrawerProps {
   title?: string;
   body?: React.ReactNode;
+  onClose?: () => void;
 }
 interface ICloseTragetProps {
   onClose: () => void;
@@ -35,6 +36,7 @@ export interface ICommonDrawerRef {
   close: () => void;
 }
 const CommonDrawer = forwardRef<ICommonDrawerRef, ICommonDrawerProps>((props, ref) => {
+  const { onClose: handleClose } = props;
   const [open, setOpen] = useState(false);
 
   const showDrawer = () => {
@@ -43,6 +45,7 @@ const CommonDrawer = forwardRef<ICommonDrawerRef, ICommonDrawerProps>((props, re
 
   const onClose = () => {
     setOpen(false);
+    handleClose?.();
   };
 
   useImperativeHandle(ref, () => ({
