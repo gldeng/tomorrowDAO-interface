@@ -363,6 +363,7 @@ interface IProposalsItem {
   activeEndTime: string;
   executeStartTime: string;
   executeEndTime: string;
+  executeTime: string;
   chainId: string;
   proposalId: string;
   deployTime: string;
