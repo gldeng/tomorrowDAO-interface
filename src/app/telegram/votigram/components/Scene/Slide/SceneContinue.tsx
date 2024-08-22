@@ -1,5 +1,4 @@
-import Image from 'next/image';
-import { Button, Progress } from 'antd';
+import { Button } from 'antd';
 import Scene from '../index';
 import { ImageLoveNode } from '../ImageLoveNode';
 

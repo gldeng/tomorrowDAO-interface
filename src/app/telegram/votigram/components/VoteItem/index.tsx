@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import Percent from './Percent';
 import BigNumber from 'bignumber.js';
 
@@ -20,7 +19,7 @@ export default function VoteItem(props: IVoteItemProps) {
         <div className="telegram-vote-item-content truncate">
           <div className={`rank-index-wrap ${isRankIcon ? 'rank-icon' : 'rank-not-icon'}`}>
             {isRankIcon ? (
-              <Image
+              <img
                 src={`/images/tg/rank-icon-${index}.png`}
                 className="vote-item-icon"
                 alt="rank-icon"

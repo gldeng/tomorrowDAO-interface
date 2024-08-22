@@ -1,6 +1,6 @@
 import CommonDrawer, { ICommonDrawerRef } from '../CommonDrawer';
 import VoteItem from '../VoteItem';
-import { Button } from 'antd';
+import { Button, message } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { Carousel } from 'antd';
 import Empty from '../Empty';
@@ -56,8 +56,11 @@ export default function VoteList() {
           }),
         (loopRes) =>
           loopRes?.data?.status === VoteStatus.Voted || loopRes?.data?.status === VoteStatus.Failed,
-        1000 * 60 * 2,
+        1000 * 60 * 1,
       );
+      if (!res || res?.data?.status !== VoteStatus.Voted) {
+        message.info('Vote failed, please try again');
+      }
       loadingDrawerRef.current?.close();
       getRankingListFn();
     } catch (error) {
