@@ -61,7 +61,6 @@ const ProposalInfo = (props: ProposalInfoProps) => {
   const activeStartTime = Form.useWatch(activeStartTimeName, form);
   const timeMilliseconds = useMemo(() => {
     return getTimeMilliseconds(activeStartTime, activeEndTime);
-    return null;
   }, [activeEndTime, activeStartTime]);
   const currentGovernanceMechanism = useMemo(() => {
     return governanceMechanismList?.find((item) => item.schemeAddress === voterAndExecute);

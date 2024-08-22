@@ -125,7 +125,7 @@ export default function VoteList() {
         <span className="rule-text">Rules</span>
       </div>
       <div className="banner">
-        <Carousel>
+        <Carousel autoplay>
           <div>
             <img src={'/images/tg/vote-list-top-banner-1.png'} className="banner-img" alt={''} />
           </div>
