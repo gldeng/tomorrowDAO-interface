@@ -149,8 +149,12 @@ export default function VoteList() {
           <Loading />
         </div>
       ) : (
-        <div className="vote-lists">
-          {rankList?.data?.rankingList.map((item, index) => {
+        <div
+          className={`vote-lists ${
+            rankList?.data?.rankingList?.length ? 'padding-bottom-content' : ''
+          }`}
+        >
+          {rankList?.data?.rankingList?.map((item, index) => {
             return (
               <VoteItem
                 key={index}
