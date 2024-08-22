@@ -76,7 +76,9 @@ export default function MyPoints() {
                         <p className="font-15-20 truncate">{item.proposalTitle}</p>
                       </div>
                     </div>
-                    <p className="amount font-18-22-weight">{item.points}</p>
+                    <p className="amount font-18-22-weight">
+                      {BigNumber(item?.points ?? 0).toFormat()}
+                    </p>
                   </li>
                 );
               })}

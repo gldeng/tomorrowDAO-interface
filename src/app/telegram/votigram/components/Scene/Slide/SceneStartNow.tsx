@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import { Button } from 'antd';
 import Scene from '../index';
 
@@ -14,7 +13,7 @@ function SceneStartNow(props: ISceneStartNowProps) {
       description="Earn points by voting and redeem them for Tomorrow Token rewards!"
       imageNode={
         <div className="start-now-image-wrap">
-          <Image src={'/images/tg/gift.png'} width={175} height={205} alt={''} />
+          <img src={'/images/tg/gift.png'} width={175} height={205} alt={''} />
         </div>
       }
       foot={

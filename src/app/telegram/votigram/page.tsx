@@ -18,6 +18,8 @@ const imageLists = [
   '/images/tg/rank-icon-2.png',
   '/images/tg/vote-list-top-banner-1.png',
   '/images/tg/vote-list-top-banner-2.png',
+  '/images/tg/empty-vote-list.png',
+  '/images/tg/empty-points.png',
 ];
 export default function Page() {
   const [scene, setScene] = useState<VotigramScene>(VotigramScene.Loading);
