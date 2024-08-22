@@ -72,7 +72,6 @@ export default function Transparent(props: ITransparentProps) {
       },
     },
   ];
-  console.log('tokenList', tokenList);
   const { data: transferList, loading: queryTransferListLoading } = useRequest(async () => {
     const pageQuery = {
       pageSize: 20,
