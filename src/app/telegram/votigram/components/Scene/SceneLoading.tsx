@@ -34,6 +34,7 @@ const LoadingFailedIcon = () => {
     </div>
   );
 };
+const loadingCompletePercent = 60;
 function SceneLoading(props: ISceneLoadingProps) {
   const { onFinish } = props;
   const [processText, setProcessText] = useState('Creating on-chain wallet...');
@@ -43,10 +44,12 @@ function SceneLoading(props: ISceneLoadingProps) {
   const retryDrawerRef = useRef<ICommonDrawerRef>(null);
   const missNftDrawerRef = useRef<ICommonDrawerRef>(null);
   const requestNftTransferRef = useRef<() => Promise<void>>();
+  const fakeProgressTimer = useRef<NodeJS.Timeout>();
+  const percentRef = useRef(0);
+  percentRef.current = percent;
   const { wallet } = useWebLogin();
   const enterNextScene = async () => {
     setPercent(100);
-    await sleep(500);
     const balanceInfo = await GetBalanceByContract(
       {
         symbol: nftSymbol,
@@ -116,13 +119,27 @@ function SceneLoading(props: ISceneLoadingProps) {
 
   useEffect(() => {
     const callBack = () => {
-      setPercent(60);
+      clearInterval(fakeProgressTimer.current);
+      setPercent(loadingCompletePercent);
       setProcessText('Minting TomorrowPass NFT...');
       requestNftTransferRef.current?.();
     };
     eventBus.on(GetTokenLogin, callBack);
     return () => {
       eventBus.off(GetTokenLogin, callBack);
+    };
+  }, []);
+  useEffect(() => {
+    fakeProgressTimer.current = setInterval(() => {
+      const curPercent = percentRef.current + 1;
+      if (curPercent >= loadingCompletePercent) {
+        clearInterval(fakeProgressTimer.current);
+        return;
+      }
+      setPercent(curPercent);
+    }, 1000);
+    return () => {
+      clearInterval(fakeProgressTimer.current);
     };
   }, []);
   return (

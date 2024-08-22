@@ -3,7 +3,7 @@
   border-radius: 16px;
   border: 1px solid var(--Border-1, #403493);
   .vote-item-percent {
-    @apply absolute h-full w-0 bg-[rgba(0,0,0,0.35)] left-0 top-0 z-20;
+    @apply absolute h-full w-0 opacity-25 bg-[#ACA6FF] left-0 top-0 z-20;
   }
   .background {
     @apply absolute h-full w-full bg-[#4600C5] left-0 top-0 z-10;

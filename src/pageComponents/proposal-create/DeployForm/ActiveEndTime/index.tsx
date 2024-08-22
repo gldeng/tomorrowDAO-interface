@@ -31,6 +31,7 @@ const InputNumberWithIncrease = (props: IInputNumberWithIncreaseProps) => {
         </div>
       }
       controls={false}
+      precision={0}
     />
   );
 };
