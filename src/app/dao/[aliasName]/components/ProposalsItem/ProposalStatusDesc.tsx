@@ -61,7 +61,7 @@ export default function ProposalStatusDesc(props: IProposalStatusDescProps) {
         return `Expired on ${getDate(proposalItem.activeEndTime)}`;
       }
       if (proposalStatus === AllProposalStatusString.Executed) {
-        return `Executed. Executed on ${getDate(proposalItem.executeEndTime)}`;
+        return `Executed. Executed on ${getDate(proposalItem.executeTime)}`;
       }
     }
   }, [proposalItem]);
