@@ -63,7 +63,6 @@ const CreateDaoPage = () => {
       form
         ?.validateFields()
         .then((res) => {
-          console.log('res', res);
           setNextLoading(false);
           stepsFormMapRef.current.stepForm[currentStepString].submitedRes = res;
           send({ type: 'NEXT' });
