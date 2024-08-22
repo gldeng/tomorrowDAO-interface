@@ -1,5 +1,5 @@
-import dayjs from "dayjs";
-import { ActiveStartTimeEnum } from "../type";
+import dayjs from 'dayjs';
+import { ActiveStartTimeEnum } from '../type';
 
 export const getTimeMilliseconds = (
   startTime: ActiveStartTimeEnum | number,
