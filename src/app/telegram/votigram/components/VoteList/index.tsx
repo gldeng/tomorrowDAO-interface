@@ -194,7 +194,7 @@ export default function VoteList() {
             <h3 className="font-16-20-weight text-[#EDEEF0] mt-[8px] mb-[16px]">
               {currentVoteItem?.title}
             </h3>
-            <p className="font-14-18">Are you sure you want to vote for this game?</p>
+            <p className="font-14-18">Are you sure you want to vote for this App?</p>
             <Button type="primary" onClick={sendRawTransaction}>
               Confirm
             </Button>
@@ -255,7 +255,7 @@ export default function VoteList() {
         body={
           <div className="flex flex-col items-center">
             <ul className="votigram-rules-text-list">
-              <li>To vote in Tomorrow Ranking, you’ll need a TomorrowPass NFT.</li>
+              <li>To vote in Votigram, you’ll need a TomorrowPass NFT.</li>
               <li>You can cast one vote per day and can choose only one option.</li>
               <li>
                 After voting, you’ll earn points that can be redeemed for exciting rewards later.
