@@ -26,7 +26,7 @@ export const retryWrap = async <T>(
       if (cancelStrategy && cancelStrategy(res)) {
         return res;
       }
-      await sleep(interval + 1);
+      await sleep(interval + 2);
       return retry();
     } catch (error) {
       await sleep(interval);
