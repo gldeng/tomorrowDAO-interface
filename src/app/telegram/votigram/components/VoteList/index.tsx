@@ -138,7 +138,7 @@ export default function VoteList() {
         </Carousel>
       </div>
       <div className="votigram-activity-title">
-        <h3>Vote your favorite game</h3>
+        <h3>Vote your favorite app</h3>
         <div className="votigram-activity-rest font-14-18">
           Remaining vote: {rankList?.data?.canVoteAmount ?? 0}
         </div>

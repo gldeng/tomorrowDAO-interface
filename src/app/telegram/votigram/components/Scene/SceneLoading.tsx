@@ -199,8 +199,8 @@ function SceneLoading(props: ISceneLoadingProps) {
         }
       />
       <Scene
-        title="🌈  Vote your favorite game"
-        description="Cast your vote for your favourite Telegram Game!"
+        title="🌈  Vote your favorite app"
+        description="Cast your vote for your favourite Telegram app!"
         imageNode={<ImageLoveNode />}
         foot={
           <div className="scene-loading-foot">

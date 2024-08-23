@@ -10,8 +10,8 @@ function SceneContinue(props: ISceneContinueProps) {
   return (
     <Scene
       className="scene-continue"
-      title="🌈  Vote your favorite game"
-      description="Cast your vote for your favourite Telegram Game!"
+      title="🌈  Vote your favorite app"
+      description="Cast your vote for your favourite Telegram app!"
       imageNode={<ImageLoveNode />}
       foot={
         <div className="scene-continue-foot">
