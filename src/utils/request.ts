@@ -19,8 +19,6 @@ export const retryWrap = async <T>(
     try {
       const cur = Date.now();
       const diff = cur - now;
-      console.log('retry', cur);
-      console.log('diff', diff);
       if (diff > time) {
         return null;
       }
@@ -28,10 +26,9 @@ export const retryWrap = async <T>(
       if (cancelStrategy && cancelStrategy(res)) {
         return res;
       }
-      await sleep(interval);
+      await sleep(interval + 1);
       return retry();
     } catch (error) {
-      console.log('retry error', error);
       await sleep(interval);
       return retry();
     }
