@@ -26,9 +26,11 @@ async function main() {
     console.log(output);
 
     if (output.includes('Collecting build traces')) {
-      console.log('build success');
-      buildCommand.kill('SIGKILL');
-      process.exit(0);
+      setTimeout(() => {
+        console.log('build success');
+        buildCommand.kill('SIGKILL');
+        process.exit(0);
+      }, 5000);
     }
   });
 

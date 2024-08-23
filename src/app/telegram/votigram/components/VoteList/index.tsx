@@ -138,7 +138,7 @@ export default function VoteList() {
         </Carousel>
       </div>
       <div className="votigram-activity-title">
-        <h3>Vote your favorite game</h3>
+        <h3>Vote your favorite app</h3>
         <div className="votigram-activity-rest font-14-18">
           Remaining vote: {rankList?.data?.canVoteAmount ?? 0}
         </div>
@@ -149,8 +149,12 @@ export default function VoteList() {
           <Loading />
         </div>
       ) : (
-        <div className="vote-lists">
-          {rankList?.data?.rankingList.map((item, index) => {
+        <div
+          className={`vote-lists ${
+            rankList?.data?.rankingList?.length ? 'padding-bottom-content' : ''
+          }`}
+        >
+          {rankList?.data?.rankingList?.map((item, index) => {
             return (
               <VoteItem
                 key={index}
