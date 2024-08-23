@@ -15,7 +15,7 @@ export const graphqlServer =
 export const portkeyServer = 'https://aa-portkey-test.portkey.finance';
 export const connectUrl = 'https://auth-aa-portkey-test.portkey.finance';
 
-export const TELEGRAM_BOT_ID = '6701447908';
+export const TELEGRAM_BOT_ID = '7190916077';
 // ------------------aelf-web-login-end------------------------
 
 export const curChain = 'tDVW';
