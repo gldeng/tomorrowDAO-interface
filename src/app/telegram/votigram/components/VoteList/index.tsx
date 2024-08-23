@@ -149,11 +149,7 @@ export default function VoteList() {
           <Loading />
         </div>
       ) : (
-        <div
-          className={`vote-lists ${
-            rankList?.data?.rankingList?.length ? 'padding-bottom-content' : ''
-          }`}
-        >
+        <div className={`vote-lists`}>
           {rankList?.data?.rankingList?.map((item, index) => {
             return (
               <VoteItem
@@ -168,6 +164,7 @@ export default function VoteList() {
               />
             );
           })}
+          {rankList?.data?.rankingList?.length && <div className="padding-bottom-content"></div>}
         </div>
       )}
 
