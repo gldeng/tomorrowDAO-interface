@@ -2,7 +2,8 @@
   @apply px-[16px] py-[15px] relative;
   min-height: 100vh;
   .vote-lists {
-    @apply flex flex-col gap-[8px];
+    overflow-y: scroll;
+    height: calc(100vh - 30px - 32px - 120px - 24px - 16px);
     .padding-bottom-content {
       @apply h-[106px];
     }
