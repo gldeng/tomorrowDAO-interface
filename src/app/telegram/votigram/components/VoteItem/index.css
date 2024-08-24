@@ -9,6 +9,9 @@
     @apply absolute h-full w-full  left-0 top-0 z-10;
   } */
 }
+.telegram-vote-item + .telegram-vote-item {
+  @apply mt-[8px];
+}
 .telegram-vote-item-wrap {
   @apply flex items-center px-[16px]  justify-between absolute h-full w-full left-0 top-0 z-30;
 
