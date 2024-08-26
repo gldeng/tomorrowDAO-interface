@@ -1,5 +1,6 @@
 import Percent from './Percent';
 import BigNumber from 'bignumber.js';
+import { useEffect, useRef } from 'react';
 
 import './index.css';
 interface IVoteItemProps {
@@ -13,9 +14,19 @@ const rankIndex = [0, 1, 2];
 export default function VoteItem(props: IVoteItemProps) {
   const { index, onVote, item, canVote } = props;
   const isRankIcon = rankIndex.includes(index);
+  const domRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    setTimeout(() => {
+      const dom = domRef.current;
+      if (dom) {
+        console.log(dom.clientWidth);
+        dom.clientWidth;
+      }
+    }, 200);
+  }, []);
   return (
     <div className="telegram-vote-item">
-      <div className="telegram-vote-item-wrap">
+      <div className="telegram-vote-item-wrap" ref={domRef}>
         <div className="telegram-vote-item-content truncate">
           <div className={`rank-index-wrap ${isRankIcon ? 'rank-icon' : 'rank-not-icon'}`}>
             {isRankIcon ? (
@@ -64,7 +75,6 @@ export default function VoteItem(props: IVoteItemProps) {
         )}
       </div>
       {!canVote && <Percent percent={item.votePercent} />}
-      <div className="background"></div>
     </div>
   );
 }
