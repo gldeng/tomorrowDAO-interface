@@ -439,6 +439,48 @@ const CreateOrganization = () => {
       }
       
       console.log("callContract", param);
+      // maximalAbstentionThreshold   maximalRejectionThreshold  minimalApprovalThreshold minimalVoteThreshold
+      const organizationMemberList = param?.organizationMemberList?.organizationMembers ?? [];
+      const proposers = param?.proposerWhiteList?.proposers ?? [];
+      const { maximalAbstentionThreshold, maximalRejectionThreshold, minimalApprovalThreshold, minimalVoteThreshold } = param.proposalReleaseThreshold;
+      if (formValue.proposalType === proposalTypes.PARLIAMENT) { 
+        if (minimalApprovalThreshold > minimalVoteThreshold) {
+          message.error('Minimal Approval Threshold needs to be less than or equal to the Minimal Vote Threshold.');
+          return;
+        }
+        if ((minimalApprovalThreshold + maximalAbstentionThreshold) > 100) {
+          message.error('Maximal Abstention Threshold plus the Minimal Approval Threshold must be less than or equal to 100%');
+          return;
+        }
+        if ((minimalApprovalThreshold + maximalRejectionThreshold) > 100) {
+          message.error('Maximal Rejection Threshold plus the Minimal Approval Threshold must be less than or equal to 100%');
+          return;
+        }
+      }
+      if (formValue.proposalType === proposalTypes.ASSOCIATION) { 
+        if (minimalVoteThreshold > organizationMemberList.length) {
+          message.error('Minimal Vote Threshold needs to be less than or equal to the Organisation members.');
+          return;
+        }
+        if ((minimalApprovalThreshold > minimalVoteThreshold)) {
+          message.error('Minimal Approval Threshold needs to be less than or equal to the Minimal Vote Threshold.');
+          return;
+        }
+        if ((maximalAbstentionThreshold + minimalApprovalThreshold) > organizationMemberList.length) {
+          message.error('Maximal Abstention Threshold plus the Minimal Approval Threshold must be less than or equal to the number of Organisation members.');
+          return;
+        }
+        if ((maximalRejectionThreshold + minimalApprovalThreshold) > organizationMemberList.length) {
+          message.error('Maximal Rejection Threshold plus the Minimal Approval Threshold must be less than or equal to the number of Organisation members.');
+          return;
+        }
+      }
+      if (formValue.proposalType === proposalTypes.REFERENDUM) {
+        if (minimalApprovalThreshold > minimalVoteThreshold) {
+          message.error('Minimal Approval Threshold needs to be less than or equal to the Minimal Vote Threshold.');
+          return;
+        }
+      }
       const chainIdQuery = getChainIdQuery();
       // debugger;
       const result = await WebLoginInstance.get().callContract({
