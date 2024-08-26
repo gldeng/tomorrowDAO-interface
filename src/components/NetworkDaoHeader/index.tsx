@@ -17,7 +17,22 @@ import LinkNetworkDao from 'components/LinkNetworkDao';
 import { useChainSelect } from 'hooks/useChainSelect';
 export enum ENetworkDaoNav {
   treasury = 'treasury',
+  proposals = 'Proposals',
+  organisations = 'Organisations',
+  bpElections = 'BPElections',
+  contractManagement = 'ContractManagement',
+  resourceTokenTrade = 'ResourceTokenTrade',
+  myProposals = 'MyProposals',
 }
+const pathnameMapKey: Record<string, ENetworkDaoNav> = {
+  '/network-dao/treasury': ENetworkDaoNav.treasury,
+  '/network-dao': ENetworkDaoNav.proposals,
+  '/network-dao/organization': ENetworkDaoNav.organisations,
+  '/network-dao/vote/election': ENetworkDaoNav.bpElections,
+  '/network-dao/apply': ENetworkDaoNav.contractManagement,
+  '/network-dao/resource': ENetworkDaoNav.resourceTokenTrade,
+  '/network-dao/my-proposals': ENetworkDaoNav.myProposals,
+};
 const DynamicLogin = dynamicReq(() => import('components/Login'), {
   ssr: false,
 });
@@ -37,47 +52,38 @@ export default function Header() {
           }
         : null,
       {
-        label: (
-          <div className="menu-label">
-            <span className="menu-label-text">Governance</span>
-            {!isLG && <MenuArrow className="transition-all duration-200" />}
-          </div>
-        ),
-        popupClassName: 'pc-menu-popup',
-        key: 'Governance',
-        children: [
-          {
-            label: <LinkNetworkDao href={`/`}>Proposals</LinkNetworkDao>,
-            key: 'Proposals',
-          },
-          {
-            label: <LinkNetworkDao href={`/organization`}>Organisations</LinkNetworkDao>,
-            key: 'Organisations',
-          },
-          isMainChain
-            ? {
-                label: <LinkNetworkDao href={`/vote/election`}>BP Elections</LinkNetworkDao>,
-                key: 'BP Elections',
-              }
-            : null,
-          {
-            label: <LinkNetworkDao href={`/apply`}>Contract Management</LinkNetworkDao>,
-            key: 'Contract Management',
-          },
-          isMainChain
-            ? {
-                label: <LinkNetworkDao href={`/resource`}>Resource Token Trade</LinkNetworkDao>,
-                key: 'Resource Token Trade',
-              }
-            : null,
-          {
-            label: <LinkNetworkDao href={`/my-proposals`}>My Proposals</LinkNetworkDao>,
-            key: 'My Proposals',
-          },
-        ],
+        label: <LinkNetworkDao href={`/`}>Proposals</LinkNetworkDao>,
+        key: ENetworkDaoNav.proposals,
+      },
+      {
+        label: <LinkNetworkDao href={`/organization`}>Organisations</LinkNetworkDao>,
+        key: ENetworkDaoNav.organisations,
+      },
+      isMainChain
+        ? {
+            label: <LinkNetworkDao href={`/vote/election`}>BP Elections</LinkNetworkDao>,
+            key: ENetworkDaoNav.bpElections,
+          }
+        : null,
+
+      {
+        label: <LinkNetworkDao href={`/apply`}>Contract Management</LinkNetworkDao>,
+        key: ENetworkDaoNav.contractManagement,
+      },
+
+      isMainChain
+        ? {
+            label: <LinkNetworkDao href={`/resource`}>Resource Token Trade</LinkNetworkDao>,
+            key: ENetworkDaoNav.resourceTokenTrade,
+          }
+        : null,
+
+      {
+        label: <LinkNetworkDao href={`/my-proposals`}>My Proposals</LinkNetworkDao>,
+        key: ENetworkDaoNav.myProposals,
       },
     ];
-  }, [isLG, isMainChain]);
+  }, [isMainChain]);
 
   const [current, setCurrent] = useState('CreateDAO');
 
@@ -86,9 +92,7 @@ export default function Header() {
   };
 
   useEffect(() => {
-    if (pathname.includes('/treasury')) {
-      setCurrent(ENetworkDaoNav.treasury);
-    }
+    setCurrent(pathnameMapKey[pathname]);
   }, [pathname]);
   useEffect(() => {
     const searchParams = qs.parse(window.location.search);
@@ -104,7 +108,7 @@ export default function Header() {
   };
 
   return (
-    <header className="header-container">
+    <header className="header-container networkdao-header-container">
       <div className="header-banner">
         <div className="header-logo">
           <div className="header-menu">

@@ -17,7 +17,15 @@
     @apply ml-2;
   }
 }
-
+.networkdao-header-container {
+  .custom-menu .TMRWDAO-menu-overflow-item, .custom-menu .TMRWDAO-menu-item {
+    padding-left: 32px !important;
+    padding-inline-start: 32px !important;
+  }
+  &.header-container .header-menu {
+    @apply flex-1;
+  }
+}
 .chain-id-select-wrap {
   @apply mr-1 flex-shrink;
 }

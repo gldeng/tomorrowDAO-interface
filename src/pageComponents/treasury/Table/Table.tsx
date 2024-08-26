@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, HashAddress } from 'aelf-design';
+import { Table, HashAddress, IHashAddressProps } from 'aelf-design';
 import { ConfigProvider, Tag, Tooltip } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import Link from 'next/link';
@@ -111,7 +111,13 @@ export default function RecordTable(props: IRecordTableProps) {
               href={`${isSideChain(currentChain) ? explorer : mainExplorer}/address/${from}`}
               target="_blank"
             >
-              <HashAddress className="treasury-address" address={from} preLen={8} endLen={9} />
+              <HashAddress
+                className="treasury-address"
+                chain={currentChain as IHashAddressProps['chain']}
+                address={from}
+                preLen={8}
+                endLen={9}
+              />
             </Link>
           </div>
         );
@@ -143,7 +149,13 @@ export default function RecordTable(props: IRecordTableProps) {
               href={`${isSideChain(currentChain) ? explorer : mainExplorer}/address/${to}`}
               target="_blank"
             >
-              <HashAddress className="treasury-address" address={to} preLen={8} endLen={9} />
+              <HashAddress
+                chain={currentChain as IHashAddressProps['chain']}
+                className="treasury-address"
+                address={to}
+                preLen={8}
+                endLen={9}
+              />
             </Link>
           </div>
         );
