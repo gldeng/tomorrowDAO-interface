@@ -4,7 +4,7 @@ const { Paragraph } = Typography;
 import { Typography as DesignTypography } from 'aelf-design';
 import useResponsive from 'hooks/useResponsive';
 import ImageWithPlaceHolder from 'components/ImageWithPlaceHolder';
-import VerifiedIcon from './verifiedIcon';
+import VerifiedIcon from './VerifiedIcon';
 interface IDAOListItemProps {
   item: IDaoItem;
 }
