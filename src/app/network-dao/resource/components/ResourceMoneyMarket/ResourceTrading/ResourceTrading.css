@@ -32,13 +32,13 @@
 }
 
 .resource-trading .trading-title-sell {
-  color: #d34a64;
+  color: #F55D6E;
   font-size: 16px;
   font-weight: 900;
 }
 
 .resource-trading .trading-title-buy {
-  color: #05ac90;
+  color: #3888FF;
   font-size: 16px;
   font-weight: 900;
 }
@@ -61,12 +61,6 @@
   min-width: 270px;
 }
 
-.ELF-value {
-  font-size: 12px;
-  color: #266cd3;
-  text-align: right;
-  margin: 5px 0;
-}
 
 .trading-input {
   margin: 2px 0;
@@ -76,11 +70,6 @@
   margin-bottom: 16px;
 }
 
-.ElF-value {
-  color: #266cd3;
-  text-align: right;
-  font-size: 16px;
-}
 
 .trading-button {
   width: 100%;
@@ -93,23 +82,25 @@
 }
 
 .trading-button.sell-btn {
-  background: #d34a64;
+  background: #F55D6E;
   border: none;
   color: #fff;
 }
 
 .trading-button.sell-btn:hover {
-  background: #d34a64;
+  background: #F55D6E !important;
+  color: #fff !important;
 }
 
 .trading-button.buy-btn {
-  background: #05ac90;
+  background: #3888FF;
   border: none;
   color: #fff;
 }
 
 .trading-button.buy-btn:hover {
-  background: #05ac90;
+  background: #3888FF !important;
+  color: #fff !important;
 }
 
 .modal-display-box {

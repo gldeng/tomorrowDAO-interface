@@ -25,12 +25,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const tmrwSiteMap: MetadataRoute.Sitemap = [];
   let daoLists: IDaoItem[] = [];
   try {
-    const daoListRes = await fetchDaoList({
-      skipCount: 0,
-      maxResultCount: maxResultCount,
-      chainId: curChain,
-    });
-    daoLists = daoListRes.data.items;
+    const [daoListRes1, daoListRes2] = await Promise.all([
+      fetchDaoList({
+        skipCount: 0,
+        maxResultCount: maxResultCount,
+        chainId: curChain,
+        daoType: 0,
+      }),
+      fetchDaoList({
+        skipCount: 0,
+        maxResultCount: maxResultCount,
+        chainId: curChain,
+        daoType: 1,
+      }),
+    ]);
+    daoLists = [...daoListRes1.data.items, ...daoListRes2.data.items];
   } catch (error) {
     //
   }

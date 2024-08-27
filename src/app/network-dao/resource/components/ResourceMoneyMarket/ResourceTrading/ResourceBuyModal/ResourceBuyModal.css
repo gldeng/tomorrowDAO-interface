@@ -34,11 +34,19 @@
 }
 
 .modal .modal-button.buy-btn {
-  background-color: #05ac90;
+  background-color: #3888FF;
+  &:hover {
+    background-color: #3888FF !important;
+    color: #fff !important;
+  }
 }
 
 .modal .modal-button.sell-btn {
-  background-color: #d34a64;
+  background-color: #F55D6E;
+  &:hover {
+    background-color: #F55D6E !important;
+    color: #fff !important;
+  }
 }
 
 .modal .modal-tip {

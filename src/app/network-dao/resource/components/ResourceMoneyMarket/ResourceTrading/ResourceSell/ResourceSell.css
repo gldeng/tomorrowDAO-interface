@@ -29,6 +29,15 @@
   border: none;
 }
 
+.ELF-value {
+  color: var(--Brand-Brand, #FA9D2B);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  text-align: right;
+}
+
 .trading-sell .ELF-value .antExplorer-spin-nested-loading {
   position: relative;
   display: inline-block;

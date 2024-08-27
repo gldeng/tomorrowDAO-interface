@@ -369,6 +369,7 @@ const CreateOrganization = () => {
   const navigate = useNetworkDaoRouter();
 
   const [form] = Form.useForm();
+  const [modal, contextHolder] = Modal.useModal();
   const { validateFields } = form;
   const common = useSelector((state) => state.common);
   const { aelf, currentWallet } = common;
@@ -443,43 +444,61 @@ const CreateOrganization = () => {
       const organizationMemberList = param?.organizationMemberList?.organizationMembers ?? [];
       const proposers = param?.proposerWhiteList?.proposers ?? [];
       const { maximalAbstentionThreshold, maximalRejectionThreshold, minimalApprovalThreshold, minimalVoteThreshold } = param.proposalReleaseThreshold;
+      let content = '';
       if (formValue.proposalType === proposalTypes.PARLIAMENT) { 
         if (minimalApprovalThreshold > minimalVoteThreshold) {
-          message.error('Minimal Approval Threshold needs to be less than or equal to the Minimal Vote Threshold.');
-          return;
+          content = ('Minimal Approval Threshold needs to be less than or equal to the Minimal Vote Threshold.');
+          
         }
         if ((minimalApprovalThreshold + maximalAbstentionThreshold) > 100) {
-          message.error('Maximal Abstention Threshold plus the Minimal Approval Threshold must be less than or equal to 100%');
-          return;
+          content = ('Maximal Abstention Threshold plus the Minimal Approval Threshold must be less than or equal to 100%');
+          
         }
         if ((minimalApprovalThreshold + maximalRejectionThreshold) > 100) {
-          message.error('Maximal Rejection Threshold plus the Minimal Approval Threshold must be less than or equal to 100%');
-          return;
+          content = ('Maximal Rejection Threshold plus the Minimal Approval Threshold must be less than or equal to 100%');
+          
         }
       }
       if (formValue.proposalType === proposalTypes.ASSOCIATION) { 
         if (minimalVoteThreshold > organizationMemberList.length) {
-          message.error('Minimal Vote Threshold needs to be less than or equal to the Organisation members.');
-          return;
+          content = ('Minimal Vote Threshold needs to be less than or equal to the Organisation members.');
+          
         }
         if ((minimalApprovalThreshold > minimalVoteThreshold)) {
-          message.error('Minimal Approval Threshold needs to be less than or equal to the Minimal Vote Threshold.');
-          return;
+          content = ('Minimal Approval Threshold needs to be less than or equal to the Minimal Vote Threshold.');
+          
         }
         if ((maximalAbstentionThreshold + minimalApprovalThreshold) > organizationMemberList.length) {
-          message.error('Maximal Abstention Threshold plus the Minimal Approval Threshold must be less than or equal to the number of Organisation members.');
-          return;
+          content = ('Maximal Abstention Threshold plus the Minimal Approval Threshold must be less than or equal to the number of Organisation members.');
+          
         }
         if ((maximalRejectionThreshold + minimalApprovalThreshold) > organizationMemberList.length) {
-          message.error('Maximal Rejection Threshold plus the Minimal Approval Threshold must be less than or equal to the number of Organisation members.');
-          return;
+          content = ('Maximal Rejection Threshold plus the Minimal Approval Threshold must be less than or equal to the number of Organisation members.');
+          
         }
       }
       if (formValue.proposalType === proposalTypes.REFERENDUM) {
         if (minimalApprovalThreshold > minimalVoteThreshold) {
-          message.error('Minimal Approval Threshold needs to be less than or equal to the Minimal Vote Threshold.');
-          return;
+          content = ('Minimal Approval Threshold needs to be less than or equal to the Minimal Vote Threshold.');
+          
         }
+      }
+      if (content) {
+        let modalIns = modal.info({
+          wrapClassName: 'create-organization-modal',
+          title: 'Organisation Creation Failed',
+          closable: true,
+          icon: null,
+          content: (
+            <div>
+              <p>{content}</p>
+            </div>
+          ),
+          footer: <Button type="primary" onClick={() => { 
+            modalIns.destroy();
+          }}>Got It</Button>,
+        });
+        return;
       }
       const chainIdQuery = getChainIdQuery();
       // debugger;
@@ -526,6 +545,7 @@ const CreateOrganization = () => {
 
   return (
     <div className="create-organization page-content-bg-border">
+      {contextHolder}
       <div className="create-organization-header">
         <div className="create-organization-header-title">
           Create Organisation

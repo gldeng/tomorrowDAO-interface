@@ -44,4 +44,7 @@
       @apply mr-0;
     }
   }
+  .verified-icon-wrap {
+    @apply ml-[12px] w-[24px] h-[24px];
+  }
 }

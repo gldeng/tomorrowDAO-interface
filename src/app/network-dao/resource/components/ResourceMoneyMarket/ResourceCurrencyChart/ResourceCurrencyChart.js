@@ -407,7 +407,6 @@ class ResourceCurrencyChart extends PureComponent {
       <div className="resource-currency-chart">
         <div className="resource-header">
           <div className="resource-header-title">
-            <AreaChartOutlined className="resource-icon" />
             <span className="resource-title">Resource Money Market</span>
           </div>
           <div className="resource-header-title-btn">{selectButton}</div>

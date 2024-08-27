@@ -4,17 +4,9 @@
   background-color: transparent;
 }
 .resource-money-market {
-  padding-top: 38px;
+
 }
 @media screen and (max-width: 992px) {
-  .resource-wallet {
-    margin: 20px;
-  }
-}
-@media (max-width: 768px) {
-  .resource-money-market {
-    padding-top: 0;
-  }
 }
 .resource-icon {
   color: #266cd3;
@@ -22,19 +14,32 @@
   margin-right: 12px;
 }
 .resource-title {
-  font-size: 16px;
-  font-weight: 600;
-  color: #000;
+  @apply card-title;
 }
 .resource-block {
   background-color: #ffffff;
+  border-radius: 8px;
+  border: 1px solid var(--Neutral-Divider, #EDEDED);
+  background: var(--Neutral-White-BG, #FFF);
 }
 .resource-header {
-  border-bottom: 1px solid #e5e5e5;
-  padding: 20px 57px 18px 57px;
+  border-bottom: 1px solid #EDEDED;
+  padding-left: 32px;
+  padding-right: 32px;
+  height: 78px;
+}
+.resource-money-market {
+  margin-top: 24px;
+  .resource-header  {
+    padding-top: 32px;
+    padding-bottom: 32px;
+    padding-left: 24px;
+    padding-right: 24px;
+    @apply lg:h-[78px] h-auto;
+  }
 }
 .resource-sub-container {
-  padding: 0 57px;
+  padding: 0 32px;
 }
 .resource-blank {
   height: 25px;
@@ -53,6 +58,14 @@
 }
 @media screen and (max-width: 768px) {
   .resource-sub-container {
-    padding: 0;
+    padding: 0 16px;
   }
+}
+.ELF-value, .ElF-value {
+  color: var(--Brand-Brand, #FA9D2B);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  text-align: right;
 }

@@ -23,13 +23,19 @@ import { useRequest } from 'ahooks';
 import formValidateScrollFirstError from 'utils/formValidateScrollFirstError';
 import { ActiveStartTimeEnum, EProposalActionTabs } from '../type';
 import { GetTokenInfo } from 'contract/callContract';
-import { fetchAddressTokenList, fetchDaoInfo, fetchVoteSchemeList } from 'api/request';
+import {
+  fetchAddressTokenList,
+  fetchDaoInfo,
+  fetchTokenIssue,
+  fetchVoteSchemeList,
+} from 'api/request';
 import { timesDecimals } from 'utils/calculate';
 import { trimAddress } from 'utils/address';
 import { useWebLogin } from 'aelf-web-login';
 import { SkeletonForm } from 'components/Skeleton';
 import { replaceUrlParams } from 'utils/url';
 import dayjs from 'dayjs';
+import { set } from 'js-cookie';
 // import { useWalletSyncCompleted } from 'hooks/useWalletSyncCompleted';
 
 const convertParams = async (address: string, methodName: string, originParams: any) => {
@@ -46,7 +52,10 @@ const convertParams = async (address: string, methodName: string, originParams: 
   const finalParams = uint8ToBase64(decoded || []) || [];
   return finalParams;
 };
-
+enum ETokenOrigin {
+  TokenContract = 1,
+  SymbolMarket = 2,
+}
 interface IGovernanceModelProps {
   aliasName: string;
 }
@@ -67,6 +76,7 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
   const router = useNetworkDaoRouter();
   const [activeTab, setActiveTab] = useState(tab ?? EProposalActionTabs.TREASURY);
 
+  const [isValidating, setIsValidating] = useState(false);
   const [isNext, setNext] = useState(!!tab);
   const { isNetWorkDao } = useIsNetworkDao();
   const nextRouter = useRouter();
@@ -145,7 +155,10 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
         openErrorModal();
         return;
       }
+
+      setIsValidating(true);
       const res = await form.validateFields();
+      setIsValidating(false);
       console.log('res', res);
       emitLoading(true, 'Publishing the proposal...');
       const voteSchemeList = await fetchVoteSchemeList({ chainId: curChain, daoId: daoId });
@@ -210,7 +223,14 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
         };
         await proposalCreateContractRequest('CreateTransferProposal', contractParams);
       } else {
-        const { removeMembers, addMembers, removeHighCouncils, addHighCouncils, ...restRes } = res;
+        const {
+          removeMembers,
+          addMembers,
+          removeHighCouncils,
+          addHighCouncils,
+          issueObj,
+          ...restRes
+        } = res;
         const contractParams = {
           ...restRes,
           proposalBasicInfo: {
@@ -218,6 +238,52 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
           },
         };
         if (res.proposalType === ProposalTypeEnum.GOVERNANCE) {
+          if (activeTab === EProposalActionTabs.IssueToken) {
+            const { symbol, amount, to } = issueObj;
+            const issueRes = await fetchTokenIssue({
+              symbol: symbol,
+              chainId: curChain,
+            });
+            // SYFFABC
+            if (issueRes.data.tokenOrigin === ETokenOrigin.TokenContract) {
+              const params = { symbol, amount, to, memo: '' };
+              const finalParams = await convertParams(
+                issueRes.data.tokenContractAddress,
+                'Issue',
+                params,
+              );
+              contractParams.transaction = {
+                toAddress: issueRes.data.tokenContractAddress,
+                contractMethodName: 'Issue',
+                params: finalParams,
+              };
+            } else if (issueRes.data.tokenOrigin === ETokenOrigin.SymbolMarket) {
+              const params = { symbol, amount, to, memo: '' };
+              console.log('params', params);
+              const tokenContractParams = await convertParams(
+                issueRes.data.tokenContractAddress,
+                'Issue',
+                params,
+              );
+              console.log('tokenContractParams', tokenContractParams);
+              const finalParams = await convertParams(
+                issueRes.data.proxyAccountContractAddress,
+                'ForwardCall',
+                {
+                  proxyAccountHash: issueRes.data.proxyAccountHash,
+                  contractAddress: issueRes.data.tokenContractAddress,
+                  methodName: 'Issue',
+                  args: tokenContractParams,
+                },
+              );
+              contractParams.transaction = {
+                toAddress: issueRes.data.proxyAccountContractAddress,
+                contractMethodName: 'ForwardCall',
+                params: finalParams,
+              };
+              console.log('contractParams', contractParams.transaction);
+            }
+          }
           if (activeTab === EProposalActionTabs.CUSTOM_ACTION) {
             const params = res.transaction.params;
             const parsedParams = parseJSON(params);
@@ -328,6 +394,7 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
         },
       });
     } catch (err) {
+      setIsValidating(false);
       if (typeof err === 'string') {
         antdMessage.open({
           type: 'error',
@@ -368,6 +435,7 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
         ) : (
           daoId && (
             <ProposalInfo
+              isValidating={isValidating}
               className={clsx({ hidden: !isNext })}
               daoData={daoData?.data}
               daoId={daoId}
