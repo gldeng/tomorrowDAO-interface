@@ -34,6 +34,7 @@ interface ProposalInfoProps {
   activeTab?: string;
   treasuryAssetsData?: ITreasuryAssetsResponseDataItem[];
   daoDataLoading?: boolean;
+  isValidating?: boolean;
 }
 
 const ProposalInfo = (props: ProposalInfoProps) => {
@@ -50,6 +51,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
     treasuryAssetsData,
     daoData,
     daoDataLoading,
+    isValidating,
   } = props;
 
   const form = Form.useFormInstance();
@@ -101,6 +103,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
     });
     setTimePeriod(timePeriod);
   }, [daoId]);
+  console.log(111, governanceMechanismList);
   return (
     <div className={className}>
       <h2 className="text-[20px] leading-[28px] font-weight">Create a Proposal</h2>
@@ -243,6 +246,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
             activeTab={activeTab}
             treasuryAssetsData={treasuryAssetsData}
             daoData={daoData}
+            governanceMechanismList={governanceMechanismList ?? []}
           />
         ))}
 
@@ -405,6 +409,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
           onClick={() => {
             onSubmit();
           }}
+          loading={isValidating}
         >
           Submit
         </Button>

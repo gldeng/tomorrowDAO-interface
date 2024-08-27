@@ -30,9 +30,6 @@
   background: rgba(255, 255, 255, 0.25);
 } */
 @media screen and (max-width: 992px) {
-  .resource-market-body {
-    margin: 20px;
-  }
 
   .resource-body {
     padding: 0 0;
@@ -49,7 +46,9 @@
     padding: 0 10px;
   }
 
-  .resource-market-body {
-    margin: 8px;
+}
+.resource-money-market {
+  .antExplorer-btn.antExplorer-btn-round.antExplorer-btn-sm {
+    border-radius: 4px;
   }
 }

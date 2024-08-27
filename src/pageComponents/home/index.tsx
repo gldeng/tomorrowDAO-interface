@@ -2,6 +2,7 @@ import DefaultPage from './defaultPage';
 interface IProps {
   ssrData: {
     daoList: IDaoItem[];
+    verifiedDaoList: IDaoItem[];
     daoHasData: boolean;
   };
 }

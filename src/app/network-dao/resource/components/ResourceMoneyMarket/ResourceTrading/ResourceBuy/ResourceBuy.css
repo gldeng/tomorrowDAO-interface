@@ -2,7 +2,14 @@
   background: #ffffff;
   display: flex;
   justify-content: center;
+  .mobile-trading-input, .antExplorer-input-number-input {
+    height: 48px;
+  }
+  .antExplorer-input {
+    height: 48px;
+  }
 }
+
 
 .trading-box .antExplorer-input-group-addon {
   border-left: none;
@@ -28,23 +35,23 @@
 }
 
 .trading-buy .trading-title {
-  color: #05ac90;
+  color: #FA9D2B;
   font-size: 16px;
   font-weight: 900;
 }
 
 .trading-buy .antExplorer-slider-track {
-  background: #05ac90;
+  background: #FA9D2B;
 }
 
 .trading-buy .antExplorer-slider-dot-active {
-  border-color: #05ac90;
-  background: #05ac90;
+  border-color: #FA9D2B;
+  background: #FA9D2B;
 }
 
 .trading-buy .antExplorer-slider-handle {
-  border-color: #05ac90;
-  background: #05ac90;
+  border-color: #FA9D2B;
+  background: #FA9D2B;
   transform: none !important;
 }
 
@@ -53,11 +60,11 @@
 }
 
 .trading-buy .antExplorer-slider-track:focus {
-  background: #05ac90;
+  background: #FA9D2B;
 }
 
 .trading-buy .antExplorer-slider:hover .antExplorer-slider-track {
-  background: #05ac90;
+  background: #FA9D2B;
 }
 
 .trading-buy .antExplorer-slider:hover .antExplorer-slider-handle {

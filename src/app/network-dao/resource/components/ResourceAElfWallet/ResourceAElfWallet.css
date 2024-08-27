@@ -1,6 +1,4 @@
-.resource-wallet a {
-  color: #266cd3;
-}
+
 
 .resource-wallet .resource-wallet-header {
   display: flex;
@@ -8,8 +6,6 @@
 }
 
 .resource-wallet .resource-wallet-address {
-  margin: 16px 0;
-  padding: 0 0 8px 0;
   border-bottom: 1px solid #e5e5e5;
   word-break: break-word;
 }
@@ -22,12 +18,31 @@
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+  padding-top: 24px;
+  padding-bottom: 24px;
+  @apply lg:gap-0 gap-[4px];
 }
 
 .resource-wallet-address-name {
-  font-weight: bold;
   flex-grow: 1;
-  line-height: 32px;
+  .link-detail-button {
+    border-radius: 6px;
+    border: 1px solid var(--Neutral-Border, #E1E1E1);
+    background: var(--Neutral-White-BG, #FFF);
+    text-align: center;
+    width: 136px;
+    height: 30px;
+    align-items: center;
+    justify-content: center;
+    display: inline-flex;
+    a {
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 20px; 
+      color: var(--Neutral-Title, var(--AELF-Design-Primary-Text, #1A1A1A));
+    }
+  }
 }
 
 .resource-wallet-address-update {
@@ -35,9 +50,6 @@
   align-items: center;
 }
 
-.resource-wallet-address-update:last-child {
-  padding-right: 0;
-}
 
 .resource-wallet-address-update:hover,
 .resource-wallet-address-update:active,
@@ -48,17 +60,31 @@
 .resource-wallet-operation-container {
   flex-grow: 1;
   display: flex;
-  justify-content: flex-end;
+  @apply lg:justify-end justify-start;
 }
 
 .resource-wallet-operation-container .antExplorer-btn>.antExplorericon {
   line-height: 0;
 }
-
+.resource-wallet-info {
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
 .resource-wallet-info .antExplorer-row .antExplorer-col {
-  margin-bottom: 25px;
+  margin-bottom: 16px;
 }
 
+.resource-wallet-info-name {
+  &.balance {
+    color: var(--Neutral-Title, var(--AELF-Design-Primary-Text, #1A1A1A));
+    font-weight: 700;
+  }
+}
+
+.resource-wallet-info-value {
+  font-weight: 500;
+  color: var(--Neutral-Primary-Text, #434343);
+}
 .resource-wallet-info .antExplorer-row .last-col {
   margin-bottom: 0;
 }
@@ -67,9 +93,4 @@
   color: #4c4c4c;
   width: 180px;
   display: inline-block;
-}
-
-.resource-wallet-info .balance {
-  font-weight: bold;
-  color: #000;
 }

@@ -118,3 +118,5 @@ We provide two chains which allow you to interact with a remote aelf node. You c
 
 - MainChain Aelf: https://explorer-test.aelf.io/
 - SideChain Aelf: https://explorer-test-side02.aelf.io/
+
+orgaddress /api/app/governance/list schemeAddress

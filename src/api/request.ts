@@ -225,3 +225,12 @@ export const fetchTreasuryRecords = async (params: {
     ...params,
   });
 };
+
+export const fetchTokenIssue = async (params: {
+  symbol: string;
+  chainId: string;
+}): Promise<ITokenIssueRes> => {
+  return apiServer.post('/token/issue', {
+    ...params,
+  });
+};

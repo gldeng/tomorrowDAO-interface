@@ -4,6 +4,7 @@ const { Paragraph } = Typography;
 import { Typography as DesignTypography } from 'aelf-design';
 import useResponsive from 'hooks/useResponsive';
 import ImageWithPlaceHolder from 'components/ImageWithPlaceHolder';
+import VerifiedIcon from './verifiedIcon';
 interface IDAOListItemProps {
   item: IDaoItem;
 }
@@ -27,6 +28,11 @@ export default function DAOListItem(props: IDAOListItemProps) {
         <div className="dao-title">
           <DesignTypography.Title level={isSM ? 6 : 5}>{item.name}</DesignTypography.Title>
         </div>
+        {item.verifiedType && (
+          <div className="verified-icon-wrap">
+            <VerifiedIcon verifiedType={item.verifiedType} />
+          </div>
+        )}
       </div>
       <div className="dao-list-item-content">
         <Paragraph

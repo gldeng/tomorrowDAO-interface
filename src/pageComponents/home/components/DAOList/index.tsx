@@ -18,12 +18,13 @@ interface IFetchResult {
 interface IDAOListProps {
   ssrData: {
     daoList: IDaoItem[];
+    verifiedDaoList: IDaoItem[];
     daoHasData: boolean;
   };
 }
 export default function DAOList(props: IDAOListProps) {
   const { ssrData } = props;
-  const { daoList, daoHasData } = ssrData;
+  const { daoList, daoHasData, verifiedDaoList } = ssrData;
   const [renderList, setRenderList] = useState<IDaoItem[]>(daoList);
   const [hasData, setHasData] = useState(daoHasData);
   const [loading, setLoading] = useState(false);
@@ -33,6 +34,7 @@ export default function DAOList(props: IDAOListProps) {
       skipCount: renderList.length,
       maxResultCount: 6,
       chainId: curChain,
+      daoType: 1,
     });
     setRenderList([...renderList, ...res.data.items]);
     setHasData(renderList.length + res.data.items.length < res.data.totalCount);
@@ -43,6 +45,25 @@ export default function DAOList(props: IDAOListProps) {
   }, []);
   return (
     <div className="dao-list">
+      <h3 className="normal-text-bold mb-[24px]">Verified DAOs</h3>
+      {verifiedDaoList ? (
+        <div className="dao-list-container mb-0">
+          {verifiedDaoList?.map((item) => {
+            return (
+              <Link
+                key={item.daoId}
+                href={item.isNetworkDAO ? `/network-dao` : `/dao/${item.alias}`}
+                prefetch={true}
+              >
+                <DAOListItem item={item} />
+              </Link>
+            );
+          })}
+        </div>
+      ) : (
+        <Empty description="No results found" className="mb-[30px]" />
+      )}
+      <h3 className="normal-text-bold my-[24px]">Community DAOs</h3>
       {renderList ? (
         <div className="dao-list-container">
           {renderList?.map((item) => {

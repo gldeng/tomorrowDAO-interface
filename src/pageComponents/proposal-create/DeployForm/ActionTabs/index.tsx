@@ -26,6 +26,8 @@ import DeleteHCMembers from './TabContent/DeleteHCMembers';
 import AddHCMembers from './TabContent/AddHCMembers';
 import ErrorBoundary from 'components/ErrorBoundary';
 import { divDecimals } from 'utils/calculate';
+import { IssueIcon } from './TabContent/IssueToken/Icon';
+import IssueToken from './TabContent/IssueToken';
 
 const contractMethodNamePath = ['transaction', 'contractMethodName'];
 
@@ -35,10 +37,12 @@ interface IActionTabsProps {
   activeTab?: string;
   daoData?: IDaoInfoData;
   treasuryAssetsData?: ITreasuryAssetsResponseDataItem[];
+  governanceMechanismList: TGovernanceSchemeList;
 }
 // const emptyTabItem = (...([]));
 export default function TabsCom(props: IActionTabsProps) {
-  const { daoId, onTabChange, activeTab, treasuryAssetsData, daoData } = props;
+  const { daoId, onTabChange, activeTab, treasuryAssetsData, daoData, governanceMechanismList } =
+    props;
   const onTabChangeRef = useRef<(activeKey: string) => void>();
   onTabChangeRef.current = onTabChange;
   const form = Form.useFormInstance();
@@ -95,6 +99,7 @@ export default function TabsCom(props: IActionTabsProps) {
       form.setFieldValue(contractMethodNamePath, undefined);
     }
   }, [contractAddress, form, contractInfo]);
+  console.log('governanceMechanismList', governanceMechanismList);
   const tabItems = useMemo(() => {
     const initItems = [
       treasuryAssetsData?.length
@@ -254,6 +259,24 @@ export default function TabsCom(props: IActionTabsProps) {
             ),
             key: EProposalActionTabs.DeleteMultisigMembers,
             children: <DeleteMultisigMembers daoId={daoId} form={form} />,
+          }
+        : {},
+      daoData?.governanceMechanism === EDaoGovernanceMechanism.Multisig
+        ? {
+            label: (
+              <span className="proposal-action-tabs-label">
+                <IssueIcon />
+                <span
+                  className={`proposal-action-tabs-text ${
+                    activeTab === EProposalActionTabs.IssueToken ? 'active' : ''
+                  }`}
+                >
+                  Issue Token
+                </span>
+              </span>
+            ),
+            key: EProposalActionTabs.IssueToken,
+            children: <IssueToken governanceMechanismList={governanceMechanismList} />,
           }
         : {},
       daoData?.governanceMechanism === EDaoGovernanceMechanism.Token && daoData.isHighCouncilEnabled
