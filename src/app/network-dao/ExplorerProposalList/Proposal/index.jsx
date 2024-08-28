@@ -55,7 +55,7 @@ const Title = (props) => {
     momentExpired.isBefore(threshold);
   return (
     <div className="proposal-list-item-title">
-      <span className="gap-right-small">{proposalType}</span>
+      <span className="gap-right-small card-sm-text-bold-black">{proposalType}</span>
       {votedStatus !== "none" ? (
         <Tag color={ACTIONS_COLOR_MAP[votedStatus]}>
           {ACTIONS_ICON_MAP[votedStatus]}
@@ -102,6 +102,8 @@ const Proposal = (props) => {
     handleApprove,
     handleReject,
     handleAbstain,
+    title,
+    description,
   } = props;
 
   const bpCountNumber =
@@ -129,24 +131,24 @@ const Proposal = (props) => {
         }
       >
         <div className="proposal-list-item-id">
-          <div className="gap-right-large">
-          <LinkNetworkDao
-              className="text-ellipsis"
-              href={{
-                pathname: `/proposal/${proposalId}`,
-              }}
-              
-            >
-              {proposalId}
-            </LinkNetworkDao>
-            {CONTRACT_TEXT_MAP[contractMethod] ? (
-              <Tag color={PRIMARY_COLOR}>
-                {CONTRACT_TEXT_MAP[contractMethod]}
-              </Tag>
-            ) : null}
+          <div className="id-wrap gap-right-large flex flex-col justify-center">
+            <h2 className="truncate card-xsm-text-bold-black">{title}</h2>
+            <LinkNetworkDao
+                className="text-ellipsis card-xsm-text-bold"
+                href={{
+                  pathname: `/proposal/${proposalId}`,
+                }}            
+              >
+                {proposalId}
+              </LinkNetworkDao>
+              {CONTRACT_TEXT_MAP[contractMethod] ? (
+                <Tag color={PRIMARY_COLOR} className="max-content">
+                  {CONTRACT_TEXT_MAP[contractMethod]}
+                </Tag>
+              ) : null}
           </div>
-          <div className="proposal-list-item-id-status">
-            <Tag color={STATUS_COLOR_MAP[status]}>
+          <div className="proposal-list-item-id-status flex flex-col justify-center lg:items-center">
+            <Tag color={STATUS_COLOR_MAP[status]}  className="max-content">
               {PROPOSAL_STATUS_CAPITAL[status]}
             </Tag>
             {status === proposalStatus.APPROVED && canRelease ? (
@@ -163,7 +165,7 @@ const Proposal = (props) => {
             ) : null}
           </div>
         </div>
-        <Divider />
+        <Divider className="my-[16px]"/>
         <div className="proposal-list-item-info">
           <div className="proposal-list-item-info-item">
             <span className="info-key">Proposal Expires:</span>
@@ -186,7 +188,7 @@ const Proposal = (props) => {
             <span className="info-value text-ellipsis">{contractMethod}</span>
           </div>
         </div>
-        <Divider />
+        <Divider className="my-[16px]"/>
         <VoteChart
           proposalType={proposalType}
           approvals={approvals}
@@ -195,7 +197,7 @@ const Proposal = (props) => {
           bpCount={bpCountNumber}
           organizationInfo={organizationInfo}
         />
-        <Divider />
+        <Divider className="my-[16px]"/>
         <div className="proposal-list-item-actions">
           <ButtonWithLoginCheck
             type='primary'

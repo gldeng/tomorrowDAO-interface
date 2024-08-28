@@ -107,6 +107,7 @@ const VoteChart = (props) => {
     approvals,
     rejections,
     abstentions,
+    size = 'default'
   } = props;
   const votesData = useMemo(() => {
     return getCircleValues(
@@ -246,6 +247,7 @@ VoteChart.propTypes = {
     .isRequired,
   bpCount: PropTypes.number.isRequired,
   organizationInfo: PropTypes.shape(organizationInfoPropTypes).isRequired,
+  size: PropTypes.oneOf(["small", "default", "large"]),
 };
 
 export default VoteChart;
