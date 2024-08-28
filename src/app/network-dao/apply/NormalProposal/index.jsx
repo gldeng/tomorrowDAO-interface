@@ -560,7 +560,9 @@ const NormalProposal = (props) => {
           required
           {...FIELDS_MAP.title}
         >
-          <Input/>
+          <Input className="normal-proposal-apply-title"
+            placeholder={FIELDS_MAP.title.placeholder}
+          />
         </FormItem>
         <FormItem
           required
