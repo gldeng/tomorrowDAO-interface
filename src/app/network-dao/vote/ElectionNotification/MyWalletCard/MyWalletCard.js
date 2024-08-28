@@ -353,7 +353,6 @@ class MyWalletCard extends PureComponent {
                 )} */}
 
                 <Button
-                  type="text"
                   className="my-wallet-card-header-sync-btn refresh-btn "
                   disabled={!currentWallet?.address}
                   onClick={this.handleUpdateWalletClick}

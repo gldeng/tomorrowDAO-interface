@@ -1,6 +1,20 @@
 .proposal-detail .antExplorer-card-head {
   background-color: #EDEDED;
 }
+.proposal-detail-tab-description {
+  h2 {
+    @apply normal-text-bold;
+  }
+  .description-card {
+    @apply px-[16px] py-[8px];
+    margin-top: 8px;
+    border-radius: 6px;
+    border: 1px solid var(--Neutral-Border, #E1E1E1);
+    background: var(--Neutral-Hover-BG, #FAFAFA);
+    margin-bottom: 32px;
+    word-break: break-all;
+  }
+}
 .proposal-detail {
   .unset-bottom-border {
     border-bottom: none;

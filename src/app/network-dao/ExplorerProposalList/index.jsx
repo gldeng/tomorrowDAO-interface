@@ -79,6 +79,8 @@ const ProposalList = () => {
     Reject: {},
     Abstain: {},
   });
+  const currentActiveKeyRef = useRef();
+  currentActiveKeyRef.current = activeKey;
 
   const { wallet: webLoginWallet, callContract } = useWebLogin();
 
@@ -97,7 +99,9 @@ const ProposalList = () => {
         address: currentWallet.address,
       };
     }
-    console.log('newParams', newParams)
+    if (currentActiveKeyRef.current !== newParams.proposalType) {
+      return;
+    }
     dispatch(getProposals(newParams));
   };
   useEffect(() => {
