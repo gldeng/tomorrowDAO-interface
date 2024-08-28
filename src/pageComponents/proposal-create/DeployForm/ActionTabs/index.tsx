@@ -99,7 +99,6 @@ export default function TabsCom(props: IActionTabsProps) {
       form.setFieldValue(contractMethodNamePath, undefined);
     }
   }, [contractAddress, form, contractInfo]);
-  console.log('governanceMechanismList', governanceMechanismList);
   const tabItems = useMemo(() => {
     const initItems = [
       treasuryAssetsData?.length

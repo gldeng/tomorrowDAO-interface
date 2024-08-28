@@ -2,8 +2,8 @@
   .ant-card-head {
     background-color: #ededed;
   }
-  .ant-divider-horizontal {
-    margin: 12px 0;
+  .antExplorer-divider-horizontal {
+    margin: 16px 0;
   }
   &-id {
     display: flex;
@@ -22,9 +22,18 @@
     &-item {
       display: flex;
       flex-flow: row nowrap;
-      .sub-title {
-        display: flex;
-        white-space: nowrap;
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 20px; 
+      .info-key {
+        width: 180px;
+        color: var(--Color-font_caption, #858585);
+      }
+      .info-value {
+        color: var(--Color-font_title, #252525);
+        .TMRWDAO-hash-address > span {
+          color: var(--Color-font_title, #252525);
+        }
       }
     }
   }
@@ -42,6 +51,8 @@
   }
   &-actions {
     position: relative;
+    display: flex;
+    justify-content: space-between;
   }
   &-buttons {
     display: inline-block;
@@ -50,8 +61,12 @@
     left: 50%;
     min-width: 180px;
   }
-  &-abstain {
-    float: right;
+}
+.proposal-list-item-actions {
+  gap: 16px;
+  button {
+    flex: 1;
+    height: 40px;
   }
 }
 

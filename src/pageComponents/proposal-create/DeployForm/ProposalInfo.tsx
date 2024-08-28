@@ -103,7 +103,6 @@ const ProposalInfo = (props: ProposalInfoProps) => {
     });
     setTimePeriod(timePeriod);
   }, [daoId]);
-  console.log(111, governanceMechanismList);
   return (
     <div className={className}>
       <h2 className="text-[20px] leading-[28px] font-weight">Create a Proposal</h2>
