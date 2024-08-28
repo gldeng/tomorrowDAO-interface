@@ -12,7 +12,8 @@ import {
   CloseCircleOutlined,
   MinusCircleOutlined,
 } from "@ant-design/icons";
-import { Button, Card, Tag, Divider, Tooltip } from "antd";
+import { Button, Card, Tag, Divider } from "antd";
+import getChainIdQuery from 'utils/url';
 import constants, {
   LOG_STATUS,
   ACTIONS_COLOR_MAP,
@@ -29,6 +30,7 @@ import addressFormat from "@utils/addressFormat";
 import { NETWORK_TYPE } from "@config/config";
 import { getBPCount } from "@common/utils";
 import ButtonWithLoginCheck from "@components/ButtonWithLoginCheck";
+import { HashAddress } from "aelf-design";
 
 const { proposalTypes, proposalStatus, proposalActions } = constants;
 
@@ -41,7 +43,7 @@ export const ACTIONS_ICON_MAP = {
     <MinusCircleOutlined className="gap-right-small" />
   ),
 };
-
+const chainIdQuery = getChainIdQuery();
 const Title = (props) => {
   const { status, proposalType, votedStatus, expiredTime } = props;
   const momentExpired = moment(expiredTime);
@@ -166,20 +168,24 @@ const Proposal = (props) => {
         <Divider className="my-[16px]"/>
         <div className="proposal-list-item-info">
           <div className="proposal-list-item-info-item">
-            <span className="gap-right card-xsm-text text-[#858585] flex-shrink-0 w-[180px]">Proposal Expires:</span>
-            <span className="text-ellipsis card-xsm-text-bold-black">
+            <span className="info-key">Proposal Expires:</span>
+            <span className="info-value text-ellipsis">
               {moment(expiredTime).format("YYYY/MM/DD HH:mm:ss")}
             </span>
           </div>
           <div className="proposal-list-item-info-item">
-            <span className="gap-right card-xsm-text text-[#858585] flex-shrink-0 w-[180px]">Contract:</span>
-            <span className="text-ellipsis card-xsm-text-bold-black">
-              {addressFormat(contractAddress)}
-            </span>
+            <span className="info-key">Contract:</span>
+            <div className="info-value text-ellipsis">
+              <HashAddress address={contractAddress} 
+              preLen={16}
+              endLen={16}
+              chain={chainIdQuery.chainId}
+              />
+            </div>
           </div>
           <div className="proposal-list-item-info-item">
-            <span className="gap-right card-xsm-text text-[#858585] flex-shrink-0 w-[180px]">Contract Method:</span>
-            <span className="text-ellipsis card-xsm-text-bold-black">{contractMethod}</span>
+            <span className="info-key">Contract Method:</span>
+            <span className="info-value text-ellipsis">{contractMethod}</span>
           </div>
         </div>
         <Divider className="my-[16px]"/>
@@ -193,32 +199,33 @@ const Proposal = (props) => {
         />
         <Divider className="my-[16px]"/>
         <div className="proposal-list-item-actions">
-          <div className="proposal-list-item-buttons">
-            <ButtonWithLoginCheck
-              type="primary"
-              disabled={!canThisUserVote}
-              className="approve-color gap-right"
-              shape="round"
-              proposal-id={proposalId}
-              onClick={handleApprove}
-              loading={loading.Approve[proposalId] && canThisUserVote}
-            >
-              Approve
-            </ButtonWithLoginCheck>
-            <ButtonWithLoginCheck
-              danger
-              shape="round"
-              disabled={!canThisUserVote}
-              proposal-id={proposalId}
-              onClick={handleReject}
-              loading={loading.Reject[proposalId] && canThisUserVote}
-            >
-              &nbsp;Reject&nbsp;
-            </ButtonWithLoginCheck>
-          </div>
           <ButtonWithLoginCheck
-            className="proposal-list-item-abstain"
-            type="link"
+            type='primary'
+            disabled={!canThisUserVote}
+            className="approve-color approve-button"
+            size='meduim'
+            proposal-id={proposalId}
+            onClick={handleApprove}
+            loading={loading.Approve[proposalId] && canThisUserVote}
+          >
+            Approve
+          </ButtonWithLoginCheck>
+          <ButtonWithLoginCheck
+            danger
+            type='primary'
+            size='meduim'
+            className="reject-button"
+            disabled={!canThisUserVote}
+            proposal-id={proposalId}
+            onClick={handleReject}
+            loading={loading.Reject[proposalId] && canThisUserVote}
+          >
+            &nbsp;Reject&nbsp;
+          </ButtonWithLoginCheck>
+          <ButtonWithLoginCheck
+            className="proposal-list-item-abstain abstention-button"
+            type='primary'
+            size='meduim'
             disabled={!canThisUserVote}
             onClick={handleAbstain}
             proposal-id={proposalId}
