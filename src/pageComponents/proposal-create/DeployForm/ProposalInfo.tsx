@@ -104,7 +104,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
     setTimePeriod(timePeriod);
   }, [daoId]);
   return (
-    <div className={className}>
+    <div className={`${className} proposal-form`}>
       <h2 className="text-[20px] leading-[28px] font-weight">Create a Proposal</h2>
       <p className=" text-[16px] leading-[24px] text-Neutral-Secondary-Text font-normal mt-[8px] mb-[64px]">
         {proposalDetailDesc}

@@ -239,7 +239,9 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
         };
         if (res.proposalType === ProposalTypeEnum.GOVERNANCE) {
           if (activeTab === EProposalActionTabs.IssueToken) {
-            const { symbol, amount, to } = issueObj;
+            const { symbol, to, decimals } = issueObj;
+            let { amount } = issueObj;
+            amount = timesDecimals(amount, decimals).toNumber();
             const issueRes = await fetchTokenIssue({
               symbol: symbol,
               chainId: curChain,
@@ -259,13 +261,11 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
               };
             } else if (issueRes.data.tokenOrigin === ETokenOrigin.SymbolMarket) {
               const params = { symbol, amount, to, memo: '' };
-              console.log('params', params);
               const tokenContractParams = await convertParams(
                 issueRes.data.tokenContractAddress,
                 'Issue',
                 params,
               );
-              console.log('tokenContractParams', tokenContractParams);
               const finalParams = await convertParams(
                 issueRes.data.proxyAccountContractAddress,
                 'ForwardCall',
@@ -281,7 +281,6 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
                 contractMethodName: 'ForwardCall',
                 params: finalParams,
               };
-              console.log('contractParams', contractParams.transaction);
             }
           }
           if (activeTab === EProposalActionTabs.CUSTOM_ACTION) {

@@ -202,8 +202,8 @@ interface ITokenIssueRes {
   code: number;
   data: {
     tokenOrigin: 1 | 2;
-    totalSupply: string;
-    supply: string;
+    totalSupply: number;
+    supply: number;
     decimals: number;
     issueChainId: string;
     issued: string;

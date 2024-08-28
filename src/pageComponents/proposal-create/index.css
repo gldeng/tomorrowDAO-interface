@@ -39,6 +39,8 @@
     @apply text-[#B8B8B8] ml-[8px];
   }
 }
-.voting-start-time-form-label {
-  @apply mt-8;
+.proposal-form {
+  .voting-start-time-form-label.TMRWDAO-form-item {
+    @apply mt-8;
+  }
 }

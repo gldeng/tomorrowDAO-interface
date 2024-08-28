@@ -7,6 +7,7 @@ import { networkType } from 'config';
 import { runTimeEnv } from 'utils/env';
 import { SentryEvents } from 'types/sentry';
 import { telegramNeedAuthList } from '../api-wrap/telegram';
+import { tokenIssueUrl } from 'api/url/tmrw';
 export const apiServerBaseURL = '/api/app';
 const defaultServerError = 'The API has an error. Please refresh and retry.';
 export const LoginExpiredTip = 'Login expired, please log in again';
@@ -17,6 +18,8 @@ const authList = [
   '/discussion/new-comment',
   ...telegramNeedAuthList,
 ];
+
+const ignoreToastList = [tokenIssueUrl];
 type Method = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
 
 type Params = Record<string, any>;
@@ -80,6 +83,9 @@ class RequestFetch {
       const json = await res.json();
       const { code, message: errorMessage } = json;
       if (code === '20000') {
+        return json as T;
+      }
+      if (ignoreToastList.find((item) => req.url.includes(item))) {
         return json as T;
       }
       if (typeof window !== 'undefined') {
