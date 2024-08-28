@@ -11,6 +11,7 @@ import './index.css';
 const symbolNamePath = ['issueObj', 'symbol'];
 const amountNamePath = ['issueObj', 'amount'];
 const issueToNamePath = ['issueObj', 'to'];
+const issueDecimalPath = ['issueObj', 'decimals'];
 
 interface IIssueTokenProps {
   governanceMechanismList: TGovernanceSchemeList;
@@ -34,16 +35,35 @@ export default function IssueToken(props: IIssueTokenProps) {
         )}
       </p>
       <Form.Item
+        hidden
+        name={issueDecimalPath}
+        validateFirst
+        label={<span className="form-item-label">Amount</span>}
+      >
+        <InputNumber placeholder="Please enter the amount you want to issue" className="w-full" />
+      </Form.Item>
+      <Form.Item
         validateFirst
         rules={[
           {
             required: true,
-            message: 'Symbol is required',
+            message: 'Please enter symbol',
+          },
+          {
+            validator: (_, value) => {
+              value = value?.toString().trim();
+              const reg = /^[A-Za-z0-9-]{1,20}$/;
+              if (!reg.test(value)) {
+                return Promise.reject(new Error('symbol name is invalid'));
+              } else {
+                return Promise.resolve();
+              }
+            },
           },
           {
             validator: (_, value) => {
               const reqParams = {
-                symbol: value ?? '',
+                symbol: (value ?? '').toUpperCase(),
                 chainId: curChain,
               };
               return new Promise<void>((resolve, reject) => {
@@ -51,12 +71,13 @@ export default function IssueToken(props: IIssueTokenProps) {
                   .then((res) => {
                     currentSymbol.current = res?.data;
                     if (!res?.data?.totalSupply) {
-                      reject(new Error('The token has not yet been issued'));
+                      reject('The token has not yet been created');
                     }
+                    form.setFieldValue(issueDecimalPath, res?.data?.decimals);
                     resolve();
                   })
                   .catch(() => {
-                    reject(new Error('The token has not yet been issued.'));
+                    reject('query token error');
                   });
               });
             },
@@ -68,7 +89,7 @@ export default function IssueToken(props: IIssueTokenProps) {
         className="governance-token-item"
       >
         <Input
-          placeholder="Enter a token symbol"
+          placeholder="Please enter the symbol you want to issue"
           onBlur={() => {
             const token = form.getFieldValue(symbolNamePath);
             form.setFieldValue(symbolNamePath, token?.toUpperCase());
@@ -85,7 +106,7 @@ export default function IssueToken(props: IIssueTokenProps) {
           },
           {
             validator: (_, value) => {
-              if (value <= 0) {
+              if (BigNumber(value).lte(0)) {
                 return Promise.reject(new Error('The amount must be greater than 0'));
               } else {
                 return Promise.resolve();
@@ -100,7 +121,7 @@ export default function IssueToken(props: IIssueTokenProps) {
               }
               return new Promise<void>((resolve, reject) => {
                 const reqParams = {
-                  symbol,
+                  symbol: symbol.toString().toUpperCase(),
                   chainId: curChain,
                 };
                 fetchTokenIssue(reqParams)
@@ -147,6 +168,7 @@ export default function IssueToken(props: IIssueTokenProps) {
           placeholder="Please enter the amount you want to issue"
           className="w-full"
           controls={false}
+          stringMode={true}
         />
       </Form.Item>
       <Form.Item
