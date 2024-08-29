@@ -2,10 +2,10 @@ import { Form, InputNumber } from 'antd';
 import { Input, HashAddress } from 'aelf-design';
 import { fetchTokenIssue } from 'api/request';
 import { curChain } from 'config';
-import { useRef } from 'react';
 import { divDecimals, timesDecimals } from 'utils/calculate';
 import BigNumber from 'bignumber.js';
 import useResponsive from 'hooks/useResponsive';
+import { voterAndExecuteNamePath } from '../../../constant';
 import './index.css';
 
 const symbolNamePath = ['issueObj', 'symbol'];
@@ -19,18 +19,18 @@ interface IIssueTokenProps {
 export default function IssueToken(props: IIssueTokenProps) {
   const { governanceMechanismList } = props;
   const form = Form.useFormInstance();
-  const currentSymbol = useRef<ITokenIssueRes['data']>();
   const { isLG } = useResponsive();
+  const schemeAddress = Form.useWatch(voterAndExecuteNamePath);
   return (
     <div className="issue-token-form">
       <p className="org-address normal-text">
         <div> Organisation address:</div>
-        {governanceMechanismList?.[0]?.schemeAddress && (
+        {schemeAddress && (
           <HashAddress
             chain={curChain}
             preLen={isLG ? 8 : 0}
             endLen={isLG ? 8 : 0}
-            address={governanceMechanismList?.[0]?.schemeAddress}
+            address={schemeAddress}
           />
         )}
       </p>
@@ -66,12 +66,20 @@ export default function IssueToken(props: IIssueTokenProps) {
                 symbol: (value ?? '').toUpperCase(),
                 chainId: curChain,
               };
+              const schemeAddress = form.getFieldValue(voterAndExecuteNamePath);
+              if (!schemeAddress) {
+                return Promise.reject(
+                  new Error('The symbol cannot be issued by the organisation address'),
+                );
+              }
               return new Promise<void>((resolve, reject) => {
                 fetchTokenIssue(reqParams)
                   .then((res) => {
-                    currentSymbol.current = res?.data;
                     if (!res?.data?.totalSupply) {
                       reject('The token has not yet been created');
+                    }
+                    if (!res?.data?.realIssuers?.includes(schemeAddress)) {
+                      reject('The symbol cannot be issued by the organisation address');
                     }
                     form.setFieldValue(issueDecimalPath, res?.data?.decimals);
                     resolve();
@@ -84,6 +92,7 @@ export default function IssueToken(props: IIssueTokenProps) {
           },
         ]}
         validateTrigger="onBlur"
+        dependencies={[voterAndExecuteNamePath]}
         name={symbolNamePath}
         label={<span className="form-item-label">Symbol</span>}
         className="governance-token-item"
@@ -103,6 +112,7 @@ export default function IssueToken(props: IIssueTokenProps) {
         rules={[
           {
             required: true,
+            message: 'The amount is required',
           },
           {
             validator: (_, value) => {
