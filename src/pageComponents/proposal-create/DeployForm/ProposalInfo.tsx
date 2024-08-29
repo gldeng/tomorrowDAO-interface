@@ -20,7 +20,8 @@ import { SkeletonTab } from 'components/Skeleton';
 import ActiveStartTime from './ActiveStartTime';
 import ActiveEndTime, { defaultActiveEndTimeDuration } from './ActiveEndTime';
 import { getTimeMilliseconds } from '../util/time';
-const voterAndExecuteNamePath = ['proposalBasicInfo', 'schemeAddress'];
+import { voterAndExecuteNamePath } from './constant';
+
 const periodName = ['proposalBasicInfo', 'activeTimePeriod'];
 const activeStartTimeName = ['proposalBasicInfo', 'activeStartTime'];
 const activeEndTimeName = ['proposalBasicInfo', 'activeEndTime'];

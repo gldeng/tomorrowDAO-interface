@@ -210,6 +210,7 @@ interface ITokenIssueRes {
     proxyAccountHash: string;
     proxyAccountContractAddress: string;
     tokenContractAddress: string;
+    realIssuers: string[];
   };
 }
 // -------------------------------------dao-info-----------------------------
