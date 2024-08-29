@@ -384,18 +384,23 @@ const CreateOrganization = () => {
 
   const { callContract, wallet } = useWebLogin();
 
-  // const [whiteList, setWhiteList] = useState([]);
+  const [whiteList, setWhiteList] = useState([]);
   useEffect(() => {
     getTokenList({voteValid: true}).then((tokens) => {
       setTokenList(Object.keys(tokens).map((key) => tokens[key]));
     });
     getWhiteList().then((arr) => {
       const whiteList = [...arr.bpList, ...arr.parliamentProposerList];
-      if (whiteList.indexOf(currentWallet.address) === -1) {
-        setSelectOptions(SELECT_OPTIONS_WITH_NO_AUTHORITY);
-      }
+      setWhiteList(whiteList)
     });
   }, []);
+  useEffect(() => {
+    if (whiteList.indexOf(currentWallet.address) === -1) {
+      setSelectOptions(SELECT_OPTIONS_WITH_NO_AUTHORITY);
+    } else {
+      setSelectOptions(SELECT_OPTIONS_WITH_AUTHORITY);
+    }
+  }, [whiteList, currentWallet.address])
 
   async function handleSubmit() {
     try {
@@ -450,11 +455,11 @@ const CreateOrganization = () => {
           content = ('Minimal Approval Threshold needs to be less than or equal to the Minimal Vote Threshold.');
           
         }
-        if ((minimalApprovalThreshold + maximalAbstentionThreshold) > 100) {
+        if ((minimalApprovalThreshold + maximalAbstentionThreshold) > 10000) {
           content = ('Maximal Abstention Threshold plus the Minimal Approval Threshold must be less than or equal to 100%');
           
         }
-        if ((minimalApprovalThreshold + maximalRejectionThreshold) > 100) {
+        if ((minimalApprovalThreshold + maximalRejectionThreshold) > 10000) {
           content = ('Maximal Rejection Threshold plus the Minimal Approval Threshold must be less than or equal to 100%');
           
         }
