@@ -275,7 +275,8 @@ export default function Discussion(props: IDiscussionProps) {
                       preLen={8}
                       endLen={11}
                       className="user-info-address"
-                      address={`ELF_${commentItem.commenter}_tDVW`}
+                      address={commentItem.commenter}
+                      chain={curChain}
                     />
                   </Link>
                   <p className="user-info-time">{getShortTimeDesc(commentItem.createTime)}</p>
