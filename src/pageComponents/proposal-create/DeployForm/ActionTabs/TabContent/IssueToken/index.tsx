@@ -142,7 +142,7 @@ export default function IssueToken(props: IIssueTokenProps) {
                       typeof totalSupply !== 'number' ||
                       typeof supply !== 'number'
                     ) {
-                      return reject(new Error('miss token info'));
+                      return reject(new Error('Please enter a valid symbol'));
                     }
                     const inputAmount = timesDecimals(value, decimals);
                     const decimalPlaces = BigNumber(value).decimalPlaces();
@@ -194,10 +194,10 @@ export default function IssueToken(props: IIssueTokenProps) {
             validator: (_, value) => {
               return new Promise<void>((resolve, reject) => {
                 if (value.endsWith(`AELF`)) {
-                  reject(new Error('Must be a SideChain address'));
+                  reject(new Error('Please enter a valid address'));
                 }
                 if (!value.startsWith(`ELF`) || !value.endsWith(curChain)) {
-                  reject(new Error('Must be a valid address'));
+                  reject(new Error('Please enter a valid address'));
                 }
                 resolve();
               });
