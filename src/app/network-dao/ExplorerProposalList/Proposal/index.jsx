@@ -13,6 +13,7 @@ import {
   MinusCircleOutlined,
 } from "@ant-design/icons";
 import { Button, Card, Tag, Divider } from "antd";
+import getChainIdQuery from 'utils/url';
 import constants, {
   LOG_STATUS,
   ACTIONS_COLOR_MAP,
@@ -29,6 +30,7 @@ import addressFormat from "@utils/addressFormat";
 import { NETWORK_TYPE } from "@config/config";
 import { getBPCount } from "@common/utils";
 import ButtonWithLoginCheck from "@components/ButtonWithLoginCheck";
+import { HashAddress } from "aelf-design";
 
 const { proposalTypes, proposalStatus, proposalActions } = constants;
 
@@ -41,7 +43,7 @@ export const ACTIONS_ICON_MAP = {
     <MinusCircleOutlined className="gap-right-small" />
   ),
 };
-
+const chainIdQuery = getChainIdQuery();
 const Title = (props) => {
   const { status, proposalType, votedStatus, expiredTime } = props;
   const momentExpired = moment(expiredTime);
@@ -53,7 +55,7 @@ const Title = (props) => {
     momentExpired.isBefore(threshold);
   return (
     <div className="proposal-list-item-title">
-      <span className="gap-right-small">{proposalType}</span>
+      <span className="gap-right-small card-sm-text-bold-black">{proposalType}</span>
       {votedStatus !== "none" ? (
         <Tag color={ACTIONS_COLOR_MAP[votedStatus]}>
           {ACTIONS_ICON_MAP[votedStatus]}
@@ -100,6 +102,8 @@ const Proposal = (props) => {
     handleApprove,
     handleReject,
     handleAbstain,
+    title,
+    description,
   } = props;
 
   const bpCountNumber =
@@ -127,24 +131,24 @@ const Proposal = (props) => {
         }
       >
         <div className="proposal-list-item-id">
-          <div className="gap-right-large">
-          <LinkNetworkDao
-              className="text-ellipsis"
-              href={{
-                pathname: `/proposal/${proposalId}`,
-              }}
-              
-            >
-              {proposalId}
-            </LinkNetworkDao>
-            {CONTRACT_TEXT_MAP[contractMethod] ? (
-              <Tag color={PRIMARY_COLOR}>
-                {CONTRACT_TEXT_MAP[contractMethod]}
-              </Tag>
-            ) : null}
+          <div className="id-wrap gap-right-large flex flex-col justify-center">
+            <h2 className="truncate card-xsm-text-bold-black">{title}</h2>
+            <LinkNetworkDao
+                className="text-ellipsis card-xsm-text-bold"
+                href={{
+                  pathname: `/proposal/${proposalId}`,
+                }}            
+              >
+                {proposalId}
+              </LinkNetworkDao>
+              {CONTRACT_TEXT_MAP[contractMethod] ? (
+                <Tag color={PRIMARY_COLOR} className="max-content">
+                  {CONTRACT_TEXT_MAP[contractMethod]}
+                </Tag>
+              ) : null}
           </div>
-          <div className="proposal-list-item-id-status">
-            <Tag color={STATUS_COLOR_MAP[status]}>
+          <div className="proposal-list-item-id-status flex flex-col justify-center lg:items-center">
+            <Tag color={STATUS_COLOR_MAP[status]}  className="max-content">
               {PROPOSAL_STATUS_CAPITAL[status]}
             </Tag>
             {status === proposalStatus.APPROVED && canRelease ? (
@@ -161,26 +165,30 @@ const Proposal = (props) => {
             ) : null}
           </div>
         </div>
-        <Divider />
+        <Divider className="my-[16px]"/>
         <div className="proposal-list-item-info">
           <div className="proposal-list-item-info-item">
-            <span className="sub-title gap-right">Proposal Expires:</span>
-            <span className="text-ellipsis">
+            <span className="info-key">Proposal Expires:</span>
+            <span className="info-value text-ellipsis">
               {moment(expiredTime).format("YYYY/MM/DD HH:mm:ss")}
             </span>
           </div>
           <div className="proposal-list-item-info-item">
-            <span className="sub-title gap-right">Contract:</span>
-            <span className="text-ellipsis">
-              {addressFormat(contractAddress)}
-            </span>
+            <span className="info-key">Contract:</span>
+            <div className="info-value text-ellipsis">
+              <HashAddress address={contractAddress} 
+              preLen={16}
+              endLen={16}
+              chain={chainIdQuery.chainId}
+              />
+            </div>
           </div>
           <div className="proposal-list-item-info-item">
-            <span className="sub-title gap-right">Contract Method:</span>
-            <span className="text-ellipsis">{contractMethod}</span>
+            <span className="info-key">Contract Method:</span>
+            <span className="info-value text-ellipsis">{contractMethod}</span>
           </div>
         </div>
-        <Divider />
+        <Divider className="my-[16px]"/>
         <VoteChart
           proposalType={proposalType}
           approvals={approvals}
@@ -189,34 +197,35 @@ const Proposal = (props) => {
           bpCount={bpCountNumber}
           organizationInfo={organizationInfo}
         />
-        <Divider />
+        <Divider className="my-[16px]"/>
         <div className="proposal-list-item-actions">
-          <div className="proposal-list-item-buttons">
-            <ButtonWithLoginCheck
-              type="primary"
-              disabled={!canThisUserVote}
-              className="approve-color gap-right"
-              shape="round"
-              proposal-id={proposalId}
-              onClick={handleApprove}
-              loading={loading.Approve[proposalId] && canThisUserVote}
-            >
-              Approve
-            </ButtonWithLoginCheck>
-            <ButtonWithLoginCheck
-              danger
-              shape="round"
-              disabled={!canThisUserVote}
-              proposal-id={proposalId}
-              onClick={handleReject}
-              loading={loading.Reject[proposalId] && canThisUserVote}
-            >
-              &nbsp;Reject&nbsp;
-            </ButtonWithLoginCheck>
-          </div>
           <ButtonWithLoginCheck
-            className="proposal-list-item-abstain"
-            type="link"
+            type='primary'
+            disabled={!canThisUserVote}
+            className="approve-color approve-button"
+            size='meduim'
+            proposal-id={proposalId}
+            onClick={handleApprove}
+            loading={loading.Approve[proposalId] && canThisUserVote}
+          >
+            Approve
+          </ButtonWithLoginCheck>
+          <ButtonWithLoginCheck
+            danger
+            type='primary'
+            size='meduim'
+            className="reject-button"
+            disabled={!canThisUserVote}
+            proposal-id={proposalId}
+            onClick={handleReject}
+            loading={loading.Reject[proposalId] && canThisUserVote}
+          >
+            &nbsp;Reject&nbsp;
+          </ButtonWithLoginCheck>
+          <ButtonWithLoginCheck
+            className="proposal-list-item-abstain abstention-button"
+            type='primary'
+            size='meduim'
             disabled={!canThisUserVote}
             onClick={handleAbstain}
             proposal-id={proposalId}

@@ -98,6 +98,7 @@ interface IListDaoReq {
   skipCount: number; //  0
   maxResultCount: number; // 6
   chainId: string; // aelf/ tdvv
+  daoType: 0 | 1;
 }
 
 interface IDaoItem {
@@ -114,6 +115,7 @@ interface IDaoItem {
   isNetworkDAO?: boolean;
   highCouncilMemberCount: number;
   alias: string;
+  verifiedType: 'Blue' | 'Gold';
 }
 
 interface IDaoData {
@@ -194,6 +196,22 @@ interface IMyDaoListQueryParams {
   ChainId: string;
   SkipCount: number;
   MaxResultCount: number;
+}
+// ------------------------------------- token issue -----------------------------
+interface ITokenIssueRes {
+  code: number;
+  data: {
+    tokenOrigin: 1 | 2;
+    totalSupply: number;
+    supply: number;
+    decimals: number;
+    issueChainId: string;
+    issued: string;
+    proxyAccountHash: string;
+    proxyAccountContractAddress: string;
+    tokenContractAddress: string;
+    realIssuers: string[];
+  };
 }
 // -------------------------------------dao-info-----------------------------
 interface ISocialMedia {

@@ -134,33 +134,6 @@ class ResourceTrading extends PureComponent {
           </div>
         ) : null}
         <div className="resource-trading-body">
-          {isPhoneCheck() ? null : (
-            <Row>
-              <Col
-                className="trading-title-buy"
-                xxl={12}
-                xl={12}
-                lg={12}
-                md={12}
-                sm={24}
-                xs={24}
-              >
-                Buy
-              </Col>
-              <Col
-                className="trading-title-sell"
-                xxl={12}
-                xl={12}
-                lg={12}
-                md={12}
-                sm={24}
-                xs={24}
-              >
-                Sell
-              </Col>
-            </Row>
-          )}
-          <Divider className="resource-buy-divider" />
           <Row>
             <Col xxl={11} xl={11} lg={11} md={11} sm={24} xs={24}>
               {isPhoneCheck() && <div className="trading-title-buy">Buy</div>}

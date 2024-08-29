@@ -13,3 +13,21 @@
 .create-organization .antExplorer-input-number {
   width: 100%;
 }
+.create-organization-modal {
+  .antExplorer-modal-confirm-title {
+    text-align: center;
+  }
+  .antExplorer-modal-confirm-body-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .antExplorer-btn {
+    height: 48px;
+    width: 96px;
+  }
+  .antExplorer-modal-confirm-content {
+    margin-top: 24px;
+    margin-bottom: 24px;
+  }
+}

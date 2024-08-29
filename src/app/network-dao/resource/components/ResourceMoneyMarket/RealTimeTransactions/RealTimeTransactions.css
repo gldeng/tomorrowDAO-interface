@@ -1,8 +1,10 @@
 .real-time-transactions .real-time-transactions-head {
-  color: #266cd3;
-  background: #ffffff;
+  color: var(--Neutral-Title, var(--AELF-Design-Primary-Text, #1A1A1A));
+  font-family: Roboto;
   font-size: 16px;
-  font-weight: 900;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 24px; 
 }
 
 .real-time-transactions .real-time-transactions-body {
@@ -18,19 +20,32 @@
 }
 
 .real-time-transactions .real-time-transactions-body .table-head {
-  background-color: #f7f8f9;
-  height: 30px;
+  background: var(--Neutral-Hover-BG, #FAFAFA);
+  height: 48px;
   margin-bottom: 8px;
   color: #000;
   text-align: center;
   font-size: 12px;
+  color: var(--Neutral-Secondary-Text, #919191);
+  font-family: Roboto;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px;
 }
 
 .real-time-transactions .real-time-transactions-body .table-sell {
   color: #000;
   text-align: center;
   font-size: 12px;
-  height: 20px;
+  height: 56px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  color: var(--Neutral-Title, var(--AELF-Design-Primary-Text, #1A1A1A));
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
 }
 
 .real-time-transactions .real-time-transactions-body .table-sell .sell {
@@ -46,7 +61,14 @@
   color: #000;
   text-align: center;
   font-size: 12px;
-  height: 20px;
+  height: 56px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  color: var(--Neutral-Title, var(--AELF-Design-Primary-Text, #1A1A1A));
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
 }
 
 .real-time-transactions .real-time-transactions-body .table-buy .sell {
@@ -60,11 +82,33 @@
 @media screen and (max-width: 768px) {
   .real-time-transactions .real-time-transactions-body .table-head {
     background-color: #f7f8f9;
-    height: 34px;
+    height: 48px;
     margin-bottom: 8px;
     color: #000;
     text-align: center;
     font-weight: 300;
     font-size: 9px;
+  }
+}
+.table-buy, .table-sell {
+  .tag {
+    display: flex;
+    width: 36px;
+    height: 24px;
+    padding: 0px 8px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    
+  }
+  .buy-tag {
+    border: 1px rgba(56, 136, 255, 0.40);
+    background: var(--Approve-Approve-Container, #EBF3FF);
+    color: var(--Approve-Approve, #3888FF);
+  }
+  .sell-tag {
+    border: 1px rgba(245, 93, 110, 0.40);
+    background: var(--Reject-Reject-Container, #FEEFF1);
+    color: var(--Reject-Reject, #F55D6E);
   }
 }

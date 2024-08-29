@@ -6,6 +6,9 @@
   .antExplorer-form-item-label {
     @apply normal-text;
   }
+  .normal-proposal-apply-title {
+    @apply h-[48px];
+  }
   .url-input input{
    @apply h-[48px];
   }

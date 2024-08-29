@@ -20,7 +20,8 @@ import { SkeletonTab } from 'components/Skeleton';
 import ActiveStartTime from './ActiveStartTime';
 import ActiveEndTime, { defaultActiveEndTimeDuration } from './ActiveEndTime';
 import { getTimeMilliseconds } from '../util/time';
-const voterAndExecuteNamePath = ['proposalBasicInfo', 'schemeAddress'];
+import { voterAndExecuteNamePath } from './constant';
+
 const periodName = ['proposalBasicInfo', 'activeTimePeriod'];
 const activeStartTimeName = ['proposalBasicInfo', 'activeStartTime'];
 const activeEndTimeName = ['proposalBasicInfo', 'activeEndTime'];
@@ -34,6 +35,7 @@ interface ProposalInfoProps {
   activeTab?: string;
   treasuryAssetsData?: ITreasuryAssetsResponseDataItem[];
   daoDataLoading?: boolean;
+  isValidating?: boolean;
 }
 
 const ProposalInfo = (props: ProposalInfoProps) => {
@@ -50,6 +52,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
     treasuryAssetsData,
     daoData,
     daoDataLoading,
+    isValidating,
   } = props;
 
   const form = Form.useFormInstance();
@@ -102,7 +105,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
     setTimePeriod(timePeriod);
   }, [daoId]);
   return (
-    <div className={className}>
+    <div className={`${className} proposal-form`}>
       <h2 className="text-[20px] leading-[28px] font-weight">Create a Proposal</h2>
       <p className=" text-[16px] leading-[24px] text-Neutral-Secondary-Text font-normal mt-[8px] mb-[64px]">
         {proposalDetailDesc}
@@ -243,6 +246,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
             activeTab={activeTab}
             treasuryAssetsData={treasuryAssetsData}
             daoData={daoData}
+            governanceMechanismList={governanceMechanismList ?? []}
           />
         ))}
 
@@ -405,6 +409,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
           onClick={() => {
             onSubmit();
           }}
+          loading={isValidating}
         >
           Submit
         </Button>

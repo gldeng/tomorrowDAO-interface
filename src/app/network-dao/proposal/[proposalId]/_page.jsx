@@ -53,6 +53,7 @@ import addressFormat from "@utils/addressFormat";
 import { NETWORK_TYPE } from '@config/config';
 import { explorer, mainExplorer } from "config";
 import { useChainSelect } from "hooks/useChainSelect";
+import { fetchNetworkDaoProposaDetail } from "api/request";
 import { useRequest } from "ahooks";
 import getChainIdQuery from "utils/url";
 import { HashAddress } from "aelf-design";
@@ -164,13 +165,14 @@ const ProposalDetail = () => {
     tab: "proposal",
     loadingStatus: LOADING_STATUS.LOADING,
   });
-  // const { data: networkDaoProposalDetail } = useRequest(() => {
-  //   const chain = getChainIdQuery()
-  //   return fetchNetworkDaoProposaDetail({
-  //     chainId: chain.chainId,
-  //     proposalId
-  //   })
-  // })
+  const { data: networkDaoProposalDetail } = useRequest(() => {
+    const chain = getChainIdQuery()
+    console.log('get fetchNetworkDaoProposaDetail', proposalId)
+    return fetchNetworkDaoProposaDetail({
+      chainId: chain.chainId,
+      proposalId
+    })
+  })
   
   const { data: forumUrlDetail, run: getForumUrlDetail } = useRequest((forumUrl) => {
   const chain = getChainIdQuery()
@@ -361,10 +363,14 @@ const ProposalDetail = () => {
             </div>
           </div>
           <div className="page-content-bg-border unset-top-border lg:py-6 mb-[24px]">
-            {/* <h3 className="card-title">{networkDaoProposalDetail?.data?.title}</h3> */}
-            <p className="card-title-lg truncate mb-[12px]">
+            {
+              networkDaoProposalDetail?.data?.title && (
+                <h3 className="card-title mb-[12px] break-all">{networkDaoProposalDetail?.data?.title}</h3>
+              )
+            }
+            <div className="card-title-lg truncate mb-[12px]">
             Proposal ID:{proposalId}
-            </p>
+            </div>
             <div className="proposal-detail-tag gap-bottom">
               <Tag color={'#FAFAFA'} className="gap-right">
                 <span className="tag-font">
@@ -435,6 +441,17 @@ const ProposalDetail = () => {
           >
             <TabPane tab="Proposal Details" key="proposal">
               <div className="px-[16px] lg:px-[32px] pb-[40px]">
+                {
+                  leftInfo?.description && (
+                    <div className="proposal-detail-tab-description">
+                      <h2>Description</h2>
+                      <p className="description-card">
+                        {leftInfo?.description}
+                      </p>
+                    </div>
+                  )
+                }
+
                 <VoteData
                   className="gap-top-large"
                   proposalType={proposalType}

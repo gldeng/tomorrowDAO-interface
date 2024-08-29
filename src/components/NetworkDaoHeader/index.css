@@ -17,11 +17,39 @@
     @apply ml-2;
   }
 }
-
+.networkdao-header-container {
+  .custom-menu .TMRWDAO-menu-overflow-item, .custom-menu .TMRWDAO-menu-item {
+    padding-left: 32px !important;
+    padding-inline-start: 32px !important;
+  }
+  &.header-container .header-menu {
+    @apply flex-1;
+  }
+  .TMRWDAO-menu .TMRWDAO-menu-overflow-item-rest  {
+    @apply flex items-center;
+    .TMRWDAO-menu-submenu-title {
+      @apply w-[32px] h-[32px];
+    }
+    .anticon {
+      @apply text-[32px];
+    }
+  }
+}
 .chain-id-select-wrap {
   @apply mr-1 flex-shrink;
 }
 
 .chain-id-select {
   @apply w-auto h-10 lg:h-12;
+}
+.network-dao-menu-pop.TMRWDAO-menu-submenu-popup {
+   .TMRWDAO-menu-vertical .TMRWDAO-menu-item {
+    margin-inline: 0px;
+    margin-block: 0px;
+    width: auto;
+    display: flex;
+    align-items: center;
+    padding-inline: 24px;
+    height: 48px;
+  }
 }

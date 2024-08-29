@@ -106,6 +106,7 @@ export enum EProposalActionTabs {
   DeleteMultisigMembers = 'deleteMultisigMembers',
   AddHcMembers = 'addHcMembers',
   DeleteHcMembers = 'deleteHcMembers',
+  IssueToken = 'issueToken',
 }
 
 export enum ActiveStartTimeEnum {

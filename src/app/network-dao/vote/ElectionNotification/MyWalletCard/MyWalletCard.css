@@ -121,20 +121,8 @@
   height: 24px;
   padding: 0px 12px;
   font-size: 12px;
-  border: 1px solid #266cd3;
-  background-color: #266cd3 !important;
-  color: #fff;
 }
 
-.my-wallet-card-body-wallet-content-withdraw-btn.antExplorer-btn.antExplorer-btn-sm.antExplorer-btn-primary:active {
-  color: #fff;
-  background: var(--color-brand-pressed, #155abf) !important;
-}
-
-.my-wallet-card-body-wallet-content-withdraw-btn.antExplorer-btn.antExplorer-btn-sm.antExplorer-btn-primary:hover {
-  color: #fff;
-  background: var(--color-brand-hover, #327dec) !important;
-}
 
 .my-wallet-card-body-wallet-content .assets {
   grid-area: myWalletAssets;
@@ -168,20 +156,11 @@
   height: 32px;
   line-height: 32px;
   padding: 0px 16px;
-  border: 1px solid var(--color-brand-default, #266cd3);
+  border: 1px solid var(--color-brand-default, #FA9D2B);
   background: var(--color-white, #fff);
-  color: var(--color-brand-default, #266cd3);
+  color: var(--color-brand-default, #FA9D2B);
 }
 
-.my-wallet-card .refresh-btn.antExplorer-btn-text:active {
-  border: 1px solid var(--color-brand-pressed, #155abf);
-  background: var(--color-white, #fff);
-}
-
-.my-wallet-card .refresh-btn.antExplorer-btn-text:hover {
-  border: 1px solid var(--color-brand-hover, #327dec);
-  background: var(--color-white, #fff);
-}
 
 .my-wallet-card .refresh-btn.antExplorer-btn-text[disabled] {
   border: 1px solid var(--color-border, #d0d0d0);

@@ -143,22 +143,21 @@ const ResourceWallet = React.forwardRef(
       <div className="resource-wallet resource-block">
         <Spin tip="loading...." size="large" spinning={loading}>
           <div className="resource-wallet-header resource-header">
-            <WalletOutlined className="resource-icon" />
             <span className="resource-title">{propsTile}</span>
           </div>
           <div className="resource-sub-container">
             <Row className="resource-wallet-address">
               {isPhone ? (
                 <Col className="resource-wallet-address-name">
-                  <div>
+                  <div className="card-sm-text">
                     Name:
                     {wallet.name}
                   </div>
-                  <div>
+                  <div className="card-sm-text-bold">
                     Address:
                     {addressFormat(wallet.address)}
                   </div>
-                  <div>
+                  <div className="link-detail-button">
                     {wallet.address !== "-" && (
                       <LinkNetworkDao href={`/resource-detail/${wallet.address}`}>
                         Transaction Details
@@ -168,15 +167,19 @@ const ResourceWallet = React.forwardRef(
                 </Col>
               ) : (
                 <Col className="resource-wallet-address-name">
+                  <span className="card-sm-text">
                   {wallet.name}
+                  </span>
                   &nbsp;&nbsp;&nbsp;
-                  {addressFormat(wallet.address)}
+                  <span className="card-sm-text-bold"> {addressFormat(wallet.address)}</span>
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <div className="link-detail-button">
                   {wallet.address !== "-" && (
                     <LinkNetworkDao href={`/resource-detail/${wallet.address}`}>
                       Transaction Details
                     </LinkNetworkDao>
                   )}
+                  </div>
                 </Col>
               )}
 
@@ -204,7 +207,7 @@ const ResourceWallet = React.forwardRef(
                   )}
 
                 <Button
-                  type="text"
+                  type="primary"
                   className="resource-wallet-address-update update-btn"
                   disabled={loginState !== WebLoginState.logined}
                   onClick={refreshWalletInfo}
@@ -235,7 +238,7 @@ const ResourceWallet = React.forwardRef(
                   <span className="resource-wallet-info-name balance">
                     Balance:
                   </span>
-                  <span className="resource-wallet-info-value">
+                  <span className="resource-wallet-info-value balance">
                     {thousandsCommaWithDecimal(hasLogin ? balance : "-")} ELF
                   </span>
                 </Col>

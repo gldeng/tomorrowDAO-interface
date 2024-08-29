@@ -39,6 +39,3 @@
     @apply text-[#B8B8B8] ml-[8px];
   }
 }
-.voting-start-time-form-label {
-  @apply mt-8;
-}

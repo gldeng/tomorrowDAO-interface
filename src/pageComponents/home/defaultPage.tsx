@@ -9,6 +9,7 @@ import useResponsive from 'hooks/useResponsive';
 interface IProps {
   ssrData: {
     daoList: IDaoItem[];
+    verifiedDaoList: IDaoItem[];
     daoHasData: boolean;
   };
 }

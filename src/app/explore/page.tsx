@@ -7,14 +7,24 @@ import { serverGetSSRData } from 'utils/ssr';
 import { ServerError } from 'components/ServerError/index';
 
 async function getInitDaoList() {
-  const res = await fetchDaoList({
-    skipCount: 0,
-    maxResultCount: 6,
-    chainId: curChain,
-  });
+  const [communityDaoRes, verifiedDaoRes] = await Promise.all([
+    fetchDaoList({
+      skipCount: 0,
+      maxResultCount: 6,
+      chainId: curChain,
+      daoType: 1,
+    }),
+    fetchDaoList({
+      skipCount: 0,
+      maxResultCount: 1000,
+      chainId: curChain,
+      daoType: 0,
+    }),
+  ]);
   return {
-    daoList: res.data.items,
-    daoHasData: res.data.items.length < res.data.totalCount,
+    verifiedDaoList: verifiedDaoRes.data.items,
+    daoList: communityDaoRes.data.items,
+    daoHasData: communityDaoRes.data.items.length < communityDaoRes.data.totalCount,
   };
 }
 

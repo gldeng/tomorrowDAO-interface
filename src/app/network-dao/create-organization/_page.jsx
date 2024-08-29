@@ -369,6 +369,7 @@ const CreateOrganization = () => {
   const navigate = useNetworkDaoRouter();
 
   const [form] = Form.useForm();
+  const [modal, contextHolder] = Modal.useModal();
   const { validateFields } = form;
   const common = useSelector((state) => state.common);
   const { aelf, currentWallet } = common;
@@ -383,18 +384,23 @@ const CreateOrganization = () => {
 
   const { callContract, wallet } = useWebLogin();
 
-  // const [whiteList, setWhiteList] = useState([]);
+  const [whiteList, setWhiteList] = useState([]);
   useEffect(() => {
     getTokenList({voteValid: true}).then((tokens) => {
       setTokenList(Object.keys(tokens).map((key) => tokens[key]));
     });
     getWhiteList().then((arr) => {
       const whiteList = [...arr.bpList, ...arr.parliamentProposerList];
-      if (whiteList.indexOf(currentWallet.address) === -1) {
-        setSelectOptions(SELECT_OPTIONS_WITH_NO_AUTHORITY);
-      }
+      setWhiteList(whiteList)
     });
   }, []);
+  useEffect(() => {
+    if (whiteList.indexOf(currentWallet.address) === -1) {
+      setSelectOptions(SELECT_OPTIONS_WITH_NO_AUTHORITY);
+    } else {
+      setSelectOptions(SELECT_OPTIONS_WITH_AUTHORITY);
+    }
+  }, [whiteList, currentWallet.address])
 
   async function handleSubmit() {
     try {
@@ -439,6 +445,66 @@ const CreateOrganization = () => {
       }
       
       console.log("callContract", param);
+      // maximalAbstentionThreshold   maximalRejectionThreshold  minimalApprovalThreshold minimalVoteThreshold
+      const organizationMemberList = param?.organizationMemberList?.organizationMembers ?? [];
+      const proposers = param?.proposerWhiteList?.proposers ?? [];
+      const { maximalAbstentionThreshold, maximalRejectionThreshold, minimalApprovalThreshold, minimalVoteThreshold } = param.proposalReleaseThreshold;
+      let content = '';
+      if (formValue.proposalType === proposalTypes.PARLIAMENT) { 
+        if (minimalApprovalThreshold > minimalVoteThreshold) {
+          content = ('Minimal Approval Threshold needs to be less than or equal to the Minimal Vote Threshold.');
+          
+        }
+        if ((minimalApprovalThreshold + maximalAbstentionThreshold) > 10000) {
+          content = ('Maximal Abstention Threshold plus the Minimal Approval Threshold must be less than or equal to 100%');
+          
+        }
+        if ((minimalApprovalThreshold + maximalRejectionThreshold) > 10000) {
+          content = ('Maximal Rejection Threshold plus the Minimal Approval Threshold must be less than or equal to 100%');
+          
+        }
+      }
+      if (formValue.proposalType === proposalTypes.ASSOCIATION) { 
+        if (minimalVoteThreshold > organizationMemberList.length) {
+          content = ('Minimal Vote Threshold needs to be less than or equal to the Organisation members.');
+          
+        }
+        if ((minimalApprovalThreshold > minimalVoteThreshold)) {
+          content = ('Minimal Approval Threshold needs to be less than or equal to the Minimal Vote Threshold.');
+          
+        }
+        if ((maximalAbstentionThreshold + minimalApprovalThreshold) > organizationMemberList.length) {
+          content = ('Maximal Abstention Threshold plus the Minimal Approval Threshold must be less than or equal to the number of Organisation members.');
+          
+        }
+        if ((maximalRejectionThreshold + minimalApprovalThreshold) > organizationMemberList.length) {
+          content = ('Maximal Rejection Threshold plus the Minimal Approval Threshold must be less than or equal to the number of Organisation members.');
+          
+        }
+      }
+      if (formValue.proposalType === proposalTypes.REFERENDUM) {
+        if (minimalApprovalThreshold > minimalVoteThreshold) {
+          content = ('Minimal Approval Threshold needs to be less than or equal to the Minimal Vote Threshold.');
+          
+        }
+      }
+      if (content) {
+        let modalIns = modal.info({
+          wrapClassName: 'create-organization-modal',
+          title: 'Organisation Creation Failed',
+          closable: true,
+          icon: null,
+          content: (
+            <div>
+              <p>{content}</p>
+            </div>
+          ),
+          footer: <Button type="primary" onClick={() => { 
+            modalIns.destroy();
+          }}>Got It</Button>,
+        });
+        return;
+      }
       const chainIdQuery = getChainIdQuery();
       // debugger;
       const result = await WebLoginInstance.get().callContract({
@@ -484,6 +550,7 @@ const CreateOrganization = () => {
 
   return (
     <div className="create-organization page-content-bg-border">
+      {contextHolder}
       <div className="create-organization-header">
         <div className="create-organization-header-title">
           Create Organisation

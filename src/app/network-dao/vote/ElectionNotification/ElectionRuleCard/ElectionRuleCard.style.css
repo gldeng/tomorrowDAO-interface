@@ -62,20 +62,12 @@
 
 .election-rule-card .btn-group .apply-to-be-a-node-btn {
   height: 32px;
-  background: #266cd3;
   border: none;
   border-radius: 4px;
   height: 40px;
   padding: 0px 20px;
 }
 
-.election-rule-card .btn-group .apply-to-be-a-node-btn:hover {
-  background: #327dec;
-}
-
-.election-rule-card .btn-group .apply-to-be-a-node-btn a:hover {
-  color: #fff !important;
-}
 
 .election-rule-card .btn-group .quit-button {
   cursor: pointer;

@@ -2,9 +2,14 @@
 // eslint-disable-next-line no-use-before-define
 import React, { useCallback, useState } from "react";
 import AElf from "aelf-sdk";
-import { Tabs, Modal, message, Result } from "antd";
+import { Tabs, Modal, message, Result, Tooltip } from "antd";
 import { useSelector } from "react-redux";
-// import { useParams } from "react-router-dom";
+import { ResultModal, emitLoading, eventBus } from 'utils/myEvent';
+import { CommonOperationResultModalType } from 'components/CommonOperationResultModal';
+import { okButtonConfig, INIT_RESULT_MODAL_CONFIG } from 'components/ResultModal';
+import {
+  omitString
+} from "@common/utils";
 import {
   formatTimeToNano,
   getContractAddress,
@@ -49,6 +54,7 @@ import {
   showAccountInfoSyncingModal,
 } from "@components/SimpleModal/index.tsx";
 import { mainExplorer, explorer } from 'config';
+import useNetworkDaoRouter from "hooks/useNetworkDaoRouter";
 import { useChainSelect } from "hooks/useChainSelect";
 
 const { TabPane } = Tabs;
@@ -65,6 +71,7 @@ const GET_CONTRACT_VERSION_TIMEOUT = 1000 * 60 * 10;
 const CreateProposal = () => {
   // const { orgAddress = "" } = useSearchParams();
   const { isSideChain } = useChainSelect()
+  const router = useNetworkDaoRouter()
   const searchParams = useSearchParams()
   const orgAddress = searchParams.get('orgAddress');
   const modifyData = useSelector((state) => state.proposalModify);
@@ -110,6 +117,7 @@ const CreateProposal = () => {
     }
   };
 
+  // Ordinary Proposal
   function handleNormalSubmit(results) {
     setNormalResult({
       ...normalResult,
@@ -615,8 +623,9 @@ const CreateProposal = () => {
       },
     });
   }
+  // normal proposal
   async function submitNormalResult() {
-    console.log(normalResult);
+    console.log('normalResult', normalResult);
     setNormalResult({
       ...normalResult,
       confirming: true,
@@ -634,6 +643,8 @@ const CreateProposal = () => {
         proposalType,
         organizationAddress,
         proposalDescriptionUrl,
+        title,
+        description,
         params: { decoded },
       } = normalResult;
 
@@ -642,6 +653,8 @@ const CreateProposal = () => {
         contractAddress: getContractAddress(proposalType),
         methodName: "CreateProposal",
         args: {
+          title,
+          description,
           contractMethodName,
           toAddress,
           params: uint8ToBase64(decoded || []) || [],
@@ -655,12 +668,53 @@ const CreateProposal = () => {
       };
 
       const result = await callContract(params);
-      showTransactionResult(result);
+      // showTransactionResult(result);
+      const ret =
+        (result.transactionId && result) ||
+        result.result ||
+        result.data ||
+        result;
+      const txsId = ret.transactionId || ret.TransactionId;
+      if (txsId) {
+        eventBus.emit(ResultModal, {
+          open: true,
+          type: CommonOperationResultModalType.Success,
+          primaryContent: 'Proposal Published',
+          secondaryContent: <div>
+            Transaction ID: 
+            <a
+              href={`${isSideChain ? explorer : mainExplorer}/tx/${txsId}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Tooltip title={txsId} placement="topLeft">
+                {omitString(txsId)}
+              </Tooltip>
+            </a>
+          </div>,
+          footerConfig: {
+            buttonList: [{
+              onClick: () => {
+                router.push(`/?${chainIdQuery.chainIdQueryString}`);
+                eventBus.emit(ResultModal, INIT_RESULT_MODAL_CONFIG);
+              },
+              children: 'OK',
+              type: 'primary',
+            }],
+          },
+        });
+      }
     } catch (e) {
-      console.error(e);
-      message.error(
-        (e?.errorMessage || {})?.message?.Message || e.message || "Error happened"
-      );
+      const errString = (e?.errorMessage || {})?.message?.Message || e.message || "Error happened"
+      eventBus.emit(ResultModal, {
+        open: true,
+        type: CommonOperationResultModalType.Error,
+        primaryContent: ' Failed to Create the proposal',
+        secondaryContent: errString,
+        footerConfig: {
+          buttonList: [okButtonConfig],
+        },
+      });
     } finally {
       setNormalResult({
         ...normalResult,
@@ -717,6 +771,18 @@ const CreateProposal = () => {
         onCancel={handleCancel}
       >
         <div className="proposal-result-list">
+          <div className="proposal-result-list-item gap-bottom">
+            <span className="sub-title gap-right">title:</span>
+            <span className="proposal-result-list-item-value text-ellipsis">
+              {normalResult.title}
+            </span>
+          </div>
+          <div className="proposal-result-list-item gap-bottom">
+            <span className="sub-title gap-right">description:</span>
+            <span className="proposal-result-list-item-value text-ellipsis">
+              {normalResult.description}
+            </span>
+          </div>
           <div className="proposal-result-list-item gap-bottom">
             <span className="sub-title gap-right">Proposal Type:</span>
             <span className="proposal-result-list-item-value text-ellipsis">

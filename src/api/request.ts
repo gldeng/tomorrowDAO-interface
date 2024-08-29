@@ -1,7 +1,11 @@
 import { stringify } from 'query-string';
 import { apiServer, explorerServer, tokenServer } from './axios';
 import { EDaoGovernanceMechanism } from 'app/(createADao)/create/type';
+import { tokenIssueUrl } from './url/tmrw';
 export * from './api-wrap/telegram';
+
+export * from './network-dao/api';
+
 export const fetchToken = async (data: ITokenParams) => {
   return tokenServer.post<string, ITokenRes>('/connect/token', stringify(data), {
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -222,6 +226,15 @@ export const fetchTreasuryRecords = async (params: {
   TreasuryAddress: string;
 }): Promise<ITreasuryRecordRes> => {
   return apiServer.get('/treasury/records', {
+    ...params,
+  });
+};
+
+export const fetchTokenIssue = async (params: {
+  symbol: string;
+  chainId: string;
+}): Promise<ITokenIssueRes> => {
+  return apiServer.post(tokenIssueUrl, {
     ...params,
   });
 };

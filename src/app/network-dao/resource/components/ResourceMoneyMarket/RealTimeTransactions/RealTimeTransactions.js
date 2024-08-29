@@ -120,7 +120,9 @@ class RealTimeTransactions extends PureComponent {
               <Link href={`${mainExplorer}/tx/${item.tx_id}`}>{date}</Link>
             </Col>
             <Col span={3} className="sell">
+            <div className="sell-tag tag">
               Sell
+            </div>
             </Col>
             <Col span={5}>{(elf / resource).toFixed(ELF_PRECISION)}</Col>
             <Col span={6}>{thousandsCommaWithDecimal(resource)}</Col>
@@ -160,7 +162,9 @@ class RealTimeTransactions extends PureComponent {
               <Link href={`${mainExplorer}/tx/${item.tx_id}`}>{date}</Link>
             </Col>
             <Col span={3} className="sell">
+            <div className="buy-tag tag">
               Buy
+            </div>
             </Col>
             <Col span={5}>{(elf / resource).toFixed(ELF_PRECISION)}</Col>
             <Col span={6}>{thousandsCommaWithDecimal(resource)}</Col>
