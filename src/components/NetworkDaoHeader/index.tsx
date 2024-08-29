@@ -115,7 +115,14 @@ export default function Header() {
             <Link href="/">
               <HeaderLogo />
             </Link>
-            {!isLG && <PCMenu selectedKeys={[current]} items={items} onClick={onClick} />}
+            {!isLG && (
+              <PCMenu
+                overflowedIndicatorPopupClassName="network-dao-menu-pop"
+                selectedKeys={[current]}
+                items={items}
+                onClick={onClick}
+              />
+            )}
           </div>
           <div className="flex items-center">
             <div className="chain-id-select-wrap">
