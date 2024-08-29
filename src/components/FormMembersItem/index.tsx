@@ -164,10 +164,10 @@ function FormMembersItem(props: IFormMembersProps) {
               {fields?.length ?? initialValue.length}
             </span>
           </div>
-          <p className="text-[12px] leading-[20px] text-Neutral-Secondary-Text mb-[32px]">
+          <div className="text-[12px] leading-[20px] text-Neutral-Secondary-Text mb-[32px]">
             Your connected wallet has been automatically added to the list. You can remove it if
             you&apos;d like.
-          </p>
+          </div>
         </div>
       )}
     </>

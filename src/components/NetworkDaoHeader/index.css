@@ -25,6 +25,9 @@
   &.header-container .header-menu {
     @apply flex-1;
   }
+  .TMRWDAO-menu .TMRWDAO-menu-submenu-title .anticon {
+    @apply text-[32px];
+  }
 }
 .chain-id-select-wrap {
   @apply mr-1 flex-shrink;
