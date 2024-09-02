@@ -1,3 +1,4 @@
+import { RightOutlined } from '@aelf-design/icons';
 import Percent from './Percent';
 import BigNumber from 'bignumber.js';
 import { useEffect, useRef } from 'react';
@@ -7,14 +8,35 @@ interface IVoteItemProps {
   index: number;
   canVote: boolean;
   onVote?: (item: IRankingListResItem) => void;
+  onShowMore?: (item: IRankingListResItem) => void;
   item: IRankingListResItem;
 }
-
+const increseIconDomCreate = (top: number, right: number) => {
+  const div = document.createElement('div');
+  div.className = 'increment-icon';
+  div.innerText = '+1';
+  div.style.top = `${top + 4}px`;
+  div.style.right = `${right + 4}px`;
+  return div;
+};
 const rankIndex = [0, 1, 2];
 export default function VoteItem(props: IVoteItemProps) {
-  const { index, onVote, item, canVote } = props;
+  const { index, onVote, item, canVote, onShowMore } = props;
   const isRankIcon = rankIndex.includes(index);
   const domRef = useRef<HTMLDivElement>(null);
+  const increseDomRef = useRef<HTMLImageElement>(null);
+
+  const handleIncrese = () => {
+    if (increseDomRef.current) {
+      const rect = increseDomRef.current.getBoundingClientRect();
+      const { top, right } = rect;
+      const div = increseIconDomCreate(top, window.innerWidth - rect.right);
+      document.body.appendChild(div);
+      setTimeout(() => {
+        document.body.removeChild(div);
+      }, 1100);
+    }
+  };
   useEffect(() => {
     setTimeout(() => {
       const dom = domRef.current;
@@ -54,10 +76,16 @@ export default function VoteItem(props: IVoteItemProps) {
             />
             <div className="vote-game-content truncate">
               <h3 className="title">{item.title}</h3>
+              {/* <p dangerouslySetInnerHTML={{ __html: item.description }}></p> */}
               <p
                 className="desc sub-title-text truncate"
-                dangerouslySetInnerHTML={{ __html: item.description }}
-              ></p>
+                onClick={() => {
+                  onShowMore?.(item);
+                }}
+              >
+                Show details
+                <RightOutlined />
+              </p>
             </div>
           </div>
         </div>
@@ -71,7 +99,16 @@ export default function VoteItem(props: IVoteItemProps) {
             Vote
           </div>
         ) : (
-          <h3 className="vote-amount font-14-18">{BigNumber(item.voteAmount).toFormat()}</h3>
+          <div className="vote-amount-wrap">
+            <h3 className="vote-amount font-14-18">{BigNumber(item.voteAmount).toFormat()}</h3>
+            <img
+              src="/images/tg/gold-coin.png"
+              className="vote-amount-increse"
+              alt=""
+              ref={increseDomRef}
+              onClick={handleIncrese}
+            />
+          </div>
         )}
       </div>
       {!canVote && <Percent percent={item.votePercent} />}

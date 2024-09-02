@@ -8,6 +8,7 @@ import Main from './components/Main';
 import Debug from './Debug';
 import { VotigramScene } from './const';
 import { preloadImages } from 'utils/file';
+import AppDetail from './components/AppDetail';
 
 const imageLists = [
   '/images/tg/circular-progress.png',
@@ -23,12 +24,32 @@ const imageLists = [
 ];
 export default function Page() {
   const [scene, setScene] = useState<VotigramScene>(VotigramScene.Loading);
+  const [currentItem, setCurrentItem] = useState<IRankingListResItem | null>(null);
+  const [isShowAppDetail, setIsShowAppDetail] = useState(false);
   const searchParams = useSearchParams();
 
   const isDebug = searchParams.get('debug');
 
+  const handleShowAppDetail = (item: IRankingListResItem) => {
+    setCurrentItem(item);
+    setIsShowAppDetail(true);
+    const button = window.Telegram.WebApp.BackButton;
+    button.show();
+  };
+
   useEffect(() => {
     preloadImages(imageLists);
+  }, []);
+  useEffect(() => {
+    const button = window.Telegram.WebApp.BackButton;
+    const handleBack = () => {
+      setIsShowAppDetail(false);
+      button.hide();
+    };
+    button.onClick(handleBack);
+    return () => {
+      button.offClick(handleBack);
+    };
   }, []);
 
   return (
@@ -50,7 +71,8 @@ export default function Page() {
           }}
         />
       )}
-      {scene === VotigramScene.Main && <Main />}
+      {scene === VotigramScene.Main && <Main onShowMore={handleShowAppDetail} />}
+      <AppDetail item={currentItem} style={{ display: isShowAppDetail ? 'block' : 'none' }} />
       {isDebug && <Debug setScene={setScene} />}
     </div>
   );

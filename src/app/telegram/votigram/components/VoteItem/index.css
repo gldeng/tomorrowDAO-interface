@@ -5,7 +5,7 @@
   .vote-item-percent {
     position: relative;
     transform: translateY(-100%);
-    @apply  h-full w-0 opacity-25 bg-[#ACA6FF];
+    @apply  h-full w-0 opacity-25 bg-[#ACA6FF] pointer-events-none;
   }
 }
 .telegram-vote-item-wrap {
@@ -52,6 +52,10 @@
       .desc {
         color: var(--Text-1, #ACA6FF);
         width: 100%;
+        @apply flex items-center cursor-pointer;
+        .TMRWDAO-icon {
+          @apply text-[12px] pl-[2px];
+        }
       }
     }
     .vote-item-icon {
@@ -76,6 +80,30 @@
     line-height: 18px;
   }
   .vote-amount {
-   @apply text-[#51FF00] font-[590] ml-[63px]; 
+   @apply text-[#51FF00] font-[590] mr-[8px]; 
+  }
+  .vote-amount-increse {
+    @apply w-[32px] h-[32px];
+  }
+  .vote-amount-wrap {
+    @apply flex items-center;
+  }
+}
+.increment-icon {
+  @apply rounded-full w-[24px] h-[24px] bg-[#51FF00] flex-center pointer-events-none fixed;
+  border: 1px solid #373940;
+  color: var(--Border-2, #4C41A9);
+  font-size: 13.5px;
+  font-weight: 590;
+  animation: moveUpFadeOut 1s ease-in-out forwards;
+}
+@keyframes moveUpFadeOut {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-40px);
   }
 }

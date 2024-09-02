@@ -62,6 +62,9 @@ interface IRankingListResItem {
   deployTime: string;
   voteAmount: number;
   votePercent: number;
+  url: string;
+  longDescription: string;
+  screenshots: Array<string>;
 }
 interface IRankingListResData {
   startTime: string;

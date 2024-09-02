@@ -16,11 +16,15 @@ import { VoteStatus } from 'types/telegram';
 import Loading from '../Loading';
 import './index.css';
 
-export default function VoteList() {
+interface IVoteListProps {
+  onShowMore?: (item: IRankingListResItem) => void;
+}
+export default function VoteList(props: IVoteListProps) {
   const confirmDrawerRef = useRef<ICommonDrawerRef>(null);
   const loadingDrawerRef = useRef<ICommonDrawerRef>(null);
   const ruleDrawerRef = useRef<ICommonDrawerRef>(null);
   const retryDrawerRef = useRef<ICommonDrawerRef>(null);
+  const { onShowMore } = props;
   // const [isLoading, setIsLoading] = useState(true);
   const [currentVoteItem, setCurrentVoteItem] = useState<IRankingListResItem | null>(null);
   const retryFn = useRef<() => Promise<void>>();
@@ -161,10 +165,13 @@ export default function VoteList() {
                   setCurrentVoteItem(item);
                   confirmDrawerRef.current?.open();
                 }}
+                onShowMore={onShowMore}
               />
             );
           })}
-          {rankList?.data?.rankingList?.length && <div className="padding-bottom-content"></div>}
+          {rankList?.data?.rankingList?.length !== 0 && (
+            <div className="padding-bottom-content"></div>
+          )}
         </div>
       )}
 
