@@ -1,0 +1,43 @@
+.votigram-app-detail-wrap {
+  @apply fixed z-[1000] bg-[#212121] px-[28px] py-[8px] left-0 top-0 w-full h-full;
+  .summary {
+    @apply flex items-center;
+  }
+  .summary-logo {
+    @apply w-[76px] h-[76px] rounded-[24px];
+  }
+  .summary-desc {
+    @apply ml-[20px] flex flex-col h-[76px];
+    .summary-desc-text{
+      word-break: break-all;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+    }
+  }
+  .app-link {
+    @apply my-[24px];
+    button {
+      @apply h-[50px] w-full;
+    }
+  }
+  .app-link-text {
+    @apply font-bold text-white;
+  }
+  .app-screenshots {
+    overflow-x: scroll;
+    @apply flex;
+    li {
+      border-radius: 32px;
+    }
+    img {
+      @apply w-[242px] h-[525px];
+      border-radius: 32px;
+    }
+    li + li {
+      @apply ml-[16px];
+    }
+  }
+}

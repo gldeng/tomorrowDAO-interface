@@ -4,11 +4,15 @@ import FootTabBar from '../FootTabBar';
 import MyPoints from '../MyPoints';
 import VoteList from '../VoteList';
 
-export default function Main() {
+export interface IMainProps {
+  onShowMore?: (item: IRankingListResItem) => void;
+}
+export default function Main(props: IMainProps) {
+  const { onShowMore } = props;
   const [activeTab, setActiveTab] = useState(0);
   return (
     <div>
-      {activeTab === 0 && <VoteList />}
+      {activeTab === 0 && <VoteList onShowMore={onShowMore} />}
       {activeTab === 1 && <MyPoints />}
       {activeTab === 2 && (
         <Assets

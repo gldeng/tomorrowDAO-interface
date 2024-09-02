@@ -29,9 +29,8 @@ export const propalAddress = '2sJ8MDufVDR3V8fDhBPUKMdP84CUf1oJroi9p8Er1yRvMp3fq7
 export const voteAddress = '2LpoLYNPAnjiBUozyYwcfaeekxRFehjt6hDR78VKgk47UwkvAv';
 export const treasuryContractAddress = '3FdTVXDuBMVAsXJ598aTm3GifQQey5ahFsonjhanTLs4qnukT';
 // explorer config
-export const explorer = 'https://explorer-test-side02.aelf.io';
-export const mainExplorer = 'https://explorer-test.aelf.io';
-// export const explorerRPC = 'https://explorer-test.aelf.io/chain';
+export const explorer = 'https://testnet.aelfscan.io/tDVW';
+export const mainExplorer = 'https://testnet.aelfscan.io/AELF';
 
 // network-dao contract address: get network dao highCouncil table
 export const electionContractAddr = 'NrVf8B7XUduXn1oGHZeF1YANFXEXAhvCymz2WPyKZt4DE2zSg';
