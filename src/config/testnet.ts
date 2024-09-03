@@ -63,3 +63,6 @@ export const host = 'https://test.tmrwdao.com';
 
 // telegram
 export const nftSymbol = 'TOMORROWPASSTEST-1';
+
+// api
+export const apiServerBase = 'https://test-api.tmrwdao.com';
