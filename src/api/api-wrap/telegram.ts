@@ -5,6 +5,7 @@ const transferUrl = '/token/transfer';
 const rankingVoteUrl = '/ranking/vote';
 const rankingVoteStatusUrl = '/ranking/vote/status';
 const rankListUrl = '/ranking/default-proposal';
+const voteLikeUrl = '/ranking/like';
 
 export const nftTokenTransfer = async (
   params: INftTokenTransfer,
@@ -41,6 +42,13 @@ export const fetchRankingVoteStatus = async (
     ...params,
   });
 };
+export const rankingVoteLike = async (
+  params: IRankingVoteLikeReq,
+): Promise<IRankingVoteLikeRes> => {
+  return apiServer.post(voteLikeUrl, {
+    ...params,
+  });
+};
 
 // export const fetchRankingVoteLists = async (
 //   params: IRankingVoteListsReq,
@@ -55,4 +63,5 @@ export const telegramNeedAuthList = [
   rankingVoteUrl,
   rankingVoteStatusUrl,
   rankListUrl,
+  voteLikeUrl,
 ];

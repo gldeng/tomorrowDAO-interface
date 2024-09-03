@@ -1,10 +1,11 @@
 import CommonDrawer, { ICommonDrawerRef } from '../CommonDrawer';
-import VoteItem from '../VoteItem';
+import VoteItem, { ILikeItem } from '../VoteItem';
 import { Button, message } from 'antd';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Carousel } from 'antd';
+import { Flipper, Flipped } from 'react-flip-toolkit';
 import Empty from '../Empty';
-import { fetchRankingVoteStatus, getRankingList, rankingVote } from 'api/request';
+import { fetchRankingVoteStatus, getRankingList, rankingVote, rankingVoteLike } from 'api/request';
 import { curChain, rpcUrlTDVW, sideChainCAContractAddress, voteAddress } from 'config';
 import { useRequest } from 'ahooks';
 import { InfoCircleOutlined } from '@aelf-design/icons';
@@ -15,6 +16,10 @@ import { retryWrap } from 'utils/request';
 import { VoteStatus } from 'types/telegram';
 import Loading from '../Loading';
 import './index.css';
+import BigNumber from 'bignumber.js';
+import SignalRManager from 'utils/socket';
+import SignalR from 'utils/socket/signalr';
+import { IPointsListRes, IWsPointsItem } from './type';
 
 interface IVoteListProps {
   onShowMore?: (item: IRankingListResItem) => void;
@@ -27,7 +32,13 @@ export default function VoteList(props: IVoteListProps) {
   const { onShowMore } = props;
   // const [isLoading, setIsLoading] = useState(true);
   const [currentVoteItem, setCurrentVoteItem] = useState<IRankingListResItem | null>(null);
+  const [wsRankList, setWsRankList] = useState<IWsPointsItem[]>([]);
+  const [currentPoints, setCurrentPoints] = useState(0);
+  const [isToolTipVisible, setIsToolTipVisible] = useState(false);
+  const [socket, setSocket] = useState<SignalR | null>(null);
   const retryFn = useRef<() => Promise<void>>();
+  const reportQueue = useRef<ILikeItem[]>([]);
+
   const {
     data: rankList,
     error: rankListError,
@@ -41,6 +52,35 @@ export default function VoteList(props: IVoteListProps) {
       manual: true,
     },
   );
+  const handleReportQueue = () => {
+    const daoId = rankList?.data?.rankingList?.[0]?.daoId ?? '';
+    setTimeout(async () => {
+      const likeList = reportQueue.current.slice(0);
+      reportQueue.current = [];
+      try {
+        const res = await rankingVoteLike({
+          chainId: curChain,
+          daoId: daoId,
+          likeList: likeList,
+        });
+        if (res.data.totalPoints) {
+          setCurrentPoints(res.data.totalPoints);
+        }
+      } catch (error) {
+        reportQueue.current.push(...likeList);
+      }
+    }, 100);
+  };
+  const renderPoints = useMemo(() => {
+    let points = 0;
+    if (currentPoints) {
+      points = currentPoints;
+    }
+    if (rankList?.data?.userTotalPoints) {
+      points = rankList?.data?.userTotalPoints;
+    }
+    return BigNumber(points).toFormat();
+  }, [currentPoints, rankList]);
   const { wallet, walletType } = useWebLogin();
   const requestVoteStatus = async () => {
     retryDrawerRef.current?.close();
@@ -65,8 +105,10 @@ export default function VoteList(props: IVoteListProps) {
       if (!res || res?.data?.status !== VoteStatus.Voted) {
         message.info('Vote failed, please try again');
       }
+      setIsToolTipVisible(true);
       loadingDrawerRef.current?.close();
       getRankingListFn();
+      setCurrentPoints((pre) => pre + (res?.data?.totalPoints ?? 0));
     } catch (error) {
       console.log('requestVoteStatus, error', error);
       handleError();
@@ -118,8 +160,62 @@ export default function VoteList(props: IVoteListProps) {
   useEffect(() => {
     getRankingListFn();
   }, []);
+  useEffect(() => {
+    SignalRManager.getInstance()
+      .initSocket()
+      .then((socketInstance) => {
+        setSocket(socketInstance);
+      });
+  }, []);
+  useEffect(() => {
+    function fetchAndReceiveWs() {
+      if (!socket) {
+        return;
+      }
+
+      socket.registerHandler('ReceivePointsProduce', (data: IPointsListRes) => {
+        setWsRankList(data.pointsList);
+      });
+      socket.sendEvent('RequestPointsProduce');
+    }
+
+    fetchAndReceiveWs();
+
+    return () => {
+      socket?.sendEvent('UnsubscribePointsProduce');
+      socket?.destroy();
+    };
+  }, [socket]);
+  const rankListMap = useMemo(() => {
+    const map = new Map<string, IRankingListResItem>();
+    rankList?.data?.rankingList?.forEach((item) => {
+      map.set(item.id, item);
+    });
+    return map;
+  }, [rankList]);
+  const initRankList = useMemo(() => {
+    return rankList?.data?.rankingList ?? [];
+  }, [rankList]);
+  const renderRankList = useMemo(() => {
+    if (!wsRankList.length) {
+      return initRankList;
+    }
+    return wsRankList.map((item) => {
+      const rankItem = rankListMap.get(item.id ?? '');
+      if (rankItem) {
+        return {
+          ...rankItem,
+          ...item,
+        };
+      }
+      return item;
+    });
+  }, [initRankList, rankListMap, wsRankList]);
+
+  const renderRankListIds = renderRankList.map((item) => item.id).join('-');
 
   const canVote = (rankList?.data?.canVoteAmount ?? 0) > 0;
+
   return (
     <div className="votigram-main">
       <div
@@ -131,6 +227,9 @@ export default function VoteList(props: IVoteListProps) {
         <InfoCircleOutlined />
         <span className="rule-text">Rules</span>
       </div>
+      <h3 className="font-20-25-weight text-white mb-[8px] text-center">
+        🌈 Vote your favorite game!
+      </h3>
       <div className="banner">
         <Carousel autoplay>
           <div>
@@ -141,41 +240,56 @@ export default function VoteList(props: IVoteListProps) {
           </div>
         </Carousel>
       </div>
-      <div className="votigram-activity-title">
-        <h3>Vote your favorite app</h3>
-        <div className="votigram-activity-rest font-14-18">
-          Remaining vote: {rankList?.data?.canVoteAmount ?? 0}
-        </div>
-      </div>
+      <ul className="votigram-activity-title ">
+        <li className="total-points">
+          <h3 className="font-14-18">Total points earned</h3>
+          <p className="font-18-22-weight">{renderPoints}</p>
+        </li>
+        <li className="remaining-vote">
+          <h3 className="font-14-18">Remaining vote</h3>
+          <p className="font-18-22-weight">{rankList?.data?.canVoteAmount ?? 0}</p>
+        </li>
+      </ul>
 
       {rankListLoading ? (
         <div className="votigram-loading-wrap">
           <Loading />
         </div>
       ) : (
-        <div className={`vote-lists`}>
-          {rankList?.data?.rankingList?.map((item, index) => {
-            return (
-              <VoteItem
-                key={index}
-                index={index}
-                item={item}
-                canVote={canVote}
-                onVote={(item: IRankingListResItem) => {
-                  setCurrentVoteItem(item);
-                  confirmDrawerRef.current?.open();
-                }}
-                onShowMore={onShowMore}
-              />
-            );
-          })}
-          {rankList?.data?.rankingList?.length !== 0 && (
-            <div className="padding-bottom-content"></div>
-          )}
-        </div>
+        <>
+          <Flipper flipKey={renderRankListIds} className="vote-lists">
+            {renderRankList?.map((item, index) => {
+              return (
+                <Flipped key={item.id} flipId={item.id}>
+                  <div>
+                    <VoteItem
+                      index={index}
+                      item={item as IRankingListResItem}
+                      canVote={canVote}
+                      onVote={(item: IRankingListResItem) => {
+                        setCurrentVoteItem(item);
+                        confirmDrawerRef.current?.open();
+                      }}
+                      onShowMore={onShowMore}
+                      onReportClickCount={(item: ILikeItem) => {
+                        reportQueue.current.push(item);
+                        handleReportQueue();
+                      }}
+                      onLikeClick={() => {
+                        setIsToolTipVisible(false);
+                      }}
+                      isToolTipVisible={isToolTipVisible}
+                    />
+                  </div>
+                </Flipped>
+              );
+            })}
+          </Flipper>
+          {renderRankList?.length !== 0 && <div className="padding-bottom-content"></div>}
+        </>
       )}
 
-      {rankList && rankList?.data?.rankingList?.length === 0 && (
+      {rankList && renderRankList?.length === 0 && (
         <Empty
           style={{
             // eslint-disable-next-line no-inline-styles/no-inline-styles

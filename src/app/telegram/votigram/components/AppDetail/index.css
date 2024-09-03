@@ -7,7 +7,7 @@
     @apply w-[76px] h-[76px] rounded-[24px];
   }
   .summary-desc {
-    @apply ml-[20px] flex flex-col h-[76px];
+    @apply ml-[20px] flex flex-col h-[76px] justify-around;
     .summary-desc-text{
       word-break: break-all;
       text-overflow: ellipsis;

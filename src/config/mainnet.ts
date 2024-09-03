@@ -64,3 +64,6 @@ export const host = 'https://tmrwdao.com';
 // telegram
 export const nftSymbol = 'TOMORROWPASS-1';
 export const nftSymbolId = '1';
+
+// api
+export const apiServerBase = 'https://api.tmrwdao.com';
