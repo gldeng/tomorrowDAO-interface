@@ -128,9 +128,9 @@ export default function VoteItem(props: IVoteItemProps) {
             )}
             <div className="vote-game-content truncate">
               <h3 className="title">{item.title}</h3>
-              {item.description && item.longDescription && (
+              {item.url ? (
                 <p
-                  className="desc sub-title-text truncate"
+                  className="show-detail desc sub-title-text truncate"
                   onClick={() => {
                     onShowMore?.(item);
                   }}
@@ -138,6 +138,11 @@ export default function VoteItem(props: IVoteItemProps) {
                   Show details
                   <RightOutlined />
                 </p>
+              ) : (
+                <p
+                  className="desc sub-title-text truncate"
+                  dangerouslySetInnerHTML={{ __html: item.description }}
+                ></p>
               )}
             </div>
           </div>
