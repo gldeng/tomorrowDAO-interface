@@ -49,10 +49,13 @@
         font-weight: 590;
         line-height: 20px;
       }
+      .show-detail {
+        @apply flex items-center cursor-pointer;
+      }
       .desc {
         color: var(--Text-1, #ACA6FF);
         width: 100%;
-        @apply flex items-center cursor-pointer;
+        
         .TMRWDAO-icon {
           @apply text-[12px] pl-[2px];
         }
@@ -91,7 +94,7 @@
     @apply w-[32px] h-[32px];
   }
   .vote-amount-wrap {
-    @apply flex items-center;
+    @apply flex items-center pl-[8px];
   }
 }
 .increment-icon {

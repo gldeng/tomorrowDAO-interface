@@ -175,7 +175,7 @@ export default function VoteList(props: IVoteListProps) {
 
       socket.registerHandler('ReceivePointsProduce', (data: IPointsListRes) => {
         console.log('ReceivePointsProduce', data);
-        // setWsRankList(data.pointsList);
+        setWsRankList(data.pointsList);
       });
       socket.sendEvent('RequestPointsProduce', { chainId: curChain });
     }
@@ -190,7 +190,7 @@ export default function VoteList(props: IVoteListProps) {
   const rankListMap = useMemo(() => {
     const map = new Map<string, IRankingListResItem>();
     rankList?.data?.rankingList?.forEach((item) => {
-      map.set(item.id, item);
+      map.set(item.alias, item);
     });
     return map;
   }, [rankList]);
@@ -202,7 +202,7 @@ export default function VoteList(props: IVoteListProps) {
       return initRankList;
     }
     return wsRankList.map((item) => {
-      const rankItem = rankListMap.get(item.id ?? '');
+      const rankItem = rankListMap.get(item.alias ?? '');
       if (rankItem) {
         return {
           ...rankItem,
@@ -213,7 +213,7 @@ export default function VoteList(props: IVoteListProps) {
     });
   }, [initRankList, rankListMap, wsRankList]);
 
-  const renderRankListIds = renderRankList.map((item) => item.id).join('-');
+  const renderRankListIds = renderRankList.map((item) => item.alias).join('-');
 
   const canVote = (rankList?.data?.canVoteAmount ?? 0) > 0;
 
@@ -261,7 +261,7 @@ export default function VoteList(props: IVoteListProps) {
           <Flipper flipKey={renderRankListIds} className="vote-lists">
             {renderRankList?.map((item, index) => {
               return (
-                <Flipped key={item.id} flipId={item.id}>
+                <Flipped key={item.alias} flipId={item.alias}>
                   <div>
                     <VoteItem
                       index={index}
