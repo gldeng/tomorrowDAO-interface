@@ -33,7 +33,7 @@ export default function Page() {
   const handleShowAppDetail = (item: IRankingListResItem) => {
     setCurrentItem(item);
     setIsShowAppDetail(true);
-    const button = window.Telegram.WebApp.BackButton;
+    const button = window?.Telegram?.WebApp?.BackButton;
     button.show();
   };
 
@@ -41,12 +41,14 @@ export default function Page() {
     preloadImages(imageLists);
   }, []);
   useEffect(() => {
-    const button = window.Telegram.WebApp.BackButton;
+    const webapp = window.Telegram.WebApp;
+    const button = webapp?.BackButton;
     const handleBack = () => {
       setIsShowAppDetail(false);
       button.hide();
     };
     button.onClick(handleBack);
+    webapp.setBackgroundColor('#090816');
     return () => {
       button.offClick(handleBack);
     };
@@ -59,8 +61,12 @@ export default function Page() {
       </div>
       {scene === VotigramScene.Loading && (
         <SceneLoading
-          onFinish={() => {
-            setScene(VotigramScene.Slide);
+          onFinish={(isAlreadyClaimed?: boolean) => {
+            if (isAlreadyClaimed) {
+              setScene(VotigramScene.Main);
+            } else {
+              setScene(VotigramScene.Slide);
+            }
           }}
         />
       )}

@@ -9,14 +9,7 @@ type SignalRParams = {
 
 type HandlerFn = (data: any) => void;
 
-const messageType: Array<string> = [
-  'ReceiveLatestTransactions',
-  'ReceiveBlockchainOverview',
-  'ReceiveLatestBlocks',
-  'ReceiveTransactionDataChart',
-  'ReceiveBpProduce',
-  'ReceiveMergeBlockInfo',
-];
+const messageType: Array<string> = ['ReceivePointsProduce'];
 
 export default class SignalR {
   private connection: HubConnection | null;

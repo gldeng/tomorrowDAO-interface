@@ -107,7 +107,7 @@ interface ILikeItem {
 }
 interface IRankingVoteLikeReq {
   chainId: string;
-  daoId: string;
+  proposalId: string;
   likeList: ILikeItem[];
 }
 interface IRankingVoteLikeRes {

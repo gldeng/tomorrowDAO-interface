@@ -53,14 +53,14 @@ export default function VoteList(props: IVoteListProps) {
     },
   );
   const handleReportQueue = () => {
-    const daoId = rankList?.data?.rankingList?.[0]?.daoId ?? '';
+    const proposalId = rankList?.data?.rankingList?.[0]?.proposalId ?? '';
     setTimeout(async () => {
       const likeList = reportQueue.current.slice(0);
       reportQueue.current = [];
       try {
         const res = await rankingVoteLike({
           chainId: curChain,
-          daoId: daoId,
+          proposalId: proposalId,
           likeList: likeList,
         });
         if (res.data.totalPoints) {
@@ -174,15 +174,16 @@ export default function VoteList(props: IVoteListProps) {
       }
 
       socket.registerHandler('ReceivePointsProduce', (data: IPointsListRes) => {
-        setWsRankList(data.pointsList);
+        console.log('ReceivePointsProduce', data);
+        // setWsRankList(data.pointsList);
       });
-      socket.sendEvent('RequestPointsProduce');
+      socket.sendEvent('RequestPointsProduce', { chainId: curChain });
     }
 
     fetchAndReceiveWs();
 
     return () => {
-      socket?.sendEvent('UnsubscribePointsProduce');
+      // socket?.sendEvent('UnsubscribePointsProduce');
       socket?.destroy();
     };
   }, [socket]);

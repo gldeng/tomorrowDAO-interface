@@ -12,15 +12,15 @@
 }
 .scene-start-now {
   .scene-title {
-    @apply mt-[96px];
+    @apply mt-[13.33vh];
   }
   .start-now-image-wrap {
-    @apply pt-[59px];
+    @apply pt-[8.19vh];
   }
 }
 
 .scene-continue {
   .scene-title {
-    @apply mt-[111px];
+    @apply mt-[15.41vh];
   }
 }
