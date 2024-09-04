@@ -33,7 +33,7 @@ export default function VoteList(props: IVoteListProps) {
   // const [isLoading, setIsLoading] = useState(true);
   const [currentVoteItem, setCurrentVoteItem] = useState<IRankingListResItem | null>(null);
   const [wsRankList, setWsRankList] = useState<IWsPointsItem[]>([]);
-  const [currentPoints, setCurrentPoints] = useState(0);
+  const [renderPoints, setRenderPoints] = useState(0);
   const [isToolTipVisible, setIsToolTipVisible] = useState(false);
   const [socket, setSocket] = useState<SignalR | null>(null);
   const retryFn = useRef<() => Promise<void>>();
@@ -46,7 +46,9 @@ export default function VoteList(props: IVoteListProps) {
     run: getRankingListFn,
   } = useRequest(
     async () => {
-      return getRankingList({ chainId: curChain });
+      const res = await getRankingList({ chainId: curChain });
+      setRenderPoints(res.data?.userTotalPoints ?? 0);
+      return res;
     },
     {
       manual: true,
@@ -58,29 +60,25 @@ export default function VoteList(props: IVoteListProps) {
       const likeList = reportQueue.current.slice(0);
       reportQueue.current = [];
       try {
+        if (!likeList.length) {
+          return;
+        }
         const res = await rankingVoteLike({
           chainId: curChain,
           proposalId: proposalId,
           likeList: likeList,
         });
-        if (res.data.totalPoints) {
-          setCurrentPoints(res.data.totalPoints);
+        if (res.data) {
+          setRenderPoints(res.data ?? 0);
         }
       } catch (error) {
         reportQueue.current.push(...likeList);
       }
     }, 100);
   };
-  const renderPoints = useMemo(() => {
-    let points = 0;
-    if (currentPoints) {
-      points = currentPoints;
-    }
-    if (rankList?.data?.userTotalPoints) {
-      points = rankList?.data?.userTotalPoints;
-    }
-    return BigNumber(points).toFormat();
-  }, [currentPoints, rankList]);
+  const renderPointsStr = useMemo(() => {
+    return BigNumber(renderPoints).toFormat();
+  }, [renderPoints]);
   const { wallet, walletType } = useWebLogin();
   const requestVoteStatus = async () => {
     retryDrawerRef.current?.close();
@@ -108,7 +106,7 @@ export default function VoteList(props: IVoteListProps) {
       setIsToolTipVisible(true);
       loadingDrawerRef.current?.close();
       getRankingListFn();
-      setCurrentPoints((pre) => pre + (res?.data?.totalPoints ?? 0));
+      setRenderPoints((pre) => pre + (res?.data?.totalPoints ?? 0));
     } catch (error) {
       console.log('requestVoteStatus, error', error);
       handleError();
@@ -160,13 +158,17 @@ export default function VoteList(props: IVoteListProps) {
   useEffect(() => {
     getRankingListFn();
   }, []);
+  const canVote = (rankList?.data?.canVoteAmount ?? 0) > 0;
   useEffect(() => {
+    if (canVote) {
+      return;
+    }
     SignalRManager.getInstance()
       .initSocket()
       .then((socketInstance) => {
         setSocket(socketInstance);
       });
-  }, []);
+  }, [canVote]);
   useEffect(() => {
     function fetchAndReceiveWs() {
       if (!socket) {
@@ -207,6 +209,7 @@ export default function VoteList(props: IVoteListProps) {
         return {
           ...rankItem,
           ...item,
+          pointsAmount: item.points,
         };
       }
       return item;
@@ -214,8 +217,6 @@ export default function VoteList(props: IVoteListProps) {
   }, [initRankList, rankListMap, wsRankList]);
 
   const renderRankListIds = renderRankList.map((item) => item.alias).join('-');
-
-  const canVote = (rankList?.data?.canVoteAmount ?? 0) > 0;
 
   return (
     <div className="votigram-main">
@@ -244,7 +245,7 @@ export default function VoteList(props: IVoteListProps) {
       <ul className="votigram-activity-title ">
         <li className="total-points">
           <h3 className="font-14-18">Total points earned</h3>
-          <p className="font-18-22-weight">{renderPoints}</p>
+          <p className="font-18-22-weight">{renderPointsStr}</p>
         </li>
         <li className="remaining-vote">
           <h3 className="font-14-18">Remaining vote</h3>

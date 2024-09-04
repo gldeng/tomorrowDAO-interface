@@ -65,7 +65,8 @@ interface IRankingListResItem {
   url: string;
   longDescription: string;
   screenshots: Array<string>;
-  points: number;
+  pointsAmount: number;
+  pointsPercent: number;
 }
 interface IRankingListResData {
   startTime: string;
@@ -112,9 +113,7 @@ interface IRankingVoteLikeReq {
 }
 interface IRankingVoteLikeRes {
   code: number;
-  data: {
-    totalPoints: number;
-  };
+  data: number;
 }
 // ------------------- RankingVote status -------------------
 interface IRankingVoteStatusReq {
