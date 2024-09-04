@@ -17,6 +17,9 @@
   * {
     font-family: -apple-system, BlinkMacSystemFont,"Roboto","Segoe UI","Noto Sans",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
   }
+  .portkey-ui-powered-wrapper {
+    @apply pb-[120px];
+  }
 }
 .telegram-webapp-wrap {
   .portkey-ui-loading-wrapper {
