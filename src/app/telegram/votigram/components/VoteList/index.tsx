@@ -285,7 +285,7 @@ export default function VoteList(props: IVoteListProps) {
               );
             })}
           </Flipper>
-          {renderRankList?.length !== 0 && <div className="padding-bottom-content"></div>}
+          {/* {renderRankList?.length !== 0 && <div className="padding-bottom-content"></div>} */}
         </>
       )}
 

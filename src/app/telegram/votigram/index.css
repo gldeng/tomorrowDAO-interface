@@ -95,3 +95,6 @@
     }
   }
 }
+.telegram-votigram-footer-main {
+  @apply h-[186px] pt-[32px];
+}

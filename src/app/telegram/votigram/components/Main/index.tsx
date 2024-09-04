@@ -3,6 +3,7 @@ import Assets from 'pageComponents/assets';
 import FootTabBar from '../FootTabBar';
 import MyPoints from '../MyPoints';
 import VoteList from '../VoteList';
+import Footer from '../Footer';
 
 export interface IMainProps {
   onShowMore?: (item: IRankingListResItem) => void;
@@ -28,6 +29,7 @@ export default function Main(props: IMainProps) {
           setActiveTab(value);
         }}
       />
+      <Footer classname="telegram-votigram-footer-main" />
     </div>
   );
 }

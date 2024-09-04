@@ -12,6 +12,7 @@ import { retryWrap } from 'utils/request';
 import { useWebLogin } from 'aelf-web-login';
 import { GetBalanceByContract } from 'contract/callContract';
 import BigNumber from 'bignumber.js';
+import Footer from '../Footer';
 
 interface ISceneLoadingProps {
   onFinish?: () => void;
@@ -216,6 +217,7 @@ function SceneLoading(props: ISceneLoadingProps) {
           </div>
         }
       />
+      <Footer classname="scene-foot-text" />
     </>
   );
 }

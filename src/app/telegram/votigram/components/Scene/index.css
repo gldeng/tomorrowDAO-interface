@@ -32,3 +32,6 @@
     @apply w-[326px];
   }
 }
+.scene-foot-text {
+  @apply fixed bottom-[48px] left-0 w-full text-center;
+}
