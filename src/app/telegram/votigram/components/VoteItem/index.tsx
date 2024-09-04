@@ -93,7 +93,7 @@ export default function VoteItem(props: IVoteItemProps) {
   );
   return (
     <div className="telegram-vote-item">
-      {!canVote && <Percent percent={item.votePercent} />}
+      {!canVote && <Percent percent={item.pointsPercent} />}
       <div className="telegram-vote-item-wrap" ref={domRef}>
         <div className="telegram-vote-item-content truncate">
           <div className={`rank-index-wrap ${isRankIcon ? 'rank-icon' : 'rank-not-icon'}`}>
@@ -158,7 +158,7 @@ export default function VoteItem(props: IVoteItemProps) {
           </div>
         ) : (
           <div className="vote-amount-wrap">
-            <h3 className="vote-amount font-14-18">{BigNumber(item.points).toFormat()}</h3>
+            <h3 className="vote-amount font-14-18">{BigNumber(item.pointsAmount).toFormat()}</h3>
             {index === 0 ? (
               <Tooltip
                 placement="topRight"

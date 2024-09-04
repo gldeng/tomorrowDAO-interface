@@ -3,6 +3,7 @@ export interface IWsPointsItem {
   proposalId: string;
   alias: string;
   points: number;
+  pointsPercent: number;
 }
 
 export interface IPointsListRes {
