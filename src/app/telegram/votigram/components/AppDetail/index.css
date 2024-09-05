@@ -18,7 +18,10 @@
     }
   }
   .app-link {
-    @apply my-[24px];
+    height: 92px;
+    width: calc(100% - 28px - 28px);
+    opacity: 1;
+    @apply mt-[24px] fixed bottom-[0px] bg-[#212121];
     button {
       @apply h-[50px] w-full;
     }

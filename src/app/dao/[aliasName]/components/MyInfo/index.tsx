@@ -6,7 +6,7 @@ import CommonModal from 'components/CommonModal';
 import { useWalletService } from 'hooks/useWallet';
 import { fetchProposalMyInfo } from 'api/request';
 import { callContract, GetBalanceByContract } from 'contract/callContract';
-import { curChain, sideChainSuffix, voteAddress } from 'config';
+import { curChain, explorer, sideChainSuffix, voteAddress } from 'config';
 import { SkeletonLine } from 'components/Skeleton';
 import { ResultModal, emitLoading, eventBus } from 'utils/myEvent';
 import Vote from './vote';
@@ -129,13 +129,15 @@ export default function MyInfo(props: TInfoTypes) {
       key: '0',
       label: '',
       children: info && (
-        <HashAddress
-          preLen={8}
-          endLen={11}
-          address={wallet.address}
-          className="form-item-title"
-          chain={sideChainSuffix}
-        ></HashAddress>
+        <a href={`${explorer}/address/${wallet.address}`} target="_blank" rel="noreferrer">
+          <HashAddress
+            preLen={8}
+            endLen={11}
+            address={wallet.address}
+            className="form-item-title"
+            chain={sideChainSuffix}
+          ></HashAddress>
+        </a>
       ),
     },
     {

@@ -12,7 +12,7 @@ import Link from 'next/link';
 import { getExploreLink } from 'utils/common';
 import { useChainSelect } from 'hooks/useChainSelect';
 import './index.css';
-import { curChain, NetworkDaoHomePathName } from 'config';
+import { curChain, explorer, NetworkDaoHomePathName } from 'config';
 import { useWebLogin } from 'aelf-web-login';
 import { EDaoGovernanceMechanism } from 'app/(createADao)/create/type';
 import ImageWithPlaceHolder from 'components/ImageWithPlaceHolder';
@@ -105,15 +105,17 @@ export default function DaoInfo(props: IParams) {
           key: '1',
           label: <span className="dao-collapse-panel-label">Creator</span>,
           children: (
-            <span className="dao-collapse-panel-child">
-              <HashAddress
-                className="address"
-                preLen={8}
-                endLen={11}
-                chain={curChain}
-                address={data?.creator ?? '-'}
-              ></HashAddress>
-            </span>
+            <a href={`${explorer}/address/${data?.creator}`} target="_blank" rel="noreferrer">
+              <span className="dao-collapse-panel-child">
+                <HashAddress
+                  className="address"
+                  preLen={8}
+                  endLen={11}
+                  chain={curChain}
+                  address={data?.creator ?? '-'}
+                ></HashAddress>
+              </span>
+            </a>
           ),
         }
       : null,

@@ -23,12 +23,14 @@ export default function Main(props: IMainProps) {
           }}
         />
       )}
-      <FootTabBar
-        value={activeTab}
-        onChange={(value: number) => {
-          setActiveTab(value);
-        }}
-      />
+      {activeTab !== 2 && (
+        <FootTabBar
+          value={activeTab}
+          onChange={(value: number) => {
+            setActiveTab(value);
+          }}
+        />
+      )}
       <Footer classname="telegram-votigram-footer-main" />
     </div>
   );
