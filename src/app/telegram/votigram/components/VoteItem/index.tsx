@@ -94,7 +94,12 @@ export default function VoteItem(props: IVoteItemProps) {
   return (
     <div className="telegram-vote-item">
       {!canVote && <Percent percent={item.pointsPercent} />}
-      <div className="telegram-vote-item-wrap" ref={domRef}>
+      <div
+        className={`telegram-vote-item-wrap ${
+          canVote ? 'padding-right-large' : 'padding-right-small'
+        }`}
+        ref={domRef}
+      >
         <div className="telegram-vote-item-content truncate">
           <div className={`rank-index-wrap ${isRankIcon ? 'rank-icon' : 'rank-not-icon'}`}>
             {isRankIcon ? (
@@ -122,12 +127,12 @@ export default function VoteItem(props: IVoteItemProps) {
                 className="vote-item-rounded"
               />
             ) : (
-              <div className="vote-item-rounded vote-item-fake-logo font-20-25-weight">
-                {item.title?.[0] ?? 't'}
+              <div className="vote-item-rounded vote-item-fake-logo font-17-22">
+                {(item.title?.[0] ?? 'T').toUpperCase()}
               </div>
             )}
             <div className="vote-game-content truncate">
-              <h3 className="title">{item.title}</h3>
+              <h3 className="title truncate">{item.title}</h3>
               {item.url ? (
                 <p
                   className="show-detail desc sub-title-text truncate"

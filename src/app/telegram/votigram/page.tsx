@@ -22,6 +22,7 @@ const imageLists = [
   '/images/tg/empty-vote-list.png',
   '/images/tg/empty-points.png',
 ];
+const mainPageBgColor = '#090816';
 export default function Page() {
   const [scene, setScene] = useState<VotigramScene>(VotigramScene.Loading);
   const [currentItem, setCurrentItem] = useState<IRankingListResItem | null>(null);
@@ -31,10 +32,12 @@ export default function Page() {
   const isDebug = searchParams.get('debug');
 
   const handleShowAppDetail = (item: IRankingListResItem) => {
+    const webapp = window.Telegram.WebApp;
     setCurrentItem(item);
     setIsShowAppDetail(true);
     const button = window?.Telegram?.WebApp?.BackButton;
     button.show();
+    webapp.setBackgroundColor('#212121');
   };
 
   useEffect(() => {
@@ -46,9 +49,10 @@ export default function Page() {
     const handleBack = () => {
       setIsShowAppDetail(false);
       button.hide();
+      webapp.setBackgroundColor(mainPageBgColor);
     };
     button.onClick(handleBack);
-    webapp.setBackgroundColor('#090816');
+    webapp.setBackgroundColor(mainPageBgColor);
     return () => {
       button.offClick(handleBack);
     };

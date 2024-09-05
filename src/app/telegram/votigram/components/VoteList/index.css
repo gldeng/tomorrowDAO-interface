@@ -62,3 +62,9 @@
     @apply mt-[18px];
   }
 }
+
+.vote-item-fake-logo-drawer {
+  color: var(--Solid-2, #4600C5);
+  flex-shrink: 0;
+  @apply w-[64px] h-[64px] flex-center rounded-[0.5rem] bg-white;
+}

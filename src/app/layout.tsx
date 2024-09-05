@@ -23,7 +23,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
       <head>
         <meta
           name="viewport"
-          content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1"
+          content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover, user-scalable=no"
         ></meta>
         {/* eslint-disable-next-line @next/next/no-sync-scripts */}
         <script src="https://telegram.org/js/telegram-web-app.js"></script>

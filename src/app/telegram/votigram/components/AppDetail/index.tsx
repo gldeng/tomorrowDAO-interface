@@ -33,7 +33,7 @@ export default function AppDetail(props: IAppDetailProps) {
         )}
       </div>
       {item?.longDescription && (
-        <div className="mt-[24px]">
+        <div className="mt-[24px] px-[28px]">
           <h3 className="font-20-25-weight text-white">Description</h3>
           <p className="font-14-18 mt-[8px] text-[#B1B3BC] pb-[138px]">{item?.longDescription}</p>
         </div>
