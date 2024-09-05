@@ -15,14 +15,11 @@ export default class SignalR {
   private connection: HubConnection | null;
   private url: string;
   private handlerMap: Map<string, Array<HandlerFn>>;
-  private maxRetryCount: number;
-  private retryCount: number;
-  private heartBeatInterval: NodeJS.Timeout | null = null;
+  private startCb: () => void;
 
-  constructor({ url }: SignalRParams, maxRetryCount = 3) {
+  constructor({ url }: SignalRParams, startCb: () => void) {
     this.url = url;
-    this.maxRetryCount = maxRetryCount;
-    this.retryCount = 0;
+    this.startCb = startCb;
     this.connection = new HubConnectionBuilder()
       .withUrl(this.url, {
         skipNegotiation: true,
@@ -36,13 +33,6 @@ export default class SignalR {
   initAndStart = () => {
     this.connection?.onclose((err) => {
       console.log('signalR---onclose', err);
-      if (this.retryCount < this.maxRetryCount) {
-        this.retryCount++;
-        console.log(`Retrying to connect... Attempt ${this.retryCount}`);
-        this.initAndStart();
-      } else {
-        console.log('Max retry attempts reached.');
-      }
     });
 
     this.connection?.onreconnecting((err) => {
@@ -51,7 +41,7 @@ export default class SignalR {
 
     this.connection?.onreconnected(() => {
       console.log('signalR---onreconnected');
-      this.retryCount = 0;
+      this.startCb();
     });
     console.log('signalR---initAndStart');
     this.listen();
@@ -60,8 +50,7 @@ export default class SignalR {
       this.connection
         ?.start()
         .then(() => {
-          this.retryCount = 0; // Reset retry count on successful connection
-          this.startHeartBeat();
+          this.startCb();
           resolve(this.connection);
         })
         .catch((e) => {
@@ -144,26 +133,7 @@ export default class SignalR {
     }
   };
 
-  startHeartBeat = () => {
-    this.heartBeatInterval = setInterval(() => {
-      if (this.connection?.state === 'Connected') {
-        this.connection.send('Ping').catch((err) => {
-          console.error('Heartbeat failed:', err);
-        });
-      }
-    }, 30000); // Send a heartbeat every 30 seconds
-  };
-
-  stopHeartBeat = () => {
-    if (this.heartBeatInterval) {
-      clearInterval(this.heartBeatInterval);
-      this.heartBeatInterval = null;
-    }
-  };
-
   destroy(): void {
-    this.stopHeartBeat(); // Stop heartbeat when destroying
-    // this.connection?.stop();
     this.handlerMap.clear();
   }
 }

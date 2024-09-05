@@ -7,7 +7,7 @@ import { Flipper, Flipped } from 'react-flip-toolkit';
 import Empty from '../Empty';
 import { fetchRankingVoteStatus, getRankingList, rankingVote, rankingVoteLike } from 'api/request';
 import { curChain, rpcUrlTDVW, sideChainCAContractAddress, voteAddress } from 'config';
-import { useRequest } from 'ahooks';
+import { useAsyncEffect, useRequest } from 'ahooks';
 import { InfoCircleOutlined } from '@aelf-design/icons';
 import { getRawTransaction } from 'utils/transaction';
 import { useWebLogin } from 'aelf-web-login';
@@ -20,6 +20,7 @@ import BigNumber from 'bignumber.js';
 import SignalRManager from 'utils/socket';
 import SignalR from 'utils/socket/signalr';
 import { IPointsListRes, IWsPointsItem } from './type';
+import { preloadImages } from 'utils/file';
 
 interface IVoteListProps {
   onShowMore?: (item: IRankingListResItem) => void;
@@ -44,6 +45,7 @@ export default function VoteList(props: IVoteListProps) {
     error: rankListError,
     loading: rankListLoading,
     run: getRankingListFn,
+    runAsync: getRankingListAsync,
   } = useRequest(
     async () => {
       const res = await getRankingList({ chainId: curChain });
@@ -54,6 +56,13 @@ export default function VoteList(props: IVoteListProps) {
       manual: true,
     },
   );
+  const handleStartWebSocket = async () => {
+    SignalRManager.getInstance()
+      .initSocket()
+      .then((socketInstance) => {
+        setSocket(socketInstance);
+      });
+  };
   const handleReportQueue = () => {
     const proposalId = rankList?.data?.rankingList?.[0]?.proposalId ?? '';
     setTimeout(async () => {
@@ -106,6 +115,7 @@ export default function VoteList(props: IVoteListProps) {
       setIsToolTipVisible(true);
       loadingDrawerRef.current?.close();
       getRankingListFn();
+      handleStartWebSocket();
       setRenderPoints((pre) => pre + (res?.data?.totalPoints ?? 0));
     } catch (error) {
       console.log('requestVoteStatus, error', error);
@@ -148,6 +158,7 @@ export default function VoteList(props: IVoteListProps) {
         } else {
           loadingDrawerRef.current?.close();
           getRankingListFn();
+          handleStartWebSocket();
         }
       }
     } catch (error) {
@@ -155,20 +166,13 @@ export default function VoteList(props: IVoteListProps) {
       handleError();
     }
   };
-  useEffect(() => {
-    getRankingListFn();
+  useAsyncEffect(async () => {
+    const res = await getRankingListAsync();
+    if ((res?.data?.canVoteAmount ?? 0) <= 0) {
+      handleStartWebSocket();
+    }
   }, []);
   const canVote = (rankList?.data?.canVoteAmount ?? 0) > 0;
-  useEffect(() => {
-    if (canVote) {
-      return;
-    }
-    SignalRManager.getInstance()
-      .initSocket()
-      .then((socketInstance) => {
-        setSocket(socketInstance);
-      });
-  }, [canVote]);
   useEffect(() => {
     function fetchAndReceiveWs() {
       if (!socket) {
@@ -179,7 +183,6 @@ export default function VoteList(props: IVoteListProps) {
         console.log('ReceivePointsProduce', data);
         setWsRankList(data.pointsList);
       });
-      socket.sendEvent('RequestPointsProduce', { chainId: curChain });
     }
 
     fetchAndReceiveWs();
@@ -215,6 +218,13 @@ export default function VoteList(props: IVoteListProps) {
       return item;
     });
   }, [initRankList, rankListMap, wsRankList]);
+  useEffect(() => {
+    setTimeout(() => {
+      initRankList?.forEach((item) => {
+        preloadImages(item?.screenshots ?? []);
+      });
+    }, 1000);
+  }, [initRankList]);
 
   const renderRankListIds = renderRankList.map((item) => item.alias).join('-');
 
