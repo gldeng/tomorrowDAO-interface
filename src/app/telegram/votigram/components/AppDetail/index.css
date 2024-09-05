@@ -1,5 +1,5 @@
 .votigram-app-detail-wrap {
-  @apply fixed z-[1000] bg-[#212121] px-[28px] py-[8px] left-0 top-0 w-full h-full;
+  @apply fixed z-[1000] bg-[#212121] px-[28px] py-[8px] left-0 top-0 w-full h-full overflow-x-scroll;
   .summary {
     @apply flex items-center;
   }

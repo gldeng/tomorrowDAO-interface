@@ -1,4 +1,4 @@
-import { apiServerBase } from 'config';
+import { apiServerBase, curChain } from 'config';
 import SignalR from './signalr';
 
 class SignalRManager {
@@ -18,7 +18,9 @@ class SignalRManager {
 
   public async initSocket(): Promise<SignalR | null> {
     if (!this.socket) {
-      const signalR = new SignalR({ url: apiServerBase + '/api/app/ranking/points' });
+      const signalR = new SignalR({ url: apiServerBase + '/api/app/ranking/points' }, () => {
+        signalR.sendEvent('RequestPointsProduce', { chainId: curChain });
+      });
       try {
         await signalR.initAndStart();
         this.socket = signalR;
