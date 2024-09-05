@@ -20,13 +20,15 @@ const columns: ColumnsType<IVoteHistoryItem> = [
     dataIndex: 'voter',
     render: (text) => {
       return (
-        <HashAddress
-          address={text}
-          preLen={8}
-          endLen={9}
-          chain={sideChainSuffix}
-          className="card-sm-text-bold"
-        />
+        <a href={`${explorer}/address/${text}`} target="_blank" rel="noreferrer">
+          <HashAddress
+            address={text}
+            preLen={8}
+            endLen={9}
+            chain={sideChainSuffix}
+            className="card-sm-text-bold"
+          />
+        </a>
       );
     },
   },
@@ -36,7 +38,7 @@ const columns: ColumnsType<IVoteHistoryItem> = [
     dataIndex: 'transactionId',
     render: (text) => {
       return (
-        <Link href={`${explorer}/tx/${text}`}>
+        <Link href={`${explorer}/tx/${text}`} target="_blank">
           <HashAddress
             className="card-sm-text-bold"
             ignorePrefixSuffix={true}
