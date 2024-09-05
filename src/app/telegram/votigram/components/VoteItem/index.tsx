@@ -1,32 +1,105 @@
+import { RightOutlined } from '@aelf-design/icons';
+import { Tooltip } from 'antd';
 import Percent from './Percent';
 import BigNumber from 'bignumber.js';
 import { useEffect, useRef } from 'react';
 
 import './index.css';
+
+export interface ILikeItem {
+  likeAmount: number;
+  alias: string;
+}
 interface IVoteItemProps {
   index: number;
   canVote: boolean;
   onVote?: (item: IRankingListResItem) => void;
+  onShowMore?: (item: IRankingListResItem) => void;
+  onReportClickCount: (item: ILikeItem) => void;
   item: IRankingListResItem;
+  isToolTipVisible?: boolean;
+  onLikeClick?: () => void;
 }
-
+const increseIconDomCreate = (top: number, right: number) => {
+  const div = document.createElement('div');
+  div.className = 'increment-icon';
+  div.innerText = '+1';
+  div.style.top = `${top + 4}px`;
+  div.style.right = `${right + 4}px`;
+  return div;
+};
 const rankIndex = [0, 1, 2];
 export default function VoteItem(props: IVoteItemProps) {
-  const { index, onVote, item, canVote } = props;
+  const {
+    index,
+    onVote,
+    item,
+    canVote,
+    onShowMore,
+    onReportClickCount,
+    isToolTipVisible,
+    onLikeClick,
+  } = props;
   const isRankIcon = rankIndex.includes(index);
   const domRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    setTimeout(() => {
-      const dom = domRef.current;
-      if (dom) {
-        console.log(dom.clientWidth);
-        dom.clientWidth;
+  const increseDomRef = useRef<HTMLImageElement>(null);
+  const clickCount = useRef(0);
+  const timer = useRef<NodeJS.Timer>();
+
+  const startTimer = () => {
+    timer.current = setInterval(() => {
+      if (clickCount.current > 0) {
+        onReportClickCount({
+          likeAmount: clickCount.current,
+          alias: item.alias,
+        });
       }
-    }, 200);
+      clickCount.current = 0;
+    }, 2000);
+  };
+  const stopTimer = () => {
+    clearInterval(timer.current);
+    timer.current = undefined;
+  };
+
+  const handleIncrese = () => {
+    if (increseDomRef.current) {
+      const rect = increseDomRef.current.getBoundingClientRect();
+      const { top, right } = rect;
+      const div = increseIconDomCreate(top, window.innerWidth - right);
+      document.body.appendChild(div);
+      setTimeout(() => {
+        document.body.removeChild(div);
+        // animation duration is 1s
+      }, 1100);
+    }
+    clickCount.current += 1;
+    onLikeClick?.();
+  };
+  useEffect(() => {
+    startTimer();
+    return () => {
+      stopTimer();
+    };
   }, []);
+  const voteAmountIncreseIcon = (
+    <img
+      src="/images/tg/gold-coin.png"
+      className="vote-amount-increse"
+      alt=""
+      ref={increseDomRef}
+      onClick={handleIncrese}
+    />
+  );
   return (
     <div className="telegram-vote-item">
-      <div className="telegram-vote-item-wrap" ref={domRef}>
+      {!canVote && <Percent percent={item.pointsPercent} />}
+      <div
+        className={`telegram-vote-item-wrap ${
+          canVote ? 'padding-right-large' : 'padding-right-small'
+        }`}
+        ref={domRef}
+      >
         <div className="telegram-vote-item-content truncate">
           <div className={`rank-index-wrap ${isRankIcon ? 'rank-icon' : 'rank-not-icon'}`}>
             {isRankIcon ? (
@@ -45,19 +118,37 @@ export default function VoteItem(props: IVoteItemProps) {
             )}
           </div>
           <div className="vote-game truncate">
-            <img
-              src={item.icon}
-              alt="rank-icon"
-              width={44}
-              height={44}
-              className="vote-item-icon"
-            />
+            {item.icon ? (
+              <img
+                src={item.icon}
+                alt="rank-icon"
+                width={44}
+                height={44}
+                className="vote-item-rounded"
+              />
+            ) : (
+              <div className="vote-item-rounded vote-item-fake-logo font-17-22">
+                {(item.title?.[0] ?? 'T').toUpperCase()}
+              </div>
+            )}
             <div className="vote-game-content truncate">
-              <h3 className="title">{item.title}</h3>
-              <p
-                className="desc sub-title-text truncate"
-                dangerouslySetInnerHTML={{ __html: item.description }}
-              ></p>
+              <h3 className="title truncate">{item.title}</h3>
+              {item.url ? (
+                <p
+                  className="show-detail desc sub-title-text truncate"
+                  onClick={() => {
+                    onShowMore?.(item);
+                  }}
+                >
+                  Show details
+                  <RightOutlined />
+                </p>
+              ) : (
+                <p
+                  className="desc sub-title-text truncate"
+                  dangerouslySetInnerHTML={{ __html: item.description }}
+                ></p>
+              )}
             </div>
           </div>
         </div>
@@ -71,10 +162,23 @@ export default function VoteItem(props: IVoteItemProps) {
             Vote
           </div>
         ) : (
-          <h3 className="vote-amount font-14-18">{BigNumber(item.voteAmount).toFormat()}</h3>
+          <div className="vote-amount-wrap">
+            <h3 className="vote-amount font-14-18">{BigNumber(item.pointsAmount).toFormat()}</h3>
+            {index === 0 ? (
+              <Tooltip
+                placement="topRight"
+                title={'Tap coin button to earn more points!'}
+                open={isToolTipVisible}
+                overlayClassName="telegram-like-tooltip"
+              >
+                {voteAmountIncreseIcon}
+              </Tooltip>
+            ) : (
+              voteAmountIncreseIcon
+            )}
+          </div>
         )}
       </div>
-      {!canVote && <Percent percent={item.votePercent} />}
     </div>
   );
 }

@@ -6,7 +6,7 @@ import { colorfulSocialMediaIconMap } from 'assets/imgs/socialMediaIcon';
 import Image from 'next/image';
 import { memo, useState } from 'react';
 import dayjs from 'dayjs';
-import { curChain, sideChainSuffix } from 'config';
+import { curChain, explorer, sideChainSuffix } from 'config';
 import ProposalTag from 'app/dao/[aliasName]/components/ProposalsItem/ProposalTag';
 import { IContractError, ProposalTypeString } from 'types';
 import { CommonOperationResultModalType } from 'components/CommonOperationResultModal';
@@ -155,13 +155,19 @@ const HeaderInfo = (props: IHeaderInfoProps) => {
         )}
         <div className="flex items-center gap-4">
           <span className="text-Neutral-Secondary-Text card-sm-text">Poster:</span>
-          <HashAddress
-            preLen={8}
-            endLen={9}
-            address={proposalDetailData.proposer}
-            className="card-sm-text-bold"
-            chain={sideChainSuffix}
-          ></HashAddress>
+          <a
+            href={`${explorer}/address/${proposalDetailData.proposer}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <HashAddress
+              preLen={8}
+              endLen={9}
+              address={proposalDetailData.proposer}
+              className="card-sm-text-bold"
+              chain={sideChainSuffix}
+            ></HashAddress>
+          </a>
         </div>
         <div className="flex items-center gap-4">
           <span className="text-Neutral-Secondary-Text card-sm-text">Proposal ID:</span>

@@ -14,7 +14,6 @@ import config from "@common/config";
 import { base64ToHex } from "@redux/common/utils";
 import { getContract } from "@common/utils";
 import { PRIMARY_COLOR } from "@common/constants";
-// import { getContractURL } from "../../_proposal_root/";
 import addressFormat from "@utils/addressFormat";
 import { isJsonString } from "@utils/utils";
 import { explorer, mainExplorer } from "config";
@@ -33,7 +32,7 @@ function getContractName(address) {
 }
 export function getContractURL(address, isSideChain) {
   // eslint-disable-next-line max-len
-  return `${isSideChain ? explorer : mainExplorer}/contract/${address}#contract`;
+  return `${isSideChain ? explorer : mainExplorer}/address/${address}?tab=contract`;
 }
 
 const ContractDetail = (props) => {

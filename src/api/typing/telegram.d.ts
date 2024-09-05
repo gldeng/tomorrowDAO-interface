@@ -62,12 +62,18 @@ interface IRankingListResItem {
   deployTime: string;
   voteAmount: number;
   votePercent: number;
+  url: string;
+  longDescription: string;
+  screenshots: Array<string>;
+  pointsAmount: number;
+  pointsPercent: number;
 }
 interface IRankingListResData {
   startTime: string;
   endTime: string;
   canVoteAmount: number;
   totalVoteAmount: number;
+  userTotalPoints: number;
   rankingList: Array<IRankingListResItem>;
 }
 interface IRankingListRes {
@@ -95,6 +101,20 @@ interface IRankingVoteRes {
   };
 }
 
+// ------------------- VoteLike -------------------
+interface ILikeItem {
+  likeAmount: number;
+  alias: string;
+}
+interface IRankingVoteLikeReq {
+  chainId: string;
+  proposalId: string;
+  likeList: ILikeItem[];
+}
+interface IRankingVoteLikeRes {
+  code: number;
+  data: number;
+}
 // ------------------- RankingVote status -------------------
 interface IRankingVoteStatusReq {
   chainId: string;
@@ -105,6 +125,7 @@ interface IRankingVoteStatusRes {
   code: number;
   data: {
     status: VoteStatus;
+    totalPoints: number;
   };
 }
 

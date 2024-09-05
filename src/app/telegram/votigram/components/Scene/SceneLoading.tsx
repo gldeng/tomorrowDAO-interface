@@ -12,9 +12,10 @@ import { retryWrap } from 'utils/request';
 import { useWebLogin } from 'aelf-web-login';
 import { GetBalanceByContract } from 'contract/callContract';
 import BigNumber from 'bignumber.js';
+import Footer from '../Footer';
 
 interface ISceneLoadingProps {
-  onFinish?: () => void;
+  onFinish?: (isAlreadyClaimed?: boolean) => void;
 }
 const LoadingFailedIcon = () => {
   return (
@@ -48,7 +49,7 @@ function SceneLoading(props: ISceneLoadingProps) {
   const percentRef = useRef(0);
   percentRef.current = percent;
   const { wallet } = useWebLogin();
-  const enterNextScene = async () => {
+  const enterNextScene = async (isAlreadyClaimed?: boolean) => {
     setPercent(100);
     try {
       const balanceInfo = await GetBalanceByContract(
@@ -62,10 +63,10 @@ function SceneLoading(props: ISceneLoadingProps) {
       if (balance === 0) {
         missNftDrawerRef.current?.open();
       } else {
-        onFinish?.();
+        onFinish?.(isAlreadyClaimed);
       }
     } catch (error) {
-      onFinish?.();
+      onFinish?.(isAlreadyClaimed);
     }
   };
   const checkMintStatus = async () => {
@@ -105,7 +106,7 @@ function SceneLoading(props: ISceneLoadingProps) {
         symbol: nftSymbol,
       });
       if (res.data.status === TransferStatus.AlreadyClaimed) {
-        enterNextScene();
+        enterNextScene(true);
         return;
       }
       if (res.data.status === TransferStatus.TransferFailed) {
@@ -216,6 +217,7 @@ function SceneLoading(props: ISceneLoadingProps) {
           </div>
         }
       />
+      <Footer classname="scene-foot-text" />
     </>
   );
 }

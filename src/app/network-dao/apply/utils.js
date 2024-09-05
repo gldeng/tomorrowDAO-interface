@@ -118,7 +118,3 @@ export const getTransactionResult = async (aelf, txId) => {
   return txResult;
 };
 
-export function getContractURL(address) {
-  // eslint-disable-next-line max-len
-  return `${window.location.protocol}//${window.location.host}/contract/${address}#contract`;
-}

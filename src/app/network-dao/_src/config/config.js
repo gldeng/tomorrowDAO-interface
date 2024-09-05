@@ -34,7 +34,7 @@ const NETWORK_TYPE = networkType === 'TESTNET' ? "TESTNET" : "MAIN";
 // ChainId: AELF
 // ChainId: tDVV(AElf public chain)
 const CHAINS_LINK = {
-  AELF: "https://explorer-test.aelf.io",
+  AELF: "https://testnet.aelfscan.io",
 };
 const CHAINS_LINK_NAMES = {
   AELF: "Main chain AELF",

@@ -8,6 +8,7 @@ import Main from './components/Main';
 import Debug from './Debug';
 import { VotigramScene } from './const';
 import { preloadImages } from 'utils/file';
+import AppDetail from './components/AppDetail';
 
 const imageLists = [
   '/images/tg/circular-progress.png',
@@ -21,14 +22,40 @@ const imageLists = [
   '/images/tg/empty-vote-list.png',
   '/images/tg/empty-points.png',
 ];
+const mainPageBgColor = '#090816';
 export default function Page() {
   const [scene, setScene] = useState<VotigramScene>(VotigramScene.Loading);
+  const [currentItem, setCurrentItem] = useState<IRankingListResItem | null>(null);
+  const [isShowAppDetail, setIsShowAppDetail] = useState(false);
   const searchParams = useSearchParams();
 
   const isDebug = searchParams.get('debug');
 
+  const handleShowAppDetail = (item: IRankingListResItem) => {
+    const webapp = window.Telegram.WebApp;
+    setCurrentItem(item);
+    setIsShowAppDetail(true);
+    const button = window?.Telegram?.WebApp?.BackButton;
+    button.show();
+    webapp.setBackgroundColor('#212121');
+  };
+
   useEffect(() => {
     preloadImages(imageLists);
+  }, []);
+  useEffect(() => {
+    const webapp = window.Telegram.WebApp;
+    const button = webapp?.BackButton;
+    const handleBack = () => {
+      setIsShowAppDetail(false);
+      button.hide();
+      webapp.setBackgroundColor(mainPageBgColor);
+    };
+    button.onClick(handleBack);
+    webapp.setBackgroundColor(mainPageBgColor);
+    return () => {
+      button.offClick(handleBack);
+    };
   }, []);
 
   return (
@@ -38,8 +65,12 @@ export default function Page() {
       </div>
       {scene === VotigramScene.Loading && (
         <SceneLoading
-          onFinish={() => {
-            setScene(VotigramScene.Slide);
+          onFinish={(isAlreadyClaimed?: boolean) => {
+            if (isAlreadyClaimed) {
+              setScene(VotigramScene.Main);
+            } else {
+              setScene(VotigramScene.Slide);
+            }
           }}
         />
       )}
@@ -50,7 +81,8 @@ export default function Page() {
           }}
         />
       )}
-      {scene === VotigramScene.Main && <Main />}
+      {scene === VotigramScene.Main && <Main onShowMore={handleShowAppDetail} />}
+      <AppDetail item={currentItem} style={{ display: isShowAppDetail ? 'block' : 'none' }} />
       {isDebug && <Debug setScene={setScene} />}
     </div>
   );

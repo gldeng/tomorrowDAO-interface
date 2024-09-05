@@ -1,15 +1,21 @@
 .telegram-vote-item {
-  @apply overflow-hidden h-[60px] bg-[#4600C5];
+  @apply overflow-hidden h-[60px] bg-[#4600C5] relative;
   border-radius: 16px;
   border: 1px solid var(--Border-1, #403493);
   .vote-item-percent {
-    position: relative;
-    transform: translateY(-100%);
-    @apply  h-full w-0 opacity-25 bg-[#ACA6FF];
+    z-index: 1;
+    @apply  h-full w-0 opacity-25 bg-[#ACA6FF] absolute left-0 top-[0px];
   }
 }
 .telegram-vote-item-wrap {
-  @apply flex items-center px-[16px]  justify-between h-full w-full;
+  z-index: 2;
+  @apply flex items-center pl-[16px]  justify-between h-full w-full absolute left-0 top-0;
+  &.padding-right-large {
+    @apply pr-[16px];
+  }
+  &.padding-right-small {
+    @apply pr-[8px];
+  }
 
   .telegram-vote-item-content {
     @apply flex;
@@ -49,13 +55,25 @@
         font-weight: 590;
         line-height: 20px;
       }
+      .show-detail {
+        @apply flex items-center cursor-pointer;
+      }
       .desc {
         color: var(--Text-1, #ACA6FF);
         width: 100%;
+        
+        .TMRWDAO-icon {
+          @apply text-[12px] pl-[2px];
+        }
       }
     }
-    .vote-item-icon {
+    .vote-item-rounded {
       @apply rounded-[0.5rem];
+    }
+    .vote-item-fake-logo {
+      color: var(--Solid-2, #4600C5);
+      flex-shrink: 0;
+      @apply w-[44px] h-[44px] flex-center bg-white;
     }
   }
   .vote-button {
@@ -76,6 +94,39 @@
     line-height: 18px;
   }
   .vote-amount {
-   @apply text-[#51FF00] font-[590] ml-[63px]; 
+   @apply text-[#51FF00] font-[590] mr-[8px]; 
+  }
+  .vote-amount-increse {
+    @apply w-[44px] h-[44px];
+  }
+  .vote-amount-wrap {
+    @apply flex items-center pl-[8px];
+  }
+}
+.increment-icon {
+  @apply rounded-full w-[36px] h-[36px] bg-[#51FF00] flex-center pointer-events-none fixed;
+  border: 1px solid #373940;
+  color: var(--Border-2, #4C41A9);
+  font-size: 13.5px;
+  font-weight: 590;
+  animation: moveUpFadeOut 1s ease-in-out forwards;
+}
+@keyframes moveUpFadeOut {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-40px);
+  }
+}
+.telegram-like-tooltip {
+  &.TMRWDAO-tooltip .TMRWDAO-tooltip-inner {
+    background: var(--Text-1, #ACA6FF);
+    color: var(--Interactive-1, #221D51);
+  }
+  &.TMRWDAO-tooltip .TMRWDAO-tooltip-arrow:before {
+    background: var(--Text-1, #ACA6FF);
   }
 }

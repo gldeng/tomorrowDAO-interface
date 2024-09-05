@@ -175,7 +175,10 @@ export default function RecordTable(props: IRecordTableProps) {
       // width: 200,
       render(symbol) {
         return (
-          <Link href={`${isSideChain(currentChain) ? explorer : mainExplorer}/token/${symbol}`}>
+          <Link
+            href={`${isSideChain(currentChain) ? explorer : mainExplorer}/token/${symbol}`}
+            target="_blank"
+          >
             <Symbol symbol={symbol} className="treasury-token" />
           </Link>
         );
