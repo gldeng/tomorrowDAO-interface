@@ -38,7 +38,18 @@ export default function VoteList(props: IVoteListProps) {
   const [isToolTipVisible, setIsToolTipVisible] = useState(false);
   const [socket, setSocket] = useState<SignalR | null>(null);
   const retryFn = useRef<() => Promise<void>>();
+  const rankingListResRef = useRef<IRankingListRes | null>(null);
+  const rankListLoadingRef = useRef(false);
+  const reGetRankingListFnRef = useRef<() => Promise<void>>();
+  const isIgnoreWsData = useRef(false);
   const reportQueue = useRef<ILikeItem[]>([]);
+
+  const updateWsRankList = (data: IWsPointsItem[]) => {
+    if (isIgnoreWsData.current) {
+      return;
+    }
+    setWsRankList(data);
+  };
 
   const {
     data: rankList,
@@ -56,6 +67,15 @@ export default function VoteList(props: IVoteListProps) {
       manual: true,
     },
   );
+  const reGetRankingListFn = async () => {
+    isIgnoreWsData.current = true;
+    setWsRankList([]);
+    await getRankingListAsync();
+    isIgnoreWsData.current = false;
+  };
+  reGetRankingListFnRef.current = reGetRankingListFn;
+  rankingListResRef.current = rankList ?? null;
+  rankListLoadingRef.current = rankListLoading;
   const handleStartWebSocket = async () => {
     SignalRManager.getInstance()
       .initSocket()
@@ -181,7 +201,14 @@ export default function VoteList(props: IVoteListProps) {
 
       socket.registerHandler('ReceivePointsProduce', (data: IPointsListRes) => {
         console.log('ReceivePointsProduce', data);
-        setWsRankList(data.pointsList);
+        const newProposalId = data?.pointsList?.[0]?.proposalId;
+        const oldProposalId = rankingListResRef.current?.data?.rankingList?.[0]?.proposalId;
+        if (newProposalId !== oldProposalId && !rankListLoadingRef.current) {
+          // reGetRankingListFnRef.current?.();
+          window.location.reload();
+          return;
+        }
+        updateWsRankList(data.pointsList);
       });
     }
 
@@ -208,11 +235,12 @@ export default function VoteList(props: IVoteListProps) {
     }
     return wsRankList.map((item) => {
       const rankItem = rankListMap.get(item.alias ?? '');
+      const points = item?.points ?? rankItem?.pointsAmount ?? 0;
       if (rankItem) {
         return {
           ...rankItem,
           ...item,
-          pointsAmount: item.points,
+          pointsAmount: points,
         };
       }
       return item;
@@ -223,7 +251,7 @@ export default function VoteList(props: IVoteListProps) {
       initRankList?.forEach((item) => {
         preloadImages(item?.screenshots ?? []);
       });
-    }, 1000);
+    }, 500);
   }, [initRankList]);
 
   const renderRankListIds = renderRankList.map((item) => item.alias).join('-');
@@ -318,13 +346,20 @@ export default function VoteList(props: IVoteListProps) {
         ref={confirmDrawerRef}
         body={
           <div className="flex flex-col items-center">
-            <img
-              src={currentVoteItem?.icon}
-              className="vote-item-icon"
-              alt="vote-confirm"
-              width={64}
-              height={64}
-            />
+            {currentVoteItem?.icon ? (
+              <img
+                src={currentVoteItem?.icon}
+                className="vote-item-icon"
+                alt="vote-confirm"
+                width={64}
+                height={64}
+              />
+            ) : (
+              <div className="vote-item-fake-logo-drawer font-20-25-weight">
+                {currentVoteItem?.title?.[0]}
+              </div>
+            )}
+
             <h3 className="font-16-20-weight text-[#EDEEF0] mt-[8px] mb-[16px]">
               {currentVoteItem?.title}
             </h3>
