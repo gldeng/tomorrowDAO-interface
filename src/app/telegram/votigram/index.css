@@ -18,11 +18,6 @@
     font-family: -apple-system, BlinkMacSystemFont,"Roboto","Segoe UI","Noto Sans",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
   }
 }
-.telegram-webapp-wrap {
-  .portkey-ui-loading-wrapper {
-    display: none;
-  }
-}
 .votigram-wrap, .telegram-common-drawer,.telegram-scene {
   .title-text {
     color: #FFF;

@@ -12,6 +12,7 @@ import { retryWrap } from 'utils/request';
 import { useWebLogin } from 'aelf-web-login';
 import { GetBalanceByContract } from 'contract/callContract';
 import BigNumber from 'bignumber.js';
+import { useConfig } from 'components/CmsGlobalConfig/type';
 import Footer from '../Footer';
 
 interface ISceneLoadingProps {
@@ -39,8 +40,8 @@ const loadingCompletePercent = 60;
 function SceneLoading(props: ISceneLoadingProps) {
   const { onFinish } = props;
   const [processText, setProcessText] = useState('Creating on-chain wallet...');
+  const { loginScreen } = useConfig() ?? {};
   const [percent, setPercent] = useState(10);
-  // const [isError, setIsError] = useState(false);
   const retryFn = useRef<() => Promise<void>>();
   const retryDrawerRef = useRef<ICommonDrawerRef>(null);
   const missNftDrawerRef = useRef<ICommonDrawerRef>(null);
@@ -200,8 +201,8 @@ function SceneLoading(props: ISceneLoadingProps) {
         }
       />
       <Scene
-        title="🌈  Vote your favorite app"
-        description="Cast your vote for your favourite Telegram app!"
+        title={`🌈${loginScreen?.title}`}
+        description={loginScreen?.subtitle ?? ''}
         imageNode={<ImageLoveNode />}
         foot={
           <div className="scene-loading-foot">
