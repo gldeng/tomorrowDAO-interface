@@ -108,6 +108,10 @@ export default function LoginSDKProvider({ children }: { children: React.ReactNo
           botId: TELEGRAM_BOT_ID,
         },
       },
+      referralInfo: {
+        referralCode: '2rMx61NXcoBT7FDx1F29ZPKEZBCagLAqwgMVB6zYTEZt6Adh8',
+        projectCode: '13027',
+      },
     },
     aelfReact: {
       appName: APP_NAME,
