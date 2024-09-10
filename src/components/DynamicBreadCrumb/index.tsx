@@ -36,3 +36,8 @@ const DynamicBreadCrumb = () => {
 };
 
 export default DynamicBreadCrumb;
+
+// https://t.me/monkeyTmrwDevBot?startapp=https://aa-portkey-test.portkey.finance/api/app/account/eJjb7wJona
+// https://t.me/monkeyTmrwDevBot?startapp=referralCode
+// referralCode
+// https://t.me/monkeyTmrwDevBot?startapp=referralCode

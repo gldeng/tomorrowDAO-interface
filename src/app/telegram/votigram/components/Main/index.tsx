@@ -4,6 +4,7 @@ import FootTabBar from '../FootTabBar';
 import MyPoints from '../MyPoints';
 import VoteList from '../VoteList';
 import Footer from '../Footer';
+import Referral from '../Referral';
 
 export interface IMainProps {
   onShowMore?: (item: IRankingListResItem) => void;
@@ -12,10 +13,11 @@ export default function Main(props: IMainProps) {
   const { onShowMore } = props;
   const [activeTab, setActiveTab] = useState(0);
   return (
-    <div>
+    <div className="relative z-[1]">
       {activeTab === 0 && <VoteList onShowMore={onShowMore} />}
       {activeTab === 1 && <MyPoints />}
-      {activeTab === 2 && (
+      {activeTab === 2 && <Referral />}
+      {activeTab === 3 && (
         <Assets
           redirect={false}
           onBack={() => {
@@ -23,7 +25,7 @@ export default function Main(props: IMainProps) {
           }}
         />
       )}
-      {activeTab !== 2 && (
+      {activeTab !== 3 && (
         <FootTabBar
           value={activeTab}
           onChange={(value: number) => {

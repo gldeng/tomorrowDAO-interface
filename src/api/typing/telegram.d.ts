@@ -148,3 +148,48 @@ interface IRankingVoteListsRes {
     items: Array<IRankingVoteListsResItem>;
   };
 }
+
+// ------------------- ReferrelCode -------------------
+interface IReferrelCodeReq {
+  chainId: string;
+  token: string;
+}
+interface IReferrelCodeRes {
+  code: number;
+  data: {
+    referrelLink: string;
+    referrelCode: string;
+  };
+}
+
+// ------------------- ReferrelList -------------------
+interface IGetReferrelListReq {
+  startTime: string;
+  endTime: string;
+}
+interface IInviterInfo {
+  rank: number;
+  inviter: string;
+  inviteeCount: number;
+}
+
+interface InviterListResponse {
+  code: number;
+  data: {
+    list: IInviterInfo[];
+  };
+}
+
+// ------------------- ReferrelInviteDetail -------------------
+interface IGetInviteDetailReq {
+  chainId: string;
+}
+interface IRewardInfo {
+  EstimatedReward: number;
+  AccountCreation: number;
+  VotigramVote: number;
+}
+interface IGetInviteDetailResponse {
+  code: number;
+  data: IRewardInfo;
+}

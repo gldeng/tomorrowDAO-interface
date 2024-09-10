@@ -1,4 +1,9 @@
-import { CheckCircleOutlined, StarOutlined, WalletOutlined } from '@aelf-design/icons';
+import {
+  CheckCircleOutlined,
+  StarOutlined,
+  WalletOutlined,
+  ShareExternalOutlined,
+} from '@aelf-design/icons';
 import './index.css';
 
 export interface IFootTabBarProps {
@@ -13,6 +18,10 @@ const footTabBarList = [
   {
     icon: <StarOutlined />,
     text: 'My Points',
+  },
+  {
+    icon: <ShareExternalOutlined />,
+    text: 'Referral',
   },
   {
     icon: <WalletOutlined />,

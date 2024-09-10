@@ -17,12 +17,14 @@ const Layout = (props: React.PropsWithChildren<{}>) => {
   const isCreateDao = pathName === '/create';
   const isCreateProposal = pathName.includes('/proposal/create');
   const isExolore = pathName === '/explore';
+  const isCustomPaint = pathName === '/votigram';
   const { isLG } = useResponsive();
-  const notHomeClass = isHome
-    ? 'home-landing-page page-content-wrap'
-    : `flex-1  mx-auto pt-4 lg:pt-6 lg:px-10 px-4 page-content-wrap mb-16 ${
-        isCreateDao || isCreateProposal ? 'max-w-[978px]' : 'max-w-[1440px]'
-      }`;
+  const notHomeClass =
+    isHome || isCustomPaint
+      ? 'home-landing-page page-content-wrap'
+      : `flex-1  mx-auto pt-4 lg:pt-6 lg:px-10 px-4 page-content-wrap mb-16 ${
+          isCreateDao || isCreateProposal ? 'max-w-[978px]' : 'max-w-[1440px]'
+        }`;
   return (
     <div className="flex w-[100vw] h-[100vh] flex-col relative box-border min-h-screen bg-global-grey">
       <Header />

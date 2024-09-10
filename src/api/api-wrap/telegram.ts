@@ -6,6 +6,8 @@ const rankingVoteUrl = '/ranking/vote';
 const rankingVoteStatusUrl = '/ranking/vote/status';
 const rankListUrl = '/ranking/default-proposal';
 const voteLikeUrl = '/ranking/like';
+const referrelCodeUrl = '/referral/get-link';
+const referrelInviteDetailUrl = '/referral/invite-detail';
 
 export const nftTokenTransfer = async (
   params: INftTokenTransfer,
@@ -50,13 +52,26 @@ export const rankingVoteLike = async (
   });
 };
 
-// export const fetchRankingVoteLists = async (
-//   params: IRankingVoteListsReq,
-// ): Promise<IRankingVoteListsRes> => {
-//   return apiServer.get(rankingVoteListsUrl, {
-//     ...params,
-//   });
-// };
+export const getReferrelCode = async (params: IReferrelCodeReq): Promise<IReferrelCodeRes> => {
+  return apiServer.get(referrelCodeUrl, {
+    ...params,
+  });
+};
+
+export const getReferrelList = async (
+  params: IGetReferrelListReq,
+): Promise<InviterListResponse> => {
+  return apiServer.get('/referral/invite-leader-board', {
+    ...params,
+  });
+};
+export const getInviteDetail = async (
+  params: IGetInviteDetailReq,
+): Promise<IGetInviteDetailResponse> => {
+  return apiServer.get(referrelInviteDetailUrl, {
+    ...params,
+  });
+};
 
 export const telegramNeedAuthList = [
   transferUrl,
@@ -64,4 +79,6 @@ export const telegramNeedAuthList = [
   rankingVoteStatusUrl,
   rankListUrl,
   voteLikeUrl,
+  referrelCodeUrl,
+  referrelInviteDetailUrl,
 ];
