@@ -9,6 +9,8 @@ import Debug from './Debug';
 import { VotigramScene } from './const';
 import { preloadImages } from 'utils/file';
 import AppDetail from './components/AppDetail';
+import InvitedSuccess from './components/InviteedSuccess';
+import { TelegramPlatform } from '@portkey/did-ui-react';
 
 const imageLists = [
   '/images/tg/circular-progress.png',
@@ -77,9 +79,17 @@ export default function Page() {
       {scene === VotigramScene.Slide && (
         <Slide
           onFinish={() => {
-            setScene(VotigramScene.Main);
+            const referrerCode = TelegramPlatform.getInitData()?.start_param;
+            if (referrerCode) {
+              setScene(VotigramScene.InvitedSuccess);
+            } else {
+              setScene(VotigramScene.Main);
+            }
           }}
         />
+      )}
+      {scene === VotigramScene.InvitedSuccess && (
+        <InvitedSuccess onFinish={() => setScene(VotigramScene.Main)} />
       )}
       {scene === VotigramScene.Main && <Main onShowMore={handleShowAppDetail} />}
       <AppDetail item={currentItem} style={{ display: isShowAppDetail ? 'block' : 'none' }} />
