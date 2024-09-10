@@ -5,7 +5,7 @@ import { LeftOutlined } from '@aelf-design/icons';
 import useResponsive from 'hooks/useResponsive';
 import './index.css';
 
-const denyList = ['/', '/explore', '/assets', '/my-daos'];
+const denyList = ['/', '/explore', '/assets', '/my-daos', '/votigram'];
 
 const DynamicBreadCrumb = () => {
   const pathname = usePathname();
