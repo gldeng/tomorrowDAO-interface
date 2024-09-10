@@ -1,4 +1,4 @@
-import { useWebLogin, WalletType } from 'aelf-web-login';
+import { useWebLogin } from 'aelf-web-login';
 import { getReferrelCode } from 'api/request';
 import { curChain, networkType } from 'config';
 import qs from 'query-string';
@@ -9,7 +9,10 @@ const portkeyUrl =
   networkType === 'TESTNET'
     ? 'https://auth-aa-portkey-test.portkey.finance/connect/token'
     : 'https://referral.portkey.finance/connect/token';
-interface IReferralProps {}
+
+interface IReferralProps {
+  //
+}
 export default function Referral(props: IReferralProps) {
   const { wallet, getSignature, walletType } = useWebLogin();
   console.log('wallet', wallet, walletType);
