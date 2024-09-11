@@ -22,6 +22,7 @@ import SignalR from 'utils/socket/signalr';
 import { IPointsListRes, IWsPointsItem } from './type';
 import { preloadImages } from 'utils/file';
 import { useConfig } from 'components/CmsGlobalConfig/type';
+import RuleButton from '../RuleButton';
 
 interface IVoteListProps {
   onShowMore?: (item: IRankingListResItem) => void;
@@ -260,15 +261,12 @@ export default function VoteList(props: IVoteListProps) {
 
   return (
     <div className="votigram-main">
-      <div
-        className="rules-wrap"
+      <RuleButton
         onClick={() => {
           ruleDrawerRef.current?.open();
         }}
-      >
-        <InfoCircleOutlined />
-        <span className="rule-text">Rules</span>
-      </div>
+        className="rules-wrap"
+      />
       <h3 className="font-20-25-weight text-white mb-[8px] text-center">
         🌈 {voteMain?.listTitle}
       </h3>

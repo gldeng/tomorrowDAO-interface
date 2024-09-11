@@ -8,11 +8,12 @@ interface ISceneProps {
   description: string;
   bodyUrl?: string;
   className?: string;
+  style?: React.CSSProperties;
 }
 function SceneCore(props: ISceneProps) {
-  const { foot, title, description, className, imageNode, middleNode } = props;
+  const { foot, title, description, className, imageNode, middleNode, style } = props;
   return (
-    <div className={`${className} telegram-scene`}>
+    <div className={`${className} telegram-scene`} style={style}>
       <div className="scene-body-header">{imageNode}</div>
       <h2 className="scene-title title-text">{title}</h2>
       <p className="scene-description sub-title-text text-center">{description}</p>

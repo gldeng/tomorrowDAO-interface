@@ -1,0 +1,13 @@
+.invite-success-wrap {
+  @apply text-white flex flex-col items-center px-[16px] min-h-screen;
+  .invite-success-tip {
+    border-radius: 8px;
+    background: #1B1741;
+  }
+  .vote-btn {
+    @apply flex justify-center items-center w-full mt-[16px];
+    img {
+      @apply mr-[10px];
+    }
+  }
+}

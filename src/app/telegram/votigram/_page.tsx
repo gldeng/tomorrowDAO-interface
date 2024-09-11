@@ -60,6 +60,15 @@ export default function Page() {
     };
   }, []);
 
+  const enterMainPage = () => {
+    const referrerCode = TelegramPlatform.getInitData()?.start_param;
+    if (referrerCode) {
+      setScene(VotigramScene.InvitedSuccess);
+    } else {
+      setScene(VotigramScene.Main);
+    }
+  };
+
   return (
     <div className="votigram-wrap">
       <div className="line-bg">
@@ -69,7 +78,7 @@ export default function Page() {
         <SceneLoading
           onFinish={(isAlreadyClaimed?: boolean) => {
             if (isAlreadyClaimed) {
-              setScene(VotigramScene.Main);
+              enterMainPage();
             } else {
               setScene(VotigramScene.Slide);
             }
@@ -79,12 +88,7 @@ export default function Page() {
       {scene === VotigramScene.Slide && (
         <Slide
           onFinish={() => {
-            const referrerCode = TelegramPlatform.getInitData()?.start_param;
-            if (referrerCode) {
-              setScene(VotigramScene.InvitedSuccess);
-            } else {
-              setScene(VotigramScene.Main);
-            }
+            enterMainPage();
           }}
         />
       )}
@@ -92,7 +96,6 @@ export default function Page() {
         <InvitedSuccess onFinish={() => setScene(VotigramScene.Main)} />
       )}
       {scene === VotigramScene.Main && <Main onShowMore={handleShowAppDetail} />}
-      <AppDetail item={currentItem} style={{ display: isShowAppDetail ? 'block' : 'none' }} />
       {isDebug && <Debug setScene={setScene} />}
     </div>
   );

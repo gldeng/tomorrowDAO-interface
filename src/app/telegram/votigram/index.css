@@ -38,6 +38,12 @@
     font-weight: 400;
     line-height: 22px;
   }
+  .font-17-22-weight {
+    font-size: 17px;
+    font-style: normal;
+    font-weight: 590;
+    line-height: 22px;
+  }
   .font-15-20 {
     font-size: 15px;
     font-style: normal;
@@ -62,6 +68,12 @@
     font-weight: 590;
     line-height: 20px;
   }
+  .font-24-32-weight {
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 590;
+    line-height: 32px; 
+   }
   .sub-title-text {
     color: var(--Text-Gray-2, #EDEEF0);
     font-size: 14px;
@@ -82,11 +94,28 @@
     &:not(:disabled)  {
       @apply !text-white !bg-[#5222D8] border-[#5222D8];
       &:hover {
-        @apply !text-white !bg-[#5222D8] border-[#5222D8];
+        @apply !text-white !bg-[#5222D8] !border-[#5222D8];
       }
       &:active {
-        @apply !text-white !bg-[#5222D8] border-[#5222D8];
+        @apply !text-white !bg-[#5222D8] !border-[#5222D8];
       }
+    }
+  }
+}
+.tg-information-card {
+  border-radius: 16px;
+  border: 1px solid var(--Border-1, #403493);
+  background: var(--Interactive-1, #221D51);
+  padding: 60px 16px 16px 16px;
+  margin-top: 32px;
+  position: relative;
+  .top-logo {
+    @apply absolute top-[-1px] left-[50%] translate-x-[-50%] h-[40px] w-[240px];
+    img {
+      @apply w-full;
+    }
+    .card-title-text {
+      @apply text-white text-center w-full absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%];
     }
   }
 }
