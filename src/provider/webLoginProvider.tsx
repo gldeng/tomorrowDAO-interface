@@ -1,5 +1,5 @@
 'use client';
-import { NetworkType } from '@portkey/did-ui-react';
+import { NetworkType, TelegramPlatform } from '@portkey/did-ui-react';
 import { NetworkDaoHomePathName, TELEGRAM_BOT_ID, aelfWebLoginNetworkType, curChain } from 'config';
 import dynamicReq from 'next/dynamic';
 import { PortkeyProvider, WebLoginProvider, setGlobalConfig } from 'aelf-web-login';
@@ -88,6 +88,7 @@ export default function LoginSDKProvider({ children }: { children: React.ReactNo
     return nodes;
   };
   const nodes = getNodes();
+  const referrerCode = TelegramPlatform.getInitData()?.start_param;
   setGlobalConfig({
     appName: APP_NAME,
     chainId: chainId,
@@ -109,7 +110,7 @@ export default function LoginSDKProvider({ children }: { children: React.ReactNo
         },
       },
       referralInfo: {
-        referralCode: '2rMx61NXcoBT7FDx1F29ZPKEZBCagLAqwgMVB6zYTEZt6Adh8',
+        referralCode: referrerCode ?? '',
         projectCode: '13027',
       },
     },

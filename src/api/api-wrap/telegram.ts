@@ -1,13 +1,14 @@
 import { apiServer } from '../axios';
 
 const transferUrl = '/token/transfer';
-// const rankingVoteListsUrl = '/ranking/vote-list';
 const rankingVoteUrl = '/ranking/vote';
 const rankingVoteStatusUrl = '/ranking/vote/status';
 const rankListUrl = '/ranking/default-proposal';
 const voteLikeUrl = '/ranking/like';
 const referrelCodeUrl = '/referral/get-link';
 const referrelInviteDetailUrl = '/referral/invite-detail';
+const referrelInviteLeaderBoardUrl = '/referral/invite-leader-board';
+const referrelInviteConfigUrl = '/referral/config';
 
 export const nftTokenTransfer = async (
   params: INftTokenTransfer,
@@ -53,15 +54,22 @@ export const rankingVoteLike = async (
 };
 
 export const getReferrelCode = async (params: IReferrelCodeReq): Promise<IReferrelCodeRes> => {
-  return apiServer.get(referrelCodeUrl, {
+  return apiServer.post(referrelCodeUrl, {
+    ...params,
+  });
+};
+export const getReferrelConfig = async (params: {
+  chainId?: string;
+}): Promise<IReferrelConfigRes> => {
+  return apiServer.post(referrelInviteConfigUrl, {
     ...params,
   });
 };
 
 export const getReferrelList = async (
-  params: IGetReferrelListReq,
+  params?: IGetReferrelListReq,
 ): Promise<InviterListResponse> => {
-  return apiServer.get('/referral/invite-leader-board', {
+  return apiServer.get(referrelInviteLeaderBoardUrl, {
     ...params,
   });
 };
@@ -81,4 +89,6 @@ export const telegramNeedAuthList = [
   voteLikeUrl,
   referrelCodeUrl,
   referrelInviteDetailUrl,
+  referrelInviteLeaderBoardUrl,
+  referrelInviteConfigUrl,
 ];

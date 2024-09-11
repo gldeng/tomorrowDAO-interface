@@ -164,8 +164,9 @@ interface IReferrelCodeRes {
 
 // ------------------- ReferrelList -------------------
 interface IGetReferrelListReq {
-  startTime: string;
-  endTime: string;
+  startTime?: string;
+  endTime?: string;
+  chainId?: string;
 }
 interface IInviterInfo {
   rank: number;
@@ -185,11 +186,22 @@ interface IGetInviteDetailReq {
   chainId: string;
 }
 interface IRewardInfo {
-  EstimatedReward: number;
-  AccountCreation: number;
-  VotigramVote: number;
+  estimatedReward: number;
+  accountCreation: number;
+  votigramVote: number;
 }
 interface IGetInviteDetailResponse {
   code: number;
   data: IRewardInfo;
+}
+
+interface IReferrelConfigActiveTime {
+  startTime: number;
+  endTime: number;
+}
+interface IReferrelConfigRes {
+  code: number;
+  data: {
+    activeTime: IReferrelConfigActiveTime[];
+  };
 }

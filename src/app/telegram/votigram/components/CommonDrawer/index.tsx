@@ -1,13 +1,17 @@
 import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import type { DrawerProps, RadioChangeEvent } from 'antd';
 import { Drawer } from 'antd';
 import Alloyfinger from 'alloyfinger';
 import './index.css';
+import { LeftArrowOutlined } from '@aelf-design/icons';
 
 interface ICommonDrawerProps {
   title?: string;
   body?: React.ReactNode;
   onClose?: () => void;
+  headerClassname?: string;
+  bodyClassname?: string;
+  showCloseTarget?: boolean;
+  showLeftArrow?: boolean;
 }
 interface ICloseTragetProps {
   onClose: () => void;
@@ -36,7 +40,13 @@ export interface ICommonDrawerRef {
   close: () => void;
 }
 const CommonDrawer = forwardRef<ICommonDrawerRef, ICommonDrawerProps>((props, ref) => {
-  const { onClose: handleClose } = props;
+  const {
+    onClose: handleClose,
+    headerClassname,
+    bodyClassname,
+    showCloseTarget = true,
+    showLeftArrow = false,
+  } = props;
   const [open, setOpen] = useState(false);
 
   const showDrawer = () => {
@@ -61,9 +71,10 @@ const CommonDrawer = forwardRef<ICommonDrawerRef, ICommonDrawerProps>((props, re
       closable={false}
       open={open}
     >
-      <div className="telegram-common-drawer-body">
-        <div className="drawer-header">
-          <CloseTraget onClose={onClose} />
+      <div className={`telegram-common-drawer-body ${bodyClassname}`}>
+        <div className={`drawer-header ${headerClassname}`}>
+          {showLeftArrow && <LeftArrowOutlined className="left-arrow" onClick={onClose} />}
+          {showCloseTarget && <CloseTraget onClose={onClose} />}
           <h2 className="title font-17-22">{props.title}</h2>
           <svg
             width="28"
