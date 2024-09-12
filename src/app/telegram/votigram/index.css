@@ -18,7 +18,7 @@
     font-family: -apple-system, BlinkMacSystemFont,"Roboto","Segoe UI","Noto Sans",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
   }
 }
-.votigram-wrap, .telegram-common-drawer,.telegram-scene {
+.votigram-wrap, .telegram-common-drawer,.telegram-scene, .tg-common-modal {
   .title-text {
     color: #FFF;
     font-size: 24px;

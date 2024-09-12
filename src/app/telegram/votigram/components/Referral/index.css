@@ -249,3 +249,8 @@ background: var(--Custom-plain_background, rgba(255, 255, 255, 0.08));
     }
   }
 }
+.invite-modal-content {
+  button {
+    @apply w-full;
+  }
+}

@@ -1,6 +1,8 @@
 import { DownOutlined, QuestionCircleOutlined } from '@aelf-design/icons';
-import { HashAddress } from 'aelf-design';
+import { Button, HashAddress } from 'aelf-design';
 import { useWebLogin } from 'aelf-web-login';
+import CommonModal, { ICommonModalRef } from '../CommonModal';
+import { useRef } from 'react';
 
 interface IReferListProps {
   onViewMore?: () => void;
@@ -10,6 +12,7 @@ interface IReferListProps {
 }
 export default function ReferList(props: IReferListProps) {
   const { onViewMore, isShowMore, list, me } = props;
+  const invitedModalRef = useRef<ICommonModalRef>(null);
   const { wallet } = useWebLogin();
   return (
     <div className="leaderboard-wrap">
@@ -17,7 +20,7 @@ export default function ReferList(props: IReferListProps) {
         <li className="left">Rank</li>
         <li className="main">Wallet Address</li>
         <li className="right">
-          Invited <QuestionCircleOutlined />
+          Invited <QuestionCircleOutlined onClick={() => invitedModalRef.current?.open()} />
         </li>
       </ul>
       <ul className="top-wrap">
@@ -57,6 +60,25 @@ export default function ReferList(props: IReferListProps) {
           <DownOutlined />
         </div>
       )}
+      <CommonModal
+        ref={invitedModalRef}
+        title="Invited"
+        content={
+          <div className="invite-modal-content">
+            <p className="my-[24px]">
+              Only addresses created via referral that have completed vote in Votigram during the
+              event will be counted here.
+            </p>
+            <Button
+              onClick={() => {
+                invitedModalRef.current?.close();
+              }}
+            >
+              OK
+            </Button>
+          </div>
+        }
+      />
     </div>
   );
 }
