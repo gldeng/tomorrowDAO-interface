@@ -139,11 +139,11 @@ export default function VoteItem(props: IVoteItemProps) {
             )}
             <div className="vote-game-content truncate">
               <h3 className="title truncate">{item.title}</h3>
-              {item.url ? (
+              {item.description ? (
                 <p
                   className="show-detail desc sub-title-text truncate select-none"
                   onClick={() => {
-                    if (item.screenshots.length > 0) {
+                    if (item.screenshots.length > 0 || item.longDescription) {
                       detailDrawerRef.current?.open();
                     } else {
                       setOpen(!open);
@@ -191,12 +191,16 @@ export default function VoteItem(props: IVoteItemProps) {
       </div>
       <div style={{ display: open ? 'block' : 'none' }} className="px-[16px] description-full-wrap">
         <p
-          className="desc sub-title-text truncate pt-[16px] pb-[24px] font-14-18"
+          className="desc sub-title-text pt-[16px] pb-[24px] font-14-18"
           dangerouslySetInnerHTML={{ __html: item.description }}
         ></p>
-        <Button type="primary" className="open-button">
-          <span className="font-17-22-weight">Open</span>
-        </Button>
+        {item?.url && (
+          <a href={item?.url}>
+            <Button type="primary" className="open-button">
+              <span className="font-17-22-weight">Open</span>
+            </Button>
+          </a>
+        )}
       </div>
       <CommonDrawer
         title="app details"

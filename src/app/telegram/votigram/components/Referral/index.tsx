@@ -40,7 +40,6 @@ interface IReferralProps {
 }
 export default function Referral(props: IReferralProps) {
   const { wallet, walletType } = useWebLogin();
-  console.log('wallet', wallet);
   const ruleDrawerRef = useRef<ICommonDrawerRef>(null);
   const shareDrawerRef = useRef<ICommonDrawerRef>(null);
   const listsDrawerRef = useRef<ICommonDrawerRef>(null);
@@ -212,7 +211,7 @@ export default function Referral(props: IReferralProps) {
           <h3 className="card-title-text font-16-20-weight">Leaderboard</h3>
         </div>
         <ReferList
-          isShowMore={(referrelListRes?.data?.totalCount ?? 0) > -1}
+          isShowMore={(referrelListRes?.data?.totalCount ?? 0) > 10}
           onViewMore={() => {
             listsDrawerRef.current?.open();
           }}
@@ -220,6 +219,7 @@ export default function Referral(props: IReferralProps) {
           me={referrelListRes?.data?.me}
         />
       </div>
+
       <CommonDrawer
         title={`Rules`}
         ref={ruleDrawerRef}
