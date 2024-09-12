@@ -89,6 +89,7 @@ export default function LoginSDKProvider({ children }: { children: React.ReactNo
   };
   const nodes = getNodes();
   const referrerCode = TelegramPlatform.getInitData()?.start_param;
+  console.log('referrerCode', referrerCode);
   setGlobalConfig({
     appName: APP_NAME,
     chainId: chainId,

@@ -1,15 +1,7 @@
 module.exports = [
   {
-    source: '/api/app/:path*',
-    destination: 'https://test-api.tmrwdao.com/api/app/:path*',
-  },
-  {
     source: '/cms/:path*',
     destination: 'https://test.tmrwdao.com/cms/:path*',
-  },
-  {
-    source: '/connect/token',
-    destination: 'https://test-api.tmrwdao.com/connect/token',
   },
   {
     source: '/explorer-api/:path*',

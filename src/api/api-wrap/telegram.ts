@@ -61,7 +61,7 @@ export const getReferrelCode = async (params: IReferrelCodeReq): Promise<IReferr
 export const getReferrelConfig = async (params: {
   chainId?: string;
 }): Promise<IReferrelConfigRes> => {
-  return apiServer.post(referrelInviteConfigUrl, {
+  return apiServer.get(referrelInviteConfigUrl, {
     ...params,
   });
 };

@@ -6,11 +6,10 @@ interface IReferListProps {
   onViewMore?: () => void;
   isShowMore?: boolean;
   list: IInviterInfo[];
-  meRank: number;
-  meInviteeCount: number;
+  me?: IInviterInfo;
 }
 export default function ReferList(props: IReferListProps) {
-  const { onViewMore, isShowMore, list, meRank, meInviteeCount } = props;
+  const { onViewMore, isShowMore, list, me } = props;
   const { wallet } = useWebLogin();
   return (
     <div className="leaderboard-wrap">
@@ -22,21 +21,33 @@ export default function ReferList(props: IReferListProps) {
         </li>
       </ul>
       <ul className="top-wrap">
-        <li className="left">{meRank}</li>
+        <li className="left">{me?.rank}</li>
         <li className="main">
           <HashAddress address={wallet.address} hasCopy={false} preLen={8} endLen={8} />
           <div className="me-tag flex-center">Me</div>
         </li>
-        <li className="right">{meInviteeCount}</li>
+        <li className="right">{me?.inviteAndVoteCount}</li>
       </ul>
       <div>
-        {list?.map((item) => (
+        {list?.map((item, index) => (
           <ul className="invite-item" key={item.inviter}>
-            <li className="left">{item.rank}</li>
+            <li className="left">
+              {[0, 1, 2].includes(index) ? (
+                <img
+                  src={`/images/tg/rank-icon-${index}.png`}
+                  className="vote-item-icon"
+                  alt="rank-icon"
+                  width={10}
+                  height={20}
+                />
+              ) : (
+                item.rank
+              )}
+            </li>
             <li className="main">
               <HashAddress address={item.inviter} hasCopy={false} preLen={8} endLen={8} />
             </li>
-            <li className="right">{item.inviteeCount}</li>
+            <li className="right">{item.inviteAndVoteCount}</li>
           </ul>
         ))}
       </div>

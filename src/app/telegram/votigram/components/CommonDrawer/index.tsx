@@ -1,5 +1,5 @@
 import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import { Drawer } from 'antd';
+import { Drawer, DrawerProps } from 'antd';
 import Alloyfinger from 'alloyfinger';
 import './index.css';
 import { LeftArrowOutlined } from '@aelf-design/icons';
@@ -12,6 +12,7 @@ interface ICommonDrawerProps {
   bodyClassname?: string;
   showCloseTarget?: boolean;
   showLeftArrow?: boolean;
+  drawerProps?: DrawerProps;
 }
 interface ICloseTragetProps {
   onClose: () => void;
@@ -46,6 +47,7 @@ const CommonDrawer = forwardRef<ICommonDrawerRef, ICommonDrawerProps>((props, re
     bodyClassname,
     showCloseTarget = true,
     showLeftArrow = false,
+    drawerProps,
   } = props;
   const [open, setOpen] = useState(false);
 
@@ -70,6 +72,7 @@ const CommonDrawer = forwardRef<ICommonDrawerRef, ICommonDrawerProps>((props, re
       placement={'bottom'}
       closable={false}
       open={open}
+      {...drawerProps}
     >
       <div className={`telegram-common-drawer-body ${bodyClassname}`}>
         <div className={`drawer-header ${headerClassname}`}>

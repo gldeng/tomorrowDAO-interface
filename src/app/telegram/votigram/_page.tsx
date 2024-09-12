@@ -23,6 +23,8 @@ const imageLists = [
   '/images/tg/vote-list-top-banner-2.png',
   '/images/tg/empty-vote-list.png',
   '/images/tg/empty-points.png',
+  '/images/tg/refer-banner.png',
+  '/images/tg/invite-success-vote-tip.png',
 ];
 const mainPageBgColor = '#090816';
 export default function Page() {

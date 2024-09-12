@@ -272,12 +272,13 @@ export default function VoteList(props: IVoteListProps) {
       </h3>
       <div className="banner">
         <Carousel autoplay>
-          <div>
-            <img src={'/images/tg/vote-list-top-banner-1.png'} className="banner-img" alt={''} />
-          </div>
-          <div>
-            <img src={'/images/tg/vote-list-top-banner-2.png'} className="banner-img" alt={''} />
-          </div>
+          {voteMain?.topBannerImages?.map((item) => {
+            return (
+              <div key={item}>
+                <img src={item} className="banner-img" alt={''} />
+              </div>
+            );
+          })}
         </Carousel>
       </div>
       <ul className="votigram-activity-title ">

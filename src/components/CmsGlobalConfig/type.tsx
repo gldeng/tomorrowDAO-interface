@@ -12,6 +12,7 @@ export interface IConfigContent {
       description: string[];
     };
     listTitle: string;
+    topBannerImages: string[];
   };
 }
 
