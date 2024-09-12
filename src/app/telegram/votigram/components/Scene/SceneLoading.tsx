@@ -154,7 +154,7 @@ function SceneLoading(props: ISceneLoadingProps) {
   useEffect(() => {
     timeoutRef.current = setTimeout(() => {
       setIsTimeout(true);
-    }, 1000 * 60);
+    }, 2000 * 60);
     return () => {
       clearTimeout(timeoutRef.current);
     };

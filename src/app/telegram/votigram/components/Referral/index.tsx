@@ -1,11 +1,11 @@
 import { useWebLogin } from 'aelf-web-login';
 import CommonDrawer, { ICommonDrawerRef } from '../CommonDrawer';
-import { getInviteDetail, getReferrelList } from 'api/request';
+import { getInviteDetail, getReferrelConfig, getReferrelList } from 'api/request';
 import { connectUrl, curChain, networkType, portkeyServer } from 'config';
 import qs from 'query-string';
 import { getCaHashAndOriginChainIdByWallet } from 'utils/wallet';
 import RuleButton from '../RuleButton';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { Button, message, Select } from 'antd';
 import QRCode from 'components/QrCode';
 import { CopyOutlined, StarOutlined } from '@aelf-design/icons';
@@ -15,6 +15,8 @@ import BigNumber from 'bignumber.js';
 const AElf = require('aelf-sdk');
 import './index.css';
 import Loading from '../Loading';
+import dayjs from 'dayjs';
+import ReferralTask from './ReferralTask';
 
 interface ShortLinkResponse {
   shortLink: string;
@@ -49,7 +51,12 @@ export default function Referral(props: IReferralProps) {
       chainId: curChain,
     });
   });
-  const { data: referrelListRes, loading } = useRequest(async () => {
+  const { data: referrelConfigRes, loading: referrelConfigLoading } = useRequest(async () => {
+    return getReferrelConfig({
+      chainId: curChain,
+    });
+  });
+  const { data: referrelListRes, loading: referrelListResLoading } = useRequest(async () => {
     return getReferrelList({
       chainId: curChain,
     });
@@ -59,12 +66,17 @@ export default function Referral(props: IReferralProps) {
     loading: referrelListQueryLoading,
     run: runReferrelListQuery,
   } = useRequest(
-    async (startTime: string, endTime: string) => {
-      return getReferrelList({
-        startTime,
-        endTime,
+    async (startTime?: number, endTime?: number) => {
+      const params: IGetReferrelListReq = {
         chainId: curChain,
-      });
+      };
+      if (startTime) {
+        params.startTime = startTime;
+      }
+      if (endTime) {
+        params.endTime = endTime;
+      }
+      return getReferrelList(params);
     },
     {
       manual: true,
@@ -120,7 +132,9 @@ export default function Referral(props: IReferralProps) {
 
   const handleChange = (value: string) => {
     console.log('value', value);
-    runReferrelListQuery(value.split('-')[0], value.split('-')[1]);
+    const startTime = Number(value.split('-')[0]);
+    const endTime = Number(value.split('-')[1]);
+    runReferrelListQuery(startTime, endTime);
   };
   const inviteCode = referralCodeRes?.userGrowthInfo?.inviteCode;
   const tgLinkWithCode = tgLink + (inviteCode ? `?startapp=${inviteCode}` : '');
@@ -134,8 +148,12 @@ export default function Referral(props: IReferralProps) {
         message.error('Copy failed');
       });
   };
+  useEffect(() => {
+    runReferrelListQuery();
+  }, []);
   return (
     <div className="referral-wrap">
+      <img src="/images/tg/refer-banner.png" className="banner-img" alt="" />
       <RuleButton
         onClick={() => {
           ruleDrawerRef.current?.open();
@@ -152,9 +170,10 @@ export default function Referral(props: IReferralProps) {
         />
         <span>Invite Friends</span>
       </Button>
-      <div className="referral-task-wrap">
+      {/* <div className="referral-task-wrap">
         <img src="/images/tg/refer-task-desc.png" alt="" />
-      </div>
+      </div> */}
+      <ReferralTask />
       <div className="tg-information-card">
         <div className="top-logo">
           <img src="/images/tg/rectangle-top-border.png" alt="" />
@@ -193,13 +212,12 @@ export default function Referral(props: IReferralProps) {
           <h3 className="card-title-text font-16-20-weight">Leaderboard</h3>
         </div>
         <ReferList
-          isShowMore={(referrelListRes?.data?.list ?? []).length > 10}
+          isShowMore={(referrelListRes?.data?.totalCount ?? 0) > -1}
           onViewMore={() => {
             listsDrawerRef.current?.open();
           }}
-          list={referrelListRes?.data?.list ?? []}
-          meRank={0}
-          meInviteeCount={inviteDetailRes?.data?.accountCreation ?? 0}
+          list={referrelListRes?.data?.data ?? []}
+          me={referrelListRes?.data?.me}
         />
       </div>
       <CommonDrawer
@@ -274,28 +292,31 @@ export default function Referral(props: IReferralProps) {
         }
       />
       <CommonDrawer
-        title={`123`}
+        title={`Leaderboard`}
         ref={listsDrawerRef}
         headerClassname="invite-drawer-header"
         bodyClassname="invite-drawer-body-wrap"
         body={
           <div className="invite-drawer-body">
             <Select
-              defaultValue="2024/09/11-2024/09/12"
+              defaultValue=""
               // eslint-disable-next-line no-inline-styles/no-inline-styles
               style={{ width: '100%' }}
               popupClassName="invite-drawer-popup"
               onChange={handleChange}
-              options={[
-                { value: '2024/09/11-2024/09/12', label: '2024/09/11-2024/09/12' },
-                { value: '2024/09/13-2024/09/14', label: '2024/09/13-2024/09/14' },
-              ]}
+              options={referrelConfigRes?.data.config.map((time) => {
+                return {
+                  value: `${time.startTime}-${time.endTime}`,
+                  label: `${dayjs(time.startTime).format('YYYY-MM-DD')}-${dayjs(
+                    time.endTime,
+                  ).format('YYYY-MM-DD')}`,
+                };
+              })}
             />
             <ReferList
               isShowMore={false}
-              list={referrelListQueryRes?.data?.list ?? []}
-              meRank={0}
-              meInviteeCount={inviteDetailRes?.data?.accountCreation ?? 0}
+              list={referrelListQueryRes?.data?.data ?? []}
+              me={referrelListRes?.data?.me}
             />
           </div>
         }

@@ -164,20 +164,22 @@ interface IReferrelCodeRes {
 
 // ------------------- ReferrelList -------------------
 interface IGetReferrelListReq {
-  startTime?: string;
-  endTime?: string;
+  startTime?: number;
+  endTime?: number;
   chainId?: string;
 }
 interface IInviterInfo {
   rank: number;
   inviter: string;
-  inviteeCount: number;
+  inviteAndVoteCount: number;
 }
 
 interface InviterListResponse {
   code: number;
   data: {
-    list: IInviterInfo[];
+    data: IInviterInfo[];
+    totalCount: number;
+    me: IInviterInfo;
   };
 }
 
@@ -202,6 +204,6 @@ interface IReferrelConfigActiveTime {
 interface IReferrelConfigRes {
   code: number;
   data: {
-    activeTime: IReferrelConfigActiveTime[];
+    config: IReferrelConfigActiveTime[];
   };
 }

@@ -38,7 +38,7 @@
     "@sentry/profiling-node": "^8.25.0",
     "@types/lodash-es": "^4.17.9",
     "@xstate/react": "^4.1.0",
-    "aelf-web-login": "2.1.5",
+    "aelf-web-login": "2.1.7",
     "ahooks": "^3.7.11",
     "alloyfinger": "^0.1.16",
     "antd": "^5.13.1",

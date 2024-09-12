@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { message } from 'antd';
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { apiServerBase } from 'config';
 
 interface ResponseType<T> {
   code: string;
@@ -76,6 +77,6 @@ class Request {
 }
 
 const tokenServer = new Request({
-  baseURL: '',
+  baseURL: apiServerBase,
 });
 export { tokenServer };

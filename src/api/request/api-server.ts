@@ -2,16 +2,15 @@ import queryString from 'query-string';
 import * as Sentry from '@sentry/nextjs';
 import { eventBus, UnAuth } from 'utils/myEvent';
 import { message } from 'antd';
-import { getHost } from 'utils/request';
-import { networkType } from 'config';
+import { apiServerBase, networkType } from 'config';
 import { runTimeEnv } from 'utils/env';
 import { SentryEvents } from 'types/sentry';
 import { telegramNeedAuthList } from '../api-wrap/telegram';
 import { tokenIssueUrl } from 'api/url/tmrw';
-export const apiServerBaseURL = '/api/app';
+export const apiServerBaseURL = apiServerBase + '/api/app';
 const defaultServerError = 'The API has an error. Please refresh and retry.';
 export const LoginExpiredTip = 'Login expired, please log in again';
-const host = getHost();
+// const host = getHost();
 const authList = [
   '/proposal/my-info',
   '/dao/my-dao-list',
@@ -51,7 +50,7 @@ class RequestFetch {
     if (token && authList.find((item) => url.includes(item))) {
       headers = { ...headers, Authorization: `Bearer ${token}` };
     }
-    url = `${host}${url}`;
+    url = `${url}`;
 
     if (method === 'GET') {
       if (params) {
