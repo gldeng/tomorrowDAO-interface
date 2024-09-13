@@ -11,6 +11,13 @@ interface IReferListProps {
   list: IInviterInfo[];
   me?: IInviterInfo;
 }
+interface IFakeAvatarProps {
+  text: string;
+}
+const FakeAvatar = (props: IFakeAvatarProps) => {
+  const { text } = props;
+  return <div className="fake-avatar">{text?.[0]?.toUpperCase()}</div>;
+};
 export default function ReferList(props: IReferListProps) {
   const { onViewMore, isShowMore, list, me } = props;
   const invitedModalRef = useRef<ICommonModalRef>(null);
@@ -25,8 +32,9 @@ export default function ReferList(props: IReferListProps) {
         </li>
       </ul>
       <ul className="top-wrap">
-        <li className="left">{me?.rank}</li>
+        <li className="left">{me?.rank ?? '--'}</li>
         <li className="main">
+          <FakeAvatar text={wallet.address} />
           <HashAddress
             address={wallet.address}
             hasCopy={false}
@@ -36,7 +44,7 @@ export default function ReferList(props: IReferListProps) {
           />
           <div className="me-tag flex-center">Me</div>
         </li>
-        <li className="right">{me?.inviteAndVoteCount}</li>
+        <li className="right">{me?.inviteAndVoteCount ?? 0}</li>
       </ul>
       <div>
         {list?.map((item, index) => (
@@ -55,6 +63,7 @@ export default function ReferList(props: IReferListProps) {
               )}
             </li>
             <li className="main">
+              <FakeAvatar text={item.inviter} />
               <HashAddress
                 address={item.inviter}
                 hasCopy={false}

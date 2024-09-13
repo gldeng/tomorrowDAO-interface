@@ -56,6 +56,14 @@
   }
 }
 .invite-drawer-body, .referral-wrap {
+  .fake-avatar {
+    color: #7F7FA7;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 16px; 
+    @apply w-[20px] h-[20px] rounded-full bg-[#303055] flex-center flex justify-center mr-[4px];
+  }
   .TMRWDAO-hash-address > span {
     color: #FFF;
     font-size: 12px;
@@ -97,13 +105,13 @@
     .header, .top-wrap, .invite-item {
       @apply flex items-center;
       .left {
-        @apply w-[48px];
+        @apply w-[12.3vw];
       }
       .main {
-        @apply flex-1 px-[8px];
+        @apply flex-1 px-[8px] flex items-center;
       }
       .right {
-        @apply w-[60px];
+        @apply w-[15.38vw];
         text-align: right;
       }
       .TMRWDAO-hash-address > span {
