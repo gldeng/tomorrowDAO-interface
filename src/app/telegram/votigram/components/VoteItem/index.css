@@ -138,7 +138,7 @@
 .description-full-wrap {
   color: #FFF;
   .open-button {
-    @apply w-full mb-[16px];
+    @apply w-full mb-[16px] mt-[24px];
   }
 }
 .app-detail-drawer {

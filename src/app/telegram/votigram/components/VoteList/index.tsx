@@ -139,7 +139,7 @@ export default function VoteList(props: IVoteListProps) {
       loadingDrawerRef.current?.close();
       getRankingListFn();
       handleStartWebSocket();
-      setRenderPoints((pre) => pre + (res?.data?.totalPoints ?? 0));
+      setRenderPoints(res?.data?.totalPoints ?? 0);
     } catch (error) {
       console.log('requestVoteStatus, error', error);
       handleError();
