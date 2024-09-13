@@ -30,7 +30,7 @@ async function main() {
         console.log('build success');
         buildCommand.kill('SIGKILL');
         process.exit(0);
-      }, 5000);
+      }, 5100);
     }
   });
 
