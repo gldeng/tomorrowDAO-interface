@@ -27,10 +27,7 @@ interface ShortLinkResponse {
     shortLinkCode: string;
   };
 }
-const portkeyConnectTokenUrl =
-  networkType === 'TESTNET'
-    ? connectUrl + '/connect/token'
-    : 'https://referral.portkey.finance/connect/token';
+const portkeyConnectTokenUrl = connectUrl + '/connect/token';
 const tgLink =
   networkType === 'TESTNET'
     ? 'https://t.me/monkeyTmrwDevBot/Votigram'
