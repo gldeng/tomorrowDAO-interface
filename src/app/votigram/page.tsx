@@ -10,11 +10,16 @@ export default function Votigram() {
   return (
     <div className="votigram-intro-container">
       <h2 className="votigram-intro-title">Votigram</h2>
-      <p className="votigram-intro-desc">
-        Votigram is a Telegram Bot created by the TMRWDAO team and integrates decentralized
-        governance and ranking of Telegram applications to accurately gauge user attitudes towards
-        the growing suite of Telegram apps.
-      </p>
+      <div className="votigram-intro-desc">
+        <p>
+          Votigram is a Telegram Bot that allows users to vote for their preferred options and get
+          incentivized for casting their votes.
+        </p>
+        <p>
+          In Votigram, users get to earn rewards by voting. Voting allows them to earn and
+          accumulate points, which can be exchanged for token rewards.
+        </p>
+      </div>
       <a
         href={
           networkType === 'TESTNET' ? 'https://t.me/monkeyTmrwDevBot' : 'https://t.me/VotigramBot'

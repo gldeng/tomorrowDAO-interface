@@ -271,7 +271,7 @@ export default function VoteList(props: IVoteListProps) {
         🌈 {voteMain?.listTitle}
       </h3>
       <div className="banner">
-        <Carousel autoplay>
+        <Carousel autoplay dots={(voteMain?.topBannerImages?.length ?? 0) > 1}>
           {voteMain?.topBannerImages?.map((item) => {
             return (
               <div key={item}>
