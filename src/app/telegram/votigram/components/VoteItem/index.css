@@ -4,10 +4,12 @@
   border: 1px solid var(--Border-1, #403493);
   .bg {
     z-index: 1;
+    border-radius: 16px;
     @apply  h-[60px] w-full bg-[#4600C5] absolute left-0 top-[0px];
   }
   .vote-item-percent {
     z-index: 2;
+    border-radius: 16px;
     @apply  h-[60px] w-0 opacity-25 bg-[#ACA6FF] absolute left-0 top-[0px];
   }
 }
