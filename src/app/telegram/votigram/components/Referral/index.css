@@ -56,6 +56,13 @@
   }
 }
 .invite-drawer-body, .referral-wrap {
+  .TMRWDAO-hash-address > span {
+    color: #FFF;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 16px;
+  }
   .leaderboard-wrap {
     color: #FFF;
     font-size: 12px;

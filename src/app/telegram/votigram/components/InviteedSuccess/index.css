@@ -4,8 +4,11 @@
     border-radius: 8px;
     background: #1B1741;
   }
+  .vote-btn-wrap {
+    @apply mt-[16px] flex justify-center items-center;
+  }
   .vote-btn {
-    @apply flex justify-center items-center w-full mt-[16px];
+    @apply flex justify-center items-center w-full;
     img {
       @apply mr-[10px];
     }

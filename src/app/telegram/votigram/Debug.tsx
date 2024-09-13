@@ -33,6 +33,13 @@ export default function Debug(props: IDebugProps) {
       </button>
       <button
         onClick={() => {
+          setScene(VotigramScene.InvitedSuccess);
+        }}
+      >
+        InvitedSuccess
+      </button>
+      <button
+        onClick={() => {
           login();
         }}
       >

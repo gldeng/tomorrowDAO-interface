@@ -9,6 +9,7 @@ const referrelCodeUrl = '/referral/get-link';
 const referrelInviteDetailUrl = '/referral/invite-detail';
 const referrelInviteLeaderBoardUrl = '/referral/invite-leader-board';
 const referrelInviteConfigUrl = '/referral/config';
+const referralBindingStatusUrl = '/referral/referral-binding-status';
 
 export const nftTokenTransfer = async (
   params: INftTokenTransfer,
@@ -81,6 +82,14 @@ export const getInviteDetail = async (
   });
 };
 
+export const getReferralBindingStatus = async (params: {
+  chainId?: string;
+}): Promise<IReferralBindingStatusRes> => {
+  return apiServer.get(referralBindingStatusUrl, {
+    ...params,
+  });
+};
+
 export const telegramNeedAuthList = [
   transferUrl,
   rankingVoteUrl,
@@ -91,4 +100,5 @@ export const telegramNeedAuthList = [
   referrelInviteDetailUrl,
   referrelInviteLeaderBoardUrl,
   referrelInviteConfigUrl,
+  referralBindingStatusUrl,
 ];

@@ -207,3 +207,12 @@ interface IReferrelConfigRes {
     config: IReferrelConfigActiveTime[];
   };
 }
+
+// ------------------- ReferralBindingStatus -------------------
+interface IReferralBindingStatusRes {
+  code: number;
+  data: {
+    bindingSuccess: boolean;
+    needBinding: boolean;
+  };
+}
