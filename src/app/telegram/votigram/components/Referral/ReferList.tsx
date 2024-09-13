@@ -3,6 +3,7 @@ import { Button, HashAddress } from 'aelf-design';
 import { useWebLogin } from 'aelf-web-login';
 import CommonModal, { ICommonModalRef } from '../CommonModal';
 import { useRef } from 'react';
+import { curChain } from 'config';
 
 interface IReferListProps {
   onViewMore?: () => void;
@@ -26,7 +27,13 @@ export default function ReferList(props: IReferListProps) {
       <ul className="top-wrap">
         <li className="left">{me?.rank}</li>
         <li className="main">
-          <HashAddress address={wallet.address} hasCopy={false} preLen={8} endLen={8} />
+          <HashAddress
+            address={wallet.address}
+            hasCopy={false}
+            preLen={8}
+            endLen={8}
+            chain={curChain}
+          />
           <div className="me-tag flex-center">Me</div>
         </li>
         <li className="right">{me?.inviteAndVoteCount}</li>
@@ -48,7 +55,13 @@ export default function ReferList(props: IReferListProps) {
               )}
             </li>
             <li className="main">
-              <HashAddress address={item.inviter} hasCopy={false} preLen={8} endLen={8} />
+              <HashAddress
+                address={item.inviter}
+                hasCopy={false}
+                preLen={8}
+                endLen={8}
+                chain={curChain}
+              />
             </li>
             <li className="right">{item.inviteAndVoteCount}</li>
           </ul>

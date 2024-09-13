@@ -139,7 +139,7 @@ export default function VoteItem(props: IVoteItemProps) {
             )}
             <div className="vote-game-content truncate">
               <h3 className="title truncate">{item.title}</h3>
-              {item.description ? (
+              {item.url ? (
                 <p
                   className="show-detail desc sub-title-text truncate select-none"
                   onClick={() => {
@@ -190,12 +190,14 @@ export default function VoteItem(props: IVoteItemProps) {
         )}
       </div>
       <div style={{ display: open ? 'block' : 'none' }} className="px-[16px] description-full-wrap">
-        <p
-          className="desc sub-title-text pt-[16px] pb-[24px] font-14-18"
-          dangerouslySetInnerHTML={{ __html: item.description }}
-        ></p>
+        {item.description && (
+          <p
+            className="desc sub-title-text pt-[16px] font-14-18"
+            dangerouslySetInnerHTML={{ __html: item.description }}
+          ></p>
+        )}
         {item?.url && (
-          <a href={item?.url}>
+          <a href={item?.url} target="_blank" rel="noreferrer" className="">
             <Button type="primary" className="open-button">
               <span className="font-17-22-weight">Open</span>
             </Button>

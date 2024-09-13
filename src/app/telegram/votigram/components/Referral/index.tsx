@@ -228,8 +228,10 @@ export default function Referral(props: IReferralProps) {
             <ul className="votigram-rules-text-list">
               <li>
                 Invite your friends to create a Portkey account and after completing a vote on
-                Votigram, both of you will earn 50,000 points Votigram is a vote-to-earn tool that
-                rewards players with valuable on-chain assets and points.
+                Votigram, both of you will earn 50,000 points.
+                <br />
+                Votigram is a vote-to-earn tool that rewards players with valuable on-chain assets
+                and points.
               </li>
               <li>
                 Your friend&apos;s account must be created during the event period. Once they
