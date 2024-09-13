@@ -17,6 +17,7 @@ import './index.css';
 import Loading from '../Loading';
 import dayjs from 'dayjs';
 import ReferralTask from './ReferralTask';
+import { useCopyToClipboard } from 'react-use';
 
 interface ShortLinkResponse {
   shortLink: string;
@@ -27,10 +28,7 @@ interface ShortLinkResponse {
     shortLinkCode: string;
   };
 }
-const portkeyConnectTokenUrl =
-  networkType === 'TESTNET'
-    ? connectUrl + '/connect/token'
-    : 'https://referral.portkey.finance/connect/token';
+const portkeyConnectTokenUrl = connectUrl + '/connect/token';
 const tgLink =
   networkType === 'TESTNET'
     ? 'https://t.me/monkeyTmrwDevBot/Votigram'
@@ -137,15 +135,10 @@ export default function Referral(props: IReferralProps) {
   };
   const inviteCode = referralCodeRes?.userGrowthInfo?.inviteCode;
   const tgLinkWithCode = tgLink + (inviteCode ? `?startapp=${inviteCode}` : '');
+  const [, setCopied] = useCopyToClipboard();
   const handleCopy = () => {
-    navigator.clipboard
-      .writeText(tgLinkWithCode)
-      .then(() => {
-        message.success('Copy success');
-      })
-      .catch(() => {
-        message.error('Copy failed');
-      });
+    setCopied(tgLinkWithCode);
+    message.success('Copy success');
   };
   useEffect(() => {
     runReferrelListQuery();
