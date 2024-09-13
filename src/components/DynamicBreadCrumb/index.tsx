@@ -5,7 +5,7 @@ import { LeftOutlined } from '@aelf-design/icons';
 import useResponsive from 'hooks/useResponsive';
 import './index.css';
 
-const denyList = ['/', '/explore', '/assets', '/my-daos'];
+const denyList = ['/', '/explore', '/assets', '/my-daos', '/votigram'];
 
 const DynamicBreadCrumb = () => {
   const pathname = usePathname();
@@ -36,3 +36,8 @@ const DynamicBreadCrumb = () => {
 };
 
 export default DynamicBreadCrumb;
+
+// https://t.me/monkeyTmrwDevBot?startapp=https://aa-portkey-test.portkey.finance/api/app/account/eJjb7wJona
+// https://t.me/monkeyTmrwDevBot?startapp=referralCode
+// referralCode
+// https://t.me/monkeyTmrwDevBot?startapp=referralCode

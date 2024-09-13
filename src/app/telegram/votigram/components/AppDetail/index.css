@@ -1,5 +1,5 @@
 .votigram-app-detail-wrap {
-  @apply fixed z-[1000] bg-[#212121] py-[8px] left-0 top-0 w-full h-full overflow-x-scroll;
+  @apply  bg-[#212121] py-[8px] overflow-x-scroll;
   .summary {
     @apply flex items-center px-[28px];
   }
@@ -20,7 +20,7 @@
   .app-link {
     height: 92px;
     opacity: 1;
-    @apply mt-[24px] fixed bottom-[0px] bg-[#212121] left-[28px] right-[28px];
+    @apply mt-[24px]  bg-[#212121] px-[28px];
     button {
       @apply h-[50px] w-full;
     }

@@ -1,15 +1,21 @@
 .telegram-vote-item {
-  @apply overflow-hidden h-[60px] bg-[#4600C5] relative;
+  @apply overflow-hidden relative bg-[#221D51];
   border-radius: 16px;
   border: 1px solid var(--Border-1, #403493);
-  .vote-item-percent {
+  .bg {
     z-index: 1;
-    @apply  h-full w-0 opacity-25 bg-[#ACA6FF] absolute left-0 top-[0px];
+    border-radius: 16px;
+    @apply  h-[60px] w-full bg-[#4600C5] absolute left-0 top-[0px];
+  }
+  .vote-item-percent {
+    z-index: 2;
+    @apply  h-[60px] w-0 opacity-25 bg-[#ACA6FF] absolute left-0 top-[0px];
   }
 }
 .telegram-vote-item-wrap {
-  z-index: 2;
-  @apply flex items-center pl-[16px]  justify-between h-full w-full absolute left-0 top-0;
+  z-index: 3;
+  border-radius: 16px;
+  @apply flex items-center pl-[16px]   justify-between  w-full absolute left-0 top-0 h-[60px];
   &.padding-right-large {
     @apply pr-[16px];
   }
@@ -104,7 +110,7 @@
   }
 }
 .increment-icon {
-  @apply rounded-full w-[36px] h-[36px] bg-[#51FF00] flex-center pointer-events-none fixed;
+  @apply rounded-full w-[36px] h-[36px] bg-[#51FF00] flex-center pointer-events-none fixed z-50;
   border: 1px solid #373940;
   color: var(--Border-2, #4C41A9);
   font-size: 13.5px;
@@ -128,5 +134,21 @@
   }
   &.TMRWDAO-tooltip .TMRWDAO-tooltip-arrow:before {
     background: var(--Text-1, #ACA6FF);
+  }
+}
+.description-full-wrap {
+  color: #FFF;
+  .open-button {
+    @apply w-full mb-[16px] mt-[24px];
+  }
+}
+.app-detail-drawer {
+  max-height: 100vh;
+  overflow-y: scroll;
+  .close-target {
+    @apply hidden;
+  }
+  .drawer-body {
+    @apply p-0;
   }
 }

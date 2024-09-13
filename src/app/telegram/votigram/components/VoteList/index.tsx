@@ -21,6 +21,8 @@ import SignalRManager from 'utils/socket';
 import SignalR from 'utils/socket/signalr';
 import { IPointsListRes, IWsPointsItem } from './type';
 import { preloadImages } from 'utils/file';
+import { useConfig } from 'components/CmsGlobalConfig/type';
+import RuleButton from '../RuleButton';
 
 interface IVoteListProps {
   onShowMore?: (item: IRankingListResItem) => void;
@@ -51,6 +53,7 @@ export default function VoteList(props: IVoteListProps) {
     setWsRankList(data);
   };
 
+  const { voteMain } = useConfig() ?? {};
   const {
     data: rankList,
     error: rankListError,
@@ -136,7 +139,7 @@ export default function VoteList(props: IVoteListProps) {
       loadingDrawerRef.current?.close();
       getRankingListFn();
       handleStartWebSocket();
-      setRenderPoints((pre) => pre + (res?.data?.totalPoints ?? 0));
+      setRenderPoints(res?.data?.totalPoints ?? 0);
     } catch (error) {
       console.log('requestVoteStatus, error', error);
       handleError();
@@ -258,26 +261,24 @@ export default function VoteList(props: IVoteListProps) {
 
   return (
     <div className="votigram-main">
-      <div
-        className="rules-wrap"
+      <RuleButton
         onClick={() => {
           ruleDrawerRef.current?.open();
         }}
-      >
-        <InfoCircleOutlined />
-        <span className="rule-text">Rules</span>
-      </div>
-      <h3 className="font-20-25-weight text-white mb-[8px] text-center">
-        🌈 Vote your favorite game!
+        className="rules-wrap"
+      />
+      <h3 className="font-16-20-weight text-white mb-[8px] text-center">
+        🌈 {voteMain?.listTitle}
       </h3>
       <div className="banner">
-        <Carousel autoplay>
-          <div>
-            <img src={'/images/tg/vote-list-top-banner-1.png'} className="banner-img" alt={''} />
-          </div>
-          <div>
-            <img src={'/images/tg/vote-list-top-banner-2.png'} className="banner-img" alt={''} />
-          </div>
+        <Carousel autoplay dots={(voteMain?.topBannerImages?.length ?? 0) > 1}>
+          {voteMain?.topBannerImages?.map((item) => {
+            return (
+              <div key={item}>
+                <img src={item} className="banner-img" alt={''} />
+              </div>
+            );
+          })}
         </Carousel>
       </div>
       <ul className="votigram-activity-title ">
@@ -419,16 +420,14 @@ export default function VoteList(props: IVoteListProps) {
         }
       />
       <CommonDrawer
-        title="How to Participate"
+        title={`${voteMain?.rules?.title}`}
         ref={ruleDrawerRef}
         body={
           <div className="flex flex-col items-center">
             <ul className="votigram-rules-text-list">
-              <li>To vote in Votigram, you’ll need a TomorrowPass NFT.</li>
-              <li>You can cast one vote per day and can choose only one option.</li>
-              <li>
-                After voting, you’ll earn points that can be redeemed for exciting rewards later.
-              </li>
+              {voteMain?.rules.description.map((item, index) => {
+                return <li key={index} dangerouslySetInnerHTML={{ __html: item }} />;
+              })}
             </ul>
             <Button
               type="primary"

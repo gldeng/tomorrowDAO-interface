@@ -35,7 +35,6 @@ export const useGetToken = () => {
         return rest;
       } catch (error) {
         if (retryCount) {
-          message.info('We will automatically re-verify your account');
           await sleep(1000);
           const retry = retryCount - 1;
           return getTokenFromServer({
@@ -43,7 +42,7 @@ export const useGetToken = () => {
             retryCount: retry,
           });
         } else {
-          message.error(LoginFailed);
+          message.error('Failed to obtain authorization token');
           isConnectWallet && logout({ noModal: true });
           needLoading && emitLoading(false);
           return null;

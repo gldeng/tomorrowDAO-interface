@@ -148,3 +148,71 @@ interface IRankingVoteListsRes {
     items: Array<IRankingVoteListsResItem>;
   };
 }
+
+// ------------------- ReferrelCode -------------------
+interface IReferrelCodeReq {
+  chainId: string;
+  token: string;
+}
+interface IReferrelCodeRes {
+  code: number;
+  data: {
+    referrelLink: string;
+    referrelCode: string;
+  };
+}
+
+// ------------------- ReferrelList -------------------
+interface IGetReferrelListReq {
+  startTime?: number;
+  endTime?: number;
+  chainId?: string;
+}
+interface IInviterInfo {
+  rank: number;
+  inviter: string;
+  inviteAndVoteCount: number;
+}
+
+interface InviterListResponse {
+  code: number;
+  data: {
+    data: IInviterInfo[];
+    totalCount: number;
+    me: IInviterInfo;
+  };
+}
+
+// ------------------- ReferrelInviteDetail -------------------
+interface IGetInviteDetailReq {
+  chainId: string;
+}
+interface IRewardInfo {
+  estimatedReward: number;
+  accountCreation: number;
+  votigramVote: number;
+}
+interface IGetInviteDetailResponse {
+  code: number;
+  data: IRewardInfo;
+}
+
+interface IReferrelConfigActiveTime {
+  startTime: number;
+  endTime: number;
+}
+interface IReferrelConfigRes {
+  code: number;
+  data: {
+    config: IReferrelConfigActiveTime[];
+  };
+}
+
+// ------------------- ReferralBindingStatus -------------------
+interface IReferralBindingStatusRes {
+  code: number;
+  data: {
+    bindingSuccess: boolean;
+    needBinding: boolean;
+  };
+}

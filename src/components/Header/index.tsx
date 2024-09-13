@@ -25,6 +25,7 @@ export enum ENavKeys {
   Telegram = 'Telegram',
   Treasury = 'Treasury',
   Blog = 'Blog',
+  Votigram = 'Votigram',
 }
 const DynamicLogin = dynamicReq(() => import('components/Login'), {
   ssr: false,
@@ -116,12 +117,19 @@ export default function Header() {
         ),
         key: ENavKeys.Blog,
       },
+      {
+        label: <Link href={'/votigram'}>Votigram</Link>,
+        key: ENavKeys.Votigram,
+      },
     ];
   }, [isLG]);
   const [current, setCurrent] = useState('');
 
   const onClick: MenuProps['onClick'] = (e) => {
     if (e.key === ENavKeys.CreateDAO) {
+      setCurrent(e.key);
+    }
+    if (e.key === ENavKeys.Votigram) {
       setCurrent(e.key);
     }
   };
@@ -131,6 +139,8 @@ export default function Header() {
     // refresh from path map to nav active
     if (pathname === '/create') {
       setCurrent(ENavKeys.CreateDAO);
+    } else if (pathname === '/votigram') {
+      setCurrent(ENavKeys.Votigram);
     } else {
       setCurrent('');
     }

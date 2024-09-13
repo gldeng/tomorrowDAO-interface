@@ -7,12 +7,12 @@ import { TransferStatus } from 'types/telegram';
 import CommonDrawer, { ICommonDrawerRef } from '../CommonDrawer';
 import { nftTokenTransfer, nftTokenTransferStatus } from 'api/request';
 import { curChain, nftSymbol } from 'config';
-import { sleep } from 'utils/common';
 import { retryWrap } from 'utils/request';
 import { useWebLogin } from 'aelf-web-login';
 import { GetBalanceByContract } from 'contract/callContract';
-import BigNumber from 'bignumber.js';
+import { useConfig } from 'components/CmsGlobalConfig/type';
 import Footer from '../Footer';
+import TimeoutTip from '../TimeoutTip';
 
 interface ISceneLoadingProps {
   onFinish?: (isAlreadyClaimed?: boolean) => void;
@@ -39,13 +39,15 @@ const loadingCompletePercent = 60;
 function SceneLoading(props: ISceneLoadingProps) {
   const { onFinish } = props;
   const [processText, setProcessText] = useState('Creating on-chain wallet...');
+  const { loginScreen } = useConfig() ?? {};
   const [percent, setPercent] = useState(10);
-  // const [isError, setIsError] = useState(false);
+  const [isTimeout, setIsTimeout] = useState(false);
   const retryFn = useRef<() => Promise<void>>();
   const retryDrawerRef = useRef<ICommonDrawerRef>(null);
   const missNftDrawerRef = useRef<ICommonDrawerRef>(null);
   const requestNftTransferRef = useRef<() => Promise<void>>();
   const fakeProgressTimer = useRef<NodeJS.Timeout>();
+  const timeoutRef = useRef<NodeJS.Timeout>();
   const percentRef = useRef(0);
   percentRef.current = percent;
   const { wallet } = useWebLogin();
@@ -147,6 +149,14 @@ function SceneLoading(props: ISceneLoadingProps) {
       clearInterval(fakeProgressTimer.current);
     };
   }, []);
+  useEffect(() => {
+    timeoutRef.current = setTimeout(() => {
+      setIsTimeout(true);
+    }, 2000 * 60);
+    return () => {
+      clearTimeout(timeoutRef.current);
+    };
+  }, []);
   return (
     <>
       <CommonDrawer
@@ -200,8 +210,11 @@ function SceneLoading(props: ISceneLoadingProps) {
         }
       />
       <Scene
-        title="🌈  Vote your favorite app"
-        description="Cast your vote for your favourite Telegram app!"
+        style={{
+          display: isTimeout ? 'none' : 'block',
+        }}
+        title={`🌈 ${loginScreen?.title}`}
+        description={loginScreen?.subtitle ?? ''}
         imageNode={<ImageLoveNode />}
         foot={
           <div className="scene-loading-foot">
@@ -217,6 +230,7 @@ function SceneLoading(props: ISceneLoadingProps) {
           </div>
         }
       />
+      <TimeoutTip style={{ display: isTimeout ? 'flex' : 'none' }} />
       <Footer classname="scene-foot-text" />
     </>
   );

@@ -1,11 +1,15 @@
 import { apiServer } from '../axios';
 
 const transferUrl = '/token/transfer';
-// const rankingVoteListsUrl = '/ranking/vote-list';
 const rankingVoteUrl = '/ranking/vote';
 const rankingVoteStatusUrl = '/ranking/vote/status';
 const rankListUrl = '/ranking/default-proposal';
 const voteLikeUrl = '/ranking/like';
+const referrelCodeUrl = '/referral/get-link';
+const referrelInviteDetailUrl = '/referral/invite-detail';
+const referrelInviteLeaderBoardUrl = '/referral/invite-leader-board';
+const referrelInviteConfigUrl = '/referral/config';
+const referralBindingStatusUrl = '/referral/referral-binding-status';
 
 export const nftTokenTransfer = async (
   params: INftTokenTransfer,
@@ -50,13 +54,41 @@ export const rankingVoteLike = async (
   });
 };
 
-// export const fetchRankingVoteLists = async (
-//   params: IRankingVoteListsReq,
-// ): Promise<IRankingVoteListsRes> => {
-//   return apiServer.get(rankingVoteListsUrl, {
-//     ...params,
-//   });
-// };
+export const getReferrelCode = async (params: IReferrelCodeReq): Promise<IReferrelCodeRes> => {
+  return apiServer.post(referrelCodeUrl, {
+    ...params,
+  });
+};
+export const getReferrelConfig = async (params: {
+  chainId?: string;
+}): Promise<IReferrelConfigRes> => {
+  return apiServer.get(referrelInviteConfigUrl, {
+    ...params,
+  });
+};
+
+export const getReferrelList = async (
+  params?: IGetReferrelListReq,
+): Promise<InviterListResponse> => {
+  return apiServer.get(referrelInviteLeaderBoardUrl, {
+    ...params,
+  });
+};
+export const getInviteDetail = async (
+  params: IGetInviteDetailReq,
+): Promise<IGetInviteDetailResponse> => {
+  return apiServer.get(referrelInviteDetailUrl, {
+    ...params,
+  });
+};
+
+export const getReferralBindingStatus = async (params: {
+  chainId?: string;
+}): Promise<IReferralBindingStatusRes> => {
+  return apiServer.get(referralBindingStatusUrl, {
+    ...params,
+  });
+};
 
 export const telegramNeedAuthList = [
   transferUrl,
@@ -64,4 +96,9 @@ export const telegramNeedAuthList = [
   rankingVoteStatusUrl,
   rankListUrl,
   voteLikeUrl,
+  referrelCodeUrl,
+  referrelInviteDetailUrl,
+  referrelInviteLeaderBoardUrl,
+  referrelInviteConfigUrl,
+  referralBindingStatusUrl,
 ];

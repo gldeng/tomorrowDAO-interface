@@ -55,7 +55,7 @@ export const useCheckLoginAndToken = () => {
     } else {
       logout({ noModal: true });
       dispatch(resetLoginStatus());
-      message.error('log in failed');
+      message.error('login failed');
     }
   };
   useAsyncEffect(async () => {
