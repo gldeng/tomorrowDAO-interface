@@ -1,4 +1,4 @@
-import { RightOutlined, DownOutlined } from '@aelf-design/icons';
+import { RightOutlined, UpOutlined } from '@aelf-design/icons';
 import { Button, Tooltip } from 'antd';
 import Percent from './Percent';
 import BigNumber from 'bignumber.js';
@@ -151,7 +151,7 @@ export default function VoteItem(props: IVoteItemProps) {
                   }}
                 >
                   Show details
-                  {open ? <DownOutlined /> : <RightOutlined />}
+                  {open ? <UpOutlined /> : <RightOutlined />}
                 </p>
               ) : (
                 <p
