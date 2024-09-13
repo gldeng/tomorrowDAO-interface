@@ -201,7 +201,7 @@ export default function Referral(props: IReferralProps) {
               <img src="/images/tg/vote-icon.png" alt="" />
               <span className="font-14-18">Votigram Vote</span>
             </div>
-            {inviteDetailRes?.data?.votigramVote}
+            {BigNumber(inviteDetailRes?.data?.votigramVote ?? 0).toFormat()}
           </div>
         </div>
       </div>
