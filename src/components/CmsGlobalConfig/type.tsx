@@ -6,6 +6,10 @@ export interface IConfigContent {
     title: string;
     subtitle: string;
   };
+  earnScreen: {
+    title: string;
+    subtitle: string;
+  };
   voteMain: {
     rules: {
       title: string;

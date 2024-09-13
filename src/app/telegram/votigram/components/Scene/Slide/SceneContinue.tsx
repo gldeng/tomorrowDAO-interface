@@ -1,4 +1,5 @@
 import { Button } from 'antd';
+import { useConfig } from 'components/CmsGlobalConfig/type';
 import Scene from '../index';
 import { ImageLoveNode } from '../ImageLoveNode';
 
@@ -7,11 +8,12 @@ interface ISceneContinueProps {
 }
 function SceneContinue(props: ISceneContinueProps) {
   const { onContinue } = props;
+  const { loginScreen } = useConfig() ?? {};
   return (
     <Scene
       className="scene-continue"
-      title="🌈  Vote your favorite app"
-      description="Cast your vote for your favourite Telegram app!"
+      title={`🌈  ${loginScreen?.title}`}
+      description={loginScreen?.subtitle ?? ''}
       imageNode={<ImageLoveNode />}
       foot={
         <div className="scene-continue-foot">

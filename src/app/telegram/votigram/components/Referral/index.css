@@ -55,6 +55,14 @@
     @apply hidden;
   }
 }
+.referral-wrap {
+  .leaderboard-wrap {
+    border-radius: 8px;
+    background: #1B1741;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+}
 .invite-drawer-body, .referral-wrap {
   .fake-avatar {
     color: #7F7FA7;
@@ -84,7 +92,7 @@
     .top-wrap {
       border-radius: 8px;
       background: var(--Interactive-2, #2D1F73);
-      @apply px-[8px] py-[10px];
+      @apply px-[8px] py-[10px] mx-[4px];
       .main {
         @apply flex;
       }
@@ -97,6 +105,8 @@
         font-weight: 400;
         margin-left: 4px;
         line-height: 10px;
+        width: 19px;
+        height: 12px;
       }
     }
     .invite-item {
@@ -146,6 +156,7 @@
     @apply px-[12px] py-[19px];
   }
   .top-wrap {
+    background: var(--Interactive-Gray-3, #2F3036);
     @apply px-[12px] py-[14px];
   }
   .invite-item {
