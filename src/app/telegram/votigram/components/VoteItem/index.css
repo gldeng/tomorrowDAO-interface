@@ -9,7 +9,6 @@
   }
   .vote-item-percent {
     z-index: 2;
-    border-radius: 16px;
     @apply  h-[60px] w-0 opacity-25 bg-[#ACA6FF] absolute left-0 top-[0px];
   }
 }

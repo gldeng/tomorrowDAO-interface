@@ -267,7 +267,7 @@ export default function VoteList(props: IVoteListProps) {
         }}
         className="rules-wrap"
       />
-      <h3 className="font-20-25-weight text-white mb-[8px] text-center">
+      <h3 className="font-16-20-weight text-white mb-[8px] text-center">
         🌈 {voteMain?.listTitle}
       </h3>
       <div className="banner">
