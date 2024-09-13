@@ -31,7 +31,7 @@ export default function ReferList(props: IReferListProps) {
             address={wallet.address}
             hasCopy={false}
             preLen={8}
-            endLen={8}
+            endLen={9}
             chain={curChain}
           />
           <div className="me-tag flex-center">Me</div>
@@ -59,7 +59,7 @@ export default function ReferList(props: IReferListProps) {
                 address={item.inviter}
                 hasCopy={false}
                 preLen={8}
-                endLen={8}
+                endLen={9}
                 chain={curChain}
               />
             </li>
