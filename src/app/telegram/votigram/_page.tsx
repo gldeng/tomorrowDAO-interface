@@ -8,7 +8,7 @@ import Main from './components/Main';
 import Debug from './Debug';
 import { VotigramScene } from './const';
 import { preloadImages } from 'utils/file';
-import AppDetail from './components/AppDetail';
+import { useConfig } from 'components/CmsGlobalConfig/type';
 import InvitedSuccess from './components/InviteedSuccess';
 import { TelegramPlatform } from '@portkey/did-ui-react';
 
@@ -29,16 +29,13 @@ const imageLists = [
 const mainPageBgColor = '#090816';
 export default function Page() {
   const [scene, setScene] = useState<VotigramScene>(VotigramScene.Loading);
-  const [currentItem, setCurrentItem] = useState<IRankingListResItem | null>(null);
-  const [isShowAppDetail, setIsShowAppDetail] = useState(false);
   const searchParams = useSearchParams();
 
   const isDebug = searchParams.get('debug');
+  const { voteMain } = useConfig() ?? {};
 
-  const handleShowAppDetail = (item: IRankingListResItem) => {
+  const handleShowAppDetail = () => {
     const webapp = window.Telegram.WebApp;
-    setCurrentItem(item);
-    setIsShowAppDetail(true);
     const button = window?.Telegram?.WebApp?.BackButton;
     button.show();
     webapp.setBackgroundColor('#212121');
@@ -46,12 +43,12 @@ export default function Page() {
 
   useEffect(() => {
     preloadImages(imageLists);
+    preloadImages(voteMain?.topBannerImages ?? []);
   }, []);
   useEffect(() => {
     const webapp = window.Telegram.WebApp;
     const button = webapp?.BackButton;
     const handleBack = () => {
-      setIsShowAppDetail(false);
       button.hide();
       webapp.setBackgroundColor(mainPageBgColor);
     };

@@ -227,8 +227,8 @@ export default function Referral(props: IReferralProps) {
           <div className="flex flex-col items-center">
             <ul className="votigram-rules-text-list">
               <li>
-                Invite your friends to create a Portkey account and after completing a vote on
-                Votigram, both of you will earn 50,000 points.
+                Invite your friends to sign up on Votigram and after completing a vote on Votigram,
+                both of you will earn 50,000 points.
                 <br />
                 Votigram is a vote-to-earn tool that rewards players with valuable on-chain assets
                 and points.
@@ -270,7 +270,7 @@ export default function Referral(props: IReferralProps) {
                 <div className="referral-link-wrap">
                   <h2 className="font-16-20-weight">Referral Link</h2>
                   <div className="font-14-18 link">
-                    <p className="link-text">{tgLinkWithCode}</p>
+                    <p className="link-text break-all">{tgLinkWithCode}</p>
                     <div className="copy-button" onClick={handleCopy}>
                       <CopyOutlined />
                     </div>

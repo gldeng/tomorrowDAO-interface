@@ -79,7 +79,7 @@ export default function ReferList(props: IReferListProps) {
         content={
           <div className="invite-modal-content">
             <p className="my-[24px]">
-              Only addresses created via referral that have completed vote in Votigram during the
+              Only sign up on Votigram via referral that have completed vote in Votigram during the
               event will be counted here.
             </p>
             <Button

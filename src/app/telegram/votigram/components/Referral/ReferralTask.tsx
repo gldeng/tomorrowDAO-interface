@@ -36,7 +36,7 @@ export default function ReferralTask() {
           <h2>Your Friends</h2>
           <div className="referral-task-item-rules right">
             <div className="text-item font-14-18">
-              Your friend creates a Portkey account via your referral link.
+              Your friend signs up on Votigram via your referral link.
             </div>
             <DownArrowOutlined />
             <div className="text-item font-14-18">Your friend completed a vote on Votigram.</div>
