@@ -4,7 +4,7 @@ interface ISceneProps {
   foot: React.ReactNode;
   imageNode: React.ReactNode;
   middleNode?: React.ReactNode;
-  title: string;
+  title: React.ReactNode;
   description: string;
   bodyUrl?: string;
   className?: string;

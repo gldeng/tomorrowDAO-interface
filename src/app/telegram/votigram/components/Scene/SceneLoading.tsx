@@ -7,11 +7,9 @@ import { TransferStatus } from 'types/telegram';
 import CommonDrawer, { ICommonDrawerRef } from '../CommonDrawer';
 import { nftTokenTransfer, nftTokenTransferStatus } from 'api/request';
 import { curChain, nftSymbol } from 'config';
-import { sleep } from 'utils/common';
 import { retryWrap } from 'utils/request';
 import { useWebLogin } from 'aelf-web-login';
 import { GetBalanceByContract } from 'contract/callContract';
-import BigNumber from 'bignumber.js';
 import { useConfig } from 'components/CmsGlobalConfig/type';
 import Footer from '../Footer';
 import TimeoutTip from '../TimeoutTip';
@@ -215,7 +213,7 @@ function SceneLoading(props: ISceneLoadingProps) {
         style={{
           display: isTimeout ? 'none' : 'block',
         }}
-        title={`🌈${loginScreen?.title}`}
+        title={`🌈 ${loginScreen?.title}`}
         description={loginScreen?.subtitle ?? ''}
         imageNode={<ImageLoveNode />}
         foot={

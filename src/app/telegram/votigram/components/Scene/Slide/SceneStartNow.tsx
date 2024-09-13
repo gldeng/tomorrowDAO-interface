@@ -1,4 +1,5 @@
 import { Button } from 'antd';
+import { useConfig } from 'components/CmsGlobalConfig/type';
 import Scene from '../index';
 
 interface ISceneStartNowProps {
@@ -6,11 +7,12 @@ interface ISceneStartNowProps {
 }
 function SceneStartNow(props: ISceneStartNowProps) {
   const { onStart } = props;
+  const { earnScreen } = useConfig() ?? {};
   return (
     <Scene
       className="scene-start-now"
-      title="🤑  Earn rewards"
-      description="Earn points by voting and redeem them for Tomorrow Token rewards!"
+      title={`🤑 ${earnScreen?.title}`}
+      description={earnScreen?.subtitle ?? ''}
       imageNode={
         <div className="start-now-image-wrap">
           <img src={'/images/tg/gift.png'} width={175} height={205} alt={''} />
