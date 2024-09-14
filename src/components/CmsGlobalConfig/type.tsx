@@ -5,6 +5,7 @@ export interface IConfigContent {
   loginScreen: {
     title: string;
     subtitle: string;
+    progressTips: string[];
   };
   earnScreen: {
     title: string;

@@ -38,8 +38,8 @@ const LoadingFailedIcon = () => {
 const loadingCompletePercent = 60;
 function SceneLoading(props: ISceneLoadingProps) {
   const { onFinish } = props;
-  const [processText, setProcessText] = useState('Creating on-chain wallet...');
   const { loginScreen } = useConfig() ?? {};
+  const [processText, setProcessText] = useState(loginScreen?.progressTips?.[0] ?? '');
   const [percent, setPercent] = useState(10);
   const [isTimeout, setIsTimeout] = useState(false);
   const retryFn = useRef<() => Promise<void>>();
@@ -128,7 +128,7 @@ function SceneLoading(props: ISceneLoadingProps) {
     const callBack = () => {
       clearInterval(fakeProgressTimer.current);
       setPercent(loadingCompletePercent);
-      setProcessText('Minting TomorrowPass NFT...');
+      setProcessText(loginScreen?.progressTips?.[1] ?? '');
       requestNftTransferRef.current?.();
     };
     eventBus.on(GetTokenLogin, callBack);
