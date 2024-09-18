@@ -1,12 +1,11 @@
 'use client';
-import { NetworkType, TelegramPlatform } from '@portkey/did-ui-react';
+import { NetworkType } from '@portkey/did-ui-react';
 import { NetworkDaoHomePathName, TELEGRAM_BOT_ID, aelfWebLoginNetworkType, curChain } from 'config';
-import dynamicReq from 'next/dynamic';
 import { PortkeyProvider, WebLoginProvider, setGlobalConfig } from 'aelf-web-login';
-
 import { store } from 'redux/store';
 import getChainIdQuery from 'utils/url';
 import { usePathname } from 'next/navigation';
+import { getReferrerCode } from 'app/telegram/votigram/util/start-params';
 
 type TNodes = {
   AELF: { chainId: string; rpcUrl: string };
@@ -88,8 +87,7 @@ export default function LoginSDKProvider({ children }: { children: React.ReactNo
     return nodes;
   };
   const nodes = getNodes();
-  const referrerCode = TelegramPlatform.getInitData()?.start_param;
-  console.log('referrerCode', referrerCode);
+  const referrerCode = getReferrerCode();
   setGlobalConfig({
     appName: APP_NAME,
     chainId: chainId,

@@ -10,6 +10,7 @@ const referrelInviteDetailUrl = '/referral/invite-detail';
 const referrelInviteLeaderBoardUrl = '/referral/invite-leader-board';
 const referrelInviteConfigUrl = '/referral/config';
 const referralBindingStatusUrl = '/referral/referral-binding-status';
+const reportSourceUrl = '/user/user-source-report';
 
 export const nftTokenTransfer = async (
   params: INftTokenTransfer,
@@ -89,7 +90,14 @@ export const getReferralBindingStatus = async (params: {
     ...params,
   });
 };
-
+export const reportUserSource = async (params: {
+  chainId: string;
+  source: string;
+}): Promise<any> => {
+  return apiServer.get(reportSourceUrl, {
+    ...params,
+  });
+};
 export const telegramNeedAuthList = [
   transferUrl,
   rankingVoteUrl,
@@ -101,4 +109,5 @@ export const telegramNeedAuthList = [
   referrelInviteLeaderBoardUrl,
   referrelInviteConfigUrl,
   referralBindingStatusUrl,
+  reportSourceUrl,
 ];

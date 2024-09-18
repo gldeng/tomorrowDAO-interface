@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { eventBus, GetTokenLogin } from 'utils/myEvent';
 import { TransferStatus } from 'types/telegram';
 import CommonDrawer, { ICommonDrawerRef } from '../CommonDrawer';
-import { nftTokenTransfer, nftTokenTransferStatus } from 'api/request';
+import { nftTokenTransfer, nftTokenTransferStatus, reportUserSource } from 'api/request';
 import { curChain, nftSymbol } from 'config';
 import { retryWrap } from 'utils/request';
 import { useWebLogin } from 'aelf-web-login';
@@ -13,6 +13,8 @@ import { GetBalanceByContract } from 'contract/callContract';
 import { useConfig } from 'components/CmsGlobalConfig/type';
 import Footer from '../Footer';
 import TimeoutTip from '../TimeoutTip';
+import { TelegramPlatform } from '@portkey/did-ui-react';
+import { parseStartAppParams } from '../../util/start-params';
 
 interface ISceneLoadingProps {
   onFinish?: (isAlreadyClaimed?: boolean) => void;
@@ -46,6 +48,7 @@ function SceneLoading(props: ISceneLoadingProps) {
   const retryDrawerRef = useRef<ICommonDrawerRef>(null);
   const missNftDrawerRef = useRef<ICommonDrawerRef>(null);
   const requestNftTransferRef = useRef<() => Promise<void>>();
+  const reportSourceRef = useRef<() => void>();
   const fakeProgressTimer = useRef<NodeJS.Timeout>();
   const timeoutRef = useRef<NodeJS.Timeout>();
   const percentRef = useRef(0);
@@ -124,12 +127,25 @@ function SceneLoading(props: ISceneLoadingProps) {
   };
   requestNftTransferRef.current = requestNftTransfer;
 
+  const reportSource = () => {
+    const startParam = TelegramPlatform.getInitData()?.start_param ?? '';
+    const params = parseStartAppParams(startParam);
+    const source = params.source ?? '';
+    if (source) {
+      reportUserSource({
+        chainId: curChain,
+        source: source,
+      });
+    }
+  };
+  reportSourceRef.current = reportSource;
   useEffect(() => {
     const callBack = () => {
       clearInterval(fakeProgressTimer.current);
       setPercent(loadingCompletePercent);
       setProcessText(loginScreen?.progressTips?.[1] ?? '');
       requestNftTransferRef.current?.();
+      reportSourceRef.current?.();
     };
     eventBus.on(GetTokenLogin, callBack);
     return () => {

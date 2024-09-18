@@ -25,7 +25,7 @@ export default class SignalR {
         skipNegotiation: true,
         transport: HttpTransportType.WebSockets,
       })
-      .withAutomaticReconnect([0, 2000, 5000, 10000])
+      .withAutomaticReconnect([0, 2000, 5000, 5000, 5000, 10000, 10000, 10000])
       .build();
     this.handlerMap = new Map();
   }

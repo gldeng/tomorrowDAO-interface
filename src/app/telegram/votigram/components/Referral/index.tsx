@@ -18,6 +18,8 @@ import Loading from '../Loading';
 import dayjs from 'dayjs';
 import ReferralTask from './ReferralTask';
 import { useCopyToClipboard } from 'react-use';
+import { IStartAppParams } from '../../type';
+import { stringifyStartAppParams } from '../../util/start-params';
 
 interface ShortLinkResponse {
   shortLink: string;
@@ -134,7 +136,11 @@ export default function Referral(props: IReferralProps) {
     runReferrelListQuery(startTime, endTime);
   };
   const inviteCode = referralCodeRes?.userGrowthInfo?.inviteCode;
-  const tgLinkWithCode = tgLink + (inviteCode ? `?startapp=${inviteCode}` : '');
+  const startAppParams: IStartAppParams = {
+    referralCode: inviteCode,
+  };
+  const tgLinkWithCode =
+    tgLink + (inviteCode ? `?startapp=${stringifyStartAppParams(startAppParams)}` : '');
   const [, setCopied] = useCopyToClipboard();
   const handleCopy = () => {
     setCopied(tgLinkWithCode);
