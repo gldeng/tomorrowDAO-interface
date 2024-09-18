@@ -218,7 +218,6 @@ export default function VoteList(props: IVoteListProps) {
     fetchAndReceiveWs();
 
     return () => {
-      // socket?.sendEvent('UnsubscribePointsProduce');
       socket?.destroy();
     };
   }, [socket]);

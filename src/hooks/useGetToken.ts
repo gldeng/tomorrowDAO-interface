@@ -5,14 +5,17 @@ import { message } from 'antd';
 import useDiscoverProvider from './useTokenDiscoverProvider';
 import { sleep } from '@portkey/utils';
 import { IContractError } from 'types';
-import { formatErrorMsg, LoginFailed } from 'contract/util';
+import { formatErrorMsg } from 'contract/util';
 import { emitLoading } from 'utils/myEvent';
-import { getCaHashAndOriginChainIdByWallet, getManagerAddressByWallet } from 'utils/wallet';
+import { getCaHashAndOriginChainIdByWallet } from 'utils/wallet';
 import { getLocalJWT } from 'utils/localJWT';
 import { curChain, networkType } from 'config';
 
 const AElf = require('aelf-sdk');
 
+const hexDataCopywriter = `Welcome to TMRWDAO! Click to sign in to the TMRWDAO platform! This request will not trigger any blockchain transaction or cost any gas fees.
+
+signature: `;
 export const useGetToken = () => {
   const { loginState, wallet, getSignature, walletType, logout } = useWebLogin();
   const { getSignatureAndPublicKey } = useDiscoverProvider();
@@ -72,7 +75,8 @@ export const useGetToken = () => {
     const timestamp = Date.now();
     const plainTextOrigin = `${wallet.address}-${timestamp}`;
     // const plainText: any = Buffer.from(plainTextOrigin).toString('hex').replace('0x', '');
-    const signInfo = AElf.utils.sha256(`${wallet.address}-${timestamp}`);
+    const signInfo = AElf.utils.sha256(plainTextOrigin);
+    const discoverSignHex = Buffer.from(hexDataCopywriter + plainTextOrigin).toString('hex');
 
     let publicKey = '';
     let signature = '';
@@ -82,7 +86,7 @@ export const useGetToken = () => {
     const { caHash, originChainId } = await getCaHashAndOriginChainIdByWallet(wallet, walletType);
     if (walletType === WalletType.discover) {
       try {
-        const { pubKey, signatureStr } = await getSignatureAndPublicKey(signInfo);
+        const { pubKey, signatureStr } = await getSignatureAndPublicKey(discoverSignHex, signInfo);
         publicKey = pubKey || '';
         signature = signatureStr || '';
         source = 'portkey';
