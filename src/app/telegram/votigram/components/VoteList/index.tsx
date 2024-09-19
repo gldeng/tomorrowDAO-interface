@@ -278,7 +278,11 @@ export default function VoteList(props: IVoteListProps) {
         className="rules-wrap"
       />
       <h3 className="font-16-20-weight text-white mb-[8px] text-center">
-        🌈 {voteMain?.listTitle}
+        <span
+          dangerouslySetInnerHTML={{
+            __html: `${voteMain?.listTitle}`,
+          }}
+        ></span>
       </h3>
       <div className="banner">
         <Carousel autoplay dots={(voteMain?.topBannerImages?.length ?? 0) > 1}>
@@ -469,6 +473,7 @@ export default function VoteList(props: IVoteListProps) {
                 onClick={() => {
                   nftMissingModalRef.current?.close();
                 }}
+                disabled={true}
               >
                 Confirm
               </Button>
