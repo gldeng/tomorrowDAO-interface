@@ -216,8 +216,20 @@ function SceneLoading(props: ISceneLoadingProps) {
         style={{
           display: isTimeout ? 'none' : 'block',
         }}
-        title={`🌈 ${loginScreen?.title}`}
-        description={loginScreen?.subtitle ?? ''}
+        title={
+          <span
+            dangerouslySetInnerHTML={{
+              __html: `${loginScreen?.title}`,
+            }}
+          ></span>
+        }
+        description={
+          <span
+            dangerouslySetInnerHTML={{
+              __html: loginScreen?.subtitle ?? '',
+            }}
+          ></span>
+        }
         imageNode={<ImageLoveNode />}
         foot={
           <div className="scene-loading-foot">

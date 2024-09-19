@@ -113,6 +113,7 @@ export enum AllProposalStatusString {
   'BelowThreshold' = 'BelowThreshold',
   'Challenged' = 'Challenged',
   'Vetoed' = 'Vetoed',
+  'Published' = 'Published',
 }
 // for filter
 export const ProposalStatusFilters = [
@@ -123,6 +124,7 @@ export const ProposalStatusFilters = [
   AllProposalStatusString.Vetoed,
   AllProposalStatusString.PendingVote,
   AllProposalStatusString.Challenged,
+  AllProposalStatusString.Published,
 ];
 export const ProposalStatusReplaceMap: Partial<Record<AllProposalStatusString, string>> = {
   [AllProposalStatusString.PendingVote]: 'Pending Vote',

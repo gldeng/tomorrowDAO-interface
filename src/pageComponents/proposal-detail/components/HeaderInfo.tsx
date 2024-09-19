@@ -22,7 +22,8 @@ import { useWebLogin } from 'aelf-web-login';
 import { fetchProposalDetail } from 'api/request';
 import { useAsyncEffect } from 'ahooks';
 import { useParams } from 'next/navigation';
-
+import { tagColorMap } from 'app/dao/[aliasName]/constants';
+type TagColorKey = keyof typeof tagColorMap;
 // import ProposalDetailFile from 'assets/imgs/proposal-detail-file.svg';
 interface IHeaderInfoProps {
   proposalDetailData: IProposalDetailData;
@@ -92,16 +93,17 @@ const HeaderInfo = (props: IHeaderInfoProps) => {
     const res = await fetchProposalDetail(params);
     setCanExecute(res?.data?.canExecute);
   }, [wallet.address]);
+  const proposalStatus = proposalDetailData.proposalStatus as TagColorKey;
   return (
     <BoxWrapper>
       <div className="flex justify-between items-start">
         <div className="flex gap-2 lg:flex-row flex-col">
           <DetailTag
             customStyle={{
-              text: getProposalStatusText(proposalDetailData.proposalStatus),
+              text: getProposalStatusText(proposalStatus),
               height: 20,
-              color: '#F8B042',
-              bgColor: '#FEF7EC',
+              color: tagColorMap[proposalStatus]?.textColor,
+              bgColor: tagColorMap[proposalStatus]?.bgColor,
             }}
             className="max-content"
           />

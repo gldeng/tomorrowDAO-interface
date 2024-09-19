@@ -177,17 +177,21 @@ export default function VoteItem(props: IVoteItemProps) {
         ) : (
           <div className="vote-amount-wrap">
             <h3 className="vote-amount font-14-18">{BigNumber(item.pointsAmount).toFormat()}</h3>
-            {index === 0 ? (
-              <Tooltip
-                placement="topRight"
-                title={'Tap coin button to earn more points!'}
-                open={isToolTipVisible}
-                overlayClassName="telegram-like-tooltip"
-              >
-                {voteAmountIncreseIcon}
-              </Tooltip>
-            ) : (
-              voteAmountIncreseIcon
+            {!disableOperation && (
+              <>
+                {index === 0 ? (
+                  <Tooltip
+                    placement="topRight"
+                    title={'Tap coin button to earn more points!'}
+                    open={isToolTipVisible}
+                    overlayClassName="telegram-like-tooltip"
+                  >
+                    {voteAmountIncreseIcon}
+                  </Tooltip>
+                ) : (
+                  voteAmountIncreseIcon
+                )}
+              </>
             )}
           </div>
         )}

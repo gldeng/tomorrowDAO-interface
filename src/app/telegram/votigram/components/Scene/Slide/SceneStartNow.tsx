@@ -11,8 +11,20 @@ function SceneStartNow(props: ISceneStartNowProps) {
   return (
     <Scene
       className="scene-start-now"
-      title={`🤑 ${earnScreen?.title}`}
-      description={earnScreen?.subtitle ?? ''}
+      title={
+        <span
+          dangerouslySetInnerHTML={{
+            __html: `${earnScreen?.title}`,
+          }}
+        ></span>
+      }
+      description={
+        <span
+          dangerouslySetInnerHTML={{
+            __html: earnScreen?.subtitle ?? '',
+          }}
+        ></span>
+      }
       imageNode={
         <div className="start-now-image-wrap">
           <img src={'/images/tg/gift.png'} width={175} height={205} alt={''} />
