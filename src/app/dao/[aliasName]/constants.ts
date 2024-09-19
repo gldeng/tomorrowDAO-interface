@@ -74,6 +74,10 @@ export const tagColorMap = {
     bgColor: '#F0F1F3',
     textColor: '#687083',
   },
+  [AllProposalStatusString.Published]: {
+    bgColor: '#F0F1F3',
+    textColor: '#687083',
+  },
 };
 // the proposal is created by network dao, not tmrw dao
 export const TMRWCreateProposal = 0;

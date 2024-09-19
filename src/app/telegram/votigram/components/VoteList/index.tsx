@@ -35,14 +35,6 @@ export default function VoteList(props: IVoteListProps) {
   const retryDrawerRef = useRef<ICommonDrawerRef>(null);
   const { onShowMore } = props;
   const nftMissingModalRef = useRef<ICommonModalRef>(null);
-  const { disableOperation } = useNftBalanceChange({
-    openModal: () => {
-      nftMissingModalRef.current?.open();
-    },
-    closeModal: () => {
-      nftMissingModalRef.current?.close();
-    },
-  });
 
   // const [isLoading, setIsLoading] = useState(true);
   const [currentVoteItem, setCurrentVoteItem] = useState<IRankingListResItem | null>(null);
@@ -53,7 +45,6 @@ export default function VoteList(props: IVoteListProps) {
   const retryFn = useRef<() => Promise<void>>();
   const rankingListResRef = useRef<IRankingListRes | null>(null);
   const rankListLoadingRef = useRef(false);
-  const reGetRankingListFnRef = useRef<() => Promise<void>>();
   const isIgnoreWsData = useRef(false);
   const reportQueue = useRef<ILikeItem[]>([]);
 
@@ -81,13 +72,26 @@ export default function VoteList(props: IVoteListProps) {
       manual: true,
     },
   );
-  const reGetRankingListFn = async () => {
-    isIgnoreWsData.current = true;
-    setWsRankList([]);
-    await getRankingListAsync();
-    isIgnoreWsData.current = false;
-  };
-  reGetRankingListFnRef.current = reGetRankingListFn;
+  const { data: canVoteAmountRes, run: getCanVoteAmountRes } = useRequest(
+    async () => {
+      const res = await getRankingList({ chainId: curChain });
+      return res;
+    },
+    {
+      manual: true,
+    },
+  );
+  const { disableOperation } = useNftBalanceChange({
+    openModal: () => {
+      nftMissingModalRef.current?.open();
+    },
+    closeModal: () => {
+      nftMissingModalRef.current?.close();
+    },
+    onNftBalanceChange: () => {
+      getCanVoteAmountRes();
+    },
+  });
   rankingListResRef.current = rankList ?? null;
   rankListLoadingRef.current = rankListLoading;
   const handleStartWebSocket = async () => {
@@ -149,7 +153,6 @@ export default function VoteList(props: IVoteListProps) {
       setIsToolTipVisible(true);
       loadingDrawerRef.current?.close();
       getRankingListFn();
-      handleStartWebSocket();
       setRenderPoints(res?.data?.totalPoints ?? 0);
     } catch (error) {
       console.log('requestVoteStatus, error', error);
@@ -192,7 +195,6 @@ export default function VoteList(props: IVoteListProps) {
         } else {
           loadingDrawerRef.current?.close();
           getRankingListFn();
-          handleStartWebSocket();
         }
       }
     } catch (error) {
@@ -201,12 +203,11 @@ export default function VoteList(props: IVoteListProps) {
     }
   };
   useAsyncEffect(async () => {
-    const res = await getRankingListAsync();
-    if ((res?.data?.canVoteAmount ?? 0) <= 0) {
-      handleStartWebSocket();
-    }
+    getCanVoteAmountRes();
+    await getRankingListAsync();
+    handleStartWebSocket();
   }, []);
-  const canVote = (rankList?.data?.canVoteAmount ?? 0) > 0;
+  const canVote = (canVoteAmountRes?.data?.canVoteAmount ?? 0) > 0;
   useEffect(() => {
     function fetchAndReceiveWs() {
       if (!socket) {
@@ -218,7 +219,6 @@ export default function VoteList(props: IVoteListProps) {
         const newProposalId = data?.pointsList?.[0]?.proposalId;
         const oldProposalId = rankingListResRef.current?.data?.rankingList?.[0]?.proposalId;
         if (newProposalId !== oldProposalId && !rankListLoadingRef.current) {
-          // reGetRankingListFnRef.current?.();
           window.location.reload();
           return;
         }
@@ -302,7 +302,7 @@ export default function VoteList(props: IVoteListProps) {
         </li>
         <li className="remaining-vote">
           <h3 className="font-14-18">Remaining vote</h3>
-          <p className="font-18-22-weight">{rankList?.data?.canVoteAmount ?? 0}</p>
+          <p className="font-18-22-weight">{canVoteAmountRes?.data?.canVoteAmount ?? 0}</p>
         </li>
       </ul>
 
@@ -473,7 +473,6 @@ export default function VoteList(props: IVoteListProps) {
                 onClick={() => {
                   nftMissingModalRef.current?.close();
                 }}
-                disabled={true}
               >
                 Confirm
               </Button>

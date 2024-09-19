@@ -9,6 +9,7 @@ import SignalR from 'utils/socket/signalr';
 interface nftBalanceChangeProps {
   openModal: () => void;
   closeModal: () => void;
+  onNftBalanceChange: (nftItem: INftBalanceChange) => void;
 }
 
 interface INftBalanceChange {
@@ -18,7 +19,7 @@ interface INftBalanceChange {
   address: string;
 }
 export default function useNftBalanceChange(params: nftBalanceChangeProps) {
-  const { openModal, closeModal } = params;
+  const { openModal, closeModal, onNftBalanceChange } = params;
   const [disableOperation, setDisableOperation] = useState(false);
   const { wallet } = useWebLogin();
   useAsyncEffect(async () => {
@@ -29,7 +30,7 @@ export default function useNftBalanceChange(params: nftBalanceChangeProps) {
       },
       { chain: curChain },
     );
-    console.log('balanceInfo', balanceInfo);
+    console.log('init get balanceInfo', balanceInfo);
     const { balance } = balanceInfo;
     if (balance === 0) {
       setDisableOperation(true);
@@ -50,6 +51,7 @@ export default function useNftBalanceChange(params: nftBalanceChangeProps) {
       socket = socketInstance;
       socketInstance.registerHandler('ReceiveUserBalanceProduce', (nftItem: INftBalanceChange) => {
         console.log('ReceiveUserBalanceProduce', nftItem);
+        onNftBalanceChange(nftItem);
         if (nftItem.nowAmount === 0 && nftItem.symbol === nftSymbol) {
           setDisableOperation(true);
           openModal();
