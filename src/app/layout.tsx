@@ -26,8 +26,8 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
           content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover, user-scalable=no"
         ></meta>
         {/* eslint-disable-next-line @next/next/no-sync-scripts */}
-        <script src="https://telegram.org/js/telegram-web-app.js"></script>
         <VconsoleScript />
+        <script src="https://telegram.org/js/telegram-web-app.js"></script>
         {/* Google Tag Manager  */}
         {/* eslint-disable-next-line @next/next/inline-script-id */}
         <Script>

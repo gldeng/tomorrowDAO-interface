@@ -98,6 +98,11 @@
     font-style: normal;
     font-weight: 590;
     line-height: 18px;
+    &.disabled {
+      color: var(--Text-2, #DDDFFF);
+      background: var(--Interactive-3, #362984);
+      opacity: 0.35;
+    }
   }
   .vote-amount {
    @apply text-[#51FF00] font-[590] mr-[8px]; 
