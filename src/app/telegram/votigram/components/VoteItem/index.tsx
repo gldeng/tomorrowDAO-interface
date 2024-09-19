@@ -21,6 +21,7 @@ interface IVoteItemProps {
   item: IRankingListResItem;
   isToolTipVisible?: boolean;
   onLikeClick?: () => void;
+  disableOperation?: boolean;
 }
 const increseIconDomCreate = (top: number, right: number) => {
   const div = document.createElement('div');
@@ -37,10 +38,10 @@ export default function VoteItem(props: IVoteItemProps) {
     onVote,
     item,
     canVote,
-    onShowMore,
     onReportClickCount,
     isToolTipVisible,
     onLikeClick,
+    disableOperation,
   } = props;
   const isRankIcon = rankIndex.includes(index);
   const domRef = useRef<HTMLDivElement>(null);
@@ -67,6 +68,7 @@ export default function VoteItem(props: IVoteItemProps) {
   };
 
   const handleIncrese = () => {
+    if (disableOperation) return;
     if (increseDomRef.current) {
       const rect = increseDomRef.current.getBoundingClientRect();
       const { top, right } = rect;
@@ -164,8 +166,9 @@ export default function VoteItem(props: IVoteItemProps) {
         </div>
         {canVote ? (
           <div
-            className="vote-button"
+            className={`${disableOperation ? 'disabled' : ''} vote-button`}
             onClick={() => {
+              if (disableOperation) return;
               onVote?.(item);
             }}
           >

@@ -18,6 +18,7 @@ export interface IConfigContent {
     };
     listTitle: string;
     topBannerImages: string[];
+    nftImage: string;
   };
 }
 

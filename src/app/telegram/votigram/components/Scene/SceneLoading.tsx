@@ -9,7 +9,6 @@ import { nftTokenTransfer, nftTokenTransferStatus, reportUserSource } from 'api/
 import { curChain, nftSymbol } from 'config';
 import { retryWrap } from 'utils/request';
 import { useWebLogin } from 'aelf-web-login';
-import { GetBalanceByContract } from 'contract/callContract';
 import { useConfig } from 'components/CmsGlobalConfig/type';
 import Footer from '../Footer';
 import TimeoutTip from '../TimeoutTip';
@@ -57,19 +56,7 @@ function SceneLoading(props: ISceneLoadingProps) {
   const enterNextScene = async (isAlreadyClaimed?: boolean) => {
     setPercent(100);
     try {
-      const balanceInfo = await GetBalanceByContract(
-        {
-          symbol: nftSymbol,
-          owner: wallet.address,
-        },
-        { chain: curChain },
-      );
-      const { balance } = balanceInfo;
-      if (balance === 0) {
-        missNftDrawerRef.current?.open();
-      } else {
-        onFinish?.(isAlreadyClaimed);
-      }
+      onFinish?.(isAlreadyClaimed);
     } catch (error) {
       onFinish?.(isAlreadyClaimed);
     }

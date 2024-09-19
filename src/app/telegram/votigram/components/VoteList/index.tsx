@@ -8,8 +8,8 @@ import Empty from '../Empty';
 import { fetchRankingVoteStatus, getRankingList, rankingVote, rankingVoteLike } from 'api/request';
 import { curChain, rpcUrlTDVW, sideChainCAContractAddress, voteAddress } from 'config';
 import { useAsyncEffect, useRequest } from 'ahooks';
-import { InfoCircleOutlined } from '@aelf-design/icons';
 import { getRawTransaction } from 'utils/transaction';
+import CommonModal, { ICommonModalRef } from '../CommonModal';
 import { useWebLogin } from 'aelf-web-login';
 import { EVoteOption } from 'types/vote';
 import { retryWrap } from 'utils/request';
@@ -17,12 +17,13 @@ import { VoteStatus } from 'types/telegram';
 import Loading from '../Loading';
 import './index.css';
 import BigNumber from 'bignumber.js';
-import SignalRManager from 'utils/socket';
+import PointSignalr from 'utils/socket/point-signalr';
 import SignalR from 'utils/socket/signalr';
 import { IPointsListRes, IWsPointsItem } from './type';
 import { preloadImages } from 'utils/file';
 import { useConfig } from 'components/CmsGlobalConfig/type';
 import RuleButton from '../RuleButton';
+import useNftBalanceChange from '../../hook/use-nft-balance-change';
 
 interface IVoteListProps {
   onShowMore?: (item: IRankingListResItem) => void;
@@ -33,6 +34,16 @@ export default function VoteList(props: IVoteListProps) {
   const ruleDrawerRef = useRef<ICommonDrawerRef>(null);
   const retryDrawerRef = useRef<ICommonDrawerRef>(null);
   const { onShowMore } = props;
+  const nftMissingModalRef = useRef<ICommonModalRef>(null);
+  const { disableOperation } = useNftBalanceChange({
+    openModal: () => {
+      nftMissingModalRef.current?.open();
+    },
+    closeModal: () => {
+      nftMissingModalRef.current?.close();
+    },
+  });
+
   // const [isLoading, setIsLoading] = useState(true);
   const [currentVoteItem, setCurrentVoteItem] = useState<IRankingListResItem | null>(null);
   const [wsRankList, setWsRankList] = useState<IWsPointsItem[]>([]);
@@ -80,7 +91,7 @@ export default function VoteList(props: IVoteListProps) {
   rankingListResRef.current = rankList ?? null;
   rankListLoadingRef.current = rankListLoading;
   const handleStartWebSocket = async () => {
-    SignalRManager.getInstance()
+    PointSignalr.getInstance()
       .initSocket()
       .then((socketInstance) => {
         setSocket(socketInstance);
@@ -303,6 +314,7 @@ export default function VoteList(props: IVoteListProps) {
                 <Flipped key={item.alias} flipId={item.alias}>
                   <div>
                     <VoteItem
+                      disableOperation={disableOperation}
                       index={index}
                       item={item as IRankingListResItem}
                       canVote={canVote}
@@ -436,6 +448,31 @@ export default function VoteList(props: IVoteListProps) {
             >
               Got it
             </Button>
+          </div>
+        }
+      />
+      <CommonModal
+        ref={nftMissingModalRef}
+        title="Get a TomorrowPass-1"
+        content={
+          <div className="nft-miss-modal-content">
+            <img
+              src={voteMain?.nftImage}
+              alt=""
+              width={96}
+              height={96}
+              className="rounded-[16px] mt-[24px]"
+            />
+            <p className="my-[24px]">You need to have a TomorrowPass-1 NFT to vote.</p>
+            <div className="mt-[16px] w-full">
+              <Button
+                onClick={() => {
+                  nftMissingModalRef.current?.close();
+                }}
+              >
+                Confirm
+              </Button>
+            </div>
           </div>
         }
       />

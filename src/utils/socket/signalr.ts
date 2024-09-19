@@ -1,4 +1,5 @@
 import { HubConnection, HubConnectionBuilder, HttpTransportType } from '@microsoft/signalr';
+import { message } from 'antd';
 // import { IBidInfo, IBidInfosResponse } from './types';
 
 type SignalRParams = {
@@ -9,7 +10,7 @@ type SignalRParams = {
 
 type HandlerFn = (data: any) => void;
 
-const messageType: Array<string> = ['ReceivePointsProduce'];
+const messageType: Array<string> = ['ReceivePointsProduce', 'ReceiveUserBalanceProduce'];
 
 export default class SignalR {
   private connection: HubConnection | null;
@@ -33,6 +34,7 @@ export default class SignalR {
   initAndStart = () => {
     this.connection?.onclose((err) => {
       console.log('signalR---onclose', err);
+      message.error('The connection to the server is lost. Please refresh and try again.');
     });
 
     this.connection?.onreconnecting((err) => {

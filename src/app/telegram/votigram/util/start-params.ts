@@ -35,6 +35,6 @@ export const getReferrerCode = () => {
   } else {
     referrerCode = startParam;
   }
-  console.log('referrerCode', referrerCode, startParam);
+  console.log('referrerCode is:', referrerCode, 'startParam is:', startParam);
   return referrerCode;
 };
