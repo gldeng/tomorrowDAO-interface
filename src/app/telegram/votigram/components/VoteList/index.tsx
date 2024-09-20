@@ -72,24 +72,12 @@ export default function VoteList(props: IVoteListProps) {
       manual: true,
     },
   );
-  const { data: canVoteAmountRes, run: getCanVoteAmountRes } = useRequest(
-    async () => {
-      const res = await getRankingList({ chainId: curChain });
-      return res;
-    },
-    {
-      manual: true,
-    },
-  );
   const { disableOperation } = useNftBalanceChange({
     openModal: () => {
       nftMissingModalRef.current?.open();
     },
     closeModal: () => {
       nftMissingModalRef.current?.close();
-    },
-    onNftBalanceChange: () => {
-      getCanVoteAmountRes();
     },
   });
   rankingListResRef.current = rankList ?? null;
@@ -203,11 +191,10 @@ export default function VoteList(props: IVoteListProps) {
     }
   };
   useAsyncEffect(async () => {
-    getCanVoteAmountRes();
     await getRankingListAsync();
     handleStartWebSocket();
   }, []);
-  const canVote = (canVoteAmountRes?.data?.canVoteAmount ?? 0) > 0;
+  const canVote = (rankList?.data?.canVoteAmount ?? 0) > 0;
   useEffect(() => {
     function fetchAndReceiveWs() {
       if (!socket) {
@@ -302,7 +289,7 @@ export default function VoteList(props: IVoteListProps) {
         </li>
         <li className="remaining-vote">
           <h3 className="font-14-18">Remaining vote</h3>
-          <p className="font-18-22-weight">{canVoteAmountRes?.data?.canVoteAmount ?? 0}</p>
+          <p className="font-18-22-weight">{rankList?.data?.canVoteAmount ?? 0}</p>
         </li>
       </ul>
 
