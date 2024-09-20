@@ -18,6 +18,10 @@ export default class SignalR {
   private handlerMap: Map<string, Array<HandlerFn>>;
   private startCb: () => void;
 
+  get connectionState() {
+    return this.connection?.state;
+  }
+
   constructor({ url }: SignalRParams, startCb: () => void) {
     this.url = url;
     this.startCb = startCb;
