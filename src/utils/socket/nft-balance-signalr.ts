@@ -5,9 +5,9 @@ class SignalRManager {
   private static instance: SignalRManager | null = null;
   private socket: SignalR | null = null;
 
-  private constructor() {
-    //
-  }
+  // private constructor() {
+  //   //
+  // }
 
   public static getInstance(): SignalRManager {
     if (SignalRManager.instance === null) {
@@ -39,3 +39,5 @@ class SignalRManager {
 }
 
 export default SignalRManager;
+const nftBalanceSignalr = new SignalRManager();
+export { nftBalanceSignalr };
