@@ -11,6 +11,7 @@ import { preloadImages } from 'utils/file';
 import { useConfig } from 'components/CmsGlobalConfig/type';
 import InvitedSuccess from './components/InviteedSuccess';
 import { TelegramPlatform } from '@portkey/did-ui-react';
+import { getReferrerCode } from './util/start-params';
 
 const imageLists = [
   '/images/tg/circular-progress.png',
@@ -60,7 +61,7 @@ export default function Page() {
   }, []);
 
   const enterMainPage = () => {
-    const referrerCode = TelegramPlatform.getInitData()?.start_param;
+    const referrerCode = getReferrerCode();
     if (referrerCode) {
       setScene(VotigramScene.InvitedSuccess);
     } else {

@@ -5,14 +5,15 @@ import { useEffect, useRef, useState } from 'react';
 import { eventBus, GetTokenLogin } from 'utils/myEvent';
 import { TransferStatus } from 'types/telegram';
 import CommonDrawer, { ICommonDrawerRef } from '../CommonDrawer';
-import { nftTokenTransfer, nftTokenTransferStatus } from 'api/request';
+import { nftTokenTransfer, nftTokenTransferStatus, reportUserSource } from 'api/request';
 import { curChain, nftSymbol } from 'config';
 import { retryWrap } from 'utils/request';
 import { useWebLogin } from 'aelf-web-login';
-import { GetBalanceByContract } from 'contract/callContract';
 import { useConfig } from 'components/CmsGlobalConfig/type';
 import Footer from '../Footer';
 import TimeoutTip from '../TimeoutTip';
+import { TelegramPlatform } from '@portkey/did-ui-react';
+import { parseStartAppParams } from '../../util/start-params';
 
 interface ISceneLoadingProps {
   onFinish?: (isAlreadyClaimed?: boolean) => void;
@@ -44,8 +45,8 @@ function SceneLoading(props: ISceneLoadingProps) {
   const [isTimeout, setIsTimeout] = useState(false);
   const retryFn = useRef<() => Promise<void>>();
   const retryDrawerRef = useRef<ICommonDrawerRef>(null);
-  const missNftDrawerRef = useRef<ICommonDrawerRef>(null);
   const requestNftTransferRef = useRef<() => Promise<void>>();
+  const reportSourceRef = useRef<() => void>();
   const fakeProgressTimer = useRef<NodeJS.Timeout>();
   const timeoutRef = useRef<NodeJS.Timeout>();
   const percentRef = useRef(0);
@@ -54,19 +55,7 @@ function SceneLoading(props: ISceneLoadingProps) {
   const enterNextScene = async (isAlreadyClaimed?: boolean) => {
     setPercent(100);
     try {
-      const balanceInfo = await GetBalanceByContract(
-        {
-          symbol: nftSymbol,
-          owner: wallet.address,
-        },
-        { chain: curChain },
-      );
-      const { balance } = balanceInfo;
-      if (balance === 0) {
-        missNftDrawerRef.current?.open();
-      } else {
-        onFinish?.(isAlreadyClaimed);
-      }
+      onFinish?.(isAlreadyClaimed);
     } catch (error) {
       onFinish?.(isAlreadyClaimed);
     }
@@ -124,12 +113,25 @@ function SceneLoading(props: ISceneLoadingProps) {
   };
   requestNftTransferRef.current = requestNftTransfer;
 
+  const reportSource = () => {
+    const startParam = TelegramPlatform.getInitData()?.start_param ?? '';
+    const params = parseStartAppParams(startParam);
+    const source = params.source ?? '';
+    if (source) {
+      reportUserSource({
+        chainId: curChain,
+        source: source,
+      });
+    }
+  };
+  reportSourceRef.current = reportSource;
   useEffect(() => {
     const callBack = () => {
       clearInterval(fakeProgressTimer.current);
       setPercent(loadingCompletePercent);
       setProcessText(loginScreen?.progressTips?.[1] ?? '');
       requestNftTransferRef.current?.();
+      reportSourceRef.current?.();
     };
     eventBus.on(GetTokenLogin, callBack);
     return () => {
@@ -181,40 +183,24 @@ function SceneLoading(props: ISceneLoadingProps) {
           </div>
         }
       />
-      <CommonDrawer
-        title="TomorrowPass NFT Missing"
-        ref={missNftDrawerRef}
-        onClose={() => {
-          onFinish?.();
-        }}
-        body={
-          <div className="flex flex-col items-center">
-            <LoadingFailedIcon />
-            <p className="font-14-18 mt-[24px] text-center">
-              Oops! It looks like you don’t have the required TomorrowPass NFT. If you’ve lost it,
-              you can grab one at{' '}
-              <a href="https://www.eforest.finance/" target="_blank" rel="noopener noreferrer">
-                eforest.finance
-              </a>
-              .
-            </p>
-            <Button
-              type="primary"
-              onClick={() => {
-                missNftDrawerRef.current?.close();
-              }}
-            >
-              Close
-            </Button>
-          </div>
-        }
-      />
       <Scene
         style={{
           display: isTimeout ? 'none' : 'block',
         }}
-        title={`🌈 ${loginScreen?.title}`}
-        description={loginScreen?.subtitle ?? ''}
+        title={
+          <span
+            dangerouslySetInnerHTML={{
+              __html: `${loginScreen?.title}`,
+            }}
+          ></span>
+        }
+        description={
+          <span
+            dangerouslySetInnerHTML={{
+              __html: loginScreen?.subtitle ?? '',
+            }}
+          ></span>
+        }
         imageNode={<ImageLoveNode />}
         foot={
           <div className="scene-loading-foot">

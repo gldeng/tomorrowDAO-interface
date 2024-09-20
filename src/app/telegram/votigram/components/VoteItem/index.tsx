@@ -21,6 +21,7 @@ interface IVoteItemProps {
   item: IRankingListResItem;
   isToolTipVisible?: boolean;
   onLikeClick?: () => void;
+  disableOperation?: boolean;
 }
 const increseIconDomCreate = (top: number, right: number) => {
   const div = document.createElement('div');
@@ -37,10 +38,10 @@ export default function VoteItem(props: IVoteItemProps) {
     onVote,
     item,
     canVote,
-    onShowMore,
     onReportClickCount,
     isToolTipVisible,
     onLikeClick,
+    disableOperation,
   } = props;
   const isRankIcon = rankIndex.includes(index);
   const domRef = useRef<HTMLDivElement>(null);
@@ -67,6 +68,7 @@ export default function VoteItem(props: IVoteItemProps) {
   };
 
   const handleIncrese = () => {
+    if (disableOperation) return;
     if (increseDomRef.current) {
       const rect = increseDomRef.current.getBoundingClientRect();
       const { top, right } = rect;
@@ -164,8 +166,9 @@ export default function VoteItem(props: IVoteItemProps) {
         </div>
         {canVote ? (
           <div
-            className="vote-button"
+            className={`${disableOperation ? 'disabled' : ''} vote-button`}
             onClick={() => {
+              if (disableOperation) return;
               onVote?.(item);
             }}
           >
@@ -174,17 +177,21 @@ export default function VoteItem(props: IVoteItemProps) {
         ) : (
           <div className="vote-amount-wrap">
             <h3 className="vote-amount font-14-18">{BigNumber(item.pointsAmount).toFormat()}</h3>
-            {index === 0 ? (
-              <Tooltip
-                placement="topRight"
-                title={'Tap coin button to earn more points!'}
-                open={isToolTipVisible}
-                overlayClassName="telegram-like-tooltip"
-              >
-                {voteAmountIncreseIcon}
-              </Tooltip>
-            ) : (
-              voteAmountIncreseIcon
+            {!disableOperation && (
+              <>
+                {index === 0 ? (
+                  <Tooltip
+                    placement="topRight"
+                    title={'Tap coin button to earn more points!'}
+                    open={isToolTipVisible}
+                    overlayClassName="telegram-like-tooltip"
+                  >
+                    {voteAmountIncreseIcon}
+                  </Tooltip>
+                ) : (
+                  voteAmountIncreseIcon
+                )}
+              </>
             )}
           </div>
         )}

@@ -12,8 +12,20 @@ function SceneContinue(props: ISceneContinueProps) {
   return (
     <Scene
       className="scene-continue"
-      title={`🌈  ${loginScreen?.title}`}
-      description={loginScreen?.subtitle ?? ''}
+      title={
+        <span
+          dangerouslySetInnerHTML={{
+            __html: `${loginScreen?.title}`,
+          }}
+        ></span>
+      }
+      description={
+        <span
+          dangerouslySetInnerHTML={{
+            __html: loginScreen?.subtitle ?? '',
+          }}
+        ></span>
+      }
       imageNode={<ImageLoveNode />}
       foot={
         <div className="scene-continue-foot">

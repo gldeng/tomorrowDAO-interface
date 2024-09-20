@@ -65,3 +65,9 @@
   flex-shrink: 0;
   @apply w-[64px] h-[64px] flex-center rounded-[0.5rem] bg-white;
 }
+.nft-miss-modal-content {
+  @apply flex flex-col items-center;
+  button {
+    @apply w-full;
+  }
+}
