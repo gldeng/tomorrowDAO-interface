@@ -28,6 +28,10 @@ const ProposalDetails = (props: IProposalDetailsProps) => {
     }
   }, [aliasName]);
 
+  useEffect(() => {
+    console.log('ssrData', props.ssrData);
+  }, []);
+
   return (
     <div className="proposal-details-wrapper">
       {!proposalDetailData.daoId ? (

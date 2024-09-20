@@ -9,7 +9,7 @@ import SignalR from 'utils/socket/signalr';
 interface nftBalanceChangeProps {
   openModal: () => void;
   closeModal: () => void;
-  onNftBalanceChange: (nftItem: INftBalanceChange) => void;
+  onNftBalanceChange?: (nftItem: INftBalanceChange) => void;
 }
 
 interface INftBalanceChange {
@@ -51,7 +51,7 @@ export default function useNftBalanceChange(params: nftBalanceChangeProps) {
       socket = socketInstance;
       socketInstance.registerHandler('ReceiveUserBalanceProduce', (nftItem: INftBalanceChange) => {
         console.log('ReceiveUserBalanceProduce', nftItem);
-        onNftBalanceChange(nftItem);
+        onNftBalanceChange?.(nftItem);
         if (nftItem.nowAmount === 0 && nftItem.symbol === nftSymbol) {
           setDisableOperation(true);
           openModal();

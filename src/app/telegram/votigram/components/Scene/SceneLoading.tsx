@@ -45,7 +45,6 @@ function SceneLoading(props: ISceneLoadingProps) {
   const [isTimeout, setIsTimeout] = useState(false);
   const retryFn = useRef<() => Promise<void>>();
   const retryDrawerRef = useRef<ICommonDrawerRef>(null);
-  const missNftDrawerRef = useRef<ICommonDrawerRef>(null);
   const requestNftTransferRef = useRef<() => Promise<void>>();
   const reportSourceRef = useRef<() => void>();
   const fakeProgressTimer = useRef<NodeJS.Timeout>();
@@ -180,34 +179,6 @@ function SceneLoading(props: ISceneLoadingProps) {
               }}
             >
               Retry
-            </Button>
-          </div>
-        }
-      />
-      <CommonDrawer
-        title="TomorrowPass NFT Missing"
-        ref={missNftDrawerRef}
-        onClose={() => {
-          onFinish?.();
-        }}
-        body={
-          <div className="flex flex-col items-center">
-            <LoadingFailedIcon />
-            <p className="font-14-18 mt-[24px] text-center">
-              Oops! It looks like you don’t have the required TomorrowPass NFT. If you’ve lost it,
-              you can grab one at{' '}
-              <a href="https://www.eforest.finance/" target="_blank" rel="noopener noreferrer">
-                eforest.finance
-              </a>
-              .
-            </p>
-            <Button
-              type="primary"
-              onClick={() => {
-                missNftDrawerRef.current?.close();
-              }}
-            >
-              Close
             </Button>
           </div>
         }
