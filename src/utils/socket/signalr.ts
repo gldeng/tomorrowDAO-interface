@@ -10,7 +10,11 @@ type SignalRParams = {
 
 type HandlerFn = (data: any) => void;
 
-const messageType: Array<string> = ['ReceivePointsProduce', 'ReceiveUserBalanceProduce'];
+const messageType: Array<string> = [
+  'ReceivePointsProduce',
+  'ReceiveUserBalanceProduce',
+  'RequestUserBalanceProduce',
+];
 
 export default class SignalR {
   private connection: HubConnection | null;
@@ -121,21 +125,24 @@ export default class SignalR {
     try {
       if (this.connection?.state === 'Connected') {
         if (rest.length === 0) {
-          this.connection.invoke(name);
+          return this.connection.invoke(name);
         } else if (rest.length === 1) {
-          this.connection.invoke(name, rest[0]);
+          return this.connection.invoke(name, rest[0]);
         } else if (rest.length === 2) {
-          this.connection.invoke(name, rest[0], rest[1]);
+          return this.connection.invoke(name, rest[0], rest[1]);
         } else if (rest.length === 3) {
-          this.connection.invoke(name, rest[0], rest[1], rest[2]);
+          return this.connection.invoke(name, rest[0], rest[1], rest[2]);
         } else {
           console.log('too much params');
+          return null;
         }
       } else {
         console.log('Connection is not in a connected state');
+        return null;
       }
     } catch (err) {
       console.log('subscribeEvent err', err);
+      return null;
     }
   };
 
