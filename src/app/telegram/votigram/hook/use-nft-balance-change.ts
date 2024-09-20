@@ -23,29 +23,6 @@ export default function useNftBalanceChange(params: nftBalanceChangeProps) {
   const { openModal, closeModal, onNftBalanceChange } = params;
   const [disableOperation, setDisableOperation] = useState(false);
   const { wallet } = useWebLogin();
-  useAsyncEffect(async () => {
-    const socket = nftBalanceSignalr.getSocket();
-    console.log('init get balanceInfo connectionState:', socket?.connectionState);
-    if (socket?.connectionState === HubConnectionState.Connected) {
-      return;
-    }
-    const balanceInfo = await GetBalanceByContract(
-      {
-        symbol: nftSymbol,
-        owner: wallet.address,
-      },
-      { chain: curChain },
-    );
-    console.log('init get balanceInfo:', balanceInfo);
-    const { balance } = balanceInfo;
-    if (balance === 0) {
-      setDisableOperation(true);
-      openModal();
-    } else {
-      setDisableOperation(false);
-      closeModal();
-    }
-  }, []);
   useEffect(() => {
     let socket: SignalR | null = null;
     const initSocket = async () => {
@@ -54,6 +31,20 @@ export default function useNftBalanceChange(params: nftBalanceChangeProps) {
         return;
       }
       socket = socketInstance;
+      socketInstance.sendEvent('RequestUserBalanceProduce', {
+        chainId: curChain,
+        address: wallet.address,
+      });
+      socketInstance.registerHandler('RequestUserBalanceProduce', (nftItem: INftBalanceChange) => {
+        console.log('RequestUserBalanceProduce', nftItem);
+        if (nftItem.nowAmount === 0 && nftItem.symbol === nftSymbol) {
+          setDisableOperation(true);
+          openModal();
+        } else {
+          setDisableOperation(false);
+          closeModal();
+        }
+      });
       socketInstance.registerHandler('ReceiveUserBalanceProduce', (nftItem: INftBalanceChange) => {
         console.log('ReceiveUserBalanceProduce', nftItem);
         onNftBalanceChange?.(nftItem);
