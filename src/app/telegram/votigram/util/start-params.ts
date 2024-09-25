@@ -1,4 +1,5 @@
 import { TelegramPlatform } from '@portkey/did-ui-react';
+import qs from 'query-string';
 import { IStartAppParams } from '../type';
 //
 export const AND_CHAR = '_';
@@ -34,6 +35,10 @@ export const getReferrerCode = () => {
     referrerCode = params.referralCode ?? '';
   } else {
     referrerCode = startParam;
+  }
+  if (!referrerCode && typeof window !== 'undefined') {
+    const searchParams = qs.parse(window.location.search);
+    referrerCode = (searchParams.referralCode as string) ?? '';
   }
   console.log('referrerCode is:', referrerCode, 'startParam is:', startParam);
   return referrerCode;

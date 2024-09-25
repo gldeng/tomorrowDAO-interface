@@ -44,6 +44,11 @@
       }
     }
   }
+  .points-entry-button {
+    .TMRWDAO-icon {
+      @apply text-[12px] ml-[2px] cursor-pointer;
+    }
+  }
 
 }
 .votigram-loading-wrap {
@@ -69,5 +74,14 @@
   @apply flex flex-col items-center;
   button {
     @apply w-full;
+  }
+}
+.telegram-common-drawer {
+  .my-points-drawer.telegram-common-drawer-body .drawer-body{
+    @apply px-0;
+  }
+  .my-points-drawer {
+    max-height: 100vh;
+    overflow-y: scroll;
   }
 }
