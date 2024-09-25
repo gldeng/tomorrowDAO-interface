@@ -80,11 +80,11 @@ const jumpExternalList = [
   },
   {
     taskId: UserTaskDetail.ExploreFollowX,
-    url: 'https://twitter.com/tmrwdao',
+    url: 'https://x.com/tmrwdao',
   },
   {
     taskId: UserTaskDetail.ExploreJoinDiscord,
-    url: 'https://discord.gg/tmrwdao',
+    url: 'https://discord.com/invite/gTWkeR5pQB',
   },
 ];
 export const TaskItem = (props: ITaskItemProps) => {
@@ -145,7 +145,9 @@ export const TaskItem = (props: ITaskItemProps) => {
         <h3 className="task-desc-title font-17-22">
           {taskItemMap[taskItem.userTaskDetail]?.title}
         </h3>
-        <p className="task-desc-points font-14-18">+{BigNumber(taskItem.points).toFormat()}</p>
+        <p className="task-desc-points font-14-18-weight">
+          +{BigNumber(taskItem.points).toFormat()}
+        </p>
       </div>
       <div
         className={`task-button flex-center ${taskItem.complete ? 'complete' : ''}`}
