@@ -12,6 +12,7 @@ interface Window {
   NightElf?: {};
   Hammer: any;
   Telegram: any;
+  gtag: any;
 }
 
 interface HTMLAttributes {

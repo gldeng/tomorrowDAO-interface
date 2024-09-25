@@ -1,35 +1,55 @@
 import { useState } from 'react';
 import Assets from 'pageComponents/assets';
 import FootTabBar from '../FootTabBar';
-import MyPoints from '../MyPoints';
+import Task from '../Task';
 import VoteList from '../VoteList';
 import Footer from '../Footer';
 import Referral from '../Referral';
+import { IStackItem, ITabSource } from '../../type';
 
 export interface IMainProps {
   onShowMore?: (item: IRankingListResItem) => void;
 }
+
 export default function Main(props: IMainProps) {
   const { onShowMore } = props;
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeTabStack, setActiveTabStack] = useState<IStackItem[]>([{ path: 0 }]);
+  const activeTab = activeTabStack[activeTabStack.length - 1];
+  const pushStackByValue = (value: number) => {
+    setActiveTabStack([...activeTabStack, { path: value }]);
+  };
+  const activeTabItem = (item: IStackItem) => {
+    setActiveTabStack([...activeTabStack, item]);
+  };
   return (
     <div className="relative z-[1]">
-      {activeTab === 0 && <VoteList onShowMore={onShowMore} />}
-      {activeTab === 1 && <MyPoints />}
-      {activeTab === 2 && <Referral />}
-      {activeTab === 3 && (
+      {activeTab.path === ITabSource.Vote && <VoteList onShowMore={onShowMore} />}
+      <Task
+        style={{
+          display: activeTab.path === ITabSource.Task ? 'block' : 'none',
+        }}
+        show={activeTab.path === ITabSource.Task}
+        activeTabItem={activeTabItem}
+      />
+      {activeTab.path === ITabSource.Referral && <Referral />}
+      {activeTab.path === ITabSource.Asset && (
         <Assets
           redirect={false}
           onBack={() => {
-            setActiveTab(0);
+            const lastItem = activeTabStack[activeTabStack.length - 2];
+            if (lastItem) {
+              pushStackByValue(lastItem.path);
+            } else {
+              pushStackByValue(0);
+            }
           }}
         />
       )}
-      {activeTab !== 3 && (
+      {activeTab.path !== ITabSource.Asset && (
         <FootTabBar
-          value={activeTab}
+          value={activeTab.path}
           onChange={(value: number) => {
-            setActiveTab(value);
+            pushStackByValue(value);
           }}
         />
       )}

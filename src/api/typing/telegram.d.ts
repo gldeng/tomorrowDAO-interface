@@ -216,3 +216,44 @@ interface IReferralBindingStatusRes {
     needBinding: boolean;
   };
 }
+// ------------------
+interface IGetRankPointsResItem {
+  title: string;
+  desc: string;
+  points: number;
+}
+interface IGetRankPointsRes {
+  code: number;
+  data: {
+    totalPoints: number;
+    totalCount: number;
+    data: Array<IGetRankPointsResItem>;
+  };
+}
+
+// ------------------- task list -------------------
+interface IUserTaskItemDetail {
+  userTaskDetail: number;
+  points: number;
+  complete: boolean;
+}
+
+interface IGetTaskListResItem {
+  totalCount: number;
+  userTask: number;
+  data: IUserTaskItemDetail[];
+}
+interface IGetTaskListRes {
+  code: number;
+  data: {
+    taskList: IGetTaskListResItem[];
+  };
+}
+
+// ------------------- complete task item -------------------
+interface ICompleteTaskItemRes {
+  code: string;
+  data: {
+    success: boolean;
+  };
+}
