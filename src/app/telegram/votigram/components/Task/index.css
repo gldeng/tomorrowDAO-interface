@@ -2,29 +2,30 @@
   @apply px-[16px] pt-[1px];
   min-height: calc(100vh - 154px - 32px);
   .title {
-    @apply max-w-[312px] text-center mx-auto;
-    font-family: 'Bowlby One';
-    background: linear-gradient(92deg, #ffe5c2 0%, #e4b5ff 100%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    @apply text-center text-white;
+    img {
+      @apply w-[20px] mr-[4px];
+    }
+  }
+  .task-complete-icon {
+    @apply w-[180px];
   }
   .task-group-item {
     .task-item {
       @apply mt-[8px] h-[64px] p-[12px] flex items-center;
       border-radius: 16px;
-      border: 1px solid var(--Interactive-3, #362984);
-      background: linear-gradient(92deg, #2D1F73 0%, rgba(45, 31, 115, 0.00) 50%);
+      border: 1px solid var(--Border-1, #403493);
+      background: var(--Solid-2, #4600C5);
       .icon-wrap {
         @apply w-[40px] h-[40px] p-[8px] text-[24px];
         border-radius: 8px;
-        background: var(--Interactive-1, #221D51);
+        background: var(--Solid-1, #5222D8);
         svg {
           @apply text-white;
         }
       }
       .task-desc {
-        @apply flex-1 mx-[12px];
+        @apply flex-1 mx-[8px];
         .task-desc-points {
           @apply text-[#51FF00];
         }
@@ -35,26 +36,19 @@
       .task-button {
         @apply w-[57px] h-[34px] cursor-pointer;
         border-radius: 20px;
-        background: linear-gradient(110deg, #B339F6 0%, #6318F5 100%);
-        color: white;
+        background: var(--Text-2, #DDDFFF);
+        color: #4600C5;
         font-size: 16px;
         &.complete {
+          color: #DDDFFF;
+          opacity: 0.35;
           background: var(--Interactive-3, #362984);
-          color: #4C41A9;
         }
       }
       &.complete {
-        .icon-wrap {
-          svg {
-            @apply text-[#362984];
-          }
-        }
         .task-desc {
           .task-desc-points {
-            @apply text-[#362984];
-          }
-          .task-desc-title {
-            @apply text-[#5C4DC9];
+            @apply text-[#ACA6FF];
           }
         }
       }
@@ -62,5 +56,11 @@
   }
   .task-group-item + .task-group-item {
     @apply mt-[24px];
+  }
+}
+.complete-task-modal-content {
+  @apply flex flex-col items-center;
+  button {
+    @apply w-full;
   }
 }

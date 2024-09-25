@@ -236,6 +236,8 @@ interface IUserTaskItemDetail {
   userTaskDetail: number;
   points: number;
   complete: boolean;
+  completeCount: number;
+  taskCount: number;
 }
 
 interface IGetTaskListResItem {

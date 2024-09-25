@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Assets from 'pageComponents/assets';
+import Assets from '../Assets';
 import FootTabBar from '../FootTabBar';
 import Task from '../Task';
 import VoteList from '../VoteList';
