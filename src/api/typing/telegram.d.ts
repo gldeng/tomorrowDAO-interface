@@ -219,7 +219,7 @@ interface IReferralBindingStatusRes {
 // ------------------
 interface IGetRankPointsResItem {
   title: string;
-  desc: string;
+  description: string;
   points: number;
 }
 interface IGetRankPointsRes {
@@ -227,13 +227,13 @@ interface IGetRankPointsRes {
   data: {
     totalPoints: number;
     totalCount: number;
-    data: Array<IGetRankPointsResItem>;
+    items: Array<IGetRankPointsResItem>;
   };
 }
 
 // ------------------- task list -------------------
 interface IUserTaskItemDetail {
-  userTaskDetail: number;
+  userTaskDetail: string;
   points: number;
   complete: boolean;
   completeCount: number;
@@ -242,7 +242,7 @@ interface IUserTaskItemDetail {
 
 interface IGetTaskListResItem {
   totalCount: number;
-  userTask: number;
+  userTask: string;
   data: IUserTaskItemDetail[];
 }
 interface IGetTaskListRes {
@@ -255,7 +255,5 @@ interface IGetTaskListRes {
 // ------------------- complete task item -------------------
 interface ICompleteTaskItemRes {
   code: string;
-  data: {
-    success: boolean;
-  };
+  data: boolean;
 }

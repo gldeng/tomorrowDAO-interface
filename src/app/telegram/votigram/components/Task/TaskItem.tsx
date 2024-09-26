@@ -5,12 +5,14 @@ import { TelegramIcon, UserAddIcon, XIcon, DiscardIcon, LoadingIcon } from 'comp
 import { useState } from 'react';
 import { completeTaskItem } from 'api/request';
 import { curChain } from 'config';
+import { url } from 'inspector';
 
 interface ITaskItemProps {
   taskItem: IUserTaskItemDetail;
   activeTabItem: (item: IStackItem) => void;
-  userTask: number;
+  userTask: string;
   getTaskListFn: () => void;
+  onReportComplete: (task: string, taskDetail: string) => void;
 }
 const openNewPageWaitPageVisible = async (url: string) => {
   if (url.includes('https://t.me')) {
@@ -60,6 +62,10 @@ const taskItemMap: Record<string, { icon: React.ReactNode; title: string; event?
     icon: <DiscardIcon />,
     title: 'Join Discord',
   },
+  [UserTaskDetail.ExploreForwardX]: {
+    icon: <XIcon />,
+    title: 'RT Post',
+  },
   [UserTaskDetail.ExploreCumulateFiveInvite]: {
     icon: <UserAddIcon />,
     title: 'Invite 5 friends',
@@ -73,6 +79,11 @@ const taskItemMap: Record<string, { icon: React.ReactNode; title: string; event?
     title: 'Invite 20 friends',
   },
 };
+const needShowTaskProgress: string[] = [
+  UserTaskDetail.ExploreCumulateFiveInvite,
+  UserTaskDetail.ExploreCumulateTenInvite,
+  UserTaskDetail.ExploreCumulateTwentyInvite,
+];
 const jumpExternalList = [
   {
     taskId: UserTaskDetail.ExploreJoinTgChannel,
@@ -86,26 +97,32 @@ const jumpExternalList = [
     taskId: UserTaskDetail.ExploreJoinDiscord,
     url: 'https://discord.com/invite/gTWkeR5pQB',
   },
+  {
+    taskid: UserTaskDetail.ExploreForwardX,
+    url: 'https://x.com/tmrwdao/status/1827955375070650747',
+  },
 ];
 export const TaskItem = (props: ITaskItemProps) => {
-  const { taskItem, activeTabItem, userTask, getTaskListFn } = props;
+  const { taskItem, activeTabItem, userTask, onReportComplete } = props;
   const [isLoading, setIsLoading] = useState(false);
   const activeTabWithSource = (target: number) => {
     activeTabItem({ path: target, source: ITabSource.Task });
   };
   const jumpAndRefresh = async (taskId: UserTaskDetail) => {
-    setIsLoading(true);
     try {
       const jumpItem = jumpExternalList.find((item) => item.taskId === taskItem.userTaskDetail);
       if (jumpItem) {
         await openNewPageWaitPageVisible(jumpItem.url);
+        setIsLoading(true);
         const reportCompleteRes = await completeTaskItem({
           chainId: curChain,
           userTask: userTask,
           userTaskDetail: taskId,
         });
+        if (reportCompleteRes.data) {
+          onReportComplete(userTask, taskId);
+        }
       }
-      getTaskListFn();
     } catch (error) {
       //
     } finally {
@@ -144,6 +161,13 @@ export const TaskItem = (props: ITaskItemProps) => {
       <div className="task-desc">
         <h3 className="task-desc-title font-17-22">
           {taskItemMap[taskItem.userTaskDetail]?.title}
+
+          {needShowTaskProgress.includes(taskItem.userTaskDetail) && (
+            <span className="task-desc-progress pl-[4px]">
+              (<span className="text-[#F4AC33]">{taskItem.completeCount}</span>/{taskItem.taskCount}
+              )
+            </span>
+          )}
         </h3>
         <p className="task-desc-points font-14-18-weight">
           +{BigNumber(taskItem.points).toFormat()}

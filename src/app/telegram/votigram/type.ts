@@ -4,23 +4,24 @@ export interface IStartAppParams {
 }
 
 export enum UserTask {
-  Daily = 0,
-  Explore = 1,
+  Daily = 'Daily',
+  Explore = 'Explore',
 }
 
 export enum UserTaskDetail {
   // Daily
-  DailyVote = 0,
-  DailyFirstInvite = 1,
-  DailyViewAsset = 2,
+  DailyVote = 'DailyVote',
+  DailyFirstInvite = 'DailyFirstInvite',
+  DailyViewAsset = 'DailyViewAsset',
 
   // Explore
-  ExploreJoinTgChannel = 3,
-  ExploreFollowX = 4,
-  ExploreJoinDiscord = 5,
-  ExploreCumulateFiveInvite = 6,
-  ExploreCumulateTenInvite = 7,
-  ExploreCumulateTwentyInvite = 8,
+  ExploreJoinTgChannel = 'ExploreJoinTgChannel',
+  ExploreFollowX = 'ExploreFollowX',
+  ExploreJoinDiscord = 'ExploreJoinDiscord',
+  ExploreForwardX = 'ExploreForwardX',
+  ExploreCumulateFiveInvite = 'ExploreCumulateFiveInvite',
+  ExploreCumulateTenInvite = 'ExploreCumulateTenInvite',
+  ExploreCumulateTwentyInvite = 'ExploreCumulateTwentyInvite',
 }
 export enum ITabSource {
   Vote = 0,

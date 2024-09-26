@@ -42,7 +42,7 @@ export default function MyPoints() {
       skipCount: preList.length,
       maxResultCount: MaxResultCount,
     });
-    const currentList = res?.data?.data ?? [];
+    const currentList = res?.data?.items ?? [];
     const len = currentList.length + preList.length;
     return {
       list: currentList,
@@ -86,7 +86,7 @@ export default function MyPoints() {
                       <CheckCircleOutlined />
                       <div className="body truncate">
                         <h3 className="font-17-22 truncate">{item.title}</h3>
-                        <p className="font-15-20 truncate">{item.desc}</p>
+                        <p className="font-15-20 truncate">{item.description}</p>
                       </div>
                     </div>
                     <p className="amount font-18-22-weight">
