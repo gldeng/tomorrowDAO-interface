@@ -97,9 +97,8 @@ export const useCheckLoginAndToken = () => {
 
   useEffect(() => {
     if (wallet.address && isLogin) {
-      window.gtag('config', 'TAG_ID', {
-        user_id: wallet.address,
-      });
+      console.log('gtag report', wallet.address);
+      window.gtag('set', 'user_id', wallet.address);
       window.gtag('event', 'login_success', {
         user_id: wallet.address,
       });

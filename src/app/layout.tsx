@@ -10,7 +10,7 @@ import StyleRegistry from './StyleRegistry';
 import { LayoutContent } from './layout-content';
 import { Metadata } from 'next';
 import VconsoleScript from './VconsoleScript';
-
+import GtagConfigScript from './GtagConfigScript';
 export const metadata: Metadata = {
   title: 'TMRWDAO: Revolutionise Decentralised Governance with AI',
   description:
@@ -27,6 +27,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
         ></meta>
         {/* eslint-disable-next-line @next/next/no-sync-scripts */}
         <VconsoleScript />
+        {/* eslint-disable-next-line @next/next/no-sync-scripts */}
         <script src="https://telegram.org/js/telegram-web-app.js"></script>
         {/* Google Tag Manager  */}
         {/* eslint-disable-next-line @next/next/inline-script-id */}
@@ -51,6 +52,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             gtag('config', 'G-Z5LV4SE2RX');
           `}
         </Script>
+        <GtagConfigScript />
       </head>
       <body>
         <noscript>
