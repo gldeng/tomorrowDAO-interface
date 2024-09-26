@@ -14,22 +14,40 @@ interface ITaskItemProps {
   getTaskListFn: () => void;
   onReportComplete: (task: string, taskDetail: string) => void;
 }
-const openNewPageWaitPageVisible = async (url: string) => {
-  if (url.includes('https://t.me')) {
-    window.Telegram.WebApp.openTelegramLink(url);
+
+const openNewPageWaitPageVisible = async (
+  url: string,
+  taskId: UserTaskDetail,
+  req: () => Promise<ICompleteTaskItemRes>,
+) => {
+  if (taskId === UserTaskDetail.ExploreJoinTgChannel) {
+    // web.telegram.org will destroy the page when openTelegramLink
+    // so send complete request before open link
+    if (window?.Telegram?.WebApp?.platform === 'weba') {
+      return req()
+        .then(() => {
+          window?.Telegram?.WebApp?.openTelegramLink?.(url);
+          return true;
+        })
+        .catch(() => {
+          window?.Telegram?.WebApp?.openTelegramLink?.(url);
+          return false;
+        });
+    }
+    window?.Telegram?.WebApp?.openTelegramLink?.(url);
   } else {
-    window.Telegram.WebApp.openLink(url);
+    window?.Telegram?.WebApp?.openLink?.(url);
   }
-  return new Promise<void>((resolve) => {
+  return new Promise<boolean>((resolve) => {
     setTimeout(() => {
       if (document.visibilityState === 'visible') {
         setTimeout(() => {
-          resolve();
+          resolve(false);
         }, 2000);
       } else {
         const handleVisibilityChange = () => {
           if (document.visibilityState === 'visible') {
-            resolve();
+            resolve(false);
           }
         };
         document.addEventListener('visibilitychange', handleVisibilityChange);
@@ -98,7 +116,7 @@ const jumpExternalList = [
     url: 'https://discord.com/invite/gTWkeR5pQB',
   },
   {
-    taskid: UserTaskDetail.ExploreForwardX,
+    taskId: UserTaskDetail.ExploreForwardX,
     url: 'https://x.com/tmrwdao/status/1827955375070650747',
   },
 ];
@@ -112,13 +130,16 @@ export const TaskItem = (props: ITaskItemProps) => {
     try {
       const jumpItem = jumpExternalList.find((item) => item.taskId === taskItem.userTaskDetail);
       if (jumpItem) {
-        await openNewPageWaitPageVisible(jumpItem.url);
+        const sendCompleteReq = () =>
+          completeTaskItem({
+            chainId: curChain,
+            userTask: userTask,
+            userTaskDetail: taskId,
+          });
+        const isComplete = await openNewPageWaitPageVisible(jumpItem.url, taskId, sendCompleteReq);
+        if (isComplete) return;
         setIsLoading(true);
-        const reportCompleteRes = await completeTaskItem({
-          chainId: curChain,
-          userTask: userTask,
-          userTaskDetail: taskId,
-        });
+        const reportCompleteRes = await sendCompleteReq();
         if (reportCompleteRes.data) {
           onReportComplete(userTask, taskId);
         }
@@ -144,6 +165,7 @@ export const TaskItem = (props: ITaskItemProps) => {
       case UserTaskDetail.ExploreJoinTgChannel:
       case UserTaskDetail.ExploreFollowX:
       case UserTaskDetail.ExploreJoinDiscord:
+      case UserTaskDetail.ExploreForwardX:
         await jumpAndRefresh(taskItem.userTaskDetail);
         break;
       case UserTaskDetail.ExploreCumulateFiveInvite:
