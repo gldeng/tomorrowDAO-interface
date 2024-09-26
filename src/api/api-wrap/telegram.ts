@@ -5,7 +5,7 @@ const rankingVoteUrl = '/ranking/vote';
 const rankingVoteStatusUrl = '/ranking/vote/status';
 const rankListUrl = '/ranking/default-proposal';
 const voteLikeUrl = '/ranking/like';
-const rankPointsUrl = '/ranking/points';
+const rankPointsUrl = '/user/my-points';
 const taskListsUrl = '/user/task-list';
 const completeTaskUrl = '/user/complete-task';
 const referrelCodeUrl = '/referral/get-link';
@@ -117,8 +117,8 @@ export const getTaskList = async (params: { chainId: string }): Promise<IGetTask
 };
 export const completeTaskItem = async (params: {
   chainId: string;
-  userTask: number;
-  userTaskDetail: number;
+  userTask: string;
+  userTaskDetail: string;
 }): Promise<ICompleteTaskItemRes> => {
   return apiServer.get(completeTaskUrl, {
     ...params,

@@ -1,7 +1,7 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { flatten } from 'lodash-es';
 import './index.css';
-import { useRequest, usePrevious } from 'ahooks';
+import { useRequest, usePrevious, useAsyncEffect } from 'ahooks';
 import { getTaskList } from 'api/request';
 import { curChain } from 'config';
 import Loading from '../Loading';
@@ -25,8 +25,9 @@ const Task: React.FC<ITaskProps> = (props: ITaskProps) => {
   const { style, className, show, activeTabItem } = props;
   const { wallet } = useWebLogin();
   const completeTaskModalRef = useRef<ICommonModalRef>(null);
+  const [taskGroupList, setTaskGroupList] = useState<IGetTaskListResItem[]>([]);
   const {
-    data: taskList,
+    data,
     error: taskListError,
     loading: taskListLoading,
     run: getTaskListFn,
@@ -40,12 +41,24 @@ const Task: React.FC<ITaskProps> = (props: ITaskProps) => {
       manual: true,
     },
   );
-  useEffect(() => {
+  const handleReportComplete = (task: string, taskDetail: string) => {
+    const taskGroupListCopy = taskGroupList.slice(0);
+    const targetGroup = taskGroupListCopy.find((group) => group.userTask === task);
+    if (targetGroup) {
+      const targetItem = targetGroup.data.find((item) => item.userTaskDetail === taskDetail);
+      if (targetItem) {
+        targetItem.complete = true;
+      }
+    }
+    setTaskGroupList(taskGroupListCopy);
+  };
+  useAsyncEffect(async () => {
     if (!show) return;
-    getTaskListFn();
+    const listRes = await getTaskListAsync();
+    setTaskGroupList(listRes?.data?.taskList || []);
   }, [show]);
   useEffect(() => {
-    const listsGroup = taskList?.data?.taskList?.map((group) => group.data);
+    const listsGroup = taskGroupList?.map((group) => group.data);
     const lists = flatten(listsGroup);
     const completed = [
       UserTaskDetail.DailyVote,
@@ -61,7 +74,7 @@ const Task: React.FC<ITaskProps> = (props: ITaskProps) => {
       localStorage.setItem(key, 'true');
       completeTaskModalRef.current?.open();
     }
-  }, [taskList, wallet.address]);
+  }, [taskGroupList, wallet.address]);
   return (
     <div className={`votigram-task-wrap ${className}`} style={style}>
       <h2 className="title font-20-25-weight mt-[24px] mb-[8px] flex-center">
@@ -77,7 +90,7 @@ const Task: React.FC<ITaskProps> = (props: ITaskProps) => {
         </div>
       ) : (
         <div>
-          {taskList?.data?.taskList?.map((taskGroup, index) => {
+          {taskGroupList?.map((taskGroup, index) => {
             return (
               <div className="task-group-item" key={'group' + index}>
                 <h2 className="font-18-22-weight text-white flex items-center">
@@ -97,6 +110,7 @@ const Task: React.FC<ITaskProps> = (props: ITaskProps) => {
                       activeTabItem={activeTabItem}
                       userTask={taskGroup.userTask}
                       getTaskListFn={getTaskListFn}
+                      onReportComplete={handleReportComplete}
                     />
                   );
                 })}
