@@ -5,7 +5,7 @@ import { connectUrl, curChain, networkType, portkeyServer } from 'config';
 import qs from 'query-string';
 import { getCaHashAndOriginChainIdByWallet } from 'utils/wallet';
 import RuleButton from '../RuleButton';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button, message, Select } from 'antd';
 import QRCode from 'components/QrCode';
 import { CopyOutlined, StarOutlined } from '@aelf-design/icons';
@@ -40,6 +40,7 @@ interface IReferralProps {
 }
 export default function Referral(props: IReferralProps) {
   const { wallet, walletType } = useWebLogin();
+  const [currentTimePeriod, setCurrentTimePeriod] = useState('');
   const ruleDrawerRef = useRef<ICommonDrawerRef>(null);
   const shareDrawerRef = useRef<ICommonDrawerRef>(null);
   const listsDrawerRef = useRef<ICommonDrawerRef>(null);
@@ -133,6 +134,7 @@ export default function Referral(props: IReferralProps) {
     console.log('value', value);
     const startTime = Number(value.split('-')[0]);
     const endTime = Number(value.split('-')[1]);
+    setCurrentTimePeriod(value);
     runReferrelListQuery(startTime, endTime);
   };
   const inviteCode = referralCodeRes?.userGrowthInfo?.inviteCode;
@@ -147,8 +149,15 @@ export default function Referral(props: IReferralProps) {
     message.success('Copy success');
   };
   useEffect(() => {
-    runReferrelListQuery();
-  }, []);
+    if (referrelConfigRes) {
+      const lists = referrelConfigRes.data.config;
+      const last = lists[lists.length - 1];
+      if (last) {
+        setCurrentTimePeriod(`${last.startTime}-${last.endTime}`);
+        runReferrelListQuery(last.startTime, last.endTime);
+      }
+    }
+  }, [referrelConfigRes, runReferrelListQuery]);
   return (
     <div className="referral-wrap">
       <img src="/images/tg/refer-banner.png" className="banner-img" alt="" />
@@ -210,12 +219,13 @@ export default function Referral(props: IReferralProps) {
           <h3 className="card-title-text font-16-20-weight">Leaderboard</h3>
         </div>
         <ReferList
-          isShowMore={(referrelListRes?.data?.totalCount ?? 0) > 10}
+          isShowMore={true}
           onViewMore={() => {
             listsDrawerRef.current?.open();
           }}
-          list={referrelListRes?.data?.data ?? []}
+          list={(referrelListRes?.data?.data ?? []).slice(0, 10)}
           me={referrelListRes?.data?.me}
+          isLoading={referrelListResLoading}
         />
       </div>
 
@@ -302,15 +312,17 @@ export default function Referral(props: IReferralProps) {
             <Select
               defaultValue=""
               // eslint-disable-next-line no-inline-styles/no-inline-styles
+              value={currentTimePeriod}
+              // eslint-disable-next-line no-inline-styles/no-inline-styles
               style={{ width: '100%' }}
               popupClassName="invite-drawer-popup"
               onChange={handleChange}
               options={referrelConfigRes?.data.config.map((time) => {
                 return {
                   value: `${time.startTime}-${time.endTime}`,
-                  label: `${dayjs(time.startTime).format('YYYY-MM-DD')}-${dayjs(
+                  label: `${dayjs(time.startTime).format('YYYY/MM/DD')}-${dayjs(
                     time.endTime,
-                  ).format('YYYY-MM-DD')}`,
+                  ).format('YYYY/MM/DD')}`,
                 };
               })}
             />
@@ -318,6 +330,7 @@ export default function Referral(props: IReferralProps) {
               isShowMore={false}
               list={referrelListQueryRes?.data?.data ?? []}
               me={referrelListRes?.data?.me}
+              isLoading={referrelListQueryLoading}
             />
           </div>
         }
