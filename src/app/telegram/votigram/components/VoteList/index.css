@@ -13,6 +13,7 @@
     @apply  top-[8px] right-[8px];
   }
   .banner {
+    transform: translateZ(0);
     @apply rounded-[1rem] overflow-hidden relative;
     .TMRWDAO-carousel {
       @apply w-full h-[7.5rem];
