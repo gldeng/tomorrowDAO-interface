@@ -77,10 +77,10 @@ const Task: React.FC<ITaskProps> = (props: ITaskProps) => {
   }, [taskGroupList, wallet.address]);
   return (
     <div className={`votigram-task-wrap ${className}`} style={style}>
-      <h2 className="title font-20-25-weight mt-[24px] mb-[8px] flex-center">
+      <div className="title font-18-22-weight mt-[24px] mb-[8px]">
         <img src="/images/tg/celebratory-fireworks-icon.png" alt="" />
-        Complete tasks to earn more points!
-      </h2>
+        <span>Complete tasks to earn more points!</span>
+      </div>
       <div className="flex-center">
         <img src="/images/tg/complete-task.png" alt="" className="task-complete-icon" />
       </div>
