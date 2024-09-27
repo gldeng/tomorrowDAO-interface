@@ -191,6 +191,7 @@ interface IRewardInfo {
   estimatedReward: number;
   accountCreation: number;
   votigramVote: number;
+  votigramActivityVote: number;
 }
 interface IGetInviteDetailResponse {
   code: number;
