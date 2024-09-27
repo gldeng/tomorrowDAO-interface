@@ -1,11 +1,17 @@
 import BigNumber from 'bignumber.js';
 import { IStackItem, ITabSource, UserTaskDetail } from '../../type';
 import { CheckOutlined, WalletOutlined } from '@aelf-design/icons';
-import { TelegramIcon, UserAddIcon, XIcon, DiscardIcon, LoadingIcon } from 'components/Icons';
+import {
+  TelegramIcon,
+  UserAddIcon,
+  XIcon,
+  DiscardIcon,
+  LoadingIcon,
+  DailyTaskIcon,
+} from 'components/Icons';
 import { useState } from 'react';
 import { completeTaskItem } from 'api/request';
 import { curChain } from 'config';
-import { url } from 'inspector';
 
 interface ITaskItemProps {
   taskItem: IUserTaskItemDetail;
@@ -57,7 +63,7 @@ const openNewPageWaitPageVisible = async (
 };
 const taskItemMap: Record<string, { icon: React.ReactNode; title: string; event?: Function }> = {
   [UserTaskDetail.DailyVote]: {
-    icon: <TelegramIcon />,
+    icon: <DailyTaskIcon />,
     title: 'Complete a vote',
   },
   [UserTaskDetail.DailyFirstInvite]: {

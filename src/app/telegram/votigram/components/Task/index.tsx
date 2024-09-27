@@ -79,7 +79,7 @@ const Task: React.FC<ITaskProps> = (props: ITaskProps) => {
     <div className={`votigram-task-wrap ${className}`} style={style}>
       <h2 className="title font-20-25-weight mt-[24px] mb-[8px] flex-center">
         <img src="/images/tg/celebratory-fireworks-icon.png" alt="" />
-        Complete tasks to earn points
+        Complete tasks to earn more points!
       </h2>
       <div className="flex-center">
         <img src="/images/tg/complete-task.png" alt="" className="task-complete-icon" />
@@ -132,7 +132,8 @@ const Task: React.FC<ITaskProps> = (props: ITaskProps) => {
               className="rounded-[16px] mt-[24px]"
             />
             <p className="my-[24px]">
-              You have completed a specific task and now have a chance to participate in the raffle!
+              You have completed the designated tasks and are included in the coming raffle after
+              the voting period ends!
             </p>
             <div className="mt-[16px] w-full">
               <Button

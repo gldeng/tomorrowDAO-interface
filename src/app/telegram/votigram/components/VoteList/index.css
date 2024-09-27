@@ -10,10 +10,10 @@
   } */
 
   .rules-wrap {
-    @apply  top-[62px] right-[24px];
+    @apply  top-[8px] right-[8px];
   }
   .banner {
-    @apply rounded-[1rem] overflow-hidden;
+    @apply rounded-[1rem] overflow-hidden relative;
     .TMRWDAO-carousel {
       @apply w-full h-[7.5rem];
     }
@@ -34,7 +34,7 @@
         color: var(--Text-Gray-2, #EDEEF0);
       }
       color: var(--Text-Gray-2, #EDEEF0);
-      @apply h-[65px] flex-1 px-[16px] py-[12px];
+      @apply h-[65px] flex-1 px-[8px] py-[12px];
       &.total-points {
         p {
           color: var(--Accent-2, #51FF00);

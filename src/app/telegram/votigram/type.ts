@@ -33,3 +33,7 @@ export interface IStackItem {
   path: number;
   source?: ITabSource;
 }
+
+export enum IPonitType {
+  TopInviter = 'TopInviter',
+}

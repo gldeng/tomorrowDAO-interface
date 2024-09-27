@@ -261,13 +261,7 @@ export default function VoteList(props: IVoteListProps) {
 
   return (
     <div className="votigram-main">
-      <RuleButton
-        onClick={() => {
-          ruleDrawerRef.current?.open();
-        }}
-        className="rules-wrap"
-      />
-      <h3 className="font-16-20-weight text-white mb-[8px] text-center">
+      <h3 className="font-20-25-weight text-white mb-[8px] text-center">
         <span
           dangerouslySetInnerHTML={{
             __html: `${voteMain?.listTitle}`,
@@ -284,6 +278,12 @@ export default function VoteList(props: IVoteListProps) {
             );
           })}
         </Carousel>
+        <RuleButton
+          onClick={() => {
+            ruleDrawerRef.current?.open();
+          }}
+          className="rules-wrap"
+        />
       </div>
       <ul className="votigram-activity-title ">
         <li className="total-points">

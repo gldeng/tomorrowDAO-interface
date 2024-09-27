@@ -2,13 +2,9 @@
   @apply  px-[16px];
   min-height: calc(100vh - 186px);
   .header {
-    @apply flex justify-between items-center pb-[24px];
-    h3 {
-      @apply text-[#FFF];
-    }
+    @apply my-[8px];
     p {
       color: var(--Text-Gray-2, #edeef0);
-      @apply inline-flex pt-[0.375rem] pb-[8px] px-[16px] justify-center items-center gap-[0.625rem] rounded-[1.625rem] bg-[#4600C5];
       .amount {
         color: var(--Accent-2, #51ff00);
       }

@@ -221,6 +221,7 @@ interface IGetRankPointsResItem {
   title: string;
   description: string;
   points: number;
+  pointsType: string;
 }
 interface IGetRankPointsRes {
   code: number;

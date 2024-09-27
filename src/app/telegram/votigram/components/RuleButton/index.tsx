@@ -7,7 +7,7 @@ export interface IRuleButtonProps {
 }
 export default function RuleButton(props: IRuleButtonProps) {
   return (
-    <div className={`votigram-rules-wrap ${props.className}`} onClick={props.onClick}>
+    <div className={`votigram-rules-wrap flex-center ${props.className}`} onClick={props.onClick}>
       <InfoCircleOutlined />
       <span className="rule-text">Rules</span>
     </div>
