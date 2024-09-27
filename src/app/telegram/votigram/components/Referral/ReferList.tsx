@@ -1,6 +1,7 @@
 import { DownOutlined, QuestionCircleOutlined } from '@aelf-design/icons';
 import { Button, HashAddress } from 'aelf-design';
 import { useWebLogin } from 'aelf-web-login';
+import Loading from '../Loading';
 import CommonModal, { ICommonModalRef } from '../CommonModal';
 import { useRef } from 'react';
 import { curChain } from 'config';
@@ -9,6 +10,7 @@ interface IReferListProps {
   onViewMore?: () => void;
   isShowMore?: boolean;
   list: IInviterInfo[];
+  isLoading?: boolean;
   me?: IInviterInfo;
 }
 interface IFakeAvatarProps {
@@ -19,7 +21,7 @@ const FakeAvatar = (props: IFakeAvatarProps) => {
   return <div className="fake-avatar">{text?.[0]?.toUpperCase()}</div>;
 };
 export default function ReferList(props: IReferListProps) {
-  const { onViewMore, isShowMore, list, me } = props;
+  const { onViewMore, isShowMore, list, me, isLoading } = props;
   const invitedModalRef = useRef<ICommonModalRef>(null);
   const { wallet } = useWebLogin();
   return (
@@ -31,51 +33,60 @@ export default function ReferList(props: IReferListProps) {
           Invited <QuestionCircleOutlined onClick={() => invitedModalRef.current?.open()} />
         </li>
       </ul>
-      <ul className="top-wrap">
-        <li className="left">{me?.rank ?? '--'}</li>
-        <li className="main">
-          <FakeAvatar text={wallet.address} />
-          <HashAddress
-            address={wallet.address}
-            hasCopy={false}
-            preLen={8}
-            endLen={9}
-            chain={curChain}
-          />
-          <div className="me-tag flex-center">Me</div>
-        </li>
-        <li className="right">{me?.inviteAndVoteCount ?? 0}</li>
-      </ul>
-      <div>
-        {list?.map((item, index) => (
-          <ul className="invite-item" key={item.inviter}>
-            <li className="left">
-              {[0, 1, 2].includes(index) ? (
-                <img
-                  src={`/images/tg/rank-icon-${index}.png`}
-                  className="vote-item-icon"
-                  alt="rank-icon"
-                  width={10}
-                  height={20}
-                />
-              ) : (
-                item.rank
-              )}
-            </li>
+      {isLoading ? (
+        <div className="flex-center">
+          <Loading />
+        </div>
+      ) : (
+        <>
+          <ul className="top-wrap">
+            <li className="left">{me?.rank ?? '--'}</li>
             <li className="main">
-              <FakeAvatar text={item.inviter} />
+              <FakeAvatar text={wallet.address} />
               <HashAddress
-                address={item.inviter}
+                address={wallet.address}
                 hasCopy={false}
                 preLen={8}
                 endLen={9}
                 chain={curChain}
               />
+              <div className="me-tag flex-center">Me</div>
             </li>
-            <li className="right">{item.inviteAndVoteCount}</li>
+            <li className="right">{me?.inviteAndVoteCount ?? 0}</li>
           </ul>
-        ))}
-      </div>
+          <div>
+            {list?.map((item, index) => (
+              <ul className="invite-item" key={item.inviter}>
+                <li className="left">
+                  {[0, 1, 2].includes(index) ? (
+                    <img
+                      src={`/images/tg/rank-icon-${index}.png`}
+                      className="vote-item-icon"
+                      alt="rank-icon"
+                      width={10}
+                      height={20}
+                    />
+                  ) : (
+                    item.rank
+                  )}
+                </li>
+                <li className="main">
+                  <FakeAvatar text={item.inviter} />
+                  <HashAddress
+                    address={item.inviter}
+                    hasCopy={false}
+                    preLen={8}
+                    endLen={9}
+                    chain={curChain}
+                  />
+                </li>
+                <li className="right">{item.inviteAndVoteCount}</li>
+              </ul>
+            ))}
+          </div>
+        </>
+      )}
+
       {isShowMore && (
         <div className="view-more" onClick={onViewMore}>
           <span className="view-more-text">View More</span>
