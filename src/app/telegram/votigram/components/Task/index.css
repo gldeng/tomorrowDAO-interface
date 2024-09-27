@@ -4,7 +4,8 @@
   .title {
     @apply text-center text-white;
     img {
-      @apply w-[20px] mr-[4px];
+      vertical-align: -2px;
+      @apply w-[18px] mr-[4px];
     }
   }
   .task-complete-icon {
