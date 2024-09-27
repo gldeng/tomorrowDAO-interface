@@ -151,10 +151,10 @@ export default function Referral(props: IReferralProps) {
   useEffect(() => {
     if (referrelConfigRes) {
       const lists = referrelConfigRes.data.config;
-      const last = lists[lists.length - 1];
-      if (last) {
-        setCurrentTimePeriod(`${last.startTime}-${last.endTime}`);
-        runReferrelListQuery(last.startTime, last.endTime);
+      const first = lists[0];
+      if (first) {
+        setCurrentTimePeriod(`${first.startTime}-${first.endTime}`);
+        runReferrelListQuery(first.startTime, first.endTime);
       }
     }
   }, [referrelConfigRes, runReferrelListQuery]);
