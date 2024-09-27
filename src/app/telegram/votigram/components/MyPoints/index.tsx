@@ -9,6 +9,8 @@ import Refresh from '../Refresh';
 import './index.css';
 import BigNumber from 'bignumber.js';
 import Loading from '../Loading';
+import { IPonitType } from '../../type';
+import dayjs from 'dayjs';
 
 const MaxResultCount = 5;
 interface IFetchResult {
@@ -16,6 +18,17 @@ interface IFetchResult {
   hasData: boolean;
   totalPoints: number;
 }
+const getPonitDescription = (item: IGetRankPointsResItem) => {
+  if (item.pointsType === IPonitType.TopInviter) {
+    const [start, end] = item.description.split('-');
+    const startNumber = Number(start);
+    const endNumber = Number(end);
+    const startMMDD = dayjs(startNumber).format('MM.DD');
+    const endMMDD = dayjs(endNumber).format('MM.DD');
+    return `Cycle: ${startMMDD}-${endMMDD}`;
+  }
+  return item.description;
+};
 export default function MyPoints() {
   const { wallet } = useWebLogin();
   // const fetchVoteList: (data?: IFetchResult) => Promise<IFetchResult> = async (data) => {
@@ -66,8 +79,7 @@ export default function MyPoints() {
   return (
     <div className="my-point-wrap">
       <div className="header">
-        <h3 className="font-18-22-weight">My Points</h3>
-        <p className="font-14-18">
+        <p className="font-14-18-weight">
           Total earned: <span className="amount">{totlePoints}</span>
         </p>
       </div>
@@ -86,7 +98,7 @@ export default function MyPoints() {
                       <CheckCircleOutlined />
                       <div className="body truncate">
                         <h3 className="font-17-22 truncate">{item.title}</h3>
-                        <p className="font-15-20 truncate">{item.description}</p>
+                        <p className="font-15-20 truncate">{getPonitDescription(item)}</p>
                       </div>
                     </div>
                     <p className="amount font-18-22-weight">
