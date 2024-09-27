@@ -78,7 +78,7 @@ const CommonDrawer = forwardRef<ICommonDrawerRef, ICommonDrawerProps>((props, re
       <div className={`telegram-common-drawer-body ${bodyClassname}`}>
         <div className={`drawer-header ${headerClassname}`}>
           {showLeftArrow && <LeftArrowOutlined className="left-arrow" onClick={onClose} />}
-          {showCloseTarget && <CloseTraget onClose={onClose} />}
+          {/* {showCloseTarget && <CloseTraget onClose={onClose} />} */}
           <h2 className="title font-17-22">{props.title}</h2>
           <CloseIcon onClick={onClose} />
         </div>
