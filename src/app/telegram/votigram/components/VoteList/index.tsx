@@ -24,6 +24,8 @@ import { preloadImages } from 'utils/file';
 import { useConfig } from 'components/CmsGlobalConfig/type';
 import RuleButton from '../RuleButton';
 import useNftBalanceChange from '../../hook/use-nft-balance-change';
+import { RightOutlined } from '@aelf-design/icons';
+import MyPoints from '../MyPoints';
 
 interface IVoteListProps {
   onShowMore?: (item: IRankingListResItem) => void;
@@ -35,6 +37,7 @@ export default function VoteList(props: IVoteListProps) {
   const retryDrawerRef = useRef<ICommonDrawerRef>(null);
   const { onShowMore } = props;
   const nftMissingModalRef = useRef<ICommonModalRef>(null);
+  const pointsDrawerRef = useRef<ICommonDrawerRef>(null);
 
   // const [isLoading, setIsLoading] = useState(true);
   const [currentVoteItem, setCurrentVoteItem] = useState<IRankingListResItem | null>(null);
@@ -258,13 +261,7 @@ export default function VoteList(props: IVoteListProps) {
 
   return (
     <div className="votigram-main">
-      <RuleButton
-        onClick={() => {
-          ruleDrawerRef.current?.open();
-        }}
-        className="rules-wrap"
-      />
-      <h3 className="font-16-20-weight text-white mb-[8px] text-center">
+      <h3 className="font-20-25-weight text-white mb-[8px] text-center">
         <span
           dangerouslySetInnerHTML={{
             __html: `${voteMain?.listTitle}`,
@@ -281,10 +278,24 @@ export default function VoteList(props: IVoteListProps) {
             );
           })}
         </Carousel>
+        <RuleButton
+          onClick={() => {
+            ruleDrawerRef.current?.open();
+          }}
+          className="rules-wrap"
+        />
       </div>
       <ul className="votigram-activity-title ">
         <li className="total-points">
-          <h3 className="font-14-18">Total points earned</h3>
+          <h3
+            className="flex-center points-entry-button"
+            onClick={() => {
+              pointsDrawerRef.current?.open();
+            }}
+          >
+            <span className="font-14-18">Total points earned</span>
+            <RightOutlined />
+          </h3>
           <p className="font-18-22-weight">{renderPointsStr}</p>
         </li>
         <li className="remaining-vote">
@@ -464,6 +475,19 @@ export default function VoteList(props: IVoteListProps) {
                 Confirm
               </Button>
             </div>
+          </div>
+        }
+      />
+      <CommonDrawer
+        title={`My Points`}
+        ref={pointsDrawerRef}
+        drawerProps={{
+          destroyOnClose: true,
+        }}
+        bodyClassname="my-points-drawer"
+        body={
+          <div>
+            <MyPoints />
           </div>
         }
       />

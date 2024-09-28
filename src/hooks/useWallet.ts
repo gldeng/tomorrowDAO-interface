@@ -27,11 +27,20 @@ import { curChain, networkType } from 'config';
 import { useUrlPath } from './useUrlPath';
 import { runTimeEnv } from 'utils/env';
 
+export const useWalletService = () => {
+  const { login, logout, loginState, walletType, wallet } = useWebLogin();
+  const loginStatus = useSelector((state) => state.loginStatus);
+  const { lock } = usePortkeyLock();
+  const isLogin = loginStatus.loginStatus.isLogin;
+  return { login, logout, isLogin, walletType, lock, wallet };
+};
+
 export const useCheckLoginAndToken = () => {
-  const { loginState, login, logout, wallet, walletType } = useWebLogin();
+  const { loginState, logout, wallet } = useWebLogin();
   const isConnectWallet = useMemo(() => loginState === WebLoginState.logined, [loginState]);
   const { getToken, checkTokenValid } = useGetToken();
   const { isTelegram } = useUrlPath();
+  const { isLogin } = useWalletService();
 
   const getTokenUpdate = async () => {
     const tokenRes = await getToken({
@@ -85,6 +94,16 @@ export const useCheckLoginAndToken = () => {
       // emitLoading(true, 'Authorize account...');
     }
   }, [isConnectWallet]);
+
+  useEffect(() => {
+    if (wallet.address && isLogin) {
+      console.log('gtag report', wallet.address);
+      window.gtag('set', 'user_id', wallet.address);
+      window.gtag('event', 'login_success', {
+        user_id: wallet.address,
+      });
+    }
+  }, [wallet.address, isLogin]);
 
   return {
     checkTokenValid,
@@ -179,12 +198,4 @@ export const useWalletInit = () => {
   // );
   // WalletAndTokenInfo.setSignMethod(getToken);
   // }, [getToken, webLoginContext]);
-};
-
-export const useWalletService = () => {
-  const { login, logout, loginState, walletType, wallet } = useWebLogin();
-  const loginStatus = useSelector((state) => state.loginStatus);
-  const { lock } = usePortkeyLock();
-  const isLogin = loginStatus.loginStatus.isLogin;
-  return { login, logout, isLogin, walletType, lock, wallet };
 };

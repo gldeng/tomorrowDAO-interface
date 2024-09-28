@@ -1,31 +1,59 @@
 import { CheckCircleOutlined } from '@aelf-design/icons';
 import { useWebLogin } from 'aelf-web-login';
 import Empty from '../Empty';
-import { fetchVoteHistory } from 'api/request';
-import { useInfiniteScroll, useRequest } from 'ahooks';
+import { fetchVoteHistory, getRankPoints } from 'api/request';
+import { useInfiniteScroll } from 'ahooks';
 import { curChain } from 'config';
 import { useEffect, useMemo } from 'react';
 import Refresh from '../Refresh';
 import './index.css';
 import BigNumber from 'bignumber.js';
 import Loading from '../Loading';
+import { IPonitType } from '../../type';
+import dayjs from 'dayjs';
 
 const MaxResultCount = 5;
 interface IFetchResult {
-  list: IVoteHistoryItem[];
+  list: IGetRankPointsResItem[];
   hasData: boolean;
   totalPoints: number;
 }
+const getPonitDescription = (item: IGetRankPointsResItem) => {
+  if (item.pointsType === IPonitType.TopInviter) {
+    const [start, end] = item.description.split('-');
+    const startNumber = Number(start);
+    const endNumber = Number(end);
+    const startMMDD = dayjs(startNumber).format('MM.DD');
+    const endMMDD = dayjs(endNumber).format('MM.DD');
+    return `Cycle: ${startMMDD}-${endMMDD}`;
+  }
+  return item.description;
+};
 export default function MyPoints() {
   const { wallet } = useWebLogin();
+  // const fetchVoteList: (data?: IFetchResult) => Promise<IFetchResult> = async (data) => {
+  //   const preList = data?.list ?? [];
+  //   const res = await fetchVoteHistory({
+  //     address: wallet.address,
+  //     chainId: curChain,
+  //     skipCount: preList.length,
+  //     maxResultCount: MaxResultCount,
+  //     source: 'Telegram',
+  //   });
+  //   const currentList = res?.data?.items ?? [];
+  //   const len = currentList.length + preList.length;
+  //   return {
+  //     list: currentList,
+  //     totalPoints: res?.data?.totalPoints ?? 0,
+  //     hasData: len < res.data?.totalCount,
+  //   };
+  // };
   const fetchVoteList: (data?: IFetchResult) => Promise<IFetchResult> = async (data) => {
     const preList = data?.list ?? [];
-    const res = await fetchVoteHistory({
-      address: wallet.address,
+    const res = await getRankPoints({
       chainId: curChain,
       skipCount: preList.length,
       maxResultCount: MaxResultCount,
-      source: 'Telegram',
     });
     const currentList = res?.data?.items ?? [];
     const len = currentList.length + preList.length;
@@ -43,18 +71,15 @@ export default function MyPoints() {
     reload: voteListReload,
   } = useInfiniteScroll(fetchVoteList, { manual: true });
   useEffect(() => {
-    if (wallet.address) {
-      voteListReload();
-    }
-  }, [wallet.address]);
+    voteListReload();
+  }, []);
   const totlePoints = useMemo(() => {
     return BigNumber(voteListData?.totalPoints ?? 0).toFormat();
   }, [voteListData?.totalPoints]);
   return (
     <div className="my-point-wrap">
       <div className="header">
-        <h3 className="font-18-22-weight">My Points</h3>
-        <p className="font-14-18">
+        <p className="font-14-18-weight">
           Total earned: <span className="amount">{totlePoints}</span>
         </p>
       </div>
@@ -64,7 +89,7 @@ export default function MyPoints() {
         </div>
       ) : (
         <>
-          {voteListData?.list?.length && (
+          {(voteListData?.list?.length ?? 0) > 0 && (
             <ul className="point-list">
               {voteListData?.list.map((item, i) => {
                 return (
@@ -72,8 +97,8 @@ export default function MyPoints() {
                     <div className="wrap1 truncate">
                       <CheckCircleOutlined />
                       <div className="body truncate">
-                        <h3 className="font-17-22 truncate">Voted for: {item.voteFor}</h3>
-                        <p className="font-15-20 truncate">{item.proposalTitle}</p>
+                        <h3 className="font-17-22 truncate">{item.title}</h3>
+                        <p className="font-15-20 truncate">{getPonitDescription(item)}</p>
                       </div>
                     </div>
                     <p className="amount font-18-22-weight">

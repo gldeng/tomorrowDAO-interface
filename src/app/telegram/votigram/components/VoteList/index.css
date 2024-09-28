@@ -10,10 +10,11 @@
   } */
 
   .rules-wrap {
-    @apply  top-[62px] right-[24px];
+    @apply  top-[8px] right-[8px];
   }
   .banner {
-    @apply rounded-[1rem] overflow-hidden;
+    transform: translateZ(0);
+    @apply rounded-[1rem] overflow-hidden relative;
     .TMRWDAO-carousel {
       @apply w-full h-[7.5rem];
     }
@@ -34,7 +35,7 @@
         color: var(--Text-Gray-2, #EDEEF0);
       }
       color: var(--Text-Gray-2, #EDEEF0);
-      @apply h-[65px] flex-1 px-[16px] py-[12px];
+      @apply h-[65px] flex-1 px-[8px] py-[12px];
       &.total-points {
         p {
           color: var(--Accent-2, #51FF00);
@@ -42,6 +43,11 @@
       }
       &.remaining-vote {
       }
+    }
+  }
+  .points-entry-button {
+    .TMRWDAO-icon {
+      @apply text-[12px] ml-[2px] cursor-pointer;
     }
   }
 
@@ -69,5 +75,14 @@
   @apply flex flex-col items-center;
   button {
     @apply w-full;
+  }
+}
+.telegram-common-drawer {
+  .my-points-drawer.telegram-common-drawer-body .drawer-body{
+    @apply px-0;
+  }
+  .my-points-drawer {
+    max-height: 100vh;
+    overflow-y: scroll;
   }
 }

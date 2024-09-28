@@ -26,6 +26,10 @@ const imageLists = [
   '/images/tg/empty-points.png',
   '/images/tg/refer-banner.png',
   '/images/tg/invite-success-vote-tip.png',
+  '/images/tg/smile-emoji-icon.png',
+  '/images/tg/gift-icon.png',
+  '/images/tg/celebratory-fireworks-icon.png',
+  '/images/tg/complete-task.png',
 ];
 const mainPageBgColor = '#090816';
 export default function Page() {

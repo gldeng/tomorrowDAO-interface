@@ -16,7 +16,7 @@ import { LeftOutlined } from '@ant-design/icons';
 
 import './index.css';
 
-interface IMyAssetProps {
+export interface IMyAssetProps {
   redirect?: boolean;
   onBack?: () => void;
 }

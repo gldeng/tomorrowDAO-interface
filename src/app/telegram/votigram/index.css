@@ -32,6 +32,12 @@
     font-weight: 400;
     line-height: 18px;
   }
+  .font-14-18-weight {
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 590;
+    line-height: 18px;
+  }
   .font-17-22 {
     font-size: 17px;
     font-style: normal;
@@ -72,6 +78,12 @@
     font-size: 24px;
     font-style: normal;
     font-weight: 590;
+    line-height: 32px; 
+   }
+   .font-28-32 {
+    font-size: 28px;
+    font-style: normal;
+    font-weight: 400;
     line-height: 32px; 
    }
   .sub-title-text {

@@ -191,6 +191,7 @@ interface IRewardInfo {
   estimatedReward: number;
   accountCreation: number;
   votigramVote: number;
+  votigramActivityVote: number;
 }
 interface IGetInviteDetailResponse {
   code: number;
@@ -215,4 +216,46 @@ interface IReferralBindingStatusRes {
     bindingSuccess: boolean;
     needBinding: boolean;
   };
+}
+// ------------------
+interface IGetRankPointsResItem {
+  title: string;
+  description: string;
+  points: number;
+  pointsType: string;
+}
+interface IGetRankPointsRes {
+  code: number;
+  data: {
+    totalPoints: number;
+    totalCount: number;
+    items: Array<IGetRankPointsResItem>;
+  };
+}
+
+// ------------------- task list -------------------
+interface IUserTaskItemDetail {
+  userTaskDetail: string;
+  points: number;
+  complete: boolean;
+  completeCount: number;
+  taskCount: number;
+}
+
+interface IGetTaskListResItem {
+  totalCount: number;
+  userTask: string;
+  data: IUserTaskItemDetail[];
+}
+interface IGetTaskListRes {
+  code: number;
+  data: {
+    taskList: IGetTaskListResItem[];
+  };
+}
+
+// ------------------- complete task item -------------------
+interface ICompleteTaskItemRes {
+  code: string;
+  data: boolean;
 }

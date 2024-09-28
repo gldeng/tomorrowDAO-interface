@@ -5,6 +5,9 @@ const rankingVoteUrl = '/ranking/vote';
 const rankingVoteStatusUrl = '/ranking/vote/status';
 const rankListUrl = '/ranking/default-proposal';
 const voteLikeUrl = '/ranking/like';
+const rankPointsUrl = '/user/my-points';
+const taskListsUrl = '/user/task-list';
+const completeTaskUrl = '/user/complete-task';
 const referrelCodeUrl = '/referral/get-link';
 const referrelInviteDetailUrl = '/referral/invite-detail';
 const referrelInviteLeaderBoardUrl = '/referral/invite-leader-board';
@@ -98,6 +101,29 @@ export const reportUserSource = async (params: {
     ...params,
   });
 };
+export const getRankPoints = async (params: {
+  chainId: string;
+  skipCount: number;
+  maxResultCount: number;
+}): Promise<IGetRankPointsRes> => {
+  return apiServer.get(rankPointsUrl, {
+    ...params,
+  });
+};
+export const getTaskList = async (params: { chainId: string }): Promise<IGetTaskListRes> => {
+  return apiServer.get(taskListsUrl, {
+    ...params,
+  });
+};
+export const completeTaskItem = async (params: {
+  chainId: string;
+  userTask: string;
+  userTaskDetail: string;
+}): Promise<ICompleteTaskItemRes> => {
+  return apiServer.get(completeTaskUrl, {
+    ...params,
+  });
+};
 export const telegramNeedAuthList = [
   transferUrl,
   rankingVoteUrl,
@@ -110,4 +136,7 @@ export const telegramNeedAuthList = [
   referrelInviteConfigUrl,
   referralBindingStatusUrl,
   reportSourceUrl,
+  rankPointsUrl,
+  taskListsUrl,
+  completeTaskUrl,
 ];
