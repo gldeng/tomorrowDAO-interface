@@ -329,7 +329,7 @@ export default function Referral(props: IReferralProps) {
             <ReferList
               isShowMore={false}
               list={referrelListQueryRes?.data?.data ?? []}
-              me={referrelListRes?.data?.me}
+              me={referrelListQueryRes?.data?.me}
               isLoading={referrelListQueryLoading}
             />
           </div>
