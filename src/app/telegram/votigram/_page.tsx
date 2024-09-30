@@ -1,16 +1,15 @@
 'use client';
 import { useSearchParams } from 'next/navigation';
-import SceneLoading from './components/Scene/SceneLoading';
+import SceneLoading from './pageComponents/Scene/SceneLoading';
 import './index.css';
-import Slide from './components/Scene/Slide';
+import Slide from './pageComponents/Scene/Slide';
 import { useEffect, useState } from 'react';
-import Main from './components/Main';
+import Main from './pageComponents/Main';
 import Debug from './Debug';
 import { VotigramScene } from './const';
 import { preloadImages } from 'utils/file';
 import { useConfig } from 'components/CmsGlobalConfig/type';
-import InvitedSuccess from './components/InviteedSuccess';
-import { TelegramPlatform } from '@portkey/did-ui-react';
+import InvitedSuccess from './pageComponents/InviteedSuccess';
 import { getReferrerCode } from './util/start-params';
 
 const imageLists = [

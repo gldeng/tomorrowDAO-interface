@@ -1,0 +1,10 @@
+.discover-page-wrap {
+  min-height: calc(100vh - 186px);
+  color: white;
+}
+.discover-page-tab {
+  color: white;
+  /* height: 56px;
+  padding-top: 24px;
+  margin-bottom: 24px; */
+}

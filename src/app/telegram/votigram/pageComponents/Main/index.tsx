@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import Assets from '../Assets';
-import FootTabBar from '../FootTabBar';
+import FootTabBar from '../../components/FootTabBar';
 import Task from '../Task';
 import VoteList from '../VoteList';
-import Footer from '../Footer';
+import Discover from '../Discover';
+import Footer from '../../components/Footer';
 import Referral from '../Referral';
 import { IStackItem, ITabSource } from '../../type';
 
@@ -13,7 +14,9 @@ export interface IMainProps {
 
 export default function Main(props: IMainProps) {
   const { onShowMore } = props;
-  const [activeTabStack, setActiveTabStack] = useState<IStackItem[]>([{ path: 0 }]);
+  const [activeTabStack, setActiveTabStack] = useState<IStackItem[]>([
+    { path: ITabSource.Discover },
+  ]);
   const activeTab = activeTabStack[activeTabStack.length - 1];
   const pushStackByValue = (value: number) => {
     setActiveTabStack([...activeTabStack, { path: value }]);
@@ -23,6 +26,7 @@ export default function Main(props: IMainProps) {
   };
   return (
     <div className="relative z-[1]">
+      {activeTab.path === ITabSource.Discover && <Discover />}
       {activeTab.path === ITabSource.Vote && <VoteList onShowMore={onShowMore} />}
       <Task
         style={{
@@ -53,7 +57,9 @@ export default function Main(props: IMainProps) {
           }}
         />
       )}
+      {/* {activeTab.path !== ITabSource.Discover && ( */}
       <Footer classname="telegram-votigram-footer-main" />
+      {/* // )} */}
     </div>
   );
 }

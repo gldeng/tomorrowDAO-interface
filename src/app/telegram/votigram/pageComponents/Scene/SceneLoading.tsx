@@ -4,14 +4,14 @@ import { ImageLoveNode } from './ImageLoveNode';
 import { useEffect, useRef, useState } from 'react';
 import { eventBus, GetTokenLogin } from 'utils/myEvent';
 import { TransferStatus } from 'types/telegram';
-import CommonDrawer, { ICommonDrawerRef } from '../CommonDrawer';
+import CommonDrawer, { ICommonDrawerRef } from '../../components/CommonDrawer';
 import { nftTokenTransfer, nftTokenTransferStatus, reportUserSource } from 'api/request';
 import { curChain, nftSymbol } from 'config';
 import { retryWrap } from 'utils/request';
 import { useWebLogin } from 'aelf-web-login';
 import { useConfig } from 'components/CmsGlobalConfig/type';
-import Footer from '../Footer';
-import TimeoutTip from '../TimeoutTip';
+import Footer from '../../components/Footer';
+import TimeoutTip from '../../components/TimeoutTip';
 import { TelegramPlatform } from '@portkey/did-ui-react';
 import { parseStartAppParams } from '../../util/start-params';
 
