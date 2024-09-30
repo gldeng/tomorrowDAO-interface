@@ -4,7 +4,7 @@ import { getReferralBindingStatus } from 'api/request';
 import { curChain } from 'config';
 import { useEffect, useMemo } from 'react';
 import './index.css';
-import Loading from '../Loading';
+import Loading from '../../components/Loading';
 
 interface IInvitedSuccessProps {
   onFinish: () => void;
