@@ -29,7 +29,8 @@ interface IDAOTreasuryRes {
 }
 // -------------------------------------Add Comment-----------------------------
 interface IAddCommentReq {
-  proposalId: string;
+  proposalId?: string;
+  alias?: string;
   chainId: string;
   comment: string;
   parentId?: string;
@@ -58,7 +59,8 @@ interface IAddCommentRes {
 // -------------------------------------Comment List-----------------------------
 interface ICommentListsReq {
   chainId: string;
-  proposalId: string;
+  proposalId?: string;
+  alias?: string;
   skipCount?: number;
   skipId?: string;
   maxResultCount: number;

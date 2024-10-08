@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 // import InfiniteScroll from 'react-infinite-scroll-component';
 import useInfiniteScrollUI from 'react-infinite-scroll-hook';
 import Loading from '../../components/Loading';
+import DiscoverItem from './DiscoverItem';
 
 interface InfiniteListProps {
   category: string;
@@ -58,18 +59,15 @@ export default function InfiniteList(props: InfiniteListProps) {
   return (
     <div>
       {listData?.list.map((appItem, index) => (
-        <div key={index}>
-          {appItem.title}
-          <p>{appItem.description}</p>
-        </div>
+        <DiscoverItem item={appItem} key={index} />
       ))}
       <div ref={sentryRef} />
-      {listLoading && (
-        <div className="text-white">
+
+      {(listLoading || listLoadingMore) && (
+        <div className={`${listLoading ? 'init-loading-wrap' : ''} flex-center`}>
           <Loading />
         </div>
       )}
-      {listLoadingMore && <div className="text-white">loading 123</div>}
     </div>
   );
 }

@@ -1,8 +1,8 @@
 import { Tabs, TabsProps } from 'antd';
 import { ETelegramAppCategory } from '../../type';
-
 import './index.css';
 import InfiniteList from './InfiniteList';
+
 export default function Discover() {
   const items: TabsProps['items'] = [
     {
@@ -13,37 +13,37 @@ export default function Discover() {
     {
       key: ETelegramAppCategory.Game,
       label: 'Game',
-      children: 'Game',
+      children: <InfiniteList category={ETelegramAppCategory.Game} />,
     },
     {
       key: ETelegramAppCategory.Earn,
       label: 'Earn',
-      children: 'Earn',
+      children: <InfiniteList category={ETelegramAppCategory.Earn} />,
     },
     {
       key: ETelegramAppCategory.Finance,
       label: 'Finance',
-      children: 'Finance',
+      children: <InfiniteList category={ETelegramAppCategory.Finance} />,
     },
     {
       key: ETelegramAppCategory.Social,
       label: 'Social',
-      children: 'Social',
+      children: <InfiniteList category={ETelegramAppCategory.Social} />,
     },
     {
       key: ETelegramAppCategory.Utility,
       label: 'Utility',
-      children: 'Utility',
+      children: <InfiniteList category={ETelegramAppCategory.Utility} />,
     },
     {
       key: ETelegramAppCategory.Information,
       label: 'Information',
-      children: 'Information',
+      children: <InfiniteList category={ETelegramAppCategory.Information} />,
     },
     {
       key: ETelegramAppCategory.Ecommerce,
       label: 'E-commerce',
-      children: 'E-commerce',
+      children: <InfiniteList category={ETelegramAppCategory.Ecommerce} />,
     },
   ];
   return (
@@ -52,6 +52,7 @@ export default function Discover() {
         rootClassName="discover-page-tab"
         defaultActiveKey={ETelegramAppCategory.Recommend}
         items={items}
+        tabBarExtraContent={null}
       />
     </div>
   );

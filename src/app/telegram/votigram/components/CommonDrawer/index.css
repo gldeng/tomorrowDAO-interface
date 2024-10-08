@@ -1,5 +1,7 @@
 .telegram-common-drawer {
- 
+  &.TMRWDAO-drawer {
+    z-index: 1002;
+  }
  .TMRWDAO-drawer-content-wrapper {
   @apply !h-auto;
  } 
@@ -44,4 +46,7 @@
 }
 .drawer-retry-icon-wrap {
   @apply flex w-[5rem] h-[5rem] justify-center items-center gap-[0.625rem] shrink-0 rounded-[4rem] border-[0.0625rem] border-solid border-[#5D606C] bg-[#454750];
+}
+.discover-app-detail-drawer-root.telegram-common-drawer {
+  z-index: 1000;
 }

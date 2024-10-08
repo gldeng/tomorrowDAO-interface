@@ -7,6 +7,9 @@ import Discover from '../Discover';
 import Footer from '../../components/Footer';
 import Referral from '../Referral';
 import { IStackItem, ITabSource } from '../../type';
+import clsx from 'clsx';
+import './index.css';
+import ReactDOM from 'react-dom';
 
 export interface IMainProps {
   onShowMore?: (item: IRankingListResItem) => void;
@@ -49,17 +52,21 @@ export default function Main(props: IMainProps) {
           }}
         />
       )}
-      {activeTab.path !== ITabSource.Asset && (
-        <FootTabBar
-          value={activeTab.path}
-          onChange={(value: number) => {
-            pushStackByValue(value);
-          }}
-        />
-      )}
-      {/* {activeTab.path !== ITabSource.Discover && ( */}
-      <Footer classname="telegram-votigram-footer-main" />
-      {/* // )} */}
+      {activeTab.path !== ITabSource.Asset &&
+        ReactDOM.createPortal(
+          <FootTabBar
+            value={activeTab.path}
+            onChange={(value: number) => {
+              pushStackByValue(value);
+            }}
+          />,
+          document.body,
+        )}
+      <Footer
+        classname={clsx('telegram-votigram-footer-main', {
+          'bg-black': activeTab.path === ITabSource.Discover,
+        })}
+      />
     </div>
   );
 }

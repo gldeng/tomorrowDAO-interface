@@ -11,6 +11,7 @@ interface ICommonDrawerProps {
   onClose?: () => void;
   headerClassname?: string;
   bodyClassname?: string;
+  rootClassName?: string;
   showCloseTarget?: boolean;
   showLeftArrow?: boolean;
   drawerProps?: DrawerProps;
@@ -46,6 +47,7 @@ const CommonDrawer = forwardRef<ICommonDrawerRef, ICommonDrawerProps>((props, re
     onClose: handleClose,
     headerClassname,
     bodyClassname,
+    rootClassName,
     showCloseTarget = true,
     showLeftArrow = false,
     drawerProps,
@@ -69,7 +71,7 @@ const CommonDrawer = forwardRef<ICommonDrawerRef, ICommonDrawerProps>((props, re
   return (
     <Drawer
       title={null}
-      rootClassName="telegram-common-drawer"
+      rootClassName={`${rootClassName} telegram-common-drawer`}
       placement={'bottom'}
       closable={false}
       open={open}
