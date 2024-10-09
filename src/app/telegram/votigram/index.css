@@ -130,6 +130,15 @@
         @apply !text-white !bg-[#5222D8] !border-[#5222D8];
       }
     }
+    &:disabled {
+      @apply !text-[#464646] !bg-[#292929] border-[#292929];
+      &:hover {
+        @apply !text-[#464646] !bg-[#292929] !border-[#292929];
+      }
+      &:active {
+        @apply !text-[#464646] !bg-[#292929] !border-[#292929];
+      }
+    }
   }
 }
 .tg-information-card {

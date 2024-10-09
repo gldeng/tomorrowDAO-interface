@@ -74,6 +74,7 @@ export default function VoteItem(props: IVoteItemProps) {
       const { top, right } = rect;
       const div = increseIconDomCreate(top, window.innerWidth - right);
       document.body.appendChild(div);
+      window.Telegram?.WebApp?.HapticFeedback?.impactOccurred?.('medium');
       setTimeout(() => {
         document.body.removeChild(div);
         // animation duration is 1s

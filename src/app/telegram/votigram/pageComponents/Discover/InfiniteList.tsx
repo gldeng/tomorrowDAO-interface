@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import useInfiniteScrollUI from 'react-infinite-scroll-hook';
 import Loading from '../../components/Loading';
 import DiscoverItem from './DiscoverItem';
+import { RefreshIcon } from 'components/Icons';
 
 interface InfiniteListProps {
   category: string;
@@ -16,6 +17,7 @@ interface IFetchResult {
   list: IDiscoverAppItem[];
   hasData: boolean;
 }
+
 export default function InfiniteList(props: InfiniteListProps) {
   const { category } = props;
   const fetchList: (data?: IFetchResult) => Promise<IFetchResult> = async (data) => {
@@ -56,18 +58,36 @@ export default function InfiniteList(props: InfiniteListProps) {
   useEffect(() => {
     listReload();
   }, []);
+  const isLoading = listLoading || listLoadingMore;
+  console.log('listData', listData?.list.length, listLoading, listLoadingMore);
   return (
     <div>
-      {listData?.list.map((appItem, index) => (
-        <DiscoverItem item={appItem} key={index} />
-      ))}
+      {listLoading
+        ? null
+        : listData?.list.map((appItem, index) => <DiscoverItem item={appItem} key={index} />)}
       <div ref={sentryRef} />
 
-      {(listLoading || listLoadingMore) && (
+      {isLoading && (
         <div className={`${listLoading ? 'init-loading-wrap' : ''} flex-center`}>
           <Loading />
         </div>
       )}
+      {!listData?.hasData && !isLoading && (
+        <div className="font-14-18-weight reached-the-bottom text-[#6A6D79] text-center">
+          It has already reached the bottom.
+        </div>
+      )}
+      <div
+        className="text-white flex-center discover-app-list-refresh-icon"
+        onClick={() => {
+          document.body.scrollTop = 0;
+          setTimeout(() => {
+            listReload();
+          }, 300);
+        }}
+      >
+        <RefreshIcon />
+      </div>
     </div>
   );
 }

@@ -13,6 +13,7 @@
  .drawer-header {
   @apply relative flex h-[3.75rem] px-[16px] py-[8px] flex-row justify-between items-center gap-[0.375rem] shrink-0;
   .title {
+    width: max-content;
     color: var(--Text-Gray-2, #EDEEF0);
     font-weight: 590;
     position: absolute;

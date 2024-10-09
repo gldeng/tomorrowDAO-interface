@@ -280,4 +280,21 @@ interface IDiscoverAppItem {
   longDescription: string;
   screenshots: string[];
   totalPoints: number;
+  categories: string[];
+}
+
+// ------------------- discover view -------------------
+interface IGetDiscoverAppViewRes {
+  code: string;
+  data: {
+    discoverViewd: boolean;
+  };
+}
+
+// ------------------- confirm choose -------------------
+interface IDiscoverConfirmChooseRes {
+  code: string;
+  data: {
+    success: boolean;
+  };
 }

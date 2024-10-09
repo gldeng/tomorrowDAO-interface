@@ -156,6 +156,7 @@ export default function Discussion(props: IDiscussionProps) {
           onChange={handleChange}
           status={errorMessage ? 'error' : ''}
           value={content}
+          autoSize={{ minRows: 1, maxRows: 10 }}
         />
         <div>
           <Button

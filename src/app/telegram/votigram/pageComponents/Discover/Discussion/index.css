@@ -10,6 +10,9 @@
     &:focus {
       background: var(--Black-BG-Hover-D, #1B1B1B);
     }
+    &::-webkit-input-placeholder { 
+      color: var(--Black-Disable-D, #616161);
+    }
   }
   .discover-app-detail-send-button {
     font-size: 24px;

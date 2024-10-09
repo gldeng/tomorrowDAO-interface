@@ -1,4 +1,5 @@
 import { Button } from 'aelf-design';
+import { Tag } from 'antd';
 import { DailyTaskIcon, DiscussionIcon } from 'components/Icons';
 import Discussion from '../Discussion';
 import './index.css';
@@ -26,8 +27,13 @@ export default function AppDetail(props: IAppDetailProps) {
         <img className="summary-logo" src={item?.icon} alt="" />
         <div className="summary-desc">
           <h3 className="font-20-28-weight text-white">{item?.title}</h3>
+          <div className="app-detail-wrap-tags my-[2px]">
+            {item?.categories?.map((category, index) => (
+              <Tag key={index}>{category}</Tag>
+            ))}
+          </div>
           <p
-            className="font-14-20 text-[#9A9A9A] mt-[6px] summary-desc-text"
+            className="font-14-20 text-[#9A9A9A] summary-desc-text"
             dangerouslySetInnerHTML={{
               __html: item?.description ?? '',
             }}
