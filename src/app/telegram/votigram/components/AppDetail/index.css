@@ -9,12 +9,12 @@
   .summary-desc {
     @apply ml-[20px] flex flex-col h-[76px] justify-around;
     .summary-desc-text{
-      word-break: break-all;
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
       -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      color: var(--hint_color);
+      display: -webkit-box;
       overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
   .app-link {

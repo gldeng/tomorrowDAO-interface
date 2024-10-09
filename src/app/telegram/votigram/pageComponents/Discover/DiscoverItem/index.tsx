@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { Button } from 'aelf-design';
+import { Tag } from 'antd';
 import CommonDrawer, { ICommonDrawerRef } from '../../../components/CommonDrawer';
 import './index.css';
 import AppDetail from '../AppDetail';
@@ -23,7 +24,11 @@ export default function DiscoverItem(props: IDiscoverProps) {
           <img src={item.icon} className="icon" alt="" width={48} />
           <div className="title-wrap">
             <h3 className="font-16-20-weight">{item.title}</h3>
-            <div className="tag-wrap"></div>
+            <div className="tag-wrap">
+              {item.categories?.map((category, index) => (
+                <Tag key={index}>{category}</Tag>
+              ))}
+            </div>
           </div>
           <a
             href={item.url}

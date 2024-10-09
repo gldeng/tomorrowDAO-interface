@@ -16,6 +16,8 @@ const referralBindingStatusUrl = '/referral/referral-binding-status';
 const reportSourceUrl = '/user/user-source-report';
 
 const discoverAppListUrl = '/discover/app-list';
+const discoverViewUrl = '/discover/view';
+const discoverConfirmChooseUrl = '/discover/choose';
 
 export const nftTokenTransfer = async (
   params: INftTokenTransfer,
@@ -136,6 +138,22 @@ export const getDiscoverAppList = async (params: {
     ...params,
   });
 };
+export const getDiscoverAppView = async (params: {
+  chainId: string;
+}): Promise<IGetDiscoverAppViewRes> => {
+  return apiServer.get(discoverViewUrl, {
+    ...params,
+  });
+};
+
+export const discoverConfirmChoose = async (params: {
+  chainId: string;
+  choices: string[];
+}): Promise<IDiscoverConfirmChooseRes> => {
+  return apiServer.post(discoverConfirmChooseUrl, {
+    ...params,
+  });
+};
 export const telegramNeedAuthList = [
   transferUrl,
   rankingVoteUrl,
@@ -152,4 +170,6 @@ export const telegramNeedAuthList = [
   taskListsUrl,
   completeTaskUrl,
   discoverAppListUrl,
+  discoverViewUrl,
+  discoverConfirmChooseUrl,
 ];
