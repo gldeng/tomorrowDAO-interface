@@ -167,6 +167,9 @@ export default function Discussion(props: IDiscussionProps) {
           status={errorMessage ? 'error' : ''}
           value={content}
           autoSize={{ minRows: 1, maxRows: 10 }}
+          onBlur={() => {
+            window.scrollTo(window.scrollX, window.scrollY - 1);
+          }}
         />
         <div>
           <Button
