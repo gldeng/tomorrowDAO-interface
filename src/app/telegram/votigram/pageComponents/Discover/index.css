@@ -2,6 +2,7 @@
   min-height: 100vh;
   color: white;
   background: #000;
+  overflow: scroll;
   @apply px-[16px] pb-[128px];
   .init-loading-wrap {
     @apply mt-[100px];
@@ -9,59 +10,54 @@
 }
 .discover-page-tab {
   color: white;
-  .TMRWDAO-tabs-nav {
-    position: sticky;
+  .adm-tabs-header {
+    position: fixed;
     height: 72px;
     top: 0px;
     background: #000;
     opacity: 1;
     z-index: 2;
+    border-bottom: none;
+    padding-top: 24px;
   }
-  .TMRWDAO-tabs-nav-list {
+  .adm-tabs-tab-list {
     height: 24px;
-    margin-top: 24px;
-    margin-bottom: 24px;
+    width: calc(100vw - 16px - 16px);
   }
-  
-  & .TMRWDAO-tabs-tab-btn:active,
-  & .TMRWDAO-tabs-tab-btn:focus:not(:focus-visible),
-  & .TMRWDAO-tabs-tab-btn {
-    color: var(--Black-Tertiary-D, #9A9A9A);
-    text-align: center;
-    font-size: 12px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 16px; /* 133.333% */
-  }
-  .TMRWDAO-tabs-tab + .TMRWDAO-tabs-tab {
-    margin: 0 0 0 8px;
-  }
-  .TMRWDAO-tabs-tab {
+   
+   .adm-tabs-content {
+    @apply p-0;
+    padding-top: 72px;
+   }
+   .adm-tabs-tab-wrapper {
+    @apply p-0 flex-grow-0;
+   }
+   .adm-tabs-tab-wrapper + .adm-tabs-tab-wrapper {
+    @apply ml-[8px];
+   }
+   .adm-tabs-tab-line,
+   .adm-tabs-header-mask
+   {
+    @apply hidden;
+   }
+   .adm-tabs-tab {
     display: flex;
     padding: 4px 8px;
     justify-content: center;
     align-items: center;
     border-radius: 100px;
     border: 1px solid var(--Black-BG-Dark-D, #292929);
-  }
-  & >.TMRWDAO-tabs-nav {
-    margin-bottom: 0;
-  }
-  & > .TMRWDAO-tabs-nav .TMRWDAO-tabs-nav-wrap::before,
-  & >.TMRWDAO-tabs-nav::before,
-  & >.TMRWDAO-tabs-nav .TMRWDAO-tabs-nav-operations
-  {
-    display: none;
-  }
-  .TMRWDAO-tabs-ink-bar {
-    display: none !important;
-  }
-  & .TMRWDAO-tabs-tab.TMRWDAO-tabs-tab-active  {
-    background: var(--Black-BG-Dark-D, #292929);
-  }
-  & .TMRWDAO-tabs-tab.TMRWDAO-tabs-tab-active .TMRWDAO-tabs-tab-btn {
     color: var(--Black-Tertiary-D, #9A9A9A);
-  }
+    text-align: center;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+    margin: 0;
+    &.adm-tabs-tab-active {
+      background: var(--Black-BG-Dark-D, #292929);
+      color: var(--Black-Tertiary-D, #9A9A9A);
+    }
+   }
 }
 .discover-app-select-drawer-root {
   &.telegram-common-drawer .TMRWDAO-btn {

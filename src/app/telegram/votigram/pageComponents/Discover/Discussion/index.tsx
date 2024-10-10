@@ -1,7 +1,7 @@
 import { HashAddress } from 'aelf-design';
 import { Input, Button } from 'antd';
 import { curChain } from 'config';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useInfiniteScroll, useRequest } from 'ahooks';
 import { addCommentReq, getCommentLists } from 'api/request';
 import dayjs from 'dayjs';
@@ -12,7 +12,7 @@ import clsx from 'clsx';
 import LoadMoreButton from '../../../components/LoadMoreButton';
 import './index.css';
 import { SendIcon } from 'components/Icons';
-import { set } from 'js-cookie';
+import { xssFilter } from 'utils/xss';
 
 const { TextArea } = Input;
 dayjs.extend(relativeTime);
@@ -35,7 +35,17 @@ enum EPosition {
   tail = 'tail',
 }
 type AddToRenderQueueFn = (lists: ICommentListsItem[], position: EPosition) => void;
-
+const CommentContent = ({ comment }: { comment: string }) => {
+  const filtedContent = useMemo(() => xssFilter(comment), [comment]);
+  return (
+    <pre
+      className="discover-app-detail-body font-14-20"
+      dangerouslySetInnerHTML={{
+        __html: filtedContent,
+      }}
+    ></pre>
+  );
+};
 export default function Discussion(props: IDiscussionProps) {
   const { alias, total } = props;
   const [content, setContent] = useState('');
@@ -117,14 +127,16 @@ export default function Discussion(props: IDiscussionProps) {
       chainId: curChain,
       alias: alias,
     };
-    const res = await getCommentLists(reqParams);
-    if (res.data.totalCount) {
-      updatetotal(res.data.totalCount);
-    }
     const latestComment = latestCommentRes?.data?.comment;
     if (latestComment) {
       addToRenderQueueRef.current?.([latestComment], EPosition.head);
     }
+    setTimeout(async () => {
+      const res = await getCommentLists(reqParams);
+      if (res.data.totalCount) {
+        updatetotal(res.data.totalCount);
+      }
+    }, 500);
   };
   const { run: addComment, loading: addCommentLoading } = useRequest(updateCommentAndApi, {
     manual: true,
@@ -138,7 +150,8 @@ export default function Discussion(props: IDiscussionProps) {
     if (disabled) {
       return;
     }
-    addComment(content);
+    const filtedContent = xssFilter(content);
+    addComment(filtedContent);
     setContent('');
   };
   return (
@@ -195,7 +208,7 @@ export default function Discussion(props: IDiscussionProps) {
                   </p>
                 </div>
               </div>
-              <div className="discover-app-detail-body font-14-20">{commentItem.comment}</div>
+              <CommentContent comment={commentItem.comment} />
             </li>
           );
         })}

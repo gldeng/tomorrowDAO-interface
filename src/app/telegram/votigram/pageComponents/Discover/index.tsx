@@ -1,12 +1,14 @@
-import { Button, Tabs, TabsProps, Checkbox, CheckboxOptionType } from 'antd';
+import { Button, TabsProps, Checkbox } from 'antd';
+import { Tabs } from 'antd-mobile';
 import { ETelegramAppCategory } from '../../type';
 import './index.css';
 import InfiniteList from './InfiniteList';
 import { useAsyncEffect } from 'ahooks';
 import { discoverConfirmChoose, getDiscoverAppView } from 'api/request';
 import { curChain } from 'config';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import CommonDrawer, { ICommonDrawerRef } from '../../components/CommonDrawer';
+
 const items: TabsProps['items'] = [
   {
     key: ETelegramAppCategory.Recommend,
@@ -107,26 +109,18 @@ export default function Discover() {
       chooseDrawerRef.current?.open();
     }
   }, []);
-  const handleTabClick: (activeKey: string, e: any) => void = (key, event) => {
-    // const min = 0;
-    // const wrap = wrapRef.current?.querySelector('.TMRWDAO-tabs-nav-wrap');
-    // const scrollWrap = wrapRef.current?.querySelector('.TMRWDAO-tabs-nav-list') as HTMLElement;
-    // if (!wrap || !scrollWrap) return;
-    // const wrapWidth = wrap.getBoundingClientRect().width;
-    // const listWidth = scrollWrap.getBoundingClientRect().width;
-    // const deltx = wrapWidth - listWidth;
-    // const paddingLeft = 16;
-  };
 
   return (
     <div className="discover-page-wrap" ref={wrapRef}>
-      <Tabs
-        rootClassName="discover-page-tab"
-        defaultActiveKey={ETelegramAppCategory.Recommend}
-        items={items}
-        tabBarExtraContent={null}
-        onTabClick={handleTabClick}
-      />
+      <Tabs defaultActiveKey={ETelegramAppCategory.Recommend} className="discover-page-tab">
+        {items?.map((item) => {
+          return (
+            <Tabs.Tab title={item.label} key={item.key}>
+              {item.children}
+            </Tabs.Tab>
+          );
+        })}
+      </Tabs>
       <CommonDrawer
         title="Choose your favourite category"
         ref={chooseDrawerRef}

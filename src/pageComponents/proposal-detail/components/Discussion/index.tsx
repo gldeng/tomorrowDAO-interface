@@ -19,6 +19,7 @@ import { EDaoGovernanceMechanism } from 'app/(createADao)/create/type';
 import { useWebLogin } from 'aelf-web-login';
 import { useEffectOnce } from 'react-use';
 import clsx from 'clsx';
+import { xssFilter } from 'utils/xss';
 import useResponsive from 'hooks/useResponsive';
 import LoadMoreButton from 'components/LoadMoreButton';
 
@@ -61,6 +62,17 @@ enum EPosition {
 }
 type AddToRenderQueueFn = (lists: ICommentListsItem[], position: EPosition) => void;
 const MultisigDAOTip = 'Only DAO members can submit comments';
+const CommentContent = ({ comment }: { comment: string }) => {
+  const filtedContent = useMemo(() => xssFilter(comment), [comment]);
+  return (
+    <pre
+      className="body"
+      dangerouslySetInnerHTML={{
+        __html: filtedContent,
+      }}
+    ></pre>
+  );
+};
 export default function Discussion(props: IDiscussionProps) {
   const { wallet } = useWebLogin();
   const { proposalId, daoId } = props;
@@ -222,7 +234,8 @@ export default function Discussion(props: IDiscussionProps) {
     if (disabled) {
       return;
     }
-    addComment(content);
+    const filteredContent = xssFilter(content);
+    addComment(filteredContent);
     setContent('');
   };
   useEffect(() => {
@@ -282,7 +295,7 @@ export default function Discussion(props: IDiscussionProps) {
                   <p className="user-info-time">{getShortTimeDesc(commentItem.createTime)}</p>
                 </div>
               </div>
-              <div className="body">{commentItem.comment}</div>
+              <CommentContent comment={commentItem.comment} />
             </li>
           );
         })}

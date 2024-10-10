@@ -4,6 +4,7 @@ import { Tag } from 'antd';
 import CommonDrawer, { ICommonDrawerRef } from '../../../components/CommonDrawer';
 import './index.css';
 import AppDetail from '../AppDetail';
+import ImageWithPlaceholder from 'components/ImageSkeleton';
 
 interface IDiscoverProps {
   item: IDiscoverAppItem;
@@ -40,13 +41,20 @@ export default function DiscoverItem(props: IDiscoverProps) {
             <Button size="small">Open</Button>
           </a>
         </div>
-        {item.screenshots?.[0] && <img src={item.screenshots[0]} alt="" className="cover-image" />}
-        <p
-          className="description"
-          dangerouslySetInnerHTML={{
-            __html: item.longDescription,
-          }}
-        ></p>
+        {item.screenshots?.[0] && (
+          <div className="cover-image">
+            <ImageWithPlaceholder src={item.screenshots[0]} />
+          </div>
+        )}
+
+        {item.longDescription && (
+          <p
+            className="description"
+            dangerouslySetInnerHTML={{
+              __html: item.longDescription,
+            }}
+          ></p>
+        )}
       </div>
       <CommonDrawer
         title="app details"
