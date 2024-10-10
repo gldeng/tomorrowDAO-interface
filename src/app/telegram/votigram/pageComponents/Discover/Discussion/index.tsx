@@ -64,8 +64,7 @@ export default function Discussion(props: IDiscussionProps) {
     const reqParams: ICommentListsReq = {
       maxResultCount: 10,
       chainId: curChain,
-      // alias: alias,
-      proposalId: 'fbd29bd94db5490d3631ea88bf6ceac61db1397a5100a92512849b4b8159055b',
+      alias: alias,
     };
     if (lastComment) {
       reqParams.skipId = lastComment.id;
@@ -109,16 +108,14 @@ export default function Discussion(props: IDiscussionProps) {
     // add to db
     const latestCommentRes = await addCommentReq({
       chainId: curChain,
-      // alias: alias,
-      proposalId: 'fbd29bd94db5490d3631ea88bf6ceac61db1397a5100a92512849b4b8159055b',
+      alias: alias,
       comment: content,
       parentId: parentId,
     });
     const reqParams: ICommentListsReq = {
       maxResultCount: 1,
       chainId: curChain,
-      // alias: alias,
-      proposalId: 'fbd29bd94db5490d3631ea88bf6ceac61db1397a5100a92512849b4b8159055b',
+      alias: alias,
     };
     const res = await getCommentLists(reqParams);
     if (res.data.totalCount) {

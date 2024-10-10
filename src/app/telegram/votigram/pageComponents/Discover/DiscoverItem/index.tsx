@@ -41,7 +41,12 @@ export default function DiscoverItem(props: IDiscoverProps) {
           </a>
         </div>
         {item.screenshots?.[0] && <img src={item.screenshots[0]} alt="" className="cover-image" />}
-        <p className="description">{item.description}</p>
+        <p
+          className="description"
+          dangerouslySetInnerHTML={{
+            __html: item.longDescription,
+          }}
+        ></p>
       </div>
       <CommonDrawer
         title="app details"

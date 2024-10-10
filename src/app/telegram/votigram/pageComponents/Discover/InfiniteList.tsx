@@ -7,6 +7,7 @@ import useInfiniteScrollUI from 'react-infinite-scroll-hook';
 import Loading from '../../components/Loading';
 import DiscoverItem from './DiscoverItem';
 import { RefreshIcon } from 'components/Icons';
+import { ETelegramAppCategory } from '../../type';
 
 interface InfiniteListProps {
   category: string;
@@ -32,7 +33,7 @@ export default function InfiniteList(props: InfiniteListProps) {
     const len = currentList.length + preList.length;
     return {
       list: currentList,
-      hasData: len < res.data?.totalCount,
+      hasData: category === ETelegramAppCategory.Recommend ? true : len < res.data?.totalCount,
     };
   };
   const {
@@ -59,7 +60,6 @@ export default function InfiniteList(props: InfiniteListProps) {
     listReload();
   }, []);
   const isLoading = listLoading || listLoadingMore;
-  console.log('listData', listData?.list.length, listLoading, listLoadingMore);
   return (
     <div>
       {listLoading
@@ -81,9 +81,7 @@ export default function InfiniteList(props: InfiniteListProps) {
         className="text-white flex-center discover-app-list-refresh-icon"
         onClick={() => {
           document.body.scrollTop = 0;
-          setTimeout(() => {
-            listReload();
-          }, 300);
+          listReload();
         }}
       >
         <RefreshIcon />
