@@ -286,9 +286,7 @@ interface IDiscoverAppItem {
 // ------------------- discover view -------------------
 interface IGetDiscoverAppViewRes {
   code: string;
-  data: {
-    discoverViewd: boolean;
-  };
+  data: boolean;
 }
 
 // ------------------- confirm choose -------------------

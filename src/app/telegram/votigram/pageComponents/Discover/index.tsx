@@ -86,11 +86,15 @@ export default function Discover() {
   const chooseDrawerRef = useRef<ICommonDrawerRef>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
   const [selectedCategory, setSelectedCategory] = useState<string[]>([]);
-  const handleConfirmLike = () => {
-    discoverConfirmChoose({
-      chainId: curChain,
-      choices: selectedCategory,
-    });
+  const handleConfirmLike = async () => {
+    try {
+      await discoverConfirmChoose({
+        chainId: curChain,
+        choices: selectedCategory,
+      });
+    } finally {
+      chooseDrawerRef.current?.close();
+    }
   };
   const onSelectChange = (checkedValues: string[]) => {
     setSelectedCategory(checkedValues);
@@ -99,10 +103,9 @@ export default function Discover() {
     const viewRes = await getDiscoverAppView({
       chainId: curChain,
     });
-    if (!viewRes.data.discoverViewd) {
+    if (!viewRes.data) {
       chooseDrawerRef.current?.open();
     }
-    chooseDrawerRef.current?.open();
   }, []);
   const handleTabClick: (activeKey: string, e: any) => void = (key, event) => {
     // const min = 0;
