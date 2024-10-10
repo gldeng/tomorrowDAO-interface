@@ -23,6 +23,7 @@
   .adm-tabs-tab-list {
     height: 24px;
     width: calc(100vw - 16px - 16px);
+    overflow-y: hidden;
   }
    
    .adm-tabs-content {
