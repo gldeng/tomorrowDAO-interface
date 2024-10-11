@@ -55,6 +55,12 @@ export default function Page() {
       setScene(VotigramScene.Main);
     }
   };
+  useEffect(() => {
+    document.body.style.backgroundColor = mainPageBgColor;
+    return () => {
+      document.body.style.backgroundColor = 'initial';
+    };
+  }, []);
 
   return (
     <div className="votigram-wrap">
