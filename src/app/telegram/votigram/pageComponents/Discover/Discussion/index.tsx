@@ -39,7 +39,7 @@ const CommentContent = ({ comment }: { comment: string }) => {
   const filtedContent = useMemo(() => xssFilter(comment), [comment]);
   return (
     <pre
-      className="discover-app-detail-body font-14-20"
+      className="discover-app-detail-body font-14-20 text-wrap break-words"
       dangerouslySetInnerHTML={{
         __html: filtedContent,
       }}
@@ -136,7 +136,7 @@ export default function Discussion(props: IDiscussionProps) {
       if (res.data.totalCount) {
         updatetotal(res.data.totalCount);
       }
-    }, 500);
+    }, 1000);
   };
   const { run: addComment, loading: addCommentLoading } = useRequest(updateCommentAndApi, {
     manual: true,
@@ -184,8 +184,14 @@ export default function Discussion(props: IDiscussionProps) {
           </Button>
         </div>
       </div>
-      {errorMessage && <div className="discover-app-detail-error-message">{errorMessage}</div>}
-      <ul className="discover-app-detail-message-lists">
+      {errorMessage && (
+        <div className="discover-app-detail-error-message font-14-20">{errorMessage}</div>
+      )}
+      <ul
+        className={`${
+          commentListsData?.hasData ? 'with-loadmore' : 'without-loadmore'
+        } discover-app-detail-message-lists`}
+      >
         {renderCommentLists.map((commentItem) => {
           return (
             <li
@@ -198,7 +204,7 @@ export default function Discussion(props: IDiscussionProps) {
                   {/* <Link href={`${explorer}/address/${commentItem.commenter}`}> */}
                   <HashAddress
                     preLen={8}
-                    endLen={11}
+                    endLen={9}
                     className="discover-app-detail-user-info-address"
                     address={commentItem.commenter}
                     chain={curChain}
@@ -216,8 +222,11 @@ export default function Discussion(props: IDiscussionProps) {
           );
         })}
       </ul>
+      {renderCommentLists.length === 0 && (
+        <div className="mt-[64px] mb-[76px] font-14-18 text-center">Waiting for you</div>
+      )}
       {commentListsData?.hasData && <LoadMoreButton onClick={loadMore} loading={loadingMore} />}
-      <div className="h-[148px]"></div>
+      <div className="h-[97px]"></div>
     </div>
   );
 }

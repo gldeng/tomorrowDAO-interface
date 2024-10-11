@@ -46,16 +46,24 @@ export default function AppDetail(props: IAppDetailProps) {
             <DiscussionIcon />
             Discussion
           </h3>
-          <span className="font-20-28-weight text-[#FFF]">{BigNumber(total).toFormat()}</span>
+          {total === 0 ? (
+            <span className="font-12-28-weight text-white">Waiting for you</span>
+          ) : (
+            <span className="font-20-28-weight text-[#FFF]">{BigNumber(total).toFormat()}</span>
+          )}
         </div>
         <div className="voting-points item">
           <h3 className="font-14-20">
             <DailyTaskIcon />
             Voting Points
           </h3>
-          <span className="font-20-28-weight text-[#51FF00]">
-            {BigNumber(item?.totalPoints ?? 0).toFormat()}
-          </span>
+          {item?.totalPoints === 0 ? (
+            <span className="font-12-28-weight text-white">No rating yet</span>
+          ) : (
+            <span className="font-20-28-weight text-[#51FF00]">
+              {BigNumber(item?.totalPoints ?? 0).toFormat()}
+            </span>
+          )}
         </div>
       </div>
       <div className="app-link">
