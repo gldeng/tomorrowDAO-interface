@@ -23,17 +23,20 @@ export default function InfiniteList(props: InfiniteListProps) {
   const { category } = props;
   const fetchList: (data?: IFetchResult) => Promise<IFetchResult> = async (data) => {
     const preList = data?.list ?? [];
+    const aliases =
+      category === ETelegramAppCategory.Recommend ? preList.map((item) => item.alias) : undefined;
     const res = await getDiscoverAppList({
       category: category,
       chainId: curChain,
       skipCount: preList.length,
       maxResultCount: MaxResultCount,
+      aliases,
     });
     const currentList = res?.data?.data ?? [];
     const len = currentList.length + preList.length;
     return {
       list: currentList,
-      hasData: category === ETelegramAppCategory.Recommend ? true : len < res.data?.totalCount,
+      hasData: len < res.data?.totalCount,
     };
   };
   const {
