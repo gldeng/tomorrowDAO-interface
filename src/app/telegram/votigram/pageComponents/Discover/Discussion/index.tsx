@@ -51,6 +51,7 @@ export default function Discussion(props: IDiscussionProps) {
   const [content, setContent] = useState('');
 
   const [errorMessage, setErrorMessage] = useState('');
+  const inputWrapRef = useRef<HTMLDivElement>(null);
 
   const updatetotal = (total: number) => {
     props.onTotalChange?.(total);
@@ -154,12 +155,29 @@ export default function Discussion(props: IDiscussionProps) {
     addComment(filtedContent);
     setContent('');
   };
+  useEffect(() => {
+    const cb = () => {
+      window?.scrollTo(window.scrollX, window.scrollY - 1);
+    };
+    const inputWrap = inputWrapRef.current?.querySelector('textarea');
+    const scroll = () => {
+      setTimeout(() => {
+        inputWrap?.scrollIntoView({ behavior: 'smooth' });
+      }, 500);
+    };
+    inputWrap?.addEventListener('focus', scroll);
+    window?.Telegram?.WebApp?.onEvent('viewportChanged', cb);
+    return () => {
+      window?.Telegram?.WebApp?.offEvent('viewportChanged', cb);
+      inputWrap?.removeEventListener('focus', scroll);
+    };
+  }, []);
   return (
     <div className="discover-app-detail-discussion-wrap">
       <h3 className="font-20-28-weight text-white" id="discussion">
         Discussion <span className="font-14-20">({total})</span>
       </h3>
-      <div className="discover-app-detail-input-wrap">
+      <div className="discover-app-detail-input-wrap" ref={inputWrapRef}>
         <TextArea
           placeholder="Thoughts?..."
           className="discover-app-detail-input-box"
