@@ -1,6 +1,5 @@
 /* eslint-disable no-inline-styles/no-inline-styles */
 
-import 'aelf-web-login/dist/assets/index.css';
 import 'styles/global.css';
 import 'styles/button.css';
 import 'aelf-design/css';

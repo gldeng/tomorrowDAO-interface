@@ -13,12 +13,13 @@ import dayjs from 'dayjs';
 import Link from 'next/link';
 import breadCrumb from 'utils/breadCrumb';
 import BigNumber from 'bignumber.js';
-import { useWebLogin } from 'aelf-web-login';
+import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
 
 const defaultPageSize = 20;
 const allValue = 'All';
 export default function RecordTable() {
-  const { wallet } = useWebLogin();
+  const { walletInfo: wallet } = useConnectWallet();
+
   const { aliasName } = useParams<{ aliasName: string }>();
   const runFetchVoteHistoryRef = useRef<() => void>();
 
@@ -36,7 +37,7 @@ export default function RecordTable() {
       const daoInfoRes = await fetchDaoInfo({ chainId: curChain, alias: aliasName });
       const daoId = daoInfoRes?.data?.id;
       return fetchVoteHistory({
-        address: wallet.address,
+        address: wallet?.address,
         chainId: curChain,
         skipCount: (tableParams.page - 1) * tableParams.pageSize,
         maxResultCount: tableParams.pageSize,
@@ -136,10 +137,10 @@ export default function RecordTable() {
     return 'customRow';
   };
   useEffect(() => {
-    if (wallet.address) {
+    if (wallet?.address) {
       runFetchVoteHistoryRef?.current?.();
     }
-  }, [tableParams, wallet.address]);
+  }, [tableParams, wallet?.address]);
 
   return (
     <ConfigProvider renderEmpty={() => <NoData></NoData>}>

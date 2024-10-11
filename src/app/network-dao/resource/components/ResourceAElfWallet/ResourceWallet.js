@@ -10,7 +10,6 @@ import { Row, Col, Spin, Button, message } from "antd";
 import { SYMBOL, ELF_DECIMAL } from "@src/constants";
 import { thousandsCommaWithDecimal } from "@utils/formater";
 import { resourceTokens } from "@config/config";
-import { WebLoginState, useWebLogin } from "aelf-web-login";
 import {
   WalletOutlined,
   SyncOutlined,
@@ -21,6 +20,7 @@ import addressFormat from "@utils/addressFormat";
 import { isPhoneCheck } from "@utils/deviceCheck";
 import { isActivityBrowser } from "@utils/isWebView";
 import LinkNetworkDao from "components/LinkNetworkDao";
+import { useConnectWallet } from "@aelf-web-login/wallet-adapter-react";
 
 const ResourceWallet = React.forwardRef(
   (
@@ -43,7 +43,7 @@ const ResourceWallet = React.forwardRef(
 
     const [loading, setLoading] = useState(true);
 
-    const { loginState, login, logout } = useWebLogin();
+    const { isConnected, connectWallet } = useConnectWallet();
 
     const getCurrentWalletBalance = useCallback(async () => {
       const payload = {
@@ -194,13 +194,11 @@ const ResourceWallet = React.forwardRef(
                 </Button>
               )} */}
 
-                {!isActivityBrowser() && (loginState === WebLoginState.initial ||
-                  loginState === WebLoginState.lock ||
-                  loginState === WebLoginState.logining) && (
+                {!isActivityBrowser() && !isConnected && (
                     <Button
                       type="text"
                       className="resource-wallet-address-update update-btn"
-                      onClick={() => login()}
+                      onClick={() => connectWallet()}
                     >
                       Login
                     </Button>
@@ -209,7 +207,7 @@ const ResourceWallet = React.forwardRef(
                 <Button
                   type="primary"
                   className="resource-wallet-address-update update-btn"
-                  disabled={loginState !== WebLoginState.logined}
+                  disabled={!isConnected}
                   onClick={refreshWalletInfo}
                 >
                   Refresh

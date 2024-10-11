@@ -19,7 +19,7 @@ import {
 } from "@redux/common/utils";
 import debounce from "lodash.debounce";
 import getChainIdQuery from 'utils/url';
-import { getConfig, useWebLogin, did } from "aelf-web-login";
+import { did } from "@portkey/did-ui-react";
 import NormalProposal from "./NormalProposal/index.jsx";
 import ContractProposal, { contractMethodType } from "./ContractProposal/index.jsx";
 import {
@@ -56,6 +56,7 @@ import {
 import { mainExplorer, explorer } from 'config';
 import useNetworkDaoRouter from "hooks/useNetworkDaoRouter";
 import { useChainSelect } from "hooks/useChainSelect";
+import { useConnectWallet } from "@aelf-web-login/wallet-adapter-react";
 
 const { TabPane } = Tabs;
 
@@ -94,7 +95,7 @@ const CreateProposal = () => {
   const [withoutApprovalProps, setWithoutApprovalProps] = useState({});
   const [withoutApprovalOpen, setWithoutApprovalOpen] = useState(false);
 
-  const { wallet: webLoginWallet, callContract } = useWebLogin();
+  const { walletInfo: webLoginWallet, callSendMethod: callContract } = useConnectWallet();
 
   // open without approval modal
   const onOpenWithoutApprovalModal = (params) => {
@@ -332,9 +333,10 @@ const CreateProposal = () => {
       if (isOnlyUpdateName) {
         let caHash = "";
         if (currentWallet.portkeyInfo || currentWallet.discoverInfo) {
-          did.setConfig({
-            graphQLUrl: getConfig().portkey.graphQLUrl,
-          });
+          // TODO: seems useless
+          // did.setConfig({
+          //   graphQLUrl: getConfig().portkey.graphQLUrl,
+          // });
           const holderInfo = await did.didGraphQL.getHolderInfoByManager({
             caAddresses: [currentWallet.address],
           });
@@ -588,12 +590,12 @@ const CreateProposal = () => {
     const { isOnlyUpdateName } = results;
     const isMobile = isPhoneCheck();
 
-    if (!webLoginWallet.accountInfoSync.syncCompleted) {
-      setContractResult((v) => ({ ...v, confirming: false }));
-      handleCancel();
-      showAccountInfoSyncingModal();
-      return;
-    }
+    // if (!webLoginWallet.accountInfoSync.syncCompleted) {
+    //   setContractResult((v) => ({ ...v, confirming: false }));
+    //   handleCancel();
+    //   showAccountInfoSyncingModal();
+    //   return;
+    // }
 
     if (results.name && currentWallet.discoverInfo) {
       setContractResult((v) => ({ ...v, confirming: false }));
@@ -631,10 +633,10 @@ const CreateProposal = () => {
       confirming: true,
     });
     try {
-      if (!webLoginWallet.accountInfoSync.syncCompleted) {
-        showAccountInfoSyncingModal();
-        return;
-      }
+      // if (!webLoginWallet.accountInfoSync.syncCompleted) {
+      //   showAccountInfoSyncingModal();
+      //   return;
+      // }
 
       const {
         expiredTime,
@@ -728,7 +730,7 @@ const CreateProposal = () => {
     setApplyModal(initApplyModal);
   }, []);
 
-  if (!webLoginWallet.address) {
+  if (!webLoginWallet?.address) {
     return <Result
     className="px-4 lg:px-8"
     status="warning"

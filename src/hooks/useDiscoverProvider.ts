@@ -1,8 +1,9 @@
 import { IPortkeyProvider } from '@portkey/provider-types';
-import { detectDiscoverProvider } from 'aelf-web-login';
+import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
 export default function useDiscoverProvider() {
+  const { walletInfo } = useConnectWallet();
   const discoverProvider = async () => {
-    const provider: IPortkeyProvider | null = await detectDiscoverProvider();
+    const provider: IPortkeyProvider | null = walletInfo?.extraInfo?.provider;
 
     if (provider) {
       if (!provider.isPortkey) {

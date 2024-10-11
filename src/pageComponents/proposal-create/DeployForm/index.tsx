@@ -31,12 +31,11 @@ import {
 } from 'api/request';
 import { timesDecimals } from 'utils/calculate';
 import { trimAddress } from 'utils/address';
-import { useWebLogin } from 'aelf-web-login';
+import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
 import { SkeletonForm } from 'components/Skeleton';
 import { replaceUrlParams } from 'utils/url';
 import dayjs from 'dayjs';
 import { set } from 'js-cookie';
-// import { useWalletSyncCompleted } from 'hooks/useWalletSyncCompleted';
 
 const convertParams = async (address: string, methodName: string, originParams: any) => {
   const contractInfo = await getContract(address);
@@ -82,7 +81,6 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
   const nextRouter = useRouter();
   const [resultModalConfig, setResultModalConfig] = useState(INIT_RESULT_MODAL_CONFIG);
   const { isSyncQuery } = useAelfWebLoginSync();
-  // const { getAccountInfoSync } = useWalletSyncCompleted();
   const { aliasName } = props;
   const {
     data: daoData,
@@ -140,12 +138,12 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
     },
   );
   const treasuryAssetsData = addressTokenList?.data;
-  const { wallet } = useWebLogin();
+  const { walletInfo: wallet } = useConnectWallet();
   useEffect(() => {
     if (daoId) {
       fetchTokenList(daoId);
     }
-  }, [daoId, fetchTokenList, wallet.address]);
+  }, [daoId, fetchTokenList, wallet?.address]);
   const handleSubmit = async () => {
     try {
       if (!isSyncQuery()) {
