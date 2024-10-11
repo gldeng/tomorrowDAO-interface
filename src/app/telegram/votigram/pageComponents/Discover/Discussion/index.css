@@ -1,8 +1,7 @@
 .discover-app-detail-input-wrap {
   @apply flex mt-[16px] gap-[12px];
   .discover-app-detail-input-box {
-    min-height: 50px;
-    height: 50px;
+    min-height: 48px !important;
     color: var(--Black-White, #FFF);
     border-radius: 16px;
     border: 1px solid var(--Black-BG-Light-D, #3A3A3A);
@@ -13,8 +12,13 @@
     &::-webkit-input-placeholder { 
       color: var(--Black-Disable-D, #616161);
     }
+    &.TMRWDAO-input-outlined.TMRWDAO-input-status-error:not(.TMRWDAO-input-disabled) {
+      border: 1px solid var(--Error, #B7142D);
+      background: var(--Black-BG-Hover-D, #1B1B1B);
+    }
   }
   .discover-app-detail-send-button {
+    height: 48px;
     font-size: 24px;
     border-radius: 16px;
     margin-top: 0;
@@ -62,5 +66,20 @@
   }
   .discover-app-detail-user-info-time {
     color: var(--Black-Tertiary-D, #9A9A9A);
+  }
+  .discover-app-detail-error-message {
+    width: calc(100vw - 16px - 16px - 12px - 48px);
+    color: var(--Error, #B7142D);
+    @apply mt-[8px];
+  }
+}
+.discover-app-detail-wrap {
+  .show-more-button-wrap {
+    @apply mb-[44px];
+  }
+}
+.discover-app-detail-message-lists {
+  &.without-loadmore li:last-child {
+    @apply mb-[44px];
   }
 }

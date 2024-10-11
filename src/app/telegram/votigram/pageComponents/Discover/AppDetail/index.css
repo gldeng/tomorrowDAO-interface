@@ -44,7 +44,7 @@
   .app-link {
     @apply my-[32px]  bg-[#000] px-[16px];
     button {
-      @apply h-[48px] w-full;
+      @apply h-[48px] w-full rounded-2xl;
     }
   }
   .app-link-text {

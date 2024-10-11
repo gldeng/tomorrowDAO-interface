@@ -69,30 +69,24 @@ export default function Main(props: IMainProps) {
           }}
         />
       )}
-      {isNotAssetPage &&
-        typeof document.body !== 'undefined' &&
-        ReactDOM.createPortal(
-          <FootTabBar
-            value={activeTab.path}
-            onChange={(value: number) => {
-              pushStackByValue(value);
-            }}
-          />,
-          document.body,
-        )}
-      {isNotAssetPage &&
-        typeof document.body !== 'undefined' &&
-        ReactDOM.createPortal(
-          <div
-            className="wallet-entry-button"
-            onClick={() => {
-              pushStackByValue(ITabSource.Asset);
-            }}
-          >
-            <WalletIcon />
-          </div>,
-          document.body,
-        )}
+      {isNotAssetPage && typeof document.body !== 'undefined' && (
+        <FootTabBar
+          value={activeTab.path}
+          onChange={(value: number) => {
+            pushStackByValue(value);
+          }}
+        />
+      )}
+      {isNotAssetPage && typeof document.body !== 'undefined' && (
+        <div
+          className="wallet-entry-button"
+          onClick={() => {
+            pushStackByValue(ITabSource.Asset);
+          }}
+        >
+          <WalletIcon />
+        </div>
+      )}
       {activeTab.path !== ITabSource.Discover && (
         <Footer
           classname={clsx('telegram-votigram-footer-main', {
