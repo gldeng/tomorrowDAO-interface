@@ -7,13 +7,8 @@
     @apply w-[80px] h-[80px] rounded-[24px];
   }
   .summary-desc {
-    @apply ml-[20px] flex flex-col  justify-around;
+    @apply ml-[20px] flex flex-col justify-center;
     .summary-desc-text{
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2;
-      overflow: hidden;
     }
   }
   .statistics-data {

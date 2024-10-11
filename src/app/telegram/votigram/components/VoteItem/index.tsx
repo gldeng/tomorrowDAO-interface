@@ -16,7 +16,6 @@ interface IVoteItemProps {
   index: number;
   canVote: boolean;
   onVote?: (item: IRankingListResItem) => void;
-  onShowMore?: (item: IRankingListResItem) => void;
   onReportClickCount: (item: ILikeItem) => void;
   item: IRankingListResItem;
   isToolTipVisible?: boolean;

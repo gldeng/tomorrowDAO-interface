@@ -38,29 +38,13 @@ export default function Page() {
   const isDebug = searchParams.get('debug');
   const { voteMain } = useConfig() ?? {};
 
-  const handleShowAppDetail = () => {
-    const webapp = window.Telegram.WebApp;
-    const button = window?.Telegram?.WebApp?.BackButton;
-    button.show();
-    webapp.setBackgroundColor('#212121');
-  };
-
   useEffect(() => {
     preloadImages(imageLists);
     preloadImages(voteMain?.topBannerImages ?? []);
   }, []);
   useEffect(() => {
     const webapp = window.Telegram.WebApp;
-    const button = webapp?.BackButton;
-    const handleBack = () => {
-      button.hide();
-      webapp.setBackgroundColor(mainPageBgColor);
-    };
-    button.onClick(handleBack);
     webapp.setBackgroundColor(mainPageBgColor);
-    return () => {
-      button.offClick(handleBack);
-    };
   }, []);
 
   const enterMainPage = () => {
@@ -71,6 +55,12 @@ export default function Page() {
       setScene(VotigramScene.Main);
     }
   };
+  useEffect(() => {
+    document.body.style.backgroundColor = mainPageBgColor;
+    return () => {
+      document.body.style.backgroundColor = 'initial';
+    };
+  }, []);
 
   return (
     <div className="votigram-wrap">
@@ -98,7 +88,7 @@ export default function Page() {
       {scene === VotigramScene.InvitedSuccess && (
         <InvitedSuccess onFinish={() => setScene(VotigramScene.Main)} />
       )}
-      {scene === VotigramScene.Main && <Main onShowMore={handleShowAppDetail} />}
+      {scene === VotigramScene.Main && <Main />}
       {isDebug && <Debug setScene={setScene} />}
     </div>
   );

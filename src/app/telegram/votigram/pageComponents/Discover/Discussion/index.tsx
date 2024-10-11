@@ -226,7 +226,6 @@ export default function Discussion(props: IDiscussionProps) {
         <div className="mt-[64px] mb-[76px] font-14-18 text-center">Waiting for you</div>
       )}
       {commentListsData?.hasData && <LoadMoreButton onClick={loadMore} loading={loadingMore} />}
-      <div className="h-[97px]"></div>
     </div>
   );
 }

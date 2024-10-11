@@ -108,7 +108,6 @@ export default function Discover() {
     if (!viewRes.data) {
       chooseDrawerRef.current?.open();
     }
-    chooseDrawerRef.current?.open();
   }, []);
 
   return (

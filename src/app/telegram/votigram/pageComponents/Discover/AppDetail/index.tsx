@@ -32,14 +32,17 @@ export default function AppDetail(props: IAppDetailProps) {
               <Tag key={index}>{category}</Tag>
             ))}
           </div>
-          <p
-            className="font-14-20 text-[#9A9A9A] summary-desc-text"
-            dangerouslySetInnerHTML={{
-              __html: item?.description ?? '',
-            }}
-          ></p>
         </div>
       </div>
+      {item?.description && (
+        <p
+          className="font-14-20 text-[#9A9A9A] summary-desc-text px-[16px] mt-[32px]"
+          dangerouslySetInnerHTML={{
+            __html: item?.description ?? '',
+          }}
+        ></p>
+      )}
+
       <div className="statistics-data">
         <div className="app-discussion-wrap item">
           <h3 className="font-14-20" onClick={handleScrollToDiscussion}>

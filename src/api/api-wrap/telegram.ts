@@ -133,8 +133,9 @@ export const getDiscoverAppList = async (params: {
   category: string;
   skipCount: number;
   maxResultCount: number;
+  aliases?: string[];
 }): Promise<IGetDiscoverAppListRes> => {
-  return apiServer.get(discoverAppListUrl, {
+  return apiServer.post(discoverAppListUrl, {
     ...params,
   });
 };

@@ -9,7 +9,6 @@ import Referral from '../Referral';
 import { IStackItem, ITabSource } from '../../type';
 import clsx from 'clsx';
 import './index.css';
-import ReactDOM from 'react-dom';
 
 export interface IMainProps {
   onShowMore?: (item: IRankingListResItem) => void;
@@ -32,7 +31,6 @@ const WalletIcon = () => (
   </svg>
 );
 export default function Main(props: IMainProps) {
-  const { onShowMore } = props;
   const [activeTabStack, setActiveTabStack] = useState<IStackItem[]>([
     { path: ITabSource.Discover },
   ]);
@@ -47,7 +45,7 @@ export default function Main(props: IMainProps) {
   return (
     <div className="relative z-[1]">
       {activeTab.path === ITabSource.Discover && <Discover />}
-      {activeTab.path === ITabSource.Vote && <VoteList onShowMore={onShowMore} />}
+      {activeTab.path === ITabSource.Vote && <VoteList />}
       <Task
         style={{
           display: activeTab.path === ITabSource.Task ? 'block' : 'none',
