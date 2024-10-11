@@ -2,7 +2,6 @@
   min-height: 100vh;
   color: white;
   background: #000;
-  overflow: scroll;
   @apply px-[16px] pb-[128px];
   .init-loading-wrap {
     @apply mt-[100px];
@@ -11,7 +10,7 @@
 .discover-page-tab {
   color: white;
   .adm-tabs-header {
-    position: fixed;
+    position: sticky;
     height: 72px;
     top: 0px;
     left: 0;
@@ -22,8 +21,6 @@
     z-index: 2;
     border-bottom: none;
     padding-top: 24px;
-    padding-left: 16px;
-    padding-right: 16px;
   }
   .adm-tabs-tab-list {
     height: 26px;
@@ -33,7 +30,6 @@
    
    .adm-tabs-content {
     @apply p-0;
-    padding-top: 72px;
    }
    .adm-tabs-tab-wrapper {
     @apply p-0 flex-grow-0;
