@@ -27,15 +27,12 @@ import useNftBalanceChange from '../../hook/use-nft-balance-change';
 import { RightOutlined } from '@aelf-design/icons';
 import MyPoints from '../../components/MyPoints';
 
-interface IVoteListProps {
-  onShowMore?: (item: IRankingListResItem) => void;
-}
-export default function VoteList(props: IVoteListProps) {
+// interface IVoteListProps {}
+export default function VoteList() {
   const confirmDrawerRef = useRef<ICommonDrawerRef>(null);
   const loadingDrawerRef = useRef<ICommonDrawerRef>(null);
   const ruleDrawerRef = useRef<ICommonDrawerRef>(null);
   const retryDrawerRef = useRef<ICommonDrawerRef>(null);
-  const { onShowMore } = props;
   const nftMissingModalRef = useRef<ICommonModalRef>(null);
   const pointsDrawerRef = useRef<ICommonDrawerRef>(null);
 
@@ -324,7 +321,6 @@ export default function VoteList(props: IVoteListProps) {
                         setCurrentVoteItem(item);
                         confirmDrawerRef.current?.open();
                       }}
-                      onShowMore={onShowMore}
                       onReportClickCount={(item: ILikeItem) => {
                         reportQueue.current.push(item);
                         handleReportQueue();
