@@ -1,4 +1,4 @@
-import { useWebLogin } from 'aelf-web-login';
+import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
 import CommonDrawer, { ICommonDrawerRef } from '../CommonDrawer';
 import { getInviteDetail, getReferrelConfig, getReferrelList } from 'api/request';
 import { connectUrl, curChain, networkType, portkeyServer } from 'config';
@@ -39,7 +39,7 @@ interface IReferralProps {
   onSuccess?: () => void;
 }
 export default function Referral(props: IReferralProps) {
-  const { wallet, walletType } = useWebLogin();
+  const { walletInfo: wallet, walletType } = useConnectWallet();
   const [currentTimePeriod, setCurrentTimePeriod] = useState('');
   const ruleDrawerRef = useRef<ICommonDrawerRef>(null);
   const shareDrawerRef = useRef<ICommonDrawerRef>(null);
@@ -84,10 +84,10 @@ export default function Referral(props: IReferralProps) {
   );
   const generateCode = async () => {
     const timestamp = Date.now();
-    const didWallet = wallet.portkeyInfo;
+    const didWallet = wallet?.extraInfo?.portkeyInfo;
     const message = Buffer.from(`${didWallet?.walletInfo.address}-${timestamp}`).toString('hex');
     const signature = AElf.wallet.sign(message, didWallet?.walletInfo.keyPair).toString('hex');
-    const publicKey = wallet.publicKey ?? '';
+    const publicKey = wallet?.extraInfo?.publicKey ?? '';
     const { caHash } = await getCaHashAndOriginChainIdByWallet(wallet, walletType);
     const requestObject = {
       grant_type: 'signature',

@@ -18,7 +18,7 @@ import { CommonOperationResultModalType } from 'components/CommonOperationResult
 import { okButtonConfig } from 'components/ResultModal';
 import Symbol from 'components/Symbol';
 import { useParams } from 'next/navigation';
-import { useWebLogin } from 'aelf-web-login';
+import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
 
 type TInfoTypes = {
   height?: number | string;
@@ -61,7 +61,7 @@ export default function MyInfo(props: TInfoTypes) {
     titleNode,
   } = props;
   const { login, isLogin } = useWalletService();
-  const { wallet } = useWebLogin();
+  const { walletInfo: wallet } = useConnectWallet();
   const [elfBalance, setElfBalance] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [info, setInfo] = useState<IMyInfo>({
@@ -83,7 +83,7 @@ export default function MyInfo(props: TInfoTypes) {
     const reqMyInfoParams: IProposalMyInfoReq = {
       chainId: curChain,
       alias: aliasName,
-      address: wallet.address,
+      address: wallet!.address,
     };
     if (proposalId) {
       reqMyInfoParams.proposalId = proposalId;
@@ -95,7 +95,7 @@ export default function MyInfo(props: TInfoTypes) {
     const { balance } = await GetBalanceByContract(
       {
         symbol: symbol,
-        owner: wallet.address,
+        owner: wallet!.address,
       },
       { chain: curChain },
     );
@@ -114,26 +114,26 @@ export default function MyInfo(props: TInfoTypes) {
     const votesAmountTokenBallot = divDecimals(data.votesAmountTokenBallot, decimal).toNumber();
     data.votesAmount = votesAmountTokenBallot + data.votesAmountUniqueVote;
     setInfo(data);
-  }, [wallet.address, aliasName, proposalId]);
+  }, [aliasName, proposalId, wallet]);
   fetchMyInfoRef.current = fetchMyInfo;
 
   useEffect(() => {
-    if (wallet.address && isLogin) {
+    if (wallet?.address && isLogin) {
       console.log('fetchMyInfo wallet.address', wallet.address);
       fetchMyInfoRef.current?.();
     }
-  }, [wallet.address, isLogin]);
+  }, [wallet?.address, isLogin]);
 
   const myInfoItems = [
     {
       key: '0',
       label: '',
       children: info && (
-        <a href={`${explorer}/address/${wallet.address}`} target="_blank" rel="noreferrer">
+        <a href={`${explorer}/address/${wallet?.address}`} target="_blank" rel="noreferrer">
           <HashAddress
             preLen={8}
             endLen={11}
-            address={wallet.address}
+            address={wallet!.address}
             className="form-item-title"
             chain={sideChainSuffix}
           ></HashAddress>

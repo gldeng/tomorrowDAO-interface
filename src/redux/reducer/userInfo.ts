@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { WalletInfo } from 'aelf-web-login';
 import { HYDRATE } from 'next-redux-wrapper';
 import { TAppState } from 'redux/store';
 import { TWalletInfoType } from 'types';
@@ -25,7 +24,7 @@ const initialState: IUserInfoState = {
   userInfo: logOutUserInfo,
   walletInfo: {
     address: '',
-  } as WalletInfo,
+  },
 };
 
 // Actual Slice

@@ -10,7 +10,7 @@ import { curChain, rpcUrlTDVW, sideChainCAContractAddress, voteAddress } from 'c
 import { useAsyncEffect, useRequest } from 'ahooks';
 import { getRawTransaction } from 'utils/transaction';
 import CommonModal, { ICommonModalRef } from '../CommonModal';
-import { useWebLogin } from 'aelf-web-login';
+import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
 import { EVoteOption } from 'types/vote';
 import { retryWrap } from 'utils/request';
 import { VoteStatus } from 'types/telegram';
@@ -117,7 +117,7 @@ export default function VoteList(props: IVoteListProps) {
   const renderPointsStr = useMemo(() => {
     return BigNumber(renderPoints).toFormat();
   }, [renderPoints]);
-  const { wallet, walletType } = useWebLogin();
+  const { walletInfo: wallet, walletType } = useConnectWallet();
   const requestVoteStatus = async () => {
     retryDrawerRef.current?.close();
     loadingDrawerRef.current?.open();
@@ -131,7 +131,7 @@ export default function VoteList(props: IVoteListProps) {
         async () =>
           fetchRankingVoteStatus({
             chainId: curChain,
-            address: wallet.address,
+            address: wallet!.address,
             proposalId: currentVoteItem?.proposalId ?? '',
           }),
         (loopRes) =>

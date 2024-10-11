@@ -231,10 +231,11 @@ export const sendTransactionWith = async (
     });
     const chainIdQuery = getChainIdQuery();
     const result = await callContract({
+      chainId: chainIdQuery.chainId,
       contractAddress,
       methodName: method,
       args: param,
-      options: {
+      sendOptions: {
         chainId: chainIdQuery.chainId
       }
     });

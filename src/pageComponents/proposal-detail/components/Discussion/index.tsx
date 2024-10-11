@@ -16,7 +16,8 @@ import { callViewContract } from 'contract/callContract';
 import { unionBy } from 'lodash-es';
 import './index.css';
 import { EDaoGovernanceMechanism } from 'app/(createADao)/create/type';
-import { useWebLogin } from 'aelf-web-login';
+import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
+
 import { useEffectOnce } from 'react-use';
 import clsx from 'clsx';
 import useResponsive from 'hooks/useResponsive';
@@ -62,7 +63,7 @@ enum EPosition {
 type AddToRenderQueueFn = (lists: ICommentListsItem[], position: EPosition) => void;
 const MultisigDAOTip = 'Only DAO members can submit comments';
 export default function Discussion(props: IDiscussionProps) {
-  const { wallet } = useWebLogin();
+  const { walletInfo: wallet } = useConnectWallet();
   const { proposalId, daoId } = props;
   const [content, setContent] = useState('');
   const [total, setTotal] = useState(0);
@@ -113,7 +114,7 @@ export default function Discussion(props: IDiscussionProps) {
     async () => {
       const daoInfo = await fetchDaoInfo({ daoId, chainId: curChain });
       if (daoInfo.data.governanceMechanism === EDaoGovernanceMechanism.Multisig) {
-        if (!wallet.address) {
+        if (!wallet?.address) {
           return {
             isEnable: false,
             message: MultisigDAOTip,
@@ -137,7 +138,7 @@ export default function Discussion(props: IDiscussionProps) {
           daoId,
           treasuryContractAddress,
         );
-        if (!wallet.address || !treasuryAddress) {
+        if (!wallet?.address || !treasuryAddress) {
           return {
             isEnable: false,
             message: tip,
@@ -227,7 +228,7 @@ export default function Discussion(props: IDiscussionProps) {
   };
   useEffect(() => {
     checkSendStatus();
-  }, [wallet.address, checkSendStatus]);
+  }, [wallet?.address, checkSendStatus]);
   return (
     <div className="discussion-wrap">
       <h2 className="card-title">

@@ -9,8 +9,8 @@ import { store } from 'redux/store';
 import { formatErrorMsg } from './util';
 import { getTxResult } from 'utils/getTxResult';
 import { sleep } from 'utils/common';
-import { GetContractServiceMethod } from './baseContract';
 import { mainChainAddress, sideChainAddress } from 'config';
+import { webLoginInstance } from './webLogin';
 
 export const multiTokenContractRequest = async <T, R>(
   methodName: string,
@@ -37,31 +37,40 @@ export const multiTokenContractRequest = async <T, R>(
     params,
   );
 
-  const CallContractMethod = GetContractServiceMethod(curChain, options?.type);
   try {
-    const res: R = await CallContractMethod({
-      contractAddress,
-      methodName,
-      args: params,
-    });
-    console.log('=====multiTokenContractRequest res: ', methodName, res);
-    const result = res as IContractError;
-
-    if (result?.error || result?.code || result?.Error) {
-      throw formatErrorMsg(result);
-    }
-
     if (options?.type === ContractMethodType.VIEW) {
-      return res;
+      const res: { data: R } = await webLoginInstance.callViewMethod(curChain, {
+        contractAddress,
+        methodName,
+        args: params,
+      });
+
+      const result = res.data as unknown as IContractError;
+      if (result?.error || result?.code || result?.Error) {
+        throw formatErrorMsg(result);
+      }
+
+      return res.data;
+    } else {
+      const res = await webLoginInstance.callSendMethod(curChain, {
+        contractAddress,
+        methodName,
+        args: params,
+      });
+      const result = res as unknown as IContractError;
+      if (result?.error || result?.code || result?.Error) {
+        throw formatErrorMsg(result);
+      }
+
+      const { transactionId, TransactionId } = result.result || result;
+      const resTransactionId = TransactionId || transactionId;
+      await sleep(1000);
+
+      const transaction = await getTxResult(resTransactionId!, curChain as Chain);
+
+      console.log('=====multiTokenContractRequest transaction: ', methodName, transaction);
+      return { TransactionId: transaction.TransactionId, TransactionResult: transaction.txResult };
     }
-
-    const { transactionId, TransactionId } = result.result || result;
-    const resTransactionId = TransactionId || transactionId;
-    await sleep(1000);
-    const transaction = await getTxResult(resTransactionId!, curChain as Chain);
-
-    console.log('=====multiTokenContractRequest transaction: ', methodName, transaction);
-    return { TransactionId: transaction.TransactionId, TransactionResult: transaction.txResult };
   } catch (error) {
     console.error('=====multiTokenContractRequest error:', methodName, JSON.stringify(error));
     const resError = error as IContractError;
