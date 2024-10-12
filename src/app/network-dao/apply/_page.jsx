@@ -664,9 +664,10 @@ const CreateProposal = () => {
           organizationAddress,
           proposalDescriptionUrl,
         },
-        options: {
-          chainId: chainIdQuery.chainId
-        }
+        chainId: chainIdQuery.chainId,
+        // options: {
+        //   chainId: chainIdQuery.chainId
+        // }
       };
 
       const result = await callContract(params);

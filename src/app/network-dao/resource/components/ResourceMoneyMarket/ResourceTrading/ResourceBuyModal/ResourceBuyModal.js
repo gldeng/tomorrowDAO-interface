@@ -55,9 +55,10 @@ export default class ResourceBuyModal extends PureComponent {
         contractAddress: contracts.tokenConverter,
         methodName: "Buy",
         args: payload,
-        options: {
-          chainId: chainIdQuery.chainId
-        }
+        chainId: chainIdQuery.chainId,
+        // options: {
+        //   chainId: chainIdQuery.chainId
+        // }
       });
 
       console.log("Buy", result);

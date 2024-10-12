@@ -77,6 +77,7 @@ export const useGetToken = () => {
     needLoading?: boolean;
   }) => Promise<null | ITokenRes> = async (params?: { needLoading?: boolean }) => {
     const { needLoading } = params || {};
+    console.log('getToken wallet', wallet, isConnected);
     if (!isConnected || !wallet) return null;
 
     const timestamp = Date.now();
