@@ -7,8 +7,6 @@ import Link from 'next/link';
 import breadCrumb from 'utils/breadCrumb';
 import { eventBus, ShowHeaderExplore } from 'utils/myEvent';
 import useResponsive from 'hooks/useResponsive';
-import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
-import { webLoginInstance } from 'contract/webLogin';
 
 interface LinkWithRightArrowProps {
   href: string;
@@ -24,14 +22,8 @@ const LinkWithRightArrow = (props: LinkWithRightArrowProps) => {
   );
 };
 export default function Page() {
-  const webLoginContext = useConnectWallet();
-
   const exploreButtonRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    console.log('webLoginContext.isConnected', webLoginContext.isConnected);
-    webLoginInstance.setWebLoginContext(webLoginContext);
-  }, [webLoginContext]);
   useEffect(() => {
     breadCrumb.clearBreadCrumb();
   }, []);

@@ -11,7 +11,7 @@ import { PortkeyAAWallet } from '@aelf-web-login/wallet-adapter-portkey-aa';
 import { NightElfWallet } from '@aelf-web-login/wallet-adapter-night-elf';
 import { IConfigProps } from '@aelf-web-login/wallet-adapter-bridge';
 import { init, WebLoginProvider } from '@aelf-web-login/wallet-adapter-react';
-import './telegram';
+// import './telegram';
 
 type TNodes = {
   AELF: { chainId: string; rpcUrl: string };

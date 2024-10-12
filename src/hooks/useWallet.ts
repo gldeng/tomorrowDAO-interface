@@ -17,15 +17,19 @@ import { runTimeEnv } from 'utils/env';
 import { WalletTypeEnum } from '@aelf-web-login/wallet-adapter-base';
 import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
 import { TWalletInfoType } from 'types';
+import { webLoginInstance } from 'contract/webLogin';
 
 export const useWalletService = () => {
   const { connectWallet, disConnectWallet, walletType, walletInfo, isConnected, lock } =
     useConnectWallet();
+  const loginStatus = useSelector((state) => state.loginStatus);
+  const isLogin = loginStatus.loginStatus.isLogin;
 
   return {
     login: connectWallet,
     logout: disConnectWallet,
-    isLogin: isConnected,
+    isConnected: isConnected,
+    isLogin: isLogin,
     walletType,
     lock,
     wallet: walletInfo,
@@ -37,7 +41,6 @@ export const useCheckLoginAndToken = () => {
   const isConnectWallet = isConnected;
   const { getToken, checkTokenValid } = useGetToken();
   const { isTelegram } = useUrlPath();
-  const { isLogin } = useWalletService();
 
   const getTokenUpdate = async () => {
     const tokenRes = await getToken({
@@ -93,14 +96,14 @@ export const useCheckLoginAndToken = () => {
   }, [isConnectWallet]);
 
   useEffect(() => {
-    if (wallet?.address && isLogin) {
+    if (wallet?.address && isConnected) {
       console.log('gtag report', wallet.address);
       window.gtag('set', 'user_id', wallet.address);
       window.gtag('event', 'login_success', {
         user_id: wallet.address,
       });
     }
-  }, [wallet?.address, isLogin]);
+  }, [wallet?.address, isConnected]);
 
   return {
     checkTokenValid,
@@ -109,6 +112,7 @@ export const useCheckLoginAndToken = () => {
 };
 export const useWalletInit = () => {
   const { walletInfo, walletType, isConnected, loginError, disConnectWallet } = useConnectWallet();
+  const webLoginContext = useConnectWallet();
 
   const handleClearRef = useRef<() => void>();
   useCheckLoginAndToken();
@@ -147,6 +151,11 @@ export const useWalletInit = () => {
       dispatch(setWalletInfo(cloneDeep(walletInfoToLocal)));
     }
   }, [walletInfo, walletType]);
+
+  useEffect(() => {
+    console.log('webLoginContext.isConnected', webLoginContext.isConnected);
+    webLoginInstance.setWebLoginContext(webLoginContext);
+  }, [webLoginContext]);
 
   useEffect(() => {
     if (loginError) {

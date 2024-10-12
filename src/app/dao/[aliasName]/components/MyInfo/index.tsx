@@ -83,7 +83,7 @@ export default function MyInfo(props: TInfoTypes) {
     const reqMyInfoParams: IProposalMyInfoReq = {
       chainId: curChain,
       alias: aliasName,
-      address: wallet!.address,
+      address: wallet?.address ?? '',
     };
     if (proposalId) {
       reqMyInfoParams.proposalId = proposalId;
@@ -95,7 +95,7 @@ export default function MyInfo(props: TInfoTypes) {
     const { balance } = await GetBalanceByContract(
       {
         symbol: symbol,
-        owner: wallet!.address,
+        owner: wallet?.address ?? '',
       },
       { chain: curChain },
     );
@@ -133,7 +133,7 @@ export default function MyInfo(props: TInfoTypes) {
           <HashAddress
             preLen={8}
             endLen={11}
-            address={wallet!.address}
+            address={wallet?.address ?? ''}
             className="form-item-title"
             chain={sideChainSuffix}
           ></HashAddress>
