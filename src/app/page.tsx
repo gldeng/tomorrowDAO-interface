@@ -23,7 +23,6 @@ const LinkWithRightArrow = (props: LinkWithRightArrowProps) => {
 };
 export default function Page() {
   const exploreButtonRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
     breadCrumb.clearBreadCrumb();
   }, []);

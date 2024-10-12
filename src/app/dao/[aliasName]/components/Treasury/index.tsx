@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Form, TableProps, Table, Skeleton, message } from 'antd';
-import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
+import { useWebLogin } from 'aelf-web-login';
 import treasuryIconSrc from 'assets/imgs/treasury-icon.svg';
 import { Button, HashAddress } from 'aelf-design';
 import { callContract } from 'contract/callContract';
@@ -101,7 +101,7 @@ const Treasury: React.FC<IProps> = (props) => {
       manual: true,
     },
   );
-  const { walletInfo: wallet } = useConnectWallet();
+  const { wallet } = useWebLogin();
   const [createProposalLoading, setCreateProposalLoading] = useState(false);
   const handleCreateProposal = async () => {
     setCreateProposalLoading(true);
@@ -111,7 +111,7 @@ const Treasury: React.FC<IProps> = (props) => {
         setCreateProposalLoading(false);
         return;
       }
-      const checkRes = await checkCreateProposal(daoRes, wallet!.address);
+      const checkRes = await checkCreateProposal(daoRes, wallet.address);
       if (checkRes) {
         router.push(`/dao/${aliasName}/proposal/create?tab=${EProposalActionTabs.TREASURY}`);
       }
@@ -189,7 +189,7 @@ const Treasury: React.FC<IProps> = (props) => {
               <p className="assets-help-message assets-help-message-text-wrap">
                 The treasury function is not currently enabled for this DAO.
               </p>
-              {wallet?.address === creator && (
+              {wallet.address === creator && (
                 <Button className="w-[172px] mt-6" type="primary" onClick={initTreasury}>
                   Enable Treasury
                 </Button>

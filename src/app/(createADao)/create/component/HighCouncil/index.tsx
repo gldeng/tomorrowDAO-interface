@@ -10,7 +10,7 @@ import { min2maxIntegerRule, useRegisterForm, percentRule } from '../utils';
 import FormMembersItem from 'components/FormMembersItem';
 import { StepEnum, StepsContext } from '../../type';
 import { curChain } from 'config/index';
-import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
+import { useWebLogin } from 'aelf-web-login';
 import './index.css';
 import { ApproveThresholdTip } from 'components/ApproveThresholdTip';
 
@@ -23,8 +23,7 @@ const HighCouncil = () => {
   // const daoCreateToken = useSelector((store) => store.daoCreate.token);
   const { stepForm, isShowHighCouncil } = useContext(StepsContext);
   useRegisterForm(form, StepEnum.step2);
-  const { walletInfo: wallet } = useConnectWallet();
-
+  const { wallet } = useWebLogin();
   const metaData = stepForm[StepEnum.step0].submitedRes;
   const disabled = !metaData?.governanceToken;
   const minimalApproveThreshold = Form.useWatch(minimalApproveThresholdNamePath, form);
@@ -304,7 +303,7 @@ const HighCouncil = () => {
           </Form.Item> */}
           <FormMembersItem
             name={highCouncilMembersList}
-            initialValue={[`ELF_${wallet?.address}_${curChain}`]}
+            initialValue={[`ELF_${wallet.address}_${curChain}`]}
             form={form}
             rules={[
               {

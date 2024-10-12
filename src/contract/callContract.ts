@@ -2,11 +2,11 @@ import { IContractOptions, IContractError, ContractMethodType, SupportedELFChain
 import { formatErrorMsg } from './util';
 import { getTxResult } from 'utils/getTxResult';
 import { sleep } from 'utils/common';
+import { GetContractServiceMethod } from './baseContract';
 import { curChain } from 'config';
 import { multiTokenContractRequest } from './multiTokenContract';
 import { proposalCreateContractRequest } from './proposalCreateContract';
 import { TransactionResult } from '@portkey/types';
-import { webLoginInstance } from './webLogin';
 
 export const callContract = async <T>(
   methodName: string,
@@ -23,43 +23,30 @@ export const callContract = async <T>(
     curChain,
   );
 
-  // const CallContractMethod = GetContractServiceMethod(curChain, options?.type);
+  const CallContractMethod = GetContractServiceMethod(curChain, options?.type);
 
   try {
-    if (options?.type === ContractMethodType.VIEW) {
-      const res: { data: any } = await webLoginInstance.callViewMethod(curChain, {
-        contractAddress: address,
-        methodName,
-        args: params,
-      });
+    const res = await CallContractMethod({
+      contractAddress: address,
+      methodName,
+      args: params,
+    });
+    console.log('=====tokenAdapterContractRequest res: ', methodName, res);
+    const result = res as IContractError;
 
-      const result = res.data as unknown as IContractError;
-      if (result?.error || result?.code || result?.Error) {
-        throw formatErrorMsg(result);
-      }
-
-      return res.data;
-    } else {
-      const res = await webLoginInstance.callSendMethod(curChain, {
-        contractAddress: address,
-        methodName,
-        args: params,
-      });
-      const result = res as unknown as IContractError;
-      if (result?.error || result?.code || result?.Error) {
-        throw formatErrorMsg(result);
-      }
-
-      const { transactionId, TransactionId } = result.result || result;
-      const resTransactionId = TransactionId || transactionId;
-      await sleep(1000);
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const transaction = await getTxResult(resTransactionId!, curChain as Chain);
-
-      console.log('=====tokenAdapterContractRequest transaction: ', methodName, transaction);
-
-      return transaction;
+    if (result?.error || result?.code || result?.Error) {
+      throw formatErrorMsg(result);
     }
+
+    const { transactionId, TransactionId } = result.result || result;
+    const resTransactionId = TransactionId || transactionId;
+    await sleep(1000);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const transaction = await getTxResult(resTransactionId!, curChain as Chain);
+
+    console.log('=====tokenAdapterContractRequest transaction: ', methodName, transaction);
+
+    return transaction;
   } catch (error) {
     console.error('=====tokenAdapterContractRequest error:', methodName, JSON.stringify(error));
     const resError = error as IContractError;
@@ -72,19 +59,21 @@ export const callViewContract = async <Req, Res>(
   params: Req,
   address: string,
 ): Promise<Res> => {
+  const CallContractMethod = GetContractServiceMethod(curChain, ContractMethodType.VIEW);
+
   try {
-    const res: { data: Res } = await webLoginInstance.callViewMethod(curChain, {
+    const res = await CallContractMethod<Req, Res>({
       contractAddress: address,
       methodName,
       args: params,
     });
     console.log('=====callViewContract res: ', methodName, res);
-    const result = res.data as IContractError;
+    const result = res as IContractError;
 
     if (result?.error || result?.code || result?.Error) {
       throw formatErrorMsg(result);
     }
-    const finalRes = res.data as Res;
+    const finalRes = res as Res;
     return finalRes;
   } catch (error) {
     console.error('=====callViewContract error:', methodName, JSON.stringify(error));
@@ -99,19 +88,25 @@ export const callMainNetViewContract = async <T>(
   params: T,
   address: string,
 ): Promise<any> => {
+  const CallContractMethod = GetContractServiceMethod(
+    SupportedELFChainId.MAIN_NET,
+    ContractMethodType.VIEW,
+  );
+
   try {
-    const res: { data: any } = await webLoginInstance.callViewMethod(SupportedELFChainId.MAIN_NET, {
+    const res = await CallContractMethod({
       contractAddress: address,
       methodName,
       args: params,
     });
-    console.log('=====callViewContract res: ', methodName, res);
-    const result = res.data as IContractError;
+    console.log('=====callMainNetViewContract res: ', methodName, res);
+    const result = res as IContractError;
 
     if (result?.error || result?.code || result?.Error) {
       throw formatErrorMsg(result);
     }
-    return res.data;
+
+    return result;
   } catch (error) {
     console.error('=====callMainNetViewContract error:', methodName, JSON.stringify(error));
     const resError = error as IContractError;

@@ -8,7 +8,7 @@ import CommonDrawer, { ICommonDrawerRef } from '../../components/CommonDrawer';
 import { nftTokenTransfer, nftTokenTransferStatus, reportUserSource } from 'api/request';
 import { curChain, nftSymbol } from 'config';
 import { retryWrap } from 'utils/request';
-import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
+import { useWebLogin } from 'aelf-web-login';
 import { useConfig } from 'components/CmsGlobalConfig/type';
 import Footer from '../../components/Footer';
 import TimeoutTip from '../../components/TimeoutTip';
@@ -51,7 +51,7 @@ function SceneLoading(props: ISceneLoadingProps) {
   const timeoutRef = useRef<NodeJS.Timeout>();
   const percentRef = useRef(0);
   percentRef.current = percent;
-  const { walletInfo: wallet } = useConnectWallet();
+  const { wallet } = useWebLogin();
   const enterNextScene = async (isAlreadyClaimed?: boolean) => {
     setPercent(100);
     try {
@@ -71,7 +71,7 @@ function SceneLoading(props: ISceneLoadingProps) {
         async () =>
           nftTokenTransferStatus({
             chainId: curChain,
-            address: wallet!.address,
+            address: wallet.address,
             symbol: nftSymbol,
           }),
         (loopRes) => loopRes?.data?.status === TransferStatus.AlreadyClaimed,

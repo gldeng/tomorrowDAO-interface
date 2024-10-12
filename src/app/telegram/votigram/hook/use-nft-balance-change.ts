@@ -1,8 +1,11 @@
 import { curChain, nftSymbol } from 'config';
+import { GetBalanceByContract } from 'contract/callContract';
+import { useAsyncEffect } from 'ahooks';
 import { useEffect, useState } from 'react';
-import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
+import { useWebLogin } from 'aelf-web-login';
 import { nftBalanceSignalr } from 'utils/socket/nft-balance-signalr';
 import SignalR from 'utils/socket/signalr';
+import { HubConnectionState } from '@microsoft/signalr';
 
 interface nftBalanceChangeProps {
   openModal: () => void;
@@ -19,18 +22,18 @@ interface INftBalanceChange {
 export default function useNftBalanceChange(params: nftBalanceChangeProps) {
   const { openModal, closeModal, onNftBalanceChange } = params;
   const [disableOperation, setDisableOperation] = useState(false);
-  const { walletInfo: wallet } = useConnectWallet();
+  const { wallet } = useWebLogin();
   useEffect(() => {
     let socket: SignalR | null = null;
     const initSocket = async () => {
-      const socketInstance = await nftBalanceSignalr.initSocket(wallet!.address);
+      const socketInstance = await nftBalanceSignalr.initSocket(wallet.address);
       if (!socketInstance) {
         return;
       }
       socket = socketInstance;
       socketInstance.sendEvent('RequestUserBalanceProduce', {
         chainId: curChain,
-        address: wallet?.address,
+        address: wallet.address,
       });
       socketInstance.registerHandler('RequestUserBalanceProduce', (nftItem: INftBalanceChange) => {
         console.log('RequestUserBalanceProduce', nftItem);

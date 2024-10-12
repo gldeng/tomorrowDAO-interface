@@ -2,8 +2,8 @@ import { IContractOptions, ContractMethodType, IContractError } from 'types';
 import { formatErrorMsg } from './util';
 import { getTxResult } from 'utils/getTxResult';
 import { sleep } from 'utils/common';
+import { GetContractServiceMethod } from './baseContract';
 import { propalAddress, curChain } from 'config';
-import { webLoginInstance } from './webLogin';
 // import ProtoInstance from 'utils/decode-log';
 
 export const proposalCreateContractRequest = async <T>(
@@ -22,44 +22,36 @@ export const proposalCreateContractRequest = async <T>(
     params,
   );
 
+  const CallContractMethod = GetContractServiceMethod(curChain, options?.type);
+
   try {
-    if (options?.type === ContractMethodType.VIEW) {
-      const res: { data: any } = await webLoginInstance.callViewMethod(curChain, {
-        contractAddress,
-        methodName,
-        args: params,
-      });
+    const res = await CallContractMethod({
+      contractAddress,
+      methodName,
+      args: params,
+    });
+    console.log('=====tokenAdapterContractRequest res: ', methodName, res);
+    const result = res as IContractError;
 
-      const result = res.data as unknown as IContractError;
-      if (result?.error || result?.code || result?.Error) {
-        throw formatErrorMsg(result);
-      }
-
-      return res.data;
-    } else {
-      const res = await webLoginInstance.callSendMethod(curChain, {
-        contractAddress,
-        methodName,
-        args: params,
-      });
-      const result = res as unknown as IContractError;
-      if (result?.error || result?.code || result?.Error) {
-        throw formatErrorMsg(result);
-      }
-
-      const { transactionId, TransactionId } = result.result || result;
-      const resTransactionId = TransactionId || transactionId;
-      await sleep(1000);
-      const transaction = await getTxResult(resTransactionId!, curChain as Chain);
-
-      // console.log('=====tokenAdapterContractRequest transaction: ', methodName, transaction);
-      // const proposalCreatedRes = await ProtoInstance.getLogEventResult<IProposalCreated>({
-      //   contractAddress: propalAddress,
-      //   logsName: 'ProposalCreated',
-      //   TransactionResult: transaction,
-      // });
-      return transaction;
+    if (result?.error || result?.code || result?.Error) {
+      throw formatErrorMsg(result);
     }
+    if (options?.type === ContractMethodType.VIEW) {
+      return res as IContractResult;
+    }
+
+    const { transactionId, TransactionId } = result.result || result;
+    const resTransactionId = TransactionId || transactionId;
+    await sleep(1000);
+    const transaction = await getTxResult(resTransactionId!, curChain as Chain);
+
+    // console.log('=====tokenAdapterContractRequest transaction: ', methodName, transaction);
+    // const proposalCreatedRes = await ProtoInstance.getLogEventResult<IProposalCreated>({
+    //   contractAddress: propalAddress,
+    //   logsName: 'ProposalCreated',
+    //   TransactionResult: transaction,
+    // });
+    return transaction;
   } catch (error) {
     console.error('=====tokenAdapterContractRequest error:', methodName, JSON.stringify(error));
     const resError = error as IContractError;

@@ -18,7 +18,7 @@ import useAelfWebLoginSync from 'hooks/useAelfWebLoginSync';
 import { proposalCreateContractRequest } from 'contract/proposalCreateContract';
 import { okButtonConfig } from 'components/ResultModal';
 import { ButtonCheckLogin } from 'components/ButtonCheckLogin';
-import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
+import { useWebLogin } from 'aelf-web-login';
 import { fetchProposalDetail } from 'api/request';
 import { useAsyncEffect } from 'ahooks';
 import { useParams } from 'next/navigation';
@@ -41,8 +41,7 @@ const HeaderInfo = (props: IHeaderInfoProps) => {
     window.open(url);
   };
   const { isLG } = useResponsive();
-  const { walletInfo: wallet } = useConnectWallet();
-
+  const { wallet } = useWebLogin();
   const { isSyncQuery } = useAelfWebLoginSync();
   const handleExecProposal = async () => {
     try {
@@ -81,7 +80,7 @@ const HeaderInfo = (props: IHeaderInfoProps) => {
     }
   };
   useAsyncEffect(async () => {
-    if (!wallet?.address) {
+    if (!wallet.address) {
       return;
     }
     const params: IProposalDetailReq = {
@@ -93,7 +92,7 @@ const HeaderInfo = (props: IHeaderInfoProps) => {
     }
     const res = await fetchProposalDetail(params);
     setCanExecute(res?.data?.canExecute);
-  }, [wallet?.address]);
+  }, [wallet.address]);
   const proposalStatus = proposalDetailData.proposalStatus as TagColorKey;
   return (
     <BoxWrapper>
@@ -135,7 +134,7 @@ const HeaderInfo = (props: IHeaderInfoProps) => {
             governanceMechanism={proposalDetailData.governanceMechanism}
           />
         </div>
-        {canExecute && proposalDetailData.proposer === wallet?.address && (
+        {canExecute && proposalDetailData.proposer === wallet.address && (
           <ButtonCheckLogin type="primary" className="execute-button" onClick={handleExecProposal}>
             Execute
           </ButtonCheckLogin>

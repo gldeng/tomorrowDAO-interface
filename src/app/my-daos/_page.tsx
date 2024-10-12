@@ -5,7 +5,7 @@ import { useInfiniteScroll } from 'ahooks';
 import { fetchMyDaoList } from 'api/request';
 import { curChain } from 'config';
 import Link from 'next/link';
-import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
+import { useWebLogin } from 'aelf-web-login';
 import LoadMoreButton from 'components/LoadMoreButton';
 import { SkeletonDaoItemList } from 'components/Skeleton';
 import './index.css';
@@ -20,7 +20,7 @@ interface IFetchResult {
   hasData: boolean;
 }
 const MyDaosPage = () => {
-  const { walletInfo: wallet, connectWallet } = useConnectWallet();
+  const { wallet, login } = useWebLogin();
   const { isLogin } = useWalletService();
   const fetchOwnDao: (data?: IFetchResult) => Promise<IFetchResult> = async (data) => {
     const preList = data?.list ?? [];
@@ -38,8 +38,8 @@ const MyDaosPage = () => {
     };
   };
   const wrapConnectCheck = (cb: () => void) => {
-    if (!wallet?.address) {
-      connectWallet();
+    if (!wallet.address) {
+      login();
       return;
     }
     cb();
@@ -82,11 +82,11 @@ const MyDaosPage = () => {
     reload: participatedReload,
   } = useInfiniteScroll(fetchParticipatedDao, { manual: true });
   useEffect(() => {
-    if (wallet?.address && isLogin) {
+    if (wallet.address && isLogin) {
       ownReload();
       participatedReload();
     }
-  }, [ownReload, participatedReload, wallet?.address, isLogin]);
+  }, [ownReload, participatedReload, wallet.address, isLogin]);
   const { isLG } = useResponsive();
   const EmptyNode = (
     <div className="flex flex-col items-center">

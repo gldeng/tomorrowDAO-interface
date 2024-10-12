@@ -1,5 +1,5 @@
 import React from "react";
-import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
+import { WebLoginState, useWebLogin } from "aelf-web-login";
 import { Button } from "antd";
 import { showAccountInfoSyncingModal } from "../SimpleModal/index.tsx";
 
@@ -9,31 +9,22 @@ export default function ButtonWithLoginCheck({
   checkAccountInfoSync,
   ...props
 }) {
-  // const { loginState, login, wallet } = useWebLogin();
-  const { connectWallet, isConnected, connecting } = useConnectWallet()
-
-  // const onClickInternal = (event) => {
-  //   if (
-  //     loginState === WebLoginState.initial ||
-  //     loginState === WebLoginState.eagerly ||
-  //     loginState === WebLoginState.lock
-  //   ) {
-  //     login();
-  //   } else if (loginState === WebLoginState.logined) {
-  //     if (checkAccountInfoSync) {
-  //       if (!wallet.accountInfoSync.syncCompleted) {
-  //         showAccountInfoSyncingModal();
-  //         return;
-  //       }
-  //     }
-  //     onClick?.(event);
-  //   }
-  // };
+  const { loginState, login, wallet } = useWebLogin();
 
   const onClickInternal = (event) => {
-    if (!isConnected) {
-      connectWallet();
-    } else {
+    if (
+      loginState === WebLoginState.initial ||
+      loginState === WebLoginState.eagerly ||
+      loginState === WebLoginState.lock
+    ) {
+      login();
+    } else if (loginState === WebLoginState.logined) {
+      if (checkAccountInfoSync) {
+        if (!wallet.accountInfoSync.syncCompleted) {
+          showAccountInfoSyncingModal();
+          return;
+        }
+      }
       onClick?.(event);
     }
   };
@@ -42,7 +33,11 @@ export default function ButtonWithLoginCheck({
     <Button
       {...props}
       onClick={onClickInternal}
-      loading={ connecting || props.loading }
+      loading={
+        loginState === WebLoginState.logining ||
+        loginState === WebLoginState.logouting ||
+        props.loading
+      }
     >
       {children}
     </Button>

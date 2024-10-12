@@ -1,4 +1,4 @@
-import { WalletTypeEnum, TWalletInfo } from '@aelf-web-login/wallet-adapter-base';
+import { WalletType, WalletInfo } from 'aelf-web-login';
 import { getRawTransactionPortkey } from './getRawTransactionPortkey';
 import { getRawTransactionDiscover } from './getRawTransactionDiscover';
 import { getRawTransactionNightELF } from './getRawTransactionNightELF';
@@ -19,8 +19,8 @@ const checkIsOut = (address: string, record: IAddressTransferListDataListItem) =
 export { checkIsOut };
 
 export interface IRowTransactionPrams<T> {
-  walletInfo: TWalletInfo;
-  walletType: WalletTypeEnum;
+  walletInfo: WalletInfo;
+  walletType: WalletType;
   params: T;
   methodName: string;
   contractAddress: string;
@@ -48,11 +48,11 @@ export const getRawTransaction: <T>(
 
   try {
     switch (walletType) {
-      case WalletTypeEnum.aa:
-        if (!walletInfo?.extraInfo?.portkeyInfo) return Promise.reject('');
+      case WalletType.portkey:
+        if (!walletInfo.portkeyInfo) return Promise.reject('');
         res = await getRawTransactionPortkey({
-          caHash: walletInfo?.extraInfo?.portkeyInfo.caInfo.caHash,
-          privateKey: walletInfo?.extraInfo?.portkeyInfo.walletInfo.privateKey,
+          caHash: walletInfo.portkeyInfo.caInfo.caHash,
+          privateKey: walletInfo.portkeyInfo.walletInfo.privateKey,
           contractAddress,
           caContractAddress,
           rpcUrl,
@@ -60,23 +60,23 @@ export const getRawTransaction: <T>(
           methodName,
         });
         break;
-      case WalletTypeEnum.discover:
-        if (!walletInfo?.address) return Promise.reject('');
+      case WalletType.discover:
+        if (!walletInfo.discoverInfo) return Promise.reject('');
         res = await getRawTransactionDiscover({
           contractAddress,
-          caAddress: walletInfo?.address,
+          caAddress: walletInfo.discoverInfo.address,
           caContractAddress,
           rpcUrl,
           params,
           methodName,
         });
         break;
-      case WalletTypeEnum.elf:
+      case WalletType.elf:
         res = await getRawTransactionNightELF({
           contractAddress,
           params,
           chainId,
-          account: walletInfo?.address || '',
+          account: walletInfo.address,
           methodName,
           rpcUrl,
         });

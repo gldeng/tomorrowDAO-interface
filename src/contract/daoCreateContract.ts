@@ -9,8 +9,8 @@ import { store } from 'redux/store';
 import { formatErrorMsg } from './util';
 import { getTxResult } from 'utils/getTxResult';
 import { sleep } from 'utils/common';
+import { GetContractServiceMethod } from './baseContract';
 import { daoAddress } from 'config';
-import { webLoginInstance } from './webLogin';
 
 export const daoCreateContractRequest = async <T, R>(
   methodName: string,
@@ -31,15 +31,23 @@ export const daoCreateContractRequest = async <T, R>(
     params,
   );
 
+  const CallContractMethod = GetContractServiceMethod(curChain, options?.type);
+
   try {
-    const res: R = await webLoginInstance.callSendMethod(curChain, {
+    const res: R = await CallContractMethod({
       contractAddress,
       methodName,
       args: params,
     });
+    console.log('=====tokenAdapterContractRequest res: ', methodName, res);
     const result = res as IContractError;
+
     if (result?.error || result?.code || result?.Error) {
       throw formatErrorMsg(result);
+    }
+
+    if (options?.type === ContractMethodType.VIEW) {
+      return res;
     }
 
     const { transactionId, TransactionId } = result.result || result;

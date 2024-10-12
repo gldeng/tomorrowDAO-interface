@@ -1,14 +1,14 @@
 import { Button, IButtonProps } from 'aelf-design';
-import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
+import { useWebLogin } from 'aelf-web-login';
 
 export const ButtonCheckLogin: React.FC<IButtonProps> = (props) => {
-  const { walletInfo: wallet, connectWallet } = useConnectWallet();
+  const { wallet, login } = useWebLogin();
   return (
     <Button
       {...props}
       onClick={(...args) => {
-        if (!wallet?.address) {
-          connectWallet();
+        if (!wallet.address) {
+          login();
           return;
         }
         props.onClick?.(...args);

@@ -1,6 +1,6 @@
 import React, { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 import { Form, InputNumber } from 'antd';
-import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
+import { useWebLogin } from 'aelf-web-login';
 import treasuryIconSrc from 'assets/imgs/treasury-icon.svg';
 import { Button, Input } from 'aelf-design';
 
@@ -37,7 +37,7 @@ export interface ITreasuryNoTxGuideRef {
 const TreasuryNoTxGuide = forwardRef<ITreasuryNoTxGuideRef, ITreasuryNoTxGuideProps>(
   (props, ref) => {
     const { address: treasuryAddress, style, className } = props;
-    const { walletInfo: wallet } = useConnectWallet();
+    const { wallet } = useWebLogin();
     const [depoistOpen, setDepoistOpen] = useState(false);
 
     const decimalsRef = useRef<number>(8);
@@ -228,7 +228,7 @@ const TreasuryNoTxGuide = forwardRef<ITreasuryNoTxGuideRef, ITreasuryNoTxGuidePr
                           GetBalanceByContract(
                             {
                               symbol: symbol,
-                              owner: wallet!.address,
+                              owner: wallet.address,
                             },
                             { chain: curChain },
                           ),
