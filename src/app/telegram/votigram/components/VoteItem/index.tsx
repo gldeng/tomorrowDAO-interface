@@ -212,12 +212,13 @@ export default function VoteItem(props: IVoteItemProps) {
         )}
       </div>
       <CommonDrawer
-        title="app details"
+        title=""
         ref={detailDrawerRef}
         showCloseTarget={false}
         showLeftArrow={true}
         bodyClassname="app-detail-drawer"
         headerClassname="app-detail-drawer-header"
+        showCloseIcon={false}
         body={
           <div className="">
             <AppDetail item={item} />
