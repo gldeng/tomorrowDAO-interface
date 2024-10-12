@@ -712,9 +712,10 @@ class VoteContainer extends Component {
           contractAddress: electionContractFromExt.address,
           methodName: "Withdraw",
           args: item,
-          options: {
-            chainId: chainIdQuery.chainId
-          }
+          chainId: chainIdQuery.chainId,
+          // options: {
+          //   chainId: chainIdQuery.chainId
+          // }
         })
         .then((res) => {
           const { error, errorMessage } = res;
@@ -841,9 +842,10 @@ class VoteContainer extends Component {
         contractAddress: electionContractFromExt.address,
         methodName: "Vote",
         args: payload,
-        options: {
-          chainId: chainIdQuery.chainId
-        }
+        chainId: chainIdQuery.chainId,
+        // options: {
+        //   chainId: chainIdQuery.chainId
+        // }
       })
       .then((res) => {
         // todo: error format maybe wrong
@@ -926,9 +928,10 @@ class VoteContainer extends Component {
         contractAddress: electionContractFromExt.address,
         methodName: "ChangeVotingOption",
         args: payload,
-        options: {
-          chainId: chainIdQuery.chainId
-        }
+        chainId: chainIdQuery.chainId,
+        // options: {
+        //   chainId: chainIdQuery.chainId
+        // }
       })
       .then((res) => {
         const { error, errorMessage } = res;
@@ -1159,9 +1162,10 @@ class VoteContainer extends Component {
             schemeId,
             beneficiary: currentWallet?.address,
           },
-          options: {
-            chainId: chainIdQuery.chainId
-          }
+          chainId: chainIdQuery.chainId,
+          // options: {
+          //   chainId: chainIdQuery.chainId
+          // }
         })
         .then((res) => {
           this.setState({

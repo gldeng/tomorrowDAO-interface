@@ -59,9 +59,10 @@ export default class ResourceSellModal extends PureComponent {
         contractAddress: contracts.tokenConverter,
         methodName: "Sell",
         args: payload,
-        options: {
-          chainId: chainIdQuery.chainId
-        }
+        chainId: chainIdQuery.chainId,
+        // options: {
+        //   chainId: chainIdQuery.chainId
+        // }
       })
       if (result.error) {
         this.setState({
