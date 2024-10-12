@@ -21,7 +21,7 @@ import {
   Form,
   Modal,
 } from "antd";
-import { useWebLogin, WebLoginContext } from "aelf-web-login";
+import { useConnectWallet } from "@aelf-web-login/wallet-adapter-react";
 import constants, { API_PATH } from "@redux/common/constants";
 import {
   commonFilter,
@@ -382,7 +382,7 @@ const CreateOrganization = () => {
     proposalType: proposalTypes.ASSOCIATION,
   });
 
-  const { callContract, wallet } = useWebLogin();
+  const { walletInfo: wallet } = useConnectWallet();
 
   const [whiteList, setWhiteList] = useState([]);
   useEffect(() => {
@@ -439,10 +439,10 @@ const CreateOrganization = () => {
         }
       }
 
-      if (!wallet.accountInfoSync.syncCompleted) {
-        showAccountInfoSyncingModal();
-        return;
-      }
+      // if (!wallet.accountInfoSync.syncCompleted) {
+      //   showAccountInfoSyncingModal();
+      //   return;
+      // }
       
       console.log("callContract", param);
       // maximalAbstentionThreshold   maximalRejectionThreshold  minimalApprovalThreshold minimalVoteThreshold

@@ -9,7 +9,8 @@ import { message } from 'antd';
 import MembersPage from 'pageComponents/members';
 import './index.css';
 import { checkCreateProposal } from 'utils/proposal';
-import { useWebLogin } from 'aelf-web-login';
+import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
+
 import { useRouter } from 'next/navigation';
 interface ITreasuryDetailsProps {
   aliasName?: string;
@@ -33,7 +34,8 @@ export default function TreasuryDetails(props: ITreasuryDetailsProps) {
     }
     return fetchDaoInfo({ chainId: curChain, alias: aliasName });
   });
-  const { wallet } = useWebLogin();
+  const { walletInfo: wallet } = useConnectWallet();
+
   const [manageLoading, setManageLoading] = useState(false);
   const {
     data: daoMembersData,
@@ -77,7 +79,7 @@ export default function TreasuryDetails(props: ITreasuryDetailsProps) {
   const handleCreate = async () => {
     if (daoData) {
       setManageLoading(true);
-      const check = await checkCreateProposal(daoData, wallet.address);
+      const check = await checkCreateProposal(daoData, wallet!.address);
       setManageLoading(false);
       if (check) {
         router.push(`/dao/${aliasName}/proposal/create?tab=${EProposalActionTabs.AddHcMembers}`);

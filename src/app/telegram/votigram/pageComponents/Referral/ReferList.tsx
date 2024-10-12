@@ -1,6 +1,6 @@
 import { DownOutlined, QuestionCircleOutlined } from '@aelf-design/icons';
 import { Button, HashAddress } from 'aelf-design';
-import { useWebLogin } from 'aelf-web-login';
+import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
 import Loading from '../../components/Loading';
 import CommonModal, { ICommonModalRef } from '../../components/CommonModal';
 import { useRef } from 'react';
@@ -23,7 +23,7 @@ const FakeAvatar = (props: IFakeAvatarProps) => {
 export default function ReferList(props: IReferListProps) {
   const { onViewMore, isShowMore, list, me, isLoading } = props;
   const invitedModalRef = useRef<ICommonModalRef>(null);
-  const { wallet } = useWebLogin();
+  const { walletInfo: wallet } = useConnectWallet();
   return (
     <div className="leaderboard-wrap">
       <ul className="header">
@@ -42,9 +42,9 @@ export default function ReferList(props: IReferListProps) {
           <ul className="top-wrap">
             <li className="left">{me?.rank ?? '--'}</li>
             <li className="main">
-              <FakeAvatar text={wallet.address} />
+              <FakeAvatar text={wallet?.address ?? ''} />
               <HashAddress
-                address={wallet.address}
+                address={wallet?.address || ''}
                 hasCopy={false}
                 preLen={8}
                 endLen={9}

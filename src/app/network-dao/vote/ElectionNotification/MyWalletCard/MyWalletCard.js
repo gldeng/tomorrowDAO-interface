@@ -13,7 +13,6 @@ import moment from "moment";
 import { SyncOutlined, LogoutOutlined } from "@ant-design/icons";
 import { thousandsCommaWithDecimal } from "@utils/formater";
 import { ELF_DECIMAL, SYMBOL } from "@src/constants";
-import { WebLoginState } from "aelf-web-login";
 import { connect } from "react-redux";
 import CopyButton from "@components/CopyButton/CopyButton";
 import { isPhoneCheck } from "@utils/deviceCheck";
@@ -262,7 +261,7 @@ class MyWalletCard extends PureComponent {
       loading,
       lastestUnlockTime,
     } = this.state;
-    const { loginState } = WebLoginInstance.get().getWebLoginContext();
+    const { isConnected } = WebLoginInstance.get().getWebLoginContext();
     const formattedAddress = addressFormat(currentWallet.address);
     const walletItems = [
       {
@@ -327,9 +326,7 @@ class MyWalletCard extends PureComponent {
               </h2>
               <div>
                 {!isActivityBrowser() &&
-                  (loginState === WebLoginState.initial ||
-                    loginState === WebLoginState.lock ||
-                    loginState === WebLoginState.logining) && (
+                  !isConnected && (
                     <Button
                       type="text"
                       className="my-wallet-card-header-sync-btn login-btn"

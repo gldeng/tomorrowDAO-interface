@@ -3,7 +3,7 @@ import { useCallback, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { getOriginProposedContractInputHash } from "@redux/common/util.proposed";
 import { getContractAddress, getTxResult } from "@redux/common/utils";
-import { useWebLogin } from "aelf-web-login";
+import { useConnectWallet } from "@aelf-web-login/wallet-adapter-react";
 import { callGetMethod } from "@utils/utils";
 import getChainIdQuery from 'utils/url';
 import { useChainSelect } from "hooks/useChainSelect";
@@ -17,7 +17,7 @@ import AddressNameVer from "../_proposal_root/components/AddressNameVer/index";
 export const useCallbackAssem = () => {
   const common = useSelector((state) => state.common);
   const { wallet } = common;
-  const { callContract } = useWebLogin();
+  const { callSendMethod: callContract } = useConnectWallet();
   // eslint-disable-next-line no-return-await
   const contractSend =  async (action, params, isOriginResult) => {
     const chainIdQuery = getChainIdQuery();

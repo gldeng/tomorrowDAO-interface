@@ -1,7 +1,6 @@
 import { Accounts, ChainId } from '@portkey/provider-types';
 import { IBlockchainWallet } from '@portkey/types';
 import { ManagerInfoType } from '@portkey/did-ui-react';
-import { DiscoverInfo, PortkeyInfo, PortkeyInfoV1, WalletInfo } from 'aelf-web-login';
 import type { AElfContextType } from '@aelf-react/core/dist/types';
 
 export type TokenInfo = {
@@ -87,7 +86,16 @@ export type TPortkeyInfoType = Partial<IDIDWalletInfo> & {
   walletInfo?: { [key: string]: any } | IBlockchainWallet;
 };
 
-export type TWalletInfoType = WalletInfo;
+export type TWalletInfoType = {
+  address: string;
+  publicKey?: string;
+  token?: string;
+  aelfChainAddress?: string;
+  //FIXME:
+  nightElfInfo?: any;
+  discoverInfo?: any;
+  portkeyInfo?: any;
+};
 
 export enum ProposalType {
   UNSPECIFIED = 0,
