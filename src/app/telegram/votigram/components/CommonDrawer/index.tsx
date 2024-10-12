@@ -14,6 +14,7 @@ interface ICommonDrawerProps {
   rootClassName?: string;
   showCloseTarget?: boolean;
   showLeftArrow?: boolean;
+  showCloseIcon?: boolean;
   drawerProps?: DrawerProps;
 }
 interface ICloseTragetProps {
@@ -51,6 +52,7 @@ const CommonDrawer = forwardRef<ICommonDrawerRef, ICommonDrawerProps>((props, re
     showCloseTarget = true,
     showLeftArrow = false,
     drawerProps,
+    showCloseIcon = true,
   } = props;
   const [open, setOpen] = useState(false);
 
@@ -82,7 +84,7 @@ const CommonDrawer = forwardRef<ICommonDrawerRef, ICommonDrawerProps>((props, re
           {showLeftArrow && <LeftArrowOutlined className="left-arrow" onClick={onClose} />}
           {/* {showCloseTarget && <CloseTraget onClose={onClose} />} */}
           <h2 className="title font-17-22">{props.title}</h2>
-          <CloseIcon onClick={onClose} />
+          {showCloseIcon && <CloseIcon onClick={onClose} />}
         </div>
         <div className="drawer-body font-14-18">{props.body}</div>
       </div>
