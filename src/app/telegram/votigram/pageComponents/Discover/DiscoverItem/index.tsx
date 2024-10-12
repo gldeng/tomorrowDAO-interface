@@ -57,7 +57,7 @@ export default function DiscoverItem(props: IDiscoverProps) {
         )}
       </div>
       <CommonDrawer
-        title="app details"
+        title=""
         ref={detailDrawerRef}
         showCloseTarget={false}
         showLeftArrow={true}
@@ -66,6 +66,7 @@ export default function DiscoverItem(props: IDiscoverProps) {
         drawerProps={{
           destroyOnClose: true,
         }}
+        showCloseIcon={false}
         body={
           <div className="">
             <AppDetail item={item} />
