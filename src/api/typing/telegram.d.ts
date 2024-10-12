@@ -259,3 +259,40 @@ interface ICompleteTaskItemRes {
   code: string;
   data: boolean;
 }
+
+// ------------------- dis cover lists -------------------
+
+interface IGetDiscoverAppListRes {
+  code: string;
+  data: {
+    totalCount: number;
+    data: IDiscoverAppItem[];
+  };
+}
+
+interface IDiscoverAppItem {
+  alias: string;
+  title: string;
+  icon: string;
+  description: string;
+  editorChoice: boolean;
+  url: string;
+  longDescription: string;
+  screenshots: string[];
+  totalPoints: number;
+  categories: string[];
+}
+
+// ------------------- discover view -------------------
+interface IGetDiscoverAppViewRes {
+  code: string;
+  data: boolean;
+}
+
+// ------------------- confirm choose -------------------
+interface IDiscoverConfirmChooseRes {
+  code: string;
+  data: {
+    success: boolean;
+  };
+}

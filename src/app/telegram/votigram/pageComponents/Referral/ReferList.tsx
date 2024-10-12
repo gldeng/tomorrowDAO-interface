@@ -1,8 +1,8 @@
 import { DownOutlined, QuestionCircleOutlined } from '@aelf-design/icons';
 import { Button, HashAddress } from 'aelf-design';
 import { useWebLogin } from 'aelf-web-login';
-import Loading from '../Loading';
-import CommonModal, { ICommonModalRef } from '../CommonModal';
+import Loading from '../../components/Loading';
+import CommonModal, { ICommonModalRef } from '../../components/CommonModal';
 import { useRef } from 'react';
 import { curChain } from 'config';
 

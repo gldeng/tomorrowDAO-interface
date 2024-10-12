@@ -24,10 +24,11 @@ export enum UserTaskDetail {
   ExploreCumulateTwentyInvite = 'ExploreCumulateTwentyInvite',
 }
 export enum ITabSource {
-  Vote = 0,
-  Task = 1,
-  Referral = 2,
-  Asset = 3,
+  Discover = 0,
+  Vote = 1,
+  Task = 2,
+  Referral = 3,
+  Asset = 4,
 }
 export interface IStackItem {
   path: number;
@@ -36,4 +37,14 @@ export interface IStackItem {
 
 export enum IPonitType {
   TopInviter = 'TopInviter',
+}
+export enum ETelegramAppCategory {
+  Recommend = 'Recommend',
+  Game = 'Game',
+  Earn = 'Earn',
+  Finance = 'Finance',
+  Social = 'Social',
+  Utility = 'Utility',
+  Information = 'Information',
+  Ecommerce = 'Ecommerce',
 }

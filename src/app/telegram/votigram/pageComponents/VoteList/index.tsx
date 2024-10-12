@@ -1,20 +1,20 @@
-import CommonDrawer, { ICommonDrawerRef } from '../CommonDrawer';
-import VoteItem, { ILikeItem } from '../VoteItem';
+import CommonDrawer, { ICommonDrawerRef } from '../../components/CommonDrawer';
+import VoteItem, { ILikeItem } from '../../components/VoteItem';
 import { Button, message } from 'antd';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Carousel } from 'antd';
 import { Flipper, Flipped } from 'react-flip-toolkit';
-import Empty from '../Empty';
+import Empty from '../../components/Empty';
 import { fetchRankingVoteStatus, getRankingList, rankingVote, rankingVoteLike } from 'api/request';
 import { curChain, rpcUrlTDVW, sideChainCAContractAddress, voteAddress } from 'config';
 import { useAsyncEffect, useRequest } from 'ahooks';
 import { getRawTransaction } from 'utils/transaction';
-import CommonModal, { ICommonModalRef } from '../CommonModal';
+import CommonModal, { ICommonModalRef } from '../../components/CommonModal';
 import { useWebLogin } from 'aelf-web-login';
 import { EVoteOption } from 'types/vote';
 import { retryWrap } from 'utils/request';
 import { VoteStatus } from 'types/telegram';
-import Loading from '../Loading';
+import Loading from '../../components/Loading';
 import './index.css';
 import BigNumber from 'bignumber.js';
 import PointSignalr from 'utils/socket/point-signalr';
@@ -22,20 +22,17 @@ import SignalR from 'utils/socket/signalr';
 import { IPointsListRes, IWsPointsItem } from './type';
 import { preloadImages } from 'utils/file';
 import { useConfig } from 'components/CmsGlobalConfig/type';
-import RuleButton from '../RuleButton';
+import RuleButton from '../../components/RuleButton';
 import useNftBalanceChange from '../../hook/use-nft-balance-change';
 import { RightOutlined } from '@aelf-design/icons';
-import MyPoints from '../MyPoints';
+import MyPoints from '../../components/MyPoints';
 
-interface IVoteListProps {
-  onShowMore?: (item: IRankingListResItem) => void;
-}
-export default function VoteList(props: IVoteListProps) {
+// interface IVoteListProps {}
+export default function VoteList() {
   const confirmDrawerRef = useRef<ICommonDrawerRef>(null);
   const loadingDrawerRef = useRef<ICommonDrawerRef>(null);
   const ruleDrawerRef = useRef<ICommonDrawerRef>(null);
   const retryDrawerRef = useRef<ICommonDrawerRef>(null);
-  const { onShowMore } = props;
   const nftMissingModalRef = useRef<ICommonModalRef>(null);
   const pointsDrawerRef = useRef<ICommonDrawerRef>(null);
 
@@ -324,7 +321,6 @@ export default function VoteList(props: IVoteListProps) {
                         setCurrentVoteItem(item);
                         confirmDrawerRef.current?.open();
                       }}
-                      onShowMore={onShowMore}
                       onReportClickCount={(item: ILikeItem) => {
                         reportQueue.current.push(item);
                         handleReportQueue();

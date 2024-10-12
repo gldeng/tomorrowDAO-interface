@@ -26,6 +26,12 @@
     font-weight: 860;
     line-height: 18px;
   }
+  .font-12-28-weight {
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 28px;
+  }
   .font-14-18 {
     font-size: 14px;
     font-style: normal;
@@ -37,6 +43,12 @@
     font-style: normal;
     font-weight: 590;
     line-height: 18px;
+  }
+  .font-16-24-weight {
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 510;
+    line-height: 24px;
   }
   .font-17-22 {
     font-size: 17px;
@@ -56,11 +68,23 @@
     font-weight: 400;
     line-height: 20px;
   }
+  .font-14-20 {
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+  }
   .font-18-22-weight {
     font-size: 18px;
     font-style: normal;
     font-weight: 590;
     line-height: 22px;
+  }
+  .font-20-28-weight{
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 510;
+    line-height: 28px;
   }
   .font-20-25-weight{
     font-size: 20px;
@@ -110,6 +134,15 @@
       }
       &:active {
         @apply !text-white !bg-[#5222D8] !border-[#5222D8];
+      }
+    }
+    &:disabled {
+      @apply !text-[#464646] !bg-[#292929] border-[#292929];
+      &:hover {
+        @apply !text-[#464646] !bg-[#292929] !border-[#292929];
+      }
+      &:active {
+        @apply !text-[#464646] !bg-[#292929] !border-[#292929];
       }
     }
   }

@@ -4,7 +4,7 @@ import './index.css';
 import { useRequest, usePrevious, useAsyncEffect } from 'ahooks';
 import { getTaskList } from 'api/request';
 import { curChain } from 'config';
-import Loading from '../Loading';
+import Loading from '../../components/Loading';
 import { taskTitle } from '../../const';
 import { IStackItem, UserTaskDetail } from '../../type';
 import { TelegramIcon, UserAddIcon, XIcon, DiscardIcon } from 'components/Icons';
@@ -12,7 +12,7 @@ import { WalletOutlined } from '@aelf-design/icons';
 import BigNumber from 'bignumber.js';
 import { TaskItem } from './TaskItem';
 import { useWebLogin } from 'aelf-web-login';
-import CommonModal, { ICommonModalRef } from '../CommonModal';
+import CommonModal, { ICommonModalRef } from '../../components/CommonModal';
 import { Button } from 'antd';
 
 interface ITaskProps {

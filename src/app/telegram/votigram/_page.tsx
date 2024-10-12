@@ -1,16 +1,15 @@
 'use client';
 import { useSearchParams } from 'next/navigation';
-import SceneLoading from './components/Scene/SceneLoading';
+import SceneLoading from './pageComponents/Scene/SceneLoading';
 import './index.css';
-import Slide from './components/Scene/Slide';
+import Slide from './pageComponents/Scene/Slide';
 import { useEffect, useState } from 'react';
-import Main from './components/Main';
+import Main from './pageComponents/Main';
 import Debug from './Debug';
 import { VotigramScene } from './const';
 import { preloadImages } from 'utils/file';
 import { useConfig } from 'components/CmsGlobalConfig/type';
-import InvitedSuccess from './components/InviteedSuccess';
-import { TelegramPlatform } from '@portkey/did-ui-react';
+import InvitedSuccess from './pageComponents/InviteedSuccess';
 import { getReferrerCode } from './util/start-params';
 
 const imageLists = [
@@ -39,29 +38,13 @@ export default function Page() {
   const isDebug = searchParams.get('debug');
   const { voteMain } = useConfig() ?? {};
 
-  const handleShowAppDetail = () => {
-    const webapp = window.Telegram.WebApp;
-    const button = window?.Telegram?.WebApp?.BackButton;
-    button.show();
-    webapp.setBackgroundColor('#212121');
-  };
-
   useEffect(() => {
     preloadImages(imageLists);
     preloadImages(voteMain?.topBannerImages ?? []);
   }, []);
   useEffect(() => {
     const webapp = window.Telegram.WebApp;
-    const button = webapp?.BackButton;
-    const handleBack = () => {
-      button.hide();
-      webapp.setBackgroundColor(mainPageBgColor);
-    };
-    button.onClick(handleBack);
     webapp.setBackgroundColor(mainPageBgColor);
-    return () => {
-      button.offClick(handleBack);
-    };
   }, []);
 
   const enterMainPage = () => {
@@ -72,6 +55,12 @@ export default function Page() {
       setScene(VotigramScene.Main);
     }
   };
+  useEffect(() => {
+    document.body.style.backgroundColor = mainPageBgColor;
+    return () => {
+      document.body.style.backgroundColor = 'initial';
+    };
+  }, []);
 
   return (
     <div className="votigram-wrap">
@@ -99,7 +88,7 @@ export default function Page() {
       {scene === VotigramScene.InvitedSuccess && (
         <InvitedSuccess onFinish={() => setScene(VotigramScene.Main)} />
       )}
-      {scene === VotigramScene.Main && <Main onShowMore={handleShowAppDetail} />}
+      {scene === VotigramScene.Main && <Main />}
       {isDebug && <Debug setScene={setScene} />}
     </div>
   );

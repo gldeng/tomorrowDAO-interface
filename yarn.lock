@@ -6377,6 +6377,11 @@ commander@^10.0.0:
   resolved "https://registry.npmjs.org/commander/-/commander-10.0.1.tgz#881ee46b4f77d1c1dccc5823433aa39b022cbe06"
   integrity sha512-y4Mg2tXshplEbSGzx7amzPwKKOCGuoSRP/CjEdwwk0FOGlUbq6lKuoyDZTNZkmxHdJtp54hdfY/JUrdL7Xfdug==
 
+commander@^2.20.3:
+  version "2.20.3"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.3.tgz#fd485e84c03eb4881c20722ba48035e8531aeb33"
+  integrity sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==
+
 commander@^4.0.0:
   version "4.1.1"
   resolved "https://registry.npmjs.org/commander/-/commander-4.1.1.tgz#9fd602bd936294e9e9ef46a3f4d6964044b18068"
@@ -6640,6 +6645,11 @@ cssesc@^3.0.0:
   version "3.0.0"
   resolved "https://registry.npmjs.org/cssesc/-/cssesc-3.0.0.tgz#37741919903b868565e1c09ea747445cd18983ee"
   integrity sha512-/Tb/JcjK111nNScGob5MNtsntNM1aCNUDipB/TkwZFhyDrrE47SOx/18wF2bbjgc3ZzCSKW1T5nt5EbFoAz/Vg==
+
+cssfilter@0.0.10:
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/cssfilter/-/cssfilter-0.0.10.tgz#c6d2672632a2e5c83e013e6864a42ce8defd20ae"
+  integrity sha512-FAaLDaplstoRsDR8XGYH51znUN0UY7nMc6Z9/fvE8EXGwvJE9hu7W2vHwx1+bd6gCYnln9nLbzxFTrcO9YQDZw==
 
 csso@^5.0.5:
   version "5.0.5"
@@ -11816,6 +11826,18 @@ react-if@^3.4.3:
   resolved "https://registry.npmjs.org/react-if/-/react-if-3.4.3.tgz#bab45478dd0374b1c5fe44aa972a2fa921416a57"
   integrity sha512-DddMrbjAA4lkVhhYJgoeKC9+dj950I9hx4KClhJXySTL3GsQ7hxl9eWkcqS2i/qWvfPiQheJOwTYQ+Wv2BNdMA==
 
+react-infinite-scroll-hook@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/react-infinite-scroll-hook/-/react-infinite-scroll-hook-5.0.1.tgz#bda5a082a8178c586055dc482a04a2d7198d2f9b"
+  integrity sha512-fn6+8BAZLQ9C1fvO5kPicGjDR2WHxK7rP4aaSWuaJkvtoJjYuudGJ9wjgPox7dghKm5Xj9cpKFycM86/wAJ3ig==
+  dependencies:
+    react-intersection-observer-hook "^3.0.0"
+
+react-intersection-observer-hook@^3.0.0:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/react-intersection-observer-hook/-/react-intersection-observer-hook-3.0.1.tgz#bc56fd9da64d26e45d277bba10ccad57c7510a64"
+  integrity sha512-nehzFUV+jVY49tc9FOm4yJHrmFFtCmsBZKiN1rUUB2675CMBf6kKu1ekuTqvCnmh4XG7RFP3bMyAevfqfV94xw==
+
 react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"
   resolved "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
@@ -13959,6 +13981,14 @@ xmlhttprequest@^1.8.0:
   version "1.8.0"
   resolved "https://registry.npmjs.org/xmlhttprequest/-/xmlhttprequest-1.8.0.tgz#67fe075c5c24fef39f9d65f5f7b7fe75171968fc"
   integrity sha512-58Im/U0mlVBLM38NdZjHyhuMtCqa61469k2YP/AaPbvCoV9aQGUpbJBj1QRm2ytRiVQBD/fsw7L2bJGDVQswBA==
+
+xss@^1.0.15:
+  version "1.0.15"
+  resolved "https://registry.yarnpkg.com/xss/-/xss-1.0.15.tgz#96a0e13886f0661063028b410ed1b18670f4e59a"
+  integrity sha512-FVdlVVC67WOIPvfOwhoMETV72f6GbW7aOabBC3WxN/oUdoEMDyLz4OgRv5/gck2ZeNqEQu+Tb0kloovXOfpYVg==
+  dependencies:
+    commander "^2.20.3"
+    cssfilter "0.0.10"
 
 xstate@^5.7.1:
   version "5.13.0"
