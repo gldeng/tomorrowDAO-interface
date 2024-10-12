@@ -5,8 +5,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import Decimal from "decimal.js";
 import { Form, InputNumber, message, Modal, Button } from "antd";
-import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
-
+import { useWebLogin } from "aelf-web-login";
 import {
   getContractAddress,
   getTxResult,
@@ -172,7 +171,7 @@ const ApproveTokenModal = (props) => {
     [loadings, allowanceInfo, inputToken]
   );
 
-  const { callSendMethod } = useConnectWallet();
+  const { wallet: webLoginWallet, callContract } = useWebLogin();
 
   useEffect(() => {
     if (visible) {
@@ -212,10 +211,10 @@ const ApproveTokenModal = (props) => {
   }
 
   async function handleStake() {
-    // if (!webLoginWallet.accountInfoSync.syncCompleted) {
-    //   showAccountInfoSyncingModal();
-    //   return;
-    // }
+    if (!webLoginWallet.accountInfoSync.syncCompleted) {
+      showAccountInfoSyncingModal();
+      return;
+    }
 
     try {
       const results = await validateFields();
@@ -231,7 +230,7 @@ const ApproveTokenModal = (props) => {
       const method = amount > 0 ? "Approve" : "UnApprove";
       amount = Math.abs(amount);
       const result = await sendTransactionWith(
-        callSendMethod,
+        callContract,
         getContractAddress("Token"),
         method,
         {

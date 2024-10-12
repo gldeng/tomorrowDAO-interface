@@ -7,8 +7,11 @@ import { curChain } from 'config';
 import Loading from '../../components/Loading';
 import { taskTitle } from '../../const';
 import { IStackItem, UserTaskDetail } from '../../type';
+import { TelegramIcon, UserAddIcon, XIcon, DiscardIcon } from 'components/Icons';
+import { WalletOutlined } from '@aelf-design/icons';
+import BigNumber from 'bignumber.js';
 import { TaskItem } from './TaskItem';
-import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
+import { useWebLogin } from 'aelf-web-login';
 import CommonModal, { ICommonModalRef } from '../../components/CommonModal';
 import { Button } from 'antd';
 
@@ -20,7 +23,7 @@ interface ITaskProps {
 }
 const Task: React.FC<ITaskProps> = (props: ITaskProps) => {
   const { style, className, show, activeTabItem } = props;
-  const { walletInfo: wallet } = useConnectWallet();
+  const { wallet } = useWebLogin();
   const completeTaskModalRef = useRef<ICommonModalRef>(null);
   const [taskGroupList, setTaskGroupList] = useState<IGetTaskListResItem[]>([]);
   const {
@@ -66,12 +69,12 @@ const Task: React.FC<ITaskProps> = (props: ITaskProps) => {
       const task = lists.find((list) => list.userTaskDetail === item);
       return task?.complete;
     });
-    const key = `${wallet?.address}-${curChain}-task-complate`;
+    const key = `${wallet.address}-${curChain}-task-complate`;
     if (completed && !localStorage.getItem(key)) {
       localStorage.setItem(key, 'true');
       completeTaskModalRef.current?.open();
     }
-  }, [taskGroupList, wallet?.address]);
+  }, [taskGroupList, wallet.address]);
   return (
     <div className={`votigram-task-wrap ${className}`} style={style}>
       <div className="title font-18-22-weight mt-[24px] mb-[8px]">

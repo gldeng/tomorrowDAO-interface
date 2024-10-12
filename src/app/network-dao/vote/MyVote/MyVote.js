@@ -13,6 +13,7 @@ import {
 } from "../constants";
 import { Button, Spin } from "antd";
 import { connect } from "react-redux";
+import { WebLoginState } from "aelf-web-login";
 import MyVoteRecord from "./MyVoteRecords";
 import addressFormat from "@utils/addressFormat";
 import "./MyVote.style.css";
@@ -255,7 +256,7 @@ class MyVote extends Component {
       this.getCurrentWallet();
     };
 
-    const { isLocking } = WebLoginInstance.get().getWebLoginContext();
+    const { loginState } = WebLoginInstance.get().getWebLoginContext();
 
     console.log('statistData', statistData)
     const renderNotLogin = () => {
@@ -273,7 +274,7 @@ class MyVote extends Component {
         <div className="not-logged-section">
           <p>
             It seems like you are{" "}
-            {isLocking ? "locked" : "not logged in"}.
+            {loginState === WebLoginState.lock ? "locked" : "not logged in"}.
           </p>
           <Button onClick={onLogin} type="primary">
             Login

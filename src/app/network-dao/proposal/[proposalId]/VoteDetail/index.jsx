@@ -17,7 +17,7 @@ import {
 import Decimal from "decimal.js";
 import moment from "moment";
 import { If, Then } from "react-if";
-import { useConnectWallet } from "@aelf-web-login/wallet-adapter-react";
+import { useWebLogin } from "aelf-web-login";
 import config from "@common/config";
 import { request } from "@common/request";
 import Total from "@components/Total";
@@ -139,7 +139,7 @@ const VoteDetail = (props) => {
     status,
     symbol,
   } = props;
-  const { callSendMethod: callContract } = useConnectWallet();
+  const { callContract } = useWebLogin();
   const [list, setList] = useState({
     loadingStatus: LOADING_STATUS.LOADING,
     list: [],

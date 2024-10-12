@@ -1,20 +1,21 @@
 'use client';
 import { memo, useEffect } from 'react';
+import { useWebLogin } from 'aelf-web-login';
 import { Result } from 'antd';
 import { useParams } from 'next/navigation';
 import DeployForm from './DeployForm';
-import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
-
+import { WebLoginState } from 'aelf-web-login';
 import breadCrumb from 'utils/breadCrumb';
 import './index.css';
 
 const ProposalDeploy = () => {
-  const { isConnected } = useConnectWallet();
+  const { loginState } = useWebLogin();
+  const isLogin = loginState === WebLoginState.logined;
   const { aliasName } = useParams<{ aliasName: string }>();
   useEffect(() => {
     breadCrumb.updateCreateProposalPage(aliasName);
   }, [aliasName]);
-  return isConnected ? (
+  return isLogin ? (
     <div className="deploy-form">
       <DeployForm aliasName={aliasName} />
     </div>

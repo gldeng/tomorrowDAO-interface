@@ -1,3 +1,4 @@
+import { useWebLogin, WalletType, WebLoginState } from 'aelf-web-login';
 import { useCallback, useMemo } from 'react';
 import { fetchToken } from 'api/request';
 import { message } from 'antd';
@@ -9,8 +10,6 @@ import { emitLoading } from 'utils/myEvent';
 import { getCaHashAndOriginChainIdByWallet } from 'utils/wallet';
 import { getLocalJWT } from 'utils/localJWT';
 import { curChain, networkType } from 'config';
-import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
-import { WalletTypeEnum } from '@aelf-web-login/wallet-adapter-base';
 
 const AElf = require('aelf-sdk');
 
@@ -18,18 +17,12 @@ const hexDataCopywriter = `Welcome to TMRWDAO! Click to sign in to the TMRWDAO p
 
 signature: `;
 export const useGetToken = () => {
-  const {
-    walletInfo: wallet,
-    walletType,
-    disConnectWallet,
-    getSignature,
-    isConnected,
-  } = useConnectWallet();
+  const { loginState, wallet, getSignature, walletType, logout } = useWebLogin();
   const { getSignatureAndPublicKey } = useDiscoverProvider();
 
   const isConnectWallet = useMemo(() => {
-    return isConnected;
-  }, [isConnected]);
+    return loginState === WebLoginState.logined;
+  }, [loginState]);
 
   const getTokenFromServer: (props: {
     params: ITokenParams;
@@ -53,34 +46,34 @@ export const useGetToken = () => {
           });
         } else {
           message.error('Failed to obtain authorization token');
-          isConnectWallet && disConnectWallet();
+          isConnectWallet && logout({ noModal: true });
           needLoading && emitLoading(false);
           return null;
         }
       }
     },
-    [disConnectWallet, isConnectWallet],
+    [],
   );
 
   const checkTokenValid = useCallback(async () => {
     // const { caHash } = await getCaHashAndOriginChainIdByWallet(wallet, walletType);
     // const managerAddress = await getManagerAddressByWallet(wallet, walletType);
-    const key = `ELF_${wallet?.address}_${curChain}_${networkType}`;
-    if (!isConnected) return false;
+    const key = `ELF_${wallet.address}_${curChain}_${networkType}`;
+    if (loginState !== WebLoginState.logined) return false;
     const accountInfo = getLocalJWT(key);
 
     return accountInfo;
-  }, [isConnected, wallet?.address]);
+  }, [loginState, wallet]);
 
   // getToken
   const getToken: (params?: {
     needLoading?: boolean;
   }) => Promise<null | ITokenRes> = async (params?: { needLoading?: boolean }) => {
     const { needLoading } = params || {};
-    if (!isConnected || !wallet) return null;
+    if (loginState !== WebLoginState.logined) return null;
 
     const timestamp = Date.now();
-    const plainTextOrigin = `${wallet?.address}-${timestamp}`;
+    const plainTextOrigin = `${wallet.address}-${timestamp}`;
     // const plainText: any = Buffer.from(plainTextOrigin).toString('hex').replace('0x', '');
     const signInfo = AElf.utils.sha256(plainTextOrigin);
     const discoverSignHex = Buffer.from(hexDataCopywriter + plainTextOrigin).toString('hex');
@@ -91,7 +84,7 @@ export const useGetToken = () => {
 
     // ------------------------------------- signature -------------------------------------
     const { caHash, originChainId } = await getCaHashAndOriginChainIdByWallet(wallet, walletType);
-    if (walletType === WalletTypeEnum.discover) {
+    if (walletType === WalletType.discover) {
       try {
         const { pubKey, signatureStr } = await getSignatureAndPublicKey(discoverSignHex, signInfo);
         publicKey = pubKey || '';
@@ -101,28 +94,28 @@ export const useGetToken = () => {
         const resError = error as IContractError;
         const errorMessage = formatErrorMsg(resError).errorMessage.message;
         message.error(errorMessage);
-        isConnectWallet && disConnectWallet();
+        isConnectWallet && logout({ noModal: true });
         return null;
       }
     } else {
       const sign = await getSignature({
         appName: 'TomorrowDAOServer',
-        address: wallet!.address,
+        address: wallet.address,
         signInfo:
-          walletType === WalletTypeEnum.aa
-            ? Buffer.from(`${wallet?.address}-${timestamp}`).toString('hex')
+          walletType === WalletType.portkey
+            ? Buffer.from(`${wallet.address}-${timestamp}`).toString('hex')
             : AElf.utils.sha256(plainTextOrigin),
       });
       if (sign?.errorMessage) {
         const errorMessage = formatErrorMsg(sign?.errorMessage as unknown as IContractError)
           .errorMessage.message;
         message.error(errorMessage);
-        isConnectWallet && disConnectWallet();
+        isConnectWallet && logout({ noModal: true });
         return null;
       }
-      publicKey = wallet?.extraInfo?.publicKey || '';
-      signature = sign?.signature ?? '';
-      if (walletType === WalletTypeEnum.elf) {
+      publicKey = wallet.publicKey || '';
+      signature = sign.signature;
+      if (walletType === WalletType.elf) {
         source = 'nightElf';
       } else {
         source = 'portkey';
@@ -138,7 +131,7 @@ export const useGetToken = () => {
       source,
       publickey: publicKey,
       chain_id: originChainId,
-      address: wallet?.address,
+      address: wallet.address,
     } as ITokenParams;
     if (caHash) {
       reqParams.ca_hash = caHash;

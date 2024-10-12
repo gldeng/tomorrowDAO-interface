@@ -9,20 +9,19 @@ import {
   WalletOutlined,
 } from '@aelf-design/icons';
 import { ReactComponent as AvatarIcon } from 'assets/imgs/avatar-icon.svg';
+import { WalletType, WebLoginState, useWebLogin } from 'aelf-web-login';
 import { useMemo, useState } from 'react';
 import { Popover } from 'antd';
 import Link from 'next/link';
 import './index.css';
 import { explorer } from 'config';
+import { useChainSelect } from 'hooks/useChainSelect';
 import getChainIdQuery from 'utils/url';
-import { WalletTypeEnum } from '@aelf-web-login/wallet-adapter-base';
-import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
 export const LoginAuth = () => {
   const { isLG } = useResponsive();
-  const { isConnected, connectWallet } = useConnectWallet();
-
+  const { loginState, login } = useWebLogin();
   const { getTokenUpdate } = useCheckLoginAndToken();
-  const isConnectWallet = isConnected;
+  const isConnectWallet = useMemo(() => loginState === WebLoginState.logined, [loginState]);
   if (isConnectWallet) {
     return (
       <Button size={isLG ? 'medium' : 'large'} type="primary" onClick={getTokenUpdate}>
@@ -31,7 +30,7 @@ export const LoginAuth = () => {
     );
   }
   return (
-    <Button size={isLG ? 'medium' : 'large'} type="primary" onClick={connectWallet}>
+    <Button size={isLG ? 'medium' : 'large'} type="primary" onClick={login}>
       Log in
     </Button>
   );
@@ -41,7 +40,8 @@ interface ILoginProps {
 }
 export default function Login(props: ILoginProps) {
   const { isNetWorkDao } = props;
-  const { disConnectWallet } = useConnectWallet();
+  const { isLG } = useResponsive();
+  const { logout, loginState } = useWebLogin();
   const [hovered, setHovered] = useState(false);
   const chainIdQuery = getChainIdQuery();
   const hide = () => {
@@ -50,20 +50,20 @@ export default function Login(props: ILoginProps) {
   const handleHoverChange = (open: boolean) => {
     setHovered(open);
   };
-  const { isLogin, walletType } = useWalletService();
+  const { login, isLogin, walletType } = useWalletService();
   const { walletInfo } = useSelector((store: any) => store.userInfo);
   const info = useSelector((store: any) => store.elfInfo.elfInfo);
   const logoutEvent = () => {
-    disConnectWallet();
+    logout();
   };
-  const isPortkeyLogin = walletType === WalletTypeEnum.aa;
+  const isPortkeyLogin = walletType === WalletType.portkey && loginState === WebLoginState.logined;
   const userName = useMemo(() => {
     if (walletInfo) {
-      if (walletType === WalletTypeEnum.discover) {
+      if (walletType === WalletType.discover) {
         return walletInfo?.discoverInfo?.nickName;
-      } else if (walletType === WalletTypeEnum.aa) {
+      } else if (walletType === WalletType.portkey) {
         return walletInfo?.portkeyInfo?.nickName;
-      } else if (walletType === WalletTypeEnum.elf) {
+      } else if (walletType === WalletType.elf) {
         return walletInfo?.nightElfInfo?.name;
       }
       return walletInfo.name;
