@@ -154,18 +154,8 @@ export default function LoginSDKProvider({ children }: { children: React.ReactNo
       noNeedForConfirm: false,
     });
   }, []);
-  const wallets = [
-    aaWallet,
-    new PortkeyDiscoverWallet({
-      networkType: networkType,
-      chainId: chainId as TChainId,
-      autoRequestAccount: true, // If set to true, please contact Portkey to add whitelist @Rachel
-      autoLogoutOnDisconnected: true,
-      autoLogoutOnNetworkMismatch: true,
-      autoLogoutOnAccountMismatch: true,
-      autoLogoutOnChainMismatch: true,
-    }),
-    new NightElfWallet({
+  const nightElfWallet = useMemo(() => {
+    return new NightElfWallet({
       chainId: chainId as TChainId,
       appName: APP_NAME,
       connectEagerly: true,
@@ -174,8 +164,20 @@ export default function LoginSDKProvider({ children }: { children: React.ReactNo
         info?.rpcUrlTDVW ||
         '',
       nodes: nodes,
-    }),
-  ];
+    });
+  }, []);
+  const portkeyDiscoverWallet = useMemo(() => {
+    return new PortkeyDiscoverWallet({
+      networkType: networkType,
+      chainId: chainId as TChainId,
+      autoRequestAccount: true, // If set to true, please contact Portkey to add whitelist @Rachel
+      autoLogoutOnDisconnected: true,
+      autoLogoutOnNetworkMismatch: true,
+      autoLogoutOnAccountMismatch: true,
+      autoLogoutOnChainMismatch: true,
+    });
+  }, []);
+  const wallets = [aaWallet, portkeyDiscoverWallet, nightElfWallet];
 
   const config: IConfigProps = {
     didConfig,

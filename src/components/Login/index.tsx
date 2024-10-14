@@ -37,7 +37,13 @@ export const LoginAuth = () => {
     );
   }
   return (
-    <Button size={isLG ? 'medium' : 'large'} type="primary" onClick={connectWallet}>
+    <Button
+      size={isLG ? 'medium' : 'large'}
+      type="primary"
+      onClick={() => {
+        connectWallet();
+      }}
+    >
       Log in
     </Button>
   );
