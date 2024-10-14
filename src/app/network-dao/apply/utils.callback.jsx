@@ -25,9 +25,10 @@ export const useCallbackAssem = () => {
       contractAddress: getContractAddress("Genesis"),
       args: params,
       methodName: action,
-      options: {
-        chainId: chainIdQuery.chainId
-      }
+      chainId: chainIdQuery.chainId,
+      // options: {
+      //   chainId: chainIdQuery.chainId
+      // }
     });
     if (isOriginResult) return result;
     if ((result && +result.error === 0) || !result.error) {

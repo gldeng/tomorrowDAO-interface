@@ -1,7 +1,6 @@
 'use client';
 import { NetworkType } from '@portkey/did-ui-react';
-import { NetworkDaoHomePathName, TELEGRAM_BOT_ID, aelfWebLoginNetworkType, curChain } from 'config';
-import { store } from 'redux/store';
+import { NetworkDaoHomePathName, TELEGRAM_BOT_ID } from 'config';
 import getChainIdQuery from 'utils/url';
 import { usePathname } from 'next/navigation';
 import { getReferrerCode } from 'app/telegram/votigram/util/start-params';
@@ -11,6 +10,18 @@ import { PortkeyAAWallet } from '@aelf-web-login/wallet-adapter-portkey-aa';
 import { NightElfWallet } from '@aelf-web-login/wallet-adapter-night-elf';
 import { IConfigProps } from '@aelf-web-login/wallet-adapter-bridge';
 import { init, WebLoginProvider } from '@aelf-web-login/wallet-adapter-react';
+import {
+  connectServer,
+  connectUrl,
+  curChain,
+  graphqlServer,
+  networkType,
+  portkeyServer,
+  rpcUrlAELF,
+  rpcUrlTDVV,
+  rpcUrlTDVW,
+} from 'config';
+import { useEffect, useMemo } from 'react';
 // import './telegram';
 
 type TNodes = {
@@ -49,10 +60,20 @@ function moveKeyToFront(nodes: TNodes, key: TNodeKeys) {
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default function LoginSDKProvider({ children }: { children: React.ReactNode }) {
-  const info = store.getState().elfInfo.elfInfo;
+  const info: Record<string, string> = {
+    networkType: networkType,
+    rpcUrlAELF: rpcUrlAELF,
+    rpcUrlTDVV: rpcUrlTDVV,
+    rpcUrlTDVW: rpcUrlTDVW,
+    connectServer: connectServer,
+    graphqlServer: graphqlServer,
+    portkeyServer: portkeyServer,
+    connectUrl: connectUrl,
+    curChain: curChain,
+  };
   const server = info.portkeyServer;
-  const connectUrl = info?.connectUrl;
-  const networkType = (info.networkType || 'TESTNET') as NetworkType;
+  // const connectUrl = info?.connectUrl;
+  // const networkType = (info.networkType || 'TESTNET') as NetworkType;
 
   const pathName = usePathname();
   const isNetWorkDao = pathName.startsWith(NetworkDaoHomePathName);
@@ -125,13 +146,16 @@ export default function LoginSDKProvider({ children }: { children: React.ReactNo
     // enableAcceleration: true,
   };
 
-  const wallets = [
-    new PortkeyAAWallet({
+  const aaWallet = useMemo(() => {
+    return new PortkeyAAWallet({
       appName: APP_NAME,
       chainId: chainId as TChainId,
       autoShowUnlock: true,
       noNeedForConfirm: false,
-    }),
+    });
+  }, []);
+  const wallets = [
+    aaWallet,
     new PortkeyDiscoverWallet({
       networkType: networkType,
       chainId: chainId as TChainId,
@@ -145,7 +169,6 @@ export default function LoginSDKProvider({ children }: { children: React.ReactNo
       chainId: chainId as TChainId,
       appName: APP_NAME,
       connectEagerly: true,
-      useMultiChain: false,
       defaultRpcUrl:
         (info?.[`rpcUrl${String(info?.curChain).toUpperCase()}`] as unknown as string) ||
         info?.rpcUrlTDVW ||
@@ -161,6 +184,9 @@ export default function LoginSDKProvider({ children }: { children: React.ReactNo
   };
 
   const bridgeAPI = init(config); // upper config
+  useEffect(() => {
+    aaWallet.setChainId(chainId as TChainId);
+  }, [aaWallet, chainId]);
 
   return <WebLoginProvider bridgeAPI={bridgeAPI}>{children}</WebLoginProvider>;
 }

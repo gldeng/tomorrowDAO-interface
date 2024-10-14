@@ -68,12 +68,13 @@ export const useCheckLoginAndToken = () => {
     }
   };
   useAsyncEffect(async () => {
-    if (isConnectWallet) {
+    if (isConnectWallet && wallet) {
       if (authManager.isAuthing) return;
       authManager.isAuthing = true;
       emitLoading(true, 'Authorize account...');
       if (!isTelegram) {
         const checkRes = await checkTokenValid();
+        console.log('checkRes------------ >', checkRes);
         if (checkRes) {
           apiServer.setToken(checkRes?.access_token);
           dispatch(
@@ -93,7 +94,7 @@ export const useCheckLoginAndToken = () => {
       authManager.isAuthing = false;
       // emitLoading(true, 'Authorize account...');
     }
-  }, [isConnectWallet]);
+  }, [isConnectWallet, wallet]);
 
   useEffect(() => {
     if (wallet?.address && isConnected) {

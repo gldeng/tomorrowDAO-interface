@@ -314,9 +314,10 @@ class ElectionNotification extends PureComponent {
           args: {
             value: currentWallet?.publicKey,
           },
-          options: {
-            chainId: chainIdQuery.chainId
-          }
+          chainId: chainIdQuery.chainId
+          // options: {
+          //   chainId: chainIdQuery.chainId
+          // }
         })
         .then((res) => {
           if (!res) {
@@ -327,9 +328,10 @@ class ElectionNotification extends PureComponent {
               args: {
                 value: currentWallet?.address,
               },
-              options: {
-                chainId: chainIdQuery.chainId
-              }
+              chainId: chainIdQuery.chainId
+              // options: {
+              //   chainId: chainIdQuery.chainId
+              // }
             });
           }
           return res;
@@ -395,9 +397,10 @@ class ElectionNotification extends PureComponent {
           contractAddress: electionContractFromExt.address,
           methodName: "AnnounceElection",
           args: admin,
-          options: {
-            chainId: chainIdQuery.chainId
-          }
+          chainId: chainIdQuery.chainId,
+          // options: {
+          //   chainId: chainIdQuery.chainId
+          // }
         })
         .then((res) => {
           if (res.error) {

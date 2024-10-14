@@ -11,9 +11,9 @@ function Provider(props: IProps) {
   const { isTelegram } = useUrlPath();
   return (
     <div className={`${isTelegram ? 'telegram-webapp-wrap' : 'brower-app'}`}>
-      <StoreProvider>
-        <WebLoginProvider>{children}</WebLoginProvider>
-      </StoreProvider>
+      <WebLoginProvider>
+        <StoreProvider>{children}</StoreProvider>
+      </WebLoginProvider>
     </div>
   );
 }

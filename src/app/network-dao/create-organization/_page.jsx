@@ -506,14 +506,14 @@ const CreateOrganization = () => {
         return;
       }
       const chainIdQuery = getChainIdQuery();
-      // debugger;
       const result = await WebLoginInstance.get().callContract({
         contractAddress: getContractAddress(formValue.proposalType),
         methodName: "CreateOrganization",
         args: param,
-        options: {
-          chainId: chainIdQuery.chainId
-        }
+        chainId: chainIdQuery.chainId,
+        // options: {
+        //   chainId: chainIdQuery.chainId
+        // }
       });
       showTransactionResult(result);
       await sleep(2000);
