@@ -19,7 +19,6 @@ import ExplorerProposalList, {
 import { useChainSelect } from 'hooks/useChainSelect';
 import getChainIdQuery from 'utils/url';
 import './page.css';
-import { checkCreateProposal } from 'utils/proposal';
 
 interface IProps {
   daoId?: string;
@@ -48,17 +47,12 @@ export default function DeoDetails(props: IProps) {
     return fetchDaoInfo({ chainId: curChain, alias: aliasName, daoId: props.daoId });
   });
   const { walletInfo } = useSelector((store: any) => store.userInfo);
-  const daoId = daoData?.data?.id;
   const [createProposalLoading, setCreateProposalLoading] = useState(false);
   const handleCreateProposalRef = useRef<(customRouter?: boolean) => Promise<boolean>>();
   const handleCreateProposal = async () => {
     if (!daoData) return false;
     setCreateProposalLoading(true);
-    const checkRes = await checkCreateProposal(daoData, walletInfo.address);
     setCreateProposalLoading(false);
-    if (!checkRes) {
-      return false;
-    }
     const chainIdQuery = getChainIdQuery();
     networkDaoRouter.push(`/apply?${chainIdQuery.chainIdQueryString}`);
     return true;

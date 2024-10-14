@@ -154,9 +154,12 @@ export const useWalletInit = () => {
   }, [walletInfo, walletType]);
 
   useEffect(() => {
-    console.log('webLoginContext.isConnected', webLoginContext.isConnected);
+    if (!walletInfo) {
+      return;
+    }
+    console.log('webLoginContext.isConnected', webLoginContext.isConnected, webLoginContext);
     webLoginInstance.setWebLoginContext(webLoginContext);
-  }, [webLoginContext]);
+  }, [webLoginContext, walletInfo]);
 
   useEffect(() => {
     if (loginError) {

@@ -18,12 +18,12 @@
     "dev1": "lt --port 3000"
   },
   "dependencies": {
-    "@aelf-web-login/wallet-adapter-night-elf": "^0.1.16",
-    "@aelf-web-login/wallet-adapter-portkey-aa": "^0.1.17-alpha.2",
-    "@aelf-web-login/wallet-adapter-portkey-discover": "^0.1.16",
-    "@aelf-web-login/wallet-adapter-react": "^0.1.16",
-    "@aelf-web-login/wallet-adapter-base": "^0.1.16",
-    "@aelf-web-login/wallet-adapter-bridge": "^0.1.16",
+    "@aelf-web-login/wallet-adapter-night-elf": "^0.1.17-alpha.6",
+    "@aelf-web-login/wallet-adapter-portkey-aa": "^0.1.17-alpha.6",
+    "@aelf-web-login/wallet-adapter-portkey-discover": "^0.1.17-alpha.6",
+    "@aelf-web-login/wallet-adapter-react": "^0.1.17-alpha.6",
+    "@aelf-web-login/wallet-adapter-base": "^0.1.17-alpha.6",
+    "@aelf-web-login/wallet-adapter-bridge": "^0.1.17-alpha.6",
     "@aelf-design/icons": "1.1.1",
     "@ant-design/icons": "^5.3.7",
     "@microsoft/signalr": "^8.0.7",
