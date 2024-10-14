@@ -16,7 +16,6 @@ import { SYMBOL, ELF_DECIMAL, NEED_PLUGIN_AUTHORIZE_TIP } from "@src/constants";
 import getStateJudgment from "@utils/getStateJudgment";
 import publicKeyToAddress from "@utils/publicKeyToAddress";
 import { getAllTeamDesc } from "@api/vote";
-import { WebLoginState } from "aelf-web-login";
 import "./index.css";
 import MyVote from "../MyVote/MyVote";
 import ElectionNotification from "../ElectionNotification/ElectionNotification";
@@ -1146,11 +1145,11 @@ class VoteContainer extends Component {
     const { currentWallet } = this.props;
     const { profitContractFromExt } = this.state;
     const webLoginContext = WebLoginInstance.get().getWebLoginContext();
-    const { loginState } = webLoginContext;
+    const { isConnected } = webLoginContext;
     this.setState({
       claimDisabled: true,
     });
-    if (loginState === WebLoginState.logined) {
+    if (isConnected) {
       const chainIdQuery = getChainIdQuery();
       WebLoginInstance.get()
         .callContract({

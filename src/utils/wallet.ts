@@ -1,22 +1,23 @@
 import { GetCAHolderByManagerParams } from '@portkey/services';
 import { ChainId, MethodsWallet } from '@portkey/provider-types';
-import { WalletType, PortkeyDid, WalletInfo } from 'aelf-web-login';
+import { WalletTypeEnum, TWalletInfo } from '@aelf-web-login/wallet-adapter-base';
+import { did } from '@portkey/did-ui-react';
 
 import { pubKeyToAddress } from './aelfBase';
 import { curChain } from 'config';
 
 export const getManagerAddressByWallet = async (
-  wallet: WalletInfo,
-  walletType: WalletType,
+  wallet: TWalletInfo,
+  walletType: WalletTypeEnum,
   pubkey?: string,
 ): Promise<string> => {
   let managerAddress;
-  if (walletType === WalletType.discover) {
-    managerAddress = await wallet.discoverInfo?.provider?.request({
+  if (walletType === WalletTypeEnum.discover) {
+    managerAddress = await wallet?.extraInfo?.provider?.request({
       method: MethodsWallet.GET_WALLET_CURRENT_MANAGER_ADDRESS,
     });
   } else {
-    managerAddress = wallet.portkeyInfo?.walletInfo.address;
+    managerAddress = wallet?.extraInfo?.portkeyInfo?.walletInfo.address;
   }
 
   if (!managerAddress && pubkey) {
@@ -27,20 +28,20 @@ export const getManagerAddressByWallet = async (
 };
 
 export const getCaHashAndOriginChainIdByWallet = async (
-  wallet: WalletInfo,
-  walletType: WalletType,
+  wallet: TWalletInfo,
+  walletType: WalletTypeEnum,
 ): Promise<{ caHash: string; originChainId: ChainId }> => {
   let caHash, originChainId;
-  if (walletType === WalletType.discover) {
-    const res = await PortkeyDid.did.services.getHolderInfoByManager({
-      caAddresses: [wallet.address],
+  if (walletType === WalletTypeEnum.discover) {
+    const res = await did.services.getHolderInfoByManager({
+      caAddresses: [wallet?.address],
     } as unknown as GetCAHolderByManagerParams);
     const caInfo = res[0];
     caHash = caInfo?.caHash;
     originChainId = caInfo?.chainId as ChainId;
   } else {
-    caHash = wallet.portkeyInfo?.caInfo?.caHash;
-    originChainId = wallet.portkeyInfo?.chainId;
+    caHash = wallet?.extraInfo?.portkeyInfo?.caInfo?.caHash;
+    originChainId = wallet?.extraInfo?.portkeyInfo?.chainId;
   }
   return {
     caHash: caHash || '',

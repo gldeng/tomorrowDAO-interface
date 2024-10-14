@@ -1,5 +1,4 @@
 import { CheckCircleOutlined } from '@aelf-design/icons';
-import { useWebLogin } from 'aelf-web-login';
 import Empty from '../Empty';
 import { fetchVoteHistory, getRankPoints } from 'api/request';
 import { useInfiniteScroll } from 'ahooks';
@@ -30,7 +29,6 @@ const getPonitDescription = (item: IGetRankPointsResItem) => {
   return item.description;
 };
 export default function MyPoints() {
-  const { wallet } = useWebLogin();
   // const fetchVoteList: (data?: IFetchResult) => Promise<IFetchResult> = async (data) => {
   //   const preList = data?.list ?? [];
   //   const res = await fetchVoteHistory({

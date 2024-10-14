@@ -1,21 +1,9 @@
-import {
-  useWebLogin,
-  WebLoginState,
-  WebLoginEvents,
-  useWebLoginEvent,
-  useLoginState,
-  WalletType,
-  usePortkeyLock,
-  PortkeyInfo,
-} from 'aelf-web-login';
 import { message } from 'antd';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { dispatch, useSelector } from 'redux/store';
 import { setWalletInfo } from 'redux/reducer/userInfo';
 import { cloneDeep } from 'lodash-es';
-import { TWalletInfoType } from 'types';
 import { storages } from 'storages';
-import { useRegisterContractServiceMethod } from 'contract/baseContract';
 import { useGetToken } from './useGetToken';
 import { setLoginStatus, resetLoginStatus } from 'redux/reducer/loginStatus';
 import { useAsyncEffect } from 'ahooks';
@@ -26,21 +14,33 @@ import { authManager } from 'utils/walletAndTokenInfo';
 import { curChain, networkType } from 'config';
 import { useUrlPath } from './useUrlPath';
 import { runTimeEnv } from 'utils/env';
+import { WalletTypeEnum } from '@aelf-web-login/wallet-adapter-base';
+import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
+import { TWalletInfoType } from 'types';
+import { webLoginInstance } from 'contract/webLogin';
 
 export const useWalletService = () => {
-  const { login, logout, loginState, walletType, wallet } = useWebLogin();
+  const { connectWallet, disConnectWallet, walletType, walletInfo, isConnected, lock } =
+    useConnectWallet();
   const loginStatus = useSelector((state) => state.loginStatus);
-  const { lock } = usePortkeyLock();
   const isLogin = loginStatus.loginStatus.isLogin;
-  return { login, logout, isLogin, walletType, lock, wallet };
+
+  return {
+    login: connectWallet,
+    logout: disConnectWallet,
+    isConnected: isConnected,
+    isLogin: isLogin,
+    walletType,
+    lock,
+    wallet: walletInfo,
+  };
 };
 
 export const useCheckLoginAndToken = () => {
-  const { loginState, logout, wallet } = useWebLogin();
-  const isConnectWallet = useMemo(() => loginState === WebLoginState.logined, [loginState]);
+  const { isConnected, disConnectWallet, walletInfo: wallet } = useConnectWallet();
+  const isConnectWallet = isConnected;
   const { getToken, checkTokenValid } = useGetToken();
   const { isTelegram } = useUrlPath();
-  const { isLogin } = useWalletService();
 
   const getTokenUpdate = async () => {
     const tokenRes = await getToken({
@@ -48,7 +48,7 @@ export const useCheckLoginAndToken = () => {
     });
     // const { caHash } = await getCaHashAndOriginChainIdByWallet(wallet, walletType);
     // const managerAddress = await getManagerAddressByWallet(wallet, walletType);
-    const key = `ELF_${wallet.address}_${curChain}_${networkType}`;
+    const key = `ELF_${wallet?.address}_${curChain}_${networkType}`;
     // // emitLoading(false, 'Authorize account...');
     emitLoading(false);
     if (tokenRes?.access_token) {
@@ -62,7 +62,7 @@ export const useCheckLoginAndToken = () => {
       setLocalJWT(key, tokenRes as LocalJWTData);
       message.success('log in');
     } else {
-      logout({ noModal: true });
+      await disConnectWallet();
       dispatch(resetLoginStatus());
       message.error('login failed');
     }
@@ -96,68 +96,28 @@ export const useCheckLoginAndToken = () => {
   }, [isConnectWallet]);
 
   useEffect(() => {
-    if (wallet.address && isLogin) {
+    if (wallet?.address && isConnected) {
       console.log('gtag report', wallet.address);
       window.gtag('set', 'user_id', wallet.address);
       window.gtag('event', 'login_success', {
         user_id: wallet.address,
       });
     }
-  }, [wallet.address, isLogin]);
+  }, [wallet?.address, isConnected]);
 
   return {
     checkTokenValid,
-    logout,
     getTokenUpdate,
   };
 };
 export const useWalletInit = () => {
-  const webLoginContext = useWebLogin();
+  const { walletInfo, walletType, isConnected, loginError, disConnectWallet } = useConnectWallet();
+  const webLoginContext = useConnectWallet();
+
   const handleClearRef = useRef<() => void>();
-  const { wallet, walletType, logout } = webLoginContext;
-  // register Contract method
-  useRegisterContractServiceMethod();
   useCheckLoginAndToken();
-  const callBack = useCallback(
-    (state: WebLoginState) => {
-      console.log('web-login-state ->>>>>>>>>>>>>>>>>>>', state);
-      if (state === WebLoginState.lock) {
-        // backToHomeByRoute();
-      }
-      if (state === WebLoginState.logined) {
-        const walletInfo: TWalletInfoType = {
-          ...wallet,
-          address: wallet?.address || '',
-          publicKey: wallet?.publicKey,
-        };
-        if (walletType === WalletType.elf) {
-          // walletInfo.aelfChainAddress = wallet?.address || '';
-          walletInfo.nightElfInfo = wallet.nightElfInfo;
-        }
-        if (walletType === WalletType.discover) {
-          walletInfo.discoverInfo = {
-            accounts: wallet.discoverInfo?.accounts || {},
-            address: wallet.discoverInfo?.address || '',
-            nickName: wallet.discoverInfo?.nickName,
-          };
-        }
-        if (walletType === WalletType.portkey) {
-          walletInfo.portkeyInfo = wallet.portkeyInfo as PortkeyInfo;
-        }
-        dispatch(setWalletInfo(cloneDeep(walletInfo)));
-      }
-    },
-    [walletType, wallet],
-  );
 
-  useLoginState(callBack);
-
-  useWebLoginEvent(WebLoginEvents.LOGIN_ERROR, (error) => {
-    message.error(`${error.message || 'LOGIN_ERROR'}`);
-  });
-  // useWebLoginEvent(WebLoginEvents.LOGINED, () => {});
-
-  useWebLoginEvent(WebLoginEvents.LOGOUT, () => {
+  const resetAccount = useCallback(() => {
     localStorage.removeItem(storages.daoAccessToken);
     localStorage.removeItem(storages.walletInfo);
     dispatch(resetLoginStatus());
@@ -167,13 +127,51 @@ export const useWalletInit = () => {
         aelfChainAddress: '',
       }),
     );
-  });
-  useWebLoginEvent(WebLoginEvents.USER_CANCEL, () => {
-    message.error('user cancel');
-  });
+  }, []);
+
+  useEffect(() => {
+    if (walletInfo) {
+      const walletInfoToLocal: TWalletInfoType = {
+        address: walletInfo?.address || '',
+        publicKey: walletInfo?.extraInfo?.publicKey || '',
+      };
+      if (walletType === WalletTypeEnum.elf) {
+        walletInfoToLocal.nightElfInfo = walletInfo.extraInfo?.nightElfInfo;
+      }
+      if (walletType === WalletTypeEnum.discover) {
+        walletInfoToLocal.discoverInfo = {
+          accounts: walletInfo?.extraInfo?.accounts || {},
+          address: walletInfo?.address || '',
+          nickName: walletInfo?.extraInfo?.nickName,
+        };
+      }
+      if (walletType === WalletTypeEnum.aa) {
+        walletInfoToLocal.portkeyInfo = walletInfo?.extraInfo?.portkeyInfo || {};
+      }
+      dispatch(setWalletInfo(cloneDeep(walletInfoToLocal)));
+    }
+  }, [walletInfo, walletType]);
+
+  useEffect(() => {
+    console.log('webLoginContext.isConnected', webLoginContext.isConnected);
+    webLoginInstance.setWebLoginContext(webLoginContext);
+  }, [webLoginContext]);
+
+  useEffect(() => {
+    if (loginError) {
+      message.error(`${loginError?.message || 'LOGIN_ERROR'}`);
+    }
+  }, [loginError]);
+
+  useEffect(() => {
+    if (!isConnected) {
+      resetAccount();
+    }
+  }, [isConnected, resetAccount]);
+
   const { isTelegram } = useUrlPath();
-  const handleClear = () => {
-    logout({ noModal: true });
+  const handleClear = async () => {
+    await disConnectWallet();
     dispatch(resetLoginStatus());
     removeJWT();
     if (runTimeEnv === 'client' && isTelegram) {
@@ -190,12 +188,4 @@ export const useWalletInit = () => {
       eventBus.removeListener(UnAuth, clear);
     };
   }, []);
-  // useEffect(() => {
-  // WalletAndTokenInfo.setWallet(
-  //   webLoginContext.walletType,
-  //   webLoginContext.wallet,
-  //   webLoginContext.version,
-  // );
-  // WalletAndTokenInfo.setSignMethod(getToken);
-  // }, [getToken, webLoginContext]);
 };

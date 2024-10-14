@@ -25,7 +25,7 @@ import {
   Segmented
 } from "antd";
 import { useEffectOnce } from "react-use";
-import { useWebLogin } from "aelf-web-login";
+import { useConnectWallet } from "@aelf-web-login/wallet-adapter-react";
 import { showAccountInfoSyncingModal } from "@components/SimpleModal/index";
 import Total from "@components/Total";
 import constants, {
@@ -82,7 +82,7 @@ const ProposalList = () => {
   const currentActiveKeyRef = useRef();
   currentActiveKeyRef.current = activeKey;
 
-  const { wallet: webLoginWallet, callContract } = useWebLogin();
+  const { callSendMethod: callContract } = useConnectWallet();
 
   useEffect(() => {
     sendHeight(500);
@@ -194,10 +194,10 @@ const ProposalList = () => {
         visible: true,
       });
     } else {
-      if (!webLoginWallet.accountInfoSync.syncCompleted) {
-        showAccountInfoSyncingModal();
-        return;
-      }
+      // if (!webLoginWallet.accountInfoSync.syncCompleted) {
+      //   showAccountInfoSyncingModal();
+      //   return;
+      // }
 
       await sendTransactionWith(
         callContract,
@@ -217,10 +217,10 @@ const ProposalList = () => {
 
   async function handleConfirm(action) {
     if (action) {
-      if (!webLoginWallet.accountInfoSync.syncCompleted) {
-        showAccountInfoSyncingModal();
-        return;
-      }
+      // if (!webLoginWallet.accountInfoSync.syncCompleted) {
+      //   showAccountInfoSyncingModal();
+      //   return;
+      // }
       await sendTransactionWith(
         callContract,
         getContractAddress(params.proposalType),
@@ -258,10 +258,10 @@ const ProposalList = () => {
     return votedStatus;
   };
   const handleRelease = async (event) => {
-    if (!webLoginWallet.accountInfoSync.syncCompleted) {
-      showAccountInfoSyncingModal();
-      return;
-    }
+    // if (!webLoginWallet.accountInfoSync.syncCompleted) {
+    //   showAccountInfoSyncingModal();
+    //   return;
+    // }
     const id = event.currentTarget.getAttribute("proposal-id");
     debounce(async () => {
       setLoading({

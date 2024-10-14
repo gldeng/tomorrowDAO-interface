@@ -1,8 +1,8 @@
-import { CallContractParams, useCallContract } from 'aelf-web-login';
 import { SupportedELFChainId, ContractMethodType } from 'types';
 import { store } from 'redux/store';
+import { ICallContractParams } from '@aelf-web-login/wallet-adapter-base';
 
-type TMethodType = <T, R>(params: CallContractParams<T>) => Promise<R>;
+type TMethodType = <T, R>(params: ICallContractParams<T>) => Promise<R>;
 
 type TChainAndRpcMapType = {
   [key in SupportedELFChainId]?: {
@@ -19,45 +19,11 @@ type TContractMethodMapType = {
 };
 
 export const contractMethodMap: TContractMethodMapType = {};
-const chainAndRPCMap: TChainAndRpcMapType = {};
-
-export function useRegisterContractServiceMethod() {
-  const info = store.getState().elfInfo.elfInfo;
-  [
-    SupportedELFChainId.MAIN_NET,
-    SupportedELFChainId.TDVV_NET,
-    SupportedELFChainId.TDVW_NET,
-  ].forEach((chain) => {
-    chainAndRPCMap[`${chain}`] = {
-      chainId: chain,
-      rpcUrl: info?.[`rpcUrl${String(chain).toUpperCase()}`],
-    };
-  });
-  const { callSendMethod: callAELFSendMethod, callViewMethod: callAELFViewMethod } =
-    useCallContract(chainAndRPCMap[SupportedELFChainId.MAIN_NET]);
-  const { callSendMethod: callTDVVSendMethod, callViewMethod: callTDVVViewMethod } =
-    useCallContract(chainAndRPCMap[SupportedELFChainId.TDVV_NET]);
-  const { callSendMethod: callTDVWSendMethod, callViewMethod: callTDVWViewMethod } =
-    useCallContract(chainAndRPCMap[SupportedELFChainId.TDVW_NET]);
-
-  contractMethodMap[SupportedELFChainId.MAIN_NET] = {
-    callSendMethod: callAELFSendMethod,
-    callViewMethod: callAELFViewMethod,
-  } as ICallMethodMap;
-  contractMethodMap[SupportedELFChainId.TDVV_NET] = {
-    callSendMethod: callTDVVSendMethod,
-    callViewMethod: callTDVVViewMethod,
-  } as ICallMethodMap;
-  contractMethodMap[SupportedELFChainId.TDVW_NET] = {
-    callSendMethod: callTDVWSendMethod,
-    callViewMethod: callTDVWViewMethod,
-  } as ICallMethodMap;
-}
 
 export function GetContractServiceMethod(
   chain: Chain,
   type?: ContractMethodType,
-): <T, R>(params: CallContractParams<T>, sendOptions?: undefined) => Promise<R> {
+): <T, R>(params: ICallContractParams<T>) => Promise<R> {
   const info = store.getState().elfInfo.elfInfo;
 
   const chainAndRPCMap: TChainAndRpcMapType = {};
