@@ -13,7 +13,7 @@ import { getExploreLink } from 'utils/common';
 import { useChainSelect } from 'hooks/useChainSelect';
 import './index.css';
 import { curChain, explorer, NetworkDaoHomePathName } from 'config';
-import { useWebLogin } from 'aelf-web-login';
+import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
 import { EDaoGovernanceMechanism } from 'app/(createADao)/create/type';
 import ImageWithPlaceHolder from 'components/ImageWithPlaceHolder';
 
@@ -60,7 +60,7 @@ export default function DaoInfo(props: IParams) {
     onChangeHCParams,
     aliasName,
   } = props;
-  const { wallet } = useWebLogin();
+  const { walletInfo: wallet } = useConnectWallet();
 
   const { isLG, isSM } = useResponsive();
   const { isSideChain } = useChainSelect();
@@ -218,7 +218,7 @@ export default function DaoInfo(props: IParams) {
                 />
               </div>
               <div className="flex">
-                {wallet.address === data?.creator && (
+                {wallet?.address === data?.creator && (
                   <Link
                     href={
                       isNetworkDAO ? `${NetworkDaoHomePathName}/edit` : `/dao/${aliasName}/edit`

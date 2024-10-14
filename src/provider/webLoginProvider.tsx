@@ -1,11 +1,17 @@
 'use client';
 import { NetworkType } from '@portkey/did-ui-react';
 import { NetworkDaoHomePathName, TELEGRAM_BOT_ID, aelfWebLoginNetworkType, curChain } from 'config';
-import { PortkeyProvider, WebLoginProvider, setGlobalConfig } from 'aelf-web-login';
 import { store } from 'redux/store';
 import getChainIdQuery from 'utils/url';
 import { usePathname } from 'next/navigation';
 import { getReferrerCode } from 'app/telegram/votigram/util/start-params';
+import { NetworkEnum, SignInDesignEnum, TChainId } from '@aelf-web-login/wallet-adapter-base';
+import { PortkeyDiscoverWallet } from '@aelf-web-login/wallet-adapter-portkey-discover';
+import { PortkeyAAWallet } from '@aelf-web-login/wallet-adapter-portkey-aa';
+import { NightElfWallet } from '@aelf-web-login/wallet-adapter-night-elf';
+import { IConfigProps } from '@aelf-web-login/wallet-adapter-bridge';
+import { init, WebLoginProvider } from '@aelf-web-login/wallet-adapter-react';
+// import './telegram';
 
 type TNodes = {
   AELF: { chainId: string; rpcUrl: string };
@@ -88,69 +94,73 @@ export default function LoginSDKProvider({ children }: { children: React.ReactNo
   };
   const nodes = getNodes();
   const referrerCode = getReferrerCode();
-  setGlobalConfig({
-    appName: APP_NAME,
-    chainId: chainId,
-    onlyShowV2: true,
-    portkey: {},
-    portkeyV2: {
-      networkType: networkType,
-      useLocalStorage: true,
-      graphQLUrl: info.graphqlServer,
-      connectUrl: addBasePath(connectUrl || ''),
-      requestDefaults: {
-        timeout: networkType === 'TESTNET' ? 300000 : 80000,
-        baseURL: addBasePath(server || ''),
-      },
-      serviceUrl: server,
-      socialLogin: {
-        Telegram: {
-          botId: TELEGRAM_BOT_ID,
-        },
-      },
-      referralInfo: {
-        referralCode: referrerCode ?? '',
-        projectCode: '13027',
+
+  const didConfig = {
+    graphQLUrl: info.graphqlServer,
+    connectUrl: addBasePath(connectUrl || ''),
+    serviceUrl: server,
+    requestDefaults: {
+      timeout: networkType === 'TESTNET' ? 300000 : 80000,
+      baseURL: addBasePath(server || ''),
+    },
+    socialLogin: {
+      Telegram: {
+        botId: TELEGRAM_BOT_ID,
       },
     },
-    aelfReact: {
+    referralInfo: {
+      referralCode: referrerCode ?? '',
+      projectCode: '13027',
+    },
+  };
+
+  const baseConfig = {
+    omitTelegramScript: true,
+    showVconsole: false,
+    networkType: networkType as NetworkEnum,
+    chainId: chainId as TChainId,
+    keyboard: true,
+    noCommonBaseModal: false,
+    design: SignInDesignEnum.CryptoDesign,
+    // enableAcceleration: true,
+  };
+
+  const wallets = [
+    new PortkeyAAWallet({
       appName: APP_NAME,
+      chainId: chainId as TChainId,
+      autoShowUnlock: true,
+      noNeedForConfirm: false,
+    }),
+    new PortkeyDiscoverWallet({
+      networkType: networkType,
+      chainId: chainId as TChainId,
+      autoRequestAccount: true, // If set to true, please contact Portkey to add whitelist @Rachel
+      autoLogoutOnDisconnected: true,
+      autoLogoutOnNetworkMismatch: true,
+      autoLogoutOnAccountMismatch: true,
+      autoLogoutOnChainMismatch: true,
+    }),
+    new NightElfWallet({
+      chainId: chainId as TChainId,
+      appName: APP_NAME,
+      connectEagerly: true,
+      useMultiChain: false,
+      defaultRpcUrl:
+        (info?.[`rpcUrl${String(info?.curChain).toUpperCase()}`] as unknown as string) ||
+        info?.rpcUrlTDVW ||
+        '',
       nodes: nodes,
-    },
-    defaultRpcUrl:
-      (info?.[`rpcUrl${String(info?.curChain).toUpperCase()}`] as unknown as string) ||
-      info?.rpcUrlTDVW ||
-      '',
-    networkType: aelfWebLoginNetworkType,
-  });
-  return (
-    <PortkeyProvider networkTypeV2={info?.networkType}>
-      <div className="1">
-        <WebLoginProvider
-          nightElf={{
-            useMultiChain: true,
-            connectEagerly: true,
-          }}
-          portkey={{
-            design: 'CryptoDesign',
-            keyboard: {
-              v2: true,
-            },
-            autoShowUnlock: false,
-            checkAccountInfoSync: true,
-          }}
-          extraWallets={['discover', 'elf']}
-          discover={{
-            autoRequestAccount: true,
-            autoLogoutOnDisconnected: true,
-            autoLogoutOnNetworkMismatch: true,
-            autoLogoutOnAccountMismatch: true,
-            autoLogoutOnChainMismatch: true,
-          }}
-        >
-          {children}
-        </WebLoginProvider>
-      </div>
-    </PortkeyProvider>
-  );
+    }),
+  ];
+
+  const config: IConfigProps = {
+    didConfig,
+    baseConfig,
+    wallets,
+  };
+
+  const bridgeAPI = init(config); // upper config
+
+  return <WebLoginProvider bridgeAPI={bridgeAPI}>{children}</WebLoginProvider>;
 }

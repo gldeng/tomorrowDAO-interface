@@ -14,7 +14,8 @@ import { TokenIconMap } from 'constants/token';
 import { IContractError } from 'types';
 import BigNumber from 'bignumber.js';
 import useAelfWebLoginSync from 'hooks/useAelfWebLoginSync';
-import { useWebLogin } from 'aelf-web-login';
+import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
+
 import { CommonOperationResultModalType } from 'components/CommonOperationResultModal';
 import { okButtonConfig } from 'components/ResultModal';
 
@@ -52,7 +53,7 @@ function Vote(props: TVoteTypes) {
   const [currentMessage, setCurrentMessage] = useState('');
   const [showTokenBallotModal, setShowTokenBallotModal] = useState(false);
   const [showVoteModal, setShowVoteModal] = useState(false);
-  const { wallet } = useWebLogin();
+  const { walletInfo: wallet } = useConnectWallet();
 
   const handlerModal = (voteType: number) => {
     // if have voted, can't vote again
@@ -108,7 +109,7 @@ function Vote(props: TVoteTypes) {
           {
             spender: voteAddress || '',
             symbol: symbol || 'ELF',
-            owner: wallet.address,
+            owner: wallet!.address,
           },
           {
             chain: curChain,
@@ -173,7 +174,7 @@ function Vote(props: TVoteTypes) {
     isSyncQuery,
     fetchMyInfo,
     symbol,
-    wallet.address,
+    wallet,
   ]);
 
   return (
