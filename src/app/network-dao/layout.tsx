@@ -50,13 +50,13 @@ const Layout = dynamicReq(
       // }, [loginState])
 
       useEffect(() => {
-        if(isConnected){
+        if(isConnected && wallet){
           dispatch({
             type: LOG_IN_ACTIONS.LOG_IN_SUCCESS,
             payload: wallet,
           });
         }
-      },[isConnected])
+      },[isConnected, wallet])
       const pathName = usePathname()
       const isProposalApply = pathName.includes('/network-dao/apply')
       return (
