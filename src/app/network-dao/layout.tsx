@@ -51,9 +51,16 @@ const Layout = dynamicReq(
 
       useEffect(() => {
         if(isConnected && wallet){
+          const newWallet = {
+            address: wallet.address ?? '',
+            publicKey: wallet.extraInfo?.publicKey ?? '',
+            discoverInfo: wallet.address,
+            portkeyInfo: wallet.extraInfo?.portkeyInfo,
+            nightElfInfo: wallet.extraInfo?.nightElfInfo,
+          }
           dispatch({
             type: LOG_IN_ACTIONS.LOG_IN_SUCCESS,
-            payload: wallet,
+            payload: newWallet,
           });
         }
       },[isConnected, wallet])
