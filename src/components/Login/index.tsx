@@ -19,11 +19,10 @@ import { WalletTypeEnum } from '@aelf-web-login/wallet-adapter-base';
 import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
 export const LoginAuth = () => {
   const { isLG } = useResponsive();
-  const { isConnected, connectWallet, walletInfo } = useConnectWallet();
+  const { connectWallet, walletInfo } = useConnectWallet();
 
   const { getTokenUpdate } = useCheckLoginAndToken();
-  const isConnectWallet = isConnected;
-  if (isConnectWallet && walletInfo) {
+  if (walletInfo) {
     return (
       <Button
         size={isLG ? 'medium' : 'large'}
