@@ -168,10 +168,10 @@ export const useWalletInit = () => {
   }, [loginError]);
 
   useEffect(() => {
-    if (!isConnected) {
+    if (!isConnected || !walletInfo) {
       resetAccount();
     }
-  }, [isConnected, resetAccount]);
+  }, [isConnected, resetAccount, walletInfo]);
 
   const { isTelegram } = useUrlPath();
   const handleClear = async () => {

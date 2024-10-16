@@ -10,7 +10,7 @@ export default function ButtonWithLoginCheck({
   ...props
 }) {
   // const { loginState, login, wallet } = useWebLogin();
-  const { connectWallet, isConnected, connecting } = useConnectWallet()
+  const { connectWallet, connecting, walletInfo } = useConnectWallet()
 
   // const onClickInternal = (event) => {
   //   if (
@@ -31,7 +31,7 @@ export default function ButtonWithLoginCheck({
   // };
 
   const onClickInternal = (event) => {
-    if (!isConnected) {
+    if (!walletInfo) {
       connectWallet();
     } else {
       onClick?.(event);

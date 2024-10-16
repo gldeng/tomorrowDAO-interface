@@ -35,7 +35,6 @@ import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
 import { SkeletonForm } from 'components/Skeleton';
 import { replaceUrlParams } from 'utils/url';
 import dayjs from 'dayjs';
-import { set } from 'js-cookie';
 
 const convertParams = async (address: string, methodName: string, originParams: any) => {
   const contractInfo = await getContract(address);

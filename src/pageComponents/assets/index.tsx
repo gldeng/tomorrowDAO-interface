@@ -20,15 +20,15 @@ export interface IMyAssetProps {
 export default function MyAsset(props: IMyAssetProps) {
   const { redirect = true, onBack } = props;
   const router = useRouter();
-  const { isConnected, walletInfo: wallet } = useConnectWallet();
+  const { walletInfo: wallet } = useConnectWallet();
   const Asset = AssetV2;
   const PortkeyAssetProvider = PortkeyAssetProviderV2;
 
   useEffect(() => {
-    if (!isConnected && redirect) {
+    if (!wallet?.address && redirect) {
       router.push('/');
     }
-  }, [isConnected, router]);
+  }, [wallet, router]);
 
   return (
     <div className={'assets-wrap'}>

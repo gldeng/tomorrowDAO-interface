@@ -27,9 +27,7 @@ export const useGetToken = () => {
   } = useConnectWallet();
   const { getSignatureAndPublicKey } = useDiscoverProvider();
 
-  const isConnectWallet = useMemo(() => {
-    return isConnected;
-  }, [isConnected]);
+  const isConnectWallet = isConnected;
 
   const getTokenFromServer: (props: {
     params: ITokenParams;
