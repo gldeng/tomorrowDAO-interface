@@ -1,7 +1,7 @@
 import { stringify } from 'query-string';
 import { apiServer, explorerServer, tokenServer } from './axios';
 import { EDaoGovernanceMechanism } from 'app/(createADao)/create/type';
-import { tokenIssueUrl } from './url/tmrw';
+import { tokenIssueUrl, voteOptionSaveUrl, fileUploadUrl } from './url/tmrw';
 export * from './api-wrap/telegram';
 
 export * from './network-dao/api';
@@ -236,5 +236,19 @@ export const fetchTokenIssue = async (params: {
 }): Promise<ITokenIssueRes> => {
   return apiServer.post(tokenIssueUrl, {
     ...params,
+  });
+};
+
+export const saveVoteOptions = async (params: ISaveAppListReq): Promise<ISaveAppListRes> => {
+  return apiServer.post(voteOptionSaveUrl, {
+    ...params,
+  });
+};
+
+export const fileUplaod = async (params: { file: File }): Promise<IUploadFileRes> => {
+  const formData = new FormData();
+  formData.append('file', params.file);
+  return apiServer.post(fileUploadUrl, formData, {
+    'Content-Type': 'multipart/form-data',
   });
 };

@@ -163,15 +163,15 @@ export const useWalletInit = () => {
 
   useEffect(() => {
     if (loginError) {
-      message.error(`${loginError?.message || 'LOGIN_ERROR'}`);
+      message.error(`${loginError?.nativeError?.message || loginError?.message || 'LOGIN_ERROR'}`);
     }
   }, [loginError]);
 
   useEffect(() => {
-    if (!isConnected || !walletInfo) {
+    if (!isConnected) {
       resetAccount();
     }
-  }, [isConnected, resetAccount, walletInfo]);
+  }, [isConnected, resetAccount]);
 
   const { isTelegram } = useUrlPath();
   const handleClear = async () => {

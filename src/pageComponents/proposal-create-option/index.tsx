@@ -1,32 +1,70 @@
 'use client';
 import { memo, useEffect, useState } from 'react';
-import { Result } from 'antd';
-import {} from 'ahooks';
+import { message, Result, Form } from 'antd';
+import { useRequest } from 'ahooks';
 import { useParams } from 'next/navigation';
-import Form from './Form';
+import OptionListForm from './Form';
 import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
-import useMount from 'hooks/useMount';
 import breadCrumb from 'utils/breadCrumb';
+import { fetchDaoInfo } from 'api/request';
+import { curChain } from 'config';
+import ProposalType from 'pageComponents/proposal-create/DeployForm/ProposalType';
+import { SkeletonForm } from 'components/Skeleton';
+import clsx from 'clsx';
+import { proposalTypeList } from './type';
 import '../proposal-create/index.css';
 
 const ProposalDeploy = () => {
   const { walletInfo } = useConnectWallet();
   const { aliasName } = useParams<{ aliasName: string }>();
+  const [proposalTypeForm] = Form.useForm();
   useEffect(() => {
     breadCrumb.updateCreateProposalPage(aliasName);
   }, [aliasName]);
+  const [isNext, setNext] = useState(false);
+  const {
+    data: daoData,
+    error: daoError,
+    loading: daoLoading,
+  } = useRequest(async () => {
+    if (!aliasName) {
+      message.error('aliasName is required');
+      return null;
+    }
+    return fetchDaoInfo({ chainId: curChain, alias: aliasName });
+  });
+  const handleNext = () => {
+    // const proposalType = form.getFieldValue('proposalType');
+    setNext(true);
+  };
+  const optionType = proposalTypeForm.getFieldValue('proposalType');
+  console.log('optionType', optionType);
   return (
     <div>
-      <div className="deploy-form">
-        {walletInfo ? (
-          <Form />
-        ) : (
-          <Result
-            className="px-4 lg:px-8"
-            status="warning"
-            title="Please log in before creating a proposal"
+      <div className="deploy-proposal-options-form-wrap lg:my-[32px] my-[24px]">
+        <Form
+          form={proposalTypeForm}
+          layout="vertical"
+          autoComplete="off"
+          requiredMark={false}
+          scrollToFirstError={true}
+        >
+          <ProposalType
+            className={clsx({ hidden: isNext })}
+            next={handleNext}
+            options={proposalTypeList}
           />
-        )}
+        </Form>
+        {isNext &&
+          (daoLoading ? (
+            <SkeletonForm />
+          ) : (
+            <OptionListForm
+              daoId={daoData?.data?.id ?? ''}
+              optionType={optionType}
+              aliasName={aliasName}
+            />
+          ))}
       </div>
     </div>
   );
