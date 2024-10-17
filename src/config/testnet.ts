@@ -11,7 +11,7 @@ export const rpcUrlTDVV = 'https://explorer-test-side02.aelf.io/chain';
 export const rpcUrlTDVW = 'https://explorer-test-side02.aelf.io/chain';
 export const connectServer = 'https://auth-portkey-test.portkey.finance';
 export const graphqlServer =
-  'https://dapp-aa-portkey-test.portkey.finance/Portkey_V2_DID/PortKeyIndexerCASchema/graphql';
+  'https://dapp-aa-portkey-test.portkey.finance/aefinder-v2/api/app/graphql/portkey';
 export const portkeyServer = 'https://aa-portkey-test.portkey.finance';
 export const connectUrl = 'https://auth-aa-portkey-test.portkey.finance';
 

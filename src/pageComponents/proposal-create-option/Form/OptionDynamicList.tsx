@@ -213,7 +213,7 @@ function FormListDymanic(props: IFormListDymanicProps) {
                   </Form.Item>
                 ))}
 
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between lg:items-center items-start lg:flex-row flex-col">
                   <div className="dynamic-form-buttons text-neutralTitle">
                     <Button
                       className="dynamic-form-buttons-item"
@@ -237,7 +237,7 @@ function FormListDymanic(props: IFormListDymanicProps) {
                       <span className="card-sm-text-bold ">Delete all</span>
                     </Button>
                   </div>
-                  <div className="card-sm-text text-Disable-Text">
+                  <div className="card-sm-text text-Disable-Text lg:mt-0 mt-[16px]">
                     <span className="text-neutralPrimaryText">{fields.length}</span> Options in
                     Total
                   </div>
