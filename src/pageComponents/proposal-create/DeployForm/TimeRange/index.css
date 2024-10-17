@@ -1,0 +1,3 @@
+.active-time-item-radio {
+  @apply h-[48px] flex items-center;
+}

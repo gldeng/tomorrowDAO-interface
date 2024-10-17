@@ -1,35 +1,26 @@
-import { Form, message as antdMessage, message } from 'antd';
-import { Input, Tooltip, Button } from 'aelf-design';
+import { Form, message as antdMessage } from 'antd';
+import { Input } from 'aelf-design';
 import OptionDynamicList from './OptionDynamicList';
 import AWSUpload from 'components/S3Upload';
 import formValidateScrollFirstError from 'utils/formValidateScrollFirstError';
 import { IContractError, IFormValidateError } from 'types';
 import { useRouter } from 'next/navigation';
 import { emitLoading } from 'utils/myEvent';
-import {
-  activeEndTimeName,
-  activeStartTimeName,
-  voterAndExecuteNamePath,
-} from 'pageComponents/proposal-create/DeployForm/constant';
+import { voterAndExecuteNamePath } from 'pageComponents/proposal-create/DeployForm/constant';
 import { ResponsiveSelect } from 'components/ResponsiveSelect';
 import { proposalCreateContractRequest } from 'contract/proposalCreateContract';
 import { useAsyncEffect } from 'ahooks';
 import { fetchGovernanceMechanismList } from 'api/request';
 import { curChain } from 'config';
 import { useMemo, useState } from 'react';
-import { InfoCircleOutlined } from '@aelf-design/icons';
 import { ButtonCheckLogin } from 'components/ButtonCheckLogin';
-import ActiveEndTime, {
-  defaultActiveEndTimeDuration,
-} from 'pageComponents/proposal-create/DeployForm/ActiveEndTime';
-import ActiveStartTime from 'pageComponents/proposal-create/DeployForm/ActiveStartTime';
-import { ActiveStartTimeEnum } from 'pageComponents/proposal-create/type';
 import { ProposalType as ProposalTypeEnum } from 'types';
 import { EOptionType, ESourceType } from '../type';
 import { showSuccessModal, showErrorModal } from 'utils/globalModal';
 import { saveVoteOptions, fetchVoteSchemeList } from 'api/request';
 import { formmatDescription } from '../utils';
 import { getProposalTimeParams } from 'utils/getProposalTime';
+import TimeRange from 'pageComponents/proposal-create/DeployForm/TimeRange';
 interface IFormPageProps {
   daoId: string;
   optionType: EOptionType;
@@ -168,7 +159,7 @@ export default function Page(props: IFormPageProps) {
       >
         <Form.Item
           name={['proposalBasicInfo', 'proposalTitle']}
-          label={<span className="form-item-label">Title</span>}
+          label={<span>Title</span>}
           validateFirst
           rules={[
             {
@@ -184,11 +175,7 @@ export default function Page(props: IFormPageProps) {
         >
           <Input type="text" placeholder="Enter the title of the proposal (300 characters max)" />
         </Form.Item>
-        <Form.Item
-          name={'banner'}
-          label={<span className="form-item-label">Banner</span>}
-          valuePropName="fileList"
-        >
+        <Form.Item name={'banner'} label={<span>Banner</span>} valuePropName="fileList">
           <AWSUpload
             maxFileCount={1}
             needCheckImgSize
@@ -223,7 +210,7 @@ export default function Page(props: IFormPageProps) {
         <Form.Item
           name={voterAndExecuteNamePath}
           required
-          label={<span className="form-item-label">Voters and executors</span>}
+          label={<span>Voters and executors</span>}
           rules={[
             {
               required: true,
@@ -239,64 +226,7 @@ export default function Page(props: IFormPageProps) {
             optionLabelProp="label"
           ></ResponsiveSelect>
         </Form.Item>
-        <Form.Item
-          className="voting-start-time-form-label"
-          label={
-            <Tooltip title="Define when a proposal should be active to receive approvals. If now is selected, the proposal is immediately active after publishing.">
-              <span className="form-item-label">
-                Voting start time
-                <InfoCircleOutlined className="cursor-pointer label-icon" />
-              </span>
-            </Tooltip>
-          }
-          initialValue={ActiveStartTimeEnum.now}
-          name={activeStartTimeName}
-          rules={[
-            {
-              required: true,
-              message: 'The voting start time is required',
-            },
-          ]}
-        >
-          <ActiveStartTime />
-        </Form.Item>
-        <Form.Item
-          label={
-            <Tooltip title="Define how long the voting should last in days, or add an exact date and time for it to conclude.">
-              <span className="form-item-label">
-                Voting end date
-                <InfoCircleOutlined className="cursor-pointer label-icon" />
-              </span>
-            </Tooltip>
-          }
-          initialValue={defaultActiveEndTimeDuration}
-          name={activeEndTimeName}
-          rules={[
-            {
-              required: true,
-              message: 'The voting end time is required',
-            },
-            {
-              validator: (_, value) => {
-                return new Promise<void>((resolve, reject) => {
-                  if (Array.isArray(value)) {
-                    if (value.every((item) => item === 0)) {
-                      reject('The voting end time is required');
-                    }
-                    const [minutes, hours, days] = value;
-                    const totalDays = days + hours / 24 + minutes / 1440;
-                    if (totalDays > 365) {
-                      reject('The maximum duration is 365 days');
-                    }
-                  }
-                  resolve();
-                });
-              },
-            },
-          ]}
-        >
-          <ActiveEndTime />
-        </Form.Item>
+        <TimeRange />
       </Form>
 
       <div className="flex justify-end mt-[100px]">

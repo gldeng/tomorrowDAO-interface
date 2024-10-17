@@ -26,7 +26,7 @@ export default function ActiveStartTime(props: IActiveStartTimeProps) {
   };
   return (
     <div>
-      <div>
+      <div className="active-time-item-radio">
         <Radio.Group onChange={handleChange} value={value}>
           <Radio value={ActiveStartTimeEnum.now}>Now</Radio>
           <Radio value={ActiveStartTimeEnum.custom}>Specific date & time</Radio>

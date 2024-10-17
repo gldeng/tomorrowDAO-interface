@@ -39,6 +39,12 @@
   & .TMRWDAO-form > .TMRWDAO-form-item {
     @apply lg:mt-[32px] mt-[24px];
   }
+  .form-item-label {
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+  }
 }
 .dynamic-form-item-wrap {
   &.simple {
