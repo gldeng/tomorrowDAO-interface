@@ -35,6 +35,7 @@ import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
 import { SkeletonForm } from 'components/Skeleton';
 import { replaceUrlParams } from 'utils/url';
 import dayjs from 'dayjs';
+import { proposalTypeList } from 'types';
 
 const convertParams = async (address: string, methodName: string, originParams: any) => {
   const contractInfo = await getContract(address);
@@ -425,7 +426,11 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
           }
         }}
       >
-        <ProposalType className={clsx({ hidden: isNext })} next={handleNext} />
+        <ProposalType
+          className={clsx({ hidden: isNext })}
+          next={handleNext}
+          options={proposalTypeList}
+        />
         {daoLoading && isNext ? (
           <SkeletonForm />
         ) : (

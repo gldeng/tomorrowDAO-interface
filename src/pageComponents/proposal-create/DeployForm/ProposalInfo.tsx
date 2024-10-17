@@ -20,11 +20,10 @@ import { SkeletonTab } from 'components/Skeleton';
 import ActiveStartTime from './ActiveStartTime';
 import ActiveEndTime, { defaultActiveEndTimeDuration } from './ActiveEndTime';
 import { getTimeMilliseconds } from '../util/time';
-import { voterAndExecuteNamePath } from './constant';
+import { activeEndTimeName, activeStartTimeName, voterAndExecuteNamePath } from './constant';
 
 const periodName = ['proposalBasicInfo', 'activeTimePeriod'];
-const activeStartTimeName = ['proposalBasicInfo', 'activeStartTime'];
-const activeEndTimeName = ['proposalBasicInfo', 'activeEndTime'];
+
 interface ProposalInfoProps {
   next?: () => void;
   className?: string;
@@ -140,7 +139,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
           {
             min: 0,
             max: 256,
-            message: 'The proposal description supports a maximum of 300,000 characters',
+            message: 'The proposal description supports a maximum of 256 characters',
           },
         ]}
       >

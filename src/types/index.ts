@@ -146,7 +146,7 @@ export enum AllProposalStageString {
   Execute = 'Execute',
   Finished = 'Finished',
 }
-interface IProposalTypeListItem {
+export interface IProposalTypeListItem {
   label: string;
   desc: string;
   value: string | number;

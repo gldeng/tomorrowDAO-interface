@@ -83,3 +83,5 @@ export const tagColorMap = {
 export const TMRWCreateProposal = 0;
 
 export const DEFAULT_PAGESIZE = 20;
+
+export const createOptionsDaoAlias = ['telegram-apps-dao', 'votigram-dao'];

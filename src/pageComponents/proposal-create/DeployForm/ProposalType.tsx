@@ -1,28 +1,29 @@
 'use client';
 
-import { Button, Form } from 'antd';
+import { Form, SelectProps } from 'antd';
 import { memo } from 'react';
 import { ResponsiveSelect } from 'components/ResponsiveSelect';
-import { proposalTypeList } from 'types';
+import { ButtonCheckLogin } from 'components/ButtonCheckLogin';
 
 interface ProposalTypeProps {
+  options: SelectProps['options'];
   next?: () => void;
   className?: string;
 }
 const ProposalType = (props: ProposalTypeProps) => {
-  const { next, className } = props;
+  const { next, className, options } = props;
   return (
     <div className={className}>
       <h2 className="title-primary">Choose Proposal Type</h2>
-      <p className="proposal-type-desc text-[16px] leading-[24px] text-Neutral-Secondary-Text font-normal mt-[8px]">
+      <div className="proposal-type-select-desc mb-[64px] text-[16px] leading-[24px] text-Neutral-Secondary-Text font-normal mt-[8px]">
         When creating a proposal, please choose the appropriate type based on its purpose and
         impact.
-      </p>
+      </div>
       <Form.Item
         name={'proposalType'}
         label={null}
         rules={[{ required: true, message: 'Please select proposal type' }]}
-        initialValue={proposalTypeList[0].value}
+        initialValue={options?.[0].value}
       >
         <ResponsiveSelect
           popupClassName="proposal-type-select"
@@ -30,7 +31,7 @@ const ProposalType = (props: ProposalTypeProps) => {
             title: 'Proposal Type',
             className: 'proposal-type-draw',
           }}
-          options={proposalTypeList}
+          options={options}
           optionLabelProp="label"
           optionRender={(option, info) => (
             <ProposalTypeItem label={option.data.label} desc={option.data.desc} key={info.index} />
@@ -38,9 +39,9 @@ const ProposalType = (props: ProposalTypeProps) => {
         ></ResponsiveSelect>
       </Form.Item>
       <div className="flex justify-end mt-[200px]">
-        <Button type="primary" className="w-[156px]" onClick={next}>
+        <ButtonCheckLogin type="primary" className="w-[156px]" onClick={next}>
           Continue
-        </Button>
+        </ButtonCheckLogin>
       </div>
     </div>
   );
