@@ -43,6 +43,7 @@ interface INftTokenTransferStatusRes {
 // ------------------- RankingList -------------------
 interface IRankingListReq {
   chainId: string;
+  proposalId: string;
 }
 interface IRankingListResItem {
   id: string;
@@ -69,6 +70,7 @@ interface IRankingListResItem {
   pointsPercent: number;
 }
 interface IRankingListResData {
+  bannerUrl: string;
   startTime: string;
   endTime: string;
   canVoteAmount: number;
@@ -294,5 +296,38 @@ interface IDiscoverConfirmChooseRes {
   code: string;
   data: {
     success: boolean;
+  };
+}
+
+// ------------------- Rankings -------------------
+enum RankingTypeEnum {
+  Official = 1,
+  Community = 2,
+}
+
+enum RankingLabelEnum {
+  None = 0,
+  Gold = 1,
+  Blue = 2,
+}
+interface IRankingsItem {
+  active: boolean;
+  activeEndTime: string;
+  activeStartTime: string;
+  chainId: string;
+  proposalId: string;
+  daoId: string;
+  proposalTitle: string;
+  proposalDescription: string;
+  totalVoteAmount: number;
+  rankingType: RankingTypeEnum;
+  labelType: RankingLabelEnum;
+}
+interface IRankingsRes {
+  code: string;
+  data: {
+    totalCount: number;
+    userTotalPoints: number;
+    data: IRankingsItem[];
   };
 }

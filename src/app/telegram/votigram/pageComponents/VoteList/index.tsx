@@ -5,7 +5,12 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Carousel } from 'antd';
 import { Flipper, Flipped } from 'react-flip-toolkit';
 import Empty from '../../components/Empty';
-import { fetchRankingVoteStatus, getRankingList, rankingVote, rankingVoteLike } from 'api/request';
+import {
+  fetchRankingVoteStatus,
+  getRankingDetail,
+  rankingVote,
+  rankingVoteLike,
+} from 'api/request';
 import { curChain, rpcUrlTDVW, sideChainCAContractAddress, voteAddress } from 'config';
 import { useAsyncEffect, useRequest } from 'ahooks';
 import { getRawTransaction } from 'utils/transaction';
@@ -16,7 +21,6 @@ import { retryWrap } from 'utils/request';
 import { VoteStatus } from 'types/telegram';
 import Loading from '../../components/Loading';
 import './index.css';
-import BigNumber from 'bignumber.js';
 import PointSignalr from 'utils/socket/point-signalr';
 import SignalR from 'utils/socket/signalr';
 import { IPointsListRes, IWsPointsItem } from './type';
@@ -24,17 +28,25 @@ import { preloadImages } from 'utils/file';
 import { useConfig } from 'components/CmsGlobalConfig/type';
 import RuleButton from '../../components/RuleButton';
 import useNftBalanceChange from '../../hook/use-nft-balance-change';
-import { RightOutlined } from '@aelf-design/icons';
-import MyPoints from '../../components/MyPoints';
+import { LeftArrowOutlined } from '@aelf-design/icons';
+import { ITabSource } from '../../type';
 
 // interface IVoteListProps {}
-export default function VoteList() {
+export default function VoteList({
+  proposalId,
+  pushStackByValue,
+  isGold,
+}: {
+  proposalId: string;
+  pushStackByValue: (arg: number) => void;
+  isGold: boolean;
+}) {
+  console.log('isGold', isGold);
   const confirmDrawerRef = useRef<ICommonDrawerRef>(null);
   const loadingDrawerRef = useRef<ICommonDrawerRef>(null);
   const ruleDrawerRef = useRef<ICommonDrawerRef>(null);
   const retryDrawerRef = useRef<ICommonDrawerRef>(null);
   const nftMissingModalRef = useRef<ICommonModalRef>(null);
-  const pointsDrawerRef = useRef<ICommonDrawerRef>(null);
 
   // const [isLoading, setIsLoading] = useState(true);
   const [currentVoteItem, setCurrentVoteItem] = useState<IRankingListResItem | null>(null);
@@ -55,6 +67,8 @@ export default function VoteList() {
     setWsRankList(data);
   };
 
+  console.log('----------proposalId', proposalId);
+
   const { voteMain } = useConfig() ?? {};
   const {
     data: rankList,
@@ -64,7 +78,7 @@ export default function VoteList() {
     runAsync: getRankingListAsync,
   } = useRequest(
     async () => {
-      const res = await getRankingList({ chainId: curChain });
+      const res = await getRankingDetail({ chainId: curChain, proposalId });
       setRenderPoints(res.data?.userTotalPoints ?? 0);
       return res;
     },
@@ -84,7 +98,7 @@ export default function VoteList() {
   rankListLoadingRef.current = rankListLoading;
   const handleStartWebSocket = async () => {
     PointSignalr.getInstance()
-      .initSocket()
+      .initSocket(proposalId)
       .then((socketInstance) => {
         setSocket(socketInstance);
       });
@@ -111,9 +125,9 @@ export default function VoteList() {
       }
     }, 100);
   };
-  const renderPointsStr = useMemo(() => {
-    return BigNumber(renderPoints).toFormat();
-  }, [renderPoints]);
+  // const renderPointsStr = useMemo(() => {
+  //   return BigNumber(renderPoints).toFormat();
+  // }, [renderPoints]);
   const { walletInfo: wallet, walletType } = useConnectWallet();
   const requestVoteStatus = async () => {
     retryDrawerRef.current?.close();
@@ -255,18 +269,29 @@ export default function VoteList() {
   }, [initRankList]);
 
   const renderRankListIds = renderRankList.map((item) => item.alias).join('-');
+
+  const finalBannerImages = isGold ? [rankList?.data?.bannerUrl] : voteMain?.topBannerImages;
+
   return (
     <div className="votigram-main">
-      <h3 className="font-20-25-weight text-white mb-[8px] text-center">
-        <span
-          dangerouslySetInnerHTML={{
-            __html: `${voteMain?.listTitle}`,
+      <div className="mb-[8px] flex items-center gap-[27px]">
+        <LeftArrowOutlined
+          className="text-2xl !text-white"
+          onClick={() => {
+            pushStackByValue(ITabSource.Rank);
           }}
-        ></span>
-      </h3>
+        />
+        <h3 className="font-20-25-weight text-white  text-center">
+          <span
+            dangerouslySetInnerHTML={{
+              __html: `${voteMain?.listTitle}`,
+            }}
+          ></span>
+        </h3>
+      </div>
       <div className="banner">
-        <Carousel autoplay dots={(voteMain?.topBannerImages?.length ?? 0) > 1}>
-          {voteMain?.topBannerImages?.map((item) => {
+        <Carousel autoplay dots={(finalBannerImages?.length ?? 0) > 1}>
+          {finalBannerImages?.map((item) => {
             return (
               <div key={item}>
                 <img src={item} className="banner-img" alt={''} />
@@ -274,31 +299,25 @@ export default function VoteList() {
             );
           })}
         </Carousel>
-        <RuleButton
-          onClick={() => {
-            ruleDrawerRef.current?.open();
-          }}
-          className="rules-wrap"
-        />
-      </div>
-      <ul className="votigram-activity-title ">
-        <li className="total-points">
-          <h3
-            className="flex-center points-entry-button"
+        {!isGold && (
+          <RuleButton
             onClick={() => {
-              pointsDrawerRef.current?.open();
+              ruleDrawerRef.current?.open();
             }}
-          >
-            <span className="font-14-18">Total points earned</span>
-            <RightOutlined />
-          </h3>
-          <p className="font-18-22-weight">{renderPointsStr}</p>
-        </li>
-        <li className="remaining-vote">
-          <h3 className="font-14-18">Remaining vote</h3>
-          <p className="font-18-22-weight">{rankList?.data?.canVoteAmount ?? 0}</p>
-        </li>
-      </ul>
+            className="rules-wrap"
+          />
+        )}
+      </div>
+      <div className="flex items-center gap-4 py-4">
+        <span className="text-white text-base">Remaining vote</span>
+        <div className="flex items-end gap-[2px]">
+          <span className="text-2xl leading-[30px] font-medium text-[#51FF00]">
+            {rankList?.data?.canVoteAmount ?? 0}
+          </span>
+          <span className="text-[#616161] leading-[30px] text-base">/</span>
+          <span className="text-[#616161] leading-[26px] text-base">1</span>
+        </div>
+      </div>
 
       {rankListLoading ? (
         <div className="votigram-loading-wrap">
@@ -470,19 +489,6 @@ export default function VoteList() {
                 Confirm
               </Button>
             </div>
-          </div>
-        }
-      />
-      <CommonDrawer
-        title={`My Points`}
-        ref={pointsDrawerRef}
-        drawerProps={{
-          destroyOnClose: true,
-        }}
-        bodyClassname="my-points-drawer"
-        body={
-          <div>
-            <MyPoints />
           </div>
         }
       />

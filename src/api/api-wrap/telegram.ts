@@ -3,7 +3,7 @@ import { apiServer } from '../axios';
 const transferUrl = '/token/transfer';
 const rankingVoteUrl = '/ranking/vote';
 const rankingVoteStatusUrl = '/ranking/vote/status';
-const rankListUrl = '/ranking/default-proposal';
+const rankListUrl = '/ranking/detail';
 const voteLikeUrl = '/ranking/like';
 const rankPointsUrl = '/user/my-points';
 const taskListsUrl = '/user/task-list';
@@ -18,6 +18,8 @@ const reportSourceUrl = '/user/user-source-report';
 const discoverAppListUrl = '/discover/app-list';
 const discoverViewUrl = '/discover/view';
 const discoverConfirmChooseUrl = '/discover/choose';
+
+const rankingsUrl = '/ranking/list';
 
 export const nftTokenTransfer = async (
   params: INftTokenTransfer,
@@ -35,7 +37,7 @@ export const nftTokenTransferStatus = async (
   });
 };
 
-export const getRankingList = async (params: IRankingListReq): Promise<IRankingListRes> => {
+export const getRankingDetail = async (params: IRankingListReq): Promise<IRankingListRes> => {
   return apiServer.get(rankListUrl, {
     ...params,
   });
@@ -155,6 +157,17 @@ export const discoverConfirmChoose = async (params: {
     ...params,
   });
 };
+
+export const getRankings = async (params: {
+  chainId: string;
+  skipCount: number;
+  maxResultCount: number;
+}): Promise<IRankingsRes> => {
+  return apiServer.get(rankingsUrl, {
+    ...params,
+  });
+};
+
 export const telegramNeedAuthList = [
   transferUrl,
   rankingVoteUrl,
@@ -173,4 +186,5 @@ export const telegramNeedAuthList = [
   discoverAppListUrl,
   discoverViewUrl,
   discoverConfirmChooseUrl,
+  rankingsUrl,
 ];
