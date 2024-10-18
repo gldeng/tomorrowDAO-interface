@@ -127,11 +127,11 @@ const AWSUpload: React.FC<IFUploadProps> = ({
       const uploadData = await fileUplaod({
         file: file as File,
       });
-      if (!uploadData?.data?.url) {
-        onError?.(new Error('upload no hash'));
+      if (!uploadData?.data) {
+        onError?.(new Error('upload failed'));
         return;
       }
-      const fileUrl = uploadData?.data?.url ?? '';
+      const fileUrl = uploadData?.data ?? '';
       onSuccess?.({ url: fileUrl });
     } catch (error) {
       message.error(`Please check your internet connection and try again.`);

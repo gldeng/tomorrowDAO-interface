@@ -61,18 +61,20 @@ class RequestFetch {
         // eslint-disable-next-line prettier/prettier
         url = `${url}?${queryParams}`;
       }
-    } else {
-      reqHeaders = {
-        'Content-Type': 'application/json',
-        ...reqHeaders,
-      };
+    } else if (method === 'POST') {
+      if (Object.prototype.toString.call(params) !== '[object FormData]') {
+        reqHeaders = {
+          'Content-Type': 'application/json',
+          ...reqHeaders,
+        };
+      }
     }
     const getRequestPayload = () => {
       if (method === 'GET') {
         return undefined;
       }
       if (method === 'POST') {
-        if (reqHeaders['Content-Type'] === 'multipart/form-data') {
+        if (Object.prototype.toString.call(params) === '[object FormData]') {
           return params;
         } else {
           return JSON.stringify(params);

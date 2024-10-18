@@ -1,11 +1,12 @@
-import { ActiveStartTimeEnum } from 'pageComponents/proposal-create/type';
+import * as proposalCreateType from 'pageComponents/proposal-create/type';
 import dayjs from 'dayjs';
 export const getProposalTimeParams = (
-  startTime: ActiveStartTimeEnum | number,
+  startTime: proposalCreateType.ActiveStartTimeEnum | number,
   endTime: number[] | number,
 ) => {
   let timeParams = {};
-  const activeStartTime = startTime === ActiveStartTimeEnum.now ? Date.now() : startTime;
+  const activeStartTime =
+    startTime === proposalCreateType.ActiveStartTimeEnum.now ? Date.now() : startTime;
   const activeEndTime = Array.isArray(endTime)
     ? dayjs(activeStartTime)
         .add(endTime[0], 'minutes')
@@ -14,7 +15,7 @@ export const getProposalTimeParams = (
         .valueOf()
     : endTime;
   // if start time is now, convert to period
-  if (activeStartTime === ActiveStartTimeEnum.now) {
+  if (startTime === proposalCreateType.ActiveStartTimeEnum.now) {
     timeParams = {
       activeTimePeriod: Math.floor((activeEndTime - activeStartTime) / 1000),
       activeStartTime: 0,

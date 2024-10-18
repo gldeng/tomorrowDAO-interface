@@ -2,6 +2,7 @@ import { stringify } from 'query-string';
 import { apiServer, explorerServer, tokenServer } from './axios';
 import { EDaoGovernanceMechanism } from 'app/(createADao)/create/type';
 import { tokenIssueUrl, voteOptionSaveUrl, fileUploadUrl } from './url/tmrw';
+import { curChain } from 'config';
 export * from './api-wrap/telegram';
 
 export * from './network-dao/api';
@@ -247,8 +248,7 @@ export const saveVoteOptions = async (params: ISaveAppListReq): Promise<ISaveApp
 
 export const fileUplaod = async (params: { file: File }): Promise<IUploadFileRes> => {
   const formData = new FormData();
+  formData.append('chainId', curChain);
   formData.append('file', params.file);
-  return apiServer.post(fileUploadUrl, formData, {
-    'Content-Type': 'multipart/form-data',
-  });
+  return apiServer.post(fileUploadUrl, formData);
 };
