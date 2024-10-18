@@ -160,7 +160,7 @@ export const TaskItem = (props: ITaskItemProps) => {
     if (isLoading || taskItem.complete) return;
     switch (taskItem.userTaskDetail) {
       case UserTaskDetail.DailyVote:
-        activeTabWithSource(ITabSource.Vote);
+        activeTabWithSource(ITabSource.Rank);
         break;
       case UserTaskDetail.DailyFirstInvite:
         activeTabWithSource(ITabSource.Referral);

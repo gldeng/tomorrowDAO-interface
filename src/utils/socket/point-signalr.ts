@@ -16,10 +16,10 @@ class SignalRManager {
     return SignalRManager.instance;
   }
 
-  public async initSocket(): Promise<SignalR | null> {
+  public async initSocket(proposalId: string): Promise<SignalR | null> {
     if (!this.socket) {
       const signalR = new SignalR({ url: apiServerBase + '/api/app/ranking/points' }, () => {
-        signalR.sendEvent('RequestPointsProduce', { chainId: curChain });
+        signalR.sendEvent('RequestPointsProduce', { chainId: curChain, proposalId: proposalId });
       });
       try {
         await signalR.initAndStart();

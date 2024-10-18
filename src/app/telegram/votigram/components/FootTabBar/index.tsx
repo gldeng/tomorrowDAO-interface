@@ -1,5 +1,6 @@
 import { CheckCircleOutlined, WalletOutlined } from '@aelf-design/icons';
 import './index.css';
+import { ITabSource } from '../../type';
 
 export interface IFootTabBarProps {
   value: number;
@@ -82,12 +83,12 @@ const DiscoverIcon = () => (
 );
 const footTabBarList = [
   {
-    icon: <DiscoverIcon />,
-    text: 'Discover',
-  },
-  {
     icon: <CheckCircleOutlined />,
     text: 'Vote',
+  },
+  {
+    icon: <DiscoverIcon />,
+    text: 'Discover',
   },
   {
     icon: <TaskIcon />,
@@ -104,11 +105,12 @@ const footTabBarList = [
 ];
 export default function FootTabBar(props: IFootTabBarProps) {
   const { value, onChange } = props;
+  const tmpValue = value === ITabSource.Vote ? 0 : value;
   return (
     <ul className="foot-tabbar">
       {footTabBarList.map((item, index) => (
         <li
-          className={`foot-tabbar-item ${index === value ? 'active' : ''}`}
+          className={`foot-tabbar-item ${index === tmpValue ? 'active' : ''}`}
           key={index}
           onClick={() => {
             onChange(index);

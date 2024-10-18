@@ -1,0 +1,14 @@
+.rankings-main{
+    @apply px-[16px] pt-[15px] pb-[128px] relative bg-black text-white flex flex-col overflow-y-auto;
+    height: 100vh;
+}
+
+.telegram-common-drawer {
+  .my-points-drawer.telegram-common-drawer-body .drawer-body{
+    @apply px-0;
+  }
+  .my-points-drawer {
+    max-height: 100vh;
+    overflow-y: scroll;
+  }
+}
