@@ -255,7 +255,6 @@ export default function VoteList() {
   }, [initRankList]);
 
   const renderRankListIds = renderRankList.map((item) => item.alias).join('-');
-
   return (
     <div className="votigram-main">
       <h3 className="font-20-25-weight text-white mb-[8px] text-center">

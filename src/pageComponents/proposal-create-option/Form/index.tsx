@@ -58,6 +58,7 @@ export default function Page(props: IFormPageProps) {
       const saveReqApps: ISaveAppListReq['apps'] = res.options.map((item: any) => {
         return {
           ...item,
+          icon: item.icon?.[0]?.url,
           screenshots: item.screenshots?.map((screenshot: any) => screenshot.url),
           sourceType: ESourceType.TomorrowDao,
         };
@@ -122,6 +123,7 @@ export default function Page(props: IFormPageProps) {
   },
        */
       await proposalCreateContractRequest(methodName, contractParams);
+      emitLoading(false);
       showSuccessModal({
         primaryContent: 'Proposal Published',
         secondaryContent: res.proposalBasicInfo.proposalTitle,

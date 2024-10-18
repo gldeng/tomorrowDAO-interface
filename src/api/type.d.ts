@@ -836,8 +836,6 @@ interface ISaveAppListRes {
 // -------------------  vote-options ---------------------------------
 interface IUploadFileRes {
   code: string;
-  data: {
-    url: string;
-  };
+  data: string;
   message: string;
 }
