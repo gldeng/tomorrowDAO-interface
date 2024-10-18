@@ -151,7 +151,7 @@ export default function LoginSDKProvider({ children }: { children: React.ReactNo
       appName: APP_NAME,
       chainId: chainId as TChainId,
       autoShowUnlock: true,
-      noNeedForConfirm: false,
+      noNeedForConfirm: true,
     });
   }, []);
   const nightElfWallet = useMemo(() => {

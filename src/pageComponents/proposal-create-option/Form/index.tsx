@@ -63,10 +63,11 @@ export default function Page(props: IFormPageProps) {
           sourceType: ESourceType.TomorrowDao,
         };
       });
-      if (res?.banner?.[0]?.url) {
+      const bannerUrl = res?.banner?.[0]?.url;
+      if (bannerUrl) {
         saveReqApps.push({
           title: 'TomorrowDaoBanner',
-          icon: res?.banner?.[0]?.url,
+          icon: bannerUrl,
           sourceType: ESourceType.TomorrowDao,
         });
       }
@@ -81,7 +82,7 @@ export default function Page(props: IFormPageProps) {
       if (!appAlias.length) {
         throw new Error('Failed to create proposal, save options failed');
       }
-      const formmatDescriptionStr = formmatDescription(appAlias);
+      const formmatDescriptionStr = formmatDescription(appAlias, bannerUrl);
       if (formmatDescriptionStr.length > 256) {
         throw new Error(
           'Too many options have been added, or the option names are too long. Please simplify the options and try again.',
