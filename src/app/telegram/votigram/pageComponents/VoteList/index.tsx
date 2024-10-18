@@ -21,7 +21,7 @@ import { retryWrap } from 'utils/request';
 import { VoteStatus } from 'types/telegram';
 import Loading from '../../components/Loading';
 import './index.css';
-import PointSignalr from 'utils/socket/point-signalr';
+import signalRManager from 'utils/socket/signalr-manager';
 import SignalR from 'utils/socket/signalr';
 import { IPointsListRes, IWsPointsItem } from './type';
 import { preloadImages } from 'utils/file';
@@ -30,6 +30,7 @@ import RuleButton from '../../components/RuleButton';
 import useNftBalanceChange from '../../hook/use-nft-balance-change';
 import { LeftArrowOutlined } from '@aelf-design/icons';
 import { ITabSource } from '../../type';
+import useVotePoints from '../../hook/use-vote-points';
 
 // interface IVoteListProps {}
 export default function VoteList({
@@ -41,7 +42,6 @@ export default function VoteList({
   pushStackByValue: (arg: number) => void;
   isGold: boolean;
 }) {
-  console.log('isGold', isGold);
   const confirmDrawerRef = useRef<ICommonDrawerRef>(null);
   const loadingDrawerRef = useRef<ICommonDrawerRef>(null);
   const ruleDrawerRef = useRef<ICommonDrawerRef>(null);
@@ -51,7 +51,6 @@ export default function VoteList({
   // const [isLoading, setIsLoading] = useState(true);
   const [currentVoteItem, setCurrentVoteItem] = useState<IRankingListResItem | null>(null);
   const [wsRankList, setWsRankList] = useState<IWsPointsItem[]>([]);
-  const [renderPoints, setRenderPoints] = useState(0);
   const [isToolTipVisible, setIsToolTipVisible] = useState(false);
   const [socket, setSocket] = useState<SignalR | null>(null);
   const retryFn = useRef<() => Promise<void>>();
@@ -67,8 +66,6 @@ export default function VoteList({
     setWsRankList(data);
   };
 
-  console.log('----------proposalId', proposalId);
-
   const { voteMain } = useConfig() ?? {};
   const {
     data: rankList,
@@ -79,14 +76,13 @@ export default function VoteList({
   } = useRequest(
     async () => {
       const res = await getRankingDetail({ chainId: curChain, proposalId });
-      setRenderPoints(res.data?.userTotalPoints ?? 0);
       return res;
     },
     {
       manual: true,
     },
   );
-  const { disableOperation } = useNftBalanceChange({
+  const { disableOperation } = useNftBalanceChange(socket, proposalId, {
     openModal: () => {
       nftMissingModalRef.current?.open();
     },
@@ -97,11 +93,9 @@ export default function VoteList({
   rankingListResRef.current = rankList ?? null;
   rankListLoadingRef.current = rankListLoading;
   const handleStartWebSocket = async () => {
-    PointSignalr.getInstance()
-      .initSocket(proposalId)
-      .then((socketInstance) => {
-        setSocket(socketInstance);
-      });
+    signalRManager.initSocket().then((socketInstance) => {
+      setSocket(socketInstance);
+    });
   };
   const handleReportQueue = () => {
     const proposalId = rankList?.data?.rankingList?.[0]?.proposalId ?? '';
@@ -117,17 +111,11 @@ export default function VoteList({
           proposalId: proposalId,
           likeList: likeList,
         });
-        if (res.data) {
-          setRenderPoints(res.data ?? 0);
-        }
       } catch (error) {
         reportQueue.current.push(...likeList);
       }
     }, 100);
   };
-  // const renderPointsStr = useMemo(() => {
-  //   return BigNumber(renderPoints).toFormat();
-  // }, [renderPoints]);
   const { walletInfo: wallet, walletType } = useConnectWallet();
   const requestVoteStatus = async () => {
     retryDrawerRef.current?.close();
@@ -155,7 +143,6 @@ export default function VoteList({
       setIsToolTipVisible(true);
       loadingDrawerRef.current?.close();
       getRankingListFn();
-      setRenderPoints(res?.data?.totalPoints ?? 0);
     } catch (error) {
       console.log('requestVoteStatus, error', error);
       handleError();
@@ -209,30 +196,17 @@ export default function VoteList({
     handleStartWebSocket();
   }, []);
   const canVote = (rankList?.data?.canVoteAmount ?? 0) > 0;
-  useEffect(() => {
-    function fetchAndReceiveWs() {
-      if (!socket) {
+  useVotePoints(socket, proposalId, {
+    onReceivePointsProduce: (data: IPointsListRes) => {
+      const newProposalId = data?.pointsList?.[0]?.proposalId;
+      const oldProposalId = rankingListResRef.current?.data?.rankingList?.[0]?.proposalId;
+      if (newProposalId !== oldProposalId && !rankListLoadingRef.current) {
+        window.location.reload();
         return;
       }
-
-      socket.registerHandler('ReceivePointsProduce', (data: IPointsListRes) => {
-        console.log('ReceivePointsProduce', data);
-        const newProposalId = data?.pointsList?.[0]?.proposalId;
-        const oldProposalId = rankingListResRef.current?.data?.rankingList?.[0]?.proposalId;
-        if (newProposalId !== oldProposalId && !rankListLoadingRef.current) {
-          window.location.reload();
-          return;
-        }
-        updateWsRankList(data.pointsList);
-      });
-    }
-
-    fetchAndReceiveWs();
-
-    return () => {
-      socket?.destroy();
-    };
-  }, [socket]);
+      updateWsRankList(data.pointsList);
+    },
+  });
   const rankListMap = useMemo(() => {
     const map = new Map<string, IRankingListResItem>();
     rankList?.data?.rankingList?.forEach((item) => {
