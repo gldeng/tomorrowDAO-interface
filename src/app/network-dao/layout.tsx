@@ -63,6 +63,12 @@ const Layout = dynamicReq(
             payload: newWallet,
           });
         }
+        if (!wallet) {
+          dispatch({
+            type: LOG_OUT_ACTIONS.LOG_OUT_SUCCESS,
+            payload: {},
+          });
+        }
       },[isConnected, wallet])
       const pathName = usePathname()
       const isProposalApply = pathName.includes('/network-dao/apply')

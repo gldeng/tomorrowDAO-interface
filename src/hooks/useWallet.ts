@@ -163,7 +163,7 @@ export const useWalletInit = () => {
 
   useEffect(() => {
     if (loginError) {
-      message.error(`${loginError?.message || 'LOGIN_ERROR'}`);
+      message.error(`${loginError?.nativeError?.message || loginError?.message || 'LOGIN_ERROR'}`);
     }
   }, [loginError]);
 

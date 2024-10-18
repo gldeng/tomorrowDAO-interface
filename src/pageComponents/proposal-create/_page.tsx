@@ -9,12 +9,12 @@ import breadCrumb from 'utils/breadCrumb';
 import './index.css';
 
 const ProposalDeploy = () => {
-  const { isConnected } = useConnectWallet();
+  const { walletInfo } = useConnectWallet();
   const { aliasName } = useParams<{ aliasName: string }>();
   useEffect(() => {
     breadCrumb.updateCreateProposalPage(aliasName);
   }, [aliasName]);
-  return isConnected ? (
+  return walletInfo ? (
     <div className="deploy-form">
       <DeployForm aliasName={aliasName} />
     </div>

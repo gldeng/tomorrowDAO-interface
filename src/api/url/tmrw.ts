@@ -1,3 +1,6 @@
 const tokenIssueUrl = '/token/issue';
+const voteOptionSaveUrl = '/telegram/save';
+const fileUploadUrl = '/file/upload';
 
-export { tokenIssueUrl };
+const tmrwNeedAuthList = [voteOptionSaveUrl, fileUploadUrl];
+export { tokenIssueUrl, voteOptionSaveUrl, tmrwNeedAuthList, fileUploadUrl };

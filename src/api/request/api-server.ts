@@ -6,6 +6,7 @@ import { apiServerBase, networkType } from 'config';
 import { runTimeEnv } from 'utils/env';
 import { SentryEvents } from 'types/sentry';
 import { telegramNeedAuthList } from '../api-wrap/telegram';
+import { tmrwNeedAuthList } from '../url/tmrw';
 import { tokenIssueUrl } from 'api/url/tmrw';
 export const apiServerBaseURL = apiServerBase + '/api/app';
 const defaultServerError = 'The API has an error. Please refresh and retry.';
@@ -15,6 +16,7 @@ const authList = [
   '/proposal/my-info',
   '/dao/my-dao-list',
   '/discussion/new-comment',
+  ...tmrwNeedAuthList,
   ...telegramNeedAuthList,
 ];
 
@@ -26,6 +28,7 @@ type Params = Record<string, any>;
 interface Props extends Params {
   url: string;
   method: Method;
+  headers?: Record<string, string>;
 }
 interface ReqParams {
   url: string;
@@ -42,13 +45,13 @@ class RequestFetch {
   public setToken(token: string) {
     this.token = token;
   }
-  interceptorsRequest({ url, method, params }: Props): ReqParams {
+  interceptorsRequest({ url, method, params, headers }: Props): ReqParams {
     let queryParams = '';
-    let requestPayload = '';
+    // let requestPayload = '';
     const token = this.token;
-    let headers = {};
+    let reqHeaders: Record<string, string> = { ...headers };
     if (token && authList.find((item) => url.includes(item))) {
-      headers = { ...headers, Authorization: `Bearer ${token}` };
+      reqHeaders = { ...reqHeaders, Authorization: `Bearer ${token}` };
     }
     url = `${url}`;
 
@@ -58,20 +61,34 @@ class RequestFetch {
         // eslint-disable-next-line prettier/prettier
         url = `${url}?${queryParams}`;
       }
-    } else {
-      headers = {
-        ...headers,
-        'Content-Type': 'application/json',
-      };
-      requestPayload = JSON.stringify(params);
+    } else if (method === 'POST') {
+      if (Object.prototype.toString.call(params) !== '[object FormData]') {
+        reqHeaders = {
+          'Content-Type': 'application/json',
+          ...reqHeaders,
+        };
+      }
     }
+    const getRequestPayload = () => {
+      if (method === 'GET') {
+        return undefined;
+      }
+      if (method === 'POST') {
+        if (Object.prototype.toString.call(params) === '[object FormData]') {
+          return params;
+        } else {
+          return JSON.stringify(params);
+        }
+      }
+    };
+    const requestPayload = getRequestPayload();
     const cacheString: RequestCache = 'no-store';
     return {
       url,
       options: {
         method,
-        headers,
-        body: method === 'POST' ? requestPayload : undefined,
+        headers: reqHeaders,
+        body: requestPayload,
         cache: cacheString,
       },
     };
@@ -151,11 +168,12 @@ class RequestFetch {
     }
   };
 
-  async httpFactory<T>({ url = '', params = {}, method }: Props): Promise<T> {
+  async httpFactory<T>({ url = '', params = {}, method, headers }: Props): Promise<T> {
     const req = this.interceptorsRequest({
       url: this.baseURL + url,
       method,
       params: params,
+      headers,
     });
     const reqStart = new Date().getTime();
     const res = await fetch(req.url, req.options);
@@ -176,16 +194,21 @@ class RequestFetch {
     return this.interceptorsResponse<T>(res, req);
   }
 
-  async request<T>(method: Method, url: string, params?: Params): Promise<T> {
-    return this.httpFactory<T>({ url, params, method });
+  async request<T>(
+    method: Method,
+    url: string,
+    params?: Params,
+    headers?: Record<string, string>,
+  ): Promise<T> {
+    return this.httpFactory<T>({ url, params, method, headers });
   }
 
   get<T>(url: string, params?: Params): Promise<T> {
     return this.request('GET', url, params);
   }
 
-  post<T>(url: string, params?: Params): Promise<T> {
-    return this.request('POST', url, params);
+  post<T>(url: string, params?: Params, headers?: Record<string, string>): Promise<T> {
+    return this.request('POST', url, params, headers);
   }
 
   put<T>(url: string, params?: Params): Promise<T> {

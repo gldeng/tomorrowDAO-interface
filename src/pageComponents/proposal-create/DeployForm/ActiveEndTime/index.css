@@ -1,5 +1,5 @@
-.active-start-time-date-picker {
-  @apply mt-[10px];
+.active-end-time-fill {
+  @apply mt-[8px];
   .TMRWDAO-picker {
     @apply w-full;
   }
@@ -18,9 +18,18 @@
     justify-content: center;
   }
   .active-time-end-input {
-    @apply flex justify-between lg:flex-row flex-col;
+    @apply flex justify-between lg:flex-row flex-col gap-[48px];
     p {
       @apply mb-2;
     }
+    .active-time-end-input-item {
+      @apply flex-1;
+      .TMRWDAO-input-number {
+        @apply w-full;
+      }
+    }
+  }
+  .active-time-end-input-duration {
+    @apply card-sm-text  text-Disable-Text;
   }
 }
