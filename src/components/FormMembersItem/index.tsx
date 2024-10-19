@@ -110,7 +110,7 @@ function FormMembersItem(props: IFormMembersProps) {
                     {fields.length > 1 ? (
                       <div className="text-[24px] cursor-pointer">
                         <MinusCircleOutlined
-                          className="dynamic-button-icon"
+                          className="delete-dynamic-form-item-icon-small delete-dynamic-form-item-icon-with-hover"
                           onClick={() => remove(field.name)}
                         />
                       </div>

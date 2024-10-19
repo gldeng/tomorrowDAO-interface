@@ -1,15 +1,5 @@
 .dynamic-form-list {
   @apply lg:mt-[32px] mt-[24px];
- .dynamic-form-buttons {
-    @apply mt-[8px] flex justify-between lg:justify-start;
-  }
-
-  .dynamic-form-buttons-item {
-    @apply w-[143px];
-  }
-  .dynamic-form-buttons-item + .dynamic-form-buttons-item {
-    @apply ml-[16px];
-  } 
 }
 .dynamic-option-item {
   .TMRWDAO-form-item:not(.TMRWDAO-form-item-horizontal) .TMRWDAO-form-item-row {
@@ -17,6 +7,10 @@
   }
   .TMRWDAO-form-item:not(.TMRWDAO-form-item-horizontal) .TMRWDAO-form-item-control {
     @apply lg:w-auto w-full;
+  }
+  .dymaic-form-item-screenshots.TMRWDAO-form-item:not(.TMRWDAO-form-item-horizontal) .TMRWDAO-form-item-control
+   {
+    @apply lg:w-[calc(100%-17%)];
   }
   .TMRWDAO-form-item:not(.TMRWDAO-form-item-horizontal) .TMRWDAO-form-item-label {
     @apply lg:pb-0;

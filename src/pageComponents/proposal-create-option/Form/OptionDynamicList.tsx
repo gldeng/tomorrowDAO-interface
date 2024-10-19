@@ -48,7 +48,7 @@ function FormListFullItems(props: IFormItemsProps) {
         <div className="flex justify-between">
           <span className="card-sm-text-bold mb-[16px]">Option {index + 1}</span>
           <span onClick={onRemove}>
-            <MinusCircleOutlined className="text-[22px]" />
+            <MinusCircleOutlined className="delete-dynamic-form-item-icon-middle" />
           </span>
         </div>
       )}
@@ -152,6 +152,7 @@ function FormListFullItems(props: IFormItemsProps) {
           labelCol={{
             span: 4,
           }}
+          className="dymaic-form-item-screenshots"
         >
           <AWSUpload
             accept=".png,.jpg,.jpeg"
@@ -186,7 +187,7 @@ function FormListSimpleItems(props: IFormItemsProps) {
       </Form.Item>
       <div className="flex justify-between">
         <span onClick={onRemove} className="cursor-pointer">
-          <MinusCircleOutlined className="text-[22px]" />
+          <MinusCircleOutlined className=" delete-dynamic-form-item-icon-with-hover delete-dynamic-form-item-icon-small" />
         </span>
       </div>
     </div>
