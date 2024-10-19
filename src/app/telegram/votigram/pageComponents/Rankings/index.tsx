@@ -161,6 +161,7 @@ const Rankings: React.FC = () => {
         bodyClassname="discover-app-detail-drawer"
         drawerProps={{
           destroyOnClose: true,
+          push: false,
         }}
         showCloseIcon={false}
         body={

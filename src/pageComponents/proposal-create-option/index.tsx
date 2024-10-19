@@ -15,11 +15,10 @@ import { proposalTypeList } from './type';
 import '../proposal-create/index.css';
 
 const ProposalDeploy = () => {
-  const { walletInfo } = useConnectWallet();
   const { aliasName } = useParams<{ aliasName: string }>();
   const [proposalTypeForm] = Form.useForm();
   useEffect(() => {
-    breadCrumb.updateCreateProposalPage(aliasName);
+    breadCrumb.updateCreateProposalVoteOptionsPage(aliasName);
   }, [aliasName]);
   const [isNext, setNext] = useState(false);
   const {
@@ -53,6 +52,7 @@ const ProposalDeploy = () => {
             className={clsx({ hidden: isNext })}
             next={handleNext}
             options={proposalTypeList}
+            titleNode={<h2 className="title-primary mb-[24px]">Choose List Type </h2>}
           />
         </Form>
         {isNext &&

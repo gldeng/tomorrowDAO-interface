@@ -38,7 +38,15 @@ const createProposalPage: TBreadcrumbFn = (daoAliasName, daoName) => {
   return [
     ...(daoDetailPage(daoAliasName, daoName) ?? []),
     {
-      title: 'Create Proposal',
+      title: 'Create a Proposal',
+    },
+  ];
+};
+const createProposalVoteOptionsPage: TBreadcrumbFn = (daoAliasName, daoName) => {
+  return [
+    ...(daoDetailPage(daoAliasName, daoName) ?? []),
+    {
+      title: 'Create a List',
     },
   ];
 };
@@ -134,6 +142,10 @@ class BreadCrumb {
   public async updateCreateProposalPage(daoAliasName?: string) {
     const daoName = await this.getDaoName(daoAliasName);
     this.updateBreadCrumb(createProposalPage(daoAliasName, daoName));
+  }
+  public async updateCreateProposalVoteOptionsPage(daoAliasName?: string) {
+    const daoName = await this.getDaoName(daoAliasName);
+    this.updateBreadCrumb(createProposalVoteOptionsPage(daoAliasName, daoName));
   }
   public async updateTreasuryPage(daoAliasName?: string) {
     const daoName = await this.getDaoName(daoAliasName);

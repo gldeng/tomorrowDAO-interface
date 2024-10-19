@@ -108,7 +108,7 @@ function FormListFullItems(props: IFormItemsProps) {
             span: 4,
           }}
         >
-          <Input.TextArea placeholder={`Enter a summary for the option(80 characters max)`} />
+          <Input.TextArea placeholder={`Enter a summary for the option(80 characters max). `} />
         </Form.Item>
         <Form.Item
           validateFirst
@@ -125,7 +125,9 @@ function FormListFullItems(props: IFormItemsProps) {
             span: 4,
           }}
         >
-          <Input.TextArea placeholder={`Enter a description for the option(1000 characters max)`} />
+          <Input.TextArea
+            placeholder={`Enter a description for the option(1000 characters max). `}
+          />
         </Form.Item>
         <Form.Item
           name={[field.name, 'url']}
@@ -134,7 +136,7 @@ function FormListFullItems(props: IFormItemsProps) {
             span: 4,
           }}
         >
-          <Input placeholder={`Enter a link for the option`} />
+          <Input placeholder={`Enter a link for the option. `} />
         </Form.Item>
         <Form.Item
           name={[field.name, 'screenshots']}
@@ -222,7 +224,7 @@ function FormListDymanic(props: IFormListDymanicProps) {
                       onClick={() => add()}
                       icon={<AddCircleOutlined className="text-[16px] " />}
                     >
-                      <span className="card-sm-text-bold ">Add address</span>
+                      <span className="card-sm-text-bold ">Add option</span>
                     </Button>
                     <Button
                       type="default"
