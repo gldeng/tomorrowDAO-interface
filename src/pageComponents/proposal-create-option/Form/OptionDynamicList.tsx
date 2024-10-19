@@ -48,7 +48,7 @@ function FormListFullItems(props: IFormItemsProps) {
         <div className="flex justify-between">
           <span className="card-sm-text-bold mb-[16px]">Option {index + 1}</span>
           <span onClick={onRemove}>
-            <MinusCircleOutlined className="delete-dynamic-form-item-icon-middle" />
+            <MinusCircleOutlined className="delete-dynamic-form-item-icon-middle delete-dynamic-form-item-icon-with-hover" />
           </span>
         </div>
       )}

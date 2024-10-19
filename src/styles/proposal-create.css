@@ -8,11 +8,13 @@
   }
 }
 .delete-dynamic-form-item-icon-small {
+  @apply cursor-pointer;
   &.TMRWDAO-icon {
     @apply text-[16px] text-Neutral-Secondary-Text;
   }
 }
 .delete-dynamic-form-item-icon-middle {
+  @apply cursor-pointer;
   &.TMRWDAO-icon {
     @apply text-[22px] text-Neutral-Secondary-Text;
   }
