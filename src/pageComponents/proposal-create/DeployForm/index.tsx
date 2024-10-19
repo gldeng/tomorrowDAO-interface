@@ -430,6 +430,13 @@ const GovernanceModel = (props: IGovernanceModelProps) => {
           className={clsx({ hidden: isNext })}
           next={handleNext}
           options={proposalTypeList}
+          titleNode={<h2 className="title-primary">Choose Proposal Type</h2>}
+          descriptionNode={
+            <div className="proposal-type-select-desc mb-[64px] text-[16px] leading-[24px] text-Neutral-Secondary-Text font-normal mt-[8px]">
+              When creating a proposal, please choose the appropriate type based on its purpose and
+              impact.
+            </div>
+          }
         />
         {daoLoading && isNext ? (
           <SkeletonForm />

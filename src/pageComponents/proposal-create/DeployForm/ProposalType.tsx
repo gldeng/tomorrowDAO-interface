@@ -9,16 +9,15 @@ interface ProposalTypeProps {
   options: SelectProps['options'];
   next?: () => void;
   className?: string;
+  titleNode?: React.ReactNode;
+  descriptionNode?: React.ReactNode;
 }
 const ProposalType = (props: ProposalTypeProps) => {
   const { next, className, options } = props;
   return (
     <div className={className}>
-      <h2 className="title-primary">Choose Proposal Type</h2>
-      <div className="proposal-type-select-desc mb-[64px] text-[16px] leading-[24px] text-Neutral-Secondary-Text font-normal mt-[8px]">
-        When creating a proposal, please choose the appropriate type based on its purpose and
-        impact.
-      </div>
+      {props.titleNode}
+      {props.descriptionNode}
       <Form.Item
         name={'proposalType'}
         label={null}

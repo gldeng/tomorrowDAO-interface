@@ -16,7 +16,7 @@ export interface IFUploadProps extends Omit<IUploadProps, 'onChange'> {
   fileList?: UploadFile[];
   isAntd?: boolean;
   needCheckImgSize?: boolean;
-  ratio?: number;
+  ratio?: number | [number, number];
   ratioErrorText?: string;
   onChange?: (fileList: UploadFile[]) => void;
 }

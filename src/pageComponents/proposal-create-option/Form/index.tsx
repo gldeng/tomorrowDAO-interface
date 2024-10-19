@@ -176,17 +176,20 @@ export default function Page(props: IFormPageProps) {
             },
           ]}
         >
-          <Input type="text" placeholder="Enter the title of the proposal (300 characters max)" />
+          <Input type="text" placeholder="Enter the title of the list (300 characters max)" />
         </Form.Item>
-        <Form.Item name={'banner'} label={<span>Banner</span>} valuePropName="fileList">
-          <AWSUpload
-            maxFileCount={1}
-            needCheckImgSize
-            ratio={3.25}
-            ratioErrorText="The ratio of the image is incorrect, please upload an image with a ratio of 3.25"
-            tips={'Formats supported: PNG and JPG. Ratio: 3.25 (e.g., 390 / 120), less than 1 MB.'}
-          />
-        </Form.Item>
+        {optionType === EOptionType.advanced && (
+          <Form.Item name={'banner'} label={<span>Banner</span>} valuePropName="fileList">
+            <AWSUpload
+              maxFileCount={1}
+              needCheckImgSize
+              ratio={[2.9, 3]}
+              ratioErrorText="The ratio of the image is incorrect, please upload an image with a ratio of 3:1"
+              tips={'Formats supported: PNG and JPG. Ratio: 3:1, less than 1 MB.'}
+            />
+          </Form.Item>
+        )}
+
         <OptionDynamicList
           name={'options'}
           form={form}
@@ -204,6 +207,9 @@ export default function Page(props: IFormPageProps) {
           ]}
           optionType={optionType}
           initialValue={[
+            {
+              title: '',
+            },
             {
               title: '',
             },
