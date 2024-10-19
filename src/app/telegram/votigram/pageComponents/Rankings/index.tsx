@@ -32,18 +32,20 @@ const RankItem = ({ item }: { item: IRankingsItem }) => {
   return (
     <div className="rounded-2xl p-4 bg-[#1B1B1B] flex items-center active:bg-[#292929]">
       <div className="flex items-center justify-between w-full">
-        <div className="flex items-center gap-4 w-full">
+        <div className="flex items-center gap-4 flex-1 overflow-hidden">
           <img src="/images/tg/ranking-icon.png" alt="rankings-icon" width={48} height={48} />
-          <div className="flex flex-col w-full">
+          <div className="flex flex-col w-full overflow-hidden">
             <div className="flex overflow-hidden w-full">
-              <h3 className="m-w-[72%] truncate text-base font-medium text-white mr-1">
+              <h3 className="truncate text-base font-medium text-white mr-1 max-w-[90%]">
                 {item?.proposalTitle}
               </h3>
-              <Flower
-                className={`w-6 h-6 ${
-                  item.labelType === RankingLabelEnum.Gold ? 'text-[#F4AC33]' : 'text-[#0395FF]'
-                }`}
-              />
+              {item.labelType !== RankingLabelEnum.None && (
+                <Flower
+                  className={`w-6 h-6 ${
+                    item.labelType === RankingLabelEnum.Gold ? 'text-[#F4AC33]' : 'text-[#0395FF]'
+                  }`}
+                />
+              )}
             </div>
             <div className="flex items-center gap-2 pt-[2px]">
               <Badge
@@ -70,6 +72,7 @@ const Rankings: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [proposalId, setProposalId] = useState('');
   const [isGold, setIsGold] = useState(false);
+  const [detailTitle, setDetailTitle] = useState('');
 
   const fetchRankings: (data?: IFetchResult) => Promise<IFetchResult> = async (data) => {
     const preList = data?.list ?? [];
@@ -100,9 +103,10 @@ const Rankings: React.FC = () => {
     return BigNumber(dataFromServer?.totalPoints ?? 0).toFormat();
   }, [dataFromServer?.totalPoints]);
 
-  const onClickHandler = (pid: string, isGold: boolean) => {
+  const onClickHandler = (pid: string, isGold: boolean, title: string) => {
     setIsGold(isGold);
     setProposalId(pid);
+    setDetailTitle(title);
     detailDrawerRef.current?.open();
   };
 
@@ -134,7 +138,13 @@ const Rankings: React.FC = () => {
           <div
             key={ele.proposalId}
             className="mb-4"
-            onClick={() => onClickHandler(ele.proposalId, ele.labelType === RankingLabelEnum.Gold)}
+            onClick={() =>
+              onClickHandler(
+                ele.proposalId,
+                ele.labelType === RankingLabelEnum.Gold,
+                ele.proposalTitle,
+              )
+            }
           >
             <RankItem item={ele} />
           </div>
@@ -166,7 +176,12 @@ const Rankings: React.FC = () => {
         showCloseIcon={false}
         body={
           <div className="h-full">
-            <VoteList backToPrev={backToPrevHandler} proposalId={proposalId} isGold={isGold} />
+            <VoteList
+              backToPrev={backToPrevHandler}
+              proposalId={proposalId}
+              isGold={isGold}
+              detailTitle={detailTitle}
+            />
           </div>
         }
       />

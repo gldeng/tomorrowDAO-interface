@@ -36,10 +36,12 @@ export default function VoteList({
   backToPrev,
   proposalId,
   isGold,
+  detailTitle,
 }: {
   backToPrev: () => void;
   proposalId: string;
   isGold: boolean;
+  detailTitle: string;
 }) {
   const confirmDrawerRef = useRef<ICommonDrawerRef>(null);
   const loadingDrawerRef = useRef<ICommonDrawerRef>(null);
@@ -243,39 +245,47 @@ export default function VoteList({
 
   const renderRankListIds = renderRankList.map((item) => item.alias).join('-');
 
-  const finalBannerImages = isGold ? [rankList?.data?.bannerUrl] : voteMain?.topBannerImages;
+  const finalBannerImages = isGold
+    ? voteMain?.topBannerImages
+    : rankList?.data?.bannerUrl
+    ? [rankList?.data?.bannerUrl]
+    : [];
+
+  const finalTitle = isGold ? voteMain?.listTitle : detailTitle;
 
   return (
     <div className="votigram-main">
-      <div className="mb-[8px] flex items-center gap-[27px]">
-        <LeftArrowOutlined className="text-2xl !text-white" onClick={backToPrev} />
-        <h3 className="font-20-25-weight text-white  text-center">
+      <div className="mb-[8px] flex items-center relative justify-center">
+        <LeftArrowOutlined className="text-2xl !text-white absolute left-0" onClick={backToPrev} />
+        <h3 className="font-20-25-weight text-white px-7 text-center truncate">
           <span
             dangerouslySetInnerHTML={{
-              __html: `${voteMain?.listTitle}`,
+              __html: `${finalTitle}`,
             }}
           ></span>
         </h3>
       </div>
-      <div className="banner">
-        <Carousel autoplay dots={(finalBannerImages?.length ?? 0) > 1}>
-          {finalBannerImages?.map((item) => {
-            return (
-              <div key={item}>
-                <img src={item} className="banner-img" alt={''} />
-              </div>
-            );
-          })}
-        </Carousel>
-        {!isGold && (
-          <RuleButton
-            onClick={() => {
-              ruleDrawerRef.current?.open();
-            }}
-            className="rules-wrap"
-          />
-        )}
-      </div>
+      {finalBannerImages && finalBannerImages?.length > 0 && (
+        <div className="banner">
+          <Carousel autoplay dots={(finalBannerImages?.length ?? 0) > 1}>
+            {finalBannerImages?.map((item) => {
+              return (
+                <div key={item}>
+                  <img src={item} className="banner-img" alt={''} />
+                </div>
+              );
+            })}
+          </Carousel>
+          {isGold && (
+            <RuleButton
+              onClick={() => {
+                ruleDrawerRef.current?.open();
+              }}
+              className="rules-wrap"
+            />
+          )}
+        </div>
+      )}
       <div className="flex items-center gap-4 py-4">
         <span className="text-white text-base">Remaining vote</span>
         <div className="flex items-end gap-[2px]">
