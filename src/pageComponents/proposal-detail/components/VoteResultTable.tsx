@@ -9,7 +9,6 @@ import { curChain, explorer, sideChainSuffix } from 'config';
 import NoData from 'components/NoData';
 import { fetchVoteHistory } from 'api/request';
 import { useRequest } from 'ahooks';
-import { useWebLogin } from 'aelf-web-login';
 import { EVoteOption } from 'types/vote';
 import BigNumber from 'bignumber.js';
 
@@ -103,7 +102,6 @@ interface IVoteResultTableProps {
 const defaultPageSize = 20;
 const VoteResultTable = (props: IVoteResultTableProps) => {
   const { daoId, proposalId } = props;
-  const { wallet } = useWebLogin();
   const [tableParams, setTableParams] = useState<{ page: number; pageSize: number }>({
     page: 1,
     pageSize: defaultPageSize,

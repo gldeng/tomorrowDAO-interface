@@ -16,7 +16,7 @@ import {
   Card
 } from "antd";
 import { useSelector } from "react-redux";
-import { useWebLogin } from "aelf-web-login";
+import { useConnectWallet } from "@aelf-web-login/wallet-adapter-react";
 import {
   CheckCircleOutlined,
   CloseCircleOutlined,
@@ -241,7 +241,7 @@ const ProposalDetail = () => {
 
   const { leftOrgInfo = {} } = info.organization;
 
-  const { wallet: webLoginWallet, callContract } = useWebLogin();
+  const { callSendMethod: callContract } = useConnectWallet()
   const { isSideChain  } = useChainSelect()
 
   const bpCountNumber = useMemo(() => {
@@ -258,10 +258,10 @@ const ProposalDetail = () => {
     if (proposalType === proposalTypes.REFERENDUM) {
       setVisible(action);
     } else {
-      if (!webLoginWallet.accountInfoSync.syncCompleted) {
-        showAccountInfoSyncingModal();
-        return;
-      }
+      // if (!webLoginWallet.accountInfoSync.syncCompleted) {
+      //   showAccountInfoSyncingModal();
+      //   return;
+      // }
 
       await sendTransactionWith(
         callContract,
@@ -300,10 +300,10 @@ const ProposalDetail = () => {
 
   const handleConfirm = async (action)=>  {
     if (action) {
-      if (!webLoginWallet.accountInfoSync.syncCompleted) {
-        showAccountInfoSyncingModal();
-        return;
-      }
+      // if (!webLoginWallet.accountInfoSync.syncCompleted) {
+      //   showAccountInfoSyncingModal();
+      //   return;
+      // }
 
       await sendTransactionWith(
         callContract,

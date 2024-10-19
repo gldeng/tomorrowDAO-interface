@@ -1,13 +1,9 @@
 import { curChain, nftSymbol } from 'config';
-import { GetBalanceByContract } from 'contract/callContract';
-import { useAsyncEffect } from 'ahooks';
 import { useEffect, useState } from 'react';
-import { useWebLogin } from 'aelf-web-login';
-import { nftBalanceSignalr } from 'utils/socket/nft-balance-signalr';
+import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
 import SignalR from 'utils/socket/signalr';
-import { HubConnectionState } from '@microsoft/signalr';
 
-interface nftBalanceChangeProps {
+interface NftBalanceChangeProps {
   openModal: () => void;
   closeModal: () => void;
   onNftBalanceChange?: (nftItem: INftBalanceChange) => void;
@@ -19,23 +15,30 @@ interface INftBalanceChange {
   nowAmount: number;
   address: string;
 }
-export default function useNftBalanceChange(params: nftBalanceChangeProps) {
+export default function useNftBalanceChange(
+  socketIns: SignalR | null,
+  proposalId: string,
+  params: NftBalanceChangeProps,
+) {
   const { openModal, closeModal, onNftBalanceChange } = params;
   const [disableOperation, setDisableOperation] = useState(false);
-  const { wallet } = useWebLogin();
+  const { walletInfo: wallet } = useConnectWallet();
   useEffect(() => {
-    let socket: SignalR | null = null;
     const initSocket = async () => {
-      const socketInstance = await nftBalanceSignalr.initSocket(wallet.address);
-      if (!socketInstance) {
+      if (!socketIns) {
         return;
       }
-      socket = socketInstance;
-      socketInstance.sendEvent('RequestUserBalanceProduce', {
-        chainId: curChain,
-        address: wallet.address,
-      });
-      socketInstance.registerHandler('RequestUserBalanceProduce', (nftItem: INftBalanceChange) => {
+      const requestData = () => {
+        console.log('send', 'RequestUserBalanceProduce');
+        socketIns.sendEvent('RequestUserBalanceProduce', {
+          chainId: curChain,
+          proposalId,
+          address: wallet?.address,
+        });
+      };
+      requestData();
+      socketIns.connection?.onreconnected(requestData);
+      socketIns.registerHandler('RequestUserBalanceProduce', (nftItem: INftBalanceChange) => {
         console.log('RequestUserBalanceProduce', nftItem);
         if (nftItem.nowAmount === 0 && nftItem.symbol === nftSymbol) {
           setDisableOperation(true);
@@ -45,7 +48,7 @@ export default function useNftBalanceChange(params: nftBalanceChangeProps) {
           closeModal();
         }
       });
-      socketInstance.registerHandler('ReceiveUserBalanceProduce', (nftItem: INftBalanceChange) => {
+      socketIns.registerHandler('ReceiveUserBalanceProduce', (nftItem: INftBalanceChange) => {
         console.log('ReceiveUserBalanceProduce', nftItem);
         onNftBalanceChange?.(nftItem);
         if (nftItem.nowAmount === 0 && nftItem.symbol === nftSymbol) {
@@ -60,8 +63,8 @@ export default function useNftBalanceChange(params: nftBalanceChangeProps) {
     initSocket();
 
     return () => {
-      socket?.destroy();
+      socketIns?.destroy();
     };
-  }, []);
+  }, [socketIns]);
   return { disableOperation };
 }

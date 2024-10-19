@@ -3,8 +3,8 @@ import type { RadioChangeEvent, InputNumberProps } from 'antd';
 import { useState } from 'react';
 import { ActiveEndTimeEnum } from '../../type';
 import dayjs from 'dayjs';
-import { AddOutlined, MinusOutlined } from '@aelf-design/icons';
 import './index.css';
+import { DownOutlined, UpOutlined } from '@aelf-design/icons';
 
 interface IActiveEndTimeProps {
   value?: number[] | number;
@@ -19,18 +19,12 @@ interface IInputNumberWithIncreaseProps extends InputNumberProps {
 const InputNumberWithIncrease = (props: IInputNumberWithIncreaseProps) => {
   return (
     <InputNumber
+      className="input-number-with-up-down-wrap"
+      controls={{
+        upIcon: <UpOutlined />,
+        downIcon: <DownOutlined />,
+      }}
       {...props}
-      addonBefore={
-        <div onClick={props.onMinus} className="active-time-end-addon">
-          <MinusOutlined />
-        </div>
-      }
-      addonAfter={
-        <div onClick={props.onAdd} className="active-time-end-addon">
-          <AddOutlined />
-        </div>
-      }
-      controls={false}
       precision={0}
     />
   );
@@ -80,17 +74,17 @@ export default function ActiveEndTime(props: IActiveEndTimeProps) {
   };
   return (
     <div className="active-time-end-wrap">
-      <div>
+      <div className="active-time-item-radio">
         <Radio.Group onChange={handleChange} value={value}>
           <Radio value={ActiveEndTimeEnum.duration}>
-            <span className="card-sm-text-bold">Duration</span>
+            <span>Duration</span>
           </Radio>
           <Radio value={ActiveEndTimeEnum.custom}>
-            <span className="card-sm-text-bold">Specific date & time</span>
+            <span>Specific date & time</span>
           </Radio>
         </Radio.Group>
       </div>
-      <div className="active-start-time-date-picker">
+      <div className="active-end-time-fill">
         {value === ActiveEndTimeEnum.custom && typeof propsValue === 'number' && (
           <DatePicker
             showTime
@@ -103,8 +97,8 @@ export default function ActiveEndTime(props: IActiveEndTimeProps) {
         )}
         {value === ActiveEndTimeEnum.duration && Array.isArray(propsValue) && (
           <div className="active-time-end-input">
-            <div>
-              <p className="card-sm-text-bold">Minutes</p>
+            <div className="active-time-end-input-item">
+              <p className="active-time-end-input-duration">Minutes</p>
               <InputNumberWithIncrease
                 min={0}
                 defaultValue={defaultActiveEndTimeDuration[0]}
@@ -120,8 +114,8 @@ export default function ActiveEndTime(props: IActiveEndTimeProps) {
                 }}
               />
             </div>
-            <div>
-              <p className="card-sm-text-bold">Hours</p>
+            <div className="active-time-end-input-item">
+              <p className="active-time-end-input-duration">Hours</p>
               <InputNumberWithIncrease
                 min={0}
                 defaultValue={defaultActiveEndTimeDuration[1]}
@@ -137,8 +131,8 @@ export default function ActiveEndTime(props: IActiveEndTimeProps) {
                 }}
               />
             </div>
-            <div>
-              <p className="card-sm-text-bold">Days</p>
+            <div className="active-time-end-input-item">
+              <p className="active-time-end-input-duration">Days</p>
               <InputNumberWithIncrease
                 min={0}
                 defaultValue={defaultActiveEndTimeDuration[2]}

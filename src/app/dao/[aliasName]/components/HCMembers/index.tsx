@@ -5,7 +5,7 @@ import { useRequest } from 'ahooks';
 import { EProposalActionTabs } from 'pageComponents/proposal-create/type';
 import Members from 'components/Members';
 import { useRouter } from 'next/navigation';
-import { useWebLogin } from 'aelf-web-login';
+import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
 import { checkCreateProposal } from 'utils/proposal';
 import { EDaoGovernanceMechanism } from 'app/(createADao)/create/type';
 import { message } from 'antd';
@@ -18,7 +18,7 @@ interface IProps {
 
 const DaoMembers: React.FC<IProps> = (props) => {
   const { daoRes, aliasName } = props;
-  const { wallet } = useWebLogin();
+  const { walletInfo: wallet } = useConnectWallet();
 
   const daoData = daoRes?.data;
   const {
@@ -50,7 +50,7 @@ const DaoMembers: React.FC<IProps> = (props) => {
         setCreateProposalLoading(false);
         return;
       }
-      const checkRes = await checkCreateProposal(daoRes, wallet.address);
+      const checkRes = await checkCreateProposal(daoRes, wallet!.address);
       if (checkRes) {
         router.push(`/dao/${aliasName}/proposal/create?tab=${EProposalActionTabs.AddHcMembers}`);
       }

@@ -24,8 +24,8 @@ export enum UserTaskDetail {
   ExploreCumulateTwentyInvite = 'ExploreCumulateTwentyInvite',
 }
 export enum ITabSource {
-  Discover = 0,
-  Vote = 1,
+  Rank = 0,
+  Discover = 1,
   Task = 2,
   Referral = 3,
   Asset = 4,

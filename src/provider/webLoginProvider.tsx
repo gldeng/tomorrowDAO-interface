@@ -1,11 +1,28 @@
 'use client';
 import { NetworkType } from '@portkey/did-ui-react';
-import { NetworkDaoHomePathName, TELEGRAM_BOT_ID, aelfWebLoginNetworkType, curChain } from 'config';
-import { PortkeyProvider, WebLoginProvider, setGlobalConfig } from 'aelf-web-login';
-import { store } from 'redux/store';
+import { NetworkDaoHomePathName, TELEGRAM_BOT_ID } from 'config';
 import getChainIdQuery from 'utils/url';
 import { usePathname } from 'next/navigation';
 import { getReferrerCode } from 'app/telegram/votigram/util/start-params';
+import { NetworkEnum, SignInDesignEnum, TChainId } from '@aelf-web-login/wallet-adapter-base';
+import { PortkeyDiscoverWallet } from '@aelf-web-login/wallet-adapter-portkey-discover';
+import { PortkeyAAWallet } from '@aelf-web-login/wallet-adapter-portkey-aa';
+import { NightElfWallet } from '@aelf-web-login/wallet-adapter-night-elf';
+import { IConfigProps } from '@aelf-web-login/wallet-adapter-bridge';
+import { init, WebLoginProvider } from '@aelf-web-login/wallet-adapter-react';
+import {
+  connectServer,
+  connectUrl,
+  curChain,
+  graphqlServer,
+  networkType,
+  portkeyServer,
+  rpcUrlAELF,
+  rpcUrlTDVV,
+  rpcUrlTDVW,
+} from 'config';
+import { useEffect, useMemo } from 'react';
+// import './telegram';
 
 type TNodes = {
   AELF: { chainId: string; rpcUrl: string };
@@ -43,10 +60,20 @@ function moveKeyToFront(nodes: TNodes, key: TNodeKeys) {
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default function LoginSDKProvider({ children }: { children: React.ReactNode }) {
-  const info = store.getState().elfInfo.elfInfo;
+  const info: Record<string, string> = {
+    networkType: networkType,
+    rpcUrlAELF: rpcUrlAELF,
+    rpcUrlTDVV: rpcUrlTDVV,
+    rpcUrlTDVW: rpcUrlTDVW,
+    connectServer: connectServer,
+    graphqlServer: graphqlServer,
+    portkeyServer: portkeyServer,
+    connectUrl: connectUrl,
+    curChain: curChain,
+  };
   const server = info.portkeyServer;
-  const connectUrl = info?.connectUrl;
-  const networkType = (info.networkType || 'TESTNET') as NetworkType;
+  // const connectUrl = info?.connectUrl;
+  // const networkType = (info.networkType || 'TESTNET') as NetworkType;
 
   const pathName = usePathname();
   const isNetWorkDao = pathName.startsWith(NetworkDaoHomePathName);
@@ -88,69 +115,80 @@ export default function LoginSDKProvider({ children }: { children: React.ReactNo
   };
   const nodes = getNodes();
   const referrerCode = getReferrerCode();
-  setGlobalConfig({
-    appName: APP_NAME,
-    chainId: chainId,
-    onlyShowV2: true,
-    portkey: {},
-    portkeyV2: {
-      networkType: networkType,
-      useLocalStorage: true,
-      graphQLUrl: info.graphqlServer,
-      connectUrl: addBasePath(connectUrl || ''),
-      requestDefaults: {
-        timeout: networkType === 'TESTNET' ? 300000 : 80000,
-        baseURL: addBasePath(server || ''),
-      },
-      serviceUrl: server,
-      socialLogin: {
-        Telegram: {
-          botId: TELEGRAM_BOT_ID,
-        },
-      },
-      referralInfo: {
-        referralCode: referrerCode ?? '',
-        projectCode: '13027',
+
+  const didConfig = {
+    graphQLUrl: info.graphqlServer,
+    connectUrl: addBasePath(connectUrl || ''),
+    serviceUrl: server,
+    requestDefaults: {
+      timeout: networkType === 'TESTNET' ? 300000 : 80000,
+      baseURL: addBasePath(server || ''),
+    },
+    socialLogin: {
+      Telegram: {
+        botId: TELEGRAM_BOT_ID,
       },
     },
-    aelfReact: {
+    referralInfo: {
+      referralCode: referrerCode ?? '',
+      projectCode: '13027',
+    },
+  };
+
+  const baseConfig = {
+    omitTelegramScript: true,
+    showVconsole: false,
+    networkType: networkType as NetworkEnum,
+    chainId: chainId as TChainId,
+    keyboard: true,
+    noCommonBaseModal: false,
+    design: SignInDesignEnum.CryptoDesign,
+    // enableAcceleration: true,
+  };
+
+  const aaWallet = useMemo(() => {
+    return new PortkeyAAWallet({
       appName: APP_NAME,
+      chainId: chainId as TChainId,
+      autoShowUnlock: true,
+      noNeedForConfirm: true,
+    });
+  }, []);
+  const nightElfWallet = useMemo(() => {
+    return new NightElfWallet({
+      chainId: chainId as TChainId,
+      appName: APP_NAME,
+      connectEagerly: true,
+      defaultRpcUrl:
+        (info?.[`rpcUrl${String(info?.curChain).toUpperCase()}`] as unknown as string) ||
+        info?.rpcUrlTDVW ||
+        '',
       nodes: nodes,
-    },
-    defaultRpcUrl:
-      (info?.[`rpcUrl${String(info?.curChain).toUpperCase()}`] as unknown as string) ||
-      info?.rpcUrlTDVW ||
-      '',
-    networkType: aelfWebLoginNetworkType,
-  });
-  return (
-    <PortkeyProvider networkTypeV2={info?.networkType}>
-      <div className="1">
-        <WebLoginProvider
-          nightElf={{
-            useMultiChain: true,
-            connectEagerly: true,
-          }}
-          portkey={{
-            design: 'CryptoDesign',
-            keyboard: {
-              v2: true,
-            },
-            autoShowUnlock: false,
-            checkAccountInfoSync: true,
-          }}
-          extraWallets={['discover', 'elf']}
-          discover={{
-            autoRequestAccount: true,
-            autoLogoutOnDisconnected: true,
-            autoLogoutOnNetworkMismatch: true,
-            autoLogoutOnAccountMismatch: true,
-            autoLogoutOnChainMismatch: true,
-          }}
-        >
-          {children}
-        </WebLoginProvider>
-      </div>
-    </PortkeyProvider>
-  );
+    });
+  }, []);
+  const portkeyDiscoverWallet = useMemo(() => {
+    return new PortkeyDiscoverWallet({
+      networkType: networkType,
+      chainId: chainId as TChainId,
+      autoRequestAccount: true, // If set to true, please contact Portkey to add whitelist @Rachel
+      autoLogoutOnDisconnected: true,
+      autoLogoutOnNetworkMismatch: true,
+      autoLogoutOnAccountMismatch: true,
+      autoLogoutOnChainMismatch: true,
+    });
+  }, []);
+  const wallets = [aaWallet, portkeyDiscoverWallet, nightElfWallet];
+
+  const config: IConfigProps = {
+    didConfig,
+    baseConfig,
+    wallets,
+  };
+
+  const bridgeAPI = init(config); // upper config
+  useEffect(() => {
+    aaWallet.setChainId(chainId as TChainId);
+  }, [aaWallet, chainId]);
+
+  return <WebLoginProvider bridgeAPI={bridgeAPI}>{children}</WebLoginProvider>;
 }

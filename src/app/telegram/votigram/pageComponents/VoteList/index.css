@@ -1,6 +1,7 @@
 .votigram-main {
-  @apply px-[16px] pt-[15px] relative;
-  min-height: calc(100vh - 186px);
+  @apply px-[16px] pt-[15px] relative min-h-full;
+  /* min-height: calc(100vh - 186px); */
+  padding-bottom: 48px;
   .vote-lists {
     transform: translateZ(0);
     @apply flex flex-col gap-[8px];
@@ -22,29 +23,7 @@
       @apply w-full h-[7.5rem];
     }
   }
-  .votigram-activity-title {
-    @apply my-[16px] flex justify-between items-center gap-[12px];
-    li {
-      border-radius: 16px;
-      background: var(--Interactive-1, #221D51);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      h3 {
-        color: var(--Text-Gray-2, #EDEEF0);
-      }
-      color: var(--Text-Gray-2, #EDEEF0);
-      @apply h-[65px] flex-1 px-[8px] py-[12px];
-      &.total-points {
-        p {
-          color: var(--Accent-2, #51FF00);
-        }
-      }
-      &.remaining-vote {
-      }
-    }
-  }
+
   .points-entry-button {
     .TMRWDAO-icon {
       @apply text-[12px] ml-[2px] cursor-pointer;

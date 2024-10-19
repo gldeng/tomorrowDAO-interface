@@ -1,5 +1,6 @@
 import { CheckCircleOutlined, WalletOutlined } from '@aelf-design/icons';
 import './index.css';
+import { ITabSource } from '../../type';
 
 export interface IFootTabBarProps {
   value: number;
@@ -82,12 +83,12 @@ const DiscoverIcon = () => (
 );
 const footTabBarList = [
   {
-    icon: <DiscoverIcon />,
-    text: 'Discover',
-  },
-  {
     icon: <CheckCircleOutlined />,
     text: 'Vote',
+  },
+  {
+    icon: <DiscoverIcon />,
+    text: 'Discover',
   },
   {
     icon: <TaskIcon />,

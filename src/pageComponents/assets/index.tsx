@@ -1,17 +1,14 @@
 'use client';
 
 import {
-  Asset as AssetV1,
-  PortkeyAssetProvider as PortkeyAssetProviderV1,
-} from '@portkey-v1/did-ui-react';
-import {
   Asset as AssetV2,
   PortkeyAssetProvider as PortkeyAssetProviderV2,
 } from '@portkey/did-ui-react';
 
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { WalletType, WebLoginState, useWebLogin } from 'aelf-web-login';
+import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
+
 import { LeftOutlined } from '@ant-design/icons';
 
 import './index.css';
@@ -23,22 +20,21 @@ export interface IMyAssetProps {
 export default function MyAsset(props: IMyAssetProps) {
   const { redirect = true, onBack } = props;
   const router = useRouter();
-  const { wallet, walletType, login, loginState } = useWebLogin();
-  const isLogin = loginState === WebLoginState.logined;
+  const { walletInfo: wallet } = useConnectWallet();
   const Asset = AssetV2;
   const PortkeyAssetProvider = PortkeyAssetProviderV2;
 
   useEffect(() => {
-    if (!isLogin && redirect) {
+    if (!wallet?.address && redirect) {
       router.push('/');
     }
-  }, [isLogin, router]);
+  }, [wallet, router]);
 
   return (
     <div className={'assets-wrap'}>
       <PortkeyAssetProvider
-        originChainId={wallet?.portkeyInfo?.chainId as Chain}
-        pin={wallet?.portkeyInfo?.pin}
+        originChainId={wallet?.extraInfo?.portkeyInfo?.chainId as Chain}
+        pin={wallet?.extraInfo?.portkeyInfo?.pin}
       >
         <Asset
           isShowRamp={true}

@@ -803,3 +803,39 @@ interface ITreasuryRecordRes {
   };
   message: string;
 }
+
+// ------- vote option save ---------
+
+enum ESourceType {
+  Telegram = 0,
+  TomorrowDao = 1,
+}
+
+interface ISaveAppItem {
+  title: string;
+  icon?: string;
+  description?: string;
+  longDescription?: string;
+  screenshots?: string[];
+  url?: string;
+  categories?: string[];
+  sourceType: ESourceType;
+}
+
+interface ISaveAppListReq {
+  chainId: string;
+  apps: ISaveAppItem[];
+}
+
+interface ISaveAppListRes {
+  code: string;
+  data: string[];
+  message: string;
+}
+
+// -------------------  vote-options ---------------------------------
+interface IUploadFileRes {
+  code: string;
+  data: string;
+  message: string;
+}

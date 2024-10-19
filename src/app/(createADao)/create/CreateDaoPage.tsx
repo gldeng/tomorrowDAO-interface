@@ -5,7 +5,6 @@ import { formMachine } from './xstate';
 import { Button, Progress } from 'aelf-design';
 import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { message as antdMessage, FormInstance, Result, Switch, Tag } from 'antd';
-import { useWebLoginEvent, WebLoginEvents, useWebLogin, WebLoginState } from 'aelf-web-login';
 import { useRouter } from 'next/navigation';
 import clsx from 'clsx';
 import SubmitButton, { ISubmitRef } from './component/SubmitButton';
@@ -35,6 +34,7 @@ import breadCrumb from 'utils/breadCrumb';
 import { FirstScreen } from './FirstScreen';
 import './index.css';
 import { trimAddress } from 'utils/address';
+import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
 
 const CreateDaoPage = () => {
   const [snapshot, send] = useMachine(formMachine);
@@ -47,7 +47,6 @@ const CreateDaoPage = () => {
   const { isSyncQuery } = useAelfWebLoginSync();
   const submitButtonRef = useRef<ISubmitRef>(null);
   const router = useRouter();
-  const { loginState } = useWebLogin();
   const isNotFirstStep = currentStep > 0;
   const [nextLoading, setNextLoading] = useState(false);
 
@@ -55,6 +54,7 @@ const CreateDaoPage = () => {
   const [isShowSecondScreen, setIsShowSecondScreen] = useState(false);
 
   const stepsFormMapRef = useRef<IStepsContext>(cloneDeepWith(defaultStepsFormMap));
+  const { isConnected } = useConnectWallet();
 
   const handleNextStep = () => {
     const form = stepsFormMapRef.current.stepForm[currentStepString].formInstance;
@@ -294,11 +294,11 @@ const CreateDaoPage = () => {
     }
   };
 
-  useWebLoginEvent(WebLoginEvents.LOGOUT, () => {
-    router.push('/create');
-  });
-
-  const isLogin = loginState === WebLoginState.logined;
+  useEffect(() => {
+    if (!isConnected) {
+      router.push('/create');
+    }
+  }, [isConnected, router]);
 
   useEffect(() => {
     if (isMultisig && isShowHighCouncil) {
@@ -311,7 +311,7 @@ const CreateDaoPage = () => {
   }, []);
 
   return isShowSecondScreen ? (
-    isLogin ? (
+    isConnected ? (
       <>
         <div className="page-content-bg-border  dao-steps-wrap">
           <p className="title-wrap">

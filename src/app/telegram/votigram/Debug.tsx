@@ -1,4 +1,4 @@
-import { useWebLogin } from 'aelf-web-login';
+import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
 import { VotigramScene } from './const';
 
 interface IDebugProps {
@@ -7,7 +7,7 @@ interface IDebugProps {
 
 export default function Debug(props: IDebugProps) {
   const { setScene } = props;
-  const { login } = useWebLogin();
+  const { connectWallet } = useConnectWallet();
   return (
     <div className="fixed z-50 left-0 bottom-0">
       <button
@@ -40,7 +40,7 @@ export default function Debug(props: IDebugProps) {
       </button>
       <button
         onClick={() => {
-          login();
+          connectWallet();
         }}
       >
         login

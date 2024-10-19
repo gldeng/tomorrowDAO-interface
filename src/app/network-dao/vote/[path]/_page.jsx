@@ -16,7 +16,6 @@ import { SYMBOL, ELF_DECIMAL, NEED_PLUGIN_AUTHORIZE_TIP } from "@src/constants";
 import getStateJudgment from "@utils/getStateJudgment";
 import publicKeyToAddress from "@utils/publicKeyToAddress";
 import { getAllTeamDesc } from "@api/vote";
-import { WebLoginState } from "aelf-web-login";
 import "./index.css";
 import MyVote from "../MyVote/MyVote";
 import ElectionNotification from "../ElectionNotification/ElectionNotification";
@@ -713,9 +712,10 @@ class VoteContainer extends Component {
           contractAddress: electionContractFromExt.address,
           methodName: "Withdraw",
           args: item,
-          options: {
-            chainId: chainIdQuery.chainId
-          }
+          chainId: chainIdQuery.chainId,
+          // options: {
+          //   chainId: chainIdQuery.chainId
+          // }
         })
         .then((res) => {
           const { error, errorMessage } = res;
@@ -842,9 +842,10 @@ class VoteContainer extends Component {
         contractAddress: electionContractFromExt.address,
         methodName: "Vote",
         args: payload,
-        options: {
-          chainId: chainIdQuery.chainId
-        }
+        chainId: chainIdQuery.chainId,
+        // options: {
+        //   chainId: chainIdQuery.chainId
+        // }
       })
       .then((res) => {
         // todo: error format maybe wrong
@@ -927,9 +928,10 @@ class VoteContainer extends Component {
         contractAddress: electionContractFromExt.address,
         methodName: "ChangeVotingOption",
         args: payload,
-        options: {
-          chainId: chainIdQuery.chainId
-        }
+        chainId: chainIdQuery.chainId,
+        // options: {
+        //   chainId: chainIdQuery.chainId
+        // }
       })
       .then((res) => {
         const { error, errorMessage } = res;
@@ -1146,11 +1148,11 @@ class VoteContainer extends Component {
     const { currentWallet } = this.props;
     const { profitContractFromExt } = this.state;
     const webLoginContext = WebLoginInstance.get().getWebLoginContext();
-    const { loginState } = webLoginContext;
+    const { isConnected } = webLoginContext;
     this.setState({
       claimDisabled: true,
     });
-    if (loginState === WebLoginState.logined) {
+    if (isConnected) {
       const chainIdQuery = getChainIdQuery();
       WebLoginInstance.get()
         .callContract({
@@ -1160,9 +1162,10 @@ class VoteContainer extends Component {
             schemeId,
             beneficiary: currentWallet?.address,
           },
-          options: {
-            chainId: chainIdQuery.chainId
-          }
+          chainId: chainIdQuery.chainId,
+          // options: {
+          //   chainId: chainIdQuery.chainId
+          // }
         })
         .then((res) => {
           this.setState({

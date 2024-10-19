@@ -14,7 +14,8 @@ import { fetchTokenInfo } from 'api/request';
 import { setToken } from 'redux/reducer/daoCreate';
 import Link from 'next/link';
 import FormMembersItem from 'components/FormMembersItem';
-import { useWebLogin } from 'aelf-web-login';
+import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
+
 import { curChain } from 'config';
 
 export const mediaList = [
@@ -34,7 +35,7 @@ export default function BasicDetails() {
   const [mediaError, setMediaError] = useState<boolean>(false);
   const { walletInfo } = useSelector((store: any) => store.userInfo);
   const elfInfo = useSelector((store: any) => store.elfInfo.elfInfo);
-  const { wallet } = useWebLogin();
+  const { walletInfo: wallet } = useConnectWallet();
   const daoType = Form.useWatch(governanceMechanismNamePath, form) ?? EDaoGovernanceMechanism.Token;
   useRegisterForm(form, StepEnum.step0);
   return (
@@ -258,7 +259,7 @@ export default function BasicDetails() {
                       return;
                     }
                     form.setFieldValue(formMembersListNamePath, [
-                      `ELF_${wallet.address}_${curChain}`,
+                      `ELF_${wallet?.address}_${curChain}`,
                     ]);
                   }}
                 >
@@ -354,7 +355,7 @@ export default function BasicDetails() {
             <>
               <FormMembersItem
                 name={formMembersListNamePath}
-                initialValue={[`ELF_${wallet.address}_${curChain}`]}
+                initialValue={[`ELF_${wallet?.address}_${curChain}`]}
                 form={form}
               />
             </>

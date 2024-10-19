@@ -1,5 +1,4 @@
 .active-start-time-date-picker {
-  @apply mt-[10px];
   .TMRWDAO-picker {
     @apply w-full;
   }

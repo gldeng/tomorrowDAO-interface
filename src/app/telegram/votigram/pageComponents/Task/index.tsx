@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { flatten } from 'lodash-es';
+// import { flatten } from 'lodash-es';
 import './index.css';
 import { useRequest, usePrevious, useAsyncEffect } from 'ahooks';
 import { getTaskList } from 'api/request';
@@ -7,13 +7,10 @@ import { curChain } from 'config';
 import Loading from '../../components/Loading';
 import { taskTitle } from '../../const';
 import { IStackItem, UserTaskDetail } from '../../type';
-import { TelegramIcon, UserAddIcon, XIcon, DiscardIcon } from 'components/Icons';
-import { WalletOutlined } from '@aelf-design/icons';
-import BigNumber from 'bignumber.js';
 import { TaskItem } from './TaskItem';
-import { useWebLogin } from 'aelf-web-login';
-import CommonModal, { ICommonModalRef } from '../../components/CommonModal';
-import { Button } from 'antd';
+import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
+// import CommonModal, { ICommonModalRef } from '../../components/CommonModal';
+// import { Button } from 'antd';
 
 interface ITaskProps {
   style?: React.CSSProperties;
@@ -23,8 +20,8 @@ interface ITaskProps {
 }
 const Task: React.FC<ITaskProps> = (props: ITaskProps) => {
   const { style, className, show, activeTabItem } = props;
-  const { wallet } = useWebLogin();
-  const completeTaskModalRef = useRef<ICommonModalRef>(null);
+  const { walletInfo: wallet } = useConnectWallet();
+  // const completeTaskModalRef = useRef<ICommonModalRef>(null);
   const [taskGroupList, setTaskGroupList] = useState<IGetTaskListResItem[]>([]);
   const {
     data,
@@ -57,24 +54,24 @@ const Task: React.FC<ITaskProps> = (props: ITaskProps) => {
     const listRes = await getTaskListAsync();
     setTaskGroupList(listRes?.data?.taskList || []);
   }, [show]);
-  useEffect(() => {
-    const listsGroup = taskGroupList?.map((group) => group.data);
-    const lists = flatten(listsGroup);
-    const completed = [
-      UserTaskDetail.DailyVote,
-      UserTaskDetail.ExploreFollowX,
-      UserTaskDetail.ExploreJoinDiscord,
-      UserTaskDetail.ExploreJoinTgChannel,
-    ].every((item) => {
-      const task = lists.find((list) => list.userTaskDetail === item);
-      return task?.complete;
-    });
-    const key = `${wallet.address}-${curChain}-task-complate`;
-    if (completed && !localStorage.getItem(key)) {
-      localStorage.setItem(key, 'true');
-      completeTaskModalRef.current?.open();
-    }
-  }, [taskGroupList, wallet.address]);
+  // useEffect(() => {
+  //   const listsGroup = taskGroupList?.map((group) => group.data);
+  //   const lists = flatten(listsGroup);
+  //   const completed = [
+  //     UserTaskDetail.DailyVote,
+  //     UserTaskDetail.ExploreFollowX,
+  //     UserTaskDetail.ExploreJoinDiscord,
+  //     UserTaskDetail.ExploreJoinTgChannel,
+  //   ].every((item) => {
+  //     const task = lists.find((list) => list.userTaskDetail === item);
+  //     return task?.complete;
+  //   });
+  //   const key = `${wallet?.address}-${curChain}-task-complate`;
+  //   if (completed && !localStorage.getItem(key)) {
+  //     localStorage.setItem(key, 'true');
+  //     completeTaskModalRef.current?.open();
+  //   }
+  // }, [taskGroupList, wallet?.address]);
   return (
     <div className={`votigram-task-wrap ${className}`} style={style}>
       <div className="title font-18-22-weight mt-[24px] mb-[8px]">
@@ -119,7 +116,7 @@ const Task: React.FC<ITaskProps> = (props: ITaskProps) => {
           })}
         </div>
       )}
-      <CommonModal
+      {/* <CommonModal
         ref={completeTaskModalRef}
         title="Congratulations!"
         content={
@@ -146,7 +143,7 @@ const Task: React.FC<ITaskProps> = (props: ITaskProps) => {
             </div>
           </div>
         }
-      />
+      /> */}
     </div>
   );
 };

@@ -17,18 +17,16 @@ const messageType: Array<string> = [
 ];
 
 export default class SignalR {
-  private connection: HubConnection | null;
+  public connection: HubConnection | null;
   private url: string;
   private handlerMap: Map<string, Array<HandlerFn>>;
-  private startCb: () => void;
 
   get connectionState() {
     return this.connection?.state;
   }
 
-  constructor({ url }: SignalRParams, startCb: () => void) {
+  constructor({ url }: SignalRParams) {
     this.url = url;
-    this.startCb = startCb;
     this.connection = new HubConnectionBuilder()
       .withUrl(this.url, {
         skipNegotiation: true,
@@ -42,7 +40,6 @@ export default class SignalR {
   initAndStart = () => {
     this.connection?.onclose((err) => {
       console.log('signalR---onclose', err);
-      message.error('The connection to the server is lost. Please refresh and try again.');
     });
 
     this.connection?.onreconnecting((err) => {
@@ -51,7 +48,6 @@ export default class SignalR {
 
     this.connection?.onreconnected(() => {
       console.log('signalR---onreconnected');
-      this.startCb();
     });
     console.log('signalR---initAndStart');
     this.listen();
@@ -60,10 +56,11 @@ export default class SignalR {
       this.connection
         ?.start()
         .then(() => {
-          this.startCb();
           resolve(this.connection);
         })
         .catch((e) => {
+          message.error('The establishment of a WebSocket connection with the service failed.');
+          console.log('signalR---initAndStart---err', e);
           reject(e);
         });
     });
@@ -148,5 +145,6 @@ export default class SignalR {
 
   destroy(): void {
     this.handlerMap.clear();
+    this.connection?.stop();
   }
 }

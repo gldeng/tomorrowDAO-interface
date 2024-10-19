@@ -9,28 +9,40 @@ import {
   WalletOutlined,
 } from '@aelf-design/icons';
 import { ReactComponent as AvatarIcon } from 'assets/imgs/avatar-icon.svg';
-import { WalletType, WebLoginState, useWebLogin } from 'aelf-web-login';
 import { useMemo, useState } from 'react';
 import { Popover } from 'antd';
 import Link from 'next/link';
 import './index.css';
 import { explorer } from 'config';
-import { useChainSelect } from 'hooks/useChainSelect';
 import getChainIdQuery from 'utils/url';
+import { WalletTypeEnum } from '@aelf-web-login/wallet-adapter-base';
+import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
 export const LoginAuth = () => {
   const { isLG } = useResponsive();
-  const { loginState, login } = useWebLogin();
+  const { connectWallet, walletInfo } = useConnectWallet();
+
   const { getTokenUpdate } = useCheckLoginAndToken();
-  const isConnectWallet = useMemo(() => loginState === WebLoginState.logined, [loginState]);
-  if (isConnectWallet) {
+  if (walletInfo) {
     return (
-      <Button size={isLG ? 'medium' : 'large'} type="primary" onClick={getTokenUpdate}>
+      <Button
+        size={isLG ? 'medium' : 'large'}
+        type="primary"
+        onClick={() => {
+          getTokenUpdate();
+        }}
+      >
         Authorization
       </Button>
     );
   }
   return (
-    <Button size={isLG ? 'medium' : 'large'} type="primary" onClick={login}>
+    <Button
+      size={isLG ? 'medium' : 'large'}
+      type="primary"
+      onClick={() => {
+        connectWallet();
+      }}
+    >
       Log in
     </Button>
   );
@@ -40,8 +52,7 @@ interface ILoginProps {
 }
 export default function Login(props: ILoginProps) {
   const { isNetWorkDao } = props;
-  const { isLG } = useResponsive();
-  const { logout, loginState } = useWebLogin();
+  const { disConnectWallet } = useConnectWallet();
   const [hovered, setHovered] = useState(false);
   const chainIdQuery = getChainIdQuery();
   const hide = () => {
@@ -50,20 +61,20 @@ export default function Login(props: ILoginProps) {
   const handleHoverChange = (open: boolean) => {
     setHovered(open);
   };
-  const { login, isLogin, walletType } = useWalletService();
+  const { isLogin, walletType } = useWalletService();
   const { walletInfo } = useSelector((store: any) => store.userInfo);
   const info = useSelector((store: any) => store.elfInfo.elfInfo);
   const logoutEvent = () => {
-    logout();
+    disConnectWallet();
   };
-  const isPortkeyLogin = walletType === WalletType.portkey && loginState === WebLoginState.logined;
+  const isPortkeyLogin = walletType === WalletTypeEnum.aa;
   const userName = useMemo(() => {
     if (walletInfo) {
-      if (walletType === WalletType.discover) {
+      if (walletType === WalletTypeEnum.discover) {
         return walletInfo?.discoverInfo?.nickName;
-      } else if (walletType === WalletType.portkey) {
+      } else if (walletType === WalletTypeEnum.aa) {
         return walletInfo?.portkeyInfo?.nickName;
-      } else if (walletType === WalletType.elf) {
+      } else if (walletType === WalletTypeEnum.elf) {
         return walletInfo?.nightElfInfo?.name;
       }
       return walletInfo.name;

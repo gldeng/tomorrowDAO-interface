@@ -10,17 +10,22 @@ export default function AppDetail(props: IAppDetailProps) {
   return (
     <div className={`${className} votigram-app-detail-wrap`} style={style}>
       <div className="summary">
-        <img className="summary-logo" src={item?.icon} alt="" />
-        <div className="summary-desc">
+        {item?.icon ? (
+          <img className="summary-logo" src={item?.icon} alt="" />
+        ) : (
+          <div className="summary-logo-text">{(item?.title?.[0] ?? 'T').toUpperCase()}</div>
+        )}
+
+        <div className="ml-[20px]">
           <h3 className="font-20-25-weight text-white">{item?.title}</h3>
-          <p
-            className="font-14-18 text-[#B1B3BC] mt-[6px] summary-desc-text"
-            dangerouslySetInnerHTML={{
-              __html: item?.description ?? '',
-            }}
-          ></p>
         </div>
       </div>
+      <p
+        className="font-14-18 text-[#B1B3BC] mt-8 break-words px-7"
+        dangerouslySetInnerHTML={{
+          __html: item?.description ?? '',
+        }}
+      ></p>
       <div>
         {(item?.screenshots?.length ?? 0) > 0 && (
           <ul className="app-screenshots mt-[24px]">
@@ -35,7 +40,7 @@ export default function AppDetail(props: IAppDetailProps) {
       {item?.longDescription && (
         <div className="mt-[24px] px-[28px]">
           <h3 className="font-20-25-weight text-white">Description</h3>
-          <p className="font-14-18 mt-[8px] text-[#B1B3BC]">{item?.longDescription}</p>
+          <p className="font-14-18 mt-[8px] text-[#B1B3BC] break-words">{item?.longDescription}</p>
         </div>
       )}
       <div className="app-link">

@@ -37,10 +37,9 @@
 }
 .chain-id-select-wrap {
   @apply mr-1 flex-shrink;
-}
-
-.chain-id-select {
-  @apply w-auto h-10 lg:h-12;
+  .TMRWDAO-select.chain-id-select {
+    @apply w-auto h-10 lg:h-12;
+  }
 }
 .network-dao-menu-pop.TMRWDAO-menu-submenu-popup {
    .TMRWDAO-menu-vertical .TMRWDAO-menu-item {

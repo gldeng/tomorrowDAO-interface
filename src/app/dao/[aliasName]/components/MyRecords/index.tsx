@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 import './index.css';
 import { SkeletonLine } from 'components/Skeleton';
 import NoData from 'components/NoData';
-import { useWebLogin } from 'aelf-web-login';
+import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
 
 interface IProps {
   daoId: string;
@@ -18,7 +18,8 @@ interface IProps {
 }
 export default function MyRecords(props: IProps) {
   const { daoId, aliasName } = props;
-  const { wallet } = useWebLogin();
+  const { walletInfo: wallet } = useConnectWallet();
+
   const {
     data: voteHistoryData,
     run,
@@ -27,7 +28,7 @@ export default function MyRecords(props: IProps) {
   } = useRequest(
     () => {
       return fetchVoteHistory({
-        address: wallet.address,
+        address: wallet!.address,
         chainId: curChain,
         skipCount: 0,
         maxResultCount: 10,
@@ -39,10 +40,10 @@ export default function MyRecords(props: IProps) {
     },
   );
   useEffect(() => {
-    if (wallet.address) {
+    if (wallet?.address) {
       run();
     }
-  }, [run, wallet.address]);
+  }, [run, wallet?.address]);
 
   const LoadMoreButton = (
     <span className="text-[12px] flex items-center text-neutralTitle hover:text-link">

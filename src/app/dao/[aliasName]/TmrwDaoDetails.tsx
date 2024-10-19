@@ -16,7 +16,7 @@ import { useRequest } from 'ahooks';
 import { IProposalTableParams, TabKey } from './type';
 import { fetchProposalList } from 'api/request';
 import { curChain } from 'config';
-import { ALL, DEFAULT_PAGESIZE } from './constants';
+import { ALL, DEFAULT_PAGESIZE, createOptionsDaoAlias } from './constants';
 import Link from 'next/link';
 import ErrorResult from 'components/ErrorResult';
 import { useRouter } from 'next/navigation';
@@ -126,6 +126,10 @@ export default function DeoDetails(props: IProps) {
     setCreateProposalLoading(false);
     if (!checkRes) {
       return false;
+    }
+    if (createOptionsDaoAlias.includes(aliasName ?? '')) {
+      router.push(`/dao/${aliasName}/proposal/create-option`);
+      return true;
     }
     router.push(`/dao/${aliasName}/proposal/create`);
     return true;
