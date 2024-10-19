@@ -115,7 +115,7 @@
   }
 }
 .increment-icon {
-  @apply rounded-full w-[36px] h-[36px] bg-[#51FF00] flex-center pointer-events-none fixed z-50;
+  @apply rounded-full w-[36px] h-[36px] bg-[#51FF00] flex-center pointer-events-none fixed z-[1003];
   border: 1px solid #373940;
   color: var(--Border-2, #4C41A9);
   font-size: 13.5px;
