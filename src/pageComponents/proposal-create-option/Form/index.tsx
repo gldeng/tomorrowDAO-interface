@@ -176,7 +176,7 @@ export default function Page(props: IFormPageProps) {
             },
           ]}
         >
-          <Input type="text" placeholder="Enter the title of the list (300 characters max)" />
+          <Input type="text" placeholder="Enter the title of the list (300 characters max). " />
         </Form.Item>
         {optionType === EOptionType.advanced && (
           <Form.Item name={'banner'} label={<span>Banner</span>} valuePropName="fileList">
