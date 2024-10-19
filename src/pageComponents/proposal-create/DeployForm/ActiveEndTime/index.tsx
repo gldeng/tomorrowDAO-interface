@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { ActiveEndTimeEnum } from '../../type';
 import dayjs from 'dayjs';
 import './index.css';
+import { DownOutlined, UpOutlined } from '@aelf-design/icons';
 
 interface IActiveEndTimeProps {
   value?: number[] | number;
@@ -16,7 +17,17 @@ interface IInputNumberWithIncreaseProps extends InputNumberProps {
   onMinus?: () => void;
 }
 const InputNumberWithIncrease = (props: IInputNumberWithIncreaseProps) => {
-  return <InputNumber {...props} precision={0} />;
+  return (
+    <InputNumber
+      className="input-number-with-up-down-wrap"
+      controls={{
+        upIcon: <UpOutlined />,
+        downIcon: <DownOutlined />,
+      }}
+      {...props}
+      precision={0}
+    />
+  );
 };
 export default function ActiveEndTime(props: IActiveEndTimeProps) {
   const { value: propsValue, onChange } = props;

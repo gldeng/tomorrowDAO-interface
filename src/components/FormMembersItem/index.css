@@ -9,13 +9,3 @@
 .dynamic-form-item-wrap .TMRWDAO-form-item-control-input-content {
   @apply flex items-center gap-[24px] justify-between;
 }
-
-.dynamic-form-buttons-item {
-  @apply w-[143px];
-}
-.dynamic-form-buttons-item + .dynamic-form-buttons-item {
-  @apply ml-[16px];
-}
-.dynamic-form-buttons-text {
-
-}

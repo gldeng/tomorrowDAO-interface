@@ -13,6 +13,7 @@ import { SkeletonForm } from 'components/Skeleton';
 import clsx from 'clsx';
 import { proposalTypeList } from './type';
 import '../proposal-create/index.css';
+import 'styles/proposal-create.css';
 
 const ProposalDeploy = () => {
   const { aliasName } = useParams<{ aliasName: string }>();

@@ -239,10 +239,10 @@ export default function Page(props: IFormPageProps) {
         <TimeRange />
       </Form>
 
-      <div className="flex justify-end mt-[100px]">
+      <div className="flex justify-end mt-[32px]">
         <ButtonCheckLogin
           type="primary"
-          className="w-[156px]"
+          className="lg:w-[156px] w-full"
           // disabled={!title || !description}
           onClick={handleSubmit}
           loading={false}

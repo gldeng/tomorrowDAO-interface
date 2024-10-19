@@ -18,7 +18,7 @@
     justify-content: center;
   }
   .active-time-end-input {
-    @apply flex justify-between lg:flex-row flex-col gap-[48px];
+    @apply flex justify-between lg:flex-row flex-col lg:gap-[48px] gap-[12px];
     p {
       @apply mb-2;
     }
@@ -31,5 +31,11 @@
   }
   .active-time-end-input-duration {
     @apply card-sm-text  text-Disable-Text;
+  }
+}
+.input-number-with-up-down-wrap {
+  .TMRWDAO-input-number-handler-up-inner,
+  .TMRWDAO-input-number-handler-down-inner {
+    @apply !text-[12px];
   }
 }

@@ -7,6 +7,7 @@ import { useConnectWallet } from '@aelf-web-login/wallet-adapter-react';
 
 import breadCrumb from 'utils/breadCrumb';
 import './index.css';
+import 'styles/proposal-create.css';
 
 const ProposalDeploy = () => {
   const { walletInfo } = useConnectWallet();
