@@ -86,6 +86,7 @@ function FormListFullItems(props: IFormItemsProps) {
           }}
         >
           <AWSUpload
+            accept=".png,.jpg,.jpeg"
             maxFileCount={1}
             tips={'Formats supported: PNG and JPG. Ratio: 1:1, less than 1 MB'}
             needCheckImgSize
@@ -135,6 +136,12 @@ function FormListFullItems(props: IFormItemsProps) {
           labelCol={{
             span: 4,
           }}
+          rules={[
+            {
+              type: 'url',
+              message: 'Please enter a correct link.',
+            },
+          ]}
         >
           <Input placeholder={`Enter a link for the option. `} />
         </Form.Item>
@@ -146,7 +153,11 @@ function FormListFullItems(props: IFormItemsProps) {
             span: 4,
           }}
         >
-          <AWSUpload maxFileCount={9} tips={`Formats supported: PNG and JPG. less than 1 MB. `} />
+          <AWSUpload
+            accept=".png,.jpg,.jpeg"
+            maxFileCount={9}
+            tips={`Formats supported: PNG and JPG. less than 1 MB. `}
+          />
         </Form.Item>
       </div>
     </div>

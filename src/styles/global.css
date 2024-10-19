@@ -178,6 +178,9 @@ input[type='number'] {
 .TMRWDAO-table-expanded-row-fixed {
   @apply !w-full !m-0;
 }
+.TMRWDAO-form-item .TMRWDAO-form-item-explain-error {
+  @apply mt-[8px];
+}
 /* .TMRWDAO-form-item-margin-offset {
   @apply !mb-0;
 }

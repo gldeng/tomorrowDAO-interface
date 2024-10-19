@@ -181,6 +181,7 @@ export default function Page(props: IFormPageProps) {
         {optionType === EOptionType.advanced && (
           <Form.Item name={'banner'} label={<span>Banner</span>} valuePropName="fileList">
             <AWSUpload
+              accept=".png,.jpg,.jpeg"
               maxFileCount={1}
               needCheckImgSize
               ratio={[2.9, 3]}
