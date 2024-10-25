@@ -110,6 +110,7 @@ export enum AllProposalStatusString {
   Defeated = 'Defeated',
   Executed = 'Executed',
   PendingVote = 'PendingVote',
+  PendingCommitment = 'PendingCommitment',
   'BelowThreshold' = 'BelowThreshold',
   'Challenged' = 'Challenged',
   'Vetoed' = 'Vetoed',
@@ -123,12 +124,14 @@ export const ProposalStatusFilters = [
   AllProposalStatusString.Executed,
   AllProposalStatusString.Vetoed,
   AllProposalStatusString.PendingVote,
+  AllProposalStatusString.PendingCommitment,
   AllProposalStatusString.Challenged,
   AllProposalStatusString.Published,
 ];
 export const ProposalStatusReplaceMap: Partial<Record<AllProposalStatusString, string>> = {
   [AllProposalStatusString.PendingVote]: 'Pending Vote',
   [AllProposalStatusString.Challenged]: 'Being Vetoed',
+  [AllProposalStatusString.PendingCommitment]: 'Pending Commitment',
 };
 
 export enum AllProposalStageString {

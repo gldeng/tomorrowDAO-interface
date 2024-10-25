@@ -378,6 +378,7 @@ interface ITransaction {
   };
 }
 interface IProposalsItem {
+  activeStartTime: string;
   activeEndTime: string;
   executeStartTime: string;
   executeEndTime: string;
@@ -407,6 +408,7 @@ interface IProposalsItem {
   maximalAbstentionThreshold: number;
   proposalSource?: number;
   voteMechanismName?: string;
+  isAnonymous: boolean;
 }
 interface IProposalListResData {
   totalCount: number;
@@ -484,6 +486,7 @@ interface IProposalDetailData {
   blockHeight: number;
   id: string;
   daoId: string;
+  isAnonymous: boolean;
   proposalId: string;
   proposalTitle: string;
   proposalDescription: string;

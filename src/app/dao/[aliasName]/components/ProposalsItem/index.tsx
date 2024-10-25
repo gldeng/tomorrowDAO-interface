@@ -13,6 +13,7 @@ import ProposalStatusDesc from './ProposalStatusDesc';
 import './index.css';
 import { getProposalStatusText } from 'utils/proposal';
 import { EDaoGovernanceMechanism } from 'app/(createADao)/create/type';
+import { ApplyAnonymousProposalRules } from 'utils/anonymousVoting';
 
 export interface IProposalsItemProps {
   data: IProposalsItem;
@@ -20,9 +21,11 @@ export interface IProposalsItemProps {
 }
 type TagColorKey = keyof typeof tagColorMap;
 
+
 export default function ProposalsItem(props: IProposalsItemProps) {
-  const { data, governanceMechanism } = props;
+  const { data: dataRaw, governanceMechanism } = props;
   const { isLG } = useResponsive();
+  const data = ApplyAnonymousProposalRules(dataRaw);
 
   const proposalStatus = data.proposalStatus as TagColorKey;
 

@@ -62,6 +62,10 @@ export const tagColorMap = {
     bgColor: '#FEF7EC',
     textColor: '#F8B042',
   },
+  [AllProposalStatusString.PendingCommitment]: {
+    bgColor: '#F2EEFF',
+    textColor: '#764DF1',
+  },
   [AllProposalStatusString.PendingVote]: {
     bgColor: '#FEF7EC',
     textColor: '#F8B042',
