@@ -2,7 +2,7 @@
 
 import { Input, Tooltip, Button } from 'aelf-design';
 import { InfoCircleOutlined } from '@aelf-design/icons';
-import { Form } from 'antd';
+import { Form, Switch } from 'antd';
 import { memo, useMemo, useState } from 'react';
 import { ResponsiveSelect } from 'components/ResponsiveSelect';
 import MarkdownEditor from 'components/MarkdownEditor';
@@ -23,6 +23,7 @@ import { getTimeMilliseconds } from '../util/time';
 import { voterAndExecuteNamePath } from './constant';
 
 const periodName = ['proposalBasicInfo', 'activeTimePeriod'];
+const isAnonymousName = ['proposalBasicInfo', 'isAnonymous'];
 const activeStartTimeName = ['proposalBasicInfo', 'activeStartTime'];
 const activeEndTimeName = ['proposalBasicInfo', 'activeEndTime'];
 interface ProposalInfoProps {
@@ -59,12 +60,20 @@ const ProposalInfo = (props: ProposalInfoProps) => {
 
   const proposalType = Form.useWatch('proposalType', form);
   const voterAndExecute = Form.useWatch(voterAndExecuteNamePath, form);
+  const isAnonymous = Form.useWatch(isAnonymousName, form);
   const activeTimePeriod = Form.useWatch(periodName, form);
   const activeEndTime = Form.useWatch(activeEndTimeName, form);
   const activeStartTime = Form.useWatch(activeStartTimeName, form);
   const timeMilliseconds = useMemo(() => {
     return getTimeMilliseconds(activeStartTime, activeEndTime);
   }, [activeEndTime, activeStartTime]);
+  const anonymousVotingStartTimeString = useMemo(() => {
+    if (isAnonymous && !!timeMilliseconds.activeStartTime && !!timeMilliseconds.activeEndTime) {
+      const start = dayjs(timeMilliseconds.activeStartTime);
+      const end = dayjs(timeMilliseconds.activeEndTime);
+      return start.add(end.diff(start) / 2).format('YYYY-MM-DD HH:mm:ss');
+    }
+  }, [timeMilliseconds]);
   const currentGovernanceMechanism = useMemo(() => {
     return governanceMechanismList?.find((item) => item.schemeAddress === voterAndExecute);
   }, [voterAndExecute, governanceMechanismList]);
@@ -96,7 +105,6 @@ const ProposalInfo = (props: ProposalInfoProps) => {
   const proposalDetailDesc = useMemo(() => {
     return proposalTypeList.find((item) => item.value === proposalType)?.desc ?? '';
   }, [proposalType]);
-
   // const
   useAsyncEffect(async () => {
     const timePeriod = await GetDaoProposalTimePeriodContract(daoId, {
@@ -209,6 +217,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
           optionLabelProp="label"
         ></ResponsiveSelect>
       </Form.Item>
+
       {/* 1a1v/1t1v */}
       {/* <Form.Item
         name={voteSchemeName}
@@ -250,12 +259,29 @@ const ProposalInfo = (props: ProposalInfoProps) => {
           />
         ))}
 
+      {/* Enable anonymous voting */}
+      <Form.Item
+        name={isAnonymousName}
+        label={
+          <Tooltip title="Enable anonymous voting to hide voter identities during the voting process">
+            <span className="form-item-label">
+              Enable anonymous voting
+              <InfoCircleOutlined className="cursor-pointer label-icon" />
+            </span>
+          </Tooltip>
+        }
+        valuePropName="checked"
+        initialValue={false}
+      >
+        <Switch />
+      </Form.Item>
+
       <Form.Item
         className="voting-start-time-form-label"
         label={
           <Tooltip title="Define when a proposal should be active to receive approvals. If now is selected, the proposal is immediately active after publishing.">
             <span className="form-item-label">
-              Voting start time
+              {!!isAnonymous ? 'Commitment registration start time' : 'Voting start time'}
               <InfoCircleOutlined className="cursor-pointer label-icon" />
             </span>
           </Tooltip>
@@ -271,6 +297,29 @@ const ProposalInfo = (props: ProposalInfoProps) => {
       >
         <ActiveStartTime />
       </Form.Item>
+
+
+      {/* Display-only field for Anonymous Voting start time */}
+      {!!isAnonymous && anonymousVotingStartTimeString && (
+        <Form.Item
+          label={
+            <Tooltip title="The anonymous voting start time is automatically set to the middle of the commitment registration period and the voting end time.">
+              <span className="form-item-label">
+                Anonymous Voting start time
+                <InfoCircleOutlined className="cursor-pointer label-icon" />
+              </span>
+            </Tooltip>
+          }
+        >
+          <Input
+            value={anonymousVotingStartTimeString}
+            disabled
+            style={{ color: 'rgba(0, 0, 0, 0.85)' }}
+          />
+        </Form.Item>
+      )}
+
+      {/* Voting end date */}
       <Form.Item
         label={
           <Tooltip title="Define how long the voting should last in days, or add an exact date and time for it to conclude.">
