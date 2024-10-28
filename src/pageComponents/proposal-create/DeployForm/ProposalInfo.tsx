@@ -281,7 +281,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
         label={
           <Tooltip title="Define when a proposal should be active to receive approvals. If now is selected, the proposal is immediately active after publishing.">
             <span className="form-item-label">
-              {!!isAnonymous ? 'Commitment registration start time' : 'Voting start time'}
+              {isAnonymous ? 'Commitment registration start time' : 'Voting start time'}
               <InfoCircleOutlined className="cursor-pointer label-icon" />
             </span>
           </Tooltip>
@@ -297,7 +297,6 @@ const ProposalInfo = (props: ProposalInfoProps) => {
       >
         <ActiveStartTime />
       </Form.Item>
-
 
       {/* Display-only field for Anonymous Voting start time */}
       {!!isAnonymous && anonymousVotingStartTimeString && (

@@ -44,29 +44,29 @@ const ProposalDetails = (props: IProposalDetailsProps) => {
           <AnonymousProposalDetails ssrData={props.ssrData} proposalId={proposalId} />
         </CommitmentProvider>
       ) : (
-          <>
-            {proposalDetailData && (
-              <HeaderInfo proposalDetailData={proposalDetailData} proposalId={proposalId} />
-            )}
-            <VoteInfo proposalDetailData={proposalDetailData} daoId={daoId} />
+        <>
+          {proposalDetailData && (
+            <HeaderInfo proposalDetailData={proposalDetailData} proposalId={proposalId} />
+          )}
+          <VoteInfo proposalDetailData={proposalDetailData} daoId={daoId} />
 
-            <div className="border border-Neutral-Divider border-solid rounded-lg bg-white">
-              <ProposalTab proposalDetailData={proposalDetailData} />
-            </div>
+          <div className="border border-Neutral-Divider border-solid rounded-lg bg-white">
+            <ProposalTab proposalDetailData={proposalDetailData} />
+          </div>
 
-            <StatusInfo proposalDetailData={proposalDetailData} />
-            <VoteResultTable daoId={proposalDetailData.daoId} proposalId={proposalId} />
-            {proposalDetailData && (
-              <Discussion proposalId={proposalId} daoId={proposalDetailData?.daoId ?? ''} />
-            )}
-          </>
-        )}
+          <StatusInfo proposalDetailData={proposalDetailData} />
+          <VoteResultTable daoId={proposalDetailData.daoId} proposalId={proposalId} />
+          {proposalDetailData && (
+            <Discussion proposalId={proposalId} daoId={proposalDetailData?.daoId ?? ''} />
+          )}
+        </>
+      )}
     </div>
   );
 };
 
-const AnonymousProposalDetails = (props: IProposalDetailsProps & { proposalId: string; }) => {
-  const { commitmentHex, regenerateCommitment} = useCommitment();
+const AnonymousProposalDetails = (props: IProposalDetailsProps & { proposalId: string }) => {
+  const { commitmentHex, regenerateCommitment } = useCommitment();
   const { proposalDetailData: proposalDetailDataRaw } = props.ssrData;
   const { proposalId } = props;
   const proposalDetailData = ApplyAnonymousProposalRulesOnProposalDetail(proposalDetailDataRaw);
@@ -74,25 +74,26 @@ const AnonymousProposalDetails = (props: IProposalDetailsProps & { proposalId: s
   // Add this to debug the value
   console.log('commitmentHex:', commitmentHex);
 
-  return <>
-    {proposalDetailData && (
-      <HeaderInfo proposalDetailData={proposalDetailData} proposalId={proposalId} />
-    )}
+  return (
+    <>
+      {proposalDetailData && (
+        <HeaderInfo proposalDetailData={proposalDetailData} proposalId={proposalId} />
+      )}
 
-    <CommitmentInfo proposalId={proposalId} />
+      <CommitmentInfo proposalId={proposalId} />
 
-    <div>Commitment is: {commitmentHex?.toString() || 'Not available'}</div>
+      <div>Commitment is: {commitmentHex?.toString() || 'Not available'}</div>
 
-    <div className="border border-Neutral-Divider border-solid rounded-lg bg-white">
-      <ProposalTab proposalDetailData={proposalDetailData} />
-    </div>
+      <div className="border border-Neutral-Divider border-solid rounded-lg bg-white">
+        <ProposalTab proposalDetailData={proposalDetailData} />
+      </div>
 
-    <StatusInfo proposalDetailData={proposalDetailData} />
-    {proposalDetailData && (
-      <Discussion proposalId={proposalId} daoId={proposalDetailData?.daoId ?? ''} />
-    )}
-  </>
-}
-
+      <StatusInfo proposalDetailData={proposalDetailData} />
+      {proposalDetailData && (
+        <Discussion proposalId={proposalId} daoId={proposalDetailData?.daoId ?? ''} />
+      )}
+    </>
+  );
+};
 
 export default memo(ProposalDetails);

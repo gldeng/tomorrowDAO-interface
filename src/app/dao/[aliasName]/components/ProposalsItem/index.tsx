@@ -21,7 +21,6 @@ export interface IProposalsItemProps {
 }
 type TagColorKey = keyof typeof tagColorMap;
 
-
 export default function ProposalsItem(props: IProposalsItemProps) {
   const { data: dataRaw, governanceMechanism } = props;
   const { isLG } = useResponsive();
