@@ -12,6 +12,8 @@ import ErrorResult from 'components/ErrorResult';
 import breadCrumb from 'utils/breadCrumb';
 import Discussion from './components/Discussion';
 import { ApplyAnonymousProposalRulesOnProposalDetail } from 'utils/anonymousVoting';
+import CommitmentInfo from './components/CommitmentInfo';
+import { CommitmentProvider, useCommitment } from 'provider/CommitmentProvider';
 interface IProposalDetailsProps {
   ssrData: {
     proposalDetailData: IProposalDetailData;
@@ -38,7 +40,9 @@ const ProposalDetails = (props: IProposalDetailsProps) => {
       {!proposalDetailData.daoId ? (
         <ErrorResult />
       ) : proposalDetailData.isAnonymous ? (
-        <AnonymousProposalDetails ssrData={props.ssrData} proposalId={proposalId} />
+        <CommitmentProvider proposalId={proposalId}>
+          <AnonymousProposalDetails ssrData={props.ssrData} proposalId={proposalId} />
+        </CommitmentProvider>
       ) : (
           <>
             {proposalDetailData && (
@@ -62,14 +66,22 @@ const ProposalDetails = (props: IProposalDetailsProps) => {
 };
 
 const AnonymousProposalDetails = (props: IProposalDetailsProps & { proposalId: string; }) => {
+  const { commitmentHex, regenerateCommitment} = useCommitment();
   const { proposalDetailData: proposalDetailDataRaw } = props.ssrData;
   const { proposalId } = props;
   const proposalDetailData = ApplyAnonymousProposalRulesOnProposalDetail(proposalDetailDataRaw);
+
+  // Add this to debug the value
+  console.log('commitmentHex:', commitmentHex);
 
   return <>
     {proposalDetailData && (
       <HeaderInfo proposalDetailData={proposalDetailData} proposalId={proposalId} />
     )}
+
+    <CommitmentInfo proposalId={proposalId} />
+
+    <div>Commitment is: {commitmentHex?.toString() || 'Not available'}</div>
 
     <div className="border border-Neutral-Divider border-solid rounded-lg bg-white">
       <ProposalTab proposalDetailData={proposalDetailData} />
