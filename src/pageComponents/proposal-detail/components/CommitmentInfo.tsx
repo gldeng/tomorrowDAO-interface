@@ -1,15 +1,6 @@
-import { Typography, FontWeightEnum, Progress, Button, HashAddress } from 'aelf-design';
-import MyInfo from 'app/dao/[aliasName]/components/MyInfo';
-import BoxWrapper from './BoxWrapper';
-import { memo, useEffect, useMemo, useState } from 'react';
-import { EVoteMechanismNameType } from 'pageComponents/proposal-create/type';
-import { fetchDaoInfo } from 'api/request';
-import { curChain } from 'config';
+import { Button } from 'aelf-design';
+import { memo, useState } from 'react';
 import { message } from 'antd';
-import { useRequest } from 'ahooks';
-import { EDaoGovernanceMechanism } from 'app/(createADao)/create/type';
-import { useParams } from 'next/navigation';
-import { SkeletonLine } from 'components/Skeleton';
 import { useCommitment } from 'provider/CommitmentProvider';
 import { EyeOutlined, EyeInvisibleOutlined, CopyOutlined } from '@ant-design/icons';
 
