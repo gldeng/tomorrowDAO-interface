@@ -238,3 +238,20 @@ export const fetchTokenIssue = async (params: {
     ...params,
   });
 };
+
+export const fetchCommitments = async (params: {
+  proposalId: string;
+}): Promise<ICommitmentListRes> => {
+  return apiServer.post('/commitment/list', {
+    ...params,
+  });
+};
+
+export const fetchVoterCommitment = async (params: {
+  proposalId: string;
+  voter: string;
+}): Promise<ICommitmentDetailRes> => {
+  return apiServer.get('/commitment/detail', {
+    ...params,
+  });
+};

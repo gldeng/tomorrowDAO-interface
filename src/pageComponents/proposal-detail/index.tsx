@@ -82,8 +82,6 @@ const AnonymousProposalDetails = (props: IProposalDetailsProps & { proposalId: s
 
       <CommitmentInfo proposalId={proposalId} />
 
-      <div>Commitment is: {commitmentHex?.toString() || 'Not available'}</div>
-
       <div className="border border-Neutral-Divider border-solid rounded-lg bg-white">
         <ProposalTab proposalDetailData={proposalDetailData} />
       </div>

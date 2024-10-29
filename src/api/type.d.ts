@@ -804,3 +804,30 @@ interface ITreasuryRecordRes {
   };
   message: string;
 }
+
+// -------------------------------------anonymous-vote-commitment-record-----------------------------
+interface IAnonymousVoteCommitmentRecord {
+  transactionId: string;
+  blockHeight: number;
+  daoId: string;
+  proposalId: string;
+  voter: string;
+  commitment: string;
+  leafIndex: number;
+  timestamp: string;
+}
+
+interface ICommitmentListRes {
+  code: string;
+  data: {
+    totalCount: number;
+    items: IAnonymousVoteCommitmentRecord[];
+  };
+  message: string;
+}
+
+interface ICommitmentDetailRes {
+  code: string;
+  data: IAnonymousVoteCommitmentRecord;
+  message: string;
+}
