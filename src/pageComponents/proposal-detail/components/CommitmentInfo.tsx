@@ -126,8 +126,9 @@ const CommitmentInfo = (props: ICommitmentInfoProps) => {
       <div className="card-title mb-[24px]">Commitment</div>
 
       <div className="flex items-center gap-4">
+        <span className="text-Neutral-Secondary-Text card-sm-text">Hash:</span>
         <span className="card-sm-text-bold">
-          Hash: {getOmittedStr(commitmentRecord.commitmentHex ?? '', 10, 0)}
+          {getOmittedStr(commitmentRecord.commitmentHex ?? '', 10, 0)}
         </span>
 
         {submitted ? (
@@ -164,14 +165,29 @@ const CommitmentInfo = (props: ICommitmentInfoProps) => {
         {commitmentRecord.preimage !== '' ? (
           <>
             <div className="flex items-center gap-2 mb-2">
-              <span className="card-sm-text-bold">Secret Note:</span>
+              <span className="text-Neutral-Secondary-Text card-sm-text">Secret Note:</span>
               <button
                 onClick={() => setShowPreimage(!showPreimage)}
-                className="p-1 hover:bg-gray-100 rounded"
+                className="hover:text-gray-500 focus:outline-none"
+                style={{
+                  border: 'none',
+                  background: 'transparent',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
               >
                 {showPreimage ? <EyeInvisibleOutlined /> : <EyeOutlined />}
               </button>
-              <button onClick={handleCopyPreimage} className="p-1 hover:bg-gray-100 rounded">
+              <button
+                onClick={handleCopyPreimage}
+                className="hover:text-gray-500 focus:outline-none"
+                style={{
+                  border: 'none',
+                  background: 'transparent',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
                 <CopyOutlined />
               </button>
             </div>
@@ -179,7 +195,7 @@ const CommitmentInfo = (props: ICommitmentInfoProps) => {
           </>
         ) : (
           <div className="flex items-center gap-2">
-            <span className="card-sm-text-bold">Secret Note:</span>
+            <span className="text-Neutral-Secondary-Text card-sm-text">Secret Note:</span>
             <span className="text-gray-500">Not available on this device</span>
           </div>
         )}
