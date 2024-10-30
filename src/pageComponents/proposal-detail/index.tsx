@@ -72,9 +72,6 @@ const AnonymousProposalDetails = (props: IProposalDetailsProps & { proposalId: s
   const { proposalId } = props;
   const proposalDetailData = ApplyAnonymousProposalRulesOnProposalDetail(proposalDetailDataRaw);
 
-  // Add this to debug the value
-  console.log('commitmentHex:', commitmentHex);
-
   return (
     <>
       {proposalDetailData && (
