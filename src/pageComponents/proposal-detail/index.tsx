@@ -82,7 +82,7 @@ const AnonymousProposalDetails = (props: IProposalDetailsProps & { proposalId: s
       )}
 
       <CommitmentInfo proposalId={proposalId} />
-      <AnonymousVote proposalId={proposalId} canVote={true}/>
+      <AnonymousVote proposalId={proposalId} canVote={true} />
 
       <div className="border border-Neutral-Divider border-solid rounded-lg bg-white">
         <ProposalTab proposalDetailData={proposalDetailData} />
