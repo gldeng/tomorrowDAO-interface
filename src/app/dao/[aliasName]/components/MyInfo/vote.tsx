@@ -1,4 +1,4 @@
-import { Divider, Form, InputNumber, message } from 'antd';
+import { Divider, Form, InputNumber, Input, message } from 'antd';
 import { Button } from 'aelf-design';
 import { useState, useCallback } from 'react';
 import CommonModal from 'components/CommonModal';
@@ -17,6 +17,7 @@ import useAelfWebLoginSync from 'hooks/useAelfWebLoginSync';
 import { useWebLogin } from 'aelf-web-login';
 import { CommonOperationResultModalType } from 'components/CommonOperationResultModal';
 import { okButtonConfig } from 'components/ResultModal';
+import { useAnonymousVote } from 'hooks/useAnonymousVote';
 
 type TVoteTypes = {
   proposalId: string;
@@ -32,6 +33,10 @@ type TVoteTypes = {
 
 type TFieldType = {
   stakeAmount: number;
+};
+
+type TPreImageFieldType = {
+  preimage: string;
 };
 
 function Vote(props: TVoteTypes) {
@@ -52,9 +57,17 @@ function Vote(props: TVoteTypes) {
   const [currentMessage, setCurrentMessage] = useState('');
   const [showTokenBallotModal, setShowTokenBallotModal] = useState(false);
   const [showVoteModal, setShowVoteModal] = useState(false);
+  const [showAonymousPreimageModal, setShowAonymousPreimageModal] = useState(false);
+  const [preimageForm] = Form.useForm<{preimage: ""}>();
+  const {isAnonymousVoteInitialized, isAnonymous, cachedCommitment, cachedPreimage, prepareAnonymousVotingInput, setPreimage} = useAnonymousVote({ proposalId });
+
   const { wallet } = useWebLogin();
 
   const handlerModal = (voteType: number) => {
+    if(isAnonymous && cachedPreimage == null) {
+      setShowAonymousPreimageModal(true);
+      return;
+    }
     // if have voted, can't vote again
     if (votesAmount > 0) {
       message.info('You have already voted!');
@@ -86,7 +99,13 @@ function Vote(props: TVoteTypes) {
   const { isSyncQuery } = useAelfWebLoginSync();
 
   const handlerVote = useCallback(async () => {
-    const contractParams = {
+    if(isAnonymous && cachedPreimage == null) {
+      setPreimage(preimageForm.getFieldValue("preimage"));
+    }
+    const preimage = cachedPreimage ?? preimageForm.getFieldValue("preimage");
+    const anonymousVoteInput = isAnonymous ? await prepareAnonymousVotingInput(currentVoteType, preimage) : {};
+    console.log(anonymousVoteInput);
+    const contractParams = isAnonymous ? {...anonymousVoteInput, voteAmount: 0} : {
       votingItemId: proposalId,
       voteOption: currentVoteType,
       // if 1t1v vote, need to approve token
@@ -102,6 +121,7 @@ function Vote(props: TVoteTypes) {
       }
       setShowVoteModal(false);
       setShowTokenBallotModal(false);
+      setShowAonymousPreimageModal(false);
       emitLoading(true, 'The vote is being processed...');
       if (voteMechanismName === EVoteMechanismNameType.TokenBallot) {
         const allowance = await GetAllowanceByContract(
@@ -165,6 +185,10 @@ function Vote(props: TVoteTypes) {
     setShowVoteModal(false);
     form.setFieldValue('stakeAmount', 1);
   }, [
+    isAnonymous,
+    cachedPreimage,
+    preimageForm,
+    prepareAnonymousVotingInput,
     proposalId,
     currentVoteType,
     voteMechanismName,
@@ -176,7 +200,7 @@ function Vote(props: TVoteTypes) {
     wallet.address,
   ]);
 
-  return (
+  return !isAnonymousVoteInitialized ? <></> : (
     <div className={`flex justify-between gap-[16px] items-center ${className}`}>
       <Button
         type="primary"
@@ -208,6 +232,64 @@ function Vote(props: TVoteTypes) {
       >
         Abstain
       </Button>
+
+      {/* Anonymous Vote */}
+      <CommonModal
+        open={showAonymousPreimageModal}
+        destroyOnClose
+        title={<div className="text-center">{currentTitle}</div>}
+        onCancel={() => {
+          preimageForm.setFieldValue("preimage", "");
+          setShowAonymousPreimageModal(false);
+        }}
+      >
+        <Form
+          form={preimageForm}
+          layout="vertical"
+          variant="filled"
+          onFinish={() => handlerVote()}
+          className="mt-[10px] my-info-form"
+          requiredMark={false}
+        >
+          <Form.Item<TPreImageFieldType>
+            label="Secret Note"
+            name="preimage"
+            validateFirst
+            initialValue={1}
+            tooltip={`Please supply the secret note you have committed so that you can cast your vote.`}
+            rules={[
+              { required: true, message: 'Please input secret note' },
+              {
+                type: 'string',
+                message: 'Please input a valid string',
+              },
+              {
+                validator: (_, value) => {
+                  return new Promise<void>((resolve, reject) => {
+                    const hexPattern = /^0x[0-9a-fA-F]{124}$/;
+                    if (!hexPattern.test(value)) {
+                      reject('The input must be a hex string of length 126 including the 0x prefix');
+                    }
+                    resolve();
+                  });
+                },
+              },
+            ]}
+          >
+            <Input
+              className="w-full"
+              placeholder="Please input your value"
+              autoFocus
+            />
+          </Form.Item>
+          <div>
+            <Button className="mx-auto mt-[24px]" type="primary" htmlType="submit">
+              Vote
+            </Button>
+          </div>
+        </Form>
+      </CommonModal>
+
 
       {/* vote TokenBallot 1t1v Modal  */}
       <CommonModal

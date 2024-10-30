@@ -11,10 +11,10 @@ import { useParams } from 'next/navigation';
 import ErrorResult from 'components/ErrorResult';
 import breadCrumb from 'utils/breadCrumb';
 import Discussion from './components/Discussion';
-import { ApplyAnonymousProposalRulesOnProposalDetail } from 'utils/anonymousVoting';
+import { ApplyAnonymousProposalRulesOnProposalDetail, CheckAnonymousVotingInCommitmentStage } from 'utils/anonymousVoting';
 import CommitmentInfo from './components/CommitmentInfo';
 import { CommitmentProvider, useCommitment } from 'provider/CommitmentProvider';
-import AnonymousVote from './components/AnonymousVote';
+
 interface IProposalDetailsProps {
   ssrData: {
     proposalDetailData: IProposalDetailData;
@@ -38,12 +38,11 @@ const ProposalDetails = (props: IProposalDetailsProps) => {
 
   return (
     <div className="proposal-details-wrapper">
+      <CommitmentProvider proposalId={proposalId}>
       {!proposalDetailData.daoId ? (
         <ErrorResult />
-      ) : proposalDetailData.isAnonymous ? (
-        <CommitmentProvider proposalId={proposalId}>
-          <AnonymousProposalDetails ssrData={props.ssrData} proposalId={proposalId} />
-        </CommitmentProvider>
+      ) : CheckAnonymousVotingInCommitmentStage(proposalDetailData) ? (
+        <AnonymousProposalDetails ssrData={props.ssrData} proposalId={proposalId} />
       ) : (
         <>
           {proposalDetailData && (
@@ -62,6 +61,7 @@ const ProposalDetails = (props: IProposalDetailsProps) => {
           )}
         </>
       )}
+      </CommitmentProvider>
     </div>
   );
 };
@@ -79,7 +79,6 @@ const AnonymousProposalDetails = (props: IProposalDetailsProps & { proposalId: s
       )}
 
       <CommitmentInfo proposalId={proposalId} />
-      <AnonymousVote proposalId={proposalId} canVote={true} />
 
       <div className="border border-Neutral-Divider border-solid rounded-lg bg-white">
         <ProposalTab proposalDetailData={proposalDetailData} />

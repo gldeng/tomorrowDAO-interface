@@ -29,14 +29,14 @@ export const CommitmentProvider = ({ proposalId, children }: CommitmentProviderP
     console.log(res.preimage, res.commitmentHex);
   };
 
-  useEffect(() => {
-    if (!wallet?.address) return;
+  // useEffect(() => {
+  //   if (!wallet?.address) return;
 
-    const existingPreimage = localStorage.getItem(storageKey);
-    if (existingPreimage) return;
+  //   const existingPreimage = localStorage.getItem(storageKey);
+  //   if (existingPreimage) return;
 
-    generateAndStore();
-  }, [proposalId, wallet?.address, storageKey]);
+  //   generateAndStore();
+  // }, [proposalId, wallet?.address, storageKey]);
 
   const value = useMemo(() => {
     const stored = localStorage.getItem(storageKey);

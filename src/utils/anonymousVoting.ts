@@ -1,5 +1,10 @@
 import { AllProposalStageString, AllProposalStatusString } from 'types';
 
+export function CheckAnonymousVotingInCommitmentStage(data: IProposalDetailData): boolean {
+  const newStatus = NewStatus(data);
+  return newStatus == AllProposalStatusString.PendingCommitment;
+}
+
 export function ApplyAnonymousProposalRules(data: IProposalsItem): IProposalsItem {
   const newStatus = NewStatus(data);
   if (newStatus) {
