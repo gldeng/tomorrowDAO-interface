@@ -151,8 +151,8 @@ const AnonymousVote = (props: IAnonymousVoteProps) => {
     console.log('Start generating SNARK proof', input);
     console.time('SNARK proof time');
 
-    if (window.genZKSnarkProofAndWitness) {
-      return await window.genZKSnarkProofAndWitness(input, circuit, provingKey);
+    if ((window as any).genZKSnarkProofAndWitness) {
+      return await (window as any).genZKSnarkProofAndWitness(input, circuit, provingKey);
     }
   };
 
