@@ -90,9 +90,7 @@
     "remark-gfm": "^4.0.0",
     "remark-math": "^6.0.0",
     "round-to": "^4.1.0",
-    "snarkjs": "git+https://github.com/peppersec/snarkjs.git#869181cfaf7526fe8972073d31655493a04326d5",
     "socket.io-client": "^2.2.0",
-    "websnark": "git+https://github.com/tornadocash/websnark.git#4c0af6a8b65aabea3c09f377f63c44e7a58afa6d",
     "xstate": "^5.7.1"
   },
   "devDependencies": {
