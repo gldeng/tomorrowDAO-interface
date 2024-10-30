@@ -14,6 +14,7 @@ import Discussion from './components/Discussion';
 import { ApplyAnonymousProposalRulesOnProposalDetail } from 'utils/anonymousVoting';
 import CommitmentInfo from './components/CommitmentInfo';
 import { CommitmentProvider, useCommitment } from 'provider/CommitmentProvider';
+import AnonymousVote from './components/AnonymousVote';
 interface IProposalDetailsProps {
   ssrData: {
     proposalDetailData: IProposalDetailData;
@@ -81,6 +82,7 @@ const AnonymousProposalDetails = (props: IProposalDetailsProps & { proposalId: s
       )}
 
       <CommitmentInfo proposalId={proposalId} />
+      <AnonymousVote proposalId={proposalId} canVote={true}/>
 
       <div className="border border-Neutral-Divider border-solid rounded-lg bg-white">
         <ProposalTab proposalDetailData={proposalDetailData} />

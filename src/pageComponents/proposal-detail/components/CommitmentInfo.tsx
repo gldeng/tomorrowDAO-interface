@@ -71,12 +71,12 @@ const CommitmentInfo = (props: ICommitmentInfoProps) => {
 
   const commitmentRecord: { commitmentHex: string; preimage: string } = (() => {
     const hasCommitmentData =
-      commitmentsData?.data.commitment != null && commitmentsData.data.commitment != '';
-    const onChainCommitment = '0x' + commitmentsData?.data.commitment ?? '';
+      commitmentsData?.data?.commitment != null && commitmentsData.data.commitment != '';
+    const onChainCommitment = '0x' + commitmentsData?.data?.commitment ?? '';
     if (hasCommitmentData && onChainCommitment == commitmentHex) {
-      return { commitmentHex: commitmentHex ?? '', preimage: preimage ?? '' };
+      return { commitmentHex: onChainCommitment, preimage: preimage ?? '' };
     } else {
-      return { commitmentHex: onChainCommitment, preimage: '' };
+      return { commitmentHex: commitmentHex ?? '', preimage: preimage ?? '' };
     }
   })();
 

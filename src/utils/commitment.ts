@@ -40,7 +40,8 @@ function calculateHash(mimc: any, left: any, right: any) {
 }
 
 export function leInt2Buff(value: Buffer) {
-  return BigNumber.from('0x' + value.toString('hex'));
+  const bigEndianBuffer = Buffer.from(value).reverse();
+  return BigNumber.from('0x' + bigEndianBuffer.toString('hex'));
 }
 
 export function randomBN(nbytes = 31) {

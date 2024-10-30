@@ -241,6 +241,7 @@ export const fetchTokenIssue = async (params: {
 
 export const fetchCommitments = async (params: {
   proposalId: string;
+  skipCount?: number;
 }): Promise<ICommitmentListRes> => {
   return apiServer.post('/commitment/list', {
     ...params,
