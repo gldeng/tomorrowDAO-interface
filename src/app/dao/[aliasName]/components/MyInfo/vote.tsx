@@ -208,7 +208,7 @@ function Vote(props: TVoteTypes) {
         millisecondOfDebounce={1000}
         className="approve-button flex-1"
         onClick={() => handlerModal(EVoteOption.APPROVED)}
-        disabled={!canVote}
+        disabled={!canVote && !isAnonymous}
       >
         Approve
       </Button>
@@ -218,7 +218,7 @@ function Vote(props: TVoteTypes) {
         className="reject-button flex-1"
         millisecondOfDebounce={1000}
         onClick={() => handlerModal(EVoteOption.REJECTED)}
-        disabled={!canVote}
+        disabled={!canVote && !isAnonymous}
       >
         Reject
       </Button>
@@ -228,7 +228,7 @@ function Vote(props: TVoteTypes) {
         millisecondOfDebounce={1000}
         className="abstention-button flex-1"
         onClick={() => handlerModal(EVoteOption.ABSTAINED)}
-        disabled={!canVote}
+        disabled={!canVote && !isAnonymous}
       >
         Abstain
       </Button>
