@@ -171,11 +171,18 @@ export const useAnonymousVote = ({ proposalId }: { proposalId: string }) => {
             console.error('Failed to produce proof.');
         }
 
+        const leftPad = (str: string, len: number) => {
+            while (str.length < len) {
+                str = '0' + str;
+            }
+            return str;
+        };
+
         const contractParams = {
             votingItemId: proposalId,
             voteOption: optionVotingFor,
             anonymousVoteExtraInfo: {
-                nullifier: '0x' + note.nullifierHash.toString(16),
+                nullifier: '0x' + leftPad(note.nullifierHash.toString(16), 64),
                 proof: {
                     a: {
                         x: proof.pi_a[0],
