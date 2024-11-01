@@ -45,6 +45,7 @@ interface TNote {
     nullifier: bigint;
     secret: bigint;
     nullifierHash: bigint;
+    commitment: bigint;
 }
 
 
@@ -53,17 +54,17 @@ const parseNote = (preimage: string): TNote => {
     const nullifier = BigInt(leInt2Buff(preimageBuffer.subarray(0, 31)).toString());
     const secret = BigInt(leInt2Buff(preimageBuffer.subarray(31, 62)).toString());
     const nullifierHash = BigInt(buffPedersenHash(preimageBuffer.subarray(0, 31)) ?? 0);
-    return { nullifier, secret, nullifierHash };
+    const commitment = BigInt(buffPedersenHash(preimageBuffer) ?? 0);
+    return { nullifier, secret, nullifierHash, commitment };
 };
 
 export const useAnonymousVote = ({ proposalId }: { proposalId: string }) => {
     const [merkleRoot, setMerkleRoot] = useState<string>();
-    const [tree, setMerkleTree] = useState<MerkleTree | null>(null);
+    const [merkleTree, setMerkleTree] = useState<MerkleTree | null>(null);
     const [scriptReady, setScriptReady] = useState(false);
     const { wallet } = useWebLogin();
     const { commitmentHex: cachedCommitment, preimage: cachedPreimage } = useCommitment();
     const [preimage, setPreimage] = useState(cachedPreimage);
-    const [proofPath, setProofPath] = useState<ProofPath | null>(null);
     const [isAnonymous, setIsAnonymous] = useState(false);
     const [isAnonymousVoteInitialized, setIsAnonymousVoteInitialized] = useState(false);
 
@@ -131,13 +132,12 @@ export const useAnonymousVote = ({ proposalId }: { proposalId: string }) => {
         // TODO: Make sure `_tree.root` is equal to `merkleRoot`
         const myCommitment = await fetchVoterCommitment({ proposalId, voter: wallet.address });
 
-        if (myCommitment?.data) {
-            const proofPath = _tree.path(myCommitment.data.leafIndex);
-            setProofPath(proofPath);
-        }
     }, [wallet?.address, isAnonymous]);
 
     const produceProof = async (voteOption: number, note: TNote) => {
+        if (!merkleTree) throw new Error('Merkle tree not found');
+        const index = merkleTree.indexOf(note.commitment.toString());
+        const proofPath = merkleTree.path(index);
         const input = {
             fee: BigInt(0),
             root: BigInt(`0x${merkleRoot}`),
@@ -145,8 +145,8 @@ export const useAnonymousVote = ({ proposalId }: { proposalId: string }) => {
             relayer: BigInt(0),
             recipient: BigInt(voteOption),
             nullifierHash: note.nullifierHash,
-            pathIndices: proofPath!.pathIndices,
-            pathElements: proofPath!.pathElements,
+            pathIndices: proofPath.pathIndices,
+            pathElements: proofPath.pathElements,
             secret: note.secret,
             nullifier: note.nullifier,
         };
