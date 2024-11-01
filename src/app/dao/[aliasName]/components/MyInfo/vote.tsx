@@ -64,12 +64,8 @@ function Vote(props: TVoteTypes) {
   const { wallet } = useWebLogin();
 
   const handlerModal = (voteType: number) => {
-    if(isAnonymous && cachedPreimage == null) {
-      setShowAonymousPreimageModal(true);
-      return;
-    }
     // if have voted, can't vote again
-    if (votesAmount > 0) {
+    if (!isAnonymous && votesAmount > 0) {
       message.info('You have already voted!');
       return;
     }
@@ -89,6 +85,10 @@ function Vote(props: TVoteTypes) {
         break;
       default:
         break;
+    }
+    if(isAnonymous && cachedPreimage == null) {
+      setShowAonymousPreimageModal(true);
+      return;
     }
     if (voteMechanismName === EVoteMechanismNameType.TokenBallot) {
       setShowTokenBallotModal(true);
