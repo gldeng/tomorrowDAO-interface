@@ -9,6 +9,7 @@ export const aelfWebLoginNetworkType = 'TESTNET';
 export const rpcUrlAELF = 'https://explorer-test.aelf.io/chain';
 export const rpcUrlTDVV = 'https://explorer-test-side02.aelf.io/chain';
 export const rpcUrlTDVW = 'https://explorer-test-side02.aelf.io/chain';
+export const txRelayerUrl = 'https://localhost:44376';
 export const connectServer = 'https://auth-portkey-test.portkey.finance';
 export const graphqlServer =
   'https://dapp-aa-portkey-test.portkey.finance/Portkey_V2_DID/PortKeyIndexerCASchema/graphql';

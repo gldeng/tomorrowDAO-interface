@@ -59,7 +59,7 @@ function Vote(props: TVoteTypes) {
   const [showVoteModal, setShowVoteModal] = useState(false);
   const [showAonymousPreimageModal, setShowAonymousPreimageModal] = useState(false);
   const [preimageForm] = Form.useForm<{preimage: ""}>();
-  const {isAnonymousVoteInitialized, isAnonymous, cachedCommitment, cachedPreimage, prepareAnonymousVotingInput, setPreimage} = useAnonymousVote({ proposalId });
+  const {isAnonymousVoteInitialized, isAnonymous, cachedCommitment, cachedPreimage, castAnonymousVote, prepareAnonymousVotingInput, setPreimage} = useAnonymousVote({ proposalId });
 
   const { wallet } = useWebLogin();
 
@@ -103,59 +103,65 @@ function Vote(props: TVoteTypes) {
       setPreimage(preimageForm.getFieldValue("preimage"));
     }
     const preimage = cachedPreimage ?? preimageForm.getFieldValue("preimage");
-    const anonymousVoteInput = isAnonymous ? await prepareAnonymousVotingInput(currentVoteType, preimage) : {};
-    console.log(anonymousVoteInput);
-    const contractParams = isAnonymous ? {...anonymousVoteInput, voteAmount: 0} : {
-      votingItemId: proposalId,
-      voteOption: currentVoteType,
-      // if 1t1v vote, need to approve token
-      // elf decimals 8
-      voteAmount:
-        voteMechanismName === EVoteMechanismNameType.TokenBallot
-          ? timesDecimals(form.getFieldValue('stakeAmount'), decimal ?? '8').toNumber()
-          : 1,
-    };
     try {
-      if (!isSyncQuery()) {
-        return;
-      }
       setShowVoteModal(false);
       setShowTokenBallotModal(false);
       setShowAonymousPreimageModal(false);
-      emitLoading(true, 'The vote is being processed...');
-      if (voteMechanismName === EVoteMechanismNameType.TokenBallot) {
-        const allowance = await GetAllowanceByContract(
-          {
-            spender: voteAddress || '',
-            symbol: symbol || 'ELF',
-            owner: wallet.address,
-          },
-          {
-            chain: curChain,
-          },
-        );
-        if (allowance.error) {
-          message.error(allowance.errorMessage?.message || 'unknown error');
+      let result = null;
+      if(isAnonymous) {
+        emitLoading(true, 'The vote is being processed...');
+        result = await castAnonymousVote(currentVoteType, preimage);
+        emitLoading(false);
+      } else {
+        const contractParams = {
+          votingItemId: proposalId,
+          voteOption: currentVoteType,
+          // if 1t1v vote, need to approve token
+          // elf decimals 8
+          voteAmount:
+            voteMechanismName === EVoteMechanismNameType.TokenBallot
+              ? timesDecimals(form.getFieldValue('stakeAmount'), decimal ?? '8').toNumber()
+              : 1,
+        };
+        if (!isSyncQuery()) {
+          return;
         }
-        const bigA = BigNumber(contractParams.voteAmount);
-        const allowanceBN = BigNumber(allowance?.allowance);
-        if (allowanceBN.lt(bigA)) {
-          const approveRes = await ApproveByContract(
+        emitLoading(true, 'The vote is being processed...');
+        if (voteMechanismName === EVoteMechanismNameType.TokenBallot) {
+          const allowance = await GetAllowanceByContract(
             {
-              spender: voteAddress,
+              spender: voteAddress || '',
               symbol: symbol || 'ELF',
-              amount: contractParams.voteAmount,
+              owner: wallet.address,
             },
             {
               chain: curChain,
             },
           );
-          console.log('token approve finish', approveRes);
+          if (allowance.error) {
+            message.error(allowance.errorMessage?.message || 'unknown error');
+          }
+          const bigA = BigNumber(contractParams.voteAmount);
+          const allowanceBN = BigNumber(allowance?.allowance);
+          if (allowanceBN.lt(bigA)) {
+            const approveRes = await ApproveByContract(
+              {
+                spender: voteAddress,
+                symbol: symbol || 'ELF',
+                amount: contractParams.voteAmount,
+              },
+              {
+                chain: curChain,
+              },
+            );
+            console.log('token approve finish', approveRes);
+          }
         }
+  
+        result = await callContract('Vote', contractParams, voteAddress);
+        emitLoading(false);
       }
 
-      const result = await callContract('Vote', contractParams, voteAddress);
-      emitLoading(false);
       eventBus.emit(ResultModal, {
         open: true,
         type: CommonOperationResultModalType.Success,

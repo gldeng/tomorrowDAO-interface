@@ -1,5 +1,5 @@
 import { useAsyncEffect } from 'ahooks';
-import { fetchCommitments, fetchProposalDetail, fetchVoterCommitment } from 'api/request';
+import { fetchCommitments, fetchProposalDetail, fetchVoterCommitment, sendAnonymousTx } from 'api/request';
 import { curChain, voteAddress } from 'config';
 import { callContract, callViewContract } from 'contract/callContract';
 import MerkleTree, { ProofPath } from 'fixed-merkle-tree';
@@ -161,6 +161,38 @@ export const useAnonymousVote = ({ proposalId }: { proposalId: string }) => {
         }
     };
 
+    const castAnonymousVote = async (optionVotingFor: EVoteOption, newPreimage?: string) => {
+        const note = parseNote(newPreimage ?? preimage ?? "");
+        const proof = await produceProof(optionVotingFor, note);
+        if (!proof) {
+            console.error('Failed to produce proof.');
+        }
+        const leftPad = (str: string, len: number) => {
+            while (str.length < len) {
+                str = '0' + str;
+            }
+            return str;
+        };
+        const result = await sendAnonymousTx({
+            chainName: curChain,
+            contractAddress: voteAddress,
+            voteDetails: {
+                votingItemId: proposalId,
+                voteOption: optionVotingFor,
+                voteAmount: 0,
+                nullifierHash: '0x' + leftPad(note.nullifierHash.toString(16), 64),
+                proof: {
+                    piA: proof.pi_a,
+                    piB: proof.pi_b,
+                    piC: proof.pi_c,
+                },
+            },
+        });
+
+        return result;
+    }
+
+    // TODO: Remove this function
     const prepareAnonymousVotingInput = async (optionVotingFor: EVoteOption, newPreimage?: string) => {
         if(!preimage && !newPreimage) {
             throw "preimage is not found";
@@ -214,6 +246,7 @@ export const useAnonymousVote = ({ proposalId }: { proposalId: string }) => {
         cachedCommitment,
         cachedPreimage,
         scriptReady,
+        castAnonymousVote,
         prepareAnonymousVotingInput,
         setPreimage
     };

@@ -831,3 +831,23 @@ interface ICommitmentDetailRes {
   data: IAnonymousVoteCommitmentRecord;
   message: string;
 }
+
+interface IProof {
+  piA: [string, string, string];
+  piB: [[string, string], [string, string], [string, string]];
+  piC: [string, string, string];
+}
+
+interface IVoteDetails {
+  votingItemId: string;
+  voteOption: number;
+  voteAmount: number;
+  nullifierHash: string;
+  proof: IProof;
+}
+
+interface IVotingData {
+  chainName: string;
+  contractAddress: string;
+  voteDetails: IVoteDetails;
+}

@@ -1,10 +1,17 @@
 import { stringify } from 'query-string';
-import { apiServer, explorerServer, tokenServer } from './axios';
+import { apiServer, explorerServer, tokenServer, txRelayer } from './axios';
 import { EDaoGovernanceMechanism } from 'app/(createADao)/create/type';
 import { tokenIssueUrl } from './url/tmrw';
+import { TransactionResult } from '@portkey/types';
 export * from './api-wrap/telegram';
 
 export * from './network-dao/api';
+
+export const sendAnonymousTx = async (params: IVotingData): Promise<TransactionResult> => {
+  return txRelayer.post('/relayVoteTx', {
+    ...params,
+  });
+};
 
 export const fetchToken = async (data: ITokenParams) => {
   return tokenServer.post<string, ITokenRes>('/connect/token', stringify(data), {

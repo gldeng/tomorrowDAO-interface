@@ -3,6 +3,7 @@ import { message } from 'antd';
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { apiServer } from './request/api-server';
 import { tokenServer } from './request/token-server';
+import { txRelayer } from './request/tx-relayer';
 
 const explorerUrlList = ['explorer-api', 'side-explorer-api', 'token-price-api'];
 interface ResponseType<T> {
@@ -129,4 +130,4 @@ const explorerServer = new Request({
 });
 const req = new Request({});
 export default req;
-export { apiServer, explorerServer, tokenServer };
+export { apiServer, explorerServer, tokenServer, txRelayer };
