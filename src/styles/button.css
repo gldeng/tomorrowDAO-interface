@@ -26,3 +26,13 @@
       @apply !text-white !bg-[#5D6579] border-[#5D6579];
     }
   }
+
+  .commitment-info-button {
+    border: none;
+    background: transparent;
+    display: flex;
+    align-items: center;
+  }
+  .disabledInput {
+    color: rgba(0, 0, 0, 0.85);
+  }

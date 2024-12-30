@@ -168,25 +168,13 @@ const CommitmentInfo = (props: ICommitmentInfoProps) => {
               <span className="text-Neutral-Secondary-Text card-sm-text">Secret Note:</span>
               <button
                 onClick={() => setShowPreimage(!showPreimage)}
-                className="hover:text-gray-500 focus:outline-none"
-                style={{
-                  border: 'none',
-                  background: 'transparent',
-                  display: 'flex',
-                  alignItems: 'center',
-                }}
+                className="hover:text-gray-500 focus:outline-none commitment-info-button"
               >
                 {showPreimage ? <EyeInvisibleOutlined /> : <EyeOutlined />}
               </button>
               <button
                 onClick={handleCopyPreimage}
-                className="hover:text-gray-500 focus:outline-none"
-                style={{
-                  border: 'none',
-                  background: 'transparent',
-                  display: 'flex',
-                  alignItems: 'center',
-                }}
+                className="hover:text-gray-500 focus:outline-none commitment-info-button"
               >
                 <CopyOutlined />
               </button>

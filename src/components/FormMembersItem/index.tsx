@@ -92,9 +92,9 @@ function FormMembersItem(props: IFormMembersProps) {
                         {
                           validator: (_, value) => {
                             return new Promise<void>((resolve, reject) => {
-                              if (value.endsWith(`AELF`)) {
-                                reject(new Error('Must be a SideChain address'));
-                              }
+                              // if (value.endsWith(`AELF`)) {
+                              //   reject(new Error('Must be a SideChain address'));
+                              // }
                               if (!value.startsWith(`ELF`) || !value.endsWith(curChain)) {
                                 reject(new Error('Must be a valid address'));
                               }

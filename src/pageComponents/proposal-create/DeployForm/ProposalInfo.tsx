@@ -313,7 +313,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
           <Input
             value={anonymousVotingStartTimeString}
             disabled
-            style={{ color: 'rgba(0, 0, 0, 0.85)' }}
+            className="disabledInput"
           />
         </Form.Item>
       )}

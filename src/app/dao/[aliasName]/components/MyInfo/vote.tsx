@@ -58,8 +58,16 @@ function Vote(props: TVoteTypes) {
   const [showTokenBallotModal, setShowTokenBallotModal] = useState(false);
   const [showVoteModal, setShowVoteModal] = useState(false);
   const [showAonymousPreimageModal, setShowAonymousPreimageModal] = useState(false);
-  const [preimageForm] = Form.useForm<{preimage: ""}>();
-  const {isAnonymousVoteInitialized, isAnonymous, cachedCommitment, cachedPreimage, castAnonymousVote, prepareAnonymousVotingInput, setPreimage} = useAnonymousVote({ proposalId });
+  const [preimageForm] = Form.useForm<{ preimage: '' }>();
+  const {
+    isAnonymousVoteInitialized,
+    isAnonymous,
+    cachedCommitment,
+    cachedPreimage,
+    castAnonymousVote,
+    prepareAnonymousVotingInput,
+    setPreimage,
+  } = useAnonymousVote({ proposalId });
 
   const { wallet } = useWebLogin();
 
@@ -86,7 +94,7 @@ function Vote(props: TVoteTypes) {
       default:
         break;
     }
-    if(isAnonymous && cachedPreimage == null) {
+    if (isAnonymous && cachedPreimage == null) {
       setShowAonymousPreimageModal(true);
       return;
     }
@@ -99,16 +107,16 @@ function Vote(props: TVoteTypes) {
   const { isSyncQuery } = useAelfWebLoginSync();
 
   const handlerVote = useCallback(async () => {
-    if(isAnonymous && cachedPreimage == null) {
-      setPreimage(preimageForm.getFieldValue("preimage"));
+    if (isAnonymous && cachedPreimage == null) {
+      setPreimage(preimageForm.getFieldValue('preimage'));
     }
-    const preimage = cachedPreimage ?? preimageForm.getFieldValue("preimage");
+    const preimage = cachedPreimage ?? preimageForm.getFieldValue('preimage');
     try {
       setShowVoteModal(false);
       setShowTokenBallotModal(false);
       setShowAonymousPreimageModal(false);
       let result = null;
-      if(isAnonymous) {
+      if (isAnonymous) {
         emitLoading(true, 'The vote is being processed...');
         result = await castAnonymousVote(currentVoteType, preimage);
         emitLoading(false);
@@ -157,7 +165,7 @@ function Vote(props: TVoteTypes) {
             console.log('token approve finish', approveRes);
           }
         }
-  
+
         result = await callContract('Vote', contractParams, voteAddress);
         emitLoading(false);
       }
@@ -206,7 +214,9 @@ function Vote(props: TVoteTypes) {
     wallet.address,
   ]);
 
-  return !isAnonymousVoteInitialized ? <></> : (
+  return !isAnonymousVoteInitialized ? (
+    <></>
+  ) : (
     <div className={`flex justify-between gap-[16px] items-center ${className}`}>
       <Button
         type="primary"
@@ -245,7 +255,7 @@ function Vote(props: TVoteTypes) {
         destroyOnClose
         title={<div className="text-center">{currentTitle}</div>}
         onCancel={() => {
-          preimageForm.setFieldValue("preimage", "");
+          preimageForm.setFieldValue('preimage', '');
           setShowAonymousPreimageModal(false);
         }}
       >
@@ -274,7 +284,9 @@ function Vote(props: TVoteTypes) {
                   return new Promise<void>((resolve, reject) => {
                     const hexPattern = /^0x[0-9a-fA-F]{124}$/;
                     if (!hexPattern.test(value)) {
-                      reject('The input must be a hex string of length 126 including the 0x prefix');
+                      reject(
+                        'The input must be a hex string of length 126 including the 0x prefix',
+                      );
                     }
                     resolve();
                   });
@@ -282,11 +294,7 @@ function Vote(props: TVoteTypes) {
               },
             ]}
           >
-            <Input
-              className="w-full"
-              placeholder="Please input your value"
-              autoFocus
-            />
+            <Input className="w-full" placeholder="Please input your value" autoFocus />
           </Form.Item>
           <div>
             <Button className="mx-auto mt-[24px]" type="primary" htmlType="submit">
@@ -295,7 +303,6 @@ function Vote(props: TVoteTypes) {
           </div>
         </Form>
       </CommonModal>
-
 
       {/* vote TokenBallot 1t1v Modal  */}
       <CommonModal

@@ -1,34 +1,38 @@
-// static config for disable label value
-export const electionContractAddress = '2akycoQt8nYSQbarup4tTJYxQ4SzdKbwBfBCcCF9yqWYtMXt9j';
+// Load environment variables from .env file
+import dotenv from 'dotenv';
+dotenv.config();
+
+// static config for disable label value todo...
+export const electionContractAddress = 'ugE15RDZs36kutC5yLdR2iGC2D7o5WFW98vDvJ76FJcYDKCbz';
 // for network-dao treasury account
-export const treasuryAccountAddress = 'KNdM6U6PyPsgyena8rPHTbCoMrkrALhxAy1b8Qx2cgi4169xr';
+export const treasuryAccountAddress = '7VdDpXgZd7PDQf4vRSZMy6nLukAviDAyHDs87o7ZUM9FbQQsA';
 
 // ------------------aelf-web-login-start------------------------
 export const networkType = 'TESTNET';
 export const aelfWebLoginNetworkType = 'TESTNET';
-export const rpcUrlAELF = 'https://explorer-test.aelf.io/chain';
-export const rpcUrlTDVV = 'https://explorer-test-side02.aelf.io/chain';
-export const rpcUrlTDVW = 'https://explorer-test-side02.aelf.io/chain';
-export const txRelayerUrl = 'https://localhost:44376';
+export const rpcUrlAELF = process.env.NEXT_PUBLIC_RPC_URL_AELF;
+export const rpcUrlTDVV = process.env.NEXT_PUBLIC_RPC_URL_TDVV;
+export const rpcUrlTDVW = process.env.NEXT_PUBLIC_RPC_URL_TDVW;
+export const txRelayerUrl = process.env.NEXT_PUBLIC_TX_RELAYER_URL;
 export const connectServer = 'https://auth-portkey-test.portkey.finance';
 export const graphqlServer =
-  'https://dapp-aa-portkey-test.portkey.finance/Portkey_V2_DID/PortKeyIndexerCASchema/graphql';
+  'http://35.232.58.162:34183/tomorrowdao_indexer/d736f750b23746beae11d22e1e0ff78a/graphq';
 export const portkeyServer = 'https://aa-portkey-test.portkey.finance';
 export const connectUrl = 'https://auth-aa-portkey-test.portkey.finance';
 
 export const TELEGRAM_BOT_ID = '7190916077';
 // ------------------aelf-web-login-end------------------------
 
-export const curChain = 'tDVW';
+export const curChain = 'AELF';
 // system contract： token contract address
 export const mainChainAddress = 'JRmBduh4nXWi1aXgdUsj5gJrzeZb2LxmrAbf7W99faZSvoAaE';
 export const sideChainAddress = 'ASh2Wt7nSEmYqnGxPPzp4pnVDU4uhj1XW9Se5VeZcX2UDdyjx';
 export const sideChainCAContractAddress = '238X6iw1j8YKcHvkDYVtYVbuYk2gJnK8UoNpVCtssynSpVC8hb';
 // tmrw contract: biz contract
-export const daoAddress = 'RRF7deQbmicUh6CZ1R2y7U9M8n2eHPyCgXVHwiSkmNETLbL4D';
-export const propalAddress = '2sJ8MDufVDR3V8fDhBPUKMdP84CUf1oJroi9p8Er1yRvMp3fq7';
-export const voteAddress = '2LpoLYNPAnjiBUozyYwcfaeekxRFehjt6hDR78VKgk47UwkvAv';
-export const treasuryContractAddress = '3FdTVXDuBMVAsXJ598aTm3GifQQey5ahFsonjhanTLs4qnukT';
+export const daoAddress = 'defdwNRez3U8WpdVE73p6xuiixeYYJ9hn9ZS5GMSpTHbJ2omt';
+export const propalAddress = 'j5c9dv4ird82fbcBiaHvBys4m3qZFaYnxPKUgDpkhc7nsbvaa';
+export const voteAddress = 'NCi6nskU1A3QTNxcxgo1rnrrtkhVh56jXqj4m2T6uXs5hjsSF';
+export const treasuryContractAddress = '7VdDpXgZd7PDQf4vRSZMy6nLukAviDAyHDs87o7ZUM9FbQQsA';
 // explorer config
 export const explorer = 'https://testnet.aelfscan.io/tDVW';
 export const mainExplorer = 'https://testnet.aelfscan.io/AELF';
@@ -50,10 +54,6 @@ export const chainIdSelect = [
     value: 'AELF',
     label: 'MainChain AELF',
   },
-  {
-    value: 'tDVW',
-    label: 'SideChain tDVW',
-  },
 ];
 
 // network-dao
@@ -66,4 +66,7 @@ export const host = 'https://test.tmrwdao.com';
 export const nftSymbol = 'TOMORROWPASSTEST-1';
 
 // api
-export const apiServerBase = 'https://test-api.tmrwdao.com';
+export const apiServerBase = process.env.NEXT_PUBLIC_API_SERVER_BASE;
+
+console.log('NEXT_PUBLIC_RPC_URL_AELF:', process.env.NEXT_PUBLIC_RPC_URL_AELF);
+console.log('NEXT_PUBLIC_RPC_URL_TDVV:', process.env.NEXT_PUBLIC_RPC_URL_TDVV);

@@ -11,7 +11,10 @@ import { useParams } from 'next/navigation';
 import ErrorResult from 'components/ErrorResult';
 import breadCrumb from 'utils/breadCrumb';
 import Discussion from './components/Discussion';
-import { ApplyAnonymousProposalRulesOnProposalDetail, CheckAnonymousVotingInCommitmentStage } from 'utils/anonymousVoting';
+import {
+  ApplyAnonymousProposalRulesOnProposalDetail,
+  CheckAnonymousVotingInCommitmentStage,
+} from 'utils/anonymousVoting';
 import CommitmentInfo from './components/CommitmentInfo';
 import { CommitmentProvider, useCommitment } from 'provider/CommitmentProvider';
 
@@ -39,28 +42,28 @@ const ProposalDetails = (props: IProposalDetailsProps) => {
   return (
     <div className="proposal-details-wrapper">
       <CommitmentProvider proposalId={proposalId}>
-      {!proposalDetailData.daoId ? (
-        <ErrorResult />
-      ) : CheckAnonymousVotingInCommitmentStage(proposalDetailData) ? (
-        <AnonymousProposalDetails ssrData={props.ssrData} proposalId={proposalId} />
-      ) : (
-        <>
-          {proposalDetailData && (
-            <HeaderInfo proposalDetailData={proposalDetailData} proposalId={proposalId} />
-          )}
-          <VoteInfo proposalDetailData={proposalDetailData} daoId={daoId} />
+        {!proposalDetailData.daoId ? (
+          <ErrorResult />
+        ) : CheckAnonymousVotingInCommitmentStage(proposalDetailData) ? (
+          <AnonymousProposalDetails ssrData={props.ssrData} proposalId={proposalId} />
+        ) : (
+          <>
+            {proposalDetailData && (
+              <HeaderInfo proposalDetailData={proposalDetailData} proposalId={proposalId} />
+            )}
+            <VoteInfo proposalDetailData={proposalDetailData} daoId={daoId} />
 
-          <div className="border border-Neutral-Divider border-solid rounded-lg bg-white">
-            <ProposalTab proposalDetailData={proposalDetailData} />
-          </div>
+            <div className="border border-Neutral-Divider border-solid rounded-lg bg-white">
+              <ProposalTab proposalDetailData={proposalDetailData} />
+            </div>
 
-          <StatusInfo proposalDetailData={proposalDetailData} />
-          <VoteResultTable daoId={proposalDetailData.daoId} proposalId={proposalId} />
-          {proposalDetailData && (
-            <Discussion proposalId={proposalId} daoId={proposalDetailData?.daoId ?? ''} />
-          )}
-        </>
-      )}
+            <StatusInfo proposalDetailData={proposalDetailData} />
+            <VoteResultTable daoId={proposalDetailData.daoId} proposalId={proposalId} />
+            {proposalDetailData && (
+              <Discussion proposalId={proposalId} daoId={proposalDetailData?.daoId ?? ''} />
+            )}
+          </>
+        )}
       </CommitmentProvider>
     </div>
   );
