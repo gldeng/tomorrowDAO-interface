@@ -310,11 +310,7 @@ const ProposalInfo = (props: ProposalInfoProps) => {
             </Tooltip>
           }
         >
-          <Input
-            value={anonymousVotingStartTimeString}
-            disabled
-            className="disabledInput"
-          />
+          <Input value={anonymousVotingStartTimeString} disabled className="disabledInput" />
         </Form.Item>
       )}
 
