@@ -1,6 +1,5 @@
 const { spawn } = require('child_process');
 const fs = require('fs');
-const publicIp = require('public-ip');
 
 // const { getConfig, getContractAddress } = require('./generate-config/queryConfig');
 
@@ -8,6 +7,8 @@ const APP_ENV = process.env.APP_ENV || 'testnet';
 console.log('APP_ENV:', APP_ENV);
 
 async function main() {
+  const { publicIp } = await import('public-ip');
+
   if (APP_ENV === 'mainnet') {
     const fileConfigContent = fs.readFileSync('./src/config/index.ts', 'utf-8');
     let mainnetImportStatement = `export * from './mainnet';`;
