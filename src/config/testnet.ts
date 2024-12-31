@@ -70,3 +70,4 @@ export const apiServerBase = process.env.NEXT_PUBLIC_API_SERVER_BASE;
 
 console.log('NEXT_PUBLIC_RPC_URL_AELF:', process.env.NEXT_PUBLIC_RPC_URL_AELF);
 console.log('NEXT_PUBLIC_RPC_URL_TDVV:', process.env.NEXT_PUBLIC_RPC_URL_TDVV);
+console.log('NEXT_PUBLIC_API_SERVER_BASE:', process.env.NEXT_PUBLIC_API_SERVER_BASE);
